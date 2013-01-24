@@ -91,9 +91,9 @@ def test_frontline(units, color, nonfrontunit_names):
 
 def test_backline(units, color, nonbackunit_names):
 
-    frontline = get_backline(color)
+    backline = get_backline(color)
     
-    return not any((unit.row == frontline and unit.name in nonbackunit_names) for unit in units)
+    return not any((unit.row == backline and unit.name in nonbackunit_names) for unit in units)
 
 
 def get_startunits():
