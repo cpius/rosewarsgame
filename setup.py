@@ -47,12 +47,12 @@ def test_coloumn_blocks(units, player):
     return not any(co < 2 for co in colcos[1:])
 
 
-def test_backlineco(units, player):
+def test_backline_count(units, player):
     
     return sum(1 for unit in units if unit.row == player.backline) < 2
    
     
-def test_samekind(units, unit_names):
+def test_samekind_limit(units):
     
     names = [unit.name for unit in units]
     
@@ -64,7 +64,7 @@ def test_onepikeman(units):
     return any(unit.name == "pikeman" for unit in units)
         
 
-def test_pikemanline(units):
+def test_pikeman_coloumn(units):
     
     colcos = [0 for i in range(6)]
     for unit in units:
@@ -74,12 +74,12 @@ def test_pikemanline(units):
     return not any(co > 1 for co in colcos[1:])
 
 
-def test_frontline(units, player, nonfrontunit_names):
+def test_frontline_units(units, player, nonfrontunit_names):
     
     return not any((unit.row == player.frontline and unit.name in nonfrontunit_names) for unit in units)
 
 
-def test_backline(units, player, nonbackunit_names):
+def test_backline_units(units, player, nonbackunit_names):
 
     return not any((unit.row == player.backline and unit.name in nonbackunit_names) for unit in units)
 
@@ -90,6 +90,9 @@ def get_startunits():
     specialunit_names = ["berserker", "cannon", "chariot", "crusader", "diplomat", "flagbearer", "lancer", "longswordsman", "royalguard", "saboteur", "samurai", "scout", "viking", "warelephant", "weaponsmith"]  
     nonfrontunit_names = ["lightcavalry", "ballista", "catapult", "archer", "scout", "saboteur", "diplomat", "berserker", "cannon", "weaponsmith", "royalguard"]
     nonbackunit_names = ["Pikeman", "Berserker", "longswordsman", "royalguard", "samurai", "viking", "warelephant"]
+    unit_bag_size = 4
+    special_unit_count = 3
+    total_unit_count = 9
     
     def get_units(player):
         
@@ -97,11 +100,11 @@ def get_startunits():
         for co in counter:
 
             units = [] 
-            unit_bag = [name for name in unit_names for i in range(4)]
+            unit_bag = [name for name in unit_names for i in range(unit_bag_size)]
             specialunit_bag = [name for name in specialunit_names]
             occupied = [[False for i in range(9)] for j in range(6)]
             
-            while len(units) <= 6: 
+            while len(units) <= total_unit_count - special_unit_count: 
                 name = unit_bag[rnd.randint(len(unit_bag))]
                 col = rnd.randint(1,6)
                 row = rnd.randint(min(player.frontline, player.backline), max(player.frontline, player.backline) +1)
@@ -116,7 +119,7 @@ def get_startunits():
                     occupied[col][row] = True
                     unit_bag.remove(name)
     
-            while len(units) <= 9:   
+            while len(units) <= total_unit_count:   
                 name = specialunit_bag[rnd.randint(len(specialunit_bag))]      
                 col = rnd.randint(1,6)
                 row = rnd.randint(min(player.frontline, player.backline), max(player.frontline, player.backline) +1)
@@ -131,22 +134,22 @@ def get_startunits():
             if not test_coloumn_blocks(units, player):
                 continue
             
-            if not test_samekind(units, unit_names):
+            if not test_samekind_limit(units):
                 continue
             
             if not test_onepikeman(units):
                 continue
             
-            if not test_pikemanline(units):
+            if not test_pikeman_coloumn(units):
                 continue
     
-            if not test_frontline(units, player, nonfrontunit_names):
+            if not test_frontline_units(units, player, nonfrontunit_names):
                 continue
 
-            if not test_backlineco(units, player):
+            if not test_backline_count(units, player):
                 continue
 
-            if not test_backline(units, player, nonbackunit_names):
+            if not test_backline_units(units, player, nonbackunit_names):
                 continue         
             
             print player.color, co
