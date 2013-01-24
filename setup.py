@@ -22,29 +22,23 @@ class Unit:
         return self.name + ", " + self.color + "\n"
       
 
-def get_backline(color):
+class Player:
+    def __init__(self, color):
+        self.color = color
+        if color == "red":
+            self.backline = 1
+            self.frontline = 4
+        else:
+            self.backline = 8
+            self.frontline = 5
+            
 
-    if color == "green":
-        return 8
-    else:
-        return 1
-
-def get_frontline(color):
-
-    if color == "green":
-        return 5
-    else:
-        return 4
-
-
-def test_coloumn_blocks(units, color):
-
-    backline = get_backline(color)
+def test_coloumn_blocks(units, player):
     
     colcos = [0 for i in range(6)]
     for unit in units:
         colcos[unit.col] += 1
-        if unit.name == "pikeman" and unit.row != backline:
+        if unit.name == "pikeman" and unit.row != player.backline:
             if unit.col > 1:
                 colcos[unit.col -1] += 1
             if unit.col < 5:
@@ -53,11 +47,9 @@ def test_coloumn_blocks(units, color):
     return not any(co < 2 for co in colcos[1:])
 
 
-def test_backlineco(units, color):
+def test_backlineco(units, player):
     
-    backline = get_backline(color)
-    
-    return sum(1 for unit in units if unit.row == backline) < 2
+    return sum(1 for unit in units if unit.row == player.backline) < 2
    
     
 def test_samekind(units, unit_names):
@@ -82,18 +74,14 @@ def test_pikemanline(units):
     return not any(co > 1 for co in colcos[1:])
 
 
-def test_frontline(units, color, nonfrontunit_names):
-
-    frontline = get_frontline(color)
+def test_frontline(units, player, nonfrontunit_names):
     
-    return not any((unit.row == frontline and unit.name in nonfrontunit_names) for unit in units)
+    return not any((unit.row == player.frontline and unit.name in nonfrontunit_names) for unit in units)
 
 
-def test_backline(units, color, nonbackunit_names):
+def test_backline(units, player, nonbackunit_names):
 
-    backline = get_backline(color)
-    
-    return not any((unit.row == backline and unit.name in nonbackunit_names) for unit in units)
+    return not any((unit.row == player.backline and unit.name in nonbackunit_names) for unit in units)
 
 
 def get_startunits():
@@ -103,7 +91,7 @@ def get_startunits():
     nonfrontunit_names = ["lightcavalry", "ballista", "catapult", "archer", "scout", "saboteur", "diplomat", "berserker", "cannon", "weaponsmith", "royalguard"]
     nonbackunit_names = ["Pikeman", "Berserker", "longswordsman", "royalguard", "samurai", "viking", "warelephant"]
     
-    def get_units(color):
+    def get_units(player):
         
         counter = it.count(1)
         for co in counter:
@@ -116,13 +104,10 @@ def get_startunits():
             while len(units) <= 6: 
                 name = unit_bag[rnd.randint(len(unit_bag))]
                 col = rnd.randint(1,6)
-                if color == "green":
-                    row = rnd.randint(5,9)
-                else:
-                    row = rnd.randint(1,5)
+                row = rnd.randint(min(player.frontline, player.backline), max(player.frontline, player.backline) +1)
                 
                 if not occupied[col][row]:
-                    unit = Unit(name, col, row, color)
+                    unit = Unit(name, col, row, player.color)
                     if len(units) == 0:
                         unit.acounter = 1
                     if len(units) == 1:
@@ -134,19 +119,16 @@ def get_startunits():
             while len(units) <= 9:   
                 name = specialunit_bag[rnd.randint(len(specialunit_bag))]      
                 col = rnd.randint(1,6)
-                if color == "green":
-                    row = rnd.randint(5,9)
-                else:
-                    row = rnd.randint(1,5)
+                row = rnd.randint(min(player.frontline, player.backline), max(player.frontline, player.backline) +1)
                 
                 if not occupied[col][row]:
-                    unit = Unit(name, col, row, color)
+                    unit = Unit(name, col, row, player.color)
                     units.append(unit)
                     occupied[col][row] = True
                     specialunit_bag.remove(name)
     
             
-            if not test_coloumn_blocks(units, color):
+            if not test_coloumn_blocks(units, player):
                 continue
             
             if not test_samekind(units, unit_names):
@@ -158,26 +140,27 @@ def get_startunits():
             if not test_pikemanline(units):
                 continue
     
-            if not test_frontline(units, color, nonfrontunit_names):
+            if not test_frontline(units, player, nonfrontunit_names):
                 continue
 
-            if not test_backlineco(units, color):
+            if not test_backlineco(units, player):
                 continue
 
-            if not test_backline(units, color, nonbackunit_names):
+            if not test_backline(units, player, nonbackunit_names):
                 continue         
             
-            print color, co
+            print player.color, co
             
             return units
 
 
-    green_units = get_units("green")
-    red_units = get_units("red")
+    player1 = Player("green")
+    player2 = Player("red")
+    
+    player1_units = get_units(player1)
+    player2_units = get_units(player2)
                 
-
-
-    return green_units, red_units
+    return player1_units, player2_units
 
 
 
