@@ -20,6 +20,7 @@
     
     BOOL _isZooming;
     GameBoardNode *_zoomInOnNode;
+    GameBoardNode *_activeNode;
 }
 
 @property (nonatomic, readonly) PlayerColors playerColor;
@@ -33,7 +34,12 @@
 - (void)layoutBoard;
 - (void)layoutDeck:(Deck*)deck forPlayerWithColor:(PlayerColors)color;
 
-- (void)placeCard:(Card *)card inGameBoardNode:(GameBoardNode *)node;
+- (void)placeCard:(Card *)card inGameBoardNode:(GameBoardNode *)node useHighLighting:(BOOL)highlighting;
+- (void)moveFromActiveNodeToNode:(GameBoardNode*)node;
+
+- (void)selectGameBoardNode:(GameBoardNode*)node useHighlighting:(BOOL)highlight;
+- (void)deselectActiveNode;
+- (BOOL)nodeIsActive;
 
 - (GameBoardNode*)getGameBoardNodeForPosition:(CGPoint)position;
 - (GameBoardNode*)getGameBoardNodeForGridLocation:(GridLocation)gridLocation;

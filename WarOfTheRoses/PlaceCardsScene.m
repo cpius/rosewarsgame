@@ -188,7 +188,7 @@
     if (_detailCard == nil) {
         if (gameboardNode != nil && !gameboardNode.hasCard && _selectedCard != nil) {
             
-            [_gameboard placeCard:_selectedCard inGameBoardNode:gameboardNode];
+            [_gameboard placeCard:_selectedCard inGameBoardNode:gameboardNode useHighLighting:YES];
             
             if (![_placedCards containsObject:_selectedCard]) {
                 [_placedCards addObject:_selectedCard];

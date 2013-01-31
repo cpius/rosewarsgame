@@ -6,7 +6,7 @@
 //
 //
 
-#import "CCNode.h"
+#import "CCSprite.h"
 #import "RangeAttribute.h"
 
 @interface Card : CCSprite <RangeAttributeDelegate> {

@@ -9,10 +9,15 @@
 #import "GameScene.h"
 #import "ParticleHelper.h"
 #import "GameManager.h"
+#import "Card.h"
+#import "Magnifier.h"
 
 @interface GameScene()
 
 - (void)addDeckToScene:(Deck*)deck;
+
+- (void)showToolsPanel;
+- (void)hideToolsPanel;
 
 @end
 
@@ -35,7 +40,7 @@
     
     if (self) {
         
-        CGSize screenSize = [CCDirector sharedDirector].winSize;
+        _winSize = [CCDirector sharedDirector].winSize;
 
         CCSprite *background = [CCSprite spriteWithFile:@"woddenbackground2.png"];
         background.anchorPoint = ccp(0, 0);
@@ -49,8 +54,12 @@
         _gameboard.anchorPoint = ccp(0.5, 0.5);
         _gameboard.colorOfTopPlayer = kPlayerRed;
         _gameboard.colorOfBottomPlayer = kPlayerGreen;
-        _gameboard.position = ccp(screenSize.width / 2, (screenSize.height / 2) + 75);
+        _gameboard.position = ccp(_winSize.width / 2, (_winSize.height / 2) + 75);
         _gameboard.scale = 0.65;
+        
+        _leftPanel = [CCSprite spriteWithFile:@"leftpanel.png"];
+        _leftPanel.position = ccp(-_leftPanel.contentSize.width, _winSize.height / 2);
+        [self addChild:_leftPanel];
         
         [self addDeckToScene:[GameManager sharedManager].currentGame.myDeck];
         [self addDeckToScene:[GameManager sharedManager].currentGame.enemyDeck];
@@ -92,42 +101,17 @@
     
     GameBoardNode *gameboardNode = [_gameboard getGameBoardNodeForPosition:[_gameboard convertTouchToNodeSpace:touch]];
     
+    if ([_gameboard nodeIsActive]) {
+        
+        [_gameboard moveFromActiveNodeToNode:gameboardNode];
+        [self hideToolsPanel];
+        return;
+    }
+    
     if (gameboardNode != nil && gameboardNode.hasCard) {
         
-        if (_activeNode) {
-            [_activeNode setZOrder:0];
-            [ParticleHelper stopHighlightingNode:_activeNode];
-            
-            NSArray *adjacentGameBoardNodes = [_gameboard getAdjacentGameBoardNodesToCard:_activeNode.card];
-            
-            for (GameBoardNode *node in adjacentGameBoardNodes) {
-                [node runAction:[CCScaleTo actionWithDuration:0.2 scale:1.0]];
-            }
-            
-            [_activeNode.card runAction:[CCTintTo actionWithDuration:0.2 red:255 green:255 blue:255]];
-        }
-        
-        NSArray *adjacentGameBoardNodes = [_gameboard getAdjacentGameBoardNodesToCard:gameboardNode.card];
-        
-        for (GameBoardNode *node in adjacentGameBoardNodes) {
-            
-            [node runAction:[CCScaleTo actionWithDuration:0.2 scale:1.1]];
-        }
-        
-        [gameboardNode setZOrder:100];
-        [gameboardNode.card runAction:[CCTintTo actionWithDuration:0.2 red:235 green:0 blue:0]];
-        [ParticleHelper highlightNode:gameboardNode forever:YES];
-       
-        _activeNode = gameboardNode;
-        
-        [self zoomInOnGameBoardNode:gameboardNode];
-        _zoomedIn = YES;
-    }
-    else {
-        if (_zoomedIn) {
-            [self zoomOut];
-            _zoomedIn = NO;
-        }
+        [_gameboard selectGameBoardNode:gameboardNode useHighlighting:YES];
+        [self showToolsPanel];
     }
 }
 
@@ -176,6 +160,8 @@
         _zoomInOnNode = nil;
         _isZooming = NO;
         _zoomPosition = CGPointZero;
+        
+        [_leftPanel runAction:[CCMoveTo actionWithDuration:0.5 position:ccp(0, _winSize.height / 2)]];
     }];
     
     [self runAction:[CCSequence actions:zoomIn, reset, nil]];
@@ -195,6 +181,16 @@
                                                       (kZoomFactor - self.scale) /
                                                       (kZoomFactor - 1.0f)));
     }
+}
+
+- (void)showToolsPanel {
+    
+    [_leftPanel runAction:[CCMoveTo actionWithDuration:0.5 position:ccp((_leftPanel.contentSize.width / 2) - 5, _winSize.height / 2)]];
+}
+
+- (void)hideToolsPanel {
+    
+    [_leftPanel runAction:[CCMoveTo actionWithDuration:0.5 position:ccp(-_leftPanel.contentSize.width, _winSize.height / 2)]];
 }
 
 @end

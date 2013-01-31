@@ -7,6 +7,7 @@
 //
 
 #import "GameBoard.h"
+#import "ParticleHelper.h"
 
 @interface GameBoard()
 
@@ -52,12 +53,24 @@
         GameBoardNode *node = [self getGameBoardNodeForGridLocation:MakeGridLocation(card.cardLocation.row + rowOffset, card.cardLocation.column)];
         
         if (node != nil) {
-            [self placeCard:card inGameBoardNode:node];
+            [self placeCard:card inGameBoardNode:node useHighLighting:NO];
         }
     }
 }
 
-- (void)placeCard:(Card *)card inGameBoardNode:(GameBoardNode *)node {
+- (void)moveFromActiveNodeToNode:(GameBoardNode *)node {
+    
+    if ([self nodeIsActive]) {
+        
+        if (_activeNode == node) {
+            return;
+        }
+        
+        [self placeCard:_activeNode.card inGameBoardNode:node useHighLighting:NO];
+    }
+}
+
+- (void)placeCard:(Card *)card inGameBoardNode:(GameBoardNode *)node useHighLighting:(BOOL)highlighting {
 
     CGPoint position = [self convertToWorldSpace:node.position];
     
@@ -72,10 +85,12 @@
    
     node.card = card;
     
-    CCParticleSystem *particle = [CCParticleSystemQuad particleWithFile:@"exploding_ring.plist"];
-    particle.position = ccp(node.contentSize.width / 2, node.contentSize.height / 2);
-    particle.scale = 0.5;
-    [node addChild:particle z:10];
+    if (highlighting) {
+        CCParticleSystem *particle = [CCParticleSystemQuad particleWithFile:@"exploding_ring.plist"];
+        particle.position = ccp(node.contentSize.width / 2, node.contentSize.height / 2);
+        particle.scale = 0.5;
+        [node addChild:particle z:10];
+    }
 }
 
 
@@ -144,6 +159,49 @@
     }
     
     return nil;
+}
+
+- (void)deselectActiveNode {
+    
+    if (_activeNode) {
+        [_activeNode setZOrder:0];
+        [ParticleHelper stopHighlightingNode:_activeNode];
+        
+        NSArray *adjacentGameBoardNodes = [self getAdjacentGameBoardNodesToCard:_activeNode.card];
+        
+        for (GameBoardNode *node in adjacentGameBoardNodes) {
+            [node runAction:[CCScaleTo actionWithDuration:0.2 scale:1.0]];
+        }
+        
+        CCCallBlock *reset = [CCCallBlock actionWithBlock:^{
+            _activeNode = nil;
+        }];
+        
+        [_activeNode.card runAction:[CCSequence actions:[CCTintTo actionWithDuration:0.2 red:255 green:255 blue:255], reset, nil]];
+    }
+}
+
+- (BOOL)nodeIsActive {
+    
+    return _activeNode != nil;
+}
+
+- (void)selectGameBoardNode:(GameBoardNode *)node useHighlighting:(BOOL)highlight {
+    
+    [self deselectActiveNode];
+    
+    NSArray *adjacentGameBoardNodes = [self getAdjacentGameBoardNodesToCard:node.card];
+    
+    for (GameBoardNode *node in adjacentGameBoardNodes) {
+        
+        [node runAction:[CCScaleTo actionWithDuration:0.2 scale:1.1]];
+    }
+    
+    [node setZOrder:100];
+    [node.card runAction:[CCTintTo actionWithDuration:0.2 red:235 green:0 blue:0]];
+    [ParticleHelper highlightNode:node forever:YES];
+    
+    _activeNode = node;
 }
 
 - (NSArray*)getAdjacentGameBoardNodesToCard:(Card*)card {

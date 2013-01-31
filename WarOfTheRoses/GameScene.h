@@ -14,6 +14,8 @@
 
 @interface GameScene : CCLayer {
     
+    CGSize _winSize;
+    
     Game *_currentGame;
     GameBoard *_gameboard;
     
@@ -23,7 +25,8 @@
     
     GameBoardNode *_zoomInOnNode;
     CGPoint _zoomPosition;
-    GameBoardNode *_activeNode;
+    
+    CCSprite *_leftPanel;
 }
 
 + (id)scene;
