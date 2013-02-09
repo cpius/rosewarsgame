@@ -7,26 +7,24 @@ import math
 import os
 import ai_module
 
-
 pause_for_animation = 350
+
 player1_ai = "Destroyer"
 player2_ai = "Advancer"
 
-
-black    = (0, 0, 0)
-white    = (255, 255, 255)
-green    = (0, 255, 0)
-red      = (255, 0, 0)
+black = (0, 0, 0)
+white = (255, 255, 255)
+green = (0, 255, 0)
+red = (255, 0, 0)
 brown = (128, 64, 0)
 grey = (48, 48, 48)
 yellow = (200, 200, 0)
 lightgrey = (223, 223, 223)
 blue = (0, 102, 204)
 
-unit_width =70
-unit_height =106.5
+unit_width = 70
+unit_height = 106.5
 board_size = [391, 908]
-
 
 _image_library = {}
 
@@ -38,48 +36,47 @@ def get_image(path, type = None):
                 _image_library[path] = image
         return image    
     
-
 def base_pos(pos):    
     if pos[1] < 5:
-        return (22 + (pos[0] -1) * unit_width,  22 + (pos[1] -1) * unit_height)
+        return (22 + (pos[0] - 1) * unit_width, 22 + (pos[1] - 1) * unit_height)
     else:
-        return (22 + (pos[0] -1) * unit_width, 39 + (pos[1] -1) * unit_height)
+        return (22 + (pos[0] - 1) * unit_width, 39 + (pos[1] - 1) * unit_height)
 
 def center_pos(pos):
-    return ( int(base_pos(pos)[0] + unit_width / 2), int(base_pos(pos)[1] + unit_height / 2) )
+    return (int(base_pos(pos)[0] + unit_width / 2), int(base_pos(pos)[1] + unit_height / 2))
 
 def symbol_pos(pos):
-    return ( base_pos(pos)[0] -22 + unit_width/2, base_pos(pos)[1] -15 + unit_height/2)
+    return (base_pos(pos)[0] - 22 + unit_width / 2, base_pos(pos)[1] - 15 + unit_height / 2)
   
 def acounter_pos(pos):
-    return ( int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 78))
+    return (int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 78))
 
 def dfont_pos(pos):
-    return ( int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 48))
+    return (int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 48))
 
 def dcounter_pos(pos):
-    return ( int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 58))
+    return (int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 58))
 
 def flag_pos(pos):
-    return ( int(base_pos(pos)[0] + 46), int(base_pos(pos)[1] + 10))
+    return (int(base_pos(pos)[0] + 46), int(base_pos(pos)[1] + 10))
 
 def ycounter_pos(pos):
-    return ( int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 38))
+    return (int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 38))
 
 def yfont_pos(pos):
-    return ( int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 28))
+    return (int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 28))
 
 def bcounter_pos(pos):
-    return ( int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 18))
+    return (int(base_pos(pos)[0] + 50), int(base_pos(pos)[1] + 18))
 
 def bfont_pos(pos):
-    return ( int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 8))
+    return (int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 8))
 
 def star_pos(pos):
-    return ( int(base_pos(pos)[0]) + 8, int(base_pos(pos)[1] + 58))
+    return (int(base_pos(pos)[0]) + 8, int(base_pos(pos)[1] + 58))
 
 def afont_pos(pos):
-    return ( int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 68))
+    return (int(base_pos(pos)[0] + 45), int(base_pos(pos)[1] + 68))
 
 def draw_unit(screen, pos, unit):
     pic = get_image(unit.pic)
@@ -97,9 +94,11 @@ def draw_unit(screen, pos, unit):
     if unit.dcounters:
         pygame.draw.circle(screen, grey, dcounter_pos(pos), 10, 0)
         pygame.draw.circle(screen, lightgrey, dcounter_pos(pos), 8, 0)
+
         if unit.dcounters > 1:
             label = font.render(str(unit.dcounters), 1, black)
             screen.blit(label, dfont_pos(pos))
+
         if unit.dcounters < 0:
             label = font.render("x", 1, black)
             screen.blit(label, dfont_pos(pos))       
@@ -116,6 +115,7 @@ def draw_unit(screen, pos, unit):
     if unit.ycounters:
         pygame.draw.circle(screen, grey, ycounter_pos(pos), 10, 0)
         pygame.draw.circle(screen, yellow, ycounter_pos(pos), 8, 0)
+
         if unit.ycounters > 1:
             label = font.render(str(unit.ycounters), 1, black)
             screen.blit(label, yfont_pos(pos))     
@@ -131,6 +131,7 @@ def draw_unit(screen, pos, unit):
     if unit.bcounters:
         pygame.draw.circle(screen, grey, bcounter_pos(pos), 10, 0)
         pygame.draw.circle(screen, blue, bcounter_pos(pos), 8, 0)
+
         if unit.bcounters > 1:
             label = font.render(str(unit.bcounters), 1, black)
             screen.blit(label, bfont_pos(pos))     
@@ -155,36 +156,40 @@ def draw_game(screen, p):
         
     pygame.display.update()  
 
-
 def draw_action(screen, action):
-    
     pygame.draw.circle(screen, black, center_pos(action.startpos), 10)
     pygame.draw.line(screen, black, center_pos(action.startpos), center_pos(action.endpos), 5)
     
     if action.is_attack:
+
         pygame.draw.line(screen, black, center_pos(action.endpos), center_pos(action.attackpos), 5)
+
         if action.move_with_attack:
             pic = get_image("./units/moveattack.gif")
         else:
             pic = get_image("./units/attack.gif")
+
         screen.blit(pic, symbol_pos(action.attackpos))
+
     elif action.is_ability:
+
         pygame.draw.line(screen, black, center_pos(action.endpos), center_pos(action.attackpos), 5)
+
         pic = get_image("./units/ability.gif")
+
         screen.blit(pic, symbol_pos(action.attackpos))      
+
     else:
             pic = get_image("./units/move.gif")
+
             screen.blit(pic, symbol_pos(action.endpos))
     
     pygame.display.update()
 
-
-
-
 def run_game():
-
     pygame.init()
-    screen=pygame.display.set_mode(board_size)
+
+    screen = pygame.display.set_mode(board_size)
     clock = pygame.time.Clock()
     
     p = setup.get_startunits()
@@ -199,16 +204,18 @@ def run_game():
     turn1 = True
 
     while True:
-
         time_passed = clock.tick(50)
         
         for event in pygame.event.get():
+
             if event.type == KEYDOWN:        
+
                 if event.key == K_SPACE:
                     
                     print p[0].color
                     
                     mover.initialize_turn(p)
+
                     draw_game(screen, p)
                     
                     if turn1:
@@ -278,7 +285,5 @@ def game_end(screen, player):
     pygame.display.update()
     pygame.time.delay(40000)
     exit_game()
-    
 
 run_game()
-
