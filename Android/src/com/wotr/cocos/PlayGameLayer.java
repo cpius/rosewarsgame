@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
@@ -47,7 +46,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("archer_0.png");
+		CCSprite prototype = CCSprite.sprite("archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -59,7 +58,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;
 
-		addBackGroundCards(xCount, yCount);
+		addBackGroundCards(xCount, yCount, true);
 		addCards(cards);
 	}
 

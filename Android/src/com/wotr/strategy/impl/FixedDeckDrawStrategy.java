@@ -1,4 +1,4 @@
-package com.wotr.strategy;
+package com.wotr.strategy.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,9 +7,10 @@ import com.wotr.model.AbstractCard;
 import com.wotr.model.Archer;
 import com.wotr.model.Ballista;
 import com.wotr.model.Catapult;
-import com.wotr.model.Heavycavalry;
-import com.wotr.model.Lightcavalry;
+import com.wotr.model.HeavyCavalry;
+import com.wotr.model.LightCavalry;
 import com.wotr.model.Pikeman;
+import com.wotr.strategy.DeckDrawStrategy;
 
 public class FixedDeckDrawStrategy implements DeckDrawStrategy {
 
@@ -21,8 +22,8 @@ public class FixedDeckDrawStrategy implements DeckDrawStrategy {
 		result.add(new Archer());
 		result.add(new Ballista());
 		result.add(new Catapult());
-		result.add(new Heavycavalry());
-		result.add(new Lightcavalry());
+		result.add(new HeavyCavalry());
+		result.add(new LightCavalry());
 		result.add(new Pikeman());
 
 		return result;

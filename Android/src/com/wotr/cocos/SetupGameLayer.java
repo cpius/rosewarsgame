@@ -21,7 +21,7 @@ import org.cocos2d.types.CGSize;
 import com.wotr.model.AbstractCard;
 import com.wotr.model.Position;
 import com.wotr.strategy.DeckDrawStrategy;
-import com.wotr.strategy.FixedDeckDrawStrategy;
+import com.wotr.strategy.impl.FixedDeckDrawStrategy;
 import com.wotr.touch.CardTouchHandler;
 import com.wotr.touch.CardTouchListener;
 
@@ -53,7 +53,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("archer_0.png");
+		CCSprite prototype = CCSprite.sprite("archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -65,7 +65,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;
 
-		addBackGroundCards(xCount, yCount);
+		addBackGroundCards(xCount, yCount, false);
 
 		CCMenuItem battleButton = CCMenuItemImage.item("battle.png", "right_arrow.png", this, "startBattle");
 		battleButton.setIsEnabled(true);
@@ -141,7 +141,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			selectedCard.setPosition(x, y);
 		} else {
 			CGPoint position = bordframe.getPosition(pInP.getX(), pInP.getY());
-			selectedCard.setPosition(position);			
+			selectedCard.setPosition(position);
 		}
 	}
 

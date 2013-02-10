@@ -98,13 +98,16 @@ public abstract class AbstractGameLayer extends CCLayer {
 		CCScaleTo scaleAction = CCScaleTo.action(0.4f, sizeScale);
 		selectedCard.runAction(scaleAction);
 	}
-	
-	protected void addBackGroundCards(int xCount, int yCount) {
+
+	protected void addBackGroundCards(int xCount, int yCount, boolean playBoard) {
+
 		// Add the bordcards
 		for (int x = 0; x < xCount; x++) {
 			for (int y = 0; y < yCount; y++) {
 				CGPoint position = bordframe.getPosition(x, y);
-				CCSprite cardBackground = CCSprite.sprite("greenback.png");
+
+				String imageName = playBoard && y >= yCount / 2 ? "redback.png" : "greenback.png";
+				CCSprite cardBackground = CCSprite.sprite(imageName);
 				cardBackground.setPosition(position);
 				cardBackground.setScale(sizeScale * 0.95f);
 				addChild(cardBackground);
