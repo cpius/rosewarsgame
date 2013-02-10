@@ -172,7 +172,7 @@ def get_extra_actions(p):
                 moves = moves_list(unit, pos, moveset_w_leftover | moveset_wo_leftover)
                 attacks, abilities = [],[]
             
-            if hasattr(unit, "samuraing"):
+            if hasattr(unit, "samuraiing"):
                 attacks = melee_attacks_list_samurai_second(p[1].units, unit, pos, set([(pos)]), unit.movement_left)
                 moves, abilities = [], []
             
@@ -317,7 +317,7 @@ def do_action(action, p, unit):
             unit.extra_action = True
 
         
-    if hasattr(unit, "samuraing"):
+    if hasattr(unit, "samuraiing"):
         if not hasattr(unit, "extra_action"):
             unit.movement_left = unit.movement - distance(action.startpos, action.endpos)
             unit.extra_action = True
