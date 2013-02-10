@@ -253,7 +253,7 @@ class Unit:
         self.zoc = []
         self.type = "Infantry"
         
-        self.samuraing = True # Can make an attack after it's first action. (But not a second move)
+        self.samuraiing = True # Can make an attack after it's first action. (But not a second move)
         
 
     def saboteur(self):

@@ -19,7 +19,7 @@ class AI:
 
         ai_type = imp.load_source(type, "ai_" + type.lower() + ".py")
         self.get_action = ai_type.get_action
-        self.get_second_action = ai_type.get_second_action
+        self.get_extra_action = ai_type.get_extra_action
         self.put_counter = ai_type.put_counter
         self.name = type
             
@@ -42,7 +42,7 @@ class AI:
                 return None  
 
 
-    def select_second_action(self, p, document_it):
+    def select_extra_action(self, p, document_it):
 
         if p[0].backline == 8:
             p = get_transformed_p(p)
@@ -50,11 +50,11 @@ class AI:
         else:
             transform_action = get_same_action
         
-        mover.get_second_actions(p)  
+        mover.get_extra_actions(p)  
         actions = get_actions(p)
 
         if actions:
-            action = self.get_second_action(p, actions, document_it)
+            action = self.get_extra_action(p, actions, document_it)
             return transform_action(action)     
         else:
             return None  

@@ -8,7 +8,7 @@ import os
 import ai_module
 
 
-pause_for_animation = 2000
+pause_for_animation = 350
 player1_ai = "Destroyer"
 player2_ai = "Advancer"
 
@@ -220,7 +220,7 @@ def run_game():
                         print
                         print "action ", 3 - p[0].actions
                         
-                        p[0].second_action = False
+                        p[0].extra_action = False
                         action = p[0].ai.select_action(p, True)
                         
                         if action:
@@ -236,14 +236,14 @@ def run_game():
 
                             draw_game(screen, p)
                             
-                            p[0].second_action = True
-                            second_action = p[0].ai.select_second_action(p, True)
+                            p[0].extra_action = True
+                            extra_action = p[0].ai.select_extra_action(p, True)
 
-                            if second_action:
-                                draw_action(screen, second_action)
+                            if extra_action:
+                                draw_action(screen, extra_action)
                                 pygame.time.delay(pause_for_animation)
     
-                                mover.do_second_action(second_action, p)
+                                mover.do_extra_action(extra_action, p)
                                 if hasattr(p[0], "won"):
                                     game_end(screen, p[0])
                                     
