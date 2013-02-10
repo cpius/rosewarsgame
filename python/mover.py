@@ -154,7 +154,7 @@ def get_all_actions(p):
                 unit.actions = moves + attacks + abilities
                 
 
-def get_second_actions(p):
+def get_extra_actions(p):
     """
     Gets all possible second actions for the player whose turn it is.
     
@@ -163,7 +163,7 @@ def get_second_actions(p):
     
     for pos, unit in p[0].units.items():
         
-        if hasattr(unit, "second_action"):
+        if hasattr(unit, "extra_action"):
       
             all_units = find_all_units_except_current(pos, p)
                 
@@ -277,12 +277,12 @@ def do_first_action(action, p):
     do_action(action, p, unit)
 
 
-def do_second_action(action, p):
+def do_extra_action(action, p):
     
     unit = p[0].units[action.startpos]
-    action.second_action = True
+    action.extra_action = True
     do_action(action, p, unit)
-    del unit.second_action
+    del unit.extra_action
 
 
 
@@ -308,19 +308,19 @@ def do_action(action, p, unit):
         settle_ability(action, enemy_unit, friendly_unit, pos, p)
     
     if hasattr(unit, "charioting"):
-        if not hasattr(unit, "second_action"):
+        if not hasattr(unit, "extra_action"):
             unit.movement_left = unit.movement - distance(action.startpos, action.endpos)
             if action.is_attack and not action.move_with_attack:
                 unit.movement_left -= 1
             if action.move_with_attack and action.endpos != action.attackpos:
                 unit.movement_left -= 1 
-            unit.second_action = True
+            unit.extra_action = True
 
         
     if hasattr(unit, "samuraing"):
-        if not hasattr(unit, "second_action"):
+        if not hasattr(unit, "extra_action"):
             unit.movement_left = unit.movement - distance(action.startpos, action.endpos)
-            unit.second_action = True
+            unit.extra_action = True
 
 
     if not action.finalpos:

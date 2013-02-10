@@ -28,7 +28,7 @@ def get_action(p, actions, document_it = False):
     
 
 
-def get_second_action(p, actions, document_it = False):
+def get_extra_action(p, actions, document_it = False):
     return get_action(p, actions, document_it)
 
 

@@ -10,7 +10,7 @@ def document_actions(ai_type, actions, p):
     else:
         taction = "2"
         
-    if p[0].second_action:
+    if p[0].extra_action:
         taction += ".2"
         
     out = open(p[0].color + " AI actions " + taction + ".txt", 'w')
