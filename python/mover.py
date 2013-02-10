@@ -282,6 +282,7 @@ def do_second_action(action, p):
     unit = p[0].units[action.startpos]
     action.second_action = True
     do_action(action, p, unit)
+    del unit.second_action
 
 
 
@@ -314,15 +315,13 @@ def do_action(action, p, unit):
             if action.move_with_attack and action.endpos != action.attackpos:
                 unit.movement_left -= 1 
             unit.second_action = True
-        else:
-            del unit.second_action
+
         
     if hasattr(unit, "samuraing"):
         if not hasattr(unit, "second_action"):
             unit.movement_left = unit.movement - distance(action.startpos, action.endpos)
             unit.second_action = True
-        else:
-            del unit.second_action
+
 
     if not action.finalpos:
         action.finalpos = action.endpos
