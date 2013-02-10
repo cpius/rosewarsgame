@@ -168,12 +168,12 @@ def get_extra_actions(p):
             all_units = find_all_units_except_current(pos, p)
                 
             if hasattr(unit, "charioting"):
-                moveset_w_leftover, moveset_wo_leftover = moves_set(all_units, p[1].units, unit, pos, unit.movement_left)
+                moveset_w_leftover, moveset_wo_leftover = moves_set(all_units, p[1].units, unit, pos, unit.movement_remaining)
                 moves = moves_list(unit, pos, moveset_w_leftover | moveset_wo_leftover)
                 attacks, abilities = [],[]
             
             if hasattr(unit, "samuraiing"):
-                attacks = melee_attacks_list_samurai_second(p[1].units, unit, pos, set([(pos)]), unit.movement_left)
+                attacks = melee_attacks_list_samurai_second(p[1].units, unit, pos, set([(pos)]), unit.movement_remaining)
                 moves, abilities = [], []
             
             flag_bearing_bonus(attacks, all_units)
@@ -309,17 +309,17 @@ def do_action(action, p, unit):
     
     if hasattr(unit, "charioting"):
         if not hasattr(unit, "extra_action"):
-            unit.movement_left = unit.movement - distance(action.startpos, action.endpos)
+            unit.movement_remaining = unit.movement - distance(action.startpos, action.endpos)
             if action.is_attack and not action.move_with_attack:
-                unit.movement_left -= 1
+                unit.movement_remaining -= 1
             if action.move_with_attack and action.endpos != action.attackpos:
-                unit.movement_left -= 1 
+                unit.movement_remaining -= 1 
             unit.extra_action = True
 
         
     if hasattr(unit, "samuraiing"):
         if not hasattr(unit, "extra_action"):
-            unit.movement_left = unit.movement - distance(action.startpos, action.endpos)
+            unit.movement_remaining = unit.movement - distance(action.startpos, action.endpos)
             unit.extra_action = True
 
 
@@ -440,7 +440,7 @@ def ranged_attacks_list(unit, startpos, attackset):
     return [Action(unit, startpos, startpos, pos, True, False) for pos in attackset]
   
   
-def melee_attacks_list_samurai_second(enemy_units, unit, startpos, moveset, movement_left):
+def melee_attacks_list_samurai_second(enemy_units, unit, startpos, moveset, movement_remaining):
     """ Generates actions a unit can do which are melee attacks."""
     
     actions = []
@@ -449,7 +449,7 @@ def melee_attacks_list_samurai_second(enemy_units, unit, startpos, moveset, move
         for direction in directions:
             npos = direction.move(move)
             if npos in enemy_units:
-                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(move)) and movement_left == 1:
+                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(move)) and movement_remaining == 1:
                     actions.append(Action(unit, startpos, move, npos, True, True))
                 actions.append(Action(unit, startpos, move, npos, True, False))
     
