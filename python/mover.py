@@ -37,7 +37,10 @@ class Action:
 
         if self.is_ability:
             representation += " ability " + self.ability + " " + coordinates(self.attackpos)
-            
+        
+        if hasattr(self, "outcome"):
+            representation += ", " + self.outcome
+         
         return representation
 
 
@@ -206,7 +209,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
         pushpos = push_tile(action.endpos, action.attackpos)
 
         if not battle.defence_successful(unit, enemy_unit, action, rolls):
-            print "Success"
+            action.outcome = "Success"
 
             if not unit.xp_gained_this_round:
                 unit.xp += 1
@@ -225,7 +228,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
         
         
         else:
-            print "Pushed"
+            action.outcome = "Pushed"
             if pushpos in p[0].units or pushpos in p[1].units or pushpos not in board:
 
                 if not unit.xp_gained_this_round:
@@ -237,7 +240,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
             else:
                 p[1].units[pushpos] = p[1].units.pop(pos)
     else:
-        print "Failure"
+        action.outcome = "Failure"
 
 
 def settle_attack(action, unit, enemy_unit, p, pos):
@@ -245,7 +248,7 @@ def settle_attack(action, unit, enemy_unit, p, pos):
 
     if battle.attack_successful(unit, enemy_unit, action, rolls) and not battle.defence_successful(unit, enemy_unit, action, rolls):
 
-        print "Success"
+        action.outcome = "Success"
 
         if not unit.xp_gained_this_round:
             unit.xp += 1
@@ -258,7 +261,7 @@ def settle_attack(action, unit, enemy_unit, p, pos):
             if action.move_with_attack and not action.finalpos:
                 action.finalpos = pos
     else:
-        print "Failure"
+        action.outcome = "Failure"
 
 
 def settle_ability(action, friendly_unit, enemy_unit, pos, p):
@@ -307,8 +310,6 @@ def do_extra_action(action, p):
 def do_action(action, p, unit):
     """ Carries out an action in the game."""
     
-    print action
-    
     pos = action.attackpos
     enemy_unit = p[1].units.get(pos)
     friendly_unit = p[0].units.get(pos)
@@ -353,6 +354,7 @@ def do_action(action, p, unit):
     if action.endpos[1] == p[1].backline or not p[1].units:
         p[0].won = True
 
+    print action
 
 def initialize_turn(p):
     

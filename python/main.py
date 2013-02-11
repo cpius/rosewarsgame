@@ -259,6 +259,7 @@ def run_game():
                             p[0].actions -= 1
                                      
                     p = [p[1], p[0]]
+                    print
 
                 elif command_q_down(event.key):
                     exit_game();
