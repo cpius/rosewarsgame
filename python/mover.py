@@ -22,20 +22,23 @@ class Action:
         self.finalpos = ()
         
     def __repr__(self):
-        string = "|" + self.unit.name + "\n"
-        string += "Start coordinates: " + str(self.startpos[0]) + " " + str(self.startpos[1]) + "\n" + "End coordinates: " + str(self.endpos[0]) + " " + str(self.endpos[1]) + "\n"
-        if self.is_attack and self.move_with_attack:
-            string += "Move - Attack " + str(self.attackpos[0]) + " " + str(self.attackpos[1]) 
-        if not self.is_attack and not self.is_ability:
-            string += "Move"
-        if self.is_attack and not self.move_with_attack:
-            string += "Attack " + str(self.attackpos[0]) + " " + str(self.attackpos[1])
+        representation = self.unit.name
+
+        if self.startpos != self.endpos:
+            representation += " move from " + coordinates(self.startpos)
+            representation += " to " + coordinates(self.endpos)
+            if self.is_attack:
+                representation += " and"
+        else:
+            representation += " at " + coordinates(self.startpos)
+
+        if self.is_attack:
+            representation += " attack " + coordinates(self.attackpos)
+
         if self.is_ability:
-            string += "Ability " + " " + self.ability + " " + str(self.attackpos[0]) + " " + str(self.attackpos[1])
+            representation += " ability " + self.ability + " " + coordinates(self.attackpos)
             
-        string += "|"
-        
-        return string
+        return representation
 
 
 class Direction:
