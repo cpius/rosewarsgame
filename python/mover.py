@@ -246,7 +246,7 @@ def settle_attack(action, unit, enemy_unit, p, pos):
             del p[1].units[pos]
             
             if action.move_with_attack and not action.finalpos:
-                action.finalpos = pos    
+                action.finalpos = pos
 
 
 def settle_ability(action, friendly_unit, enemy_unit, pos, p):
