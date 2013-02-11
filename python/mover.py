@@ -70,6 +70,9 @@ eight_directions = [Direction(i, j) for i in[-1,0,1] for j in [-1,0,1] if not i 
 ###################
 ###################
 
+def coordinates(position):
+    columns = list(" ABCDE")
+    return columns[position[0]] + str(position[1])
 
 def any(iterable):
     for element in iterable:
