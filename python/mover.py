@@ -282,7 +282,7 @@ def settle_ability(action, friendly_unit, enemy_unit, pos, p):
         p[0].units[pos].bribed = True
 
 
-def do_first_action(action, p):
+def do_first_action(action, p, debug_mode):
     
     unit = p[0].units[action.startpos]
 
@@ -292,19 +292,18 @@ def do_first_action(action, p):
     if hasattr(unit, "double_attack_cost") and action.is_attack:
         p[0].actions -= 1
         
-    do_action(action, p, unit)
+    do_action(action, p, unit, debug_mode)
 
 
-def do_extra_action(action, p):
+def do_extra_action(action, p, debug_mode):
     
-    unit = p[0].units[action.startpos]
-    action.extra_action = True
-    do_action(action, p, unit)
+    unit = p[0].units[action.startpos] 
+    do_action(action, p, unit, debug_mode)
     del unit.extra_action
 
 
 
-def do_action(action, p, unit):
+def do_action(action, p, unit, debug_mode):
     """ Carries out an action in the game."""
     
     print action
@@ -345,7 +344,7 @@ def do_action(action, p, unit):
         action.finalpos = action.endpos
 
     for sub_action in action.sub_actions:
-        do_action(sub_action, p, unit)
+        do_action(sub_action, p, unit, debug_mode)
     
     if action.startpos in p[0].units:
         p[0].units[action.finalpos] = p[0].units.pop(action.startpos)
