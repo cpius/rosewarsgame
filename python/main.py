@@ -224,9 +224,6 @@ def run_game():
                     
                     while p[0].actions > 0:
                         
-                        print
-                        print "action ", 3 - p[0].actions
-                        
                         p[0].extra_action = False
                         action = p[0].ai.select_action(p, True)
                         
@@ -262,7 +259,6 @@ def run_game():
                             p[0].actions -= 1
                                      
                     p = [p[1], p[0]]
-                    print
 
                 elif command_q_down(event.key):
                     exit_game();
