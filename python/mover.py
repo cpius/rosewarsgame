@@ -22,20 +22,23 @@ class Action:
         self.finalpos = ()
         
     def __repr__(self):
-        string = "|" + self.unit.name + "\n"
-        string += "Start coordinates: " + str(self.startpos[0]) + " " + str(self.startpos[1]) + "\n" + "End coordinates: " + str(self.endpos[0]) + " " + str(self.endpos[1]) + "\n"
-        if self.is_attack and self.move_with_attack:
-            string += "Move - Attack " + str(self.attackpos[0]) + " " + str(self.attackpos[1]) 
-        if not self.is_attack and not self.is_ability:
-            string += "Move"
-        if self.is_attack and not self.move_with_attack:
-            string += "Attack " + str(self.attackpos[0]) + " " + str(self.attackpos[1])
+        representation = self.unit.name
+
+        if self.startpos != self.endpos:
+            representation += " move from " + coordinates(self.startpos)
+            representation += " to " + coordinates(self.endpos)
+            if self.is_attack:
+                representation += " and"
+        else:
+            representation += " at " + coordinates(self.startpos)
+
+        if self.is_attack:
+            representation += " attack " + coordinates(self.attackpos)
+
         if self.is_ability:
-            string += "Ability " + " " + self.ability + " " + str(self.attackpos[0]) + " " + str(self.attackpos[1])
+            representation += " ability " + self.ability + " " + coordinates(self.attackpos)
             
-        string += "|"
-        
-        return string
+        return representation
 
 
 class Direction:
@@ -70,6 +73,9 @@ eight_directions = [Direction(i, j) for i in[-1,0,1] for j in [-1,0,1] if not i 
 ###################
 ###################
 
+def coordinates(position):
+    columns = list(" ABCDE")
+    return columns[position[0]] + str(position[1])
 
 def any(iterable):
     for element in iterable:
@@ -188,15 +194,20 @@ def get_extra_actions(p):
 
 def settle_attack_push(action, unit, enemy_unit, p, pos):
 
-    rolls = [rnd.randint(1,6), rnd.randint(1,6)]
-    print "roll", rolls
+    rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
+
     if battle.attack_successful(unit, enemy_unit, action, rolls):
         
+
+
         if action.move_with_attack and not action.finalpos:
             action.finalpos = pos
             
         pushpos = push_tile(action.endpos, action.attackpos)
+
         if not battle.defence_successful(unit, enemy_unit, action, rolls):
+            print "Success"
+
             if not unit.xp_gained_this_round:
                 unit.xp += 1
                 unit.xp_gained_this_round = True
@@ -214,6 +225,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
         
         
         else:
+            print "Pushed"
             if pushpos in p[0].units or pushpos in p[1].units or pushpos not in board:
 
                 if not unit.xp_gained_this_round:
@@ -224,13 +236,17 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
     
             else:
                 p[1].units[pushpos] = p[1].units.pop(pos)
+    else:
+        print "Failure"
 
 
 def settle_attack(action, unit, enemy_unit, p, pos):
-    rolls = [rnd.randint(1,6), rnd.randint(1,6)]
-    print "roll", rolls
+    rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
+
     if battle.attack_successful(unit, enemy_unit, action, rolls) and not battle.defence_successful(unit, enemy_unit, action, rolls):
-    
+
+        print "Success"
+
         if not unit.xp_gained_this_round:
             unit.xp += 1
             unit.xp_gained_this_round = True
@@ -240,7 +256,9 @@ def settle_attack(action, unit, enemy_unit, p, pos):
             del p[1].units[pos]
             
             if action.move_with_attack and not action.finalpos:
-                action.finalpos = pos    
+                action.finalpos = pos
+    else:
+        print "Failure"
 
 
 def settle_ability(action, friendly_unit, enemy_unit, pos, p):
