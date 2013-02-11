@@ -194,7 +194,7 @@ def get_extra_actions(p):
 
 def settle_attack_push(action, unit, enemy_unit, p, pos):
 
-    rolls = [rnd.randint(1,6), rnd.randint(1,6)]
+    rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
     print "roll", rolls
     if battle.attack_successful(unit, enemy_unit, action, rolls):
         
@@ -233,7 +233,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
 
 
 def settle_attack(action, unit, enemy_unit, p, pos):
-    rolls = [rnd.randint(1,6), rnd.randint(1,6)]
+    rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
     print "roll", rolls
     if battle.attack_successful(unit, enemy_unit, action, rolls) and not battle.defence_successful(unit, enemy_unit, action, rolls):
     
