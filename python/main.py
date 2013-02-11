@@ -257,12 +257,16 @@ def run_game():
                     p = [p[1], p[0]]
                     print
 
+                elif command_q_down(event.key):
+                    exit_game();
+
             if event.type == QUIT:
                 exit_game()
-
     
         pygame.display.flip()
 
+def command_q_down(key):
+    return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
 
 def exit_game():
     sys.exit()
