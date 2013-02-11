@@ -351,7 +351,7 @@ def do_action(action, p, unit):
     if action.startpos in p[0].units:
         p[0].units[action.finalpos] = p[0].units.pop(action.startpos)
 
-    if action.endpos[1] == p[1].backline or not p[1].units:
+    if action.finalpos[1] == p[1].backline or not p[1].units:
         p[0].won = True
 
     print action
