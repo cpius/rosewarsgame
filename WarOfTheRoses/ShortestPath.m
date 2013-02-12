@@ -161,7 +161,7 @@
     return nil;
 }
 
-- (NSArray *)getReachableLocationsFromLocation:(GridLocation)fromLocation withMaxMoves:(NSUInteger)maxMoves {
+- (NSArray *)getReachableLocationsFromLocation:(GridLocation)fromLocation withMaxRange:(NSUInteger)maxRange {
     
     return nil;
 }

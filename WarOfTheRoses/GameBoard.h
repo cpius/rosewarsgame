@@ -65,5 +65,4 @@
 
 - (void)swapCardFromNode:(GameBoardNode*)fromNode toNode:(GameBoardNode*)toNode;
 
-
 @end

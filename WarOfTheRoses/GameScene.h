@@ -29,6 +29,7 @@
     CCSprite *_leftPanel;
     
     CCLabelTTF *_actionCountLabel;
+    CCSprite *_backButton;
     
     NSMutableArray *_myCards;
     NSMutableArray *_enemyCards;

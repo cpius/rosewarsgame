@@ -11,6 +11,7 @@
 #import "Card.h"
 #import "Magnifier.h"
 #import "EndTurnLayer.h"
+#import "MainMenuScene.h"
 
 @interface GameScene()
 
@@ -72,6 +73,11 @@
         _actionCountLabel.position = ccp(_winSize.width - 50, _winSize.height - 50);
         _actionCountLabel.anchorPoint = ccp(0, 0);
         [self addChild:_actionCountLabel];
+        
+        _backButton = [CCSprite spriteWithFile:@"backbutton.png"];
+        _backButton.position = ccp(10, _winSize.height - _backButton.contentSize.height - 10);
+        _backButton.anchorPoint = ccp(0, 0);
+        [self addChild:_backButton];
                 
         [self addChild:_gameboard];
         
@@ -128,6 +134,12 @@
     }
     
     UITouch *touch = [touches anyObject];
+    
+    if (CGRectContainsPoint(_backButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
+        
+        [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
+        return;
+    }
     
     GameBoardNode *targetNode = [_gameboard getGameBoardNodeForPosition:[_gameboard convertTouchToNodeSpace:touch]];
     

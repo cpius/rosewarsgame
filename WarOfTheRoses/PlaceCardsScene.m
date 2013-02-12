@@ -176,9 +176,7 @@
     
     if (gameboardNode != nil) {
         if (gameboardNode != _hoveringOverGameBoardNode && !gameboardNode.hasCard) {
-            
-            [_selectedCard runAction:[CCMoveTo actionWithDuration:0.0 position:[_gameboard convertToWorldSpace:gameboardNode.position]]];
-            
+                        
             CCScaleTo *scaleUpAction = [CCScaleTo actionWithDuration:0.2 scale:1.1];
             [gameboardNode runAction:scaleUpAction];
             

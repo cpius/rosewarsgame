@@ -24,6 +24,6 @@
 @property (nonatomic, weak) id<ShortestPathDatasource> datasource;
 
 - (NSArray*)getPathFromGridLocation:(GridLocation)fromLocation toGridLocation:(GridLocation)toLocation;
-- (NSArray*)getReachableLocationsFromLocation:(GridLocation)fromLocation withMaxMoves:(NSUInteger)maxMoves;
+- (NSArray*)getReachableLocationsFromLocation:(GridLocation)fromLocation withMaxRange:(NSUInteger)maxRange;
 
 @end
