@@ -55,4 +55,12 @@
     [particle stopAllActions];
     [particle removeFromParentAndCleanup:YES];
 }
+
++ (void)applyBurstToNode:(CCNode*)node {
+    
+    CCParticleSystem *particle = [CCParticleSystemQuad particleWithFile:@"exploding_ring.plist"];
+    particle.position = ccp(node.contentSize.width / 2, node.contentSize.height / 2);
+    particle.scale = 0.5;
+    [node addChild:particle z:10];
+}
 @end

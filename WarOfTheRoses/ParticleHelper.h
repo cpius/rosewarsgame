@@ -16,4 +16,6 @@
 + (void)highlightNode:(CCNode*)node forever:(BOOL)forever;
 + (void)stopHighlightingNode:(CCNode*)node;
 
++ (void)applyBurstToNode:(CCNode*)node;
+
 @end

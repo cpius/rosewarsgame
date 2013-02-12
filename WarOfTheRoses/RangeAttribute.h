@@ -10,6 +10,12 @@
 #import "RawBonus.h"
 #import "TimedBonus.h"
 
+typedef enum {
+    
+    kRangedAttributeLowerValue,
+    kRangedAttributeUpperValue
+} RangedAttributeValues;
+
 @class RangeAttribute;
 @protocol RangeAttributeDelegate <NSObject>
 
@@ -31,6 +37,7 @@
 
 @property (nonatomic, weak) id<RangeAttributeDelegate> delegate;
 @property (nonatomic, readonly) AttributeRange finalRange;
+@property (nonatomic, assign) RangedAttributeValues valueAffectedByBonuses;
 
 - (id)initWithStartingRange:(AttributeRange)startingRange;
 

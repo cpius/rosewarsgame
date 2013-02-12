@@ -16,7 +16,10 @@
 @property (nonatomic, strong) Deck *myDeck;
 @property (nonatomic, strong) Deck *enemyDeck;
 @property (nonatomic, assign) NSUInteger currentRound;
+@property (nonatomic, assign) NSUInteger numberOfAvailableActions;
 @property (nonatomic, assign) GameStates state;
+@property (nonatomic, assign) PlayerColors myColor;
+@property (nonatomic, readonly) PlayerColors enemyColor;
 
 
 + (void)deserializeGameData:(NSData*)gameData;

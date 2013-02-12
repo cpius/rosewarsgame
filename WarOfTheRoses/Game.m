@@ -15,18 +15,29 @@
 @synthesize enemyDeck = _enemyDeck;
 @synthesize currentRound;
 @synthesize state;
+@synthesize myColor;
+@synthesize numberOfAvailableActions;
 
 - (id)init {
     
     self = [super init];
     
     if (self) {
-        
-        self.currentRound = 1;
-        self.state = kGameStateInitialState;
+        self.myColor = arc4random() % 1;
     }
     
     return self;
+}
+
+- (PlayerColors)enemyColor {
+    
+    if (self.myColor == kPlayerGreen) {
+        return kPlayerRed;
+    }
+    
+    if (self.myColor == kPlayerRed) {
+        return kPlayerGreen;
+    }
 }
 
 - (NSData *)serializeCurrentGame {

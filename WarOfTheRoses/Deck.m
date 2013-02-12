@@ -19,18 +19,18 @@
 
 @synthesize cards = _cards;
 
-- (id)initWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType {
+- (id)initWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
     
     self = [super init];
     
     if (self) {
-        [self generateNewDeckWithNumberOfBasicType:basicType andSpecialType:specialType];
+        [self generateNewDeckWithNumberOfBasicType:basicType andSpecialType:specialType cardColor:cardColor];
     }
     
     return self;
 }
 
-- (void)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType {
+- (void)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
     
     _cards = [[NSMutableArray alloc] init];
     
@@ -43,6 +43,8 @@
         
         Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeBasicUnit];
         
+        drawnCard.cardColor = cardColor;
+        
         if ([self cardIsAllowedInDeck:drawnCard]) {
             [_cards addObject:drawnCard];
             numberOfBasicTypes++;
@@ -52,6 +54,8 @@
     while (numberOfSpecialTypes < specialType) {
         
         Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeSpecialUnit];
+        
+        drawnCard.cardColor = cardColor;
         
         if ([self cardIsAllowedInDeck:drawnCard]) {
             [_cards addObject:drawnCard];
@@ -79,6 +83,13 @@
     
     // Max 1 of the same specialunit in the deck
     return unitsAlreadyInDeck < 1;
+}
+
+- (void)resetMoveCounters {
+    
+    for (Card *card in _cards) {
+        card.movesConsumed = 0;
+    }
 }
 
 @end

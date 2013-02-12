@@ -5,16 +5,16 @@
 //  Created by Heine Skov Kristensen on 12/27/12.
 //
 //
+#import "BaseBonus.h"
 
 @class RangeAttribute;
-@interface TimedBonus : NSObject {
+@interface TimedBonus : BaseBonus {
     
     RangeAttribute *_parent;
     
     NSUInteger bonusValueStartedInRound;
 }
 
-@property (nonatomic, readonly) NSUInteger bonusValue;
 @property (nonatomic, readonly) NSUInteger numberOfRounds;
 
 - (id)initWithValue:(NSUInteger)bonusValue;

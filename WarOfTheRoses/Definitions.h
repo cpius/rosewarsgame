@@ -9,20 +9,29 @@
 #ifndef WarOfTheRoses_Definitions_h
 #define WarOfTheRoses_Definitions_h
 
-#define BUTTON_CLICK_SOUND @"buttonclick.wav"
-#define BOOM_SOUND @"boom.wav"
-#define SWOOSH_SOUND @"swoosh.wav"
+#define APP_FONT @"AppleGothic"
 
 typedef struct _GridLocation {
-    NSUInteger row;
-    NSUInteger column;
+    NSInteger row;
+    NSInteger column;
 } GridLocation;
 
-NS_INLINE GridLocation MakeGridLocation(NSUInteger row, NSUInteger column) {
+NS_INLINE GridLocation MakeGridLocation(NSInteger row, NSInteger column) {
     GridLocation cl;
     cl.row = row;
     cl.column = column;
     return cl;
+}
+
+#define GridLocationEmpty MakeGridLocation(-1, -1);
+
+/*NS_INLINE GridLocation GridLocationEmpty() {
+    return MakeGridLocation(-1, -1);
+}
+*/
+NS_INLINE BOOL GridLocationEqualToLocation(GridLocation location1, GridLocation location2) {
+    
+    return location1.row == location2.row && location1.column == location2.column;
 }
 
 typedef enum {
@@ -31,6 +40,10 @@ typedef enum {
     kGameStateGameStarted = 2
 } GameStates;
 
+typedef enum {
+    kCombatOutcomeAttackSuccessful = 0,
+    kCombatOutcomeDefendSuccessful = 1
+} CombatOutcome;
 
 typedef enum {
     kCardTypeBasicUnit,

@@ -7,10 +7,10 @@
 //
 
 #import "BaseRangedAttribute.h"
+#import "BaseBonus.h"
 
-@interface RawBonus : NSObject
+@interface RawBonus : BaseBonus
 
-@property (nonatomic, readonly) NSUInteger bonusValue;
 
 - (id)initWithValue:(NSUInteger)bonusValue;
 

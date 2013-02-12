@@ -14,10 +14,12 @@
 #import "BonusSprite.h"
 #import "ParticleHelper.h"
 #import "GameManager.h"
+#import "CardSprite.h"
 
 @interface ConstructDeckScene()
 
 - (void)presentCards;
+- (void)moveCardToHomePosition:(CardSprite*)card;
 
 @end
 
@@ -42,10 +44,10 @@
     
     if (self) {
         
-        CGSize screenSize = [CCDirector sharedDirector].winSize;
+        _screenSize = [CCDirector sharedDirector].winSize;
                 
-        CCSprite *background = [CCSprite spriteWithFile:@"woddenbackground.png"];
-        background.position = ccp(screenSize.width / 2, screenSize.height / 2);
+        CCSprite *background = [CCSprite spriteWithFile:@"woddenbackground2.png"];
+        background.position = ccp(_screenSize.width / 2, _screenSize.height / 2);
         [self addChild:background z:-1];
 
         _deckOfCards = [CCSprite spriteWithFile:@"deckgreencard.png"];
@@ -53,6 +55,8 @@
         _deckOfCards.position = ccp(20, [_deckOfCards contentSize].height + 20);
         [self addChild:_deckOfCards];
         
+        CardSprite *tempSprite = [[CardSprite alloc] initWithCard:[[GameManager sharedManager].currentGame.myDeck.cards objectAtIndex:0]];
+        _cardSize = CGSizeMake(tempSprite.contentSize.width * 0.5, tempSprite.contentSize.height * 0.5);
         
         CCDelayTime *delayAction = [CCDelayTime actionWithDuration:1.0];
         CCCallFunc *funcAction = [CCCallFunc actionWithTarget:self selector:@selector(presentCards)];
@@ -68,7 +72,7 @@
     
     PlaceCardsScene *scene = [PlaceCardsScene scene];
     
-    [[SimpleAudioEngine sharedEngine] playEffect:BUTTON_CLICK_SOUND];
+    [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
     
     [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:(CCScene*)scene]];
 }
@@ -81,35 +85,42 @@
     
     GridlLayoutManager *gridLayoutManager = [[GridlLayoutManager alloc] init];
     
-    gridLayoutManager.numberOfRows = 3;
-    gridLayoutManager.numberOfColumns = 4;
-    gridLayoutManager.columnPadding = 0;
+    gridLayoutManager.numberOfRows = 2;
+    gridLayoutManager.numberOfColumns = 5;
+    gridLayoutManager.columnPadding = 4;
+    gridLayoutManager.columnWidth = _cardSize.width;
+    gridLayoutManager.rowHeight = _cardSize.height;
     gridLayoutManager.gridSize = CGSizeMake(screenSize.width, screenSize.height / 2);
 
     gridLayoutManager.yOffset = screenSize.height;
+    gridLayoutManager.xOffset = 8;
     
     NSInteger row = 1, column = 1;
     float cardCounter = 1;
+    
+    _cardSprites = [[NSMutableArray alloc] initWithCapacity:[GameManager sharedManager].currentGame.myDeck.cards.count];
     
     for (Card *card in [GameManager sharedManager].currentGame.myDeck.cards) {
         
         CCLOG(@"Cardtype: %@", NSStringFromClass([card class]));
         
-        card.scale = 0.8;
-        card.position = ccp(_deckOfCards.position.x + 30, _deckOfCards.position.y - 40);
-        card.rotation = -10;
-        card.cardLocation = MakeGridLocation(row, column);
+        CardSprite *cardSprite = [[CardSprite alloc] initWithCard:card];
         
-        [self addChild:card];
+        cardSprite.scale = 0.8;
+        cardSprite.position = ccp(_deckOfCards.position.x + 30, _deckOfCards.position.y - 40);
+        cardSprite.rotation = -10;
+        cardSprite.model.cardLocation = MakeGridLocation(row, column);
+        
+        [self addChild:cardSprite];
+        [_cardSprites addObject:cardSprite];
         
         CGPoint cardPosition = [gridLayoutManager getPositionForRowNumber:row columnNumber:column];
         
-        CCScaleTo *scale = [CCScaleTo actionWithDuration:0.5 scale:0.5];
-        CCMoveTo *moveTo = [CCMoveTo  actionWithDuration:0.5 position:cardPosition];
-        CCRotateTo *rotate = [CCRotateTo actionWithDuration:0.5 angle:0];
+        CCScaleTo *scale = [CCScaleTo actionWithDuration:0.1 * (cardCounter + 1) scale:0.5];
+        CCMoveTo *moveTo = [CCMoveTo  actionWithDuration:0.1 * (cardCounter + 1) position:cardPosition];
+        CCRotateTo *rotate = [CCRotateTo actionWithDuration:0.1 * (cardCounter + 1) angle:0];
         CCSpawn *spawn = [CCSpawn actions:scale, moveTo, rotate, nil];
-        CCCallFunc *sound = [CCCallFunc actionWithTarget:self selector:@selector(playBoomSound)];
-        CCDelayTime *delay = [CCDelayTime actionWithDuration:0.5];
+        CCDelayTime *delay = [CCDelayTime actionWithDuration:0.1];
         
         CCCallBlock *checkFinished = [CCCallBlock actionWithBlock:^{
             
@@ -119,13 +130,13 @@
             }
         }];
         
-        CCSequence *sequence = [CCSequence actions:spawn, sound, checkFinished, delay, nil];
-        [card runAction:sequence];
+        CCSequence *sequence = [CCSequence actions:spawn, checkFinished, delay, nil];
+        [cardSprite runAction:sequence];
         
         cardCounter++;
         column++;
         
-        if (column > 4) {
+        if (column > 5) {
             column = 1;
             row++;
         }
@@ -164,14 +175,14 @@
 
 - (void)addBonusToCard:(Card*)card withDrawNumber:(NSNumber*)drawNumber {
     
-    TimedBonus *bonus = [[TimedBonus alloc] initWithValue:1 forNumberOfRounds:1];
+    RawBonus *bonus = [[RawBonus alloc] initWithValue:1];
 
     if (drawNumber.integerValue == 1) {
-        [card.attack addTimedBonus:bonus];
+        [card.attack addRawBonus:bonus];
     }
     
     if (drawNumber.integerValue == 2) {
-        [card.defence addTimedBonus:bonus];
+        [card.defence addRawBonus:bonus];
     }
 }
 
@@ -192,29 +203,16 @@
     CGPoint location = [touch locationInView:touch.view];
     CGPoint convLoc = [[CCDirector sharedDirector] convertToGL:location];
     
-    for (Card *card in [GameManager sharedManager].currentGame.myDeck.cards) {
+    for (CardSprite *card in _cardSprites) {
         
 		if(CGRectContainsPoint(card.boundingBox, convLoc)) {
             CGSize screenSize = [CCDirector sharedDirector].winSize;
             
             CCCallFunc *sound = [CCCallFunc actionWithTarget:self selector:@selector(playSwooshSound)];
 
-            if (card.isShowingDetail) {
+            if (card.model.isShowingDetail) {
                 
-                GridlLayoutManager *gridLayoutManager = [[GridlLayoutManager alloc] init];
-                
-                gridLayoutManager.numberOfRows = 3;
-                gridLayoutManager.numberOfColumns = 4;
-                gridLayoutManager.columnPadding = 0;
-                gridLayoutManager.gridSize = CGSizeMake(screenSize.width, screenSize.height / 2);
-                
-                gridLayoutManager.yOffset = screenSize.height;
-                
-                CGPoint location = [gridLayoutManager getPositionForRowNumber:card.cardLocation.row columnNumber:card.cardLocation.column];
-                
-                CCMoveTo *moveTo = [CCMoveTo  actionWithDuration:0.3 position:location];
-                CCSpawn *spawn = [CCSpawn actions: moveTo, sound, nil];
-                [card runAction:spawn];
+                [self moveCardToHomePosition:card];
             }
             else {
                 CCMoveTo *moveTo = [CCMoveTo  actionWithDuration:0.3 position:CGPointMake(screenSize.width / 2, screenSize.height / 2)];
@@ -223,10 +221,29 @@
             }
             
             [card toggleDetailWithScale:0.5];
-            
-			break;
 		}
 	}
+}
+
+- (void)moveCardToHomePosition:(CardSprite *)card {
+    
+    GridlLayoutManager *gridLayoutManager = [[GridlLayoutManager alloc] init];
+    
+    gridLayoutManager.numberOfRows = 2;
+    gridLayoutManager.numberOfColumns = 5;
+    gridLayoutManager.columnPadding = 4;
+    gridLayoutManager.columnWidth = _cardSize.width;
+    gridLayoutManager.rowHeight = _cardSize.height;
+    gridLayoutManager.gridSize = CGSizeMake(_screenSize.width, _screenSize.height / 2);
+    
+    gridLayoutManager.yOffset = _screenSize.height;
+    gridLayoutManager.xOffset = 8;
+    
+    CGPoint location = [gridLayoutManager getPositionForRowNumber:card.model.cardLocation.row columnNumber:card.model.cardLocation.column];
+    
+    CCMoveTo *moveTo = [CCMoveTo  actionWithDuration:0.3 position:location];
+    CCSpawn *spawn = [CCSpawn actions: moveTo, nil];
+    [card runAction:spawn];
 }
 
 @end

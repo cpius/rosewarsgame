@@ -30,7 +30,7 @@
     
     [self removeAllChildrenWithCleanup:YES];
     
-    CCLabelTTF *bonusLabel = [CCLabelTTF labelWithString:bonusText fontName:@"AppleGothic" fontSize:10.0];
+    CCLabelTTF *bonusLabel = [CCLabelTTF labelWithString:bonusText fontName:APP_FONT fontSize:10.0];
     
     [self addChild:bonusLabel];
     

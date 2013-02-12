@@ -11,13 +11,14 @@
 #import "Deck.h"
 #import "GameBoard.h"
 #import "GridlLayoutManager.h"
+#import "CardSprite.h"
 
 #define NEXT_ARROW_TAG 1000
 
 @interface PlaceCardsScene : CCLayer {
 
-    Card * _selectedCard;
-    Card *_detailCard;
+    CardSprite * _selectedCard;
+    CardSprite *_detailCard;
     BOOL _isMovingCard;
     
     GameBoard *_gameboard;
@@ -26,6 +27,7 @@
     GridlLayoutManager *_gridLayoutManager;
     
     NSMutableArray *_placedCards;
+    NSMutableArray *_cardSprites;
 }
 
 @property (nonatomic, strong) Deck *currentDeck;
