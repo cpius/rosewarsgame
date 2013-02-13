@@ -90,6 +90,8 @@ def any(iterable):
 def zoc(pos, unit, enemy_units):
     return pos in board and pos in enemy_units and hasattr(enemy_units[pos], "zoc") and unit.type in enemy_units[pos].zoc
 
+def blocked_by_perpending_zoc(unit, enemy_units, pos, direction):
+    return any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(pos))
 
 def surrounding_tiles(pos):
     return set(direction.move(pos) for direction in eight_directions)
@@ -423,7 +425,7 @@ def moves_set(units, enemy_units, unit, pos, tiles):
         for direction in directions:
             npos = direction.move(pos)
             if npos in board and npos not in units:
-                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(pos)):
+                if not blocked_by_perpending_zoc(unit, enemy_units, pos, direction):
                     movesets = moves_set(units, enemy_units, unit, npos, tiles -1)
                     moveset_w_leftover |= movesets[0]
                     moveset_wo_leftover |= movesets[1]
@@ -469,7 +471,7 @@ def melee_attacks_list_samurai_second(enemy_units, unit, startpos, moveset, move
         for direction in directions:
             npos = direction.move(move)
             if npos in enemy_units:
-                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(move)) and movement_remaining == 1:
+                if not blocked_by_perpending_zoc(unit, enemy_units, move, direction) and movement_remaining == 1:
                     actions.append(Action(unit, startpos, move, npos, True, True))
                 actions.append(Action(unit, startpos, move, npos, True, False))
     
@@ -486,7 +488,7 @@ def melee_attacks_list(enemy_units, unit, startpos, moveset):
         for direction in directions:
             npos = direction.move(move)
             if npos in enemy_units:
-                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(move)):
+                if not blocked_by_perpending_zoc(unit, enemy_units, move, direction):
                     actions.append(Action(unit, startpos, move, npos, True, True))
                 actions.append(Action(unit, startpos, move, npos, True, False))
     
@@ -696,7 +698,7 @@ def melee_attacks_rage(enemy_units, unit, startpos, moveset_w_leftover, moveset_
         for direction in directions:
             npos = direction.move(move)
             if npos in enemy_units:
-                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(move)):
+                if not blocked_by_perpending_zoc(unit, enemy_units, move, direction):
                     actions.append(Action(unit, startpos, move, npos, True, True))
                 actions.append(Action(unit, startpos, move, npos, True, False))
 
@@ -718,7 +720,7 @@ def melee_attacks_longsword(enemy_units, unit, startpos, moveset):
         for direction in directions:
             npos = direction.move(move)
             if npos in enemy_units:
-                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(move)):
+                if not blocked_by_perpending_zoc(unit, enemy_units, move, direction):
                     actions.append(Action(unit, startpos, move, npos, True, True))
                     for fpos in four_forward_tiles(move, npos):
                         if fpos in enemy_units:
@@ -740,7 +742,7 @@ def melee_attacks_triple(enemy_units, unit, startpos, moveset):
         for direction in directions:
             npos = direction.move(move)
             if npos in enemy_units:
-                if not any(zoc(ppos, unit, enemy_units) for ppos in direction.perpendicular(move)):
+                if not blocked_by_perpending_zoc(unit, enemy_units, move, direction):
                     actions.append(Action(unit, startpos, move, npos, True, True))
                     for fpos in two_forward_tiles(move, npos):
                         if fpos in enemy_units:
