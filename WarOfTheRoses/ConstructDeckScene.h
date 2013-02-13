@@ -15,7 +15,10 @@
     GridLocation selectedCard;
     
     CCSprite *_deckOfCards;
+    CGSize _cardSize;
+    CGSize _screenSize;
     
+    NSMutableArray *_cardSprites;
 }
 
 @property (nonatomic, strong) Deck *currentDeck;

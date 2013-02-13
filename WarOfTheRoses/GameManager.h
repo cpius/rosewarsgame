@@ -17,7 +17,11 @@
 
 @property (nonatomic, readonly) Game *currentGame;
 
+- (CombatOutcome)resolveCombatBetween:(Card*)attacker defender:(Card*)defender;
+
+- (NSUInteger)actionUsed;
 - (void)startNewGameOfType:(GameTypes)gameType;
+- (void)endTurn;
 
 + (GameManager*)sharedManager;
 

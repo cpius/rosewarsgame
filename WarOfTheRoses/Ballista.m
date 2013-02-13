@@ -22,8 +22,7 @@
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(3, 6)];
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 1)];
         range = 3;
-        move = 1;
-        experience = 0;
+        self.move = 1;
         actionCost = 1;
         
         hasSpecialAbility = NO;

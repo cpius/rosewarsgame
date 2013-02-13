@@ -12,6 +12,7 @@
 #import "GCTurnBasedMatchHelper.h"
 #import "MainMenuScene.h"
 #import "GridlLayoutManager.h"
+#import "SoundManager.h"
 
 @implementation AppController
 
@@ -99,15 +100,11 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"heavycavalry_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"heavycavalry_icon.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"heavycavalry_0.png" rect:CGRectMake(0, 0, 100, 154)] name:@"heavycavalry_0.png"];
 
+    [[SoundManager sharedManager] preloadSoundEffects];
+    
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
 	[director_ pushScene: [MainMenuScene scene]];
-    
-    [SimpleAudioEngine sharedEngine];
-    
-    [[SimpleAudioEngine sharedEngine] preloadEffect:BUTTON_CLICK_SOUND];
-    [[SimpleAudioEngine sharedEngine] preloadEffect:BOOM_SOUND];
-    [[SimpleAudioEngine sharedEngine] preloadEffect:SWOOSH_SOUND];
-    
+            
     [[GCTurnBasedMatchHelper sharedInstance] authenticateLocalUser];
     
     [glView setMultipleTouchEnabled:TRUE];

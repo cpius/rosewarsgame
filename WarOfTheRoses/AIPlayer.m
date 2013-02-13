@@ -24,7 +24,7 @@
         
         while (!cardInValidPosition) {
             
-            GridLocation location = MakeGridLocation((arc4random() % 3) + 1, (arc4random() % 4) + 1);
+            GridLocation location = MakeGridLocation((arc4random() % 4) + 1, (arc4random() % 5) + 1);
             
             if (![self deck:deck containsCardInLocation:location]) {
                 

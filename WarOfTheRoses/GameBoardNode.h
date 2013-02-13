@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
-#import "Card.h"
+#import "CardSprite.h"
 
 @interface GameBoardNode : CCNode {
     
@@ -17,7 +17,7 @@
 
 @property (nonatomic, assign) BOOL hasCard;
 @property (nonatomic, assign) GridLocation locationInGrid;
-@property (nonatomic, strong) Card *card;
+@property (nonatomic, strong) CardSprite *card;
 
 - (id)initWithSprite:(CCSprite*)sprite;
 

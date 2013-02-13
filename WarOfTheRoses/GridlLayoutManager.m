@@ -18,7 +18,8 @@
 @synthesize rowPadding, columnPadding;
 @synthesize numberOfColumns, numberOfRows;
 @synthesize gridSize;
-@synthesize yOffset;
+@synthesize yOffset, xOffset;
+@synthesize columnWidth, rowHeight;
 
 + (GridlLayoutManager*)sharedManager {
     
@@ -47,33 +48,16 @@
     return self;
 }
 
-- (float)widthForColumn {
-    
-    float width = gridSize.width  / numberOfColumns;
-    
-    return width;
-}
-
-- (float)heightForRow {
-    
-    float height = (gridSize.height - (rowPadding * numberOfRows)) / numberOfRows;
-    
-    return height;
-}
-
 - (CGPoint)getPositionForRowNumber:(NSInteger)rowNumber columnNumber:(NSInteger)columnNumber {
     
     if (rowNumber > numberOfRows || columnNumber > numberOfColumns) {
         return CGPointZero;
     }
+        
+    NSInteger x = (columnPadding * columnNumber) + (self.columnWidth * (columnNumber - 1));
+    NSInteger y = yOffset - ((rowPadding * rowNumber) + (self.rowHeight * (rowNumber - 1)));
     
-    float widthForColumn = [self widthForColumn];
-    float heightForRow = [self heightForRow];
-    
-    NSInteger x = (columnPadding * columnNumber) + (widthForColumn * (columnNumber - 1));
-    NSInteger y = yOffset - ((rowPadding * rowNumber) + (heightForRow * (rowNumber - 1)));
-    
-    return CGPointMake(x + (widthForColumn / 2) , y - (heightForRow / 2));
+    return CGPointMake(xOffset + x + (self.columnWidth / 2) , y - (self.rowHeight / 2));
 }
 
 @end

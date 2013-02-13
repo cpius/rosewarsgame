@@ -8,10 +8,17 @@
 
 #import "RangeAttribute.h"
 
+@interface RangeAttribute()
+
+- (AttributeRange)calculateFinalRange:(AttributeRange)finalRange fromBonus:(NSUInteger)bonus;
+
+@end
+
 @implementation RangeAttribute
 
 @synthesize finalRange = _finalRange;
 @synthesize delegate = _delegate;
+@synthesize valueAffectedByBonuses = _valueAffectedByBonuses;
 
 - (id)initWithStartingRange:(AttributeRange)startingRange {
     
@@ -21,6 +28,8 @@
         
         _rawBonuses = [[NSMutableArray alloc] init];
         _timedBonuses = [[NSMutableArray alloc] init];
+        
+        _valueAffectedByBonuses = kRangedAttributeLowerValue;
         
         _finalRange = self.baseRange;
     }
@@ -68,6 +77,20 @@
     }
 }
 
+- (AttributeRange)calculateFinalRange:(AttributeRange)finalRange fromBonus:(NSUInteger)bonus {
+    
+    AttributeRange calculatedFinalRange;
+    
+    if (_valueAffectedByBonuses == kRangedAttributeLowerValue) {
+        calculatedFinalRange = MakeAttributeRange(finalRange.lowerValue - bonus, finalRange.upperValue);
+    }
+    else if (_valueAffectedByBonuses == kRangedAttributeUpperValue) {
+        calculatedFinalRange = MakeAttributeRange(finalRange.lowerValue, finalRange.upperValue + bonus);
+    }
+    
+    return calculatedFinalRange;
+}
+
 - (AttributeRange)calculateValue {
     
     _finalRange = self.baseRange;
@@ -80,7 +103,8 @@
         rawBonusValue += rawbonus.bonusValue;
     }
     
-    _finalRange = MakeAttributeRange(_finalRange.lowerValue - rawBonusValue, _finalRange.upperValue);
+    _finalRange = [self calculateFinalRange:_finalRange fromBonus:rawBonusValue];
+    
 
     // Add values from final bonuses
     NSUInteger finalBonusValue = 0;
@@ -90,8 +114,8 @@
         finalBonusValue += finalbonus.bonusValue;
     }
     
-    _finalRange = MakeAttributeRange(_finalRange.lowerValue - rawBonusValue, _finalRange.upperValue);
-    
+    _finalRange = [self calculateFinalRange:_finalRange fromBonus:finalBonusValue];
+        
     return _finalRange;
 }
 

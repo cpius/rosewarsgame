@@ -7,14 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Game.h"
+#import "GameManager.h"
 #import "GameBoard.h"
 
 #define kZoomFactor 2.0
 
-@interface GameScene : CCLayer {
+@interface GameScene : CCLayer <GameBoardActionProtocol> {
     
-    Game *_currentGame;
+    CGSize _winSize;
+    
+    GameManager *_gameManager;
     GameBoard *_gameboard;
     
     BOOL _zoomedIn;
@@ -23,9 +25,18 @@
     
     GameBoardNode *_zoomInOnNode;
     CGPoint _zoomPosition;
-    GameBoardNode *_activeNode;
+    
+    CCSprite *_leftPanel;
+    
+    CCLabelTTF *_actionCountLabel;
+    CCSprite *_backButton;
+    
+    NSMutableArray *_myCards;
+    NSMutableArray *_enemyCards;
 }
 
 + (id)scene;
+
+- (CombatOutcome)engageCombatBetweenMyCard:(Card*)myCard andEnemyCard:(Card*)enemyCard;
 
 @end
