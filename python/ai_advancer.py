@@ -10,15 +10,12 @@ def get_action(p, actions, document_it = False):
         action.score = action.endpos[1]
         
         if action.endpos[1] > action.startpos[1]:
-            action.score += 0.1
+            action.score += 1
         
         if action.is_attack:
             action.score += 0.25
             if action.attackpos[1] > action.endpos[1] and action.move_with_attack:
                 action.score += 0.5
-    
-        if action.unit.name == "Diplomat" and action.is_ability:
-            action.score = 11
     
     rnd.shuffle(actions)
     actions.sort(key = attrgetter("score"), reverse= True)

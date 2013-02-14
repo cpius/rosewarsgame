@@ -225,7 +225,7 @@ def run_game():
                     while p[0].actions > 0:
                         
                         p[0].extra_action = False
-                        action = p[0].ai.select_action(p, True)
+                        action = p[0].ai.select_action(p, False)
                         
                         if action:
                             draw_action(screen, action)
@@ -241,7 +241,7 @@ def run_game():
                             draw_game(screen, p)
                             
                             p[0].extra_action = True
-                            extra_action = p[0].ai.select_extra_action(p, True)
+                            extra_action = p[0].ai.select_extra_action(p, False)
 
                             if extra_action:
                                 draw_action(screen, extra_action)

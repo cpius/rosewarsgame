@@ -98,7 +98,7 @@ class Unit:
 
 
     def royal_guard(self):
-        self.attack = 5
+        self.attack = 4
         self.defence = 3
         self.movement = 1
         self.range= 1
@@ -126,7 +126,7 @@ class Unit:
 
     def viking(self):
         self.attack = 4
-        self.defence = 3
+        self.defence = 2
         self.movement = 1
         self.range = 1
         self.abonus = {}
@@ -152,11 +152,11 @@ class Unit:
 
 
     def lancer(self):
-        self.attack = 4
+        self.attack = 5
         self.defence = 3
         self.movement = 3
         self.range = 1
-        self.abonus = {}
+        self.abonus = {"Cavalry": 1}
         self.dbonus = {}
         self.zoc = []
         self.type = "Cavalry"
@@ -179,7 +179,7 @@ class Unit:
 
     def longswordsman(self):
         self.attack = 4
-        self.defence = 6
+        self.defence = 3
         self.movement = 1
         self.range = 1
         self.abonus = {}
@@ -299,9 +299,7 @@ class Unit:
 
 board = set((i,j) for i in range(1,6) for j in range(1, 9))
 unit_names = ["Archer", "Ballista", "Catapult", "Light Cavalry", "Heavy Cavalry", "Pikeman"]
-specialunit_names = ["Samurai", "Chariot", "War Elephant"]  #special units that are used in this game
-#specialunit_names = ["Weaponsmith", "Scout", "Lancer", "Cannon", "Saboteur", "Viking", "Berserker", "Crusader", "Longswordsman, "Flagbearer", "Royal Guard"]   #Special units that are implemented so far.
-#specialunit_names = ["Chariot", "Diplomat", "Samurai", "War Elephant"] #Special units that are not yet implemented
+specialunit_names = ["Chariot", "Diplomat", "Samurai", "War Elephant", "Weaponsmith", "Scout", "Lancer", "Cannon", "Saboteur", "Viking", "Berserker", "Crusader", "Longswordsman", "Flag Bearer", "Royal Guard"]   #Special units that are implemented so far.
 nonfrontunit_names = ["Light Cavalry", "Ballista", "Catapult", "Archer", "Scout", "Saboteur", "Diplomat", "Berserker", "Cannon", "Weaponsmith", "Royal Guard"]
 nonbackunit_names = ["Pikeman", "Berserker", "Longswordsman", "Royal Guard", "Samurai", "Viking", "War Elephant"]
 
