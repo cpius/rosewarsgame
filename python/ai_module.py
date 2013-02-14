@@ -71,6 +71,20 @@ class AI:
                 unit.xp = 0
 
 
+class Direction:
+    """ A object direction is one move up, down, left or right.
+    The class contains methods for returning the tile you will go to after the move, and for returning the tiles you should check for zone of control.
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def move(self, pos):
+        return (pos[0] + self. x, pos[1] + self.y)
+    
+    def perpendicular(self, pos):
+        return ((pos[0] + self.y, pos[1] + self.x), (pos[0] - self.y, pos[1] - self.x))
+
 
 
 def get_actions(p):
@@ -92,14 +106,27 @@ def t(pos):
         return None
 
 
+def get_transformed_direction(direction):
+    
+    if direction.y == -1:
+        return Direction(0,1)
+ 
+    if direction.y == 1:
+        return Direction(0,-1)
+
+    return direction
+
 
 def get_transformed_action(action):
-    
+
     action.startpos = t(action.startpos)
     action.endpos = t(action.endpos)
     action.attackpos = t(action.attackpos)
     for sub_action in action.sub_actions:
         sub_action = get_transformed_action(sub_action)
+    if hasattr(action, "push"):
+        action.push_direction = get_transformed_direction(action.push_direction)
+        
     return action
 
 

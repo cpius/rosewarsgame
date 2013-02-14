@@ -106,11 +106,14 @@ def two_forward_tiles(pos, fpos):
     
     return set(direction.move(pos) for direction in eight_directions) & set(direction.move(fpos) for direction in directions)
 
-
-def push_tile(pos, apos):
+"""
+def get_direction(pos, apos):
     for direction in directions:
         if direction.move(pos) == apos:
-            return direction.move(apos)
+            return direction
+"""
+def get_direction(pos, apos):
+    return Direction(-pos[0] + apos[0], -pos[1] + apos[1])
 
 
 def distance(p1, p2):
@@ -125,6 +128,13 @@ def find_all_units_except_current(pos, p):
     return all_units
 
 
+
+def out_of_board_vertical(pos):
+    return (pos[1] < 1 or pos[1] > 8)
+
+
+def out_of_board_horizontal(pos):
+    return (pos[0] < 1 or pos[0] > 5)
 
 ###################
 ###################
@@ -200,13 +210,8 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
     rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
 
     if battle.attack_successful(unit, enemy_unit, action, rolls):
-        
 
-
-        if action.move_with_attack and not action.finalpos:
-            action.finalpos = pos
-            
-        pushpos = push_tile(action.endpos, action.attackpos)
+        pushpos = action.push_direction.move(action.attackpos)
 
         if not battle.defence_successful(unit, enemy_unit, action, rolls):
             action.outcome = "Success"
@@ -217,28 +222,37 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
             
             if hasattr(enemy_unit, "extra_life"):
                 del enemy_unit.extra_life
-
-                if pushpos not in p[0].units and pushpos not in p[1].units:
-                    p[1].units[pushpos] = p[1].units.pop(action.attackpos)
-                else:
-                    del p[1].units[pos] 
+                
+                if not out_of_board_vertical(pushpos):
+                    if action.move_with_attack and not action.finalpos:
+                        action.finalpos = pos
+                    if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
+                        del p[1].units[pos]
+                    else:       
+                        p[1].units[pushpos] = p[1].units.pop(action.attackpos)
                 
             else:
+                if action.move_with_attack and not action.finalpos:
+                    action.finalpos = pos
                 del p[1].units[pos]
-        
-        
+           
         else:
-            action.outcome = "Pushed"
-            if pushpos in p[0].units or pushpos in p[1].units or pushpos not in board:
-
-                if not unit.xp_gained_this_round:
-                    unit.xp += 1
-                    unit.xp_gained_this_round = True
-                del p[1].units[pos]
-
+            if not out_of_board_vertical(pushpos):
+                action.outcome =  "Push"
+                if action.move_with_attack and not action.finalpos:
+                    action.finalpos = pos
+                if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
     
+                    if not unit.xp_gained_this_round:
+                        unit.xp += 1
+                        unit.xp_gained_this_round = True
+                    del p[1].units[pos]
+     
+                else:
+                    p[1].units[pushpos] = p[1].units.pop(pos)
+            
             else:
-                p[1].units[pushpos] = p[1].units.pop(pos)
+                action.outcome = "Failure"
     else:
         action.outcome = "Failure"
 
@@ -576,9 +590,12 @@ def get_special_unit_actions(pos, unit, all_units, p):
      
         if hasattr(unit, "push"):
             for attack in attacks:
+                push_direction = get_direction(attack.endpos, attack.attackpos)
                 for sub_attack in attack.sub_actions:
                     sub_attack.push = True
-                attack.push = True   
+                    sub_attack.push_direction = push_direction
+                attack.push = True
+                attack.push_direction = push_direction
 
         return moves, attacks
 
