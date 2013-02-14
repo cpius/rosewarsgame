@@ -88,7 +88,7 @@ def any(iterable):
 
 
 def zoc(pos, unit, enemy_units):
-    return pos in board and pos in enemy_units and hasattr(enemy_units[pos], "zoc") and unit.type in enemy_units[pos].zoc
+    return pos in enemy_units and unit.type in enemy_units[pos].zoc
 
 
 def surrounding_tiles(pos):
@@ -106,11 +106,14 @@ def two_forward_tiles(pos, fpos):
     
     return set(direction.move(pos) for direction in eight_directions) & set(direction.move(fpos) for direction in directions)
 
-
-def push_tile(pos, apos):
+"""
+def get_direction(pos, apos):
     for direction in directions:
         if direction.move(pos) == apos:
-            return direction.move(apos)
+            return direction
+"""
+def get_direction(pos, apos):
+    return Direction(-pos[0] + apos[0], -pos[1] + apos[1])
 
 
 def distance(p1, p2):
@@ -124,6 +127,26 @@ def find_all_units_except_current(pos, p):
         
     return all_units
 
+
+
+def out_of_board_vertical(pos):
+    return (pos[1] < 1 or pos[1] > 8)
+
+
+def out_of_board_horizontal(pos):
+    return (pos[0] < 1 or pos[0] > 5)
+    
+    
+
+def gain_xp(unit):
+    if not unit.xp_gained_this_round:
+        unit.xp += 1
+        unit.xp_gained_this_round = True
+    
+
+def update_finalpos(action, pos):
+    if action.move_with_attack and not action.finalpos:
+        action.finalpos = pos
 
 
 ###################
@@ -178,12 +201,13 @@ def get_extra_actions(p):
                 
             if hasattr(unit, "charioting"):
                 moveset_w_leftover, moveset_wo_leftover = moves_set(all_units, p[1].units, unit, pos, unit.movement_remaining)
-                moves = moves_list(unit, pos, moveset_w_leftover | moveset_wo_leftover)
+                moves = moves_list(unit, pos, moveset_w_leftover | moveset_wo_leftover | set([(pos)]))
                 attacks, abilities = [],[]
             
             if hasattr(unit, "samuraiing"):
                 attacks = melee_attacks_list_samurai_second(p[1].units, unit, pos, set([(pos)]), unit.movement_remaining)
-                moves, abilities = [], []
+                moves = moves_list(unit, pos, set([(pos)]))
+                abilities = []
             
             flag_bearing_bonus(attacks, all_units)
             
@@ -200,45 +224,41 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
     rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
 
     if battle.attack_successful(unit, enemy_unit, action, rolls):
-        
 
-
-        if action.move_with_attack and not action.finalpos:
-            action.finalpos = pos
-            
-        pushpos = push_tile(action.endpos, action.attackpos)
+        pushpos = action.push_direction.move(action.attackpos)
 
         if not battle.defence_successful(unit, enemy_unit, action, rolls):
             action.outcome = "Success"
 
-            if not unit.xp_gained_this_round:
-                unit.xp += 1
-                unit.xp_gained_this_round = True
+            gain_xp(unit)
             
             if hasattr(enemy_unit, "extra_life"):
                 del enemy_unit.extra_life
-
-                if pushpos not in p[0].units and pushpos not in p[1].units:
-                    p[1].units[pushpos] = p[1].units.pop(action.attackpos)
-                else:
-                    del p[1].units[pos] 
+                
+                if not out_of_board_vertical(pushpos):
+                    update_finalpos(action, pos)
+                    if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
+                        del p[1].units[pos]
+                    else:       
+                        p[1].units[pushpos] = p[1].units.pop(action.attackpos)
                 
             else:
+                update_finalpos(action, pos)
                 del p[1].units[pos]
-        
-        
+           
         else:
-            action.outcome = "Pushed"
-            if pushpos in p[0].units or pushpos in p[1].units or pushpos not in board:
-
-                if not unit.xp_gained_this_round:
-                    unit.xp += 1
-                    unit.xp_gained_this_round = True
-                del p[1].units[pos]
-
-    
+            if not out_of_board_vertical(pushpos):
+                action.outcome =  "Push"
+                update_finalpos(action, pos)
+                if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
+                    gain_xp(unit)
+                    del p[1].units[pos]
+     
+                else:
+                    p[1].units[pushpos] = p[1].units.pop(pos)
+            
             else:
-                p[1].units[pushpos] = p[1].units.pop(pos)
+                action.outcome = "Failure"
     else:
         action.outcome = "Failure"
 
@@ -250,16 +270,13 @@ def settle_attack(action, unit, enemy_unit, p, pos):
 
         action.outcome = "Success"
 
-        if not unit.xp_gained_this_round:
-            unit.xp += 1
-            unit.xp_gained_this_round = True
+        gain_xp(unit)
         if hasattr(enemy_unit, "extra_life"):
             del enemy_unit.extra_life
         else:
             del p[1].units[pos]
             
-            if action.move_with_attack and not action.finalpos:
-                action.finalpos = pos
+            update_finalpos(action, pos)
     else:
         action.outcome = "Failure"
 
@@ -285,30 +302,28 @@ def settle_ability(action, friendly_unit, enemy_unit, pos, p):
         p[0].units[pos].bribed = True
 
 
-def do_first_action(action, p):
-    
-    unit = p[0].units[action.startpos]
-
-    p[0].actions -= 1
-    unit.used = True
-    
-    if hasattr(unit, "double_attack_cost") and action.is_attack:
-        p[0].actions -= 1
-        
-    do_action(action, p, unit)
-
-
 def do_extra_action(action, p):
     
     unit = p[0].units[action.startpos]
-    action.extra_action = True
     do_action(action, p, unit)
     del unit.extra_action
 
 
 
-def do_action(action, p, unit):
+def do_action(action, p, unit = None):
     """ Carries out an action in the game."""
+    
+    print action
+    
+    if not unit:
+        unit = p[0].units[action.startpos]
+        
+    unit.used = True
+    
+    if not hasattr(unit, "extra_action"):
+        p[0].actions -= 1
+        if hasattr(unit, "double_attack_cost") and action.is_attack:
+            p[0].actions -= 1
     
     pos = action.attackpos
     enemy_unit = p[1].units.get(pos)
@@ -576,9 +591,12 @@ def get_special_unit_actions(pos, unit, all_units, p):
      
         if hasattr(unit, "push"):
             for attack in attacks:
+                push_direction = get_direction(attack.endpos, attack.attackpos)
                 for sub_attack in attack.sub_actions:
                     sub_attack.push = True
-                attack.push = True   
+                    sub_attack.push_direction = push_direction
+                attack.push = True
+                attack.push_direction = push_direction
 
         return moves, attacks
 
