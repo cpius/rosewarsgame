@@ -135,6 +135,14 @@ def out_of_board_vertical(pos):
 
 def out_of_board_horizontal(pos):
     return (pos[0] < 1 or pos[0] > 5)
+    
+    
+
+def gain_xp(unit):
+    if not unit.xp_gained_this_round:
+        unit.xp += 1
+        unit.xp_gained_this_round = True
+    
 
 ###################
 ###################
@@ -217,9 +225,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
         if not battle.defence_successful(unit, enemy_unit, action, rolls):
             action.outcome = "Success"
 
-            if not unit.xp_gained_this_round:
-                unit.xp += 1
-                unit.xp_gained_this_round = True
+            gain_xp(unit)
             
             if hasattr(enemy_unit, "extra_life"):
                 del enemy_unit.extra_life
@@ -243,10 +249,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
                 if action.move_with_attack and not action.finalpos:
                     action.finalpos = pos
                 if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
-    
-                    if not unit.xp_gained_this_round:
-                        unit.xp += 1
-                        unit.xp_gained_this_round = True
+                    gain_xp(unit)
                     del p[1].units[pos]
      
                 else:
@@ -265,9 +268,7 @@ def settle_attack(action, unit, enemy_unit, p, pos):
 
         action.outcome = "Success"
 
-        if not unit.xp_gained_this_round:
-            unit.xp += 1
-            unit.xp_gained_this_round = True
+        gain_xp(unit)
         if hasattr(enemy_unit, "extra_life"):
             del enemy_unit.extra_life
         else:
