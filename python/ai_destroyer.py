@@ -18,13 +18,6 @@ def get_action(p, actions, document_it = False):
         else:
                 action.score = 0
     
-        if action.is_ability:
-                action.score = 8
-        
-        
-        if hasattr(action, "push"):
-                action.score = 10
-    
     rnd.shuffle(actions)
     actions.sort(key = attrgetter("score"), reverse= True)
     if document_it:
