@@ -188,12 +188,13 @@ def get_extra_actions(p):
                 
             if hasattr(unit, "charioting"):
                 moveset_w_leftover, moveset_wo_leftover = moves_set(all_units, p[1].units, unit, pos, unit.movement_remaining)
-                moves = moves_list(unit, pos, moveset_w_leftover | moveset_wo_leftover)
+                moves = moves_list(unit, pos, moveset_w_leftover | moveset_wo_leftover | set([(pos)]))
                 attacks, abilities = [],[]
             
             if hasattr(unit, "samuraiing"):
                 attacks = melee_attacks_list_samurai_second(p[1].units, unit, pos, set([(pos)]), unit.movement_remaining)
-                moves, abilities = [], []
+                moves = moves_list(unit, pos, set([(pos)]))
+                abilities = []
             
             flag_bearing_bonus(attacks, all_units)
             
