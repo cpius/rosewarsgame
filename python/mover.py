@@ -88,7 +88,7 @@ def any(iterable):
 
 
 def zoc(pos, unit, enemy_units):
-    return pos in board and pos in enemy_units and hasattr(enemy_units[pos], "zoc") and unit.type in enemy_units[pos].zoc
+    return pos in enemy_units and unit.type in enemy_units[pos].zoc
 
 
 def surrounding_tiles(pos):
