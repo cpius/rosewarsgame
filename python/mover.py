@@ -144,6 +144,11 @@ def gain_xp(unit):
         unit.xp_gained_this_round = True
     
 
+def update_finalpos(action):
+    if action.move_with_attack and not action.finalpos:
+        action.finalpos = pos
+
+
 ###################
 ###################
 ###Major methods######
@@ -231,23 +236,20 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
                 del enemy_unit.extra_life
                 
                 if not out_of_board_vertical(pushpos):
-                    if action.move_with_attack and not action.finalpos:
-                        action.finalpos = pos
+                    update_finalpos(action)
                     if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
                         del p[1].units[pos]
                     else:       
                         p[1].units[pushpos] = p[1].units.pop(action.attackpos)
                 
             else:
-                if action.move_with_attack and not action.finalpos:
-                    action.finalpos = pos
+                update_finalpos(action)
                 del p[1].units[pos]
            
         else:
             if not out_of_board_vertical(pushpos):
                 action.outcome =  "Push"
-                if action.move_with_attack and not action.finalpos:
-                    action.finalpos = pos
+                update_finalpos(action)
                 if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
                     gain_xp(unit)
                     del p[1].units[pos]
@@ -274,8 +276,7 @@ def settle_attack(action, unit, enemy_unit, p, pos):
         else:
             del p[1].units[pos]
             
-            if action.move_with_attack and not action.finalpos:
-                action.finalpos = pos
+            update_finalpos(action)
     else:
         action.outcome = "Failure"
 
