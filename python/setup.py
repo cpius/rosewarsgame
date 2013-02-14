@@ -22,6 +22,7 @@ class Unit:
         self.acounters = acounters
         self.dcounters = dcounters
         self.xp = 0
+        self.zoc = []
         self.has_attack = True
         self.has_ability = False
         self.is_crusading = False
@@ -38,7 +39,8 @@ class Unit:
         self.range= 4
         self.abonus = {"Infantry": 1}
         self.dbonus = {}
-        self.type = "Infantry"      
+        self.type = "Infantry"
+    
 
     
     def pikeman(self):
@@ -48,8 +50,7 @@ class Unit:
         self.range= 1
         self.abonus = {"Cavalry": 1}
         self.dbonus = {"Cavalry": 1}
-        self.type = "Infantry"
-        
+        self.type = "Infantry"   
         self.zoc = ["Cavalry"]
 
 
