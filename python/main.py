@@ -231,7 +231,7 @@ def run_game():
                             draw_action(screen, action)
                             pygame.time.delay(pause_for_animation)
 
-                            mover.do_first_action(action, p)
+                            mover.do_action(action, p)
                             
                             if hasattr(p[0], "won"):
                                 game_end(screen, p[0])                              
