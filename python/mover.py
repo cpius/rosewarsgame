@@ -149,6 +149,11 @@ def update_finalpos(action, pos):
         action.finalpos = pos
 
 
+
+def can_move_to(pushpos, p):
+    return pushpos not in p[0].units and pushpos not in p[1].units and not out_of_board_horizontal(pushpos) and not out_of_board_vertical(pushpos)
+
+
 ###################
 ###################
 ###Major methods######
@@ -237,7 +242,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
                 
                 if not out_of_board_vertical(pushpos):
                     update_finalpos(action, pos)
-                    if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
+                    if not can_move_to(pushpos, p):
                         del p[1].units[pos]
                     else:       
                         p[1].units[pushpos] = p[1].units.pop(action.attackpos)
@@ -250,7 +255,7 @@ def settle_attack_push(action, unit, enemy_unit, p, pos):
             if not out_of_board_vertical(pushpos):
                 action.outcome =  "Push"
                 update_finalpos(action, pos)
-                if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
+                if not can_move_to(pushpos, p):
                     gain_xp(unit)
                     del p[1].units[pos]
      
