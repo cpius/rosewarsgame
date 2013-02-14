@@ -1,19 +1,19 @@
-package com.wotr.model;
+package com.wotr.model.unit;
 
-public class Archer extends AbstractCard {
+public class HeavyCavalry extends MeleeUnit {
 
-	public Archer() {
-		super("archer", false);
+	public HeavyCavalry() {
+		super("heavycavalry", false);
 	}
 
 	@Override
 	public int getAttack() {
-		return 5;
+		return 3;
 	}
 
 	@Override
 	public int getDefense() {
-		return 2;
+		return 1;
 	}
 
 	@Override
@@ -23,6 +23,6 @@ public class Archer extends AbstractCard {
 
 	@Override
 	public int getRange() {
-		return 4;
+		return 3;
 	}
 }

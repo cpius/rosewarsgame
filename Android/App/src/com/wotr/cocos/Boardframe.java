@@ -26,7 +26,7 @@ public class Boardframe {
 
 		float boardScale = frameHeight / frameWidth;
 
-		float x = 1 * xCount;
+		float x = xCount;
 		float y = scale * yCount;
 
 		float cardSumScale = y / x;

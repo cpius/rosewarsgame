@@ -1,9 +1,9 @@
-package com.wotr.model;
+package com.wotr.model.unit;
 
-public class Pikeman extends AbstractCard {
+public class Archer extends RangedUnit {
 
-	public Pikeman() {
-		super("pikeman", false);
+	public Archer() {
+		super("archer", false);
 	}
 
 	@Override
@@ -23,6 +23,6 @@ public class Pikeman extends AbstractCard {
 
 	@Override
 	public int getRange() {
-		return 1;
+		return 4;
 	}
 }

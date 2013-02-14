@@ -18,8 +18,8 @@ import org.cocos2d.particlesystem.CCQuadParticleSystem;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
-import com.wotr.model.AbstractCard;
 import com.wotr.model.Position;
+import com.wotr.model.unit.Unit;
 import com.wotr.strategy.DeckDrawStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
 import com.wotr.touch.CardTouchHandler;
@@ -30,7 +30,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	private CCSprite sparkCard;
 
 	private List<CCSprite> cardList = new ArrayList<CCSprite>();
-	private Map<CCSprite, AbstractCard> modelMap = new HashMap<CCSprite, AbstractCard>();
+	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
 
 	public static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -85,8 +85,8 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	private void addCards() {
 		DeckDrawStrategy deck = new FixedDeckDrawStrategy();
-		Collection<AbstractCard> drawDeck = deck.drawDeck();
-		for (AbstractCard abstractCard : drawDeck) {
+		Collection<Unit> drawDeck = deck.drawDeck();
+		for (Unit abstractCard : drawDeck) {
 			CGPoint position = CGPoint.ccp(100, 100);
 			CCSprite player = CCSprite.sprite(abstractCard.getImage());
 			player.setPosition(position);
@@ -125,7 +125,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			moveCardToOriginalPosition();
 		} else {
 			moveCardToPosition();
-			AbstractCard abstractCard = modelMap.get(selectedCard);
+			Unit abstractCard = modelMap.get(selectedCard);
 			abstractCard.setPosistion(pInP);
 		}
 		sparkCard = selectedCard;
@@ -145,9 +145,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		}
 	}
 
-	private AbstractCard getCardInPosition(Position pInP) {
-		Collection<AbstractCard> values = modelMap.values();
-		for (AbstractCard card : values) {
+	private Unit getCardInPosition(Position pInP) {
+		Collection<Unit> values = modelMap.values();
+		for (Unit card : values) {
 			if (pInP.equals(card.getPosistion())) {
 				return card;
 			}

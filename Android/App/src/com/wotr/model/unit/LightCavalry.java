@@ -1,28 +1,28 @@
-package com.wotr.model;
+package com.wotr.model.unit;
 
-public class Ballista extends AbstractCard {
+public class LightCavalry extends MeleeUnit {
 
-	public Ballista() {
-		super("ballista", false);
+	public LightCavalry() {
+		super("lightcavalry", false);
 	}
 
 	@Override
 	public int getAttack() {
-		return 3;
+		return 5;
 	}
 
 	@Override
 	public int getDefense() {
-		return 1;
+		return 2;
 	}
 
 	@Override
 	public int getMovement() {
-		return 1;
+		return 4;
 	}
 
 	@Override
 	public int getRange() {
-		return 3;
+		return 1;
 	}
 }

@@ -43,4 +43,14 @@ public class Position {
 		return true;
 	}
 
+	public Position move(Position pos) {
+		return new Position(getX() + pos.getX(), getY() + pos.getY());
+	}
+
+	@Override
+	public String toString() {
+		return "(" + getX() + "," + getY() + ")";
+
+	}
+
 }

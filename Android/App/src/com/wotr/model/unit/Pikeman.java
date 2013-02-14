@@ -1,14 +1,14 @@
-package com.wotr.model;
+package com.wotr.model.unit;
 
-public class Catapult extends AbstractCard {
-	
-	public Catapult() {
-		super("catapult", false);
+public class Pikeman extends MeleeUnit {
+
+	public Pikeman() {
+		super("pikeman", false);
 	}
 
 	@Override
 	public int getAttack() {
-		return 1;
+		return 5;
 	}
 
 	@Override
@@ -23,6 +23,6 @@ public class Catapult extends AbstractCard {
 
 	@Override
 	public int getRange() {
-		return 3;
+		return 1;
 	}
 }

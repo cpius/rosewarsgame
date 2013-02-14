@@ -1,9 +1,9 @@
-package com.wotr.model;
+package com.wotr.model.unit;
 
-public class HeavyCavalry extends AbstractCard {
+public class Ballista extends RangedUnit {
 
-	public HeavyCavalry() {
-		super("heavycavalry", false);
+	public Ballista() {
+		super("ballista", false);
 	}
 
 	@Override

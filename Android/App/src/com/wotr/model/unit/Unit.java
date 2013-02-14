@@ -1,6 +1,9 @@
-package com.wotr.model;
+package com.wotr.model.unit;
 
-public abstract class AbstractCard {
+import com.wotr.model.Position;
+import com.wotr.strategy.action.ActionResolverStrategy;
+
+public abstract class Unit {
 
 	private final String image;
 	private Position posistion;
@@ -10,7 +13,7 @@ public abstract class AbstractCard {
 		return image + (enemy ? "red" : "green") + ".jpg";
 	}
 
-	public AbstractCard(String image, boolean enemy) {
+	public Unit(String image, boolean enemy) {
 		this.image = image;
 		this.enemy = enemy;
 	}
@@ -30,4 +33,8 @@ public abstract class AbstractCard {
 	public abstract int getMovement();
 
 	public abstract int getRange();
+
+	public abstract ActionResolverStrategy getActionResolverStrategy();
+
+	public abstract boolean isRanged();
 }

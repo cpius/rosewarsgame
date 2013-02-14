@@ -1,14 +1,14 @@
-package com.wotr.model;
+package com.wotr.model.unit;
 
-public class LightCavalry extends AbstractCard {
-
-	public LightCavalry() {
-		super("lightcavalry", false);
+public class Catapult extends RangedUnit {
+	
+	public Catapult() {
+		super("catapult", false);
 	}
 
 	@Override
 	public int getAttack() {
-		return 5;
+		return 1;
 	}
 
 	@Override
@@ -18,11 +18,11 @@ public class LightCavalry extends AbstractCard {
 
 	@Override
 	public int getMovement() {
-		return 4;
+		return 1;
 	}
 
 	@Override
 	public int getRange() {
-		return 1;
+		return 3;
 	}
 }

@@ -2,10 +2,10 @@ package com.wotr.strategy;
 
 import java.util.Collection;
 
-import com.wotr.model.AbstractCard;
+import com.wotr.model.unit.Unit;
 
 public interface DeckDrawStrategy {
 	
-	public Collection<AbstractCard> drawDeck();
+	public Collection<Unit> drawDeck();
 
 }

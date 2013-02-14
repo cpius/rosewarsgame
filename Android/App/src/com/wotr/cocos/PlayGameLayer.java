@@ -15,8 +15,8 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
 import com.wotr.R;
-import com.wotr.model.AbstractCard;
 import com.wotr.model.Position;
+import com.wotr.model.unit.Unit;
 import com.wotr.touch.CardTouchHandler;
 import com.wotr.touch.CardTouchListener;
 
@@ -24,14 +24,14 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	private List<CCSprite> cardList = new ArrayList<CCSprite>();
 
-	public static CCScene scene(Collection<AbstractCard> cards) {
+	public static CCScene scene(Collection<Unit> cards) {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new PlayGameLayer(cards);
 		scene.addChild(layer);
 		return scene;
 	}
 
-	protected PlayGameLayer(Collection<AbstractCard> cards) {
+	protected PlayGameLayer(Collection<Unit> cards) {
 
 		// this.cards = cards;
 		setIsTouchEnabled(true);
@@ -69,9 +69,9 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		selectedCard.runAction(seq);
 	}
 
-	private void addCards(Collection<AbstractCard> cards) {
+	private void addCards(Collection<Unit> cards) {
 
-		for (AbstractCard card : cards) {
+		for (Unit card : cards) {
 			Position pos = card.getPosistion();
 			CGPoint point = bordframe.getPosition(pos.getX(), pos.getY());
 			CCSprite player = CCSprite.sprite(card.getImage());
