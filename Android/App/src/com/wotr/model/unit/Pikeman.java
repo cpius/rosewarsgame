@@ -1,5 +1,7 @@
 package com.wotr.model.unit;
 
+import com.wotr.model.UnitType;
+
 public class Pikeman extends MeleeUnit {
 
 	public Pikeman() {
@@ -24,5 +26,15 @@ public class Pikeman extends MeleeUnit {
 	@Override
 	public int getRange() {
 		return 1;
+	}
+
+	@Override
+	public UnitType getType() {
+		return UnitType.INFANTRY;
+	}
+
+	public UnitType[] getZoc() {
+		UnitType[] zoc = { UnitType.CAVALRY };
+		return zoc;
 	}
 }

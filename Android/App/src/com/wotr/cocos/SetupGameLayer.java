@@ -20,6 +20,7 @@ import org.cocos2d.types.CGSize;
 
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
+import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.DeckDrawStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
 import com.wotr.touch.CardTouchHandler;
@@ -31,6 +32,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	private List<CCSprite> cardList = new ArrayList<CCSprite>();
 	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
+
+	private int xCount;
+	private int yCount;
 
 	public static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -45,8 +49,8 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		winSize = CCDirector.sharedDirector().displaySize();
 
-		int xCount = 5;
-		int yCount = 4;
+		xCount = 5;
+		yCount = 4;
 
 		CCSprite back = CCSprite.sprite("woddenbackground.png");
 
@@ -100,7 +104,15 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	}
 
 	public void startBattle(Object obj) {
-		CCScene scene = PlayGameLayer.scene(modelMap.values());
+
+		UnitMap<Position, Unit> playerOnemap = new UnitMap<Position, Unit>();
+		for (Unit unit : modelMap.values()) {
+			playerOnemap.put(unit.getPosistion(), unit);
+		}
+
+		UnitMap<Position, Unit> playerTwoMap = playerOnemap.getMirrored(xCount, yCount * 2);
+
+		CCScene scene = PlayGameLayer.scene(playerOnemap, playerTwoMap);
 		CCDirector.sharedDirector().runWithScene(scene);
 	}
 
@@ -141,7 +153,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			selectedCard.setPosition(x, y);
 		} else {
 			CGPoint position = bordframe.getPosition(pInP.getX(), pInP.getY());
-			selectedCard.setPosition(position);
+			selectedCard.setPosition(position);			
 		}
 	}
 

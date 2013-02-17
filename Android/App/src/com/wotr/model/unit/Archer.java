@@ -1,5 +1,7 @@
 package com.wotr.model.unit;
 
+import com.wotr.model.UnitType;
+
 public class Archer extends RangedUnit {
 
 	public Archer() {
@@ -24,5 +26,10 @@ public class Archer extends RangedUnit {
 	@Override
 	public int getRange() {
 		return 4;
+	}
+
+	@Override
+	public UnitType getType() {
+		return UnitType.CAVALRY;
 	}
 }

@@ -4,6 +4,10 @@ public class Action {
 
 	private final Position pos;
 
+	public Position getPosition() {
+		return pos;
+	}
+
 	public Action(Position pos) {
 		this.pos = pos;
 	}
@@ -32,9 +36,9 @@ public class Action {
 			return false;
 		return true;
 	}
-	
+
 	public String toString() {
-		return getClass().getSimpleName() + " at " + pos; 
+		return getClass().getSimpleName() + " at " + pos;
 	}
 
 }

@@ -1,10 +1,14 @@
 package com.wotr.strategy.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import com.wotr.model.Direction;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
+import com.wotr.strategy.facade.ActionResolverFactory;
 
 public abstract class AbstractActionResolverStrategy implements ActionResolverStrategy {
 
@@ -24,8 +28,16 @@ public abstract class AbstractActionResolverStrategy implements ActionResolverSt
 		return Math.max(unit.getMovement(), unit.getRange());
 	}
 
-	public Direction[] getDirections(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress) {
-		// TODO Implement ZOC movement rules
-		return Direction.allDirections;
+	public Collection<Direction> getDirections(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress) {
+		List<Direction> result = new ArrayList<Direction>();
+		ZocBlockStrategy zbs = ActionResolverFactory.getZocBlockStrategy();
+
+		for (Direction d : Direction.perpendicularDirections) {
+			if (!zbs.isDirectionBlocked(unit, d, pos, attackingUnits, defendingUnits)) {
+				result.add(d);
+				result.add(d.opposite());
+			}
+		}
+		return result;
 	}
 }

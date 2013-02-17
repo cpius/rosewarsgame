@@ -1,5 +1,6 @@
 package com.wotr.strategy.action;
 
+import java.util.Collection;
 import java.util.Map;
 
 import com.wotr.model.Direction;
@@ -14,6 +15,6 @@ public interface ActionResolverStrategy {
 
 	int getPathLength(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress);
 
-	Direction[] getDirections(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress);
+	Collection<Direction> getDirections(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress);
 
 }

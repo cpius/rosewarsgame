@@ -1,5 +1,7 @@
 package com.wotr.model.unit;
 
+import com.wotr.model.UnitType;
+
 public class LightCavalry extends MeleeUnit {
 
 	public LightCavalry() {
@@ -24,5 +26,10 @@ public class LightCavalry extends MeleeUnit {
 	@Override
 	public int getRange() {
 		return 1;
+	}
+	
+	@Override
+	public UnitType getType() {
+		return UnitType.CAVALRY;
 	}
 }

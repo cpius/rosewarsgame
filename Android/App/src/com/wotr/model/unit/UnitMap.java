@@ -17,8 +17,37 @@ public class UnitMap<K extends Position, V extends Unit> extends HashMap<K, V> {
 	@Override
 	public V remove(Object key) {
 		V result = super.remove(key);
-		result.setPosistion(null);
+		if(result != null) {
+			result.setPosistion(null);
+		}
 		return result;
 	}
 
+	public UnitMap<Position, Unit> getMirrored(int xRange, int yRange) {
+
+		UnitMap<Position, Unit> result = new UnitMap<Position, Unit>();
+
+		for (Unit unit : this.values()) {
+			try {
+				Unit newUnit = (Unit) unit.clone();
+				newUnit.setEnemy(!unit.isEnemy());
+
+				Position pos = mirror(xRange, yRange, unit.getPosistion());
+				result.put(pos, newUnit);
+
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	private Position mirror(int xRange, int yRange, Position posistion) {
+
+		int x = Math.abs(posistion.getX() + 1 - xRange);
+		int y = Math.abs(posistion.getY() + 1 - yRange);
+
+		return new Position(x, y);
+	}
 }

@@ -1,5 +1,7 @@
 package com.wotr.strategy.action;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import com.wotr.model.Direction;
@@ -18,4 +20,13 @@ public class MeleeActionResolverStrategy extends AbstractActionResolverStrategy 
 		return super.isAttackable(unit, pos, direction, attackingUnits, defendingUnits, pathProgress) && pathProgress <= unit.getMovement();
 	}
 
+	@Override
+	public Collection<Direction> getDirections(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress) {
+
+		if (isAttackable(unit, pos, direction, attackingUnits, defendingUnits, pathProgress)) {
+			return Collections.emptyList();
+		} else {
+			return super.getDirections(unit, pos, direction, attackingUnits, defendingUnits, pathProgress);
+		}
+	}
 }

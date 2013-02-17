@@ -44,7 +44,7 @@ public class ActionResolver {
 				}
 			}
 
-			Direction[] directions = ars.getDirections(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress);
+			Collection<Direction> directions = ars.getDirections(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress);
 			for (Direction direction : directions) {
 				Position movePosition = pos.move(direction);
 				if (isInBoard(movePosition)) {

@@ -16,6 +16,7 @@ import org.cocos2d.types.CGSize;
 import android.view.MotionEvent;
 
 import com.wotr.R;
+import com.wotr.model.Position;
 import com.wotr.touch.CardTouchHandler;
 
 public abstract class AbstractGameLayer extends CCLayer {
@@ -50,14 +51,18 @@ public abstract class AbstractGameLayer extends CCLayer {
 					}
 					reorderChild(selectedCard, 1);
 
-					CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 2f);
-					selectedCard.runAction(action);
+					selectCardForMove(selectedCard);
 				}
 				break;
 			}
 		}
 
 		return super.ccTouchesBegan(event);
+	}
+
+	protected void selectCardForMove(CCSprite selectedCard) {
+		CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 2f);
+		selectedCard.runAction(action);		
 	}
 
 	@Override
@@ -110,6 +115,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 				CCSprite cardBackground = CCSprite.sprite(imageName);
 				cardBackground.setPosition(position);
 				cardBackground.setScale(sizeScale * 0.95f);
+				cardBackground.setUserData(new Position(x, y));
 				addChild(cardBackground);
 			}
 		}
