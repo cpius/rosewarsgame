@@ -12,7 +12,6 @@
 @interface ConstructDeckScene : CCLayer {
     
     CCNode *_movingNode;
-    GridLocation selectedCard;
     
     CCSprite *_deckOfCards;
     CGSize _cardSize;

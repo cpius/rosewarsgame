@@ -11,11 +11,13 @@
 #import "GameManager.h"
 #import "GameScene.h"
 #import "ParticleHelper.h"
+#import "RandomDeckStrategy.h"
 
 @interface PlaceCardsScene()
 
 - (void)toggleDetailForCard:(CardSprite*)card;
 - (void)moveCardToHomePosition:(CardSprite*)card;
+- (void)placeCard:(CardSprite*)card inGameBoardNode:(GameBoardNode *)node;
 
 @end
 
@@ -76,6 +78,17 @@
         _gridLayoutManager.columnWidth = tempSprite.contentSize.width * 0.45;
         _gridLayoutManager.rowHeight = tempSprite.contentSize.height * 0.45;
         
+        CCMenuItem *autoButton = [CCMenuItemImage itemWithNormalImage:@"autobutton.png" selectedImage:@"autobutton.png" target:self selector:@selector(autoPressed:)];
+        
+        autoButton.anchorPoint = ccp(1, 0);
+        autoButton.position = ccp(screenSize.width - 10, 10);
+        
+        CCMenu *menu = [CCMenu menuWithItems:autoButton, nil];
+        menu.position = CGPointZero;
+        menu.tag = AUTO_TAG;
+        
+        [self addChild:menu];
+        
         _placedCards = [[NSMutableArray alloc] init];
         
         [self presentCards];
@@ -102,7 +115,7 @@
         CardSprite *cardSprite = [[CardSprite alloc] initWithCard:card];
         
         cardSprite.position = ccp(screenSize.width / 2, -200);
-        cardSprite.model.cardLocation = MakeGridLocation(row, column);
+        cardSprite.model.cardLocation = [GridLocation gridLocationWithRow:row column:column];
         
         [self addChild:cardSprite];
         [_cardSprites addObject:cardSprite];
@@ -122,6 +135,22 @@
             column = 1;
             row++;
         }
+    }
+}
+
+- (void)autoPressed:(id)sender {
+    
+    CCMenuItem *menu = sender;
+    [menu removeFromParentAndCleanup:YES];
+    
+    RandomDeckStrategy *deckStrategy = [[RandomDeckStrategy alloc] init];
+    [deckStrategy placeCardsInDeck:[GameManager sharedManager].currentGame.myDeck inGameBoardSide:kGameBoardLower];
+    
+    for (CardSprite *card in _cardSprites) {
+        
+        GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:card.model.cardLocation];
+        
+        [self placeCard:card inGameBoardNode:node];
     }
 }
 
@@ -198,8 +227,29 @@
     _isMovingCard = YES;
 }
 
-- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+- (void)placeCard:(CardSprite*)card inGameBoardNode:(GameBoardNode *)node {
+    
+    [_gameboard placeCard:card inGameBoardNode:node useHighLighting:YES onCompletion:^{
         
+        [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventCardDropped];
+        
+        if (![_placedCards containsObject:card]) {
+            [_placedCards addObject:card];
+        }
+        
+        if (_placedCards.count == [GameManager sharedManager].currentGame.myDeck.cards.count) {
+            [self finishedPlacingCards];
+        }
+        
+        [card setZOrder:0];
+        
+        _selectedCard = nil;
+        _isMovingCard = NO;
+    }];
+}
+
+- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+    
     CGPoint location = [touch locationInView:touch.view];
     CGPoint convLoc = [[CCDirector sharedDirector] convertToGL:location];
     
@@ -208,24 +258,7 @@
     if (_detailCard == nil) {
         if (gameboardNode != nil && !gameboardNode.hasCard && _selectedCard != nil) {
             
-            [_gameboard placeCard:_selectedCard inGameBoardNode:gameboardNode useHighLighting:YES onCompletion:^{
-                
-                [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventCardDropped];
-                
-                if (![_placedCards containsObject:_selectedCard]) {
-                    [_placedCards addObject:_selectedCard];
-                }
-                
-                if (_placedCards.count == [GameManager sharedManager].currentGame.myDeck.cards.count) {
-                    [self finishedPlacingCards];
-                }
-                
-                [_selectedCard setZOrder:0];
-                _selectedCard = nil;
-                _isMovingCard = NO;
-            }];
-            
-            
+            [self placeCard:_selectedCard inGameBoardNode:gameboardNode];
             return;
         }
         else {
@@ -293,7 +326,7 @@
     
     [GameManager sharedManager].currentGame.state = kGameStateFinishedPlacingCards;
     
-    [self removeAllChildrenWithCleanup:YES];
+  //  [self removeAllChildrenWithCleanup:YES];
         
     [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
     

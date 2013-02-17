@@ -12,6 +12,7 @@
 @implementation GameBoardNode
 
 @synthesize hasCard, card = _card;
+@synthesize nodeSprite = _nodeSprite;
 
 - (id)initWithSprite:(CCSprite *)sprite {
     
@@ -23,11 +24,11 @@
         
         self.contentSize = CGSizeMake(64, 87);
         
-        _sprite = sprite;
+        _nodeSprite = sprite;
         
-        _sprite.position = ccp(self.contentSize.width / 2, self.contentSize.height / 2);
+        _nodeSprite.position = ccp(self.contentSize.width / 2, self.contentSize.height / 2);
         
-        [self addChild:_sprite];
+        [self addChild:_nodeSprite];
     }
     
     return self;

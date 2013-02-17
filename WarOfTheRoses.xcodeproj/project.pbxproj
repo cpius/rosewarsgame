@@ -14,15 +14,13 @@
 		6D0CBE8116BA4A4B00D241A7 /* loupe@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBE7D16BA4A4B00D241A7 /* loupe@2x~ipad.png */; };
 		6D0CBE8216BA4A4B00D241A7 /* loupe~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBE7E16BA4A4B00D241A7 /* loupe~ipad.png */; };
 		6D0CBE8516BA4BB000D241A7 /* Magnifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8416BA4A5C00D241A7 /* Magnifier.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6D0CBE8916BA994200D241A7 /* ShortestPathStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8816BA994200D241A7 /* ShortestPathStep.m */; };
-		6D0CBE8C16BA9ADC00D241A7 /* ShortestPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8B16BA9ADC00D241A7 /* ShortestPath.m */; };
-		6D0CBE9016BAA8C400D241A7 /* NSValue+GridLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8F16BAA8C400D241A7 /* NSValue+GridLocation.m */; };
+		6D0CBE8916BA994200D241A7 /* PathFinderStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8816BA994200D241A7 /* PathFinderStep.m */; };
+		6D0CBE8C16BA9ADC00D241A7 /* PathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8B16BA9ADC00D241A7 /* PathFinder.m */; };
 		6D0CBE9316BEB9CB00D241A7 /* CombatScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9216BEB9CB00D241A7 /* CombatScene.m */; };
 		6D0CBE9616BEE64700D241A7 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9516BEE64500D241A7 /* Dice.m */; };
 		6D0CBE9816C1968600D241A7 /* flame.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9716C1968600D241A7 /* flame.plist */; };
 		6D0CBE9B16C19B9500D241A7 /* BaseBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9A16C19B9500D241A7 /* BaseBonus.m */; };
 		6D0CBE9D16C233EA00D241A7 /* Background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9C16C233EA00D241A7 /* Background-ipad.png */; };
-		6D0CBEA016C2363900D241A7 /* BoardFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9F16C2363600D241A7 /* BoardFrame.m */; };
 		6D0CBEA316C25DCE00D241A7 /* EndTurnLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEA216C25DCD00D241A7 /* EndTurnLayer.m */; };
 		6D0CBEA516C26A2700D241A7 /* pageflip.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEA416C26A2700D241A7 /* pageflip.mp3 */; };
 		6D0CBEA716C282D900D241A7 /* testframe.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEA616C282D900D241A7 /* testframe.png */; };
@@ -32,6 +30,24 @@
 		6D0CBEB116C971F500D241A7 /* attackbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEAF16C971F500D241A7 /* attackbutton.png */; };
 		6D0CBEB416C9777D00D241A7 /* backbutton-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEB216C9777C00D241A7 /* backbutton-hd.png */; };
 		6D0CBEB516C9777D00D241A7 /* backbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEB316C9777C00D241A7 /* backbutton.png */; };
+		6D0CBEBE16CC112E00D241A7 /* GridLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEBD16CC112900D241A7 /* GridLocation.m */; };
+		6D0CBEC116CC3EF000D241A7 /* autobutton-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEBF16CC3EF000D241A7 /* autobutton-hd.png */; };
+		6D0CBEC216CC3EF000D241A7 /* autobutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEC016CC3EF000D241A7 /* autobutton.png */; };
+		6D0CBEC716CC40D500D241A7 /* RandomDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEC616CC40D500D241A7 /* RandomDeckStrategy.m */; };
+		6D0CBECC16CEB6B800D241A7 /* MovePathFinderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBECB16CEB6B700D241A7 /* MovePathFinderStrategy.m */; };
+		6D0CBECF16CEB72700D241A7 /* MeleeAttackPathFinderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBECE16CEB72600D241A7 /* MeleeAttackPathFinderStrategy.m */; };
+		6D0CBED216CF872300D241A7 /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBED116CF872300D241A7 /* Action.m */; };
+		6D0CBED516CF877C00D241A7 /* MoveAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBED416CF877C00D241A7 /* MoveAction.m */; };
+		6D0CBED816CF880F00D241A7 /* MeleeAttackAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBED716CF880F00D241A7 /* MeleeAttackAction.m */; };
+		6D0CBEE316D00DE500D241A7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0CBEE216D00DE400D241A7 /* SenTestingKit.framework */; };
+		6D0CBEE416D00DE500D241A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DF2FB8916596C5C00F08664 /* UIKit.framework */; };
+		6D0CBEE516D00DE500D241A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DF2FB8B16596C5C00F08664 /* Foundation.framework */; };
+		6D0CBEEB16D00DE800D241A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEE916D00DE800D241A7 /* InfoPlist.strings */; };
+		6D0CBEEE16D00DE800D241A7 /* WarOfTheRosesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEED16D00DE800D241A7 /* WarOfTheRosesTest.m */; };
+		6D0CBEF716D01DF500D241A7 /* BasePathFinderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEF616D01DF400D241A7 /* BasePathFinderStrategy.m */; };
+		6D0CBEFA16D043C600D241A7 /* PathFinderStrategyFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEF916D043C500D241A7 /* PathFinderStrategyFactory.m */; };
+		6D0CBEFD16D0F67800D241A7 /* RangedAttackAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */; };
+		6D0CBF0016D0F70D00D241A7 /* RangedAttackPathFinderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEFF16D0F70B00D241A7 /* RangedAttackPathFinderStrategy.m */; };
 		6D5E04411662545C0085311B /* CardPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E04401662545C0085311B /* CardPool.m */; };
 		6D5E595D166D42C0007429BD /* archer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595C166D42C0007429BD /* archer_icon.png */; };
 		6D5E595F166D4426007429BD /* archer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595E166D4426007429BD /* archer_0.png */; };
@@ -80,12 +96,6 @@
 		6D6151AC16AFE3E1007A104E /* sparks.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D6151AB16AFE3E1007A104E /* sparks.plist */; };
 		6D6151AF16AFE5EA007A104E /* ParticleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6151AE16AFE5EA007A104E /* ParticleHelper.m */; };
 		6D6151B216B015E3007A104E /* GameManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6151B116B015E2007A104E /* GameManager.m */; };
-		6D6900D2169341290071EC22 /* CCBAnimationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6900C7169341290071EC22 /* CCBAnimationManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6D6900D3169341290071EC22 /* CCBKeyframe.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6900C9169341290071EC22 /* CCBKeyframe.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6D6900D4169341290071EC22 /* CCBReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6900CB169341290071EC22 /* CCBReader.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6D6900D5169341290071EC22 /* CCBsequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6900CD169341290071EC22 /* CCBsequence.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6D6900D6169341290071EC22 /* CCBSequenceProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6900CF169341290071EC22 /* CCBSequenceProperty.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6D6900D7169341290071EC22 /* CCNode+CCBRelativePositioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6900D1169341290071EC22 /* CCNode+CCBRelativePositioning.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6D6900DA169341330071EC22 /* PlaceCardsScene.ccbi in Resources */ = {isa = PBXBuildFile; fileRef = 6D6900D9169341330071EC22 /* PlaceCardsScene.ccbi */; };
 		6D6900E1169588470071EC22 /* right_arrow-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D6900DF169588470071EC22 /* right_arrow-hd.png */; };
 		6D6900E2169588470071EC22 /* right_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D6900E0169588470071EC22 /* right_arrow.png */; };
@@ -244,6 +254,16 @@
 		6DF2FD72165D78C100F08664 /* darkwood.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DF2FD70165D78C100F08664 /* darkwood.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6D0CBEF316D00F2300D241A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DF2FB7216596C5C00F08664 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6DF2FB7A16596C5C00F08664;
+			remoteInfo = WarOfTheRoses;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		6D0CBE7616B9B19A00D241A7 /* leftpanel-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "leftpanel-hd.png"; path = "Resources/Images/leftpanel-hd.png"; sourceTree = "<group>"; };
 		6D0CBE7716B9B19A00D241A7 /* leftpanel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leftpanel.png; path = Resources/Images/leftpanel.png; sourceTree = "<group>"; };
@@ -253,12 +273,10 @@
 		6D0CBE7E16BA4A4B00D241A7 /* loupe~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loupe~ipad.png"; sourceTree = "<group>"; };
 		6D0CBE8316BA4A5C00D241A7 /* Magnifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Magnifier.h; sourceTree = "<group>"; };
 		6D0CBE8416BA4A5C00D241A7 /* Magnifier.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Magnifier.m; sourceTree = "<group>"; };
-		6D0CBE8716BA994200D241A7 /* ShortestPathStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortestPathStep.h; sourceTree = "<group>"; };
-		6D0CBE8816BA994200D241A7 /* ShortestPathStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShortestPathStep.m; sourceTree = "<group>"; };
-		6D0CBE8A16BA9ADC00D241A7 /* ShortestPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortestPath.h; sourceTree = "<group>"; };
-		6D0CBE8B16BA9ADC00D241A7 /* ShortestPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShortestPath.m; sourceTree = "<group>"; };
-		6D0CBE8E16BAA8C400D241A7 /* NSValue+GridLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValue+GridLocation.h"; sourceTree = "<group>"; };
-		6D0CBE8F16BAA8C400D241A7 /* NSValue+GridLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValue+GridLocation.m"; sourceTree = "<group>"; };
+		6D0CBE8716BA994200D241A7 /* PathFinderStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinderStep.h; sourceTree = "<group>"; };
+		6D0CBE8816BA994200D241A7 /* PathFinderStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFinderStep.m; sourceTree = "<group>"; };
+		6D0CBE8A16BA9ADC00D241A7 /* PathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinder.h; sourceTree = "<group>"; };
+		6D0CBE8B16BA9ADC00D241A7 /* PathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFinder.m; sourceTree = "<group>"; };
 		6D0CBE9116BEB9CB00D241A7 /* CombatScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CombatScene.h; sourceTree = "<group>"; };
 		6D0CBE9216BEB9CB00D241A7 /* CombatScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CombatScene.m; sourceTree = "<group>"; };
 		6D0CBE9416BEE64500D241A7 /* Dice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dice.h; sourceTree = "<group>"; };
@@ -267,8 +285,6 @@
 		6D0CBE9916C19B9400D241A7 /* BaseBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseBonus.h; sourceTree = "<group>"; };
 		6D0CBE9A16C19B9500D241A7 /* BaseBonus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseBonus.m; sourceTree = "<group>"; };
 		6D0CBE9C16C233EA00D241A7 /* Background-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Background-ipad.png"; sourceTree = "<group>"; };
-		6D0CBE9E16C2363500D241A7 /* BoardFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardFrame.h; sourceTree = "<group>"; };
-		6D0CBE9F16C2363600D241A7 /* BoardFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardFrame.m; sourceTree = "<group>"; };
 		6D0CBEA116C25DCD00D241A7 /* EndTurnLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndTurnLayer.h; sourceTree = "<group>"; };
 		6D0CBEA216C25DCD00D241A7 /* EndTurnLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EndTurnLayer.m; sourceTree = "<group>"; };
 		6D0CBEA416C26A2700D241A7 /* pageflip.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = pageflip.mp3; path = Resources/Sounds/pageflip.mp3; sourceTree = "<group>"; };
@@ -281,6 +297,39 @@
 		6D0CBEAF16C971F500D241A7 /* attackbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = attackbutton.png; path = Resources/Images/attackbutton.png; sourceTree = "<group>"; };
 		6D0CBEB216C9777C00D241A7 /* backbutton-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "backbutton-hd.png"; path = "Resources/Images/backbutton-hd.png"; sourceTree = "<group>"; };
 		6D0CBEB316C9777C00D241A7 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backbutton.png; path = Resources/Images/backbutton.png; sourceTree = "<group>"; };
+		6D0CBEBC16CC112700D241A7 /* GridLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridLocation.h; sourceTree = "<group>"; };
+		6D0CBEBD16CC112900D241A7 /* GridLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridLocation.m; sourceTree = "<group>"; };
+		6D0CBEBF16CC3EF000D241A7 /* autobutton-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "autobutton-hd.png"; path = "Resources/Images/autobutton-hd.png"; sourceTree = "<group>"; };
+		6D0CBEC016CC3EF000D241A7 /* autobutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = autobutton.png; path = Resources/Images/autobutton.png; sourceTree = "<group>"; };
+		6D0CBEC416CC404B00D241A7 /* DeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeckStrategy.h; sourceTree = "<group>"; };
+		6D0CBEC516CC40D500D241A7 /* RandomDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomDeckStrategy.h; sourceTree = "<group>"; };
+		6D0CBEC616CC40D500D241A7 /* RandomDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomDeckStrategy.m; sourceTree = "<group>"; };
+		6D0CBEC916CEB62400D241A7 /* PathFinderStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinderStrategy.h; sourceTree = "<group>"; };
+		6D0CBECA16CEB6B700D241A7 /* MovePathFinderStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovePathFinderStrategy.h; sourceTree = "<group>"; };
+		6D0CBECB16CEB6B700D241A7 /* MovePathFinderStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovePathFinderStrategy.m; sourceTree = "<group>"; };
+		6D0CBECD16CEB72600D241A7 /* MeleeAttackPathFinderStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeleeAttackPathFinderStrategy.h; sourceTree = "<group>"; };
+		6D0CBECE16CEB72600D241A7 /* MeleeAttackPathFinderStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeleeAttackPathFinderStrategy.m; sourceTree = "<group>"; };
+		6D0CBED016CF872300D241A7 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
+		6D0CBED116CF872300D241A7 /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Action.m; sourceTree = "<group>"; };
+		6D0CBED316CF877C00D241A7 /* MoveAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveAction.h; sourceTree = "<group>"; };
+		6D0CBED416CF877C00D241A7 /* MoveAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveAction.m; sourceTree = "<group>"; };
+		6D0CBED616CF880E00D241A7 /* MeleeAttackAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeleeAttackAction.h; sourceTree = "<group>"; };
+		6D0CBED716CF880F00D241A7 /* MeleeAttackAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeleeAttackAction.m; sourceTree = "<group>"; };
+		6D0CBEE116D00DE400D241A7 /* WarOfTheRosesTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WarOfTheRosesTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D0CBEE216D00DE400D241A7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		6D0CBEE816D00DE800D241A7 /* WarOfTheRosesTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WarOfTheRosesTest-Info.plist"; sourceTree = "<group>"; };
+		6D0CBEEA16D00DE800D241A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6D0CBEEC16D00DE800D241A7 /* WarOfTheRosesTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WarOfTheRosesTest.h; sourceTree = "<group>"; };
+		6D0CBEED16D00DE800D241A7 /* WarOfTheRosesTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WarOfTheRosesTest.m; sourceTree = "<group>"; };
+		6D0CBEEF16D00DE800D241A7 /* WarOfTheRosesTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WarOfTheRosesTest-Prefix.pch"; sourceTree = "<group>"; };
+		6D0CBEF516D01DF300D241A7 /* BasePathFinderStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasePathFinderStrategy.h; sourceTree = "<group>"; };
+		6D0CBEF616D01DF400D241A7 /* BasePathFinderStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasePathFinderStrategy.m; sourceTree = "<group>"; };
+		6D0CBEF816D043C400D241A7 /* PathFinderStrategyFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinderStrategyFactory.h; sourceTree = "<group>"; };
+		6D0CBEF916D043C500D241A7 /* PathFinderStrategyFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFinderStrategyFactory.m; sourceTree = "<group>"; };
+		6D0CBEFB16D0F67700D241A7 /* RangedAttackAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RangedAttackAction.h; sourceTree = "<group>"; };
+		6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RangedAttackAction.m; sourceTree = "<group>"; };
+		6D0CBEFE16D0F70A00D241A7 /* RangedAttackPathFinderStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RangedAttackPathFinderStrategy.h; sourceTree = "<group>"; };
+		6D0CBEFF16D0F70B00D241A7 /* RangedAttackPathFinderStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RangedAttackPathFinderStrategy.m; sourceTree = "<group>"; };
 		6D5E043F1662545C0085311B /* CardPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardPool.h; sourceTree = "<group>"; };
 		6D5E04401662545C0085311B /* CardPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardPool.m; sourceTree = "<group>"; };
 		6D5E595C166D42C0007429BD /* archer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = archer_icon.png; path = Resources/Images/archer_icon.png; sourceTree = "<group>"; };
@@ -339,18 +388,6 @@
 		6D6151AE16AFE5EA007A104E /* ParticleHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticleHelper.m; sourceTree = "<group>"; };
 		6D6151B016B015E0007A104E /* GameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameManager.h; sourceTree = "<group>"; };
 		6D6151B116B015E2007A104E /* GameManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameManager.m; sourceTree = "<group>"; };
-		6D6900C6169341290071EC22 /* CCBAnimationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBAnimationManager.h; sourceTree = "<group>"; };
-		6D6900C7169341290071EC22 /* CCBAnimationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBAnimationManager.m; sourceTree = "<group>"; };
-		6D6900C8169341290071EC22 /* CCBKeyframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBKeyframe.h; sourceTree = "<group>"; };
-		6D6900C9169341290071EC22 /* CCBKeyframe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBKeyframe.m; sourceTree = "<group>"; };
-		6D6900CA169341290071EC22 /* CCBReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBReader.h; sourceTree = "<group>"; };
-		6D6900CB169341290071EC22 /* CCBReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBReader.m; sourceTree = "<group>"; };
-		6D6900CC169341290071EC22 /* CCBSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBSequence.h; sourceTree = "<group>"; };
-		6D6900CD169341290071EC22 /* CCBsequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBsequence.m; sourceTree = "<group>"; };
-		6D6900CE169341290071EC22 /* CCBSequenceProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBSequenceProperty.h; sourceTree = "<group>"; };
-		6D6900CF169341290071EC22 /* CCBSequenceProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBSequenceProperty.m; sourceTree = "<group>"; };
-		6D6900D0169341290071EC22 /* CCNode+CCBRelativePositioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CCNode+CCBRelativePositioning.h"; sourceTree = "<group>"; };
-		6D6900D1169341290071EC22 /* CCNode+CCBRelativePositioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CCNode+CCBRelativePositioning.m"; sourceTree = "<group>"; };
 		6D6900D9169341330071EC22 /* PlaceCardsScene.ccbi */ = {isa = PBXFileReference; lastKnownFileType = file; path = PlaceCardsScene.ccbi; sourceTree = "<group>"; };
 		6D6900DF169588470071EC22 /* right_arrow-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "right_arrow-hd.png"; path = "Resources/Images/right_arrow-hd.png"; sourceTree = "<group>"; };
 		6D6900E0169588470071EC22 /* right_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right_arrow.png; path = Resources/Images/right_arrow.png; sourceTree = "<group>"; };
@@ -661,6 +698,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6D0CBEDD16D00DE400D241A7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D0CBEE316D00DE500D241A7 /* SenTestingKit.framework in Frameworks */,
+				6D0CBEE416D00DE500D241A7 /* UIKit.framework in Frameworks */,
+				6D0CBEE516D00DE500D241A7 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6DF2FB7816596C5C00F08664 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -683,26 +730,75 @@
 		6D0CBE8616BA992C00D241A7 /* PathFinding */ = {
 			isa = PBXGroup;
 			children = (
-				6D0CBE8716BA994200D241A7 /* ShortestPathStep.h */,
-				6D0CBE8816BA994200D241A7 /* ShortestPathStep.m */,
-				6D0CBE8A16BA9ADC00D241A7 /* ShortestPath.h */,
-				6D0CBE8B16BA9ADC00D241A7 /* ShortestPath.m */,
+				6D0CBE8716BA994200D241A7 /* PathFinderStep.h */,
+				6D0CBE8816BA994200D241A7 /* PathFinderStep.m */,
+				6D0CBE8A16BA9ADC00D241A7 /* PathFinder.h */,
+				6D0CBE8B16BA9ADC00D241A7 /* PathFinder.m */,
+				6D0CBEC916CEB62400D241A7 /* PathFinderStrategy.h */,
+				6D0CBECA16CEB6B700D241A7 /* MovePathFinderStrategy.h */,
+				6D0CBECB16CEB6B700D241A7 /* MovePathFinderStrategy.m */,
+				6D0CBECD16CEB72600D241A7 /* MeleeAttackPathFinderStrategy.h */,
+				6D0CBECE16CEB72600D241A7 /* MeleeAttackPathFinderStrategy.m */,
+				6D0CBEF516D01DF300D241A7 /* BasePathFinderStrategy.h */,
+				6D0CBEF616D01DF400D241A7 /* BasePathFinderStrategy.m */,
+				6D0CBEF816D043C400D241A7 /* PathFinderStrategyFactory.h */,
+				6D0CBEF916D043C500D241A7 /* PathFinderStrategyFactory.m */,
+				6D0CBEFE16D0F70A00D241A7 /* RangedAttackPathFinderStrategy.h */,
+				6D0CBEFF16D0F70B00D241A7 /* RangedAttackPathFinderStrategy.m */,
 			);
 			name = PathFinding;
 			sourceTree = "<group>";
 		};
-		6D0CBE8D16BAA8AE00D241A7 /* Categories */ = {
+		6D0CBEC316CC402E00D241A7 /* DeckStrategy */ = {
 			isa = PBXGroup;
 			children = (
-				6D0CBE8E16BAA8C400D241A7 /* NSValue+GridLocation.h */,
-				6D0CBE8F16BAA8C400D241A7 /* NSValue+GridLocation.m */,
+				6D0CBEC416CC404B00D241A7 /* DeckStrategy.h */,
+				6D0CBEC516CC40D500D241A7 /* RandomDeckStrategy.h */,
+				6D0CBEC616CC40D500D241A7 /* RandomDeckStrategy.m */,
 			);
-			name = Categories;
+			name = DeckStrategy;
+			sourceTree = "<group>";
+		};
+		6D0CBEC816CE766C00D241A7 /* Action */ = {
+			isa = PBXGroup;
+			children = (
+				6D0CBED016CF872300D241A7 /* Action.h */,
+				6D0CBED116CF872300D241A7 /* Action.m */,
+				6D0CBED316CF877C00D241A7 /* MoveAction.h */,
+				6D0CBED416CF877C00D241A7 /* MoveAction.m */,
+				6D0CBED616CF880E00D241A7 /* MeleeAttackAction.h */,
+				6D0CBED716CF880F00D241A7 /* MeleeAttackAction.m */,
+				6D0CBEFB16D0F67700D241A7 /* RangedAttackAction.h */,
+				6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */,
+			);
+			name = Action;
+			sourceTree = "<group>";
+		};
+		6D0CBEE616D00DE500D241A7 /* WarOfTheRosesTest */ = {
+			isa = PBXGroup;
+			children = (
+				6D0CBEEC16D00DE800D241A7 /* WarOfTheRosesTest.h */,
+				6D0CBEED16D00DE800D241A7 /* WarOfTheRosesTest.m */,
+				6D0CBEE716D00DE800D241A7 /* Supporting Files */,
+			);
+			path = WarOfTheRosesTest;
+			sourceTree = "<group>";
+		};
+		6D0CBEE716D00DE800D241A7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6D0CBEE816D00DE800D241A7 /* WarOfTheRosesTest-Info.plist */,
+				6D0CBEE916D00DE800D241A7 /* InfoPlist.strings */,
+				6D0CBEEF16D00DE800D241A7 /* WarOfTheRosesTest-Prefix.pch */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6D0CBEBF16CC3EF000D241A7 /* autobutton-hd.png */,
+				6D0CBEC016CC3EF000D241A7 /* autobutton.png */,
 				6D0CBEB216C9777C00D241A7 /* backbutton-hd.png */,
 				6D0CBEB316C9777C00D241A7 /* backbutton.png */,
 				6D0CBEAE16C971F400D241A7 /* attackbutton-hd.png */,
@@ -789,25 +885,6 @@
 			name = Particles;
 			sourceTree = "<group>";
 		};
-		6D6900C5169341290071EC22 /* CCBReader */ = {
-			isa = PBXGroup;
-			children = (
-				6D6900C6169341290071EC22 /* CCBAnimationManager.h */,
-				6D6900C7169341290071EC22 /* CCBAnimationManager.m */,
-				6D6900C8169341290071EC22 /* CCBKeyframe.h */,
-				6D6900C9169341290071EC22 /* CCBKeyframe.m */,
-				6D6900CA169341290071EC22 /* CCBReader.h */,
-				6D6900CB169341290071EC22 /* CCBReader.m */,
-				6D6900CC169341290071EC22 /* CCBSequence.h */,
-				6D6900CD169341290071EC22 /* CCBsequence.m */,
-				6D6900CE169341290071EC22 /* CCBSequenceProperty.h */,
-				6D6900CF169341290071EC22 /* CCBSequenceProperty.m */,
-				6D6900D0169341290071EC22 /* CCNode+CCBRelativePositioning.h */,
-				6D6900D1169341290071EC22 /* CCNode+CCBRelativePositioning.m */,
-			);
-			path = CCBReader;
-			sourceTree = "<group>";
-		};
 		6D6900E41695A13B0071EC22 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -869,6 +946,7 @@
 			isa = PBXGroup;
 			children = (
 				6DF2FB9116596C5C00F08664 /* WarOfTheRoses */,
+				6D0CBEE616D00DE500D241A7 /* WarOfTheRosesTest */,
 				6DF2FB7E16596C5C00F08664 /* Frameworks */,
 				6DF2FB7C16596C5C00F08664 /* Products */,
 			);
@@ -878,6 +956,7 @@
 			isa = PBXGroup;
 			children = (
 				6DF2FB7B16596C5C00F08664 /* WarOfTheRoses.app */,
+				6D0CBEE116D00DE400D241A7 /* WarOfTheRosesTest.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -894,6 +973,7 @@
 				6DF2FB8B16596C5C00F08664 /* Foundation.framework */,
 				6DF2FB8D16596C5C00F08664 /* CoreGraphics.framework */,
 				6DF2FB8F16596C5C00F08664 /* GameKit.framework */,
+				6D0CBEE216D00DE400D241A7 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -901,9 +981,7 @@
 		6DF2FB9116596C5C00F08664 /* WarOfTheRoses */ = {
 			isa = PBXGroup;
 			children = (
-				6D0CBE8D16BAA8AE00D241A7 /* Categories */,
 				6D690123169B55C50071EC22 /* UI */,
-				6D6900C5169341290071EC22 /* CCBReader */,
 				6DF2FD1F165C21CD00F08664 /* Domain */,
 				6DF2FD141659753500F08664 /* GameCenter */,
 				6DF2FD131659752F00F08664 /* Scenes */,
@@ -1300,31 +1378,33 @@
 		6DF2FD1F165C21CD00F08664 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				6D0CBE8616BA992C00D241A7 /* PathFinding */,
+				6D0CBEC816CE766C00D241A7 /* Action */,
+				6D0CBEC316CC402E00D241A7 /* DeckStrategy */,
 				6DEA3477168D986A00485F00 /* Attributes */,
-				6DF2FD24165C22B700F08664 /* Special Units */,
 				6DF2FD23165C22B100F08664 /* Basic Units */,
-				6DF2FD20165C21ED00F08664 /* Card.h */,
-				6DF2FD21165C21ED00F08664 /* Card.m */,
-				6DF2FD25165C232B00F08664 /* Definitions.h */,
-				6DF2FD66165D68D600F08664 /* Deck.h */,
-				6DF2FD67165D68D600F08664 /* Deck.m */,
-				6D5E043F1662545C0085311B /* CardPool.h */,
-				6D5E04401662545C0085311B /* CardPool.m */,
-				6D5E596416712833007429BD /* GridlLayoutManager.h */,
-				6D5E596516712834007429BD /* GridlLayoutManager.m */,
-				6D6901201698B0D30071EC22 /* Game.h */,
-				6D6901211698B0D30071EC22 /* Game.m */,
+				6DF2FD24165C22B700F08664 /* Special Units */,
+				6D0CBE8616BA992C00D241A7 /* PathFinding */,
 				6D61519F16AF2F99007A104E /* AIPlayer.h */,
 				6D6151A016AF2F99007A104E /* AIPlayer.m */,
-				6D6151B016B015E0007A104E /* GameManager.h */,
-				6D6151B116B015E2007A104E /* GameManager.m */,
+				6DF2FD20165C21ED00F08664 /* Card.h */,
+				6DF2FD21165C21ED00F08664 /* Card.m */,
+				6D5E043F1662545C0085311B /* CardPool.h */,
+				6D5E04401662545C0085311B /* CardPool.m */,
+				6DF2FD66165D68D600F08664 /* Deck.h */,
+				6DF2FD67165D68D600F08664 /* Deck.m */,
+				6DF2FD25165C232B00F08664 /* Definitions.h */,
 				6D0CBE9416BEE64500D241A7 /* Dice.h */,
 				6D0CBE9516BEE64500D241A7 /* Dice.m */,
-				6D0CBE9E16C2363500D241A7 /* BoardFrame.h */,
-				6D0CBE9F16C2363600D241A7 /* BoardFrame.m */,
+				6D6901201698B0D30071EC22 /* Game.h */,
+				6D6901211698B0D30071EC22 /* Game.m */,
+				6D6151B016B015E0007A104E /* GameManager.h */,
+				6D6151B116B015E2007A104E /* GameManager.m */,
+				6D5E596416712833007429BD /* GridlLayoutManager.h */,
+				6D5E596516712834007429BD /* GridlLayoutManager.m */,
 				6D0CBEA816C2D7F900D241A7 /* SoundManager.h */,
 				6D0CBEA916C2D7FD00D241A7 /* SoundManager.m */,
+				6D0CBEBC16CC112700D241A7 /* GridLocation.h */,
+				6D0CBEBD16CC112900D241A7 /* GridLocation.m */,
 			);
 			name = Domain;
 			sourceTree = "<group>";
@@ -1358,6 +1438,25 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6D0CBEE016D00DE400D241A7 /* WarOfTheRosesTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D0CBEF016D00DE800D241A7 /* Build configuration list for PBXNativeTarget "WarOfTheRosesTest" */;
+			buildPhases = (
+				6D0CBEDC16D00DE400D241A7 /* Sources */,
+				6D0CBEDD16D00DE400D241A7 /* Frameworks */,
+				6D0CBEDE16D00DE400D241A7 /* Resources */,
+				6D0CBEDF16D00DE400D241A7 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D0CBEF416D00F2300D241A7 /* PBXTargetDependency */,
+			);
+			name = WarOfTheRosesTest;
+			productName = WarOfTheRosesTest;
+			productReference = 6D0CBEE116D00DE400D241A7 /* WarOfTheRosesTest.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		6DF2FB7A16596C5C00F08664 /* WarOfTheRoses */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6DF2FD0A16596C6100F08664 /* Build configuration list for PBXNativeTarget "WarOfTheRoses" */;
@@ -1396,11 +1495,20 @@
 			projectRoot = "";
 			targets = (
 				6DF2FB7A16596C5C00F08664 /* WarOfTheRoses */,
+				6D0CBEE016D00DE400D241A7 /* WarOfTheRosesTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6D0CBEDE16D00DE400D241A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D0CBEEB16D00DE800D241A7 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6DF2FB7916596C5C00F08664 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1487,12 +1595,38 @@
 				6D0CBEB116C971F500D241A7 /* attackbutton.png in Resources */,
 				6D0CBEB416C9777D00D241A7 /* backbutton-hd.png in Resources */,
 				6D0CBEB516C9777D00D241A7 /* backbutton.png in Resources */,
+				6D0CBEC116CC3EF000D241A7 /* autobutton-hd.png in Resources */,
+				6D0CBEC216CC3EF000D241A7 /* autobutton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6D0CBEDF16D00DE400D241A7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		6D0CBEDC16D00DE400D241A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D0CBEEE16D00DE800D241A7 /* WarOfTheRosesTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6DF2FB7716596C5C00F08664 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1615,12 +1749,6 @@
 				6DEA346C168C555900485F00 /* RawBonus.m in Sources */,
 				6DEA346F168C556400485F00 /* TimedBonus.m in Sources */,
 				6DEA3472168C55EC00485F00 /* RangeAttribute.m in Sources */,
-				6D6900D2169341290071EC22 /* CCBAnimationManager.m in Sources */,
-				6D6900D3169341290071EC22 /* CCBKeyframe.m in Sources */,
-				6D6900D4169341290071EC22 /* CCBReader.m in Sources */,
-				6D6900D5169341290071EC22 /* CCBsequence.m in Sources */,
-				6D6900D6169341290071EC22 /* CCBSequenceProperty.m in Sources */,
-				6D6900D7169341290071EC22 /* CCNode+CCBRelativePositioning.m in Sources */,
 				6D6901221698B0D40071EC22 /* Game.m in Sources */,
 				6D690126169B55D90071EC22 /* GameBoard.m in Sources */,
 				6D690130169CB2880071EC22 /* GameBoardNode.m in Sources */,
@@ -1631,22 +1759,109 @@
 				6D6151A116AF2F9A007A104E /* AIPlayer.m in Sources */,
 				6D6151AF16AFE5EA007A104E /* ParticleHelper.m in Sources */,
 				6D6151B216B015E3007A104E /* GameManager.m in Sources */,
-				6D0CBE8916BA994200D241A7 /* ShortestPathStep.m in Sources */,
-				6D0CBE8C16BA9ADC00D241A7 /* ShortestPath.m in Sources */,
-				6D0CBE9016BAA8C400D241A7 /* NSValue+GridLocation.m in Sources */,
+				6D0CBE8916BA994200D241A7 /* PathFinderStep.m in Sources */,
+				6D0CBE8C16BA9ADC00D241A7 /* PathFinder.m in Sources */,
 				6D0CBE9316BEB9CB00D241A7 /* CombatScene.m in Sources */,
 				6D0CBE9616BEE64700D241A7 /* Dice.m in Sources */,
 				6D0CBE9B16C19B9500D241A7 /* BaseBonus.m in Sources */,
-				6D0CBEA016C2363900D241A7 /* BoardFrame.m in Sources */,
 				6D0CBEA316C25DCE00D241A7 /* EndTurnLayer.m in Sources */,
 				6D0CBEAA16C2D80100D241A7 /* SoundManager.m in Sources */,
 				6D0CBEAD16C81F0800D241A7 /* CardSprite.m in Sources */,
+				6D0CBEBE16CC112E00D241A7 /* GridLocation.m in Sources */,
+				6D0CBEC716CC40D500D241A7 /* RandomDeckStrategy.m in Sources */,
+				6D0CBECC16CEB6B800D241A7 /* MovePathFinderStrategy.m in Sources */,
+				6D0CBECF16CEB72700D241A7 /* MeleeAttackPathFinderStrategy.m in Sources */,
+				6D0CBED216CF872300D241A7 /* Action.m in Sources */,
+				6D0CBED516CF877C00D241A7 /* MoveAction.m in Sources */,
+				6D0CBED816CF880F00D241A7 /* MeleeAttackAction.m in Sources */,
+				6D0CBEF716D01DF500D241A7 /* BasePathFinderStrategy.m in Sources */,
+				6D0CBEFA16D043C600D241A7 /* PathFinderStrategyFactory.m in Sources */,
+				6D0CBEFD16D0F67800D241A7 /* RangedAttackAction.m in Sources */,
+				6D0CBF0016D0F70D00D241A7 /* RangedAttackPathFinderStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		6D0CBEF416D00F2300D241A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6DF2FB7A16596C5C00F08664 /* WarOfTheRoses */;
+			targetProxy = 6D0CBEF316D00F2300D241A7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6D0CBEE916D00DE800D241A7 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6D0CBEEA16D00DE800D241A7 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		6D0CBEF116D00DE800D241A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WarOfTheRoses.app/WarOfTheRoses";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WarOfTheRosesTest/WarOfTheRosesTest-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "WarOfTheRosesTest/WarOfTheRosesTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		6D0CBEF216D00DE800D241A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WarOfTheRoses.app/WarOfTheRoses";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WarOfTheRosesTest/WarOfTheRosesTest-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "WarOfTheRosesTest/WarOfTheRosesTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
 		6DF2FD0816596C6100F08664 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1664,7 +1879,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1683,7 +1898,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1736,6 +1951,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6D0CBEF016D00DE800D241A7 /* Build configuration list for PBXNativeTarget "WarOfTheRosesTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D0CBEF116D00DE800D241A7 /* Debug */,
+				6D0CBEF216D00DE800D241A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6DF2FB7516596C5C00F08664 /* Build configuration list for PBXProject "WarOfTheRoses" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

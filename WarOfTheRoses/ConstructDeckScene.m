@@ -9,7 +9,6 @@
 #import "ConstructDeckScene.h"
 #import "GridlLayoutManager.h"
 #import "PlaceCardsScene.h"
-#import "CCBReader.h"
 #import "TimedBonus.h"
 #import "BonusSprite.h"
 #import "ParticleHelper.h"
@@ -109,7 +108,7 @@
         cardSprite.scale = 0.8;
         cardSprite.position = ccp(_deckOfCards.position.x + 30, _deckOfCards.position.y - 40);
         cardSprite.rotation = -10;
-        cardSprite.model.cardLocation = MakeGridLocation(row, column);
+        cardSprite.model.cardLocation = [GridLocation gridLocationWithRow:row column:column];
         
         [self addChild:cardSprite];
         [_cardSprites addObject:cardSprite];

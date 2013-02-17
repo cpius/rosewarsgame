@@ -21,6 +21,7 @@
 @property (nonatomic, assign) PlayerColors myColor;
 @property (nonatomic, readonly) PlayerColors enemyColor;
 
+@property (nonatomic, readonly) NSMutableDictionary *unitLayout;
 
 + (void)deserializeGameData:(NSData*)gameData;
 - (NSData*)serializeCurrentGame;

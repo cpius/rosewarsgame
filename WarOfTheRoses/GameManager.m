@@ -48,6 +48,23 @@
     }
 }
 
+- (void)card:(Card *)card movedToGridLocation:(GridLocation *)location {
+    
+    NSLog(@"Card: %@ moved to location: %@", card, location);
+    
+    [_currentGame.unitLayout removeObjectForKey:card.cardLocation];
+    
+    card.cardLocation = location;
+    [_currentGame.unitLayout setObject:card forKey:location];
+}
+
+- (void)cardHasBeenDefeated:(Card *)card {
+    
+    NSLog(@"Card: %@ has been defeated - remove from game", card);
+    
+    [_currentGame.unitLayout removeObjectForKey:card.cardLocation];
+}
+
 - (NSUInteger)actionUsed {
     
     _currentGame.numberOfAvailableActions--;
@@ -91,7 +108,7 @@
         outcome = kCombatOutcomeDefendSuccessful;
     }
     
-    if (kCombatOutcomeAttackSuccessful) {
+    if (outcome == kCombatOutcomeAttackSuccessful) {
         [attacker attackSuccessfulAgainstDefender:defender];
     }
     else {

@@ -10,13 +10,7 @@
 #import "RangeAttribute.h"
 
 @interface Card : CCNode  {
-    
 
-    /*
-     Angiver rækkevidden på en units angreb, hver square tæller for 1 range, dvs en unit med range 1 kan angribe de  felter umiddelbart ved siden af sig.
-     */
-    NSUInteger range;
-    
     
     /* Indikerer hvor mange gange enheden er gået op i level
      */
@@ -40,7 +34,7 @@
 @property (nonatomic, strong) NSString *frontImageLarge;
 @property (nonatomic, strong) NSString *frontImageSmall;
 @property (nonatomic, strong) NSString *backImage;
-@property (nonatomic, assign) GridLocation cardLocation;
+@property (nonatomic, strong) GridLocation *cardLocation;
 @property (nonatomic, assign) BOOL isShowingDetail;
 @property (nonatomic, assign) NSUInteger movesConsumed;
 /*
@@ -69,6 +63,12 @@
  En unit modtager et experience point hver gang den slår en anden unit ihjel. Når en unit har to experience points bliver disse vekslet til enten +1 angreb eller +1 forsvar. Dette kan maximalt ske to gange for den samme unit.
  */
 @property(nonatomic, assign) NSInteger experience;
+
+/*
+ Angiver rækkevidden på en units angreb, hver square tæller for 1 range, dvs en unit med range 1 kan angribe de  felter umiddelbart ved siden af sig.
+ */
+@property(nonatomic, assign) NSUInteger range;
+@property(nonatomic, readonly) BOOL isRanged;
 
 
 - (void)commonInit;

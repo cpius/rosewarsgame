@@ -11,28 +11,13 @@
 
 #define APP_FONT @"AppleGothic"
 
-typedef struct _GridLocation {
-    NSInteger row;
-    NSInteger column;
-} GridLocation;
+#define BOARDSIZE_ROWS 8
+#define BOARDSIZE_COLUMNS 5
 
-NS_INLINE GridLocation MakeGridLocation(NSInteger row, NSInteger column) {
-    GridLocation cl;
-    cl.row = row;
-    cl.column = column;
-    return cl;
-}
-
-#define GridLocationEmpty MakeGridLocation(-1, -1);
-
-/*NS_INLINE GridLocation GridLocationEmpty() {
-    return MakeGridLocation(-1, -1);
-}
-*/
-NS_INLINE BOOL GridLocationEqualToLocation(GridLocation location1, GridLocation location2) {
-    
-    return location1.row == location2.row && location1.column == location2.column;
-}
+typedef enum {
+    kGameBoardUpper = 0,
+    kGameBoardLower
+} GameBoardSides;
 
 typedef enum {
     kGameStateInitialState = 0,

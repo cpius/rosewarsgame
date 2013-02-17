@@ -7,46 +7,20 @@
 //
 
 #import "AIPlayer.h"
+#import "RandomDeckStrategy.h"
 
 @interface AIPlayer()
 
-- (BOOL)deck:(Deck*)deck containsCardInLocation:(GridLocation)location;
 
 @end
 
 @implementation AIPlayer
 
+
 - (void)placeCardsInDeck:(Deck *)deck {
-
-    for (Card *card in deck.cards) {
-        
-        BOOL cardInValidPosition = NO;
-        
-        while (!cardInValidPosition) {
-            
-            GridLocation location = MakeGridLocation((arc4random() % 4) + 1, (arc4random() % 5) + 1);
-            
-            if (![self deck:deck containsCardInLocation:location]) {
-                
-                card.cardLocation = location;
-                cardInValidPosition = YES;
-            }
-        }
-    }
-}
-
-- (BOOL)deck:(Deck *)deck containsCardInLocation:(GridLocation)location {
     
-    for (Card *card in deck.cards) {
-        
-        if (card.cardLocation.row == location.row &&
-            card.cardLocation.column == location.column) {
-            return YES;
-        }
-    }
-    
-    return NO;
+    RandomDeckStrategy *deckStrategy = [[RandomDeckStrategy alloc] init];
+    [deckStrategy placeCardsInDeck:deck inGameBoardSide:kGameBoardUpper];
 }
-
 
 @end

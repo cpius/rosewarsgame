@@ -6,16 +6,16 @@
 //
 //
 
-#import "ShortestPathStep.h"
+#import "PathFinderStep.h"
 
-@implementation ShortestPathStep
+@implementation PathFinderStep
 
 @synthesize location;
 @synthesize gScore;
 @synthesize hScore;
 @synthesize parent;
 
-- (id)initWithLocation:(GridLocation)loc
+- (id)initWithLocation:(GridLocation*)loc
 {
 	if ((self = [super init])) {
 		location = loc;
@@ -32,9 +32,9 @@
 	return [NSString stringWithFormat:@"%@  pos=[%d;%d]  g=%d  h=%d  f=%d", [super description], self.location.column, self.location.row, self.gScore, self.hScore, [self fScore]];
 }
 
-- (BOOL)isEqual:(ShortestPathStep *)other
+- (BOOL)isEqual:(PathFinderStep *)other
 {
-	return GridLocationEqualToLocation(self.location, other.location);
+	return [self.location isEqual:other.location];
 }
 
 - (int)fScore

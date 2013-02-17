@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ShortestPathStep : NSObject
+@interface PathFinderStep : NSObject
 
-@property (nonatomic, assign) GridLocation location;
+@property (nonatomic, strong) GridLocation *location;
 @property (nonatomic, assign) int gScore;
 @property (nonatomic, assign) int hScore;
-@property (nonatomic, assign) ShortestPathStep *parent;
+@property (nonatomic, assign) PathFinderStep *parent;
 
-- (id)initWithLocation:(GridLocation)loc;
+- (id)initWithLocation:(GridLocation*)loc;
 - (int)fScore;
 
 @end

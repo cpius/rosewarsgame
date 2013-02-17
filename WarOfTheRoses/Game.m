@@ -17,6 +17,7 @@
 @synthesize state;
 @synthesize myColor;
 @synthesize numberOfAvailableActions;
+@synthesize unitLayout = _unitLayout;
 
 - (id)init {
     
@@ -24,6 +25,8 @@
     
     if (self) {
         self.myColor = arc4random() % 1;
+        
+        _unitLayout = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -35,10 +38,10 @@
         return kPlayerRed;
     }
     
-    if (self.myColor == kPlayerRed) {
-        return kPlayerGreen;
-    }
+    return kPlayerGreen;
 }
+
+
 
 - (NSData *)serializeCurrentGame {
     

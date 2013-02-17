@@ -8,6 +8,10 @@
 
 #import "GameBoard.h"
 #import "ParticleHelper.h"
+#import "MovePathFinderStrategy.h"
+#import "MeleeAttackPathFinderStrategy.h"
+#import "RangedAttackAction.h"
+#import "PathFinderStrategyFactory.h"
 
 @interface GameBoard()
 
@@ -30,6 +34,8 @@
         
         _greenBackgroundImageName = @"greenbackground.png";
         _redBackgroundImageName = @"redbackground.png";
+        
+        _highlightedNodes = [NSMutableArray array];
     }
     
     return self;
@@ -49,7 +55,7 @@
     
     for (CardSprite *cardSprite in deck) {
         
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:MakeGridLocation(cardSprite.model.cardLocation.row + rowOffset, cardSprite.model.cardLocation.column)];
+        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:cardSprite.model.cardLocation.row + rowOffset column:cardSprite.model.cardLocation.column]];
         
         if (node != nil) {
             
@@ -58,59 +64,67 @@
     }
 }
 
+- (void)removeCardAtGameBoardNode:(GameBoardNode *)node {
+    
+    if (node.card != nil) {
+        [node.card removeFromParentAndCleanup:YES];
+    }
+}
+
+- (void)replaceCardAtGameBoardNode:(GameBoardNode *)node withCard:(CardSprite *)card {
+    
+    [node.card removeFromParentAndCleanup:YES];
+    node.card = card;
+}
+
 - (void)swapCardFromNode:(GameBoardNode *)fromNode toNode:(GameBoardNode *)toNode {
     
     toNode.card = fromNode.card;
     fromNode.card = nil;
 }
 
-- (void)moveFromActiveNodeToNode:(GameBoardNode *)node {
+- (Action*)getActionsToGameBoardNode:(GameBoardNode *)toNode allLocations:(NSMutableDictionary*)allLocations {
     
-    if ([self nodeIsActive]) {
-        
-        if (_activeNode == node) {
-            return;
-        }
-        
-        NSArray *path = [self getMovePathfromGameBoardNode:_activeNode toGameBoardNode:node];
-        
-        [self moveActiveGameBoardNodeFollowingPath:path onCompletion:^{
-        }];
-    }
+    return [self getActionsfromGameBoardNode:_activeNode toGameBoardNode:toNode allLocations:allLocations];
 }
 
-- (NSArray *)getMovePathToGameBoardNode:(GameBoardNode *)toNode {
-    
-    return [self getMovePathfromGameBoardNode:_activeNode toGameBoardNode:toNode];
-}
-
-- (NSArray*)getMovePathfromGameBoardNode:(GameBoardNode *)fromNode toGameBoardNode:(GameBoardNode *)toNode {
+- (Action*)getActionsfromGameBoardNode:(GameBoardNode *)fromNode toGameBoardNode:(GameBoardNode *)toNode allLocations:(NSMutableDictionary*)allLocations {
         
-    GridLocation fromLocation = fromNode.locationInGrid;
-    GridLocation toLocation = toNode.locationInGrid;
+    GridLocation *fromLocation = fromNode.locationInGrid;
+    GridLocation *toLocation = toNode.locationInGrid;
     
-    if (GridLocationEqualToLocation(fromLocation, toLocation)) {
+    if ([fromLocation isEqual:toLocation]) {
         CCLOG(@"Can't move to current location");
-        return [NSArray array];
+        return nil;
     }
     
-    ShortestPath *pathFinder = [[ShortestPath alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] init];
     
-    pathFinder.datasource = self;
+    Action *action = nil;
+    id<PathFinderStrategy> strategy = [PathFinderStrategyFactory getStrategyFromCard:fromNode.card.model toCard:toNode.card.model myColor:colorOfBottomPlayer];
     
-    NSArray *path = [pathFinder getPathFromGridLocation:fromLocation toGridLocation:toLocation];
-        
-    for (ShortestPathStep *step in [path reverseObjectEnumerator]) {
+    NSArray *path = [pathFinder getPathFromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:strategy allLocations:allLocations];
+    
+    if (toNode.hasCard && [toNode.card.model isOwnedByPlayerWithColor:colorOfTopPlayer]) {
+        if ((path.count - 1) > 1 && fromNode.card.model.isRanged) {
+            action = [[RangedAttackAction alloc] initWithPath:path andCardInAction:fromNode.card.model enemyCard:toNode.card.model];
+        }
+        else {
+            action = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:fromNode.card.model enemyCard:toNode.card.model];
+        }
+    }
+    else {
+        action = [[MoveAction alloc] initWithPath:path andCardInAction:fromNode.card.model];
+    }
+    
+    for (PathFinderStep *step in [path reverseObjectEnumerator]) {
         CCLOG(@"%@", step);
     }
-    
-    
-    // Check if toLocation is enemy unit - in this case: ATTAAAAAAACK!
     
     CCLOG(@"fromNode: (row:%d - column:%d)", fromLocation.row, fromLocation.column);
     CCLOG(@"toNode: (row:%d - column:%d)", toLocation.row, toLocation.column);
     
-    return path;
+    return action;
 }
 
 - (void)moveActiveGameBoardNodeFollowingPath:(NSArray *)path onCompletion:(void (^)())completion {
@@ -124,7 +138,7 @@
         _isMoving = YES;
     }
         
-    ShortestPathStep *step = [tempPath objectAtIndex:0];
+    PathFinderStep *step = [tempPath objectAtIndex:0];
     
     GameBoardNode *nextNode = [self getGameBoardNodeForGridLocation:step.location];
     
@@ -209,7 +223,7 @@
             GameBoardNode *node = [[GameBoardNode alloc] initWithSprite:[CCSprite spriteWithFile:spriteName]];
             
             
-            node.locationInGrid = MakeGridLocation(row + 1, column + 1);
+            node.locationInGrid = [GridLocation gridLocationWithRow:row + 1 column:column + 1];
             CCLabelTTF *label = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%d,%d", node.locationInGrid.row, node.locationInGrid.column] fontName:APP_FONT fontSize:10];
             node.position = ccp((column * node.contentSize.width) + node.contentSize.width / 2, self.contentSize.height - ((row * node.contentSize.height) +node.contentSize.height / 2));
             label.anchorPoint = ccp(0.5, 0.5);
@@ -235,11 +249,11 @@
     return nil;
 }
 
-- (GameBoardNode *)getGameBoardNodeForGridLocation:(GridLocation)gridLocation {
+- (GameBoardNode *)getGameBoardNodeForGridLocation:(GridLocation*)gridLocation {
     
     for (GameBoardNode *node in _boardNodes) {
         
-        if (GridLocationEqualToLocation(node.locationInGrid, gridLocation)) {
+        if ([node.locationInGrid isEqual:gridLocation]) {
             return node;
         }
     }
@@ -257,20 +271,46 @@
     return _activeNode;
 }
 
+- (void)highlightNodeAtLocation:(GridLocation*)location withColor:(ccColor3B)color {
+    
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+    
+    if (node != nil) {
+        [node.nodeSprite runAction:[CCTintTo actionWithDuration:0.2 red:color.r green:color.g blue:color.b]];
+        
+        if (![_highlightedNodes containsObject:node.nodeSprite]) {
+            [_highlightedNodes addObject:node.nodeSprite];
+        }
+    }
+}
+
+- (void)highlightCardAtLocation:(GridLocation *)location withColor:(ccColor3B)color {
+    
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+    
+    if (node != nil && node.card != nil) {
+        [node.card runAction:[CCTintTo actionWithDuration:0.2 red:color.r green:color.g blue:color.b]];
+        
+        if (![_highlightedNodes containsObject:node.card]) {
+            [_highlightedNodes addObject:node.card];
+        }
+    }
+}
+
+- (void)deHighlightAllNodes {
+    
+    for (CCSprite *sprite in _highlightedNodes) {
+        [sprite runAction:[CCTintTo actionWithDuration:0.2 red:255 green:255 blue:255]];
+    }
+}
+
 - (void)selectGameBoardNode:(GameBoardNode *)node useHighlighting:(BOOL)highlight {
     
     [self deselectActiveNode];
-    
-    NSArray *adjacentGameBoardNodes = [self getAdjacentGameBoardNodesToGameBoardNode:node ignoreNode:nil];
-    
-    for (GameBoardNode *node in adjacentGameBoardNodes) {
         
-        [node runAction:[CCScaleTo actionWithDuration:0.2 scale:1.1]];
-    }
-    
     [node setZOrder:500];
     [node.card setZOrder:501];
-    [node.card runAction:[CCTintTo actionWithDuration:0.2 red:235 green:0 blue:0]];
+    [node.card runAction:[CCTintTo actionWithDuration:0.2 red:0 green:0 blue:235]];
     [ParticleHelper highlightNode:node.card forever:YES];
     
     _activeNode = node;
@@ -282,13 +322,7 @@
         [_activeNode setZOrder:0];
         [_activeNode.card setZOrder:1];
         [ParticleHelper stopHighlightingNode:_activeNode.card];
-        
-        NSArray *adjacentGameBoardNodes = [self getAdjacentGameBoardNodesToGameBoardNode:_activeNode ignoreNode:nil];
-        
-        for (GameBoardNode *node in adjacentGameBoardNodes) {
-            [node runAction:[CCScaleTo actionWithDuration:0.2 scale:1.0]];
-        }
-        
+                
         CCCallBlock *reset = [CCCallBlock actionWithBlock:^{
             _activeNode = nil;
         }];
@@ -303,7 +337,7 @@
     
     // Card to the left?
     if (gameBoardnode.locationInGrid.column > 1) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:MakeGridLocation(gameBoardnode.locationInGrid.row, gameBoardnode.locationInGrid.column - 1)];
+        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row column:gameBoardnode.locationInGrid.column - 1]];
         
         if (!node.hasCard || node == ignoreNode) {
             [adjacentGameBoards addObject:node];
@@ -312,7 +346,7 @@
     
     // Card to the right?
     if (gameBoardnode.locationInGrid.column < self.columns) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:MakeGridLocation(gameBoardnode.locationInGrid.row, gameBoardnode.locationInGrid.column + 1)];
+        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row column:gameBoardnode.locationInGrid.column + 1]];
         
         if (!node.hasCard || node == ignoreNode) {
             [adjacentGameBoards addObject:node];
@@ -321,7 +355,7 @@
     
     // Card above?
     if (gameBoardnode.locationInGrid.row > 1) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:MakeGridLocation(gameBoardnode.locationInGrid.row - 1, gameBoardnode.locationInGrid.column)];
+        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row - 1 column:gameBoardnode.locationInGrid.column]];
         
         if (!node.hasCard || node == ignoreNode) {
             [adjacentGameBoards addObject:node];
@@ -330,7 +364,7 @@
     
     // Card below?
     if (gameBoardnode.locationInGrid.row < self.rows) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:MakeGridLocation(gameBoardnode.locationInGrid.row + 1, gameBoardnode.locationInGrid.column)];
+        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row + 1 column:gameBoardnode.locationInGrid.column - 1]];
         
         if (!node.hasCard || node == ignoreNode) {
             [adjacentGameBoards addObject:node];
@@ -346,13 +380,13 @@
     NSMutableArray *adjacentGridLocations = [NSMutableArray array];
     
     for (GameBoardNode *node in adjacentGridNodes) {
-        [adjacentGridLocations addObject:[NSValue valueWithGridLocation:node.locationInGrid]];
+        [adjacentGridLocations addObject:node.locationInGrid];
     }
         
     return [NSArray arrayWithArray:adjacentGridLocations];
 }
 
-- (NSArray *)getAdjacentGridLocationsToGridLocation:(GridLocation)location {
+- (NSArray *)getAdjacentGridLocationsToGridLocation:(GridLocation*)location {
     
     GameBoardNode *nodeInLocation = [self getGameBoardNodeForGridLocation:location];
     
@@ -365,7 +399,7 @@
     return adjacentGridLocations;
 }
 
-- (NSArray *)requestAdjacentGridLocationsForGridLocation:(GridLocation)location withTargetLocation:(GridLocation)targetLocation {
+- (NSArray *)requestAdjacentGridLocationsForGridLocation:(GridLocation*)location targetLocation:(GridLocation*)targetLocation usingStrategy:(id<PathFinderStrategy>)pathFinderStrategy {
     
     GameBoardNode *gameboardNode = [self getGameBoardNodeForGridLocation:location];
     GameBoardNode *targetNode = [self getGameBoardNodeForGridLocation:targetLocation];

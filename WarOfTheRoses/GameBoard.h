@@ -10,8 +10,11 @@
 #import "cocos2d.h"
 #import "Deck.h"
 #import "GameBoardNode.h"
-#import "ShortestPath.h"
+#import "PathFinder.h"
 #import "CardSprite.h"
+#import "MoveAction.h"
+#import "MeleeAttackAction.h"
+#import "RangedAttackAction.h"
 
 @protocol GameBoardActionProtocol <NSObject>
 
@@ -21,7 +24,7 @@
 
 @end
 
-@interface GameBoard : CCSprite <ShortestPathDatasource> {
+@interface GameBoard : CCSprite {
     
     NSString *_redBackgroundImageName;
     NSString *_greenBackgroundImageName;
@@ -31,6 +34,8 @@
     
     GameBoardNode *_zoomInOnNode;
     GameBoardNode *_activeNode;
+    
+    NSMutableArray *_highlightedNodes;
 }
 
 @property (nonatomic, weak) id<GameBoardActionProtocol> delegate;
@@ -45,24 +50,28 @@
 
 - (void)placeCard:(CardSprite *)cardSprite inGameBoardNode:(GameBoardNode *)node useHighLighting:(BOOL)highlighting onCompletion:(void (^)())completion;
 
-- (NSArray*)getMovePathToGameBoardNode:(GameBoardNode*)toNode;
-- (NSArray*)getMovePathfromGameBoardNode:(GameBoardNode *)fromNode toGameBoardNode:(GameBoardNode *)toNode;
+- (Action*)getActionsToGameBoardNode:(GameBoardNode*)toNode allLocations:(NSMutableDictionary*)allLocations;
+- (Action*)getActionsfromGameBoardNode:(GameBoardNode *)fromNode toGameBoardNode:(GameBoardNode *)toNode allLocations:(NSMutableDictionary*)allLocations;
 - (void)moveActiveGameBoardNodeFollowingPath:(NSArray *)path onCompletion:(void (^)())completion;
 
-- (void)moveFromActiveNodeToNode:(GameBoardNode*)node;
-
 - (void)selectGameBoardNode:(GameBoardNode*)node useHighlighting:(BOOL)highlight;
+- (void)replaceCardAtGameBoardNode:(GameBoardNode*)node withCard:(CardSprite*)card;
+- (void)removeCardAtGameBoardNode:(GameBoardNode*)node;
 - (void)deselectActiveNode;
 - (BOOL)nodeIsActive;
 - (GameBoardNode*)activeNode;
 
 - (GameBoardNode*)getGameBoardNodeForPosition:(CGPoint)position;
-- (GameBoardNode*)getGameBoardNodeForGridLocation:(GridLocation)gridLocation;
+- (GameBoardNode*)getGameBoardNodeForGridLocation:(GridLocation*)gridLocation;
 
 - (NSArray*)getAdjacentGameBoardNodesToGameBoardNode:(GameBoardNode*)gameBoardNode ignoreNode:(GameBoardNode *)ignoreNode;
-- (NSArray*)getAdjacentGridLocationsToGridLocation:(GridLocation)location;
+- (NSArray*)getAdjacentGridLocationsToGridLocation:(GridLocation*)location;
 - (NSArray*)getAdjacentGridLocationsToGameBoardNode:(GameBoardNode*)node ignoreNode:(GameBoardNode *)ignoreNode;
 
 - (void)swapCardFromNode:(GameBoardNode*)fromNode toNode:(GameBoardNode*)toNode;
+
+- (void)highlightNodeAtLocation:(GridLocation*)location withColor:(ccColor3B)color;
+- (void)highlightCardAtLocation:(GridLocation*)location withColor:(ccColor3B)color;
+- (void)deHighlightAllNodes;
 
 @end

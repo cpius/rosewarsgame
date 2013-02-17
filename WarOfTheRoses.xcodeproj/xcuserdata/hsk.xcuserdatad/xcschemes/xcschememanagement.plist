@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>WarOfTheRosesTest.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>6D0CBEE016D00DE400D241A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6DF2FB7A16596C5C00F08664</key>
 		<dict>
 			<key>primary</key>

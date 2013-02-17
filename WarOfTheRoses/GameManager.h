@@ -23,6 +23,9 @@
 - (void)startNewGameOfType:(GameTypes)gameType;
 - (void)endTurn;
 
+- (void)card:(Card*)card movedToGridLocation:(GridLocation*)location;
+- (void)cardHasBeenDefeated:(Card*)card;
+
 + (GameManager*)sharedManager;
 
 @end

@@ -19,6 +19,7 @@
 
 - (void)showToolsPanel;
 - (void)hideToolsPanel;
+- (void)resetUserInterface;
 
 - (void)checkForEndTurn;
 
@@ -90,6 +91,8 @@
         [_gameboard layoutBoard];
         [_gameboard layoutDeck:_myCards forPlayerWithColor:_gameManager.currentGame.myColor];
         [_gameboard layoutDeck:_enemyCards forPlayerWithColor:_gameManager.currentGame.enemyColor];
+        
+        [self populateUnitLayout];
 
         _originalPos = self.position;
         self.isTouchEnabled = YES;
@@ -122,6 +125,19 @@
     }
 }
 
+- (void)populateUnitLayout {
+    
+    Game *currentGame = [GameManager sharedManager].currentGame;
+    
+    for (Card *card in currentGame.myDeck.cards) {
+        [currentGame.unitLayout setObject:card forKey:card.cardLocation];
+    }
+    
+    for (Card *card in currentGame.enemyDeck.cards) {
+        [currentGame.unitLayout setObject:card forKey:card.cardLocation];
+    }
+}
+
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     
     return NO;
@@ -147,45 +163,81 @@
         
         if ([_gameboard nodeIsActive]) {
             
-            NSArray *movePath = [_gameboard getMovePathToGameBoardNode:targetNode];
+            Action *action = [_gameboard getActionsToGameBoardNode:targetNode allLocations:_gameManager.currentGame.unitLayout];
             
-            // -1 because of current node is included
-            if (movePath.count - 1 > [_gameboard activeNode].card.model.move) {
+            if (action == nil || ![action isWithinRange]) {
+                
+                [self resetUserInterface];
                 return;
             }
             
-            if (targetNode.hasCard && [targetNode.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.enemyColor]) {
+            // TODO: Isolate in actions
+            
+            if ([action isKindOfClass:[MeleeAttackAction class]]) {
                 
-                [_gameboard moveActiveGameBoardNodeFollowingPath:movePath onCompletion:^{
+                [_gameboard moveActiveGameBoardNodeFollowingPath:action.path onCompletion:^{
                     
                     CombatOutcome outcome = [self engageCombatBetweenMyCard:[_gameboard activeNode].card.model andEnemyCard:targetNode.card.model];
                     
                     if (outcome == kCombatOutcomeDefendSuccessful) {
-                        [_gameboard moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithObject:[movePath objectAtIndex:movePath.count - 2]] onCompletion:^{
+                        
+                        PathFinderStep *retreatToLocation = [action.path objectAtIndex:action.path.count - 2];
+                        
+                        [_gameboard moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithObject:retreatToLocation] onCompletion:^{
                             [_gameboard deselectActiveNode];
+                            
+                            if (![[_gameboard activeNode].locationInGrid isEqual:retreatToLocation.location]) {
+                                [_gameManager card:[_gameboard activeNode].card.model movedToGridLocation:retreatToLocation.location];
+                                [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:[_gameboard getGameBoardNodeForGridLocation:retreatToLocation.location]];
+                            }
+                            
+                            [_gameboard deHighlightAllNodes];
                         }];
                     }
                     else {
                         [ParticleHelper applyBurstToNode:targetNode];
                         
-                        [targetNode.card removeFromParentAndCleanup:YES];
-                        targetNode.card = [_gameboard activeNode].card;
-                        
-                        [_gameboard deselectActiveNode];
+                        [_gameManager cardHasBeenDefeated:targetNode.card.model];
+                        [_gameboard replaceCardAtGameBoardNode:targetNode withCard:[_gameboard activeNode].card];
+                        [self resetUserInterface];
                     }
                     
                     NSUInteger remainingActions = [_gameManager actionUsed];
                     [self updateRemainingActions:remainingActions];
-                    [self hideToolsPanel];
                 //    [self checkForEndTurn];
                 }];
             }
-            else if (!targetNode.hasCard){
-                [_gameboard moveActiveGameBoardNodeFollowingPath:movePath onCompletion:^{
+            
+            else if ([action isKindOfClass:[RangedAttackAction class]]) {
+                CombatOutcome outcome = [self engageCombatBetweenMyCard:action.cardInAction andEnemyCard:action.enemyCard];
+                
+                if (outcome == kCombatOutcomeDefendSuccessful) {
+                    [self resetUserInterface];
+                }
+                else {
+                    [ParticleHelper applyBurstToNode:targetNode];
+                    
+                    [_gameManager cardHasBeenDefeated:action.enemyCard];
+                    [_gameboard removeCardAtGameBoardNode:targetNode];
+                    [self resetUserInterface];
+                }
+                
+                NSUInteger remainingActions = [_gameManager actionUsed];
+                [self updateRemainingActions:remainingActions];
+            }
+            
+            else if ([action isKindOfClass:[MoveAction class]]){
+                [_gameboard moveActiveGameBoardNodeFollowingPath:action.path onCompletion:^{
                     
                     [_gameboard deselectActiveNode];
-                    [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:targetNode];
-                    
+
+                    if (![[_gameboard activeNode].locationInGrid isEqual:targetNode.locationInGrid]) {
+                        [_gameManager card:[_gameboard activeNode].card.model movedToGridLocation:targetNode.locationInGrid];
+                        [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:targetNode];
+                    }
+
+                    [_gameboard deHighlightAllNodes];
+
                     NSUInteger remainingActions = [_gameManager actionUsed];
                     [self updateRemainingActions:remainingActions];
                     [self hideToolsPanel];
@@ -197,10 +249,36 @@
         else {
             if (targetNode.hasCard && [targetNode.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
                 [_gameboard selectGameBoardNode:targetNode useHighlighting:YES];
+                
+                PathFinder *pathFinder = [[PathFinder alloc] init];
+                
+                NSArray *movableNodes = [pathFinder getMovableLocationsFromLocation:targetNode.locationInGrid forCard:targetNode.card.model enemyUnits:_gameManager.currentGame.enemyDeck.cards allLocations:_gameManager.currentGame.unitLayout];
+                NSArray *meleeNodes = [pathFinder getMeleeAttackableLocationsFromLocation:targetNode.locationInGrid forCard:targetNode.card.model enemyUnits:_gameManager.currentGame.enemyDeck.cards allLocations:_gameManager.currentGame.unitLayout];
+                NSArray *rangeNodes = [pathFinder getRangeAttackableLocationsFromLocation:targetNode.locationInGrid forCard:targetNode.card.model enemyUnits:_gameManager.currentGame.enemyDeck.cards allLocations:_gameManager.currentGame.unitLayout];
+                
+                for (GridLocation *meleeLocation in movableNodes) {
+                    [_gameboard highlightNodeAtLocation:meleeLocation withColor:ccc3(0, 235, 0)];
+                }
+
+                for (GridLocation *meleeLocation in meleeNodes) {
+                    [_gameboard highlightCardAtLocation:meleeLocation withColor:ccc3(235, 0, 0)];
+                }
+                
+                for (GridLocation *rangeLocation in rangeNodes) {
+                    [_gameboard highlightCardAtLocation:rangeLocation withColor:ccc3(235, 0, 0)];
+                }
+                
                 [self showToolsPanel];
             }
         }
     }
+}
+
+- (void)resetUserInterface {
+    
+    [_gameboard deselectActiveNode];
+    [_gameboard deHighlightAllNodes];
+    [self hideToolsPanel];
 }
 
 - (void)card:(CardSprite *)card movedToNode:(GameBoardNode *)node {

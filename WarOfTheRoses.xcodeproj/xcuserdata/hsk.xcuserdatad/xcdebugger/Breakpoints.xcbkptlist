@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "382386632.965729"
+         timestampString = "382799336.452737"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "212"
-         endingLineNumber = "212"
+         startingLineNumber = "226"
+         endingLineNumber = "226"
          landmarkName = "-layoutBoard"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,25 +34,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "382386632.965729"
+         timestampString = "382799336.452737"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "156"
-         endingLineNumber = "156"
-         landmarkName = "-placeCard:inGameBoardNode:useHighLighting:onCompletion:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "382393108.025272"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "373"
-         endingLineNumber = "373"
-         landmarkName = "-requestAdjacentGridLocationsForGridLocation:withTargetLocation:"
+         startingLineNumber = "407"
+         endingLineNumber = "407"
+         landmarkName = "-requestAdjacentGridLocationsForGridLocation:targetLocation:usingStrategy:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -60,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/PlaceCardsScene.m"
-         timestampString = "382217286.839086"
+         timestampString = "382745011.681117"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "137"
-         endingLineNumber = "137"
+         startingLineNumber = "166"
+         endingLineNumber = "166"
          landmarkName = "-selectSpriteForTouch:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -73,12 +60,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "382386632.965729"
+         timestampString = "382799336.452737"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "89"
-         endingLineNumber = "89"
-         landmarkName = "-getMovePathfromGameBoardNode:toGameBoardNode:"
+         startingLineNumber = "93"
+         endingLineNumber = "93"
+         landmarkName = "-getActionsfromGameBoardNode:toGameBoardNode:allLocations:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -92,6 +79,123 @@
          startingLineNumber = "53"
          endingLineNumber = "53"
          landmarkName = "-getPositionForRowNumber:columnNumber:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameScene.m"
+         timestampString = "382748924.906152"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "130"
+         endingLineNumber = "130"
+         landmarkName = "-populateUnitLayout"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRosesTest/WarOfTheRosesTest.m"
+         timestampString = "382737631.054159"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "30"
+         endingLineNumber = "30"
+         landmarkName = "-testGridLocationHash"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/MovePathFinderStrategy.m"
+         timestampString = "382796133.781946"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "23"
+         endingLineNumber = "23"
+         landmarkName = "-getReachableLocationsFromLocation:targetLocation:allLocations:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GridLocation.m"
+         timestampString = "382743285.251196"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "58"
+         endingLineNumber = "58"
+         landmarkName = "-isEqual:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/MeleeAttackPathFinderStrategy.m"
+         timestampString = "382795487.953699"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "26"
+         endingLineNumber = "26"
+         landmarkName = "-getReachableLocationsFromLocation:targetLocation:allLocations:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/PathFinder.m"
+         timestampString = "382795880.026809"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "185"
+         endingLineNumber = "185"
+         landmarkName = "-getMeleeAttackableLocationsFromLocation:forCard:enemyUnits:allLocations:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameScene.m"
+         timestampString = "382800450.266075"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "166"
+         endingLineNumber = "166"
+         landmarkName = "-ccTouchesEnded:withEvent:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameBoard.m"
+         timestampString = "382800520.591245"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "108"
+         endingLineNumber = "108"
+         landmarkName = "-getActionsfromGameBoardNode:toGameBoardNode:allLocations:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameScene.m"
+         timestampString = "382800864.689542"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "176"
+         endingLineNumber = "176"
+         landmarkName = "-ccTouchesEnded:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

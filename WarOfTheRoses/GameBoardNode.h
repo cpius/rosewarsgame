@@ -12,12 +12,13 @@
 
 @interface GameBoardNode : CCNode {
     
-    CCSprite *_sprite;
+    
 }
 
 @property (nonatomic, assign) BOOL hasCard;
-@property (nonatomic, assign) GridLocation locationInGrid;
+@property (nonatomic, strong) GridLocation *locationInGrid;
 @property (nonatomic, strong) CardSprite *card;
+@property (nonatomic, readonly) CCSprite *nodeSprite;
 
 - (id)initWithSprite:(CCSprite*)sprite;
 

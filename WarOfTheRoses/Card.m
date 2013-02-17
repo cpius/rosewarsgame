@@ -25,6 +25,8 @@
 @synthesize movesConsumed;
 @synthesize move;
 @synthesize experience;
+@synthesize range;
+@synthesize isRanged;
 
 - (id)init {
     
@@ -50,6 +52,11 @@
     
     numberOfLevelsIncreased = 0;
     self.experience = 0;
+}
+
+- (BOOL)isRanged {
+    
+    return self.range > 1;
 }
 
 - (NSString *)description {

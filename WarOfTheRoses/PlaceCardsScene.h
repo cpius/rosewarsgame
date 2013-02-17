@@ -14,6 +14,7 @@
 #import "CardSprite.h"
 
 #define NEXT_ARROW_TAG 1000
+#define AUTO_TAG 1001
 
 @interface PlaceCardsScene : CCLayer {
 
