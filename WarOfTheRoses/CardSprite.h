@@ -10,6 +10,8 @@
 #import "cocos2d.h"
 #import "Card.h"
 
+#define BONUSSPRITE_TAG  500
+
 @interface CardSprite : CCSprite <RangeAttributeDelegate> {
     
 }

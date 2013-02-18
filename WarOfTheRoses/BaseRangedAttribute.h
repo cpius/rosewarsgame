@@ -20,6 +20,11 @@ NS_INLINE AttributeRange MakeAttributeRange(NSUInteger lower, NSUInteger upper) 
     return r;
 }
 
+NS_INLINE NSString* AttributeRangeToNSString(AttributeRange range) {
+    
+    return [NSString stringWithFormat:@"%d - %d", range.lowerValue, range.upperValue];
+}
+
 @interface BaseRangedAttribute : NSObject {
     
 }

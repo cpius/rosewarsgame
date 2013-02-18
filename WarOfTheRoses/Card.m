@@ -27,6 +27,7 @@
 @synthesize experience;
 @synthesize range;
 @synthesize isRanged;
+@synthesize dead;
 
 - (id)init {
     
@@ -84,7 +85,11 @@
 
 - (void)defenceSuccessfulAgainstAttacker:(Card *)attacker {
     
+}
+
+- (BOOL)zoneOfControlAgainst:(Card *)opponent {
     
+    return NO;
 }
 
 - (void)attackSuccessfulAgainstDefender:(Card *)defender {
@@ -95,6 +100,10 @@
     }
 }
 
+- (NSUInteger)movesRemaining {
+    
+    return move - movesConsumed;
+}
 
 - (BOOL)isOwnedByPlayerWithColor:(PlayerColors)playerColor {
     

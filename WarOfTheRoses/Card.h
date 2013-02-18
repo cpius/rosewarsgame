@@ -37,6 +37,7 @@
 @property (nonatomic, strong) GridLocation *cardLocation;
 @property (nonatomic, assign) BOOL isShowingDetail;
 @property (nonatomic, assign) NSUInteger movesConsumed;
+@property (nonatomic, readonly) NSUInteger movesRemaining;
 /*
  Samme mekanisme som range, man kan bevæge sig til siden og fremad eller bagud. Man kan ikke bevæge sig ind I et felt som er optaget af en anden unit. Man kan heller ikke gå igennem egne eller modstanderens units.
  Eksempel: Hvis en unit har move 2 og range 1 har den unit følgende muligheder:
@@ -69,10 +70,12 @@
  */
 @property(nonatomic, assign) NSUInteger range;
 @property(nonatomic, readonly) BOOL isRanged;
+@property(nonatomic, assign) BOOL dead;
 
 
 - (void)commonInit;
 
+- (BOOL)zoneOfControlAgainst:(Card*)opponent;
 - (BOOL)specialAbilityTriggersVersus:(Card*) opponent;
 - (void)addSpecialAbilityVersusOpponent:(Card*)opponent;
 

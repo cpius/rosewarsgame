@@ -8,16 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "Card.h"
+#import "BaseDeckStrategy.h"
 
 @interface Deck : NSObject {
     
 }
 
-@property (nonatomic, strong) NSMutableArray *cards;
+@property (nonatomic, strong) NSArray *cards;
 
 - (id)initWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor;
-
-- (void)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor;
 
 - (void)resetMoveCounters;
 

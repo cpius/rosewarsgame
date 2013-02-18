@@ -63,10 +63,30 @@
     return isEqual;
 }
 
-- (NSArray*)perpendicularLocationsFromLocation:(GridLocation*)location {
+- (GridLocation*)locationAbove {
     
-    return @[[GridLocation gridLocationWithRow:location.row + 1 column:location.column + 1],
-    [GridLocation gridLocationWithRow:location.row - 1 column:location.column - 1]];
+    return [GridLocation gridLocationWithRow:self.row - 1 column:self.column];
+}
+
+- (GridLocation*)locationBelow {
+    
+    return [GridLocation gridLocationWithRow:self.row + 1 column:self.column];
+}
+
+- (GridLocation *)locationToTheLeft {
+    
+    return [GridLocation gridLocationWithRow:self.row column:self.column - 1];
+}
+
+- (GridLocation *)locationToTheRight {
+    
+    return [GridLocation gridLocationWithRow:self.row column:self.column + 1];
+}
+
+- (NSArray*)perpendicularGridLocations {
+    
+    return @[[GridLocation gridLocationWithRow:self.row + 1 column:self.column + 1],
+    [GridLocation gridLocationWithRow:self.row - 1 column:self.column - 1]];
 }
 
 - (NSArray *)surroundingGridLocations {

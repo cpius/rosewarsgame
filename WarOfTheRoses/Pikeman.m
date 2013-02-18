@@ -41,6 +41,11 @@
     return [[Pikeman alloc]init];
 }
 
+- (BOOL)zoneOfControlAgainst:(Card *)opponent {
+    
+    return (self.cardColor != opponent.cardColor) && (opponent.unitType == kCavalry);
+}
+
 -(BOOL)specialAbilityTriggersVersus:(Card *)opponent {
     
     return opponent.unitType == kCavalry;

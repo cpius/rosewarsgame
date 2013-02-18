@@ -15,7 +15,7 @@
     return [[RangedAttackPathFinderStrategy alloc] init];
 }
 
-- (NSArray*)getReachableLocationsFromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations {
+- (NSArray*)getReachableLocationsForCard:(Card*)card fromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations {
     
     NSMutableArray *adjacentLocations = [NSMutableArray array];
     NSArray *surroundingGridLocations = [fromLocation surroundingGridLocations];

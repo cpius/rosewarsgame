@@ -103,7 +103,7 @@
     Action *action = nil;
     id<PathFinderStrategy> strategy = [PathFinderStrategyFactory getStrategyFromCard:fromNode.card.model toCard:toNode.card.model myColor:colorOfBottomPlayer];
     
-    NSArray *path = [pathFinder getPathFromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:strategy allLocations:allLocations];
+    NSArray *path = [pathFinder getPathForCard:fromNode.card.model fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:strategy allLocations:allLocations];
     
     if (toNode.hasCard && [toNode.card.model isOwnedByPlayerWithColor:colorOfTopPlayer]) {
         if ((path.count - 1) > 1 && fromNode.card.model.isRanged) {
@@ -116,14 +116,7 @@
     else {
         action = [[MoveAction alloc] initWithPath:path andCardInAction:fromNode.card.model];
     }
-    
-    for (PathFinderStep *step in [path reverseObjectEnumerator]) {
-        CCLOG(@"%@", step);
-    }
-    
-    CCLOG(@"fromNode: (row:%d - column:%d)", fromLocation.row, fromLocation.column);
-    CCLOG(@"toNode: (row:%d - column:%d)", toLocation.row, toLocation.column);
-    
+        
     return action;
 }
 
@@ -304,7 +297,7 @@
     }
 }
 
-- (void)selectGameBoardNode:(GameBoardNode *)node useHighlighting:(BOOL)highlight {
+- (void)selectCardInGameBoardNode:(GameBoardNode *)node useHighlighting:(BOOL)highlight {
     
     [self deselectActiveNode];
         
@@ -314,6 +307,7 @@
     [ParticleHelper highlightNode:node.card forever:YES];
     
     _activeNode = node;
+    _activeCard = node.card;
 }
 
 - (void)deselectActiveNode {
@@ -321,90 +315,13 @@
     if ([self nodeIsActive]) {
         [_activeNode setZOrder:0];
         [_activeNode.card setZOrder:1];
-        [ParticleHelper stopHighlightingNode:_activeNode.card];
-                
-        CCCallBlock *reset = [CCCallBlock actionWithBlock:^{
-            _activeNode = nil;
-        }];
+        [ParticleHelper stopHighlightingNode:_activeCard];
         
-        [_activeNode.card runAction:[CCSequence actions:[CCTintTo actionWithDuration:0.2 red:255 green:255 blue:255], reset, nil]];
-    }
-}
-
-- (NSArray*)getAdjacentGameBoardNodesToGameBoardNode:(GameBoardNode *)gameBoardnode ignoreNode:(GameBoardNode *)ignoreNode {
-    
-    NSMutableArray *adjacentGameBoards = [NSMutableArray array];
-    
-    // Card to the left?
-    if (gameBoardnode.locationInGrid.column > 1) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row column:gameBoardnode.locationInGrid.column - 1]];
+        [_activeCard setColor:ccc3(255, 255, 255)];
         
-        if (!node.hasCard || node == ignoreNode) {
-            [adjacentGameBoards addObject:node];
-        }
+        _activeCard = nil;
+        _activeNode = nil;
     }
-    
-    // Card to the right?
-    if (gameBoardnode.locationInGrid.column < self.columns) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row column:gameBoardnode.locationInGrid.column + 1]];
-        
-        if (!node.hasCard || node == ignoreNode) {
-            [adjacentGameBoards addObject:node];
-        }
-    }
-    
-    // Card above?
-    if (gameBoardnode.locationInGrid.row > 1) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row - 1 column:gameBoardnode.locationInGrid.column]];
-        
-        if (!node.hasCard || node == ignoreNode) {
-            [adjacentGameBoards addObject:node];
-        }
-    }
-    
-    // Card below?
-    if (gameBoardnode.locationInGrid.row < self.rows) {
-        GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:gameBoardnode.locationInGrid.row + 1 column:gameBoardnode.locationInGrid.column - 1]];
-        
-        if (!node.hasCard || node == ignoreNode) {
-            [adjacentGameBoards addObject:node];
-        }
-    }
-    
-    return [NSArray arrayWithArray:adjacentGameBoards];
-}
-
-- (NSArray*)getAdjacentGridLocationsToGameBoardNode:(GameBoardNode*)node ignoreNode:(GameBoardNode *)ignoreNode {
-    
-    NSArray *adjacentGridNodes = [self getAdjacentGameBoardNodesToGameBoardNode:node ignoreNode:ignoreNode];
-    NSMutableArray *adjacentGridLocations = [NSMutableArray array];
-    
-    for (GameBoardNode *node in adjacentGridNodes) {
-        [adjacentGridLocations addObject:node.locationInGrid];
-    }
-        
-    return [NSArray arrayWithArray:adjacentGridLocations];
-}
-
-- (NSArray *)getAdjacentGridLocationsToGridLocation:(GridLocation*)location {
-    
-    GameBoardNode *nodeInLocation = [self getGameBoardNodeForGridLocation:location];
-    
-    if (nodeInLocation == nil) {
-        return nil;
-    }
-    
-    NSArray *adjacentGridLocations = [self getAdjacentGridLocationsToGameBoardNode:nodeInLocation ignoreNode:nil];
-
-    return adjacentGridLocations;
-}
-
-- (NSArray *)requestAdjacentGridLocationsForGridLocation:(GridLocation*)location targetLocation:(GridLocation*)targetLocation usingStrategy:(id<PathFinderStrategy>)pathFinderStrategy {
-    
-    GameBoardNode *gameboardNode = [self getGameBoardNodeForGridLocation:location];
-    GameBoardNode *targetNode = [self getGameBoardNodeForGridLocation:targetLocation];
-    
-    return [self getAdjacentGridLocationsToGameBoardNode:gameboardNode ignoreNode:targetNode];
 }
 
 @end

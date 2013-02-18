@@ -11,7 +11,8 @@
 
 @interface CardSprite()
 
-- (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue;
+- (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated;
+- (void)updateBonusSprite:(RangeAttribute*)rangeAttribute;
 
 @end
 
@@ -31,16 +32,34 @@
         _model.defence.delegate = self;
         
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_model.frontImageSmall]];
+        
+        [self updateBonusSprite:_model.attack];
+        [self updateBonusSprite:_model.defence];
+        
     }
     
     return self;
+}
+
+- (void)draw {
+    
+    [super draw];
+    
+    if (_model.cardColor == kCardColorGreen) {
+        ccDrawColor4B(0, 235, 0, 255);
+        ccDrawCircle(ccp(self.contentSize.width - 15, self.contentSize.height - 15), 5, 0, 10, NO);
+    }
+    else {
+        ccDrawColor4B(235, 0, 0, 255);
+        ccDrawCircle(ccp(self.contentSize.width - 15, self.contentSize.height - 15), 5, 0, 10, NO);
+    }
 }
 
 - (void)rangeAttribute:(RangeAttribute *)attribute addedRawBonus:(RawBonus *)rawBonus {
     
     CCLOG(@"Card: %@ added raw bonus: %@", self.model, rawBonus);
     
-    [self addBonusSprite:attribute bonusValue:rawBonus.bonusValue];
+    [self addBonusSprite:attribute bonusValue:rawBonus.bonusValue animated:YES];
 }
 
 - (void)rangeAttribute:(RangeAttribute *)attribute removedRawBonus:(RawBonus *)rawBonus {
@@ -52,7 +71,7 @@
     
     CCLOG(@"Card: %@ added timed bonus: %@", self.model, timedBonus);
     
-    [self addBonusSprite:attribute bonusValue:timedBonus.bonusValue];
+    [self addBonusSprite:attribute bonusValue:timedBonus.bonusValue animated:YES];
 }
 
 - (void)rangeAttribute:(RangeAttribute *)attribute removedTimedBonus:(TimedBonus *)timedBonus {
@@ -60,21 +79,41 @@
     CCLOG(@"Card: %@ removed timed bonus: %@", self.model, timedBonus);
 }
 
+- (void)updateBonusSprite:(RangeAttribute *)rangeAttribute {
+    
+    NSUInteger bonusValue = [rangeAttribute getRawBonusValue] + [rangeAttribute getTimedBonusValue];
+    
+    if (bonusValue != 0) {
+        BonusSprite *bonusSprite = (BonusSprite*)[self getChildByTag:BONUSSPRITE_TAG];
+        
+        if (bonusSprite != nil) {
+            [bonusSprite setBonusText:[NSString stringWithFormat:@"+%d%@",
+                                       bonusValue,
+                                       rangeAttribute.attributeAbbreviation]];
+        }
+        else {
+            [self addBonusSprite:rangeAttribute bonusValue:bonusValue animated:NO];
+        }
+    }
+}
 
-- (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue {
+- (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated {
     
     BonusSprite *bonusSprite = [[BonusSprite alloc] initWithBonusText:[NSString stringWithFormat:@"+%d%@",
                                                                        bonusValue,
                                                                        rangeAttribute.attributeAbbreviation]];
     
+    bonusSprite.tag = BONUSSPRITE_TAG;
     bonusSprite.anchorPoint = ccp(0, 0);
     bonusSprite.position = ccp(0.0, self.contentSize.height - bonusSprite.contentSize.height);
     [self addChild:bonusSprite];
     
-    CCScaleTo *scaleup = [CCScaleTo actionWithDuration:0.2 scale:1.5];
-    CCScaleTo *scaledown = [CCScaleTo actionWithDuration:0.2 scale:1.0];
-    
-    [bonusSprite runAction:[CCSequence actions:scaleup, scaledown, nil]];
+    if (animated) {
+        CCScaleTo *scaleup = [CCScaleTo actionWithDuration:0.2 scale:1.5];
+        CCScaleTo *scaledown = [CCScaleTo actionWithDuration:0.2 scale:1.0];
+        
+        [bonusSprite runAction:[CCSequence actions:scaleup, scaledown, nil]];
+    }
 }
 
 

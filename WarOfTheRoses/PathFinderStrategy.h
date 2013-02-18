@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Card.h"
 
 @protocol PathFinderStrategy <NSObject>
 
-- (NSArray*)getReachableLocationsFromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations;
+- (NSArray*)getReachableLocationsForCard:(Card*)card fromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations;
 
 @end

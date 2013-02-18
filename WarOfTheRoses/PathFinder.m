@@ -11,6 +11,10 @@
 #import "MeleeAttackPathFinderStrategy.h"
 #import "RangedAttackPathFinderStrategy.h"
 
+#import "MoveAction.h"
+#import "MeleeAttackAction.h"
+#import "RangedAttackAction.h"
+
 @interface PathFinder()
 
 - (void)insertInOpenSteps:(PathFinderStep*)step;
@@ -91,7 +95,7 @@
     return nil;
 }
 
-- (NSArray *)getPathFromGridLocation:(GridLocation*)fromLocation toGridLocation:(GridLocation*)toLocation usingStrategy:(id<PathFinderStrategy>)strategy allLocations:(NSDictionary *)allLocations {
+- (NSArray *)getPathForCard:(Card*)card fromGridLocation:(GridLocation*)fromLocation toGridLocation:(GridLocation*)toLocation usingStrategy:(id<PathFinderStrategy>)strategy allLocations:(NSDictionary *)allLocations {
         
     BOOL pathFound = NO;
     
@@ -117,7 +121,7 @@
             return [NSArray arrayWithArray:path];
         }
         
-        NSArray *adjacentGridLocations = [strategy getReachableLocationsFromLocation:currentStep.location targetLocation:toLocation allLocations:allLocations];
+        NSArray *adjacentGridLocations = [strategy getReachableLocationsForCard:card fromLocation:currentStep.location targetLocation:toLocation allLocations:allLocations];
         
         for (GridLocation *location in adjacentGridLocations) {
             
@@ -157,63 +161,64 @@
     return nil;
 }
 
-- (NSArray*)getMovableLocationsFromLocation:(GridLocation*)fromLocation forCard:(Card*)card enemyUnits:(NSArray*)enemyUnits allLocations:(NSDictionary*)allLocations {
+- (NSArray*)getMoveActionsFromLocation:(GridLocation*)fromLocation forCard:(Card*)card enemyUnits:(NSArray*)enemyUnits allLocations:(NSDictionary*)allLocations {
     
-    NSMutableArray *movableLocations = [NSMutableArray array];
+    NSMutableArray *moveActions = [NSMutableArray array];
     
     for (int row = 1; row <= BOARDSIZE_ROWS; row++) {
         for (int column = 1; column <= BOARDSIZE_COLUMNS; column++) {
         
             GridLocation *toLocation = [GridLocation gridLocationWithRow:row column:column];
-            NSArray *path = [self getPathFromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[MovePathFinderStrategy strategy] allLocations:allLocations];
+            NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[MovePathFinderStrategy strategy] allLocations:allLocations];
             
             if (path != nil && path.count <= card.move + 1) {
-                [movableLocations addObject:toLocation];
+                
+                [moveActions addObject:[[MoveAction alloc] initWithPath:path andCardInAction:card]];
             }
         }
     }
     
-    return [NSArray arrayWithArray:movableLocations];
+    return [NSArray arrayWithArray:moveActions];
 }
 
-- (NSArray*)getMeleeAttackableLocationsFromLocation:(GridLocation*)fromLocation forCard:(Card*)card enemyUnits:(NSArray*)enemyUnits allLocations:(NSDictionary*)allLocations {
+- (NSArray*)getMeleeAttackActionsFromLocation:(GridLocation*)fromLocation forCard:(Card*)card enemyUnits:(NSArray*)enemyUnits allLocations:(NSDictionary*)allLocations {
     
-    NSMutableArray *attackableLocations = [NSMutableArray array];
+    NSMutableArray *attackActions = [NSMutableArray array];
     
     for (Card *enemyCard in enemyUnits) {
         
         GridLocation *enemyLocation = enemyCard.cardLocation;
         
-        NSArray *path = [self getPathFromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[MeleeAttackPathFinderStrategy strategy] allLocations:allLocations];
+        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[MeleeAttackPathFinderStrategy strategy] allLocations:allLocations];
         
         if (path != nil) {
             if (path.count <= card.move + 1) {
-                [attackableLocations addObject:enemyLocation];
+                [attackActions addObject:[[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
             }
         }
     }
     
-    return [NSArray arrayWithArray:attackableLocations];
+    return [NSArray arrayWithArray:attackActions];
 }
 
-- (NSArray *)getRangeAttackableLocationsFromLocation:(GridLocation *)fromLocation forCard:(Card *)card enemyUnits:(NSArray *)enemyUnits allLocations:(NSDictionary *)allLocations {
+- (NSArray *)getRangedAttackActionsFromLocation:(GridLocation *)fromLocation forCard:(Card *)card enemyUnits:(NSArray *)enemyUnits allLocations:(NSDictionary *)allLocations {
     
-    NSMutableArray *attackableLocations = [NSMutableArray array];
+    NSMutableArray *attackActions = [NSMutableArray array];
     
     for (Card *enemyCard in enemyUnits) {
         
         GridLocation *enemyLocation = enemyCard.cardLocation;
         
-        NSArray *path = [self getPathFromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[RangedAttackPathFinderStrategy strategy] allLocations:allLocations];
+        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[RangedAttackPathFinderStrategy strategy] allLocations:allLocations];
         
         if (path != nil) {
             if (path.count <= card.range + 1) {
-                [attackableLocations addObject:enemyLocation];
+                [attackActions addObject:[[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
             }
         }
     }
     
-    return [NSArray arrayWithArray:attackableLocations];
+    return [NSArray arrayWithArray:attackActions];
 }
 
 @end

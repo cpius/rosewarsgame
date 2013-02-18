@@ -16,7 +16,12 @@
 + (id)gridLocationWithRow:(NSUInteger)row column:(NSUInteger)column;
 - (id)initWithRow:(NSUInteger)row column:(NSUInteger)column;
 
-- (NSArray*)perpendicularLocationsFromLocation:(GridLocation*)location;
+- (NSArray*)perpendicularGridLocations;
 - (NSArray*)surroundingGridLocations;
+
+- (GridLocation*)locationAbove;
+- (GridLocation*)locationBelow;
+- (GridLocation*)locationToTheLeft;
+- (GridLocation*)locationToTheRight;
 
 @end

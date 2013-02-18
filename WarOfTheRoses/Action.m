@@ -7,6 +7,7 @@
 //
 
 #import "Action.h"
+#import "PathFinderStep.h"
 
 @implementation Action
 
@@ -30,6 +31,15 @@
 - (BOOL)isWithinRange {
     
     @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];
+}
+
+- (GridLocation *)getLastLocationInPath {
+    
+    if (_path != nil && _path.count > 0) {
+        return [[_path lastObject] location];
+    }
+    
+    return nil;
 }
 
 @end

@@ -55,6 +55,32 @@
     }
 }
 
+- (NSUInteger)getRawBonusValue {
+    
+    // Add values from raw bonuses
+    NSUInteger rawBonusValue = 0;
+    
+    for (RawBonus *rawbonus in _rawBonuses) {
+        
+        rawBonusValue += rawbonus.bonusValue;
+    }
+    
+    return rawBonusValue;
+}
+
+- (NSUInteger)getTimedBonusValue {
+    
+    // Add values from final bonuses
+    NSUInteger timedBonusValue = 0;
+    
+    for (TimedBonus *timedbonus in _timedBonuses) {
+        
+        timedBonusValue += timedbonus.bonusValue;
+    }
+    
+    return timedBonusValue;
+}
+
 - (void)removeTimedBonus:(TimedBonus *)timedBonus {
     
     if ([_timedBonuses containsObject:timedBonus]) {
@@ -95,26 +121,13 @@
     
     _finalRange = self.baseRange;
     
-    // Add values from raw bonuses
-    NSUInteger rawBonusValue = 0;
-    
-    for (RawBonus *rawbonus in _rawBonuses) {
-        
-        rawBonusValue += rawbonus.bonusValue;
-    }
+    NSUInteger rawBonusValue = [self getRawBonusValue];
     
     _finalRange = [self calculateFinalRange:_finalRange fromBonus:rawBonusValue];
-    
 
-    // Add values from final bonuses
-    NSUInteger finalBonusValue = 0;
+    NSUInteger timedBonusValue = [self getTimedBonusValue];
     
-    for (TimedBonus *finalbonus in _timedBonuses) {
-        
-        finalBonusValue += finalbonus.bonusValue;
-    }
-    
-    _finalRange = [self calculateFinalRange:_finalRange fromBonus:finalBonusValue];
+    _finalRange = [self calculateFinalRange:_finalRange fromBonus:timedBonusValue];
         
     return _finalRange;
 }

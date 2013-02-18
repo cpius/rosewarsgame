@@ -8,10 +8,10 @@
 
 #import "Deck.h"
 #import "CardPool.h"
+#import "RandomDeckStrategy.h"
+#import "FixedDeckStrategy.h"
 
 @interface Deck()
-
-- (BOOL)cardIsAllowedInDeck:(Card*)card;
 
 @end
 
@@ -24,66 +24,13 @@
     self = [super init];
     
     if (self) {
-        [self generateNewDeckWithNumberOfBasicType:basicType andSpecialType:specialType cardColor:cardColor];
+        _cards = [[RandomDeckStrategy strategy] generateNewDeckWithNumberOfBasicType:basicType andSpecialType:specialType cardColor:cardColor];
     }
     
     return self;
 }
 
-- (void)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
-    
-    _cards = [[NSMutableArray alloc] init];
-    
-    CardPool *cardPool = [[CardPool alloc] init];
-        
-    NSInteger numberOfBasicTypes = 0;
-    NSInteger numberOfSpecialTypes = 0;
-        
-    while (numberOfBasicTypes < basicType) {
-        
-        Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeBasicUnit];
-        
-        drawnCard.cardColor = cardColor;
-        
-        if ([self cardIsAllowedInDeck:drawnCard]) {
-            [_cards addObject:drawnCard];
-            numberOfBasicTypes++;
-        }
-    }
-    
-    while (numberOfSpecialTypes < specialType) {
-        
-        Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeSpecialUnit];
-        
-        drawnCard.cardColor = cardColor;
-        
-        if ([self cardIsAllowedInDeck:drawnCard]) {
-            [_cards addObject:drawnCard];
-            numberOfSpecialTypes++;
-        }
-    }
-}
 
-- (BOOL)cardIsAllowedInDeck:(Card *)card {
-    
-    UnitName name = card.unitName;
-    
-    NSInteger unitsAlreadyInDeck = 0;
-    
-    for (Card *card in _cards) {
-        if (card.unitName == name) {
-            unitsAlreadyInDeck++;
-        }
-    }
-
-    if (card.cardType == kCardTypeBasicUnit) {
-        // Max 3 of the same basicunit allowed in the deck
-        return unitsAlreadyInDeck < 3;
-    }
-    
-    // Max 1 of the same specialunit in the deck
-    return unitsAlreadyInDeck < 1;
-}
 
 - (void)resetMoveCounters {
     

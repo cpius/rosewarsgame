@@ -16,7 +16,7 @@
     return [[MovePathFinderStrategy alloc] init];
 }
 
-- (NSArray*)getReachableLocationsFromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations {
+- (NSArray*)getReachableLocationsForCard:(Card*)card fromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations {
     
     NSMutableArray *adjacentLocations = [NSMutableArray array];
     
@@ -25,9 +25,10 @@
     for (GridLocation *gridLocation in surroundingGridLocations) {
         
         if ([self isGrindLocationInsideGameBoard:gridLocation]) {
-            Card *card = [allLocations objectForKey:gridLocation];
+            Card *cardAtToLocation = [allLocations objectForKey:gridLocation];
             
-            if (card == nil) {
+            if (cardAtToLocation == nil && ![self card:card blockedByZoneOfControlUnitWhenMovingFromLocation:fromLocation toLocation:gridLocation allLocations:allLocations]) {
+                
                 [adjacentLocations addObject:gridLocation];
             }
         }
@@ -35,5 +36,6 @@
 
     return [NSArray arrayWithArray:adjacentLocations];
 }
+
 
 @end

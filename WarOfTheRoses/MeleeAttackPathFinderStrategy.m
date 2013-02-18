@@ -16,7 +16,7 @@
     return [[MeleeAttackPathFinderStrategy alloc] init];
 }
 
-- (NSArray*)getReachableLocationsFromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations {
+- (NSArray*)getReachableLocationsForCard:(Card*)card fromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations {
     
     Card *targetCard = [allLocations objectForKey:targetLocation];
 
@@ -28,7 +28,8 @@
         if ([self isGrindLocationInsideGameBoard:gridLocation]) {
             Card *card = [allLocations objectForKey:gridLocation];
             
-            if (card == nil || card == targetCard) {
+            if ((card == nil || card == targetCard) && ![self card:card blockedByZoneOfControlUnitWhenMovingFromLocation:fromLocation toLocation:gridLocation allLocations:allLocations]) {
+                
                 [adjacentLocations addObject:gridLocation];
             }
         }

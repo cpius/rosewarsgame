@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "DeckStrategy.h"
+#import "BaseDeckStrategy.h"
 
-@interface RandomDeckStrategy : NSObject <DeckStrategy>
+@interface RandomDeckStrategy : BaseDeckStrategy <DeckStrategy>
 
 @end

@@ -12,7 +12,7 @@
 
 - (BOOL)isWithinRange {
     
-    return self.path.count - 1 <= self.cardInAction.move;
+    return self.path.count - 1 <= self.cardInAction.movesRemaining;
 }
 
 @end

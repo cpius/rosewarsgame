@@ -48,6 +48,8 @@
 		6D0CBEFA16D043C600D241A7 /* PathFinderStrategyFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEF916D043C500D241A7 /* PathFinderStrategyFactory.m */; };
 		6D0CBEFD16D0F67800D241A7 /* RangedAttackAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */; };
 		6D0CBF0016D0F70D00D241A7 /* RangedAttackPathFinderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEFF16D0F70B00D241A7 /* RangedAttackPathFinderStrategy.m */; };
+		6D0CBF0A16D208CE00D241A7 /* AIStrategyAdvancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBF0916D208CD00D241A7 /* AIStrategyAdvancer.m */; };
+		6D0CBF0D16D209C100D241A7 /* BattlePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */; };
 		6D5E04411662545C0085311B /* CardPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E04401662545C0085311B /* CardPool.m */; };
 		6D5E595D166D42C0007429BD /* archer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595C166D42C0007429BD /* archer_icon.png */; };
 		6D5E595F166D4426007429BD /* archer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595E166D4426007429BD /* archer_0.png */; };
@@ -111,6 +113,8 @@
 		6D690129169B5C200071EC22 /* greenbackground-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D690127169B5C200071EC22 /* greenbackground-hd.png */; };
 		6D69012A169B5C200071EC22 /* greenbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D690128169B5C200071EC22 /* greenbackground.png */; };
 		6D690130169CB2880071EC22 /* GameBoardNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D69012F169CB2880071EC22 /* GameBoardNode.m */; };
+		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
+		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DEA3468168C544400485F00 /* BaseRangedAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA3467168C544400485F00 /* BaseRangedAttribute.m */; };
 		6DEA346C168C555900485F00 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346B168C555900485F00 /* RawBonus.m */; };
 		6DEA346F168C556400485F00 /* TimedBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346E168C556400485F00 /* TimedBonus.m */; };
@@ -330,6 +334,11 @@
 		6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RangedAttackAction.m; sourceTree = "<group>"; };
 		6D0CBEFE16D0F70A00D241A7 /* RangedAttackPathFinderStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RangedAttackPathFinderStrategy.h; sourceTree = "<group>"; };
 		6D0CBEFF16D0F70B00D241A7 /* RangedAttackPathFinderStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RangedAttackPathFinderStrategy.m; sourceTree = "<group>"; };
+		6D0CBF0716D207DD00D241A7 /* AIStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIStrategy.h; sourceTree = "<group>"; };
+		6D0CBF0816D208CD00D241A7 /* AIStrategyAdvancer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIStrategyAdvancer.h; sourceTree = "<group>"; };
+		6D0CBF0916D208CD00D241A7 /* AIStrategyAdvancer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIStrategyAdvancer.m; sourceTree = "<group>"; };
+		6D0CBF0B16D209B400D241A7 /* BattlePlan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattlePlan.h; sourceTree = "<group>"; };
+		6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BattlePlan.m; sourceTree = "<group>"; };
 		6D5E043F1662545C0085311B /* CardPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardPool.h; sourceTree = "<group>"; };
 		6D5E04401662545C0085311B /* CardPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardPool.m; sourceTree = "<group>"; };
 		6D5E595C166D42C0007429BD /* archer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = archer_icon.png; path = Resources/Images/archer_icon.png; sourceTree = "<group>"; };
@@ -406,6 +415,10 @@
 		6D690128169B5C200071EC22 /* greenbackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = greenbackground.png; path = Resources/Images/greenbackground.png; sourceTree = "<group>"; };
 		6D69012E169CB2880071EC22 /* GameBoardNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoardNode.h; sourceTree = "<group>"; };
 		6D69012F169CB2880071EC22 /* GameBoardNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoardNode.m; sourceTree = "<group>"; };
+		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
+		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
+		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
+		6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseDeckStrategy.m; sourceTree = "<group>"; };
 		6DEA3466168C544400485F00 /* BaseRangedAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRangedAttribute.h; sourceTree = "<group>"; };
 		6DEA3467168C544400485F00 /* BaseRangedAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseRangedAttribute.m; sourceTree = "<group>"; };
 		6DEA346A168C555900485F00 /* RawBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawBonus.h; sourceTree = "<group>"; };
@@ -755,6 +768,10 @@
 				6D0CBEC416CC404B00D241A7 /* DeckStrategy.h */,
 				6D0CBEC516CC40D500D241A7 /* RandomDeckStrategy.h */,
 				6D0CBEC616CC40D500D241A7 /* RandomDeckStrategy.m */,
+				6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */,
+				6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */,
+				6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */,
+				6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */,
 			);
 			name = DeckStrategy;
 			sourceTree = "<group>";
@@ -792,6 +809,18 @@
 				6D0CBEEF16D00DE800D241A7 /* WarOfTheRosesTest-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6D0CBF0616D2069D00D241A7 /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				6D61519F16AF2F99007A104E /* AIPlayer.h */,
+				6D6151A016AF2F99007A104E /* AIPlayer.m */,
+				6D0CBF0716D207DD00D241A7 /* AIStrategy.h */,
+				6D0CBF0816D208CD00D241A7 /* AIStrategyAdvancer.h */,
+				6D0CBF0916D208CD00D241A7 /* AIStrategyAdvancer.m */,
+			);
+			name = AI;
 			sourceTree = "<group>";
 		};
 		6D5E595A166D42B2007429BD /* Images */ = {
@@ -1378,14 +1407,13 @@
 		6DF2FD1F165C21CD00F08664 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				6D0CBF0616D2069D00D241A7 /* AI */,
 				6D0CBEC816CE766C00D241A7 /* Action */,
 				6D0CBEC316CC402E00D241A7 /* DeckStrategy */,
 				6DEA3477168D986A00485F00 /* Attributes */,
 				6DF2FD23165C22B100F08664 /* Basic Units */,
 				6DF2FD24165C22B700F08664 /* Special Units */,
 				6D0CBE8616BA992C00D241A7 /* PathFinding */,
-				6D61519F16AF2F99007A104E /* AIPlayer.h */,
-				6D6151A016AF2F99007A104E /* AIPlayer.m */,
 				6DF2FD20165C21ED00F08664 /* Card.h */,
 				6DF2FD21165C21ED00F08664 /* Card.m */,
 				6D5E043F1662545C0085311B /* CardPool.h */,
@@ -1405,6 +1433,8 @@
 				6D0CBEA916C2D7FD00D241A7 /* SoundManager.m */,
 				6D0CBEBC16CC112700D241A7 /* GridLocation.h */,
 				6D0CBEBD16CC112900D241A7 /* GridLocation.m */,
+				6D0CBF0B16D209B400D241A7 /* BattlePlan.h */,
+				6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */,
 			);
 			name = Domain;
 			sourceTree = "<group>";
@@ -1778,6 +1808,10 @@
 				6D0CBEFA16D043C600D241A7 /* PathFinderStrategyFactory.m in Sources */,
 				6D0CBEFD16D0F67800D241A7 /* RangedAttackAction.m in Sources */,
 				6D0CBF0016D0F70D00D241A7 /* RangedAttackPathFinderStrategy.m in Sources */,
+				6D0CBF0A16D208CE00D241A7 /* AIStrategyAdvancer.m in Sources */,
+				6D0CBF0D16D209C100D241A7 /* BattlePlan.m in Sources */,
+				6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */,
+				6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

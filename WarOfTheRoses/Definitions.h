@@ -15,6 +15,12 @@
 #define BOARDSIZE_COLUMNS 5
 
 typedef enum {
+    kGameResultInProgress,
+    kGameResultVictory,
+    kGameResultDefeat
+} GameResults;
+
+typedef enum {
     kGameBoardUpper = 0,
     kGameBoardLower
 } GameBoardSides;

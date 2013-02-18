@@ -34,6 +34,7 @@
     
     GameBoardNode *_zoomInOnNode;
     GameBoardNode *_activeNode;
+    CardSprite *_activeCard;
     
     NSMutableArray *_highlightedNodes;
 }
@@ -54,7 +55,7 @@
 - (Action*)getActionsfromGameBoardNode:(GameBoardNode *)fromNode toGameBoardNode:(GameBoardNode *)toNode allLocations:(NSMutableDictionary*)allLocations;
 - (void)moveActiveGameBoardNodeFollowingPath:(NSArray *)path onCompletion:(void (^)())completion;
 
-- (void)selectGameBoardNode:(GameBoardNode*)node useHighlighting:(BOOL)highlight;
+- (void)selectCardInGameBoardNode:(GameBoardNode*)node useHighlighting:(BOOL)highlight;
 - (void)replaceCardAtGameBoardNode:(GameBoardNode*)node withCard:(CardSprite*)card;
 - (void)removeCardAtGameBoardNode:(GameBoardNode*)node;
 - (void)deselectActiveNode;
@@ -63,10 +64,6 @@
 
 - (GameBoardNode*)getGameBoardNodeForPosition:(CGPoint)position;
 - (GameBoardNode*)getGameBoardNodeForGridLocation:(GridLocation*)gridLocation;
-
-- (NSArray*)getAdjacentGameBoardNodesToGameBoardNode:(GameBoardNode*)gameBoardNode ignoreNode:(GameBoardNode *)ignoreNode;
-- (NSArray*)getAdjacentGridLocationsToGridLocation:(GridLocation*)location;
-- (NSArray*)getAdjacentGridLocationsToGameBoardNode:(GameBoardNode*)node ignoreNode:(GameBoardNode *)ignoreNode;
 
 - (void)swapCardFromNode:(GameBoardNode*)fromNode toNode:(GameBoardNode*)toNode;
 

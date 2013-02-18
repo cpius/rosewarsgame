@@ -12,7 +12,7 @@
 
 #define kZoomFactor 2.0
 
-@interface GameScene : CCLayer <GameBoardActionProtocol> {
+@interface GameScene : CCLayer <GameBoardActionProtocol, GameManagerProtocol> {
     
     CGSize _winSize;
     

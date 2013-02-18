@@ -1,20 +1,20 @@
 //
-//  RandomDeckStrategy.m
+//  FixedDeckStrategy.m
 //  WarOfTheRoses
 //
-//  Created by Heine Skov Kristensen on 2/13/13.
+//  Created by Heine Skov Kristensen on 2/18/13.
 //
 //
 
-#import "RandomDeckStrategy.h"
+#import "FixedDeckStrategy.h"
 #import "CardPool.h"
 #import "Deck.h"
 
-@implementation RandomDeckStrategy
+@implementation FixedDeckStrategy
 
 + (id)strategy {
     
-    return [[RandomDeckStrategy alloc] init];
+    return [[FixedDeckStrategy alloc] init];
 }
 
 - (NSArray*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
@@ -73,6 +73,5 @@
         }
     }
 }
-
 
 @end
