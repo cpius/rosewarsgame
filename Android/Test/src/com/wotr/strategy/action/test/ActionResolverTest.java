@@ -93,9 +93,28 @@ public class ActionResolverTest {
 			e.printStackTrace();
 			Assert.fail();
 		}
-
 	}
 
+	@Test
+	public void testActionResolverMeleeBockedByFriendly() {
+
+		try {
+			aUnits.put(new Position(0, 0), new LightCavalry());
+			aUnits.put(new Position(0, 1), new Archer());
+			aUnits.put(new Position(1, 0), new Archer());
+			
+			Unit aUnit = aUnits.get(new Position(0, 0));
+
+			ActionResolver ac = new ActionResolver(5, 8);
+			Collection<Action> actions = ac.getActions(aUnit, aUnits, dUnits);
+
+			Assert.assertEquals(0, actions.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+	
 	@Test
 	public void testActionResolverRanged() {
 
