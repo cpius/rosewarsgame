@@ -9,8 +9,11 @@ import com.wotr.model.unit.Unit;
 public class RangedActionResolverStrategy extends AbstractActionResolverStrategy {
 
 	@Override
-	public boolean isMoveable(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress) {
-		return super.isMoveable(unit, pos, direction, attackingUnits, defendingUnits, pathProgress) && pathProgress <= unit.getMovement();
+	public boolean isMoveable(Unit unit, Position pos, Direction direction, boolean moveable, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress) {
+		
+		//TODO Implement ZOC here
+		
+		return super.isMoveable(unit, pos, direction, moveable, attackingUnits, defendingUnits, pathProgress) && pathProgress <= unit.getMovement();
 	}
 
 	@Override

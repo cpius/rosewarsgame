@@ -11,7 +11,7 @@ public abstract class Unit implements Cloneable {
 	private boolean enemy;
 
 	public String getImage() {
-		return image + (enemy ? "red" : "green") + ".jpg";
+		return "unit/" + image + (enemy ? "red" : "green") + ".jpg";
 	}
 
 	public Unit(String image, boolean enemy) {
