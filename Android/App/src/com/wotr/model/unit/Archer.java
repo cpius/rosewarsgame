@@ -1,6 +1,8 @@
 package com.wotr.model.unit;
 
+import com.wotr.GameManager;
 import com.wotr.model.UnitType;
+import com.wotr.strategy.battle.AttackStrategy;
 
 public class Archer extends RangedUnit {
 
@@ -30,6 +32,11 @@ public class Archer extends RangedUnit {
 
 	@Override
 	public UnitType getType() {
-		return UnitType.CAVALRY;
+		return UnitType.INFANTRY;
+	}
+
+	@Override
+	public AttackStrategy getAttackStrategy() {
+		return GameManager.getFactory().getArcherAttackStrategy();
 	}
 }
