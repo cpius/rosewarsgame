@@ -18,6 +18,7 @@
 @synthesize myColor;
 @synthesize numberOfAvailableActions;
 @synthesize unitLayout = _unitLayout;
+@synthesize gameOver;
 
 - (id)init {
     

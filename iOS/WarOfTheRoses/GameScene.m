@@ -166,7 +166,7 @@
         return;
     }
     
-    if (_gameover) {
+    if (_gameManager.currentGame.gameOver) {
         return;
     }
         
@@ -325,7 +325,10 @@
                     
                     [_gameManager card:action.cardInAction movedToGridLocation:retreatLocation];
                     [_gameboard removeCardAtGameBoardNode:targetNode];
-                    [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:[_gameboard getGameBoardNodeForGridLocation:retreatLocation]];
+
+                    if (![[_gameboard activeNode].locationInGrid isEqual:retreatLocation]) {
+                        [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:[_gameboard getGameBoardNodeForGridLocation:retreatLocation]];
+                    }
                     
                     NSUInteger remainingActions = [_gameManager actionUsed:action];
                     [self updateRemainingActions:remainingActions];
@@ -396,7 +399,7 @@
 
 - (void)doEnemyPlayerTurn {
     
-    if (_gameover) {
+    if (_gameManager.currentGame.gameOver) {
         return;
     }
     
@@ -491,7 +494,6 @@
         }
     }
     else {
-        _gameover = YES;
         [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
         return;
     }

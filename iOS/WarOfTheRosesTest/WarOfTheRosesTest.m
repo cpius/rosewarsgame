@@ -93,11 +93,13 @@
     
     STAssertFalse([_manager shouldEndTurn], @"shouldEndTurn should return NO");
     
-    [attacker consumeMove];
+    [attacker consumeAllMoves];
     attacker.hasMovedThisRound = YES;
     _manager.currentGame.numberOfAvailableActions--;
     
     STAssertTrue([_manager shouldEndTurn], @"shouldEndTurn should return YES");
+    
+    
 }
 
 @end

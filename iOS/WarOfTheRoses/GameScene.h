@@ -36,8 +36,6 @@
     NSMutableArray *_myCards;
     NSMutableArray *_enemyCards;
     
-    BOOL _gameover;
-    
     GameBoardNode *_showingDetailOfNode;
     
     Action *_actionInQueue;

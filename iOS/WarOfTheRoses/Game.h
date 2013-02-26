@@ -20,6 +20,7 @@
 @property (nonatomic, assign) GameStates state;
 @property (nonatomic, assign) PlayerColors myColor;
 @property (nonatomic, readonly) PlayerColors enemyColor;
+@property (nonatomic, assign) BOOL gameOver;
 
 @property (nonatomic, readonly) NSMutableDictionary *unitLayout;
 

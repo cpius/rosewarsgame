@@ -181,6 +181,7 @@
     
     if (outcome == kCombatOutcomeAttackSuccessful) {
         CCLOG(@"Attack successful");
+        [self cardHasBeenDefeated:defender];
         [_delegate cardHasBeenDefeatedInCombat:defender];
     }
     else {
@@ -229,6 +230,8 @@
     
     BOOL allUnitsDead = YES;
     
+    _currentGame.gameOver = YES;
+    
     for (Card *myCard in _currentGame.myDeck.cards) {
         if (!myCard.dead) {
             allUnitsDead = NO;
@@ -264,6 +267,8 @@
         }
     }
 
+    _currentGame.gameOver = NO;
+    
     return kGameResultInProgress;
 }
 
