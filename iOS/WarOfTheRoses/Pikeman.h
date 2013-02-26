@@ -7,8 +7,12 @@
 //
 
 #import "Card.h"
+#import "RawBonus.h"
 
-@interface Pikeman : Card
+@interface Pikeman : Card {
+    
+    RawBonus *_bonusAgainstCavalry;
+}
 
 + (id)card;
 

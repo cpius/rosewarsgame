@@ -7,9 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AIPlayer.h"
 #import "AIStrategy.h"
 
-@interface AIStrategyAdvancer : AIPlayer <AIStrategy>
+@interface AIStrategyAdvancer : NSObject<AIStrategy>
 
 @end

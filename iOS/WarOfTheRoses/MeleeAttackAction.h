@@ -10,4 +10,6 @@
 
 @interface MeleeAttackAction : Action
 
+@property (nonatomic, assign) MeleeAttackTypes meleeAttackType;
+
 @end

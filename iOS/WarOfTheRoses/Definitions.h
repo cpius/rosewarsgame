@@ -15,6 +15,18 @@
 #define BOARDSIZE_COLUMNS 5
 
 typedef enum {
+    kActionTypeMove = 0,
+    kActionTypeMelee,
+    kActionTypeRanged,
+    kActionTypeAbility
+} ActionTypes;
+
+typedef enum {
+    kMeleeAttackTypeNormal,
+    kMeleeAttackTypeConquer
+} MeleeAttackTypes;
+
+typedef enum {
     kGameResultInProgress,
     kGameResultVictory,
     kGameResultDefeat
@@ -49,18 +61,19 @@ typedef enum {
 } UnitType;
 
 typedef enum {
-    kArcher,
+    kArcher = 0,
     kBallista,
     kCatapult,
     kPikeman,
     kLightCavalry,
     kHeavyCalavry,
+    kChariot,
+    kUnitNameCount,
     kLongSwordsMan,
     kRoyalGuard,
     kBerserker,
     kSamurai,
     kViking,
-    kChariot,
     kScout,
     kCrusader,
     kFlagBearer,
@@ -71,7 +84,6 @@ typedef enum {
     kAssassin,
     kWeaponSmith,
     kDiplomat,
-    kUnitNameCount
 } UnitName;
 
 typedef enum {

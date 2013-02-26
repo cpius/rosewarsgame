@@ -8,7 +8,11 @@
 
 #import "WarOfTheRosesTest.h"
 #import "GridLocation.h"
+#import "Definitions.h"
+#import "Archer.h"
+#import "Pikeman.h"
 
+@class GameManager;
 @implementation WarOfTheRosesTest
 
 - (void)setUp
@@ -25,8 +29,9 @@
     [super tearDown];
 }
 
-- (void)testGridLocationHash
-{
+
+- (void)testGridLocationHash {
+    
     GridLocation *location1 = [GridLocation gridLocationWithRow:1 column:1];
     GridLocation *location2 = [GridLocation gridLocationWithRow:1 column:1];
     

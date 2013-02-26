@@ -13,7 +13,7 @@
 
 @implementation PathFinderStrategyFactory
 
-+ (BasePathFinderStrategy *)getStrategyFromCard:(Card *)fromCard toCard:(Card*)toCard myColor:(PlayerColors)myColor {
++ (id<PathFinderStrategy>)getStrategyFromCard:(Card *)fromCard toCard:(Card*)toCard myColor:(PlayerColors)myColor {
     
     if (toCard != nil && ![toCard isOwnedByPlayerWithColor:myColor]) {
         
@@ -27,6 +27,21 @@
     else {
         return [MovePathFinderStrategy strategy];
     }
+}
+
++ (id<PathFinderStrategy>)getMoveStrategy {
+    
+    return [MovePathFinderStrategy strategy];
+}
+
++ (id<PathFinderStrategy>)getMeleeAttackStrategy {
+    
+    return [MeleeAttackPathFinderStrategy strategy];
+}
+
++ (id<PathFinderStrategy>)getRangedAttackStrategy {
+    
+    return [RangedAttackPathFinderStrategy strategy];
 }
 
 @end

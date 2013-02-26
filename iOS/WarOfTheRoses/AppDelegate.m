@@ -90,15 +90,17 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"archer_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"archer_icon.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"archer_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"archer_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"ballista_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"ballista_icon.png"];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"ballista_0.png" rect:CGRectMake(0, 0, 100, 154)] name:@"ballista_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"ballista_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"ballista_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"catapult_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"catapult_icon.png"];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"catapult_0.png" rect:CGRectMake(0, 0, 100, 154)] name:@"catapult_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"catapult_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"catapult_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"pikeman_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"pikeman_icon.png"];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"pikeman_0.png" rect:CGRectMake(0, 0, 100, 154)] name:@"pikeman_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"pikeman_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"pikeman_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"lightcavalry_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"lightcavalry_icon.png"];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"lightcavalry_0.png" rect:CGRectMake(0, 0, 100, 154)] name:@"lightcavalry_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"lightcavalry_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"lightcavalry_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"heavycavalry_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"heavycavalry_icon.png"];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"heavycavalry_0.png" rect:CGRectMake(0, 0, 100, 154)] name:@"heavycavalry_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"heavycavalry_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"heavycavalry_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"chariot_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"chariot_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"chariot_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"chariot_icon.png"];
 
     [[SoundManager sharedManager] preloadSoundEffects];
     

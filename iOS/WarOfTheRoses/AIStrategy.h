@@ -12,6 +12,6 @@
 
 @protocol AIStrategy <NSObject>
 
-- (Action *)decideNextActionFromBattlePlans:(NSDictionary*)battlePlans;
+- (Action *)decideNextActionFromActions:(NSArray *)actions;
 
 @end

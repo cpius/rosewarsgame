@@ -20,9 +20,13 @@ typedef enum {
     kGameEventAttack
 } GameEvents;
 
+@class Deck;
 @interface SoundManager : NSObject
 
+- (void)preloadSoundEffectsForDeck:(Deck*)deck;
 - (void)preloadSoundEffects;
+
+- (void)playSoundEffectWithName:(NSString*)name;
 - (void)playSoundEffectForGameEvent:(GameEvents)gameEvent;
 
 + (SoundManager*)sharedManager;

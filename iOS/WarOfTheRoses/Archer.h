@@ -7,8 +7,12 @@
 //
 
 #import "Card.h"
+#import "RawBonus.h"
 
-@interface Archer : Card
+@interface Archer : Card {
+    
+    RawBonus *_bonusAgainstInfantry;
+}
 
 + (id)card;
 

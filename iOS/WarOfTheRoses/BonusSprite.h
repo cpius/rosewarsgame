@@ -8,15 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
+#import "RangeAttribute.h"
 
 @interface BonusSprite : CCSprite {
     
 }
 
 @property (nonatomic, copy) NSString *bonusText;
+@property (nonatomic, readonly) RangeAttribute *attribute;
 
 - (void)setBonusText:(NSString*)bonusText;
 
-- (id)initWithBonusText:(NSString*)bonusText;
+- (id)initWithAttribute:(RangeAttribute*)attribute;
 
 @end

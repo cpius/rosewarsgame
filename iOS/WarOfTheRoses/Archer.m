@@ -25,10 +25,11 @@
         
         self.range = 4;
         self.move = 1;
-        actionCost = 1;
+        self.moveActionCost = self.attackActionCost = 1;
         
         hasSpecialAbility = YES;
         
+        self.attackSound = @"bow_fired.wav";
         self.frontImageSmall = @"archer_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"archer_%d.png", self.cardColor];
         
@@ -49,7 +50,23 @@
 }
 
 - (void)addSpecialAbilityVersusOpponent:(Card *)opponent {
+
+    if (opponent.unitType == kInfantry) {
+        _bonusAgainstInfantry = [[RawBonus alloc] initWithValue:1];
+        [self.attack addRawBonus:_bonusAgainstInfantry];
+    }
+}
+
+- (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
     
+    [self.attack removeRawBonus:_bonusAgainstInfantry];
+    _bonusAgainstInfantry = nil;
+}
+
+- (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {
+    
+    [self.attack removeRawBonus:_bonusAgainstInfantry];
+    _bonusAgainstInfantry = nil;
 }
 
 @end

@@ -8,12 +8,17 @@
 
 #import "Action.h"
 #import "PathFinderStep.h"
+#import "GameManager.h"
 
 @implementation Action
 
 @synthesize path = _path;
 @synthesize cardInAction = _cardInAction;
 @synthesize enemyCard = _enemyCard;
+@synthesize score = _score;
+@synthesize isAttack = _isAttack;
+@synthesize delegate = _delegate;
+@synthesize actionType = _actionType;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
@@ -33,6 +38,11 @@
     @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];
 }
 
+/*- (void)performActionWithCompletion:(void (^)())completion {
+    
+    @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];
+}*/
+
 - (GridLocation *)getLastLocationInPath {
     
     if (_path != nil && _path.count > 0) {
@@ -40,6 +50,11 @@
     }
     
     return nil;
+}
+
+- (ActionTypes)actionType {
+    
+    @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];
 }
 
 @end

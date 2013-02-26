@@ -7,6 +7,7 @@
 //
 
 #import "Card.h"
+#import "Action.h"
 
 @interface Card()
 
@@ -28,6 +29,12 @@
 @synthesize range;
 @synthesize isRanged;
 @synthesize dead;
+@synthesize moveActionCost;
+@synthesize attackActionCost;
+@synthesize hasReceivedExperiencePointsThisRound;
+@synthesize numberOfLevelsIncreased;
+@synthesize delegate = _delegate;
+@synthesize attackSound = _attackSound, defenceSound = _defenceSound, moveSound = _moveSound;
 
 - (id)init {
     
@@ -51,7 +58,7 @@
     self.defence.attributeAbbreviation = @"D";
     self.defence.valueAffectedByBonuses = kRangedAttributeUpperValue;
     
-    numberOfLevelsIncreased = 0;
+    self.numberOfLevelsIncreased = 0;
     self.experience = 0;
 }
 
@@ -83,21 +90,106 @@
     
 }
 
-- (void)defenceSuccessfulAgainstAttacker:(Card *)attacker {
-    
-}
-
 - (BOOL)zoneOfControlAgainst:(Card *)opponent {
     
     return NO;
 }
 
-- (void)attackSuccessfulAgainstDefender:(Card *)defender {
+- (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
     
-    // Attack succcessfull - assign experience if applicable
-    if (self.experience < 4) {
-        self.experience++;
+}
+
+- (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {
+    
+    if (combatOutcome == kCombatOutcomeAttackSuccessful) {
+        // Attack succcessfull - assign experience if applicable
+        if (!self.hasReceivedExperiencePointsThisRound && self.experience < 4) {
+            self.experience++;
+            
+            // Unit can only receive experience point once every round
+            self.hasReceivedExperiencePointsThisRound = YES;
+            
+            // Unit can only increase in level twice
+            if (self.numberOfLevelsIncreased < 2 && (self.experience % 2) == 0) {
+                [self levelIncreased];
+            }
+        }
     }
+}
+
+- (void)levelIncreased {
+    
+    NSLog(@"Card: %@ advanced in level", self);
+    
+    self.numberOfLevelsIncreased++;
+    
+    BOOL attributeSwitch = arc4random() % 2;
+    
+    if (attributeSwitch) {
+        [self.attack addRawBonus:[[RawBonus alloc] initWithValue:1]];
+    }
+    else {
+        [self.defence addRawBonus:[[RawBonus alloc] initWithValue:1]];
+    }
+    
+    if ([_delegate respondsToSelector:@selector(cardIncreasedInLevel:)]) {
+        [_delegate cardIncreasedInLevel:self];
+    }
+}
+
+- (void)performedAction:(Action *)action {
+
+    if (action.actionType == kActionTypeMove) {
+        self.hasMovedThisRound = YES;
+    }
+    
+    // An attack consumes all remaining moves of an unit
+    if (action.isAttack) {
+        [self consumeAllMoves];
+    }
+}
+
+- (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount {
+    
+    switch (actionType) {
+            
+        case kActionTypeMove:
+            return self.moveActionCost <= remainingActionCount && self.movesRemaining > 0;
+            
+        case kActionTypeAbility:
+            return self.moveActionCost <= remainingActionCount;
+            
+        case kActionTypeMelee:
+            if (self.movesRemaining == 0) {
+                return NO;
+            }
+            else {
+                // Unit cannot move and attack the same round
+                return (self.attackActionCost <= remainingActionCount) && !self.hasMovedThisRound && !self.isRanged;
+            }
+            
+        case kActionTypeRanged:
+            
+            if (self.movesRemaining == 0) {
+                return NO;
+            }
+            else {
+                // Unit cannot move and attack the same round
+                return (self.attackActionCost <= remainingActionCount) && !self.hasMovedThisRound && self.isRanged;
+            }
+
+            
+    }
+}
+
+- (void)consumeAllMoves {
+    
+    movesConsumed = move;
+}
+
+- (void)consumeMove {
+    
+    self.movesConsumed++;
 }
 
 - (NSUInteger)movesRemaining {

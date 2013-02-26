@@ -13,7 +13,9 @@
 @protocol GameManagerProtocol <NSObject>
 
 - (void)turnChangedToPlayerWithColor:(PlayerColors)player;
+
 - (void)combatHasStartedBetweenAttacker:(Card*)attacker andDefender:(Card*)defender;
+- (void)cardHasBeenDefeatedInCombat:(Card*)card;
 
 @end
 
@@ -30,7 +32,9 @@
 - (CombatOutcome)resolveCombatBetween:(Card*)attacker defender:(Card*)defender;
 
 - (NSUInteger)actionUsed:(Action*)action;
+
 - (void)startNewGameOfType:(GameTypes)gameType;
+- (BOOL)shouldEndTurn;
 - (void)endTurn;
 
 - (void)card:(Card*)card movedToGridLocation:(GridLocation*)location;

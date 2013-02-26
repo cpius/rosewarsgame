@@ -12,7 +12,37 @@
 
 - (BOOL)isWithinRange {
     
-    return self.path.count - 1 <= self.cardInAction.range;
+    return self.path.count <= self.cardInAction.range;
+}
+
+- (BOOL)isAttack {
+    
+    return YES;
+}
+
+- (ActionTypes)actionType {
+    
+    return kActionTypeRanged;
+}
+
+- (void)performAction {
+    
+/*    [self.delegate beforePerformAction:self];
+    
+    CombatOutcome outcome = [self engageCombatBetweenMyCard:action.cardInAction andEnemyCard:action.enemyCard];
+    
+    if (outcome == kCombatOutcomeDefendSuccessful) {
+        [self resetUserInterface];
+    }
+    else {
+        [ParticleHelper applyBurstToNode:targetNode];
+        
+        [_gameManager cardHasBeenDefeated:action.enemyCard];
+        [_gameboard removeCardAtGameBoardNode:targetNode];
+        [self resetUserInterface];
+    }
+        
+    [self.delegate afterPerformAction:self];*/
 }
 
 @end

@@ -23,10 +23,12 @@
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 2)];
         self.range = 1;
         self.move = 4;
-        actionCost = 1;
+        self.moveActionCost = self.attackActionCost = 1;
         
         hasSpecialAbility = NO;
         
+        self.attackSound = @"sword_sound.wav";
+
         self.frontImageSmall = @"lightcavalry_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"lightcavalry_%d.png", self.cardColor];
         

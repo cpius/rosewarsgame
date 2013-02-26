@@ -24,7 +24,6 @@
     
     if (self) {
         _actionStrategy = strategy;
-        
         _battlePlans = [[NSMutableDictionary alloc] init];
     }
     
@@ -33,7 +32,24 @@
 
 - (Action *)decideNextAction {
     
-    return [_actionStrategy decideNextActionFromBattlePlans:_battlePlans];
+    NSMutableArray *actions = [NSMutableArray array];
+    
+    for (id key in _battlePlans.allKeys) {
+        
+        BattlePlan *battleplan = [_battlePlans objectForKey:key];
+        
+        [actions addObjectsFromArray:battleplan.moveActions];
+        [actions addObjectsFromArray:battleplan.meleeActions];
+        [actions addObjectsFromArray:battleplan.rangeActions];
+    }
+    
+    return [_actionStrategy decideNextActionFromActions:[NSArray arrayWithArray:actions]];
+}
+
+
+- (void)placeCardsInDeck:(Deck *)deck {
+    
+    [deckStrategy placeCardsInDeck:deck inGameBoardSide:kGameBoardUpper];
 }
 
 - (void)createBattlePlansForUnits:(NSArray*)units sgainstEnemyUnits:(NSArray*)enemyUnits fromUnitLayout:(NSDictionary*)unitLayout {
@@ -50,12 +66,6 @@
         }
     }
 }
-
-- (void)placeCardsInDeck:(Deck *)deck {
-    
-    [deckStrategy placeCardsInDeck:deck inGameBoardSide:kGameBoardUpper];
-}
-
 
 
 @end

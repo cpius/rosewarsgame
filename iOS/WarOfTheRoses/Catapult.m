@@ -23,9 +23,12 @@
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 2)];
         self.range = 3;
         self.move = 1;
-        actionCost = 2;
+        self.attackActionCost = 2;
+        self.moveActionCost = 1;
         
         hasSpecialAbility = NO;
+        
+        self.attackSound = @"catapult_attacksound.wav";
         
         self.frontImageSmall = @"catapult_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"catapult_%d.png", self.cardColor];

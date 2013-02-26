@@ -25,6 +25,6 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"Bonus value %d added", _bonusValue];
+    return [NSString stringWithFormat:@"Bonus value %d", _bonusValue];
 }
 @end

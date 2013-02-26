@@ -1,0 +1,70 @@
+- Koster det et move at "retreate" fra combat?
+
+
+- (void)zoomOut {
+    
+    [self stopAllActions];
+    
+    [self unscheduleUpdate];
+    [self scheduleUpdate];
+    
+    CGSize winSize = [CCDirector sharedDirector].winSize;
+    
+    _zoomPosition = ccp(winSize.width / 2, winSize.height / 2);
+    _isZooming = YES;
+    
+    id zoomIn = [CCScaleTo actionWithDuration:0.2f scale:1.0];
+    id reset = [CCCallBlock actionWithBlock:^{
+        CCLOG(@"zoom out complete");
+        
+        [self unscheduleUpdate];
+        
+        _zoomInOnNode = nil;
+        _isZooming = NO;
+        _zoomPosition = CGPointZero;
+    }];
+    
+    [self runAction:[CCSequence actions:zoomIn, reset, nil]];
+}
+
+-(void) zoomInOnGameBoardNode:(GameBoardNode*)node
+{
+    [self stopAllActions];
+    
+    [self unscheduleUpdate];
+    [self scheduleUpdate];
+    
+    _zoomPosition = node.card.position;
+    _isZooming = YES;
+    
+    id zoomIn = [CCScaleTo actionWithDuration:0.2f scale:kZoomFactor];
+    id reset = [CCCallBlock actionWithBlock:^{
+        CCLOG(@"zoom in complete");
+        
+        [self unscheduleUpdate];
+        
+        _zoomInOnNode = nil;
+        _isZooming = NO;
+        _zoomPosition = CGPointZero;
+        
+        [_leftPanel runAction:[CCMoveTo actionWithDuration:0.5 position:ccp(0, _winSize.height / 2)]];
+    }];
+    
+    [self runAction:[CCSequence actions:zoomIn, reset, nil]];
+}
+
+-(void) update:(ccTime)delta
+{
+    if (_isZooming)
+    {
+        CGSize screenSize = [CCDirector sharedDirector].winSize;
+        CGPoint screenCenter = CGPointMake(screenSize.width * 0.5f,
+                                           screenSize.height * 0.5f);
+        
+        CGPoint offsetToCenter = ccpSub(screenCenter, _zoomPosition);
+        self.position = ccpMult(offsetToCenter, self.scale);
+        self.position = ccpSub(self.position, ccpMult(offsetToCenter,
+                                                      (kZoomFactor - self.scale) /
+                                                      (kZoomFactor - 1.0f)));
+    }
+}

@@ -57,6 +57,7 @@
 
 - (void)selectCardInGameBoardNode:(GameBoardNode*)node useHighlighting:(BOOL)highlight;
 - (void)replaceCardAtGameBoardNode:(GameBoardNode*)node withCard:(CardSprite*)card;
+- (void)removeCard:(CardSprite*)card;
 - (void)removeCardAtGameBoardNode:(GameBoardNode*)node;
 - (void)deselectActiveNode;
 - (BOOL)nodeIsActive;
@@ -68,7 +69,7 @@
 - (void)swapCardFromNode:(GameBoardNode*)fromNode toNode:(GameBoardNode*)toNode;
 
 - (void)highlightNodeAtLocation:(GridLocation*)location withColor:(ccColor3B)color;
-- (void)highlightCardAtLocation:(GridLocation*)location withColor:(ccColor3B)color;
+- (void)highlightCardAtLocation:(GridLocation*)location withColor:(ccColor3B)color actionType:(ActionTypes)actionType;
 - (void)deHighlightAllNodes;
 
 @end

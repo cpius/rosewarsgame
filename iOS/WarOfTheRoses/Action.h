@@ -8,16 +8,39 @@
 
 #import <Foundation/Foundation.h>
 #import "Card.h"
+#import "GridLocation.h"
 
+@class Action;
+@class GameManager;
+@protocol ActionDelegate <NSObject>
+
+- (void)beforePerformAction:(Action*)action;
+
+- (void)action:(Action*)action wantsToMoveCard:(Card*)card fromLocation:(GridLocation*)fromLocation toLocation:(GridLocation*)toLocation;
+- (void)action:(Action*)action wantsToMoveFollowingPath:(NSArray*)path withCompletion:(void (^)(GridLocation*))completion;
+
+- (void)afterPerformAction:(Action*)action;
+
+@end
+
+@class Card;
 @interface Action : NSObject
 
+@property (nonatomic, weak) id<ActionDelegate> delegate;
 @property (nonatomic, readonly) NSArray *path;
 @property (nonatomic, readonly) Card *cardInAction;
 @property (nonatomic, readonly) Card *enemyCard;
+
+@property (nonatomic, assign) NSUInteger score;
+@property (nonatomic, readonly) BOOL isAttack;
+
+@property (nonatomic, readonly) ActionTypes actionType;
 
 - (id)initWithPath:(NSArray*)path andCardInAction:(Card*)card enemyCard:(Card*)enemyCard;
 
 - (BOOL)isWithinRange;
 - (GridLocation*)getLastLocationInPath;
+
+- (void)performActionWithCompletion:(void (^)())completion;
 
 @end

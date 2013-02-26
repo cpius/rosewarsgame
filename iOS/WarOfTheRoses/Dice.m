@@ -12,7 +12,7 @@
 
 + (NSUInteger)rollDiceWithDie:(NSUInteger)die {
     
-    return (arc4random() % (die - 1)) + 1;
+    return (arc4random() % die) + 1;
 }
 
 @end

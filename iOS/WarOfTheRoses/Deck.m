@@ -30,12 +30,12 @@
     return self;
 }
 
-
-
 - (void)resetMoveCounters {
     
     for (Card *card in _cards) {
         card.movesConsumed = 0;
+        card.hasReceivedExperiencePointsThisRound = NO;
+        card.hasMovedThisRound = NO;
     }
 }
 

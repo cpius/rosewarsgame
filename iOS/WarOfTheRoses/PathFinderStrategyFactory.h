@@ -7,11 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BasePathFinderStrategy.h"
+#import "PathFinderStrategy.h"
 #import "Card.h"
 
 @interface PathFinderStrategyFactory : NSObject
 
-+ (BasePathFinderStrategy *)getStrategyFromCard:(Card *)fromCard toCard:(Card*)toCard myColor:(PlayerColors)myColor;
++ (id<PathFinderStrategy>)getStrategyFromCard:(Card *)fromCard toCard:(Card*)toCard myColor:(PlayerColors)myColor;
+
++ (id<PathFinderStrategy>)getMoveStrategy;
++ (id<PathFinderStrategy>)getMeleeAttackStrategy;
++ (id<PathFinderStrategy>)getRangedAttackStrategy;
 
 @end

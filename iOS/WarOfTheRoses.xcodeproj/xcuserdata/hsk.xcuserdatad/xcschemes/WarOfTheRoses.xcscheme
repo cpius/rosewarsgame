@@ -28,6 +28,16 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6D0CBEE016D00DE400D241A7"
+               BuildableName = "WarOfTheRosesTest.octest"
+               BlueprintName = "WarOfTheRosesTest"
+               ReferencedContainer = "container:WarOfTheRoses.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

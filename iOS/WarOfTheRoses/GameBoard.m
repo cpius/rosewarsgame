@@ -8,8 +8,6 @@
 
 #import "GameBoard.h"
 #import "ParticleHelper.h"
-#import "MovePathFinderStrategy.h"
-#import "MeleeAttackPathFinderStrategy.h"
 #import "RangedAttackAction.h"
 #import "PathFinderStrategyFactory.h"
 
@@ -64,10 +62,16 @@
     }
 }
 
+- (void)removeCard:(CardSprite *)card {
+    
+    [card removeFromParentAndCleanup:YES];
+}
+
 - (void)removeCardAtGameBoardNode:(GameBoardNode *)node {
     
     if (node.card != nil) {
         [node.card removeFromParentAndCleanup:YES];
+        node.card = nil;
     }
 }
 
@@ -106,7 +110,7 @@
     NSArray *path = [pathFinder getPathForCard:fromNode.card.model fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:strategy allLocations:allLocations];
     
     if (toNode.hasCard && [toNode.card.model isOwnedByPlayerWithColor:colorOfTopPlayer]) {
-        if ((path.count - 1) > 1 && fromNode.card.model.isRanged) {
+        if (fromNode.card.model.isRanged) {
             action = [[RangedAttackAction alloc] initWithPath:path andCardInAction:fromNode.card.model enemyCard:toNode.card.model];
         }
         else {
@@ -114,7 +118,7 @@
         }
     }
     else {
-        action = [[MoveAction alloc] initWithPath:path andCardInAction:fromNode.card.model];
+        action = [[MoveAction alloc] initWithPath:path andCardInAction:fromNode.card.model enemyCard:nil];
     }
         
     return action;
@@ -269,7 +273,7 @@
     GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
     
     if (node != nil) {
-        [node.nodeSprite runAction:[CCTintTo actionWithDuration:0.2 red:color.r green:color.g blue:color.b]];
+        [node.nodeSprite setColor:color];
         
         if (![_highlightedNodes containsObject:node.nodeSprite]) {
             [_highlightedNodes addObject:node.nodeSprite];
@@ -277,12 +281,39 @@
     }
 }
 
-- (void)highlightCardAtLocation:(GridLocation *)location withColor:(ccColor3B)color {
+- (void)highlightCardAtLocation:(GridLocation *)location withColor:(ccColor3B)color actionType:(ActionTypes)actionType {
     
     GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
     
     if (node != nil && node.card != nil) {
-        [node.card runAction:[CCTintTo actionWithDuration:0.2 red:color.r green:color.g blue:color.b]];
+        
+        if (actionType == kActionTypeRanged) {
+            
+            CCSprite *crosshair = [CCSprite spriteWithFile:@"crosshair.png"];
+            crosshair.scale = node.card.scaleX;
+            crosshair.anchorPoint = ccp(0.5, 0.5);
+            crosshair.position = ccp(node.card.contentSize.width / 2, node.card.contentSize.height / 2);
+            [node.card addChild:crosshair z:10 tag:10];
+            [crosshair runAction:[CCRepeatForever actionWithAction:
+                                  [CCSequence actions:[CCScaleTo actionWithDuration:0.2 scale:1.2],
+                                   [CCScaleTo actionWithDuration:0.2 scale:1.0],
+                                   nil]]];
+        }
+        else if (actionType == kActionTypeMelee) {
+            
+            CCSprite *swordClash = [CCSprite spriteWithFile:@"swordclash.png"];
+            swordClash.scale = node.card.scaleX;
+            swordClash.anchorPoint = ccp(0.5, 0.5);
+            swordClash.position = ccp(node.card.contentSize.width / 2, node.card.contentSize.height / 2);
+            [node.card addChild:swordClash z:10 tag:10];
+            [swordClash runAction:[CCRepeatForever actionWithAction:
+                                  [CCSequence actions:[CCScaleTo actionWithDuration:0.2 scale:1.2],
+                                   [CCScaleTo actionWithDuration:0.2 scale:1.0],
+                                   nil]]];
+        }
+        else {
+            [node.card setColor:color];
+        }
         
         if (![_highlightedNodes containsObject:node.card]) {
             [_highlightedNodes addObject:node.card];
@@ -293,8 +324,15 @@
 - (void)deHighlightAllNodes {
     
     for (CCSprite *sprite in _highlightedNodes) {
-        [sprite runAction:[CCTintTo actionWithDuration:0.2 red:255 green:255 blue:255]];
+        [sprite setColor:ccc3(255, 255, 255)];
+        
+        CCSprite *crosshair = (CCSprite*)[sprite getChildByTag:10];
+        if (crosshair) {
+            [crosshair removeFromParentAndCleanup:YES];
+        }
     }
+    
+    [_highlightedNodes removeAllObjects];
 }
 
 - (void)selectCardInGameBoardNode:(GameBoardNode *)node useHighlighting:(BOOL)highlight {
@@ -303,8 +341,11 @@
         
     [node setZOrder:500];
     [node.card setZOrder:501];
-    [node.card runAction:[CCTintTo actionWithDuration:0.2 red:0 green:0 blue:235]];
-    [ParticleHelper highlightNode:node.card forever:YES];
+    [node.card setColor:ccc3(0, 0, 235.0)];
+    
+    if (highlight) {
+        [ParticleHelper highlightNode:node.card forever:YES];
+    }
     
     _activeNode = node;
     _activeCard = node.card;

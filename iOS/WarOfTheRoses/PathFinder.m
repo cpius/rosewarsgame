@@ -7,10 +7,7 @@
 //
 
 #import "PathFinder.h"
-#import "MovePathFinderStrategy.h"
-#import "MeleeAttackPathFinderStrategy.h"
-#import "RangedAttackPathFinderStrategy.h"
-
+#import "PathFinderStrategyFactory.h"
 #import "MoveAction.h"
 #import "MeleeAttackAction.h"
 #import "RangedAttackAction.h"
@@ -118,6 +115,7 @@
             
             pathFound = YES;
             
+            [path removeObjectAtIndex:0];
             return [NSArray arrayWithArray:path];
         }
         
@@ -169,11 +167,11 @@
         for (int column = 1; column <= BOARDSIZE_COLUMNS; column++) {
         
             GridLocation *toLocation = [GridLocation gridLocationWithRow:row column:column];
-            NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[MovePathFinderStrategy strategy] allLocations:allLocations];
+            NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:allLocations];
             
-            if (path != nil && path.count <= card.move + 1) {
+            if (path != nil && path.count > 0 && path.count <= card.movesRemaining) {
                 
-                [moveActions addObject:[[MoveAction alloc] initWithPath:path andCardInAction:card]];
+                [moveActions addObject:[[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil]];
             }
         }
     }
@@ -187,12 +185,14 @@
     
     for (Card *enemyCard in enemyUnits) {
         
+        if (enemyCard.dead) continue;
+
         GridLocation *enemyLocation = enemyCard.cardLocation;
         
-        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[MeleeAttackPathFinderStrategy strategy] allLocations:allLocations];
+        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:allLocations];
         
-        if (path != nil) {
-            if (path.count <= card.move + 1) {
+        if (path != nil && path.count > 0) {
+            if (path.count <= card.movesRemaining) {
                 [attackActions addObject:[[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
             }
         }
@@ -207,12 +207,14 @@
     
     for (Card *enemyCard in enemyUnits) {
         
+        if (enemyCard.dead) continue;
+        
         GridLocation *enemyLocation = enemyCard.cardLocation;
         
-        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[RangedAttackPathFinderStrategy strategy] allLocations:allLocations];
+        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
         
-        if (path != nil) {
-            if (path.count <= card.range + 1) {
+        if (path != nil && path.count > 0) {
+            if (path.count <= card.range) {
                 [attackActions addObject:[[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
             }
         }

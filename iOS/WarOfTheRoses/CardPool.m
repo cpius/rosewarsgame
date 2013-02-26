@@ -14,6 +14,8 @@
 #import "LightCavalry.h"
 #import "HeavyCavalry.h"
 
+#import "Chariot.h"
+
 @interface CardPool()
 
 -(NSArray*)shuffle:(NSArray *)array;
@@ -50,6 +52,8 @@
             return [LightCavalry card];
         case kPikeman:
             return [Pikeman card];
+        case kChariot:
+            return [Chariot card];
         default:
             CCLOG(@"Unknown cardname: %d", unitName);
     }
@@ -77,11 +81,11 @@
     Card *drawnCard;
     
     if (cardType == kCardTypeBasicUnit) {
-        UnitName unitName = (arc4random() % 5);
+        UnitName unitName = (arc4random() % 6);
         drawnCard = [self createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = (arc4random() % (kUnitNameCount - 1) + 5);
+        UnitName unitName = 6;
         drawnCard = [self createCardOfName:unitName];
     }
     

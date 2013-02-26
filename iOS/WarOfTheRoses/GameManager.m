@@ -9,7 +9,9 @@
 #import "GameManager.h"
 #import "Dice.h"
 #import "RandomDeckStrategy.h"
+
 #import "AIStrategyAdvancer.h"
+#import "AIStrategyCatapulter.h"
 
 @implementation GameManager
 
@@ -76,18 +78,25 @@
 
 - (NSUInteger)actionUsed:(Action*)action {
     
-    _currentGame.numberOfAvailableActions--;
+    if (action.isAttack) {
+        _currentGame.numberOfAvailableActions -= action.cardInAction.attackActionCost;
+    }
+    else {
+        _currentGame.numberOfAvailableActions -= action.cardInAction.moveActionCost;
+    }
     
     return _currentGame.numberOfAvailableActions;
+}
+
+- (BOOL)shouldEndTurn {
+    
+    return _currentGame.numberOfAvailableActions == 0;
 }
 
 - (CombatOutcome)resolveCombatBetween:(Card *)attacker defender:(Card *)defender {
     
     [_delegate combatHasStartedBetweenAttacker:attacker andDefender:defender];
-    
-    // An attack consumes all moves
-    attacker.movesConsumed = attacker.move;
-    
+        
     CCLOG(@"Resolving combat between attacker: %@ and defender: %@", attacker, defender);
     
     if ([attacker specialAbilityTriggersVersus:defender]) {
@@ -132,12 +141,11 @@
     
     if (outcome == kCombatOutcomeAttackSuccessful) {
         CCLOG(@"Attack successful");
-        [attacker attackSuccessfulAgainstDefender:defender];
+        [_delegate cardHasBeenDefeatedInCombat:defender];
     }
-    else {
-        CCLOG(@"Defence successful");
-        [defender defenceSuccessfulAgainstAttacker:attacker];
-    }
+    
+    [attacker combatFinishedAgainstDefender:defender withOutcome:outcome];
+    [defender combatFinishedAgainstAttacker:attacker withOutcome:outcome];
     
     return outcome;
 }

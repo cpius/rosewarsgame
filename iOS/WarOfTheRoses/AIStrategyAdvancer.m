@@ -11,29 +11,35 @@
 
 @implementation AIStrategyAdvancer
 
-- (Action *)decideNextActionFromBattlePlans:(NSDictionary *)battlePlans {
+- (Action *)decideNextActionFromActions:(NSArray *)actions {
     
     Action *action = nil;
-    BOOL actionFound = NO;
     
     CCLOG(@"Deciding next action");
     
-    while (!actionFound) {
-        NSUInteger randomKeyIndex = arc4random() % (battlePlans.allKeys.count - 1);
+    for (Action *action in actions) {
         
-        BattlePlan *battlePlanForUnit = [battlePlans objectForKey:[battlePlans.allKeys objectAtIndex:randomKeyIndex]];
+        GridLocation *startPosition = [action.path[0] location];
+        GridLocation *endPosition = [action.path.lastObject location];
         
-        if (battlePlanForUnit.moveActions.count > 0) {
-            action = [battlePlanForUnit.moveActions objectAtIndex:(arc4random() % (battlePlanForUnit.moveActions.count - 1))];
-            
-            GridLocation *startLocation = [action.path[0] location];
-            GridLocation *endLocation = [action.path.lastObject location];
-            
-            if (action.path.count > 1 && ![startLocation isEqual:endLocation]) {
-                actionFound = YES;
-            }
+        action.score = endPosition.row;
+        
+        if (endPosition.row > startPosition.row) {
+            action.score += 0.1;
+        }
+        
+        if (action.isAttack) {
+            action.score += 0.25;
         }
     }
+    
+    action = [[actions sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        Action *action1 = obj1;
+        Action *action2 = obj2;
+        
+        return action1.score > action2.score;
+    }] lastObject];
     
     CCLOG(@"Next action found: %@", action);
     

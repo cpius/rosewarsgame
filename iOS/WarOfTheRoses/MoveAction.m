@@ -7,17 +7,46 @@
 //
 
 #import "MoveAction.h"
+#import "GameManager.h"
 
 @implementation MoveAction
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card*)card {
-    
-    return [[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil];
-}
-
 - (BOOL)isWithinRange {
     
-    return self.path.count - 1 <= self.cardInAction.movesRemaining;
+    return self.path.count <= self.cardInAction.movesRemaining;
+}
+
+- (BOOL)isAttack {
+    
+    return NO;
+}
+
+- (ActionTypes)actionType {
+    
+    return kActionTypeMove;
+}
+
+- (void)performActionWithCompletion:(void (^)())completion {
+    
+    [self.delegate beforePerformAction:self];
+    
+    GridLocation *startLocation = self.cardInAction.cardLocation;
+
+    [self.delegate action:self wantsToMoveFollowingPath:self.path withCompletion:^(GridLocation *endLocation) {
+        
+        if (![self.cardInAction.cardLocation isEqual:endLocation]) {
+            
+            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];
+            
+            [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:endLocation];
+        }
+        
+        [self.delegate afterPerformAction:self];
+
+        if (completion != nil) {
+            completion();
+        }
+    }];
 }
 
 @end

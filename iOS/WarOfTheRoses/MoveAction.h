@@ -11,6 +11,4 @@
 
 @interface MoveAction : Action
 
-- (id)initWithPath:(NSArray*)path andCardInAction:(Card*)card;
-
 @end

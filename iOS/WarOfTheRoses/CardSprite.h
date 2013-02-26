@@ -14,6 +14,7 @@
 
 @interface CardSprite : CCSprite <RangeAttributeDelegate> {
     
+    NSMutableArray *_bonusSprites;
 }
 
 @property (nonatomic, strong) Card *model;

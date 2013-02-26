@@ -8,6 +8,7 @@
 
 #import "BattlePlan.h"
 #import "PathFinder.h"
+#import "GameManager.h"
 
 @implementation BattlePlan
 
@@ -26,9 +27,19 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] init];
     
-    _moveActions = [pathFinder getMoveActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
-    _meleeActions = [pathFinder getMeleeAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
-    _rangeActions = [pathFinder getRangedAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
+    NSUInteger remainingActionCount = [GameManager sharedManager].currentGame.numberOfAvailableActions;
+    
+    if ([card canPerformActionOfType:kActionTypeMove withRemainingActionCount:remainingActionCount]) {
+        _moveActions = [pathFinder getMoveActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
+    }
+    
+    if ([card canPerformActionOfType:kActionTypeMelee withRemainingActionCount:remainingActionCount]) {
+        _meleeActions = [pathFinder getMeleeAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
+    }
+
+    if ([card canPerformActionOfType:kActionTypeRanged withRemainingActionCount:remainingActionCount]) {
+        _rangeActions = [pathFinder getRangedAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
+    }
     
     return [[_moveActions arrayByAddingObjectsFromArray:_meleeActions] arrayByAddingObjectsFromArray:_rangeActions];
 }

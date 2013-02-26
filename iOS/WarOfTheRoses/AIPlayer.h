@@ -11,7 +11,6 @@
 #import "Deck.h"
 #import "Action.h"
 #import "AIStrategy.h"
-#import "BattlePlan.h"
 
 @interface AIPlayer : NSObject {
     
@@ -24,9 +23,8 @@
 
 - initWithStrategy:(id<AIStrategy>)strategy;
 
-- (Action*)decideNextAction;
-
-- (void)createBattlePlansForUnits:(NSArray*)units sgainstEnemyUnits:(NSArray*)enemyUnits fromUnitLayout:(NSDictionary*)unitLayout;
 - (void)placeCardsInDeck:(Deck*)deck;
+- (Action *)decideNextAction;
+- (void)createBattlePlansForUnits:(NSArray*)units sgainstEnemyUnits:(NSArray*)enemyUnits fromUnitLayout:(NSDictionary*)unitLayout;
 
 @end

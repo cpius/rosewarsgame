@@ -12,15 +12,20 @@
 @implementation BonusSprite
 
 @synthesize bonusText = _bonusText;
+@synthesize attribute = _attribute;
 
-- (id)initWithBonusText:(NSString *)bonusText {
+- (id)initWithAttribute:(RangeAttribute *)attribute {
     
     self = [super initWithFile:@"bonus.png"];
     
     if (self) {
-        _bonusText = bonusText;
+        _attribute = attribute;
         
-        [self setBonusText:_bonusText];
+        NSUInteger bonusValue = [_attribute getRawBonusValue] + [_attribute getTimedBonusValue];
+
+        [self setBonusText:[NSString stringWithFormat:@"+%d%@",
+                            bonusValue,
+                            _attribute.attributeAbbreviation]];
     }
     
     return self;

@@ -12,7 +12,11 @@
 @interface CardSprite()
 
 - (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated;
-- (void)updateBonusSprite:(RangeAttribute*)rangeAttribute;
+- (void)updateBonusSprite:(BonusSprite*)bonusSprite;
+- (void)updateBonusSpriteForAttribute:(RangeAttribute*)rangeAttribute;
+- (void)updateAllBonusSprites;
+- (void)updateBonusSpritePositions;
+- (BonusSprite*)getBonusSpriteForAttribute:(RangeAttribute*)attribute;
 
 @end
 
@@ -28,14 +32,15 @@
         
         _model = card;
         
+        _bonusSprites = [NSMutableArray array];
+        
         _model.attack.delegate = self;
         _model.defence.delegate = self;
         
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_model.frontImageSmall]];
         
-        [self updateBonusSprite:_model.attack];
-        [self updateBonusSprite:_model.defence];
-        
+        [self updateBonusSpriteForAttribute:_model.attack];
+        [self updateBonusSpriteForAttribute:_model.defence];
     }
     
     return self;
@@ -65,6 +70,8 @@
 - (void)rangeAttribute:(RangeAttribute *)attribute removedRawBonus:(RawBonus *)rawBonus {
     
     CCLOG(@"Card: %@ removed raw bonus: %@", self.model, rawBonus);
+    
+    [self updateBonusSpriteForAttribute:attribute];
 }
 
 - (void)rangeAttribute:(RangeAttribute *)attribute addedTimedBonus:(TimedBonus *)timedBonus {
@@ -77,42 +84,88 @@
 - (void)rangeAttribute:(RangeAttribute *)attribute removedTimedBonus:(TimedBonus *)timedBonus {
     
     CCLOG(@"Card: %@ removed timed bonus: %@", self.model, timedBonus);
+
+    [self updateBonusSpriteForAttribute:attribute];
 }
 
-- (void)updateBonusSprite:(RangeAttribute *)rangeAttribute {
+- (BonusSprite *)getBonusSpriteForAttribute:(RangeAttribute *)attribute {
     
-    NSUInteger bonusValue = [rangeAttribute getRawBonusValue] + [rangeAttribute getTimedBonusValue];
+    for (BonusSprite* bonusSprite in _bonusSprites) {
+        if (bonusSprite.attribute == attribute) {
+            return bonusSprite;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)updateAllBonusSprites {
+    
+    for (BonusSprite *bonusSprite in _bonusSprites) {
+        [self updateBonusSprite:bonusSprite];
+    }
+}
+
+- (void)updateBonusSpriteForAttribute:(RangeAttribute *)rangeAttribute {
+    
+    BonusSprite *bonusSprite = [self getBonusSpriteForAttribute:rangeAttribute];
+    
+    if (bonusSprite == nil) {
+        NSUInteger bonusValue = [rangeAttribute getRawBonusValue] + [rangeAttribute getTimedBonusValue];
+        
+        if (bonusValue > 0) {
+            [self addBonusSprite:rangeAttribute bonusValue:bonusValue animated:YES];
+        }
+    }
+    else {
+        [self updateBonusSprite:bonusSprite];
+    }
+}
+
+- (void)updateBonusSprite:(BonusSprite *)bonusSprite {
+    
+    NSUInteger bonusValue = [bonusSprite.attribute getRawBonusValue] + [bonusSprite.attribute getTimedBonusValue];
     
     if (bonusValue != 0) {
-        BonusSprite *bonusSprite = (BonusSprite*)[self getChildByTag:BONUSSPRITE_TAG];
-        
-        if (bonusSprite != nil) {
-            [bonusSprite setBonusText:[NSString stringWithFormat:@"+%d%@",
-                                       bonusValue,
-                                       rangeAttribute.attributeAbbreviation]];
-        }
-        else {
-            [self addBonusSprite:rangeAttribute bonusValue:bonusValue animated:NO];
-        }
+        [bonusSprite setBonusText:[NSString stringWithFormat:@"+%d%@",
+                                   bonusValue,
+                                   bonusSprite.attribute.attributeAbbreviation]];
+    }
+    else {
+        [bonusSprite removeFromParentAndCleanup:YES];
     }
 }
 
 - (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated {
     
-    BonusSprite *bonusSprite = [[BonusSprite alloc] initWithBonusText:[NSString stringWithFormat:@"+%d%@",
-                                                                       bonusValue,
-                                                                       rangeAttribute.attributeAbbreviation]];
+    BonusSprite *bonusSprite = [self getBonusSpriteForAttribute:rangeAttribute];
     
-    bonusSprite.tag = BONUSSPRITE_TAG;
-    bonusSprite.anchorPoint = ccp(0, 0);
-    bonusSprite.position = ccp(0.0, self.contentSize.height - bonusSprite.contentSize.height);
-    [self addChild:bonusSprite];
-    
-    if (animated) {
-        CCScaleTo *scaleup = [CCScaleTo actionWithDuration:0.2 scale:1.5];
-        CCScaleTo *scaledown = [CCScaleTo actionWithDuration:0.2 scale:1.0];
+    if (bonusSprite != nil) {
+        [self updateBonusSprite:bonusSprite];
+    }
+    else {
+        BonusSprite *bonusSprite = [[BonusSprite alloc] initWithAttribute:rangeAttribute];
         
-        [bonusSprite runAction:[CCSequence actions:scaleup, scaledown, nil]];
+        bonusSprite.tag = BONUSSPRITE_TAG;
+        bonusSprite.anchorPoint = ccp(0, 0);
+        bonusSprite.position = ccp(0.0, self.contentSize.height - ((bonusSprite.contentSize.height + 5) * (_bonusSprites.count + 1)));
+        [self addChild:bonusSprite];
+
+        [_bonusSprites addObject:bonusSprite];
+        
+        if (animated) {
+            CCScaleTo *scaleup = [CCScaleTo actionWithDuration:0.2 scale:1.5];
+            CCScaleTo *scaledown = [CCScaleTo actionWithDuration:0.2 scale:1.0];
+            
+            [bonusSprite runAction:[CCSequence actions:scaleup, scaledown, nil]];
+        }
+    }
+}
+
+- (void)updateBonusSpritePositions {
+    
+    for (BonusSprite *bonusSprite in _bonusSprites) {
+        bonusSprite.position = ccp(0.0, self.contentSize.height - ((bonusSprite.contentSize.height + 5) * (_bonusSprites.count)));
     }
 }
 
@@ -153,7 +206,8 @@
     CCAction* skewAction = [CCSkewBy    actionWithDuration:.25f skewX:0.0f skewY:20.0f];
     CCAction* waitAction     = [CCDelayTime actionWithDuration:.25f];
     CCAction* callCompleteFuncAction = [CCCallFuncO actionWithTarget:self selector:@selector(completeFlipWithScale:) object:@(scale)];
-    CCAction* completeFlipAction = [CCSequence actions:(CCFiniteTimeAction*)waitAction, callCompleteFuncAction, nil];
+    CCAction* repositionBonusSprites = [CCCallFunc actionWithTarget:self selector:@selector(updateBonusSpritePositions)];
+    CCAction* completeFlipAction = [CCSequence actions:(CCFiniteTimeAction*)waitAction, callCompleteFuncAction, repositionBonusSprites, nil];
     CCAction* flipActions1 = [CCSpawn actions:(CCFiniteTimeAction*)scaleXAction, skewAction, completeFlipAction, nil];
     [self runAction:flipActions1];
     
