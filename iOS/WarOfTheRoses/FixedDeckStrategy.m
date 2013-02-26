@@ -12,45 +12,27 @@
 
 @implementation FixedDeckStrategy
 
+@synthesize fixedCards = _fixedCards;
+
+- (id)init {
+    
+    self = [super init];
+    
+    if (self) {
+        _fixedCards = [NSMutableArray array];
+    }
+    
+    return self;
+}
+
 + (id)strategy {
     
     return [[FixedDeckStrategy alloc] init];
 }
 
-- (NSArray*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
+- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
     
-    _cards = [[NSMutableArray alloc] init];
-    
-    CardPool *cardPool = [[CardPool alloc] init];
-    
-    NSInteger numberOfBasicTypes = 0;
-    NSInteger numberOfSpecialTypes = 0;
-    
-    while (numberOfBasicTypes < basicType) {
-        
-        Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeBasicUnit];
-        
-        drawnCard.cardColor = cardColor;
-        
-        if ([self cardIsAllowedInDeck:drawnCard]) {
-            [_cards addObject:drawnCard];
-            numberOfBasicTypes++;
-        }
-    }
-    
-    while (numberOfSpecialTypes < specialType) {
-        
-        Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeSpecialUnit];
-        
-        drawnCard.cardColor = cardColor;
-        
-        if ([self cardIsAllowedInDeck:drawnCard]) {
-            [_cards addObject:drawnCard];
-            numberOfSpecialTypes++;
-        }
-    }
-    
-    return [NSArray arrayWithArray:_cards];
+    return [[Deck alloc] initWithCards:_fixedCards];
 }
 
 - (void)placeCardsInDeck:(Deck *)deck inGameBoardSide:(GameBoardSides)gameBoardSide {

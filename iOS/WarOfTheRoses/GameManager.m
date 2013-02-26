@@ -7,7 +7,7 @@
 //
 
 #import "GameManager.h"
-#import "Dice.h"
+#import "RandomDiceStrategy.h"
 #import "RandomDeckStrategy.h"
 
 #import "AIStrategyAdvancer.h"
@@ -18,6 +18,25 @@
 @synthesize delegate = _delegate;
 @synthesize currentGame = _currentGame;
 @synthesize currentPlayersTurn = _currentPlayersTurn;
+@synthesize attackerDiceStrategy = _attackerDiceStrategy;
+@synthesize defenderDiceStrategy = _defenderDiceStrategy;
+
+- (id)init {
+    
+    self = [super init];
+    
+    if (self) {
+        
+        _currentGame = [[Game alloc] init];
+        
+        self.attackerDiceStrategy = [RandomDiceStrategy strategy];
+        self.defenderDiceStrategy = [RandomDiceStrategy strategy];
+        
+        self.deckStrategy = [RandomDeckStrategy strategy];
+    }
+    
+    return self;
+}
 
 + (GameManager*)sharedManager {
     
@@ -38,18 +57,17 @@
     _currentGame = [[Game alloc] init];
     _currentGame.gametype = gameType;
     _currentGame.state = kGameStateInitialState;
-    _currentGame.currentRound = 1;
     
     // Only 1 action in first round
     _currentGame.numberOfAvailableActions = 1;
-    _currentGame.myDeck = [[Deck alloc] initWithNumberOfBasicType:7 andSpecialType:0 cardColor:_currentGame.myColor];
-        
+    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:0 cardColor:_currentGame.myColor];
+    
     if (gameType == kGameTypeSinglePlayer) {
         
         _enemyPlayer = [[AIPlayer alloc] initWithStrategy:[[AIStrategyAdvancer alloc] init]];
         _enemyPlayer.deckStrategy = [[RandomDeckStrategy alloc] init];
         
-        _currentGame.enemyDeck = [[Deck alloc] initWithNumberOfBasicType:7 andSpecialType:0 cardColor:_currentGame.enemyColor];
+        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:0 cardColor:_currentGame.enemyColor];
         [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
     }
     
@@ -90,7 +108,29 @@
 
 - (BOOL)shouldEndTurn {
     
-    return _currentGame.numberOfAvailableActions == 0;
+    if (_currentGame.numberOfAvailableActions == 0) {
+        return YES;
+    }
+    
+    // Check if any units has remaning actions
+    NSArray *unitsToCheck;
+    
+    if (_currentPlayersTurn == _currentGame.myColor) {
+        unitsToCheck = _currentGame.myDeck.cards;
+    }
+    else {
+        unitsToCheck = _currentGame.enemyDeck.cards;
+    }
+    
+    for (Card *card in unitsToCheck) {
+        
+        if ((card.moveActionCost <= _currentGame.numberOfAvailableActions && card.movesRemaining > 0) ||
+            (card.attackActionCost <= _currentGame.numberOfAvailableActions && !card.hasMovedThisRound) ) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 - (CombatOutcome)resolveCombatBetween:(Card *)attacker defender:(Card *)defender {
@@ -117,8 +157,8 @@
     CCLOG(@"Attack value: %@", AttributeRangeToNSString(attackValue));
     CCLOG(@"Defend value: %@", AttributeRangeToNSString(defendValue));
     
-    NSUInteger attackRoll = [Dice rollDiceWithDie:6];
-    NSUInteger defenceRoll = [Dice rollDiceWithDie:6];
+    NSUInteger attackRoll = [_attackerDiceStrategy rollDiceWithDie:6];
+    NSUInteger defenceRoll = [_defenderDiceStrategy rollDiceWithDie:6];
     
     CCLOG(@"Attack roll: %d", attackRoll);
     CCLOG(@"Defence roll: %d", defenceRoll);
@@ -142,6 +182,9 @@
     if (outcome == kCombatOutcomeAttackSuccessful) {
         CCLOG(@"Attack successful");
         [_delegate cardHasBeenDefeatedInCombat:defender];
+    }
+    else {
+        CCLOG(@"Defend successful");
     }
     
     [attacker combatFinishedAgainstDefender:defender withOutcome:outcome];
@@ -167,7 +210,10 @@
     }
     
     _currentPlayersTurn = !_currentPlayersTurn;
-    [_delegate turnChangedToPlayerWithColor:_currentPlayersTurn];
+    
+    if ([_delegate respondsToSelector:@selector(turnChangedToPlayerWithColor:)]) {
+        [_delegate turnChangedToPlayerWithColor:_currentPlayersTurn];
+    }
 }
 
 - (Action *)getActionForEnemeyPlayer {

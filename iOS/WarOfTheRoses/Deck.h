@@ -16,7 +16,7 @@
 
 @property (nonatomic, strong) NSArray *cards;
 
-- (id)initWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor;
+- (id)initWithCards:(NSArray*)cards;
 
 - (void)resetMoveCounters;
 

@@ -19,12 +19,12 @@
 
 @synthesize cards = _cards;
 
-- (id)initWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
+- (id)initWithCards:(NSArray*)cards {
     
     self = [super init];
     
     if (self) {
-        _cards = [[RandomDeckStrategy strategy] generateNewDeckWithNumberOfBasicType:basicType andSpecialType:specialType cardColor:cardColor];
+        _cards = cards;
     }
     
     return self;

@@ -7,12 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Definitions.h"
 
 @class Deck;
 @protocol DeckStrategy <NSObject>
 
 @required
+
++ (id)strategy;
+
 - (void)placeCardsInDeck:(Deck*)deck inGameBoardSide:(GameBoardSides)gameBoardSide;
-- (NSArray*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor;
+- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor;
 
 @end

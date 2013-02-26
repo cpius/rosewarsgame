@@ -26,6 +26,7 @@
     if (self) {
         self.myColor = arc4random() % 1;
         
+        self.currentRound = 1;
         _unitLayout = [[NSMutableDictionary alloc] init];
     }
     

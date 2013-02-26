@@ -8,6 +8,7 @@
 
 #import "CCSprite.h"
 #import "RangeAttribute.h"
+#import "GridLocation.h"
 
 @class Card;
 @protocol CardDelegate <NSObject>

@@ -16,7 +16,7 @@
 		6D0CBE8916BA994200D241A7 /* PathFinderStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8816BA994200D241A7 /* PathFinderStep.m */; };
 		6D0CBE8C16BA9ADC00D241A7 /* PathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE8B16BA9ADC00D241A7 /* PathFinder.m */; };
 		6D0CBE9316BEB9CB00D241A7 /* CombatScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9216BEB9CB00D241A7 /* CombatScene.m */; };
-		6D0CBE9616BEE64700D241A7 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9516BEE64500D241A7 /* Dice.m */; };
+		6D0CBE9616BEE64700D241A7 /* RandomDiceStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9516BEE64500D241A7 /* RandomDiceStrategy.m */; };
 		6D0CBE9816C1968600D241A7 /* flame.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9716C1968600D241A7 /* flame.plist */; };
 		6D0CBE9B16C19B9500D241A7 /* BaseBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9A16C19B9500D241A7 /* BaseBonus.m */; };
 		6D0CBE9D16C233EA00D241A7 /* Background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9C16C233EA00D241A7 /* Background-ipad.png */; };
@@ -145,6 +145,9 @@
 		6DC7F47B16DCB14200CD5071 /* green_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F47716DCB14100CD5071 /* green_indicator.png */; };
 		6DC7F47C16DCB14200CD5071 /* red_indicator-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F47816DCB14200CD5071 /* red_indicator-hd.png */; };
 		6DC7F47D16DCB14200CD5071 /* red_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F47916DCB14200CD5071 /* red_indicator.png */; };
+		6DC7F48016DCEB8E00CD5071 /* CombatTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F47F16DCEB8D00CD5071 /* CombatTest.m */; };
+		6DC7F48516DCEDAF00CD5071 /* FixedDiceStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48416DCEDAF00CD5071 /* FixedDiceStrategy.m */; };
+		6DC7F48816DD2C8200CD5071 /* MoveTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48716DD2C8200CD5071 /* MoveTest.m */; };
 		6DEA3468168C544400485F00 /* BaseRangedAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA3467168C544400485F00 /* BaseRangedAttribute.m */; };
 		6DEA346C168C555900485F00 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346B168C555900485F00 /* RawBonus.m */; };
 		6DEA346F168C556400485F00 /* TimedBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346E168C556400485F00 /* TimedBonus.m */; };
@@ -311,8 +314,8 @@
 		6D0CBE8B16BA9ADC00D241A7 /* PathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFinder.m; sourceTree = "<group>"; };
 		6D0CBE9116BEB9CB00D241A7 /* CombatScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CombatScene.h; sourceTree = "<group>"; };
 		6D0CBE9216BEB9CB00D241A7 /* CombatScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CombatScene.m; sourceTree = "<group>"; };
-		6D0CBE9416BEE64500D241A7 /* Dice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dice.h; sourceTree = "<group>"; };
-		6D0CBE9516BEE64500D241A7 /* Dice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dice.m; sourceTree = "<group>"; };
+		6D0CBE9416BEE64500D241A7 /* RandomDiceStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomDiceStrategy.h; sourceTree = "<group>"; };
+		6D0CBE9516BEE64500D241A7 /* RandomDiceStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomDiceStrategy.m; sourceTree = "<group>"; };
 		6D0CBE9716C1968600D241A7 /* flame.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = flame.plist; path = Resources/Particles/flame.plist; sourceTree = "<group>"; };
 		6D0CBE9916C19B9400D241A7 /* BaseBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseBonus.h; sourceTree = "<group>"; };
 		6D0CBE9A16C19B9500D241A7 /* BaseBonus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseBonus.m; sourceTree = "<group>"; };
@@ -483,6 +486,13 @@
 		6DC7F47716DCB14100CD5071 /* green_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green_indicator.png; path = Resources/Images/green_indicator.png; sourceTree = "<group>"; };
 		6DC7F47816DCB14200CD5071 /* red_indicator-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red_indicator-hd.png"; path = "Resources/Images/red_indicator-hd.png"; sourceTree = "<group>"; };
 		6DC7F47916DCB14200CD5071 /* red_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red_indicator.png; path = Resources/Images/red_indicator.png; sourceTree = "<group>"; };
+		6DC7F47E16DCEB8D00CD5071 /* CombatTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CombatTest.h; sourceTree = "<group>"; };
+		6DC7F47F16DCEB8D00CD5071 /* CombatTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CombatTest.m; sourceTree = "<group>"; };
+		6DC7F48216DCED1B00CD5071 /* DiceStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiceStrategy.h; sourceTree = "<group>"; };
+		6DC7F48316DCEDAE00CD5071 /* FixedDiceStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDiceStrategy.h; sourceTree = "<group>"; };
+		6DC7F48416DCEDAF00CD5071 /* FixedDiceStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDiceStrategy.m; sourceTree = "<group>"; };
+		6DC7F48616DD2C8200CD5071 /* MoveTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveTest.h; sourceTree = "<group>"; };
+		6DC7F48716DD2C8200CD5071 /* MoveTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveTest.m; sourceTree = "<group>"; };
 		6DEA3466168C544400485F00 /* BaseRangedAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRangedAttribute.h; sourceTree = "<group>"; };
 		6DEA3467168C544400485F00 /* BaseRangedAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseRangedAttribute.m; sourceTree = "<group>"; };
 		6DEA346A168C555900485F00 /* RawBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawBonus.h; sourceTree = "<group>"; };
@@ -863,6 +873,10 @@
 				6D0CBEE716D00DE800D241A7 /* Supporting Files */,
 				6DC7F45816DA9BC500CD5071 /* BasicUnitTest.h */,
 				6DC7F45916DA9BC500CD5071 /* BasicUnitTest.m */,
+				6DC7F47E16DCEB8D00CD5071 /* CombatTest.h */,
+				6DC7F47F16DCEB8D00CD5071 /* CombatTest.m */,
+				6DC7F48616DD2C8200CD5071 /* MoveTest.h */,
+				6DC7F48716DD2C8200CD5071 /* MoveTest.m */,
 			);
 			path = WarOfTheRosesTest;
 			sourceTree = "<group>";
@@ -1047,6 +1061,18 @@
 				6DC7F45C16DA9CFD00CD5071 /* LeftPanel.m */,
 			);
 			name = UI;
+			sourceTree = "<group>";
+		};
+		6DC7F48116DCECD500CD5071 /* DiceStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				6D0CBE9416BEE64500D241A7 /* RandomDiceStrategy.h */,
+				6D0CBE9516BEE64500D241A7 /* RandomDiceStrategy.m */,
+				6DC7F48216DCED1B00CD5071 /* DiceStrategy.h */,
+				6DC7F48316DCEDAE00CD5071 /* FixedDiceStrategy.h */,
+				6DC7F48416DCEDAF00CD5071 /* FixedDiceStrategy.m */,
+			);
+			name = DiceStrategy;
 			sourceTree = "<group>";
 		};
 		6DEA3477168D986A00485F00 /* Attributes */ = {
@@ -1503,6 +1529,7 @@
 		6DF2FD1F165C21CD00F08664 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				6DC7F48116DCECD500CD5071 /* DiceStrategy */,
 				6D0CBF0616D2069D00D241A7 /* AI */,
 				6D0CBEC816CE766C00D241A7 /* Action */,
 				6D0CBEC316CC402E00D241A7 /* DeckStrategy */,
@@ -1517,8 +1544,6 @@
 				6DF2FD66165D68D600F08664 /* Deck.h */,
 				6DF2FD67165D68D600F08664 /* Deck.m */,
 				6DF2FD25165C232B00F08664 /* Definitions.h */,
-				6D0CBE9416BEE64500D241A7 /* Dice.h */,
-				6D0CBE9516BEE64500D241A7 /* Dice.m */,
 				6D6901201698B0D30071EC22 /* Game.h */,
 				6D6901211698B0D30071EC22 /* Game.m */,
 				6D6151B016B015E0007A104E /* GameManager.h */,
@@ -1779,6 +1804,8 @@
 			files = (
 				6D0CBEEE16D00DE800D241A7 /* WarOfTheRosesTest.m in Sources */,
 				6DC7F45A16DA9BC600CD5071 /* BasicUnitTest.m in Sources */,
+				6DC7F48016DCEB8E00CD5071 /* CombatTest.m in Sources */,
+				6DC7F48816DD2C8200CD5071 /* MoveTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1916,7 +1943,7 @@
 				6D0CBE8916BA994200D241A7 /* PathFinderStep.m in Sources */,
 				6D0CBE8C16BA9ADC00D241A7 /* PathFinder.m in Sources */,
 				6D0CBE9316BEB9CB00D241A7 /* CombatScene.m in Sources */,
-				6D0CBE9616BEE64700D241A7 /* Dice.m in Sources */,
+				6D0CBE9616BEE64700D241A7 /* RandomDiceStrategy.m in Sources */,
 				6D0CBE9B16C19B9500D241A7 /* BaseBonus.m in Sources */,
 				6D0CBEA316C25DCE00D241A7 /* EndTurnLayer.m in Sources */,
 				6D0CBEAA16C2D80100D241A7 /* SoundManager.m in Sources */,
@@ -1940,6 +1967,7 @@
 				6DC7F44816D929DF00CD5071 /* AIStrategyDestroyer.m in Sources */,
 				6DC7F44F16D94FAD00CD5071 /* Chariot.m in Sources */,
 				6DC7F45D16DA9CFE00CD5071 /* LeftPanel.m in Sources */,
+				6DC7F48516DCEDAF00CD5071 /* FixedDiceStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

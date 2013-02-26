@@ -7,6 +7,8 @@
 //
 
 #import "BaseDeckStrategy.h"
+#import "GridLocation.h"
+#import "Card.h"
 #import "Deck.h"
 
 @implementation BaseDeckStrategy

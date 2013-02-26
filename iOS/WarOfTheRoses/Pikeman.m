@@ -63,12 +63,16 @@
 
 - (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
     
+    [super combatFinishedAgainstAttacker:attacker withOutcome:combatOutcome];
+    
     [self.attack removeRawBonus:_bonusAgainstCavalry];
     _bonusAgainstCavalry = nil;
 }
 
 - (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {
     
+    [super combatFinishedAgainstDefender:defender withOutcome:combatOutcome];
+
     [self.attack removeRawBonus:_bonusAgainstCavalry];
     _bonusAgainstCavalry = nil;
 }

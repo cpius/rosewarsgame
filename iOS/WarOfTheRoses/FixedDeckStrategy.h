@@ -12,4 +12,6 @@
 
 @interface FixedDeckStrategy : BaseDeckStrategy <DeckStrategy>
 
+@property (nonatomic, strong) NSMutableArray *fixedCards;
+
 @end

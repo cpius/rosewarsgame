@@ -1,8 +1,8 @@
 //
-//  WarOfTheRosesTest.h
-//  WarOfTheRosesTest
+//  CombatTest.h
+//  WarOfTheRoses
 //
-//  Created by Heine Skov Kristensen on 2/16/13.
+//  Created by Heine Skov Kristensen on 2/26/13.
 //
 //
 
@@ -11,7 +11,7 @@
 #import "FixedDeckStrategy.h"
 
 @class GameManager;
-@interface WarOfTheRosesTest : SenTestCase {
+@interface CombatTest : SenTestCase {
     
     GameManager *_manager;
     

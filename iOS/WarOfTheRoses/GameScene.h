@@ -12,7 +12,7 @@
 #import "LeftPanel.h"
 
 #define kZoomFactor 2.0
-#define kEnemyActionDelayTime 1.0
+#define kEnemyActionDelayTime 2.0
 
 @interface GameScene : CCLayer <GameBoardActionProtocol, GameManagerProtocol, ActionDelegate, LeftPanelProtocol> {
     

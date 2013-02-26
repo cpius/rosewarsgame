@@ -97,6 +97,9 @@
 
 - (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
     
+    if (combatOutcome == kCombatOutcomeAttackSuccessful) {
+        self.dead = YES;
+    }
 }
 
 - (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {

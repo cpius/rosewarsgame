@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DiceStrategy.h"
 
-@interface Dice : NSObject
+@interface RandomDiceStrategy : NSObject <DiceStrategy>
 
-+ (NSUInteger)rollDiceWithDie:(NSUInteger)die;
+- (NSUInteger)rollDiceWithDie:(NSUInteger)die;
 
 @end

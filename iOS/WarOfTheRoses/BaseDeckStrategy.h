@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Card.h"
 
+@class GridLocation;
+@class Card;
 @class Deck;
 @interface BaseDeckStrategy : NSObject {
     
@@ -16,7 +17,6 @@
 }
 
 - (BOOL)cardIsAllowedInDeck:(Card *)card;
-+ (id)strategy;
 - (BOOL)deck:(Deck *)deck containsCardInLocation:(GridLocation*)location;
 
 @end

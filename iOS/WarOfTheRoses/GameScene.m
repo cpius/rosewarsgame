@@ -323,7 +323,6 @@
             if (meleeAction.meleeAttackType == kMeleeAttackTypeNormal) {
                 [_gameboard moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithObject:[[PathFinderStep alloc] initWithLocation:retreatLocation]] onCompletion:^{
                     
-                    [_gameManager cardHasBeenDefeated:targetNode.card.model];
                     [_gameManager card:action.cardInAction movedToGridLocation:retreatLocation];
                     [_gameboard removeCardAtGameBoardNode:targetNode];
                     [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:[_gameboard getGameBoardNodeForGridLocation:retreatLocation]];
@@ -339,7 +338,6 @@
                 }];
             }
             else {
-                [_gameManager cardHasBeenDefeated:targetNode.card.model];
                 [_gameManager card:[_gameboard activeNode].card.model movedToGridLocation:targetNode.locationInGrid];
                 [_gameboard replaceCardAtGameBoardNode:targetNode withCard:[_gameboard activeNode].card];
                 
@@ -363,8 +361,6 @@
     if (combatOutcome == kCombatOutcomeAttackSuccessful) {
         [ParticleHelper applyBurstToNode:targetNode];
         
-        [_gameManager cardHasBeenDefeated:action.enemyCard];
-
         // TODO: Possible bug here - card not always removed
         [_gameboard removeCardAtGameBoardNode:targetNode];
     }
@@ -485,7 +481,7 @@
     GameResults result = [_gameManager checkForEndGame];
     
     if (result == kGameResultInProgress) {
-        if (_gameManager.currentGame.numberOfAvailableActions == 0) {
+        if ([_gameManager shouldEndTurn]) {
             
             /*        EndTurnLayer *endTurnLayer = [EndTurnLayer getEndTurnLayerWithSize:_winSize];
              endTurnLayer.position = self.position;
@@ -536,7 +532,7 @@
     
     if (activeNode != nil && activeNode.hasCard) {
         
-        activeNode.card.zOrder = 1000;
+        activeNode.card.zOrder = 10000;
         _showingDetailOfNode = activeNode;
         
         [_gameboard deselectActiveNode];
