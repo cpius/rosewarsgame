@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameScene.m"
-         timestampString = "383562251.44667"
+         timestampString = "383690565.393876"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "143"
-         endingLineNumber = "143"
+         startingLineNumber = "145"
+         endingLineNumber = "145"
          landmarkName = "-populateUnitLayout"
          landmarkType = "5">
       </FileBreakpoint>
@@ -111,19 +111,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/MeleeAttackPathFinderStrategy.m"
-         timestampString = "382795487.953699"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "26"
-         endingLineNumber = "26"
-         landmarkName = "-getReachableLocationsForCard:fromLocation:targetLocation:allLocations:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/PathFinder.m"
          timestampString = "383515926.110877"
          startingColumnNumber = "9223372036854775807"
@@ -138,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameScene.m"
-         timestampString = "383562251.44667"
+         timestampString = "383690565.393876"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "191"
-         endingLineNumber = "191"
+         startingLineNumber = "193"
+         endingLineNumber = "193"
          landmarkName = "-ccTouchesEnded:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -150,25 +137,12 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/BasePathFinderStrategy.m"
-         timestampString = "382822062.366393"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "34"
-         endingLineNumber = "34"
-         landmarkName = "-card:blockedByZoneOfControlUnitWhenMovingFromLocation:toLocation:allLocations:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/Card.m"
-         timestampString = "383579280.051401"
+         timestampString = "383674274.07034"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "157"
-         endingLineNumber = "157"
+         startingLineNumber = "159"
+         endingLineNumber = "159"
          landmarkName = "-canPerformActionOfType:withRemainingActionCount:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -196,19 +170,6 @@
          startingLineNumber = "41"
          endingLineNumber = "41"
          landmarkName = "-observeValueForKeyPath:ofObject:change:context:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/GameScene.m"
-         timestampString = "383601027.810464"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "344"
-         endingLineNumber = "344"
-         landmarkName = "-performMeleeAction:targetNode:onCompletion:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

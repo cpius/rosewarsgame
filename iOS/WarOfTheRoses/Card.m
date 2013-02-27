@@ -142,9 +142,7 @@
 
 - (void)performedAction:(Action *)action {
 
-    if (action.actionType == kActionTypeMove) {
-        self.hasMovedThisRound = YES;
-    }
+    self.hasPerformedActionThisRound = YES;
     
     // An attack consumes all remaining moves of an unit
     if (action.isAttack) {
@@ -153,6 +151,10 @@
 }
 
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount {
+    
+    if (self.hasPerformedActionThisRound) {
+        return NO;
+    }
     
     switch (actionType) {
             
@@ -168,7 +170,7 @@
             }
             else {
                 // Unit cannot move and attack the same round
-                return (self.attackActionCost <= remainingActionCount) && !self.hasMovedThisRound && !self.isRanged;
+                return (self.attackActionCost <= remainingActionCount) && !self.isRanged;
             }
             
         case kActionTypeRanged:
@@ -178,10 +180,8 @@
             }
             else {
                 // Unit cannot move and attack the same round
-                return (self.attackActionCost <= remainingActionCount) && !self.hasMovedThisRound && self.isRanged;
+                return (self.attackActionCost <= remainingActionCount) && self.isRanged;
             }
-
-            
     }
 }
 

@@ -17,9 +17,6 @@
     
     FixedDiceStrategy *_attackerFixedStrategy;
     FixedDiceStrategy *_defenderFixedStrategy;
-    
-    FixedDeckStrategy *_attackerFixedDeckStrategy;
-    FixedDeckStrategy *_defenderFixedDeckStrategy;
 }
 
 @end

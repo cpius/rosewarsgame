@@ -112,7 +112,7 @@
         return YES;
     }
     
-    // Check if any units has remaning actions
+    // Check if any units has remaining actions
     NSArray *unitsToCheck;
     
     if (_currentPlayersTurn == _currentGame.myColor) {
@@ -124,9 +124,11 @@
     
     for (Card *card in unitsToCheck) {
         
-        if ((card.moveActionCost <= _currentGame.numberOfAvailableActions && card.movesRemaining > 0) ||
-            (card.attackActionCost <= _currentGame.numberOfAvailableActions && !card.hasMovedThisRound) ) {
-            return NO;
+        if (!card.dead && !card.hasPerformedActionThisRound) {
+            if ((card.moveActionCost <= _currentGame.numberOfAvailableActions && card.movesRemaining > 0) ||
+                (card.attackActionCost <= _currentGame.numberOfAvailableActions) ) {
+                return NO;
+            }
         }
     }
     

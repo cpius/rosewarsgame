@@ -7,7 +7,16 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import "FixedDiceStrategy.h"
+#import "FixedDeckStrategy.h"
 
-@interface MoveTest : SenTestCase
+@class GameManager;
+@interface MoveTest : SenTestCase {
+    
+    GameManager *_manager;
+    
+    FixedDiceStrategy *_attackerFixedStrategy;
+    FixedDiceStrategy *_defenderFixedStrategy;
+}
 
 @end

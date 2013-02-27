@@ -89,7 +89,7 @@
 @property(nonatomic, assign) NSUInteger moveActionCost;
 
 @property(nonatomic, assign) BOOL hasReceivedExperiencePointsThisRound;
-@property(nonatomic, assign) BOOL hasMovedThisRound;
+@property(nonatomic, assign) BOOL hasPerformedActionThisRound;
 
 - (void)commonInit;
 

@@ -27,7 +27,7 @@
 }
 
 @property (nonatomic, weak) id<GameManagerProtocol> delegate;
-@property (nonatomic, readonly) Game *currentGame;
+@property (nonatomic, strong) Game *currentGame;
 @property (nonatomic, assign) PlayerColors currentPlayersTurn;
 
 @property (nonatomic, strong) id<DiceStrategy> attackerDiceStrategy;

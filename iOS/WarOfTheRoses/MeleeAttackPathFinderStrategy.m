@@ -26,12 +26,13 @@
     for (GridLocation *gridLocation in surroundingGridLocations) {
 
         if ([self isGrindLocationInsideGameBoard:gridLocation]) {
-            Card *card = [allLocations objectForKey:gridLocation];
+            Card *cardAtToLocation = [allLocations objectForKey:gridLocation];
             
-            if ((card == nil || card == targetCard) && ![self card:card blockedByZoneOfControlUnitWhenMovingFromLocation:fromLocation toLocation:gridLocation allLocations:allLocations]) {
-                
-                [adjacentLocations addObject:gridLocation];
-            }
+            if (cardAtToLocation == nil || cardAtToLocation == targetCard) {
+                if (![self card:card blockedByZoneOfControlUnitWhenMovingFromLocation:fromLocation toLocation:gridLocation allLocations:allLocations]) {
+                    [adjacentLocations addObject:gridLocation];
+                }
+            } 
         }
     }
 

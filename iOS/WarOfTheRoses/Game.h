@@ -22,7 +22,7 @@
 @property (nonatomic, readonly) PlayerColors enemyColor;
 @property (nonatomic, assign) BOOL gameOver;
 
-@property (nonatomic, readonly) NSMutableDictionary *unitLayout;
+@property (nonatomic, strong) NSMutableDictionary *unitLayout;
 
 + (void)deserializeGameData:(NSData*)gameData;
 - (NSData*)serializeCurrentGame;

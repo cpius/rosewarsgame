@@ -32,6 +32,8 @@
 - (void)showCardDetail;
 - (void)hideCardDetail;
 
+- (void)displayCombatOutcome:(CombatOutcome)combatOutcome;
+
 @end
 
 @implementation GameScene
@@ -296,6 +298,8 @@
         
         CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:action.enemyCard];
         
+        [self displayCombatOutcome:outcome];
+        
         if (outcome == kCombatOutcomeDefendSuccessful) {
             
             PathFinderStep *retreatToLocation = [[PathFinderStep alloc] initWithLocation:retreatLocation];
@@ -361,6 +365,8 @@
     
     CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:action.enemyCard];
     
+    [self displayCombatOutcome:combatOutcome];
+
     if (combatOutcome == kCombatOutcomeAttackSuccessful) {
         [ParticleHelper applyBurstToNode:targetNode];
         
@@ -408,6 +414,11 @@
     }
     
     Action *nextAction = [_gameManager getActionForEnemeyPlayer];
+    
+    if (nextAction == nil) {
+        [self checkForEndTurn];
+        return;
+    }
     
     nextAction.delegate = self;
         
@@ -582,6 +593,33 @@
             _actionInQueue = nil;
         }];
     }
+}
+
+- (void)displayCombatOutcome:(CombatOutcome)combatOutcome {
+    
+    CCLabelTTF *label;
+    
+    if (combatOutcome == kCombatOutcomeDefendSuccessful) {
+        label = [CCLabelTTF labelWithString:@"Unit successfully defended" fontName:APP_FONT fontSize:24];
+        [label setColor:ccc3(0, 0, 0)];
+    }
+    else {
+        label = [CCLabelTTF labelWithString:@"Attack successful" fontName:APP_FONT fontSize:24];
+        [label setColor:ccc3(0, 0, 0)];
+    }
+    
+    label.position = ccp(_winSize.width / 2, _winSize.height - 100);
+    label.zOrder = 1000;
+    [self addChild:label];
+
+    CCMoveTo *moveAction = [CCMoveTo actionWithDuration:2.0 position:ccp(_winSize.width / 2, _winSize.height + 25)];
+    CCFadeOut *fadeAction = [CCFadeOut actionWithDuration:3.0];
+    CCCallBlock *removeLabel = [CCCallBlock actionWithBlock:^{
+        
+        [label removeFromParentAndCleanup:YES];
+    }];
+    
+    [label runAction:[CCSequence actions:[CCEaseSineIn actionWithAction:[CCSpawn actions:moveAction, fadeAction, nil]], removeLabel, nil]];
 }
 
 @end
