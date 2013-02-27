@@ -47,7 +47,7 @@
     
     CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender];
     
-    STAssertTrue(outcome == kCombatOutcomeDefendSuccessful, @"Pike should have defended successfully");
+    STAssertTrue(IsDefenseSuccessful(outcome), @"Pike should have defended successfully");
 
     STAssertTrue(!defender.dead, @"Defender isn't dead");
     STAssertTrue(!attacker.dead, @"Attacker isn't dead");
@@ -70,7 +70,7 @@
     
     CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender];
     
-    STAssertTrue(outcome == kCombatOutcomeAttackSuccessful, @"Attack should be successful");
+    STAssertTrue(IsAttackSuccessful(outcome), @"Attack should be successful");
     
     STAssertTrue(defender.dead, @"Defender is dead");
     STAssertTrue(!attacker.dead, @"Attacker isn't dead");

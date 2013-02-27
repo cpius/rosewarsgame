@@ -178,10 +178,10 @@
         }
     }
     else {
-        outcome = kCombatOutcomeDefendSuccessful;
+        outcome = kCombatOutcomeDefendSuccessfulMissed;
     }
     
-    if (outcome == kCombatOutcomeAttackSuccessful) {
+    if (IsAttackSuccessful(outcome)) {
         CCLOG(@"Attack successful");
         [self cardHasBeenDefeated:defender];
         [_delegate cardHasBeenDefeatedInCombat:defender];

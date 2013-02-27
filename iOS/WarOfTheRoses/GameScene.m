@@ -224,7 +224,6 @@
             
             else if ([action isKindOfClass:[MoveAction class]]){
                 [action performActionWithCompletion:^{
-                    [action.cardInAction performedAction:action];
                 }];
             }
 
@@ -300,7 +299,7 @@
         
         [self displayCombatOutcome:outcome];
         
-        if (outcome == kCombatOutcomeDefendSuccessful) {
+        if (IsDefenseSuccessful(outcome)) {
             
             PathFinderStep *retreatToLocation = [[PathFinderStep alloc] initWithLocation:retreatLocation];
             
@@ -367,7 +366,7 @@
     
     [self displayCombatOutcome:combatOutcome];
 
-    if (combatOutcome == kCombatOutcomeAttackSuccessful) {
+    if (IsAttackSuccessful(combatOutcome)) {
         [ParticleHelper applyBurstToNode:targetNode];
         
         // TODO: Possible bug here - card not always removed
@@ -599,8 +598,15 @@
     
     CCLabelTTF *label;
     
-    if (combatOutcome == kCombatOutcomeDefendSuccessful) {
-        label = [CCLabelTTF labelWithString:@"Unit successfully defended" fontName:APP_FONT fontSize:24];
+    if (IsDefenseSuccessful(combatOutcome)) {
+        
+        if (combatOutcome == kCombatOutcomeDefendSuccessfulMissed) {
+            label = [CCLabelTTF labelWithString:@"Misssed!" fontName:APP_FONT fontSize:24];
+        }
+        else {
+            label = [CCLabelTTF labelWithString:@"Unit defended" fontName:APP_FONT fontSize:24];
+        }
+        
         [label setColor:ccc3(0, 0, 0)];
     }
     else {

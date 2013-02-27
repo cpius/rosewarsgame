@@ -45,8 +45,20 @@ typedef enum {
 
 typedef enum {
     kCombatOutcomeAttackSuccessful = 0,
-    kCombatOutcomeDefendSuccessful = 1
+    kCombatOutcomeDefendSuccessful = 1,
+    kCombatOutcomeDefendSuccessfulMissed = 2,
+    
 } CombatOutcome;
+
+NS_INLINE BOOL IsAttackSuccessful(CombatOutcome outcome) {
+    
+    return outcome == kCombatOutcomeAttackSuccessful;
+}
+
+NS_INLINE BOOL IsDefenseSuccessful(CombatOutcome outcome) {
+    
+    return outcome == kCombatOutcomeDefendSuccessful || outcome == kCombatOutcomeDefendSuccessfulMissed;
+}
 
 typedef enum {
     kCardTypeBasicUnit,

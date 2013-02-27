@@ -42,6 +42,7 @@
         }
         
         [self.delegate afterPerformAction:self];
+        [self.cardInAction performedAction:self];
 
         if (completion != nil) {
             completion();

@@ -149,6 +149,7 @@
 		6DC7F48516DCEDAF00CD5071 /* FixedDiceStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48416DCEDAF00CD5071 /* FixedDiceStrategy.m */; };
 		6DC7F48816DD2C8200CD5071 /* MoveTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48716DD2C8200CD5071 /* MoveTest.m */; };
 		6DC7F48B16DE875C00CD5071 /* TestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48A16DE875C00CD5071 /* TestHelper.m */; };
+		6DC7F48E16DEAF0E00CD5071 /* SpecialUnitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48D16DEAF0D00CD5071 /* SpecialUnitTest.m */; };
 		6DEA3468168C544400485F00 /* BaseRangedAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA3467168C544400485F00 /* BaseRangedAttribute.m */; };
 		6DEA346C168C555900485F00 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346B168C555900485F00 /* RawBonus.m */; };
 		6DEA346F168C556400485F00 /* TimedBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346E168C556400485F00 /* TimedBonus.m */; };
@@ -496,6 +497,8 @@
 		6DC7F48716DD2C8200CD5071 /* MoveTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveTest.m; sourceTree = "<group>"; };
 		6DC7F48916DE875C00CD5071 /* TestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestHelper.h; sourceTree = "<group>"; };
 		6DC7F48A16DE875C00CD5071 /* TestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestHelper.m; sourceTree = "<group>"; };
+		6DC7F48C16DEAF0D00CD5071 /* SpecialUnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialUnitTest.h; sourceTree = "<group>"; };
+		6DC7F48D16DEAF0D00CD5071 /* SpecialUnitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialUnitTest.m; sourceTree = "<group>"; };
 		6DEA3466168C544400485F00 /* BaseRangedAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRangedAttribute.h; sourceTree = "<group>"; };
 		6DEA3467168C544400485F00 /* BaseRangedAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseRangedAttribute.m; sourceTree = "<group>"; };
 		6DEA346A168C555900485F00 /* RawBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawBonus.h; sourceTree = "<group>"; };
@@ -882,6 +885,8 @@
 				6DC7F48916DE875C00CD5071 /* TestHelper.h */,
 				6DC7F48A16DE875C00CD5071 /* TestHelper.m */,
 				6D0CBEE716D00DE800D241A7 /* Supporting Files */,
+				6DC7F48C16DEAF0D00CD5071 /* SpecialUnitTest.h */,
+				6DC7F48D16DEAF0D00CD5071 /* SpecialUnitTest.m */,
 			);
 			path = WarOfTheRosesTest;
 			sourceTree = "<group>";
@@ -1812,6 +1817,7 @@
 				6DC7F48016DCEB8E00CD5071 /* CombatTest.m in Sources */,
 				6DC7F48816DD2C8200CD5071 /* MoveTest.m in Sources */,
 				6DC7F48B16DE875C00CD5071 /* TestHelper.m in Sources */,
+				6DC7F48E16DEAF0E00CD5071 /* SpecialUnitTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

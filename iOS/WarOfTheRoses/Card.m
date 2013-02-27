@@ -97,14 +97,14 @@
 
 - (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
     
-    if (combatOutcome == kCombatOutcomeAttackSuccessful) {
+    if (IsAttackSuccessful(combatOutcome)) {
         self.dead = YES;
     }
 }
 
 - (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {
     
-    if (combatOutcome == kCombatOutcomeAttackSuccessful) {
+    if (IsAttackSuccessful(combatOutcome)) {
         // Attack succcessfull - assign experience if applicable
         if (!self.hasReceivedExperiencePointsThisRound && self.experience < 4) {
             self.experience++;
