@@ -41,8 +41,10 @@
             [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:endLocation];
         }
         
-        [self.delegate afterPerformAction:self];
         [self.cardInAction performedAction:self];
+        [[GameManager sharedManager] actionUsed:self];
+        
+        [self.delegate afterPerformAction:self];
 
         if (completion != nil) {
             completion();

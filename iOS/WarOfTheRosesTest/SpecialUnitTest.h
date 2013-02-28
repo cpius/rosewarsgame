@@ -8,6 +8,16 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface SpecialUnitTest : SenTestCase
+#import "FixedDiceStrategy.h"
+#import "FixedDeckStrategy.h"
+
+@class GameManager;
+@interface SpecialUnitTest : SenTestCase {
+    
+    GameManager *_manager;
+    
+    FixedDiceStrategy *_attackerFixedStrategy;
+    FixedDiceStrategy *_defenderFixedStrategy;
+}
 
 @end

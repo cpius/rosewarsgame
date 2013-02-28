@@ -16,9 +16,9 @@
     
     if (self) {
         
-        self.cardType = kCardTypeBasicUnit;
-        self.unitType = kInfantry;
-        self.unitName = kArcher;
+        self.cardType = kCardTypeSpecialUnit;
+        self.unitType = kSpecialUnit;
+        self.unitName = kChariot;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];
         
@@ -27,8 +27,6 @@
         self.range = 1;
         self.move = 3;
         self.moveActionCost = self.attackActionCost = 1;
-        
-        hasSpecialAbility = YES;
         
         self.attackSound = @"sword_sound.wav";
         self.frontImageSmall = @"chariot_icon.png";
@@ -47,7 +45,7 @@
 
 -(BOOL)specialAbilityTriggersVersus:(Card *)opponent {
     
-    return opponent.unitType == kInfantry;
+    return NO;
 }
 
 - (void)addSpecialAbilityVersusOpponent:(Card *)opponent {
@@ -57,6 +55,7 @@
 - (void)performedAction:(Action *)action {
     
     if (action.isAttack) {
+        self.hasPerformedAttackThisRound = YES;
         CCLOG(@"Chariot has attacked but moves are not consumed");
     }
 }

@@ -75,10 +75,10 @@
     }
 }
 
-- (void)replaceCardAtGameBoardNode:(GameBoardNode *)node withCard:(CardSprite *)card {
+- (void)replaceCardAtGameBoardNode:(GameBoardNode *)node withCardInGameBoardNode:(GameBoardNode *)replaceWithNode {
     
     [node.card removeFromParentAndCleanup:YES];
-    node.card = card;
+    node.card = replaceWithNode.card;
 }
 
 - (void)swapCardFromNode:(GameBoardNode *)fromNode toNode:(GameBoardNode *)toNode {

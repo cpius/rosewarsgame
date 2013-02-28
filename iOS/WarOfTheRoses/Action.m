@@ -38,10 +38,10 @@
     @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];
 }
 
-/*- (void)performActionWithCompletion:(void (^)())completion {
+- (void)performActionWithCompletion:(void (^)())completion {
     
     @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];
-}*/
+}
 
 - (GridLocation *)getLastLocationInPath {
     

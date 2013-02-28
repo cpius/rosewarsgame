@@ -56,7 +56,7 @@
 - (void)moveActiveGameBoardNodeFollowingPath:(NSArray *)path onCompletion:(void (^)())completion;
 
 - (void)selectCardInGameBoardNode:(GameBoardNode*)node useHighlighting:(BOOL)highlight;
-- (void)replaceCardAtGameBoardNode:(GameBoardNode*)node withCard:(CardSprite*)card;
+- (void)replaceCardAtGameBoardNode:(GameBoardNode *)node withCardInGameBoardNode:(GameBoardNode *)replaceWithNode;
 - (void)removeCard:(CardSprite*)card;
 - (void)removeCardAtGameBoardNode:(GameBoardNode*)node;
 - (void)deselectActiveNode;

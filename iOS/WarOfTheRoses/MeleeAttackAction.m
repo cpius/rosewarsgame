@@ -7,6 +7,9 @@
 //
 
 #import "MeleeAttackAction.h"
+#import "GridLocation.h"
+#import "PathFinderStep.h"
+#import "GameManager.h"
 
 @implementation MeleeAttackAction
 
@@ -27,39 +30,83 @@
     return kActionTypeMelee;
 }
 
-- (void)performAction {
+
+- (void)performActionWithCompletion:(void (^)())completion {
     
- /*   [self.delegate beforePerformAction:self];
+    [self.delegate beforePerformAction:self];
     
-    [_gameboard moveActiveGameBoardNodeFollowingPath:action.path onCompletion:^{
+    GridLocation *retreatLocation = self.cardInAction.cardLocation;
+    GridLocation *startLocation = self.cardInAction.cardLocation;
+    
+    if (self.path.count > 1) {
+        retreatLocation = [[self.path objectAtIndex:self.path.count - 2] location];
+    }
+
+    [self.delegate action:self wantsToMoveFollowingPath:self.path withCompletion:^(GridLocation *endLocation) {
         
-        CombatOutcome outcome = [self engageCombatBetweenMyCard:[_gameboard activeNode].card.model andEnemyCard:targetNode.card.model];
+        CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard];
         
-        if (outcome == kCombatOutcomeDefendSuccessful) {
+        [self.delegate action:self hasResolvedRangedCombatWithOutcome:combatOutcome];
+        
+        if (IsDefenseSuccessful(combatOutcome)) {
             
-            PathFinderStep *retreatToLocation = [action.path objectAtIndex:action.path.count - 2];
+            PathFinderStep *retreatToLocation = [[PathFinderStep alloc] initWithLocation:retreatLocation];
             
-            [_gameboard moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithObject:retreatToLocation] onCompletion:^{
+            [self.delegate action:self wantsToMoveFollowingPath:@[retreatToLocation] withCompletion:^(GridLocation *endLocation) {
                 
-                if (![[_gameboard activeNode].locationInGrid isEqual:retreatToLocation.location]) {
-                    [_gameManager card:[_gameboard activeNode].card.model movedToGridLocation:retreatToLocation.location];
-                    [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:[_gameboard getGameBoardNodeForGridLocation:retreatToLocation.location]];
+                if (![self.cardInAction.cardLocation isEqual:retreatLocation]) {
+                    [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
+                    [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:retreatLocation];
                 }
                 
-                [_gameboard deselectActiveNode];
-                [_gameboard deHighlightAllNodes];
+                [self.cardInAction performedAction:self];
+                [[GameManager sharedManager] actionUsed:self];
+                
+                [self.delegate afterPerformAction:self];
+
+                if (completion != nil) {
+                    completion();
+                }
             }];
         }
         else {
-            [ParticleHelper applyBurstToNode:targetNode];
             
-            [_gameManager cardHasBeenDefeated:targetNode.card.model];
-            [_gameboard replaceCardAtGameBoardNode:targetNode withCard:[_gameboard activeNode].card];
-            [self resetUserInterface];
+            if (meleeAttackType == kMeleeAttackTypeNormal) {
+                
+                [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:retreatLocation]] withCompletion:^(GridLocation *endLocation) {
+                    
+                    [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
+                    
+                    if (![startLocation isEqual:retreatLocation]) {
+                        [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:retreatLocation];
+                    }
+                    
+                    [self.cardInAction performedAction:self];
+                    [[GameManager sharedManager] actionUsed:self];
+                    
+                    [self.delegate afterPerformAction:self];
+
+                    if (completion != nil) {
+                        completion();
+                    }
+                }];
+            }
+            else {
+                
+                [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
+                [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:startLocation];
+                
+                [self.cardInAction performedAction:self];
+                [[GameManager sharedManager] actionUsed:self];
+                
+                [self.delegate afterPerformAction:self];
+
+                if (completion != nil) {
+                    completion();
+                }
+            }
         }
     }];
-
-    [self.delegate afterPerformAction:self]*/
 }
 
 @end

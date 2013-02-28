@@ -38,7 +38,7 @@
 @property (nonatomic, strong) GridLocation *cardLocation;
 @property (nonatomic, assign) BOOL isShowingDetail;
 @property (nonatomic, assign) NSUInteger movesConsumed;
-@property (nonatomic, readonly) NSUInteger movesRemaining;
+@property (nonatomic, readonly) NSInteger movesRemaining;
 
 @property (nonatomic, copy) NSString *attackSound;
 @property (nonatomic, copy) NSString *defenceSound;
@@ -90,6 +90,7 @@
 
 @property(nonatomic, assign) BOOL hasReceivedExperiencePointsThisRound;
 @property(nonatomic, assign) BOOL hasPerformedActionThisRound;
+@property(nonatomic, assign) BOOL hasPerformedAttackThisRound;
 
 - (void)commonInit;
 

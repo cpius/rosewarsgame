@@ -24,6 +24,7 @@
 @interface GameManager : NSObject {
     
     AIPlayer *_enemyPlayer;
+    NSUInteger _turnCounter;
 }
 
 @property (nonatomic, weak) id<GameManagerProtocol> delegate;

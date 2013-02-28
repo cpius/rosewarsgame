@@ -57,17 +57,19 @@
     _currentGame = [[Game alloc] init];
     _currentGame.gametype = gameType;
     _currentGame.state = kGameStateInitialState;
+    _currentGame.currentRound = 1;
+    _turnCounter = 0;
     
     // Only 1 action in first round
     _currentGame.numberOfAvailableActions = 1;
-    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:0 cardColor:_currentGame.myColor];
+    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:1 cardColor:_currentGame.myColor];
     
     if (gameType == kGameTypeSinglePlayer) {
         
         _enemyPlayer = [[AIPlayer alloc] initWithStrategy:[[AIStrategyAdvancer alloc] init]];
         _enemyPlayer.deckStrategy = [[RandomDeckStrategy alloc] init];
         
-        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:0 cardColor:_currentGame.enemyColor];
+        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:1 cardColor:_currentGame.enemyColor];
         [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
     }
     
@@ -198,12 +200,16 @@
 
 - (void)endTurn {
     
-    _currentGame.currentRound++;
+    _turnCounter++;
+    
+    if ((_turnCounter % 2) == 0) {
+        _currentGame.currentRound++;
+        
+        CCLOG(@"Round increased to %d", _currentGame.currentRound);
+    }
 
     // Reset actioncount
-    if (_currentGame.currentRound > 1) {
-        _currentGame.numberOfAvailableActions = 2;
-    }
+    _currentGame.numberOfAvailableActions = 2;
     
     // Reset movecounters på kort
     [_currentGame.myDeck resetMoveCounters];

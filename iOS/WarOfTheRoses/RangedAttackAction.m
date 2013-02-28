@@ -7,6 +7,7 @@
 //
 
 #import "RangedAttackAction.h"
+#import "GameManager.h"
 
 @implementation RangedAttackAction
 
@@ -25,24 +26,22 @@
     return kActionTypeRanged;
 }
 
-- (void)performAction {
+- (void)performActionWithCompletion:(void (^)())completion {
     
-/*    [self.delegate beforePerformAction:self];
+    [self.delegate beforePerformAction:self];
+
+    CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard];
     
-    CombatOutcome outcome = [self engageCombatBetweenMyCard:action.cardInAction andEnemyCard:action.enemyCard];
-    
-    if (outcome == kCombatOutcomeDefendSuccessful) {
-        [self resetUserInterface];
-    }
-    else {
-        [ParticleHelper applyBurstToNode:targetNode];
+    [self.delegate action:self hasResolvedRangedCombatWithOutcome:combatOutcome];
         
-        [_gameManager cardHasBeenDefeated:action.enemyCard];
-        [_gameboard removeCardAtGameBoardNode:targetNode];
-        [self resetUserInterface];
+    [self.cardInAction performedAction:self];
+    [[GameManager sharedManager] actionUsed:self];
+    
+    [self.delegate afterPerformAction:self];
+
+    if (completion != nil) {
+        completion();
     }
-        
-    [self.delegate afterPerformAction:self];*/
 }
 
 @end

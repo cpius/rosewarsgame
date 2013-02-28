@@ -146,6 +146,7 @@
     
     // An attack consumes all remaining moves of an unit
     if (action.isAttack) {
+        self.hasPerformedAttackThisRound = YES;
         [self consumeAllMoves];
     }
 }
@@ -165,7 +166,7 @@
             return self.moveActionCost <= remainingActionCount;
             
         case kActionTypeMelee:
-            if (self.movesRemaining == 0) {
+            if (self.movesRemaining == 0 || self.hasPerformedAttackThisRound) {
                 return NO;
             }
             else {
@@ -175,7 +176,7 @@
             
         case kActionTypeRanged:
             
-            if (self.movesRemaining == 0) {
+            if (self.movesRemaining == 0 || self.hasPerformedAttackThisRound) {
                 return NO;
             }
             else {
@@ -195,7 +196,7 @@
     self.movesConsumed++;
 }
 
-- (NSUInteger)movesRemaining {
+- (NSInteger)movesRemaining {
     
     return move - movesConsumed;
 }

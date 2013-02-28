@@ -24,9 +24,6 @@
 - (void)checkForEndTurn;
 - (void)doEnemyPlayerTurn;
 
-- (void)performMeleeAction:(Action*)action targetNode:(GameBoardNode*)targetNode onCompletion:(void (^)())completion;
-- (void)performRangedAction:(Action*)action targetNode:(GameBoardNode*)targetNode onCompletion:(void (^)())completion;
-
 - (void)updateRemainingActions:(NSUInteger)remainingActions;
 
 - (void)showCardDetail;
@@ -217,8 +214,7 @@
             }
             
             else if ([action isKindOfClass:[RangedAttackAction class]]) {
-                [self performRangedAction:action targetNode:targetNode onCompletion:^{
-                    [action.cardInAction performedAction:action];
+                [action performActionWithCompletion:^{
                 }];
             }
             
@@ -253,6 +249,11 @@
     }
 }
 
+- (void)action:(Action *)action wantsToReplaceCardAtLocation:(GridLocation *)replaceLocation withCardAtLocation:(GridLocation *)withLocation {
+    
+    [_gameboard replaceCardAtGameBoardNode:[_gameboard getGameBoardNodeForGridLocation:replaceLocation] withCardInGameBoardNode:[_gameboard getGameBoardNodeForGridLocation:withLocation]];
+}
+
 - (void)action:(Action *)action wantsToMoveCard:(Card *)card fromLocation:(GridLocation *)fromLocation toLocation:(GridLocation *)toLocation {
     
     [_gameboard swapCardFromNode:[_gameboard getGameBoardNodeForGridLocation:fromLocation]
@@ -269,6 +270,19 @@
     }];
 }
 
+- (void)action:(Action *)action hasResolvedRangedCombatWithOutcome:(CombatOutcome)combatOutcome {
+    
+    [self displayCombatOutcome:combatOutcome];
+    
+    if (IsAttackSuccessful(combatOutcome)) {
+        
+        GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:action.enemyCard.cardLocation];
+        
+        [ParticleHelper applyBurstToNode:node];
+        [_gameboard removeCardAtGameBoardNode:node];
+    }
+}
+
 - (void)beforePerformAction:(Action *)action {
     
 }
@@ -277,111 +291,10 @@
     
     _actionInQueue = nil;
     
-    NSUInteger remainingActions = [_gameManager actionUsed:action];
+    NSUInteger remainingActions = _gameManager.currentGame.numberOfAvailableActions;
     [self updateRemainingActions:remainingActions];
     [self resetUserInterface];
     [self checkForEndTurn];
-}
-
-- (void)performMeleeAction:(Action *)action targetNode:(GameBoardNode *)targetNode onCompletion:(void (^)())completion {
-    
-    MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
-    
-    GridLocation *retreatLocation = action.cardInAction.cardLocation;
-
-    if (action.path.count > 1) {
-        retreatLocation = [[action.path objectAtIndex:action.path.count - 2] location];
-    }
-    
-    [_gameboard moveActiveGameBoardNodeFollowingPath:action.path onCompletion:^{
-        
-        CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:action.enemyCard];
-        
-        [self displayCombatOutcome:outcome];
-        
-        if (IsDefenseSuccessful(outcome)) {
-            
-            PathFinderStep *retreatToLocation = [[PathFinderStep alloc] initWithLocation:retreatLocation];
-            
-            [_gameboard moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithObject:retreatToLocation] onCompletion:^{
-                
-                if (![[_gameboard activeNode].locationInGrid isEqual:retreatToLocation.location]) {
-                    [_gameManager card:[_gameboard activeNode].card.model movedToGridLocation:retreatToLocation.location];
-                    [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:[_gameboard getGameBoardNodeForGridLocation:retreatToLocation.location]];
-                }
-                
-                NSUInteger remainingActions = [_gameManager actionUsed:action];
-                [self updateRemainingActions:remainingActions];
-                [self resetUserInterface];
-                [self checkForEndTurn];
-                
-                if (completion != nil) {
-                    completion();
-                }
-            }];
-        }
-        else {
-            [ParticleHelper applyBurstToNode:targetNode];
-                        
-            if (meleeAction.meleeAttackType == kMeleeAttackTypeNormal) {
-                [_gameboard moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithObject:[[PathFinderStep alloc] initWithLocation:retreatLocation]] onCompletion:^{
-                    
-                    [_gameManager card:action.cardInAction movedToGridLocation:retreatLocation];
-                    [_gameboard removeCardAtGameBoardNode:targetNode];
-
-                    if (![[_gameboard activeNode].locationInGrid isEqual:retreatLocation]) {
-                        [_gameboard swapCardFromNode:[_gameboard activeNode] toNode:[_gameboard getGameBoardNodeForGridLocation:retreatLocation]];
-                    }
-                    
-                    NSUInteger remainingActions = [_gameManager actionUsed:action];
-                    [self updateRemainingActions:remainingActions];
-                    [self resetUserInterface];
-                    [self checkForEndTurn];
-                    
-                    if (completion != nil) {
-                        completion();
-                    }
-                }];
-            }
-            else {
-                [_gameManager card:[_gameboard activeNode].card.model movedToGridLocation:targetNode.locationInGrid];
-                [_gameboard replaceCardAtGameBoardNode:targetNode withCard:[_gameboard activeNode].card];
-                
-                NSUInteger remainingActions = [_gameManager actionUsed:action];
-                [self updateRemainingActions:remainingActions];
-                [self resetUserInterface];
-                [self checkForEndTurn];
-                
-                if (completion != nil) {
-                    completion();
-                }
-            }
-        }
-    }];
-}
-
-- (void)performRangedAction:(Action *)action targetNode:(GameBoardNode *)targetNode onCompletion:(void (^)())completion {
-    
-    CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:action.enemyCard];
-    
-    [self displayCombatOutcome:combatOutcome];
-
-    if (IsAttackSuccessful(combatOutcome)) {
-        [ParticleHelper applyBurstToNode:targetNode];
-        
-        // TODO: Possible bug here - card not always removed
-        [_gameboard removeCardAtGameBoardNode:targetNode];
-    }
-
-    [self resetUserInterface];
-    
-    NSUInteger remainingActions = [_gameManager actionUsed:action];
-    [self updateRemainingActions:remainingActions];
-    [self checkForEndTurn];
-
-    if (completion != nil) {
-        completion();
-    }
 }
 
 - (void)turnChangedToPlayerWithColor:(PlayerColors)player {
@@ -436,8 +349,7 @@
         [_gameboard highlightCardAtLocation:toNode.locationInGrid withColor:ccc3(235, 0, 0) actionType:kActionTypeMelee];
 
         [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
-            [self performMeleeAction:nextAction targetNode:toNode onCompletion:^{
-                
+            [nextAction performActionWithCompletion:^{
                 [nextAction.cardInAction performedAction:nextAction];
                 [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
             }];
@@ -449,7 +361,7 @@
         [_gameboard highlightCardAtLocation:toNode.locationInGrid withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
 
         [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
-            [self performRangedAction:nextAction targetNode:toNode onCompletion:^{
+            [nextAction performActionWithCompletion:^{
                 [nextAction.cardInAction performedAction:nextAction];
                 [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
             }];
@@ -495,11 +407,6 @@
     
     if (result == kGameResultInProgress) {
         if ([_gameManager shouldEndTurn]) {
-            
-            /*        EndTurnLayer *endTurnLayer = [EndTurnLayer getEndTurnLayerWithSize:_winSize];
-             endTurnLayer.position = self.position;
-             [self addChild:endTurnLayer z:1000];
-             */
             [_gameManager endTurn];
         }
     }
@@ -570,9 +477,7 @@
         MeleeAttackAction *action = (MeleeAttackAction*)_actionInQueue;
         action.meleeAttackType = kMeleeAttackTypeNormal;
         
-        GameBoardNode *targetNode = [_gameboard getGameBoardNodeForGridLocation:action.enemyCard.cardLocation];
-        
-        [self performMeleeAction:action targetNode:targetNode onCompletion:^{
+        [_actionInQueue performActionWithCompletion:^{
             [action.cardInAction performedAction:action];
             _actionInQueue = nil;
         }];
@@ -585,9 +490,7 @@
         MeleeAttackAction *action = (MeleeAttackAction*)_actionInQueue;
         action.meleeAttackType = kMeleeAttackTypeConquer;
         
-        GameBoardNode *targetNode = [_gameboard getGameBoardNodeForGridLocation:action.enemyCard.cardLocation];
-        
-        [self performMeleeAction:action targetNode:targetNode onCompletion:^{
+        [_actionInQueue performActionWithCompletion:^{
             [action.cardInAction performedAction:action];
             _actionInQueue = nil;
         }];

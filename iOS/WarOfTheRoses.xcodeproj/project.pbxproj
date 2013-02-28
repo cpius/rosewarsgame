@@ -150,6 +150,8 @@
 		6DC7F48816DD2C8200CD5071 /* MoveTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48716DD2C8200CD5071 /* MoveTest.m */; };
 		6DC7F48B16DE875C00CD5071 /* TestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48A16DE875C00CD5071 /* TestHelper.m */; };
 		6DC7F48E16DEAF0E00CD5071 /* SpecialUnitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F48D16DEAF0D00CD5071 /* SpecialUnitTest.m */; };
+		6DC7F49116DFDD3200CD5071 /* GameBoardMockup.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F49016DFDD3200CD5071 /* GameBoardMockup.m */; };
+		6DC7F49416DFE4BD00CD5071 /* Canon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F49316DFE4BC00CD5071 /* Canon.m */; };
 		6DEA3468168C544400485F00 /* BaseRangedAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA3467168C544400485F00 /* BaseRangedAttribute.m */; };
 		6DEA346C168C555900485F00 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346B168C555900485F00 /* RawBonus.m */; };
 		6DEA346F168C556400485F00 /* TimedBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346E168C556400485F00 /* TimedBonus.m */; };
@@ -499,6 +501,10 @@
 		6DC7F48A16DE875C00CD5071 /* TestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestHelper.m; sourceTree = "<group>"; };
 		6DC7F48C16DEAF0D00CD5071 /* SpecialUnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialUnitTest.h; sourceTree = "<group>"; };
 		6DC7F48D16DEAF0D00CD5071 /* SpecialUnitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialUnitTest.m; sourceTree = "<group>"; };
+		6DC7F48F16DFDD3100CD5071 /* GameBoardMockup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoardMockup.h; sourceTree = "<group>"; };
+		6DC7F49016DFDD3200CD5071 /* GameBoardMockup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoardMockup.m; sourceTree = "<group>"; };
+		6DC7F49216DFE4BC00CD5071 /* Canon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canon.h; sourceTree = "<group>"; };
+		6DC7F49316DFE4BC00CD5071 /* Canon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canon.m; sourceTree = "<group>"; };
 		6DEA3466168C544400485F00 /* BaseRangedAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRangedAttribute.h; sourceTree = "<group>"; };
 		6DEA3467168C544400485F00 /* BaseRangedAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseRangedAttribute.m; sourceTree = "<group>"; };
 		6DEA346A168C555900485F00 /* RawBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawBonus.h; sourceTree = "<group>"; };
@@ -887,6 +893,8 @@
 				6D0CBEE716D00DE800D241A7 /* Supporting Files */,
 				6DC7F48C16DEAF0D00CD5071 /* SpecialUnitTest.h */,
 				6DC7F48D16DEAF0D00CD5071 /* SpecialUnitTest.m */,
+				6DC7F48F16DFDD3100CD5071 /* GameBoardMockup.h */,
+				6DC7F49016DFDD3200CD5071 /* GameBoardMockup.m */,
 			);
 			path = WarOfTheRosesTest;
 			sourceTree = "<group>";
@@ -920,41 +928,20 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				6DC7F47616DCB14100CD5071 /* green_indicator-hd.png */,
-				6DC7F47716DCB14100CD5071 /* green_indicator.png */,
-				6DC7F47816DCB14200CD5071 /* red_indicator-hd.png */,
-				6DC7F47916DCB14200CD5071 /* red_indicator.png */,
-				6DC7F47216DCA0ED00CD5071 /* swordclash-hd.png */,
-				6DC7F47316DCA0ED00CD5071 /* swordclash.png */,
-				6DC7F46A16DC969300CD5071 /* infobutton_selected-hd.png */,
-				6DC7F46B16DC969400CD5071 /* infobutton_selected.png */,
-				6DC7F46C16DC969400CD5071 /* moveattackbutton_selected-hd.png */,
-				6DC7F46D16DC969500CD5071 /* moveattackbutton_selected.png */,
-				6DC7F46616DC095600CD5071 /* attackbutton_selected-hd.png */,
-				6DC7F46716DC095700CD5071 /* attackbutton_selected.png */,
-				6DC7F46216DAA7E900CD5071 /* infobutton-hd.png */,
-				6DC7F46316DAA7E900CD5071 /* infobutton.png */,
-				6DC7F45E16DAA46100CD5071 /* moveattackbutton-hd.png */,
-				6DC7F45F16DAA46100CD5071 /* moveattackbutton.png */,
-				6DC7F45016D951BD00CD5071 /* chariot_0-hd.png */,
-				6DC7F45116D951BD00CD5071 /* chariot_0.png */,
-				6DC7F44916D94F9A00CD5071 /* chariot_icon-hd.png */,
-				6DC7F44A16D94F9A00CD5071 /* chariot_icon.png */,
-				6DC7F43C16D7F17700CD5071 /* crosshair-hd.png */,
-				6DC7F43D16D7F17700CD5071 /* crosshair.png */,
-				6D0CBEBF16CC3EF000D241A7 /* autobutton-hd.png */,
-				6D0CBEC016CC3EF000D241A7 /* autobutton.png */,
-				6D0CBEB216C9777C00D241A7 /* backbutton-hd.png */,
-				6D0CBEB316C9777C00D241A7 /* backbutton.png */,
-				6D0CBEAE16C971F400D241A7 /* attackbutton-hd.png */,
-				6D0CBEAF16C971F500D241A7 /* attackbutton.png */,
-				6D0CBEA616C282D900D241A7 /* testframe.png */,
-				6D0CBE9C16C233EA00D241A7 /* Background-ipad.png */,
 				6D61517A16A88391007A104E /* archer_0-hd.png */,
 				6D5E595E166D4426007429BD /* archer_0.png */,
 				6D61516A16A88272007A104E /* archer_icon-hd.png */,
 				6D5E595C166D42C0007429BD /* archer_icon.png */,
+				6D0CBEAE16C971F400D241A7 /* attackbutton-hd.png */,
+				6D0CBEAF16C971F500D241A7 /* attackbutton.png */,
+				6DC7F46616DC095600CD5071 /* attackbutton_selected-hd.png */,
+				6DC7F46716DC095700CD5071 /* attackbutton_selected.png */,
+				6D0CBEBF16CC3EF000D241A7 /* autobutton-hd.png */,
+				6D0CBEC016CC3EF000D241A7 /* autobutton.png */,
+				6D0CBEB216C9777C00D241A7 /* backbutton-hd.png */,
+				6D0CBEB316C9777C00D241A7 /* backbutton.png */,
 				6DF2FD19165C1DF300F08664 /* Background-hd.png */,
+				6D0CBE9C16C233EA00D241A7 /* Background-ipad.png */,
 				6DF2FD18165C1DF300F08664 /* Background.png */,
 				6D61517B16A88391007A104E /* ballista_0-hd.png */,
 				6D5E5A45167FB564007429BD /* ballista_0.png */,
@@ -968,6 +955,12 @@
 				6D5E5A2E167FB425007429BD /* catapult_0.png */,
 				6D61516C16A88272007A104E /* catapult_icon-hd.png */,
 				6D5E5A2F167FB425007429BD /* catapult_icon.png */,
+				6DC7F45016D951BD00CD5071 /* chariot_0-hd.png */,
+				6DC7F45116D951BD00CD5071 /* chariot_0.png */,
+				6DC7F44916D94F9A00CD5071 /* chariot_icon-hd.png */,
+				6DC7F44A16D94F9A00CD5071 /* chariot_icon.png */,
+				6DC7F43C16D7F17700CD5071 /* crosshair-hd.png */,
+				6DC7F43D16D7F17700CD5071 /* crosshair.png */,
 				6D61516D16A88273007A104E /* darkwood-hd.png */,
 				6DF2FD6F165D78C100F08664 /* darkwood-hd.png */,
 				6D61516E16A88273007A104E /* darkwood.png */,
@@ -978,6 +971,8 @@
 				6DF2FB9716596C5C00F08664 /* fps_images-hd.png */,
 				6DF2FB9916596C5C00F08664 /* fps_images-ipadhd.png */,
 				6DF2FB9516596C5C00F08664 /* fps_images.png */,
+				6DC7F47616DCB14100CD5071 /* green_indicator-hd.png */,
+				6DC7F47716DCB14100CD5071 /* green_indicator.png */,
 				6D5E5A30167FB425007429BD /* GREENBACK.png */,
 				6D690127169B5C200071EC22 /* greenbackground-hd.png */,
 				6D690128169B5C200071EC22 /* greenbackground.png */,
@@ -992,6 +987,10 @@
 				6DF2FBA116596C5C00F08664 /* Icon-Small@2x.png */,
 				6DF2FBA316596C5C00F08664 /* Icon.png */,
 				6DF2FBA516596C5C00F08664 /* Icon@2x.png */,
+				6DC7F46216DAA7E900CD5071 /* infobutton-hd.png */,
+				6DC7F46316DAA7E900CD5071 /* infobutton.png */,
+				6DC7F46A16DC969300CD5071 /* infobutton_selected-hd.png */,
+				6DC7F46B16DC969400CD5071 /* infobutton_selected.png */,
 				6D0CBE7616B9B19A00D241A7 /* leftpanel-hd.png */,
 				6D0CBE7716B9B19A00D241A7 /* leftpanel.png */,
 				6D61517E16A88392007A104E /* lightcavalry_0-hd.png */,
@@ -1002,16 +1001,25 @@
 				6D0CBE7C16BA4A4B00D241A7 /* loupe@2x.png */,
 				6D0CBE7D16BA4A4B00D241A7 /* loupe@2x~ipad.png */,
 				6D0CBE7E16BA4A4B00D241A7 /* loupe~ipad.png */,
+				6DC7F45E16DAA46100CD5071 /* moveattackbutton-hd.png */,
+				6DC7F45F16DAA46100CD5071 /* moveattackbutton.png */,
+				6DC7F46C16DC969400CD5071 /* moveattackbutton_selected-hd.png */,
+				6DC7F46D16DC969500CD5071 /* moveattackbutton_selected.png */,
 				6D61517F16A88392007A104E /* pikeman_0-hd.png */,
 				6D5E5A35167FB425007429BD /* pikeman_0.png */,
 				6D61517116A88275007A104E /* pikeman_icon-hd.png */,
 				6D5E5A49167FB757007429BD /* pikeman_icon.png */,
+				6DC7F47816DCB14200CD5071 /* red_indicator-hd.png */,
+				6DC7F47916DCB14200CD5071 /* red_indicator.png */,
 				6D5E5A37167FB425007429BD /* REDBACK.png */,
 				6D61519316ADD652007A104E /* redbackground-hd.png */,
 				6D61519416ADD653007A104E /* redbackground.png */,
 				6D6900DF169588470071EC22 /* right_arrow-hd.png */,
 				6D6900E0169588470071EC22 /* right_arrow.png */,
 				6D69010C1696C8740071EC22 /* rose.png */,
+				6DC7F47216DCA0ED00CD5071 /* swordclash-hd.png */,
+				6DC7F47316DCA0ED00CD5071 /* swordclash.png */,
+				6D0CBEA616C282D900D241A7 /* testframe.png */,
 				6D61518F16ADD355007A104E /* woddenbackground-hd.png */,
 				6D61519016ADD356007A104E /* woddenbackground.png */,
 				6D6151A716AFD67B007A104E /* woddenbackground2-hd.png */,
@@ -1594,6 +1602,8 @@
 			children = (
 				6DC7F44D16D94FAD00CD5071 /* Chariot.h */,
 				6DC7F44E16D94FAD00CD5071 /* Chariot.m */,
+				6DC7F49216DFE4BC00CD5071 /* Canon.h */,
+				6DC7F49316DFE4BC00CD5071 /* Canon.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -1818,6 +1828,7 @@
 				6DC7F48816DD2C8200CD5071 /* MoveTest.m in Sources */,
 				6DC7F48B16DE875C00CD5071 /* TestHelper.m in Sources */,
 				6DC7F48E16DEAF0E00CD5071 /* SpecialUnitTest.m in Sources */,
+				6DC7F49116DFDD3200CD5071 /* GameBoardMockup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1980,6 +1991,7 @@
 				6DC7F44F16D94FAD00CD5071 /* Chariot.m in Sources */,
 				6DC7F45D16DA9CFE00CD5071 /* LeftPanel.m in Sources */,
 				6DC7F48516DCEDAF00CD5071 /* FixedDiceStrategy.m in Sources */,
+				6DC7F49416DFE4BD00CD5071 /* Canon.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
