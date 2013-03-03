@@ -352,7 +352,7 @@ def show_unit(p, pos):
         print
         print unit
         for attribute, value in unit.__dict__.items():
-            if attribute not in ["has_ability", "has_attack", "name", "ycounters", "bcounters", "pic", "xp_gained_this_round", "color", "attack", "defence", "range", "movement"]:
+            if attribute not in ["has_ability", "has_attack", "name", "ycounters", "bcounters", "pic", "xp_gained_this_round", "color", "range", "movement"]:
                 if value:
                     print attribute, value
         pic = get_image("./units_big/" + unit.pic.replace(" ", "-"))

@@ -167,10 +167,6 @@ def get_next_action(action, actions, p):
     actions_copy = [copy.copy(action_c) for action_c in actions]
     
     actions_copy = [action_copy for action_copy in actions_copy if action_copy.startpos != action.startpos and not hasattr(action_copy, "double_cost")]
-    
-    for action_copy in actions_copy:
-        if action_copy.is_attack and action_copy.chance_of_win == 1:
-            print "before, chance of win 1"
 
     for action_copy in actions_copy:
         if hasattr(p[0].units[action_copy.startpos], "improved_weapons") and action_copy.is_attack:
@@ -181,10 +177,6 @@ def get_next_action(action, actions, p):
         
             action_copy.score = action_copy.chance_of_win * action_copy.score_success + (1- action_copy.chance_of_win) * action_copy.score_failure
 
-    for action_copy in actions_copy:
-        if action_copy.is_attack and action_copy.chance_of_win == 1:
-            print "after, chance of win 1"          
-            
 
     actions_copy.sort(key = attrgetter("score"), reverse= True)
 
@@ -231,7 +223,6 @@ def find_action_scores_two_actions(saved_gamestate, actions_orig):
     
 
     for action in actions:
-        
         p = gamestate.load_gamestate(saved_gamestate)
     
         unit = p[0].units[action.startpos]
@@ -243,14 +234,12 @@ def find_action_scores_two_actions(saved_gamestate, actions_orig):
             action.chance_of_win = m.chance_of_win(unit, enemy_unit, action)
     
             action = get_action_success(action)
-    
+
             p = perform_action(action, p)
-            
 
             action.values_success, action.score_success = get_values_and_score(action, p, p_orig)
-           
+   
             p = gamestate.load_gamestate(saved_gamestate)
-    
             
             action = get_action_failure(action)
             
@@ -262,9 +251,7 @@ def find_action_scores_two_actions(saved_gamestate, actions_orig):
     
             action.score = action.chance_of_win * action.score_success + (1- action.chance_of_win) * action.score_failure
 
-
             action.next_action = get_next_action(action, actions_orig, p)
-            
             
             if action.next_action:
                 action.combined_score = action.score + action.next_action.score
@@ -325,10 +312,7 @@ def get_action(p, actions):
     
     possible_actions = mover.get_actions(p)
 
-
-    t = time()
     actions_orig = find_action_scores_one_action(saved_gamestate, possible_actions)
-    print "one action", time() - t
      
     if p[0].actions_remaining == 1:
                 
@@ -338,16 +322,13 @@ def get_action(p, actions):
         actions.sort(key = attrgetter("score"), reverse= True)
   
     else:
-        t = time()
         actions = find_action_scores_two_actions(saved_gamestate, actions_orig)
-        print "two actions", time() - t
 
         rnd.shuffle(actions)
         actions.sort(key = attrgetter("combined_score"), reverse= True)
     
     if settings.document_ai_actions:
         document_actions("Advancer", actions, p)
-
 
     return actions[0]    
         
@@ -440,3 +421,4 @@ def get_action_values(p, p_orig):
     
 
     return values
+
