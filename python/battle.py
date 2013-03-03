@@ -25,9 +25,15 @@ def get_defence(a, d, attack, action):
     
     if a.type in d.dbonus:
         defence += d.dbonus[a.type]
-    
+
+    if hasattr(d, "improved_weapons"):
+        defence += 1
+  
     if attack < 1:
         defence = d.defence + attack -1
+    
+    if hasattr(d, "sabotaged"):
+        defence = 0
     
     return defence
 
@@ -38,12 +44,18 @@ def get_attack(a, d, action):
     
     attack -= a.acounters
     
-    if a.is_crusading:
-        attack += 1
+    if hasattr(a, "is_crusading"):
+        attack -= 1
     
-    if hasattr(action, "abonus"):
-        attack -= action.abonus  
+    if hasattr(action, "lancing"):
+        attack -= 2
     
+    if hasattr(action, "high_morale"):
+        attack -= 2
+
+    if hasattr(a, "improved_weapons"):
+        attack -= 3
+ 
     if d.type in a.abonus:
         attack -= a.abonus[d.type]
     
