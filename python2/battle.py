@@ -53,7 +53,7 @@ def get_attack(a, d, action):
     if hasattr(action, "high_morale"):
         attack -= 2
 
-    if hasattr(d, "improved_weapons"):
+    if hasattr(a, "improved_weapons"):
         attack -= 3
  
     if d.type in a.abonus:

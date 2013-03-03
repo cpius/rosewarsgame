@@ -1,4 +1,4 @@
-
+ 
 class Unit(object):
     def __init__(self, color):
         self.color = color
@@ -20,7 +20,7 @@ class Archer(Unit):
         self.name = "Archer"
         super(Archer, self).__init__(color)
         
-        self.attack = 5
+        self.attack = 2
         self.defence = 2
         self.movement = 1
         self.range= 4
@@ -34,7 +34,7 @@ class Pikeman(Unit):
         self.name = "Pikeman"
         super(Pikeman, self).__init__(color)
 
-        self.attack = 5
+        self.attack = 2
         self.defence = 2
         self.movement = 1
         self.range= 1
@@ -49,7 +49,7 @@ class Light_Cavalry(Unit):
         self.name = "Light Cavalry"
         super(Light_Cavalry, self).__init__(color)
        
-        self.attack = 5
+        self.attack = 2
         self.defence = 2
         self.movement = 4
         self.range= 1
@@ -63,7 +63,7 @@ class Heavy_Cavalry(Unit):
         self.name = "Heavy Cavalry"
         super(Heavy_Cavalry, self).__init__(color)
 
-        self.attack = 4
+        self.attack = 3
         self.defence = 3
         self.movement = 2
         self.range= 1
@@ -77,7 +77,7 @@ class Ballista(Unit):
         self.name = "Ballista"
         super(Ballista, self).__init__(color)
  
-        self.attack = 3
+        self.attack = 4
         self.defence = 1
         self.movement = 1
         self.range= 3
@@ -91,7 +91,7 @@ class Catapult(Unit):
         self.name = "Catapult"
         super(Catapult, self).__init__(color)
 
-        self.attack = 1
+        self.attack = 6
         self.defence = 2
         self.movement = 1
         self.range= 3
@@ -108,7 +108,7 @@ class Royal_Guard(Unit):
         self.name = "Royal Guard"
         super(Royal_Guard, self).__init__(color)
   
-        self.attack = 4
+        self.attack = 3
         self.defence = 3
         self.movement = 1
         self.range= 1
@@ -143,7 +143,7 @@ class Viking(Unit):
         self.name = "Viking"
         super(Viking, self).__init__(color)
  
-        self.attack = 4
+        self.attack = 3
         self.defence = 2
         self.movement = 1
         self.range = 1
@@ -161,7 +161,7 @@ class Cannon(Unit):
         self.name = "Cannon"
         super(Cannon, self).__init__(color)
     
-        self.attack = 2
+        self.attack = 5
         self.defence = 1
         self.movement = 1
         self.range = 4
@@ -178,7 +178,7 @@ class Lancer(Unit):
         self.name = "Lancer"
         super(Lancer, self).__init__(color)
 
-        self.attack = 5
+        self.attack = 2
         self.defence = 3
         self.movement = 3
         self.range = 1
@@ -195,7 +195,7 @@ class Flag_Bearer(Unit):
         self.name = "Flag Bearer"
         super(Flag_Bearer, self).__init__(color)
    
-        self.attack = 5
+        self.attack = 2
         self.defence = 3
         self.movement = 3
         self.range = 1
@@ -212,7 +212,7 @@ class Longswordsman(Unit):
         self.name = "Longswordsman"
         super(Longswordsman, self).__init__(color)
 
-        self.attack = 4
+        self.attack = 3
         self.defence = 3
         self.movement = 1
         self.range = 1
@@ -229,7 +229,7 @@ class Crusader(Unit):
         self.name = "Crusader"
         super(Crusader, self).__init__(color)
   
-        self.attack = 4
+        self.attack = 3
         self.defence = 3
         self.movement = 3
         self.range = 1
@@ -247,7 +247,7 @@ class Berserker(Unit):
         self.name = "Berserker"
         super(Berserker, self).__init__(color)
    
-        self.attack = 2
+        self.attack = 5
         self.defence = 1
         self.movement = 1
         self.range = 1
@@ -264,7 +264,7 @@ class Chariot(Unit):
         self.name = "Chariot"
         super(Chariot, self).__init__(color)
   
-        self.attack = 4
+        self.attack = 3
         self.defence = 3
         self.movement = 3
         self.range = 1
@@ -281,7 +281,7 @@ class War_Elephant(Unit):
         self.name = "War Elephant"
         super(War_Elephant, self).__init__(color)
 
-        self.attack = 4
+        self.attack = 3
         self.defence = 3
         self.movement = 2
         self.range = 1
