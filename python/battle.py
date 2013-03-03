@@ -1,8 +1,6 @@
 def attack_successful(u1, u2, action, rolls):
     
     attack = get_attack(u1, u2, action)
-    if attack < 1:
-        attack = 1
     
     return rolls[0] >= attack
 
@@ -10,8 +8,6 @@ def attack_successful(u1, u2, action, rolls):
 def defence_successful(u1,u2,action, rolls):
 
     attack = get_attack(u1, u2, action)
-    if attack < 1:
-        attack = 1
     defence = get_defence(u1, u2, attack, action)
     
     return rolls[1] <= defence
