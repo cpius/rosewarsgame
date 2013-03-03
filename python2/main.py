@@ -441,9 +441,16 @@ def run_game():
                     else:   
                         action = mover.Action(p[0].unit, startpos, startpos, (x,y), False, False, True, p[0].unit.abilities[0])
                         p, startpos, endpos = perform_action(action, p), None, None
-            
-                elif startpos and not endpos and (x,y) in p[1].units and not p[0].unit.has_ability:
+
+                elif startpos and not endpos and (x,y) in p[1].units and p[0].unit.range > 1:
                     print "Attack", (x,y)
+
+                    action = mover.Action(p[0].unit, startpos, startpos, (x,y), True, False)
+                    p, startpos, endpos = perform_action(action, p), None, None            
+                    
+         
+                elif startpos and not endpos and (x,y) in p[1].units and not p[0].unit.has_ability:
+                    print "Attack-Move", (x,y)
                     
                     if hasattr(p[0], "extra_action"):
                         all_actions = mover.get_extra_actions(p)
@@ -453,7 +460,7 @@ def run_game():
                     action = None
                          
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos and possible_action.attackpos == (x,y) and not possible_action.move_with_attack:
+                        if possible_action.startpos == startpos and possible_action.attackpos == (x,y) and possible_action.move_with_attack:
                             if possible_action.endpos == startpos:
                                 action = possible_action
                                 break
@@ -464,12 +471,23 @@ def run_game():
                         startpos, endpos = None, None
                     else:
                         p, startpos, endpos = perform_action(action, p), None, None
-                    
-                elif startpos and endpos:
+                
+                elif startpos and not endpos:
+                    print "Stop at", (x,y)
+                    endpos = (x,y)
+                   
+                elif startpos and endpos and (x,y) in p[1].units:
+                    print "Attack-Move", (x,y)
                     action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, False)
                     p, startpos, endpos = perform_action(action, p), None, None
                     
-            
+
+                elif startpos and endpos and (x,y) not in p[1].units:
+                    print "Move to", (x,y)
+                    action = mover.Action(p[0].unit, startpos, (x,y), None, False, False)
+                    p, startpos, endpos = perform_action(action, p), None, None
+                    
+       
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
                 x, y = get_position(event.pos)
                 
@@ -491,21 +509,10 @@ def run_game():
                 x, y = get_position(event.pos)
                 
                 if not startpos:
-                    show_unit(p, (x,y))
-
-                if startpos and endpos and (x,y) == endpos:
-                    print "Move to", (x,y)
-                    action = mover.Action(p[0].unit, startpos, (x,y), None, False, False)
-                    p, startpos, endpos = perform_action(action, p), None, None
-                    
-                    
-                if startpos and endpos and (x,y) != endpos:
-                    print "Attack-Move", (x,y)
-                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, True)
-                    p, startpos, endpos = perform_action(action, p), None, None
+                    show_unit(p, (x,y))  
                 
                 elif startpos and not endpos and (x,y) in p[1].units:
-                    print "Attack-Move", (x,y)
+                    print "Attack", (x,y)
                     
                     if hasattr(p[0], "extra_action"):
                         all_actions = mover.get_extra_actions(p)
@@ -515,7 +522,7 @@ def run_game():
                     action = None
                          
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos and possible_action.attackpos == (x,y) and possible_action.move_with_attack:
+                        if possible_action.startpos == startpos and possible_action.attackpos == (x,y) and not possible_action.move_with_attack:
                             if possible_action.endpos == startpos:
                                 action = possible_action
                                 break
@@ -526,10 +533,6 @@ def run_game():
                         startpos, endpos = None, None
                     else:
                         p, startpos, endpos = perform_action(action, p), None, None
-                    
-                elif startpos and not endpos and (x,y) not in p[1].units:
-                    print "Stop at", (x,y)
-                    endpos = (x,y)
 
             if event.type == KEYDOWN and event.key == K_p:
                 print "paused"
