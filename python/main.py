@@ -11,7 +11,6 @@ import shutil
 import os
 import ai_methods
 
-
 pause_for_animation = settings.pause_for_animation
 
 black = (0, 0, 0)
@@ -31,17 +30,13 @@ x_border = 22
 y_border_top = 22
 y_border_bottom = 39
 
-
-
-def get_position(coords):
-    x = int((coords[0] - x_border) / unit_width) +1
+def get_pixel_position(coords):
+    x = int((coords[0] - x_border) / unit_width) + 1
     if coords[1] > 454:
         y = 8 - int((coords[1] - y_border_bottom) / unit_height)
     else:
         y = 8 - int((coords[1] - y_border_top) / unit_height)
     return x, y
-
-
 
 class Coordinates(object):
     def __init__(self, x, y):
@@ -54,7 +49,7 @@ class Coordinates(object):
         else:
             y_border = y_border_bottom
             
-        return ( int((pos[0] -1) * unit_width + x_border + self.add_x), int(( 8 - pos[1]) * unit_height + + y_border + self.add_y))
+        return (int((pos[0] - 1) * unit_width + x_border + self.add_x), int((8 - pos[1]) * unit_height + y_border + self.add_y))
 
 base_coords = Coordinates(0, 0)
 center_coords = Coordinates(35, 53.2)
@@ -69,9 +64,6 @@ star_coords = Coordinates(8, 58)
 bfont_coords = Coordinates(45, 8)
 afont_coords = Coordinates(45, 68)
 
-
-
-
 _image_library = {}
 def get_image(path, type = None):
         global _image_library
@@ -81,10 +73,7 @@ def get_image(path, type = None):
                 _image_library[path] = image
         return image    
 
-
-
 def draw_acounters(unit, pos):
-    
     if unit.acounters:
         pygame.draw.circle(screen, grey, acounter_coords.get(pos), 10, 0)
         pygame.draw.circle(screen, brown, acounter_coords.get(pos), 8, 0)
@@ -425,7 +414,7 @@ def run_game():
                             
     
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                x, y = get_position(event.pos)
+                x, y = get_pixel_position(event.pos)
                 
                 if not startpos and (x,y) in p[0].units:
                     print "Start at", (x,y)
@@ -489,7 +478,7 @@ def run_game():
                     
        
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
-                x, y = get_position(event.pos)
+                x, y = get_pixel_position(event.pos)
                 
                 if startpos and (x,y) not in p[1].units:
                     print "Move to", (x,y)
@@ -506,7 +495,7 @@ def run_game():
 
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:   
-                x, y = get_position(event.pos)
+                x, y = get_pixel_position(event.pos)
                 
                 if not startpos:
                     show_unit(p, (x,y))  
