@@ -312,10 +312,7 @@ def get_action(p, actions):
     
     possible_actions = mover.get_actions(p)
 
-
-    t = time()
     actions_orig = find_action_scores_one_action(saved_gamestate, possible_actions)
-    print "one action", time() - t
      
     if p[0].actions_remaining == 1:
                 
@@ -325,16 +322,13 @@ def get_action(p, actions):
         actions.sort(key = attrgetter("score"), reverse= True)
   
     else:
-        t = time()
         actions = find_action_scores_two_actions(saved_gamestate, actions_orig)
-        print "two actions", time() - t
 
         rnd.shuffle(actions)
         actions.sort(key = attrgetter("combined_score"), reverse= True)
     
     if settings.document_ai_actions:
         document_actions("Advancer", actions, p)
-
 
     return actions[0]    
         
@@ -427,3 +421,4 @@ def get_action_values(p, p_orig):
     
 
     return values
+
