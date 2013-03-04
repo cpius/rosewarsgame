@@ -3,9 +3,10 @@ import mover
 import copy
 import imp
 from time import time
+import gamestate
 
 
-class AI:
+class AI(object):
     """
     Creates an AI of a certain type, which can make the two decisions a player has to make in a game:
     - Make an action
@@ -19,42 +20,24 @@ class AI:
 
         ai_type = imp.load_source(type, "ai_" + type.lower() + ".py")
         self.get_action = ai_type.get_action
-        self.get_extra_action = ai_type.get_extra_action
         self.put_counter = ai_type.put_counter
         self.name = type
             
     
-    def select_action(self, p, document_it):
-            
-            if p[0].backline == 8:
-                p = get_transformed_p(p)
-                transform_action = get_transformed_action
-            else:
-                transform_action = get_same_action
-            
-            mover.get_all_actions(p)  
-            actions = get_actions(p)
-
-            if actions:
-                action = self.get_action(p, actions, document_it)
-                return transform_action(action)     
-            else:
-                return None  
-
-
-    def select_extra_action(self, p, document_it):
-
+    def select_action(self, p, turn = None):
+                 
+        p = gamestate.copy_p(p)
+                    
         if p[0].backline == 8:
             p = get_transformed_p(p)
             transform_action = get_transformed_action
         else:
             transform_action = get_same_action
         
-        mover.get_extra_actions(p)  
-        actions = get_actions(p)
+        actions = mover.get_actions(p)
 
         if actions:
-            action = self.get_extra_action(p, actions, document_it)
+            action = self.get_action(p, actions)
             return transform_action(action)     
         else:
             return None  
@@ -84,19 +67,6 @@ class Direction:
     
     def perpendicular(self, pos):
         return ((pos[0] + self.y, pos[1] + self.x), (pos[0] - self.y, pos[1] - self.x))
-
-
-
-def get_actions(p):
-
-    actions = []
-    for unit in p[0].units.values():
-        for action in unit.actions:
-            if action.is_attack:
-                action.enemy_unit = p[1].units[action.attackpos]
-            actions.append(action)
-    
-    return actions
 
 
 def t(pos):

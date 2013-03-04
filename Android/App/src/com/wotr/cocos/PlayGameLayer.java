@@ -62,7 +62,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("archergreen.jpg");
+		CCSprite prototype = CCSprite.sprite("unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -104,17 +104,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	@Override
 	public void cardDragedEnded(float x, float y) {
 
-		List<CCNode> children = getChildren();
-		for (Action action : actions) {
-
-			for (CCNode ccNode : children) {
-				boolean contains = action.getPosition().equals(ccNode.getUserData());
-				if (contains) {
-					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
-					ccNode.runAction(tin);
-				}
-			}
-		}
+		resetActionSelection();
 
 		// If moved to a invalid position move back to original position
 		Position pInP = bordframe.getPositionInPerimeter(CGPoint.ccp(x, y));
@@ -140,6 +130,19 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		selectedCard = null;
 	}
 
+	private void resetActionSelection() {
+		List<CCNode> children = getChildren();
+		for (Action action : actions) {
+			for (CCNode ccNode : children) {
+				boolean contains = action.getPosition().equals(ccNode.getUserData());
+				if (contains) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
+					ccNode.runAction(tin);
+				}
+			}
+		}
+	}
+
 	protected void selectCardForMove(CCSprite selectedCard) {
 		super.selectCardForMove(selectedCard);
 
@@ -158,16 +161,19 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			for (CCNode ccNode : children) {
 				boolean contains = action.getPosition().equals(ccNode.getUserData());
 				if (contains) {
-
-					if (action instanceof MoveAction) {
-						CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccGREEN);
-						ccNode.runAction(tin);
-					} else {
-						CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccRED);
-						ccNode.runAction(tin);
-					}
+					markeNodeForAction(action, ccNode);
 				}
 			}
+		}
+	}
+
+	private void markeNodeForAction(Action action, CCNode ccNode) {
+		if (action instanceof MoveAction) {
+			CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccGREEN);
+			ccNode.runAction(tin);
+		} else {
+			CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccRED);
+			ccNode.runAction(tin);
 		}
 	}
 
@@ -190,6 +196,8 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	@Override
 	public void cardDeSelected(float x, float y) {
 		moveCardToOriginalPosition();
+		
+		resetActionSelection();
 	}
 
 	@Override

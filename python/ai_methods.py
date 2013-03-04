@@ -1,54 +1,36 @@
 from __future__ import division
 import battle
+from ai_module import get_transformed_action
+import copy
+import gamestate
+import settings
 
 
 
 def document_actions(ai_type, actions, p):
     
-    if p[0].actions == 2:
+    if p[0].actions_remaining == 1:
         taction = "1"
     else:
         taction = "2"
         
-    if p[0].extra_action:
+    if hasattr(p[0], "extra_action"):
         taction += ".2"
-        
-    out = open(p[0].color + " AI actions " + taction + ".txt", 'w')
     
-    out.write("ACTIONS:\n\n")
+    out = open("./replay/" + p[0].color + " AI actions " + str(settings.turn) + "." + taction + ".txt", 'w')
+    
     for action in actions:
+        if p[0].color == "Red":
+            #action = copy.deepcopy(action)
+            action = gamestate.copy_action(action)
+            get_transformed_action(action)
+            
         out.write(str(action) + "\n")
-        if action.is_attack:
-            a = p[0].units[action.startpos]
-            d = p[1].units[action.attackpos]
-            out.write("Base attack: " +  str(a.attack) + "\n")
-            out.write("Attack Counters: " +  str(a.acounters) + "\n")
-            out.write("Defence Counters: " +  str(d.dcounters) + "\n")
-            if hasattr(action, "abonus"):
-                out.write("Attack Move Bonus: " +  str(action.abonus) + "\n")
-            attack = battle.get_attack(a,d, action)
-            defence = battle.get_defence(a,d, attack, action)
-            out.write("Defender: " + d.name + ", A: " + str(attack) + " D: " + str(defence)  + "\n\n")
-            if action.sub_actions:
-                out.write("Sub actions:\n")
-                for i, sub_action in enumerate(action.sub_actions):
-                    out.write("Sub action " + str(i +1) + "\n")
-                    a = p[0].units[sub_action.startpos]
-                    d = p[1].units[sub_action.attackpos]
-                    out.write("Base attack: " +  str(a.attack) + "\n")
-                    out.write("Attack Counters: " +  str(a.acounters) + "\n")
-                    out.write("Defence Counters: " +  str(d.dcounters) + "\n")
-                    if hasattr(sub_action, "abonus"):
-                        out.write("Attack Move Bonus: " +  str(sub_action.abonus) + "\n")
-                    attack = battle.get_attack(a,d, sub_action)
-                    defence = battle.get_defence(a,d, attack, sub_action)
-                    out.write("Defender: " + d.name + ", A: " + str(attack) + " D: " + str(defence)  + "\n\n")        
-                        
-        out.write("Score: " + str(round(action.score,2)) + "\n\n")
-    
+        out.write("Score: " + str(round(action.score,2)) + "\n")
+        if hasattr(action, "score_success"):
+            out.write("Score sucess: " + str(round(action.score_success)) + " Score failure: " + str(round(action.score_failure)) + "\n")
+        out.write("\n")
     out.close()
-
-
 
 
 def chance_of_win(a, d, action):
@@ -67,5 +49,9 @@ def chance_of_win(a, d, action):
     
     if defence > 6:
         defence = 6
+    
+    chance_of_attack_succesful = attack / 6
+    
+    chance_of_defence_unsuccesful = (6 - defence) / 6
 
-    return ((7 - attack) / 6) * ((6 - defence) / 6)
+    return chance_of_attack_succesful * chance_of_defence_unsuccesful

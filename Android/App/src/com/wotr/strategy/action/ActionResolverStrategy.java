@@ -9,7 +9,7 @@ import com.wotr.model.unit.Unit;
 
 public interface ActionResolverStrategy {
 
-	boolean isMoveable(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress);
+	boolean isMoveable(Unit unit, Position pos, Direction direction, boolean moveable, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress);
 
 	boolean isAttackable(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress);	
 

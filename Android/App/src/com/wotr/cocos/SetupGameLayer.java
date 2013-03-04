@@ -57,7 +57,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("archergreen.jpg");
+		CCSprite prototype = CCSprite.sprite("unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -90,16 +90,16 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	private void addCards() {
 		DeckDrawStrategy deck = new FixedDeckDrawStrategy();
 		Collection<Unit> drawDeck = deck.drawDeck();
-		for (Unit abstractCard : drawDeck) {
+		for (Unit unit : drawDeck) {
 			CGPoint position = CGPoint.ccp(100, 100);
-			CCSprite player = CCSprite.sprite(abstractCard.getImage());
+			CCSprite player = CCSprite.sprite(unit.getImage());
 			player.setPosition(position);
 			player.setScale(sizeScale);
 			addChild(player);
 
 			cardList.add(player);
 
-			modelMap.put(player, abstractCard);
+			modelMap.put(player, unit);
 		}
 	}
 
@@ -118,9 +118,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	public void spark() {
 		try {
-			CCParticleSystem particle = new CCQuadParticleSystem("exploding_ring.plist");
+			CCParticleSystem particle = new CCQuadParticleSystem("particle/exploding_ring.plist");
 			particle.setPosition(sparkCard.getPosition());
-			particle.setScale(sizeScale);
+			//particle.setScale(sizeScale);
 			addChild(particle);
 
 		} catch (Exception e) {

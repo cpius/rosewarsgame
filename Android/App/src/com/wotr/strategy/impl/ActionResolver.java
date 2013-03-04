@@ -25,10 +25,10 @@ public class ActionResolver {
 
 	public Collection<Action> getActions(Unit originalunit, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits) {
 		ActionResolverStrategy ars = originalunit.getActionResolverStrategy();
-		return getActions(originalunit, originalunit.getPosistion(), null, aUnits, dUnits, 0, ars);
+		return getActions(originalunit, originalunit.getPosistion(), null, true, aUnits, dUnits, 0, ars);
 	}
 
-	private Set<Action> getActions(Unit originalunit, Position pos, Direction lastDirection, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, ActionResolverStrategy ars) {
+	private Set<Action> getActions(Unit originalunit, Position pos, Direction lastDirection, boolean moveable, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, ActionResolverStrategy ars) {
 
 		Set<Action> moves = new HashSet<Action>();
 
@@ -39,7 +39,7 @@ public class ActionResolver {
 
 				if (ars.isAttackable(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress)) {
 					moves.add(new AttackAction(pos));
-				} else if (ars.isMoveable(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress)) {
+				} else if (moveable = ars.isMoveable(originalunit, pos, lastDirection, moveable, aUnits, dUnits, pathProgress)) {
 					moves.add(new MoveAction(pos));
 				}
 			}
@@ -48,7 +48,7 @@ public class ActionResolver {
 			for (Direction direction : directions) {
 				Position movePosition = pos.move(direction);
 				if (isInBoard(movePosition)) {
-					moves.addAll(getActions(originalunit, movePosition, direction, aUnits, dUnits, pathProgress + 1, ars));
+					moves.addAll(getActions(originalunit, movePosition, direction, moveable, aUnits, dUnits, pathProgress + 1, ars));
 				}
 			}
 		}

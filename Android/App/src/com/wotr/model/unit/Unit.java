@@ -1,8 +1,11 @@
 package com.wotr.model.unit;
 
+import com.wotr.GameManager;
 import com.wotr.model.Position;
 import com.wotr.model.UnitType;
 import com.wotr.strategy.action.ActionResolverStrategy;
+import com.wotr.strategy.battle.AttackStrategy;
+import com.wotr.strategy.battle.DefenceStrategy;
 
 public abstract class Unit implements Cloneable {
 
@@ -11,7 +14,7 @@ public abstract class Unit implements Cloneable {
 	private boolean enemy;
 
 	public String getImage() {
-		return image + (enemy ? "red" : "green") + ".jpg";
+		return "unit/" + image + (enemy ? "red" : "green") + ".jpg";
 	}
 
 	public Unit(String image, boolean enemy) {
@@ -56,5 +59,13 @@ public abstract class Unit implements Cloneable {
 
 	public void setEnemy(boolean enemy) {
 		this.enemy = enemy;
+	}
+
+	public AttackStrategy getAttackStrategy() {
+		return GameManager.getFactory().getAttackStrategy();
+	}
+
+	public DefenceStrategy getDefenceStrategy() {
+		return GameManager.getFactory().getDefenceStrategy();
 	}
 }

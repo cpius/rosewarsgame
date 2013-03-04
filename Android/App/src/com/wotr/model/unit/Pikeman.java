@@ -1,6 +1,8 @@
 package com.wotr.model.unit;
 
+import com.wotr.GameManager;
 import com.wotr.model.UnitType;
+import com.wotr.strategy.battle.AttackStrategy;
 
 public class Pikeman extends MeleeUnit {
 
@@ -36,5 +38,10 @@ public class Pikeman extends MeleeUnit {
 	public UnitType[] getZoc() {
 		UnitType[] zoc = { UnitType.CAVALRY };
 		return zoc;
+	}
+	
+	@Override
+	public AttackStrategy getAttackStrategy() {
+		return GameManager.getFactory().getPikemanAttackStrategy();
 	}
 }

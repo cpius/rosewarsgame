@@ -2,9 +2,10 @@ import itertools
 from operator import attrgetter
 import ai_methods as m
 import random as rnd
+import settings
 
 
-def get_action(p, actions, document_it = False):
+def get_action(p, actions):
     
     for action in actions:
         action.score = action.endpos[1]
@@ -19,15 +20,11 @@ def get_action(p, actions, document_it = False):
     
     rnd.shuffle(actions)
     actions.sort(key = attrgetter("score"), reverse= True)
-    if document_it:
-        m.document_actions("Advancer", actions, p)   
+    
+    if settings.document_ai_actions:
+        m.document_actions("Advancer", actions, p)
     return actions[0]
     
-
-
-def get_extra_action(p, actions, document_it = False):
-    return get_action(p, actions, document_it)
-
 
 def put_counter(p, unit):
     unit.dcounters += 1
