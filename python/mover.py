@@ -510,7 +510,7 @@ def get_actions(p):
 
 def get_unit_actions(unit, pos, all_units, p):
     
-    if unit.name not in setup.special_unit_names:
+    if unit.name not in settings.special_units:
         if unit.range == 1:
             moves, attacks = melee_actions(unit, pos, all_units, p)
             return moves, attacks, []
