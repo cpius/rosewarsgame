@@ -101,6 +101,8 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"heavycavalry_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"heavycavalry_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"chariot_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"chariot_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"chariot_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"chariot_icon.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"cannon_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"cannon_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"cannon_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"cannon_icon.png"];
 
     [[SoundManager sharedManager] preloadSoundEffects];
     

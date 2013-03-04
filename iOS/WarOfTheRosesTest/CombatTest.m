@@ -14,6 +14,7 @@
 #import "LightCavalry.h"
 #import "GameManager.h"
 #import "TestHelper.h"
+#import "TimedBonus.h"
 
 @implementation CombatTest
 
@@ -129,6 +130,34 @@
     
     STAssertTrue(attacker.experience == 2, @"Attacker should have gained 2 XP");
     STAssertTrue(attacker.numberOfLevelsIncreased == 1, @"Attacker should have increased a level");
+}
+
+- (void)testTimedBonusShouldDisappear {
+    
+    Archer *attacker = [Archer card];
+    Pikeman *defender1 = [Pikeman card];
+    
+    attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    defender1.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:attacker]
+                                    player2Units:[NSArray arrayWithObjects:defender1, nil]];
+
+    TimedBonus *timedBonus = [[TimedBonus alloc] initWithValue:2 forNumberOfRounds:2];
+    [attacker.attack addTimedBonus:timedBonus];
+    
+    STAssertTrue([attacker.attack calculateValue].lowerValue == 3, @"Attack lower value should be 3");
+    
+    [_manager endTurn];
+    [_manager endTurn];
+    
+    STAssertTrue([attacker.attack calculateValue].lowerValue == 3, @"Attack lower value should be 3");
+
+    [_manager endTurn];
+    [_manager endTurn];
+
+    STAssertTrue([attacker.attack calculateValue].lowerValue == 5, @"Attack lower value should be 5");
 }
 
 @end

@@ -34,8 +34,8 @@
         _lastAttackInRound = 0;
         
         self.attackSound = @"sword_sound.wav";
-        self.frontImageSmall = @"chariot_icon.png";
-        self.frontImageLarge = [NSString stringWithFormat:@"chariot_%d.png", self.cardColor];
+        self.frontImageSmall = @"cannon_icon.png";
+        self.frontImageLarge = [NSString stringWithFormat:@"cannon_%d.png", self.cardColor];
         
         [self commonInit];
     }
@@ -61,6 +61,17 @@
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount {
     
     BOOL canPerformAction = [super canPerformActionOfType:actionType withRemainingActionCount:remainingActionCount];
+    
+    if (actionType == kActionTypeRanged) {
+        if (_isQuarantined && ([GameManager sharedManager].currentGame.currentRound - _lastAttackInRound < 3)) {
+            canPerformAction = NO;
+        }
+        else {
+            _isQuarantined = NO;
+        }
+    }
+    
+    return canPerformAction;
 }
 
 -(BOOL)specialAbilityTriggersVersus:(Card *)opponent {

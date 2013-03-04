@@ -41,6 +41,8 @@
     
     [_timedBonuses addObject:timedBonus];
     
+    [timedBonus startTimedBonus:self];
+    
     if ([_delegate respondsToSelector:@selector(rangeAttribute:addedTimedBonus:)]) {
         [_delegate rangeAttribute:self addedTimedBonus:timedBonus];
     }

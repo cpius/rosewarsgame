@@ -80,6 +80,7 @@ typedef enum {
     kLightCavalry,
     kHeavyCalavry,
     kChariot,
+    kCannon,
     kUnitNameCount,
     kLongSwordsMan,
     kRoyalGuard,
@@ -91,11 +92,10 @@ typedef enum {
     kFlagBearer,
     kLancer,
     kWarElephant,
-    kCannon,
     kSaboteur,
     kAssassin,
     kWeaponSmith,
-    kDiplomat,
+    kDiplomat
 } UnitName;
 
 typedef enum {

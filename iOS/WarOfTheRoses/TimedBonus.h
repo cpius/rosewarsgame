@@ -20,4 +20,6 @@
 - (id)initWithValue:(NSUInteger)bonusValue;
 - (id)initWithValue:(NSUInteger)bonusValue forNumberOfRounds:(NSUInteger)numberOfRounds;
 
+- (void)startTimedBonus:(RangeAttribute*)parent;
+
 @end

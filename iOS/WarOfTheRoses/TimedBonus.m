@@ -29,8 +29,6 @@
         _numberOfRounds = numberOfRounds;
         
         [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"currentRound" options:NSKeyValueObservingOptionNew context:nil];
-        
-        [self startTimedBonus];
     }
     
     return self;
@@ -42,24 +40,20 @@
         
         if ([GameManager sharedManager].currentGame.currentRound == bonusValueStartedInRound + _numberOfRounds) {
             [self stopTimedBonus];
-            [self removeObserver:self forKeyPath:@"currentRound"];
+            [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"currentRound"];
         }
     }
 }
 
-- (void)startTimedBonus {
+- (void)startTimedBonus:(RangeAttribute*)parent {
     
+    _parent = parent;
     bonusValueStartedInRound = [GameManager sharedManager].currentGame.currentRound;
 }
 
 - (void)stopTimedBonus {
     
     [_parent removeTimedBonus:self];
-}
-
-- (void)dealloc {
-    
-//    [self removeObserver:self forKeyPath:@"currentRound"];
 }
 
 - (NSString *)description {
