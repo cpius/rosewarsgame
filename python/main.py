@@ -421,7 +421,7 @@ def run_game():
                     startpos = (x,y)
                     p[0].unit = p[0].units[startpos]
                  
-                elif startpos and not endpos and p[0].unit.has_ability:          
+                elif startpos and not endpos and (x,y) in p[1].units and p[0].unit.has_ability:          
                     print "Ability", (x,y)
                     if len(p[0].unit.abilities) > 1:
                         index = get_input_abilities(p[0].unit, p)
@@ -438,7 +438,7 @@ def run_game():
                     p, startpos, endpos = perform_action(action, p), None, None            
                     
          
-                elif startpos and not endpos and (x,y) in p[1].units and not p[0].unit.has_ability:
+                elif startpos and not endpos and (x,y) in p[1].units:
                     print "Attack-Move", (x,y)
                     
                     if hasattr(p[0], "extra_action"):

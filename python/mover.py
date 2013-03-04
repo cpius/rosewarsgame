@@ -863,7 +863,7 @@ def get_special_unit_actions(unit, pos, units, p):
                 target_units = p[1].units
 
             if ability == "improve_weapons":
-                target_units = [tpos for tpos, tunit in p[0].units.items() if tunit.has_attack]
+                target_units = [tpos for tpos, tunit in p[0].units.items() if tunit.has_attack and tunit.range == 1]
                 
             if ability == "bribe":
                 target_units = [tpos for tpos, tunit in p[1].units.items() if not hasattr(tunit, "bribed") and not hasattr(tunit, "just_bribed")]
