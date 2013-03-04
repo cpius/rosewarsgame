@@ -11,10 +11,23 @@
 
 @implementation MoveAction
 
-- (BOOL)isWithinRange {
+@synthesize actionType = _actionType;
+
+- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
+    
+    self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
+    
+    if (self) {
+        _actionType = kActionTypeMove;
+    }
+    
+    return self;
+}
+
+/*- (BOOL)isWithinRange {
     
     return self.path.count <= self.cardInAction.movesRemaining;
-}
+}*/
 
 - (BOOL)isAttack {
     

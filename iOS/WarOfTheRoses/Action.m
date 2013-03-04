@@ -35,7 +35,7 @@
 
 - (BOOL)isWithinRange {
     
-    @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];
+    return [self.cardInAction allowPath:self.path forActionType:self.actionType allLocations:[GameManager sharedManager].currentGame.unitLayout];
 }
 
 - (void)performActionWithCompletion:(void (^)())completion {

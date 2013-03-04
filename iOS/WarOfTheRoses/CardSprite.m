@@ -41,23 +41,20 @@
         
         [self updateBonusSpriteForAttribute:_model.attack];
         [self updateBonusSpriteForAttribute:_model.defence];
+
+        CCSprite *cardIndicator;
+        if (_model.cardColor == kCardColorGreen) {
+            cardIndicator = [CCSprite spriteWithFile:@"green_cardindicator.png"];
+        }
+        else {
+            cardIndicator = [CCSprite spriteWithFile:@"red_cardindicator.png"];
+        }
+        
+        cardIndicator.position = ccp(self.contentSize.width - 15, self.contentSize.height - 15);
+        [self addChild:cardIndicator];
     }
     
     return self;
-}
-
-- (void)draw {
-    
-    [super draw];
-    
-    if (_model.cardColor == kCardColorGreen) {
-        ccDrawColor4B(0, 235, 0, 255);
-        ccDrawCircle(ccp(self.contentSize.width - 15, self.contentSize.height - 15), 5, 0, 10, NO);
-    }
-    else {
-        ccDrawColor4B(235, 0, 0, 255);
-        ccDrawCircle(ccp(self.contentSize.width - 15, self.contentSize.height - 15), 5, 0, 10, NO);
-    }
 }
 
 - (void)rangeAttribute:(RangeAttribute *)attribute addedRawBonus:(RawBonus *)rawBonus {

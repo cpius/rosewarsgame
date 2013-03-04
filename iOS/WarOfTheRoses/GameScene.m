@@ -157,6 +157,11 @@
 
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    if (_gameManager.currentGame.gameOver) {
+        [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
+        return;
+    }
+
     if (_gameManager.currentPlayersTurn != _gameManager.currentGame.myColor) {
         return;
     }
@@ -164,11 +169,7 @@
     if (_gameboard.isMoving) {
         return;
     }
-    
-    if (_gameManager.currentGame.gameOver) {
-        return;
-    }
-        
+            
     UITouch *touch = [touches anyObject];
     
     if (CGRectContainsPoint(_backButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
@@ -410,8 +411,20 @@
         }
     }
     else {
-        [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
-        return;
+        
+        CCLabelTTF *gameoverStatus;
+        
+        if (result == kGameResultVictory) {
+            gameoverStatus = [CCLabelTTF labelWithString:@"Victory!" fontName:APP_FONT fontSize:48];
+            [gameoverStatus setColor:ccc3(0, 255.0, 0)];
+        }
+        else {
+            gameoverStatus = [CCLabelTTF labelWithString:@"Defeat!" fontName:APP_FONT fontSize:48];
+            [gameoverStatus setColor:ccc3(255.0, 0, 0)];
+        }
+        
+        gameoverStatus.position = ccp(_winSize.width / 2, _winSize.height - (_winSize.height / 4));
+        [self addChild:gameoverStatus z:5000];
     }
 }
 

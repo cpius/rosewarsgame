@@ -16,6 +16,8 @@
 
 #import "Chariot.h"
 #import "Canon.h"
+#import "Berserker.h"
+#import "Scout.h"
 
 @interface CardPool()
 
@@ -57,6 +59,10 @@
             return [Chariot card];
         case kCannon:
             return [Canon card];
+        case kBerserker:
+            return [Berserker card];
+        case kScout:
+            return [Scout card];
         default:
             CCLOG(@"Unknown cardname: %d", unitName);
     }
@@ -88,7 +94,7 @@
         drawnCard = [self createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = kCannon;//(arc4random() % 2) + 6;
+        UnitName unitName = (arc4random() % 4) + 6;
         drawnCard = [self createCardOfName:unitName];
     }
     

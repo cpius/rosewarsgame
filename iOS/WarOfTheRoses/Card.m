@@ -151,6 +151,29 @@
     }
 }
 
+- (BOOL)allowPath:(NSArray *)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary *)allLocations {
+    
+    BOOL allowPath = NO;
+    
+    if (actionType == kActionTypeMove) {
+        if (path != nil && path.count > 0 && path.count <= self.movesRemaining) {
+            allowPath = YES;
+        }
+    }
+    else if (actionType == kActionTypeMelee) {
+        if ((path != nil && path.count > 0) && path.count <= self.movesRemaining) {
+            allowPath = YES;
+        }
+    }
+    else if (actionType == kActionTypeRanged) {
+        if ((path != nil && path.count > 0) && path.count <= self.range) {
+            allowPath = YES;
+        }
+    }
+    
+    return allowPath;
+}
+
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount {
     
     if (self.hasPerformedActionThisRound) {

@@ -14,11 +14,23 @@
 @implementation MeleeAttackAction
 
 @synthesize meleeAttackType;
+@synthesize actionType = _actionType;
 
-- (BOOL)isWithinRange {
+- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
+    
+    self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
+    
+    if (self) {
+        _actionType = kActionTypeMelee;
+    }
+    
+    return self;
+}
+
+/*- (BOOL)isWithinRange {
     
     return self.path.count <= self.cardInAction.movesRemaining;
-}
+}*/
 
 - (BOOL)isAttack {
     

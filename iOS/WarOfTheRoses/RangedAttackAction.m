@@ -10,11 +10,22 @@
 #import "GameManager.h"
 
 @implementation RangedAttackAction
+@synthesize actionType = _actionType;
 
-- (BOOL)isWithinRange {
+- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
+    
+    self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
+    
+    if (self) {
+        _actionType = kActionTypeRanged;
+    }
+    
+    return self;
+}
+/*- (BOOL)isWithinRange {
     
     return self.path.count <= self.cardInAction.range;
-}
+}*/
 
 - (BOOL)isAttack {
     

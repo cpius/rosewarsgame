@@ -103,6 +103,10 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"chariot_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"chariot_icon.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"cannon_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"cannon_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"cannon_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"cannon_icon.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"berserker_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"berserker_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"berserker_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"berserker_icon.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"scout_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"scout_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"scout_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"scout_icon.png"];
 
     [[SoundManager sharedManager] preloadSoundEffects];
     

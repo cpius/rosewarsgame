@@ -111,38 +111,12 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/PathFinder.m"
-         timestampString = "383515926.110877"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "188"
-         endingLineNumber = "188"
-         landmarkName = "-getMeleeAttackActionsFromLocation:forCard:enemyUnits:allLocations:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/GameScene.m"
-         timestampString = "383768701.000011"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "190"
-         endingLineNumber = "190"
-         landmarkName = "-ccTouchesEnded:withEvent:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/Card.m"
-         timestampString = "383769793.238489"
+         timestampString = "384118236.010174"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "160"
-         endingLineNumber = "160"
+         startingLineNumber = "183"
+         endingLineNumber = "183"
          landmarkName = "-canPerformActionOfType:withRemainingActionCount:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -157,6 +131,19 @@
          startingLineNumber = "292"
          endingLineNumber = "292"
          landmarkName = "-highlightCardAtLocation:withColor:actionType:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRosesTest/SpecialUnitTest.m"
+         timestampString = "384124631.401174"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "88"
+         endingLineNumber = "88"
+         landmarkName = "-testBerserkerAttackingCannon"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

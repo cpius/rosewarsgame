@@ -39,6 +39,8 @@
     game.myDeck = [attackerFixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0];
     game.enemyDeck = [defenderFixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0];
     
+    game.currentRound = 1;
+    
     return game;
 }
 

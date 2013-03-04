@@ -14,6 +14,8 @@
 #define BOARDSIZE_ROWS 8
 #define BOARDSIZE_COLUMNS 5
 
+#define kEnemyActionDelayTime 1.0
+
 typedef enum {
     kActionTypeMove = 0,
     kActionTypeMelee,
@@ -81,13 +83,12 @@ typedef enum {
     kHeavyCalavry,
     kChariot,
     kCannon,
-    kUnitNameCount,
+    kBerserker,
+    kScout,
     kLongSwordsMan,
     kRoyalGuard,
-    kBerserker,
     kSamurai,
     kViking,
-    kScout,
     kCrusader,
     kFlagBearer,
     kLancer,
@@ -95,7 +96,8 @@ typedef enum {
     kSaboteur,
     kAssassin,
     kWeaponSmith,
-    kDiplomat
+    kDiplomat,
+    kUnitNameCount
 } UnitName;
 
 typedef enum {

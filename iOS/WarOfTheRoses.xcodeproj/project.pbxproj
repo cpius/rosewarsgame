@@ -152,6 +152,20 @@
 		6DC7F49A16E521F800CD5071 /* cannon_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F49616E521F200CD5071 /* cannon_0.png */; };
 		6DC7F49B16E521F800CD5071 /* cannon_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F49716E521F300CD5071 /* cannon_icon-hd.png */; };
 		6DC7F49C16E521F800CD5071 /* cannon_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F49816E521F600CD5071 /* cannon_icon.png */; };
+		6DC7F49F16E528B700CD5071 /* Berserker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F49E16E528B600CD5071 /* Berserker.m */; };
+		6DC7F4A416E529AC00CD5071 /* berserker_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F4A016E529A200CD5071 /* berserker_0-hd.png */; };
+		6DC7F4A516E529AC00CD5071 /* berserker_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F4A116E529A400CD5071 /* berserker_0.png */; };
+		6DC7F4A616E529AC00CD5071 /* berserker_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F4A216E529A600CD5071 /* berserker_icon-hd.png */; };
+		6DC7F4A716E529AC00CD5071 /* berserker_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F4A316E529A800CD5071 /* berserker_icon.png */; };
+		6DD5886716E53B3000466DDB /* TimedAbility.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5886616E53B3000466DDB /* TimedAbility.m */; };
+		6DD5886A16E53C4B00466DDB /* Bribe.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5886916E53C4B00466DDB /* Bribe.m */; };
+		6DD5886D16E540E200466DDB /* Scout.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5886C16E540E200466DDB /* Scout.m */; };
+		6DD5887116E5427E00466DDB /* scout_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5886E16E5427E00466DDB /* scout_0-hd.png */; };
+		6DD5887216E5427E00466DDB /* scout_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5886F16E5427E00466DDB /* scout_0.png */; };
+		6DD5887316E5427E00466DDB /* scout_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887016E5427E00466DDB /* scout_icon-hd.png */; };
+		6DD5887516E542AC00466DDB /* scout_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887416E542AC00466DDB /* scout_icon.png */; };
+		6DD5887816E54ADB00466DDB /* green_cardindicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887616E54ADB00466DDB /* green_cardindicator.png */; };
+		6DD5887916E54ADB00466DDB /* red_cardindicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887716E54ADB00466DDB /* red_cardindicator.png */; };
 		6DEA3468168C544400485F00 /* BaseRangedAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA3467168C544400485F00 /* BaseRangedAttribute.m */; };
 		6DEA346C168C555900485F00 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346B168C555900485F00 /* RawBonus.m */; };
 		6DEA346F168C556400485F00 /* TimedBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346E168C556400485F00 /* TimedBonus.m */; };
@@ -505,6 +519,24 @@
 		6DC7F49616E521F200CD5071 /* cannon_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cannon_0.png; path = Resources/Images/cannon_0.png; sourceTree = "<group>"; };
 		6DC7F49716E521F300CD5071 /* cannon_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cannon_icon-hd.png"; path = "Resources/Images/cannon_icon-hd.png"; sourceTree = "<group>"; };
 		6DC7F49816E521F600CD5071 /* cannon_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cannon_icon.png; path = Resources/Images/cannon_icon.png; sourceTree = "<group>"; };
+		6DC7F49D16E528B600CD5071 /* Berserker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Berserker.h; sourceTree = "<group>"; };
+		6DC7F49E16E528B600CD5071 /* Berserker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Berserker.m; sourceTree = "<group>"; };
+		6DC7F4A016E529A200CD5071 /* berserker_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "berserker_0-hd.png"; path = "Resources/Images/berserker_0-hd.png"; sourceTree = "<group>"; };
+		6DC7F4A116E529A400CD5071 /* berserker_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = berserker_0.png; path = Resources/Images/berserker_0.png; sourceTree = "<group>"; };
+		6DC7F4A216E529A600CD5071 /* berserker_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "berserker_icon-hd.png"; path = "Resources/Images/berserker_icon-hd.png"; sourceTree = "<group>"; };
+		6DC7F4A316E529A800CD5071 /* berserker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = berserker_icon.png; path = Resources/Images/berserker_icon.png; sourceTree = "<group>"; };
+		6DD5886516E53B3000466DDB /* TimedAbility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimedAbility.h; sourceTree = "<group>"; };
+		6DD5886616E53B3000466DDB /* TimedAbility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimedAbility.m; sourceTree = "<group>"; };
+		6DD5886816E53C4B00466DDB /* Bribe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bribe.h; sourceTree = "<group>"; };
+		6DD5886916E53C4B00466DDB /* Bribe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bribe.m; sourceTree = "<group>"; };
+		6DD5886B16E540E200466DDB /* Scout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scout.h; sourceTree = "<group>"; };
+		6DD5886C16E540E200466DDB /* Scout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scout.m; sourceTree = "<group>"; };
+		6DD5886E16E5427E00466DDB /* scout_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "scout_0-hd.png"; path = "Resources/Images/scout_0-hd.png"; sourceTree = "<group>"; };
+		6DD5886F16E5427E00466DDB /* scout_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scout_0.png; path = Resources/Images/scout_0.png; sourceTree = "<group>"; };
+		6DD5887016E5427E00466DDB /* scout_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "scout_icon-hd.png"; path = "Resources/Images/scout_icon-hd.png"; sourceTree = "<group>"; };
+		6DD5887416E542AC00466DDB /* scout_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scout_icon.png; path = Resources/Images/scout_icon.png; sourceTree = "<group>"; };
+		6DD5887616E54ADB00466DDB /* green_cardindicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green_cardindicator.png; path = Resources/Images/green_cardindicator.png; sourceTree = "<group>"; };
+		6DD5887716E54ADB00466DDB /* red_cardindicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red_cardindicator.png; path = Resources/Images/red_cardindicator.png; sourceTree = "<group>"; };
 		6DEA3466168C544400485F00 /* BaseRangedAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRangedAttribute.h; sourceTree = "<group>"; };
 		6DEA3467168C544400485F00 /* BaseRangedAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseRangedAttribute.m; sourceTree = "<group>"; };
 		6DEA346A168C555900485F00 /* RawBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawBonus.h; sourceTree = "<group>"; };
@@ -928,6 +960,16 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DD5887616E54ADB00466DDB /* green_cardindicator.png */,
+				6DD5887716E54ADB00466DDB /* red_cardindicator.png */,
+				6DD5887416E542AC00466DDB /* scout_icon.png */,
+				6DD5886E16E5427E00466DDB /* scout_0-hd.png */,
+				6DD5886F16E5427E00466DDB /* scout_0.png */,
+				6DD5887016E5427E00466DDB /* scout_icon-hd.png */,
+				6DC7F4A016E529A200CD5071 /* berserker_0-hd.png */,
+				6DC7F4A116E529A400CD5071 /* berserker_0.png */,
+				6DC7F4A216E529A600CD5071 /* berserker_icon-hd.png */,
+				6DC7F4A316E529A800CD5071 /* berserker_icon.png */,
 				6D61517A16A88391007A104E /* archer_0-hd.png */,
 				6D5E595E166D4426007429BD /* archer_0.png */,
 				6D61516A16A88272007A104E /* archer_icon-hd.png */,
@@ -1091,6 +1133,17 @@
 				6DC7F48416DCEDAF00CD5071 /* FixedDiceStrategy.m */,
 			);
 			name = DiceStrategy;
+			sourceTree = "<group>";
+		};
+		6DD5886416E53B1C00466DDB /* Abilities */ = {
+			isa = PBXGroup;
+			children = (
+				6DD5886516E53B3000466DDB /* TimedAbility.h */,
+				6DD5886616E53B3000466DDB /* TimedAbility.m */,
+				6DD5886816E53C4B00466DDB /* Bribe.h */,
+				6DD5886916E53C4B00466DDB /* Bribe.m */,
+			);
+			name = Abilities;
 			sourceTree = "<group>";
 		};
 		6DEA3477168D986A00485F00 /* Attributes */ = {
@@ -1547,6 +1600,7 @@
 		6DF2FD1F165C21CD00F08664 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				6DD5886416E53B1C00466DDB /* Abilities */,
 				6DC7F48116DCECD500CD5071 /* DiceStrategy */,
 				6D0CBF0616D2069D00D241A7 /* AI */,
 				6D0CBEC816CE766C00D241A7 /* Action */,
@@ -1604,6 +1658,10 @@
 				6DC7F44E16D94FAD00CD5071 /* Chariot.m */,
 				6DC7F49216DFE4BC00CD5071 /* Canon.h */,
 				6DC7F49316DFE4BC00CD5071 /* Canon.m */,
+				6DC7F49D16E528B600CD5071 /* Berserker.h */,
+				6DC7F49E16E528B600CD5071 /* Berserker.m */,
+				6DD5886B16E540E200466DDB /* Scout.h */,
+				6DD5886C16E540E200466DDB /* Scout.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -1796,6 +1854,16 @@
 				6DC7F49A16E521F800CD5071 /* cannon_0.png in Resources */,
 				6DC7F49B16E521F800CD5071 /* cannon_icon-hd.png in Resources */,
 				6DC7F49C16E521F800CD5071 /* cannon_icon.png in Resources */,
+				6DC7F4A416E529AC00CD5071 /* berserker_0-hd.png in Resources */,
+				6DC7F4A516E529AC00CD5071 /* berserker_0.png in Resources */,
+				6DC7F4A616E529AC00CD5071 /* berserker_icon-hd.png in Resources */,
+				6DC7F4A716E529AC00CD5071 /* berserker_icon.png in Resources */,
+				6DD5887116E5427E00466DDB /* scout_0-hd.png in Resources */,
+				6DD5887216E5427E00466DDB /* scout_0.png in Resources */,
+				6DD5887316E5427E00466DDB /* scout_icon-hd.png in Resources */,
+				6DD5887516E542AC00466DDB /* scout_icon.png in Resources */,
+				6DD5887816E54ADB00466DDB /* green_cardindicator.png in Resources */,
+				6DD5887916E54ADB00466DDB /* red_cardindicator.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1992,6 +2060,10 @@
 				6DC7F45D16DA9CFE00CD5071 /* LeftPanel.m in Sources */,
 				6DC7F48516DCEDAF00CD5071 /* FixedDiceStrategy.m in Sources */,
 				6DC7F49416DFE4BD00CD5071 /* Canon.m in Sources */,
+				6DC7F49F16E528B700CD5071 /* Berserker.m in Sources */,
+				6DD5886716E53B3000466DDB /* TimedAbility.m in Sources */,
+				6DD5886A16E53C4B00466DDB /* Bribe.m in Sources */,
+				6DD5886D16E540E200466DDB /* Scout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

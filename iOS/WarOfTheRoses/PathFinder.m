@@ -169,8 +169,7 @@
             GridLocation *toLocation = [GridLocation gridLocationWithRow:row column:column];
             NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:allLocations];
             
-            if (path != nil && path.count > 0 && path.count <= card.movesRemaining) {
-                
+            if ([card allowPath:path forActionType:kActionTypeMove allLocations:allLocations]) {
                 [moveActions addObject:[[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil]];
             }
         }
@@ -191,10 +190,8 @@
         
         NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:allLocations];
         
-        if (path != nil && path.count > 0) {
-            if (path.count <= card.movesRemaining) {
-                [attackActions addObject:[[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
-            }
+        if ([card allowPath:path forActionType:kActionTypeMelee allLocations:allLocations]) {
+            [attackActions addObject:[[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
         }
     }
     
@@ -213,10 +210,8 @@
         
         NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
         
-        if (path != nil && path.count > 0) {
-            if (path.count <= card.range) {
-                [attackActions addObject:[[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
-            }
+        if ([card allowPath:path forActionType:kActionTypeRanged allLocations:allLocations]) {
+            [attackActions addObject:[[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
         }
     }
     
