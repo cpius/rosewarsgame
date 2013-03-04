@@ -1,8 +1,8 @@
 ##########
 # Custom #
 ##########
-python2/replay/*
 python/replay/*
+python/demo/*
 
 
 #########
