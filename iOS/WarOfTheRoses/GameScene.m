@@ -388,7 +388,6 @@
 
 - (void)card:(CardSprite *)card movedToNode:(GameBoardNode *)node {
     
-    [card.model consumeMove];
 }
 
 - (void)combatHasStartedBetweenAttacker:(Card *)attacker andDefender:(Card *)defender {

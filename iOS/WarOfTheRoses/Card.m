@@ -193,7 +193,12 @@
 
 - (void)consumeMove {
     
-    self.movesConsumed++;
+    [self consumeMoves:1];
+}
+
+- (void)consumeMoves:(NSUInteger)moves {
+    
+    movesConsumed += moves;
 }
 
 - (NSInteger)movesRemaining {

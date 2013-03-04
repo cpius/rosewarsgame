@@ -96,6 +96,7 @@
 
 - (void)consumeAllMoves;
 - (void)consumeMove;
+- (void)consumeMoves:(NSUInteger)moves;
 
 - (void)performedAction:(Action*)action;
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount;

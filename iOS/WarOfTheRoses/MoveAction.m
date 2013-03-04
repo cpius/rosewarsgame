@@ -34,6 +34,8 @@
 
     [self.delegate action:self wantsToMoveFollowingPath:self.path withCompletion:^(GridLocation *endLocation) {
         
+        [self.cardInAction consumeMoves:self.path.count];
+        
         if (![self.cardInAction.cardLocation isEqual:endLocation]) {
             
             [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];

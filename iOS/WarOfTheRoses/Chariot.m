@@ -17,7 +17,7 @@
     if (self) {
         
         self.cardType = kCardTypeSpecialUnit;
-        self.unitType = kSpecialUnit;
+        self.unitType = kCavalry;
         self.unitName = kChariot;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];

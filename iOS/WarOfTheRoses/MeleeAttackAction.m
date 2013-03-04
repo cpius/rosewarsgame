@@ -44,6 +44,8 @@
 
     [self.delegate action:self wantsToMoveFollowingPath:self.path withCompletion:^(GridLocation *endLocation) {
         
+        [self.cardInAction consumeMoves:self.path.count];
+        
         CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard];
         
         [self.delegate action:self hasResolvedRangedCombatWithOutcome:combatOutcome];
