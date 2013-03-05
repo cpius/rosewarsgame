@@ -25,6 +25,9 @@ def get_defence(a, d, attack, action):
     if hasattr(d, "improved_weapons"):
         defence += 1
   
+    if hasattr(d, "shield") and a.range == 1:
+        defence += 1
+
     if attack > 6:
         defence = d.defence - attack + 6
     
