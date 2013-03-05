@@ -467,7 +467,7 @@ def run_game():
                    
                 elif startpos and endpos and (x,y) in p[1].units:
                     print "Attack-Move", (x,y)
-                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, False)
+                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, True)
                     p, startpos, endpos = perform_action(action, p), None, None
                     
 
@@ -522,6 +522,11 @@ def run_game():
                         startpos, endpos = None, None
                     else:
                         p, startpos, endpos = perform_action(action, p), None, None
+
+                elif startpos and endpos and (x,y) in p[1].units:
+                    print "Attack", (x,y)
+                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, False)
+                    p, startpos, endpos = perform_action(action, p), None, None
 
             if event.type == KEYDOWN and event.key == K_p:
                 print "paused"
