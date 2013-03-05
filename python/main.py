@@ -148,9 +148,11 @@ def add_bcounters(unit):
     if hasattr(unit, "just_bribed"):
         unit.bcounters = 1
         
-        
-def draw_unit(unit, pos):
-    pic = get_image("./units_small/" + unit.pic.replace(" ", "-"))
+def get_unit_pic(name, color):
+    return name.replace(" ", "-") + ",-" + color.lower() + ".jpg"
+
+def draw_unit(unit, pos, color):
+    pic = get_image("./units_small/" + get_unit_pic(unit.name, color))
     screen.blit(pic, base_coords.get(pos))
 
     draw_acounters(unit, pos)
@@ -174,8 +176,11 @@ def draw_game(p):
     pic = get_image("./other/board.gif")
     screen.blit(pic, (0,0))
  
-    for pos, unit in p[0].units.items() + p[1].units.items():
-        draw_unit(unit, pos)
+    for pos, unit in p[0].units.items():
+        draw_unit(unit, pos, p[0].color)
+
+    for pos, unit in p[1].units.items():
+        draw_unit(unit, pos, p[1].color)
 
     pygame.display.update()  
 
@@ -342,10 +347,10 @@ def show_unit(p, pos):
         print
         print unit
         for attribute, value in unit.__dict__.items():
-            if attribute not in ["has_ability", "has_attack", "name", "ycounters", "bcounters", "pic", "xp_gained_this_round", "color", "range", "movement"]:
+            if attribute not in ["name", "ycounters", "bcounters", "pic", "xp_gained_this_round", "color", "range", "movement"]:
                 if value:
                     print attribute, value
-        pic = get_image("./units_big/" + unit.pic.replace(" ", "-"))
+        pic = get_image("./units_big/" + get_unit_pic(unit.name, color))
         screen.blit(pic, (40,40))
         pygame.display.flip()
         
@@ -424,7 +429,7 @@ def run_game():
                     startpos = (x,y)
                     p[0].unit = p[0].units[startpos]
                  
-                elif startpos and not endpos and (x,y) in p[1].units and p[0].unit.has_ability:          
+                elif startpos and not endpos and (x,y) in p[1].units and p[0].unit.abilities:          
                     print "Ability", (x,y)
                     if len(p[0].unit.abilities) > 1:
                         index = get_input_abilities(p[0].unit, p)
