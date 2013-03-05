@@ -318,6 +318,7 @@ def perform_action(action, p):
             if p[0].color == "Green":
                 settings.turn += 1
             mover.initialize_turn(p)
+            mover.initialize_action(p)
           
         draw_game(p)
         
@@ -407,6 +408,8 @@ def run_game():
                         if p[0].color == "Green":
                             settings.turn += 1
                         mover.initialize_turn(p)
+                        mover.initialize_action(p)
+                        draw_game(p)
                         
                     if hasattr(p[0], "extra_action"):
                         extra_action = p[0].ai.select_action(p)
