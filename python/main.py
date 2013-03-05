@@ -571,7 +571,7 @@ def game_end(player):
     label = font.render(player.color + "\nWins", 1, black)
     screen.blit(label, (40, 400))
     pygame.display.update()
-    pygame.time.delay(400000)
+    pause()
     exit_game()
 
 
