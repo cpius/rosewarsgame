@@ -909,12 +909,12 @@ def get_special_unit_actions(unit, pos, units, p):
         return moves
 
 
-    if unit.has_ability:
+    if unit.abilities:
         abilities = ability_units()
     else:
         abilities = []
         
-    if unit.has_attack:
+    if unit.attack:
         if unit.range == 1:
             moves, attacks = melee_units()
         else:

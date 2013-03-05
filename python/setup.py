@@ -79,7 +79,7 @@ def get_units(color):
         while len(units) < basic_unit_count: 
             name = basic_units_bag.pick()
             pos = tiles_bag.pick(basic_units_list[name])      
-            units[pos] = getattr(units_module, name.replace(" ", "_"))(color)
+            units[pos] = getattr(units_module, name.replace(" ", "_"))()
 
             if len(units) == 0:
                 units[pos].acounters = 1
@@ -91,17 +91,17 @@ def get_units(color):
     def select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag):
          
         units = {}
-        
+
         while len(units) < special_unit_count and special_units_first_bag.has_units():
             name = special_units_first_bag.pick()    
             pos = tiles_bag.pick(special_units_list[name])        
-            units[pos] = getattr(units_module, name.replace(" ", "_"))(player.color)
+            units[pos] = getattr(units_module, name.replace(" ", "_"))()
 
         while len(units) < special_unit_count:
             name = special_units_second_bag.pick()
             pos = tiles_bag.pick(special_units_list[name])
-            units[pos] = getattr(units_module, name.replace(" ", "_"))(color)
-        
+            units[pos] = getattr(units_module, name.replace(" ", "_"))()
+
         return units
 
     def fill_bags():
