@@ -1,8 +1,6 @@
-import random as rnd
 import mover
 import copy
 import imp
-from time import time
 import gamestate
 
 
