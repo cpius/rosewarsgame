@@ -21,7 +21,6 @@ class AI(object):
         self.put_counter = ai_type.put_counter
         self.name = type
             
-    
     def select_action(self, p, turn = None):
                  
         p = gamestate.copy_p(p)
@@ -40,7 +39,6 @@ class AI(object):
         else:
             return None  
 
-    
     def add_counters(self, p):
         
         for unit in p[0].units.values():
@@ -102,7 +100,6 @@ def get_same_action(action):
 
     return action
 
- 
 
 def get_transformed_p(p):
 
