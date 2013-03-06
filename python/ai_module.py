@@ -14,12 +14,12 @@ class AI(object):
     The locations are transformed so that the player the AI is playing for has backline on row 1.
     """
     
-    def __init__(self, type, player):
+    def __init__(self, name):
 
-        ai_type = imp.load_source(type, "ai_" + type.lower() + ".py")
+        ai_type = imp.load_source(name, "ai_" + name.lower() + ".py")
         self.get_action = ai_type.get_action
         self.put_counter = ai_type.put_counter
-        self.name = type
+        self.name = name
             
     def select_action(self, p, turn = None):
                  

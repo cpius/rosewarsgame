@@ -364,12 +364,12 @@ def run_game():
     
 
     if settings.player1_ai != "Human":
-        p[0].ai = ai_module.AI(settings.player1_ai, p[0])
+        p[0].ai = ai_module.AI(settings.player1_ai)
     else:
         p[0].ai = "Human"
         
     if settings.player2_ai != "Human":
-        p[1].ai = ai_module.AI(settings.player2_ai, p[1])
+        p[1].ai = ai_module.AI(settings.player2_ai)
     else:
         p[1].ai = "Human"
 
