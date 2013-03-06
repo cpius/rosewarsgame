@@ -3,18 +3,7 @@ import random
 import itertools as it
 import units_module
 import settings
-
-
-
-class Player(object):
-    def __init__(self, color):
-        self.color = color
-        if color == "Red":
-            self.backline = 8
-            self.frontline = 5
-        else:
-            self.backline = 1
-            self.frontline = 4
+from player import Player
 
 
 class Tiles_bag(object):
