@@ -59,15 +59,15 @@ class Direction:
         self.y = y
 
     def move(self, pos):
-        return (pos[0] + self. x, pos[1] + self.y)
+        return pos[0] + self. x, pos[1] + self.y
 
     def perpendicular(self, pos):
-        return ((pos[0] + self.y, pos[1] + self.x), (pos[0] - self.y, pos[1] - self.x))
+        return (pos[0] + self.y, pos[1] + self.x), (pos[0] - self.y, pos[1] - self.x)
 
 
 def t(pos):
     if pos:
-        return (pos[0], 9 - pos[1])     
+        return pos[0], 9 - pos[1]
     else:
         return None
 
