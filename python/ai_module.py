@@ -21,7 +21,7 @@ class AI(object):
         self.put_counter = ai_type.put_counter
         self.name = name
             
-    def select_action(self, p, turn = None):
+    def select_action(self, p):
                  
         p = gamestate.copy_p(p)
                     
