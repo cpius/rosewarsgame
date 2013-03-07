@@ -94,7 +94,7 @@
         drawnCard = [self createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = kScout;//(arc4random() % 4) + 6;
+        UnitName unitName = (arc4random() % 4) + 6;
         drawnCard = [self createCardOfName:unitName];
     }
     

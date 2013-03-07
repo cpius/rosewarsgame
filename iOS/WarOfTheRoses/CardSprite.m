@@ -187,7 +187,7 @@
         self.contentSize = CGSizeMake(frame.rect.size.width, frame.rect.size.height);
         restoreWidthAction = [CCScaleTo actionWithDuration:.25f scaleX:1.0f scaleY:1.0f];
         
-        [self setZOrder:100];
+        [self setZOrder:1000];
     }
     
     CCAction* unskewAction = [CCSkewBy actionWithDuration:.25f skewX:0.0f skewY:-20.0f];

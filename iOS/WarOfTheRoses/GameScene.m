@@ -19,7 +19,9 @@
 
 - (void)showToolsPanel;
 - (void)hideToolsPanel;
+
 - (void)resetUserInterface;
+- (void)resetAttackDirection;
 
 - (void)checkForEndTurn;
 - (void)doEnemyPlayerTurn;
@@ -195,9 +197,7 @@
             if (action == nil || ![action isWithinRange]) {
                 
                 [self resetUserInterface];
-                _actionInQueue = nil;
-                _pathInQueue = nil;
-                _selectedAttackDirection = nil;
+                [self resetAttackDirection];
                 return;
             }
             
@@ -387,6 +387,13 @@
     }
 }
 
+- (void)resetAttackDirection {
+    
+    _actionInQueue = nil;
+    _pathInQueue = nil;
+    _selectedAttackDirection = nil;
+}
+
 - (void)resetUserInterface {
     
     [_gameboard deselectActiveNode];
@@ -502,9 +509,7 @@
         }
         
         [_actionInQueue performActionWithCompletion:^{
-            _actionInQueue = nil;
-            _pathInQueue = nil;
-            _selectedAttackDirection = nil;
+            [self resetAttackDirection];
         }];
     }
 }
