@@ -8,7 +8,7 @@ import main
 
 def get_p():
 
-    p = setup.get_startunits()
+    p = setup.get_start_units()
     p[0].ai_name = "Advancer"
     p[1].ai_name = "Destroyer"
     p[0].actions_remaining = 1
