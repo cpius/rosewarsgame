@@ -3,23 +3,12 @@ import random
 import itertools as it
 import units_module
 import settings
-
-
-
-class Player(object):
-    def __init__(self, color):
-        self.color = color
-        if color == "Red":
-            self.backline = 8
-            self.frontline = 5
-        else:
-            self.backline = 1
-            self.frontline = 4
+from player import Player
 
 
 class Tiles_bag(object):
     def __init__(self):
-        self.tiles = [(i,j) for i in board_coloumns for j in board_rows]
+        self.tiles = [(column, row) for column in board_coloumns for row in board_rows]
         
     def pick(self, rows):
         pick = random.choice([item for item in self.tiles if item[1] in rows])
@@ -45,10 +34,8 @@ special_units_list = settings.special_units
 unit_bag_size = settings.unit_bag_size
 special_unit_count = settings.special_unit_count
 basic_unit_count = settings.basic_unit_count
-board_rows = [1,2,3,4]
-board_coloumns = [1,2,3,4,5]
-
-
+board_rows = [1, 2, 3, 4]
+board_coloumns = [1, 2, 3, 4, 5]
 
 
 def any(iterable):
@@ -57,16 +44,20 @@ def any(iterable):
             return True
     return False
 
+
 def all(iterable):
     for element in iterable:
         if not element:
             return False
     return True
 
+
 def test_coloumn_blocks(units):
-    """ Tests whether there on each coloumn are at least two 'blocks'. A block is either a unit, or a Pikeman zoc tile. """
+    """ Tests whether there on each coloumn are at least two 'blocks'.
+    A block is either a unit, or a Pikeman zoc tile. """
     
-    cols = [pos[0] + x for x in [-1, +1] for pos, unit in units.items() if unit.name == "Pikeman"] + [pos[0] for pos in units]
+    cols = [pos[0] + x for x in [-1, +1] for pos, unit in units.items() if unit.name == "Pikeman"]\
+        + [pos[0] for pos in units]
 
     return not any(cols.count(col) < 2 for col in board_coloumns)
      
@@ -77,8 +68,6 @@ def test_pikeman_coloumn(units):
     cols = [pos[0] for pos, unit in units.items() if unit.name == "Pikeman"]
     
     return not any(cols.count(col) > 1 for col in board_coloumns)
-
-
 
 
 def get_units(color):
@@ -92,11 +81,12 @@ def get_units(color):
             pos = tiles_bag.pick(basic_units_list[name])      
             units[pos] = getattr(units_module, name.replace(" ", "_"))(color)
 
-            if len(units) == 0: units[pos].acounters = 1
-            if len(units) == 1: units[pos].dcounters = 1
+            if len(units) == 0:
+                units[pos].acounters = 1
+            if len(units) == 1:
+                units[pos].dcounters = 1
         
         return units
-    
     
     def select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag):
          
@@ -107,33 +97,28 @@ def get_units(color):
             pos = tiles_bag.pick(special_units_list[name])        
             units[pos] = getattr(units_module, name.replace(" ", "_"))(player.color)
 
-            
         while len(units) < special_unit_count:
             name = special_units_second_bag.pick()
             pos = tiles_bag.pick(special_units_list[name])
             units[pos] = getattr(units_module, name.replace(" ", "_"))(color)
         
         return units
-    
-    
+
     def fill_bags():
         
-        basic_units_bag = Unit_bag([name for name in basic_units_list for i in range(unit_bag_size)])
+        basic_units_bag = Unit_bag([name for name in basic_units_list for _ in range(unit_bag_size)])
         
         special_units_first_bag = Unit_bag([name for name in settings.use_special_units])
         
-        special_units_second_bag = Unit_bag([name for name in special_units_list if name not in settings.dont_use_special_units])
+        special_units_second_bag = Unit_bag([name for name in special_units_list
+                                             if name not in settings.dont_use_special_units])
         
         tiles_bag = Tiles_bag()
         
         return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
         
-    
-    counter = it.count(1)
-    for co in counter:
+    while True:
         
-        units = {}
-
         basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
         
         try:
@@ -153,19 +138,17 @@ def get_units(color):
 def flip_units(units):
     
     def flip(pos):
-        return (pos[0], 9 - pos[1])     
+        return pos[0], 9 - pos[1]
     
     return dict((flip(pos), unit) for pos, unit in units.items())
 
 
 def get_startunits():
     
-    p1 = Player("Green")
-    p2 = Player("Red")
+    player1 = Player("Green")
+    player2 = Player("Red")
     
-    p1.units = get_units(p1.color)
+    player1.units = get_units(player1.color)
+    player2.units = flip_units(get_units(player2.color))
     
-    p2.units = flip_units(get_units(p2.color))
-    
-    return [p1, p2]
-
+    return [player1, player2]
