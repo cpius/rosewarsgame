@@ -1,6 +1,5 @@
 from __future__ import division
 import random
-import itertools as it
 import units_module
 import settings
 from player import Player
@@ -38,18 +37,11 @@ board_rows = [1, 2, 3, 4]
 board_coloumns = [1, 2, 3, 4, 5]
 
 
-def any(iterable):
+def any(iterable):  # For compatibility with older python versions.
     for element in iterable:
         if element:
             return True
     return False
-
-
-def all(iterable):
-    for element in iterable:
-        if not element:
-            return False
-    return True
 
 
 def test_coloumn_blocks(units):
@@ -70,7 +62,7 @@ def test_pikeman_coloumn(units):
     return not any(cols.count(col) > 1 for col in board_coloumns)
 
 
-def get_units(color):
+def get_units():
     
     def select_basic_units(basic_units_bag, tiles_bag):
 
@@ -143,12 +135,12 @@ def flip_units(units):
     return dict((flip(pos), unit) for pos, unit in units.items())
 
 
-def get_startunits():
+def get_start_units():
     
     player1 = Player("Green")
     player2 = Player("Red")
     
-    player1.units = get_units(player1.color)
-    player2.units = flip_units(get_units(player2.color))
+    player1.units = get_units()
+    player2.units = flip_units(get_units())
     
     return [player1, player2]
