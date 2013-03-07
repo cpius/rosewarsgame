@@ -9,7 +9,7 @@ import setup
 import numpy as np
 
 
-def document_actions(ai_type, actions, p):
+def document_actions(actions, p):
     
     if p[0].actions_remaining == 2:
         taction = "1"
@@ -326,7 +326,7 @@ def get_action(p, actions):
         actions.sort(key = attrgetter("combined_score"), reverse= True)
     
     if settings.document_ai_actions:
-        document_actions("Advancer", actions, p)
+        document_actions(actions, p)
 
     return actions[0]    
         
