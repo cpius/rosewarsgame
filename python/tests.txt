@@ -1,0 +1,26 @@
+== WhenBothMoveAttackAndMoveIsAvailable_ThenChooseMoveAttack ==
+Player1:
+Red
+Human
+Actions: 0
+Extra action: False
+
+C7
+Royal_Guard
+
+E7
+Archer
+
+
+Player2:
+Green
+Evaluator
+Actions: 1
+Extra action: False
+
+D6
+Heavy_Cavalry
+
+
+Expected outcome:
+Heavy Cavalry move from D6 to D7 and attack-move Royal Guard C7
