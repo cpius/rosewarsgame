@@ -1,4 +1,3 @@
-import itertools
 from operator import attrgetter
 import ai_methods as m
 import random as rnd
@@ -7,7 +6,6 @@ import gamestate
 import mover
 import copy
 import setup
-from time import time
 import numpy as np
 
 
