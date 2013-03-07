@@ -9,20 +9,20 @@ import setup
 import numpy as np
 
 
-def document_actions(actions, p):
+def document_actions(actions, players):
     
-    if p[0].actions_remaining == 2:
+    if players[0].actions_remaining == 2:
         taction = "1"
     else:
         taction = "2"
         
-    if hasattr(p[0], "extra_action"):
+    if hasattr(players[0], "extra_action"):
         taction += ".2"
     
-    out = open("./replay/" + p[0].color + " AI actions " + str(settings.turn) + "." + taction + ".txt", 'w')
+    out = open("./replay/" + players[0].color + " AI actions " + str(settings.turn) + "." + taction + ".txt", 'w')
     
     for action in actions:
-        if p[0].color == "Red":
+        if players[0].color == "Red":
             action = gamestate.copy_action(action)
             get_transformed_action(action)
             
