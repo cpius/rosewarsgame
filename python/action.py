@@ -1,3 +1,5 @@
+import battle
+
 class Action(object):
     def __init__(self, unit, startpos, endpos, attackpos, is_attack, move_with_attack, is_ability=False, ability=""):
         self.unit = unit
@@ -15,6 +17,7 @@ class Action(object):
         self.target_unit = None
         self.rolls = None
         self.outcome = None
+
 
     def repr_attributes(self):
         return str(self.__dict__)
@@ -86,3 +89,8 @@ class Action(object):
         other = dict((attribute, other.__dict__[attribute]) for attribute in basic_attributes)
 
         return original == other
+
+
+def coordinates(position):
+    columns = list(" ABCDE")
+    return columns[position[0]] + str(position[1])

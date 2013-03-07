@@ -2,6 +2,7 @@ from __future__ import division
 import settings
 import random as rnd
 import battle
+from action import Action
 
 
 class Direction:
@@ -45,11 +46,6 @@ eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if no
 ###Helper methods####
 #####################
 #####################
-
-
-def coordinates(position):
-    columns = list(" ABCDE")
-    return columns[position[0]] + str(position[1])
 
 
 def any(iterable):  # For compatibility with older python versions.
@@ -676,7 +672,7 @@ def get_special_unit_actions(unit, pos, units, p):
         def triple_attack(unit, startpos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
             def get_attack(unit, startpos, endpos, attackpos, move_with_attack):
-                attack = Action(unit, startpos, endpos, attackpos, True, move_with_attack) 
+                attack = Action(unit, startpos, endpos, attackpos, True, move_with_attack)
                 for fpos in two_forward_tiles(endpos, attackpos):
                     if fpos in enemy_units:
                         attack.sub_actions.append(Action(unit, startpos, endpos, fpos, True, False))
