@@ -1,16 +1,16 @@
-def attack_successful(attacking_unit, defending_unit, action, rolls):
+def attack_successful(action):
     
-    attack = get_attack(attacking_unit, defending_unit, action)
+    attack = get_attack(action.unit, action.target_unit, action)
     
-    return rolls[0] <= attack
+    return action.rolls[0] <= attack
 
 
-def defence_successful(attacking_unit, defending_unit, action, rolls):
+def defence_successful(action):
 
-    attack = get_attack(attacking_unit, defending_unit, action)
-    defence = get_defence(attacking_unit, defending_unit, attack, action)
+    attack = get_attack(action.unit, action.target_unit, action)
+    defence = get_defence(action.unit, action.target_unit, attack, action)
     
-    return rolls[1] <= defence
+    return action.rolls[1] <= defence
     
 
 def get_defence(attacking_unit, defending_unit, attack, action):
