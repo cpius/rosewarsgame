@@ -1,6 +1,6 @@
 from __future__ import division
 import random
-import units_module
+import units
 import settings
 from player import Player
 
@@ -71,7 +71,7 @@ def get_units():
         while len(units) < basic_unit_count: 
             name = basic_units_bag.pick()
             pos = tiles_bag.pick(basic_units_list[name])      
-            units[pos] = getattr(units_module, name.replace(" ", "_"))()
+            units[pos] = getattr(units, name.replace(" ", "_"))()
 
             if len(units) == 0:
                 units[pos].acounters = 1
@@ -87,12 +87,12 @@ def get_units():
         while len(units) < special_unit_count and special_units_first_bag.has_units():
             name = special_units_first_bag.pick()    
             pos = tiles_bag.pick(special_units_list[name])        
-            units[pos] = getattr(units_module, name.replace(" ", "_"))()
+            units[pos] = getattr(units, name.replace(" ", "_"))()
 
         while len(units) < special_unit_count:
             name = special_units_second_bag.pick()
             pos = tiles_bag.pick(special_units_list[name])
-            units[pos] = getattr(units_module, name.replace(" ", "_"))()
+            units[pos] = getattr(units, name.replace(" ", "_"))()
 
         return units
 
