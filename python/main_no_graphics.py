@@ -58,8 +58,8 @@ def run_game():
     
     p = setup.get_startunits()
     
-    p[0].ai = ai_module.AI(settings.player1_ai, p[0])
-    p[1].ai = ai_module.AI(settings.player2_ai, p[1])
+    p[0].ai = ai_module.AI(settings.player1_ai)
+    p[1].ai = ai_module.AI(settings.player2_ai)
     
     mover.initialize_turn([p[0], p[1]])
     mover.initialize_turn([p[1], p[0]])

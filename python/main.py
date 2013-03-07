@@ -251,7 +251,7 @@ def get_input_abilities(unit, p):
 def pause():
     while True:
         for event in pygame.event.get():
-            if event.type == KEYDOWN:
+            if event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
 def add_counters(p):
@@ -318,6 +318,7 @@ def perform_action(action, p):
             if p[0].color == "Green":
                 settings.turn += 1
             mover.initialize_turn(p)
+            mover.initialize_action(p)
           
         draw_game(p)
         
@@ -363,12 +364,12 @@ def run_game():
     
 
     if settings.player1_ai != "Human":
-        p[0].ai = ai_module.AI(settings.player1_ai, p[0])
+        p[0].ai = ai_module.AI(settings.player1_ai)
     else:
         p[0].ai = "Human"
         
     if settings.player2_ai != "Human":
-        p[1].ai = ai_module.AI(settings.player2_ai, p[1])
+        p[1].ai = ai_module.AI(settings.player2_ai)
     else:
         p[1].ai = "Human"
 
@@ -407,6 +408,8 @@ def run_game():
                         if p[0].color == "Green":
                             settings.turn += 1
                         mover.initialize_turn(p)
+                        mover.initialize_action(p)
+                        draw_game(p)
                         
                     if hasattr(p[0], "extra_action"):
                         extra_action = p[0].ai.select_action(p)
@@ -467,7 +470,7 @@ def run_game():
                    
                 elif startpos and endpos and (x,y) in p[1].units:
                     print "Attack-Move", (x,y)
-                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, False)
+                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, True)
                     p, startpos, endpos = perform_action(action, p), None, None
                     
 
@@ -523,6 +526,11 @@ def run_game():
                     else:
                         p, startpos, endpos = perform_action(action, p), None, None
 
+                elif startpos and endpos and (x,y) in p[1].units:
+                    print "Attack", (x,y)
+                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, False)
+                    p, startpos, endpos = perform_action(action, p), None, None
+
             if event.type == KEYDOWN and event.key == K_p:
                 print "paused"
                 pause()
@@ -566,7 +574,7 @@ def game_end(player):
     label = font.render(player.color + "\nWins", 1, black)
     screen.blit(label, (40, 400))
     pygame.display.update()
-    pygame.time.delay(400000)
+    pause()
     exit_game()
 
 

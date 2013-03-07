@@ -1,46 +1,49 @@
-def attack_successful(u1, u2, action, rolls):
+def attack_successful(attacking_unit, defending_unit, action, rolls):
     
-    attack = get_attack(u1, u2, action)
+    attack = get_attack(attacking_unit, defending_unit, action)
     
     return rolls[0] <= attack
 
 
-def defence_successful(u1,u2,action, rolls):
+def defence_successful(attacking_unit, defending_unit, action, rolls):
 
-    attack = get_attack(u1, u2, action)
-    defence = get_defence(u1, u2, attack, action)
+    attack = get_attack(attacking_unit, defending_unit, action)
+    defence = get_defence(attacking_unit, defending_unit, attack, action)
     
     return rolls[1] <= defence
     
 
-def get_defence(a, d, attack, action):
+def get_defence(attacking_unit, defending_unit, attack, action):
     
-    defence = d.defence
+    defence = defending_unit.defence
     
-    defence += d.dcounters
+    defence += defending_unit.dcounters
     
-    if a.type in d.dbonus:
-        defence += d.dbonus[a.type]
+    if attacking_unit.type in defending_unit.dbonus:
+        defence += defending_unit.dbonus[attacking_unit.type]
 
-    if hasattr(d, "improved_weapons"):
+    if hasattr(defending_unit, "improved_weapons"):
         defence += 1
-  
+
+    if hasattr(defending_unit, "shield") and attacking_unit.range == 1:
+        defence += 1
+
     if attack > 6:
-        defence = d.defence - attack + 6
+        defence = defending_unit.defence - attack + 6
     
-    if hasattr(d, "sabotaged"):
+    if hasattr(defending_unit, "sabotaged"):
         defence = 0
     
     return defence
 
 
-def get_attack(a, d, action):
+def get_attack(attacking_unit, defending_unit, action):
     
-    attack = a.attack
+    attack = attacking_unit.attack
     
-    attack += a.acounters
+    attack += attacking_unit.acounters
     
-    if hasattr(a, "is_crusading"):
+    if hasattr(attacking_unit, "is_crusading"):
         attack += 1
     
     if hasattr(action, "lancing"):
@@ -49,10 +52,10 @@ def get_attack(a, d, action):
     if hasattr(action, "high_morale"):
         attack += 2
 
-    if hasattr(a, "improved_weapons"):
+    if hasattr(attacking_unit, "improved_weapons"):
         attack += 3
  
-    if d.type in a.abonus:
-        attack += a.abonus[d.type]
+    if defending_unit.type in attacking_unit.abonus:
+        attack += attacking_unit.abonus[defending_unit.type]
     
     return attack
