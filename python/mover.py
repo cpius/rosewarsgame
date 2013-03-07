@@ -17,6 +17,10 @@ class Action(object):
         self.ability = ability
         self.sub_actions = []
         self.finalpos = endpos  # The tile a unit ends up at after attacks are resolved
+
+        self.target_unit = None
+        self.rolls = None
+        self.outcome = None
     
     def repr_attributes(self):
         return str(self.__dict__)
@@ -44,14 +48,14 @@ class Action(object):
         return representation
     
     def get_battle_outcome_string(self):
-        if hasattr(self, "outcome"):
+        if self.outcome:
             return self.outcome
         else:
             return ""
     
     def get_full_battle_outcome_string(self):
         representation = ""
-        if hasattr(self, "rolls"):
+        if self.rolls:
             attack = battle.get_attack(self.unit, self.target_unit, self)
             defence = battle.get_defence(self.unit, self.target_unit, attack, self)
 
@@ -62,7 +66,7 @@ class Action(object):
         for sub_action in self.sub_actions:
             representation += "\n"
             representation += "and attack " + coordinates(sub_action.attackpos)
-            if hasattr(sub_action, "rolls"):
+            if sub_action.rolls:
                 attack = battle.get_attack(self.unit, self.target_unit, self)
                 defence = battle.get_defence(self.unit, self.target_unit, attack, self)
 
@@ -331,7 +335,7 @@ def initialize_turn(p):
     
 def settle_attack_push(action, unit, enemy_unit, pos, p):
     
-    if not hasattr(action, "rolls"):
+    if not action.rolls:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
         action.rolls = rolls
 
@@ -361,7 +365,7 @@ def settle_attack_push(action, unit, enemy_unit, pos, p):
            
         else:
             if not out_of_board_vertical(pushpos):
-                action.outcome =  "Push"
+                action.outcome = "Push"
                 update_finalpos(action, pos)
                 if pushpos in p[0].units or pushpos in p[1].units or out_of_board_horizontal(pushpos):
                     gain_xp(unit)
@@ -378,7 +382,7 @@ def settle_attack_push(action, unit, enemy_unit, pos, p):
 
 def settle_attack(action, unit, enemy_unit, pos, p):
     
-    if not hasattr(action, "rolls"):
+    if not action.rolls:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
         action.rolls = rolls
 
