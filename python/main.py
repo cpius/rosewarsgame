@@ -3,12 +3,10 @@ import pygame, sys
 from pygame.locals import *
 import setup
 import mover
-import math
 import os
 import ai_module
 import settings
 import shutil
-import os
 import ai_methods
 
 pause_for_animation = settings.pause_for_animation
@@ -20,7 +18,7 @@ red = (255, 0, 0)
 brown = (128, 64, 0)
 grey = (48, 48, 48)
 yellow = (200, 200, 0)
-lightgrey = (223, 223, 223)
+light_grey = (223, 223, 223)
 blue = (0, 102, 204)
 
 unit_width = 70
@@ -30,13 +28,15 @@ x_border = 22
 y_border_top = 22
 y_border_bottom = 39
 
-def get_pixel_position(coords):
-    x = int((coords[0] - x_border) / unit_width) + 1
-    if coords[1] > 454:
-        y = 8 - int((coords[1] - y_border_bottom) / unit_height)
+
+def get_pixel_position(coordinates):
+    x = int((coordinates[0] - x_border) / unit_width) + 1
+    if coordinates[1] > 454:
+        y = 8 - int((coordinates[1] - y_border_bottom) / unit_height)
     else:
-        y = 8 - int((coords[1] - y_border_top) / unit_height)
+        y = 8 - int((coordinates[1] - y_border_top) / unit_height)
     return x, y
+
 
 class Coordinates(object):
     def __init__(self, x, y):
@@ -49,7 +49,7 @@ class Coordinates(object):
         else:
             y_border = y_border_bottom
             
-        return (int((pos[0] - 1) * unit_width + x_border + self.add_x), int((8 - pos[1]) * unit_height + y_border + self.add_y))
+        return int((pos[0] - 1) * unit_width + x_border + self.add_x), int((8 - pos[1]) * unit_height + y_border + self.add_y)
 
 base_coords = Coordinates(0, 0)
 center_coords = Coordinates(35, 53.2)
@@ -64,14 +64,18 @@ star_coords = Coordinates(8, 58)
 bfont_coords = Coordinates(45, 8)
 afont_coords = Coordinates(45, 68)
 
+
 _image_library = {}
-def get_image(path, type = None):
+
+
+def get_image(path):
         global _image_library
         image = _image_library.get(path)
-        if image == None:
+        if not image:
                 image = pygame.image.load(path).convert()
                 _image_library[path] = image
         return image    
+
 
 def draw_acounters(unit, pos):
     if unit.acounters:
@@ -91,7 +95,7 @@ def draw_dcounters(unit, pos):
     
     if dcounters:
         pygame.draw.circle(screen, grey, dcounter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, lightgrey, dcounter_coords.get(pos), 8, 0)
+        pygame.draw.circle(screen, light_grey, dcounter_coords.get(pos), 8, 0)
         
         if dcounters > 1:
             label = font.render(str(dcounters), 1, black)
@@ -147,9 +151,11 @@ def add_bcounters(unit):
         unit.bcounters = unit.frozen
     if hasattr(unit, "just_bribed"):
         unit.bcounters = 1
-        
+
+
 def get_unit_pic(name, color):
     return name.replace(" ", "-") + ",-" + color.lower() + ".jpg"
+
 
 def draw_unit(unit, pos, color):
     pic = get_image("./units_small/" + get_unit_pic(unit.name, color))
@@ -167,8 +173,6 @@ def draw_unit(unit, pos, color):
   
     draw_crusading(unit, pos)
     draw_bribed(unit, pos)
-           
-  
 
 
 def draw_game(p):
@@ -214,7 +218,6 @@ def draw_action(action):
     pygame.display.update()
 
 
-
 def get_input_counter(unit):
     label = font_big.render("Select counter for " + unit.name, 1, black)
     screen.blit(label, (20, 400))
@@ -252,7 +255,6 @@ def get_input_abilities(unit, p):
                 return 1
 
 
-
 def pause():
     while True:
         for event in pygame.event.get():
@@ -260,6 +262,7 @@ def pause():
                 exit_game()
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
+
 
 def add_counters(p):
     for unit in p[0].units.values():
@@ -284,7 +287,6 @@ def perform_action(action, p):
         if action == possible_action:
             matchco += 1
             action = possible_action
- 
 
     if matchco == 0:
         print "Action not allowed"
@@ -296,7 +298,7 @@ def perform_action(action, p):
         
         draw_action(action)
         pygame.time.delay(pause_for_animation)
-        
+
         mover.do_action(action, p)
 
         if settings.show_full_battle_result:
@@ -317,7 +319,6 @@ def perform_action(action, p):
             
         draw_game(p)
 
-        
         mover.initialize_action(p)
         
         if (p[0].actions_remaining < 1 or len(all_actions) == 1) and not hasattr(p[0], "extra_action"):
@@ -349,11 +350,12 @@ def show_unit(p, pos):
         print
         print unit
         for attribute, value in unit.__dict__.items():
-            if attribute not in ["name", "ycounters", "bcounters", "pic", "xp_gained_this_round", "color", "range", "movement"]:
+            if attribute not in ["name", "ycounters", "bcounters", "pic", "xp_gained_this_round",
+                                 "color", "range", "movement"]:
                 if value:
                     print attribute, value
         pic = get_image("./units_big/" + get_unit_pic(unit.name, color))
-        screen.blit(pic, (40,40))
+        screen.blit(pic, (40, 40))
         pygame.display.flip()
         
         while 1:
@@ -371,7 +373,6 @@ def run_game(p):
     if p[1].ai_name != "Human":
         p[1].ai = ai_module.AI(p[1].ai_name)
 
-
     pygame.time.set_timer(USEREVENT + 1, 1000)
     startpos, endpos = None, None
 
@@ -384,7 +385,8 @@ def run_game(p):
 
                 if p[0].ai_name != "Human":
 
-                    pygame.image.save(screen, "./replay/" + p[0].color + " " + str(settings.turn) + "." + str(3 - p[0].actions_remaining) + ".jpeg")
+                    pygame.image.save(screen, "./replay/" + p[0].color + " " + str(settings.turn) + "." +
+                                              str(3 - p[0].actions_remaining) + ".jpeg")
                     action = p[0].ai.select_action(p)
                     if action:
                         p = perform_action(action, p)
@@ -435,7 +437,8 @@ def run_game(p):
                     action = None
 
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos and possible_action.attackpos == (x, y) and possible_action.move_with_attack:
+                        if possible_action.startpos == startpos and possible_action.attackpos == (x, y) and \
+                                possible_action.move_with_attack:
                             if possible_action.endpos == startpos:
                                 action = possible_action
                                 break
@@ -474,7 +477,7 @@ def run_game(p):
                 if startpos and (x, y) in p[1].units:
                     action = mover.Action(p[0].unit, startpos, (x, y), (x, y), True, False)
                     chance_of_win = ai_methods.chance_of_win(p[0].unit, p[1].units[(x, y)], action)
-                    print "Chance of win", round(chance_of_win *100), "%"
+                    print "Chance of win", round(chance_of_win * 100), "%"
                     startpos = None
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
@@ -495,6 +498,7 @@ def run_game(p):
 
                     for possible_action in all_actions:
                         if possible_action.startpos == startpos and possible_action.attackpos == (x, y) and not possible_action.move_with_attack:
+
                             if possible_action.endpos == startpos:
                                 action = possible_action
                                 break
@@ -534,7 +538,7 @@ def run_game(p):
                 startpos, endpos = None, None
 
             elif event.type == KEYDOWN and command_q_down(event.key):
-                exit_game();
+                exit_game()
 
             elif event.type == QUIT:
                 exit_game()
@@ -544,8 +548,7 @@ def run_game(p):
 
 def new_game():
 
-    
-    p = setup.get_startunits()
+    p = setup.get_start_units()
 
     p[0].ai_name = settings.player1_ai
     p[1].ai_name = settings.player2_ai
