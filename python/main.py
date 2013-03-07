@@ -256,7 +256,9 @@ def get_input_abilities(unit, p):
 def pause():
     while True:
         for event in pygame.event.get():
-            if event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == QUIT:
+                exit_game()
+            elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
 def add_counters(p):
