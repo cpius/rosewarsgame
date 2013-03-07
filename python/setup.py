@@ -73,7 +73,7 @@ def test_pikeman_coloumn(units):
 def get_units(color):
     
     def select_basic_units(basic_units_bag, tiles_bag):
-        
+
         units = {}
         
         while len(units) < basic_unit_count: 

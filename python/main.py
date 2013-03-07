@@ -308,7 +308,7 @@ def perform_action(action, p):
 
         draw_game(p)
 
-        if p[0].ai == "Human":
+        if p[0].ai_name == "Human":
             add_counters(p)
         else:
             p[0].ai.add_counters(p)
@@ -359,51 +359,29 @@ def show_unit(p, pos):
                 if event.type == pygame.MOUSEBUTTONDOWN or event.type == KEYDOWN:
                     draw_game(p)
                     return
-    
 
-def run_game():
 
-    clock = pygame.time.Clock()
-    
-    p = setup.get_startunits()
-    
+def run_game(p):
 
-    if settings.player1_ai != "Human":
-        p[0].ai = ai_module.AI(settings.player1_ai)
-    else:
-        p[0].ai = "Human"
-        
-    if settings.player2_ai != "Human":
-        p[1].ai = ai_module.AI(settings.player2_ai)
-    else:
-        p[1].ai = "Human"
+    if p[0].ai_name != "Human":
+        p[0].ai = ai_module.AI(p[0].ai_name)
 
-    mover.initialize_turn([p[0], p[1]])
-    mover.initialize_turn([p[1], p[0]])
-    mover.initialize_action(p)
-    draw_game(p)
-   
-    p[0].actions_remaining = 1
-    print p[0].color
-    startpos, endpos = None, None
+    if p[1].ai_name != "Human":
+        p[1].ai = ai_module.AI(p[1].ai_name)
+
 
     pygame.time.set_timer(USEREVENT + 1, 1000)
+    startpos, endpos = None, None
 
-    if  os.path.exists("./replay"):
-        shutil.rmtree('./replay')
-    
-    os.makedirs("./replay")
-    
+    draw_game(p)
+
     while True:
-        time_passed = clock.tick(50)
-    
-        for event in pygame.event.get():  
-            
+        for event in pygame.event.get():
+
             if event.type == USEREVENT + 1:
 
-                
-                if p[0].ai != "Human":            
-                    
+                if p[0].ai_name != "Human":
+
                     pygame.image.save(screen, "./replay/" + p[0].color + " " + str(settings.turn) + "." + str(3 - p[0].actions_remaining) + ".jpeg")
                     action = p[0].ai.select_action(p)
                     if action:
@@ -415,49 +393,47 @@ def run_game():
                         mover.initialize_turn(p)
                         mover.initialize_action(p)
                         draw_game(p)
-                        
+
                     if hasattr(p[0], "extra_action"):
                         extra_action = p[0].ai.select_action(p)
                         p = perform_action(extra_action, p)
-                            
-    
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = get_pixel_position(event.pos)
-                
-                if not startpos and (x,y) in p[0].units:
-                    print "Start at", (x,y)
-                    startpos = (x,y)
+
+                if not startpos and (x, y) in p[0].units:
+                    print "Start at", (x, y)
+                    startpos = (x, y)
                     p[0].unit = p[0].units[startpos]
-                 
-                elif startpos and not endpos and (x,y) in p[1].units and p[0].unit.abilities:          
-                    print "Ability", (x,y)
+
+                elif startpos and not endpos and (x, y) in p[1].units and p[0].unit.abilities:
+                    print "Ability", (x, y)
                     if len(p[0].unit.abilities) > 1:
                         index = get_input_abilities(p[0].unit, p)
-                        action = mover.Action(p[0].unit, startpos, startpos, (x,y), False, False, True, p[0].unit.abilities[index])
+                        action = mover.Action(p[0].unit, startpos, startpos, (x, y), False, False, True, p[0].unit.abilities[index])
                         p, startpos, endpos = perform_action(action, p), None, None
-                    else:   
-                        action = mover.Action(p[0].unit, startpos, startpos, (x,y), False, False, True, p[0].unit.abilities[0])
+                    else:
+                        action = mover.Action(p[0].unit, startpos, startpos, (x, y), False, False, True, p[0].unit.abilities[0])
                         p, startpos, endpos = perform_action(action, p), None, None
 
-                elif startpos and not endpos and (x,y) in p[1].units and p[0].unit.range > 1:
-                    print "Attack", (x,y)
+                elif startpos and not endpos and (x, y) in p[1].units and p[0].unit.range > 1:
+                    print "Attack", (x, y)
 
-                    action = mover.Action(p[0].unit, startpos, startpos, (x,y), True, False)
-                    p, startpos, endpos = perform_action(action, p), None, None            
-                    
-         
-                elif startpos and not endpos and (x,y) in p[1].units:
-                    print "Attack-Move", (x,y)
-                    
+                    action = mover.Action(p[0].unit, startpos, startpos, (x, y), True, False)
+                    p, startpos, endpos = perform_action(action, p), None, None
+
+                elif startpos and not endpos and (x, y) in p[1].units:
+                    print "Attack-Move", (x, y)
+
                     if hasattr(p[0], "extra_action"):
                         all_actions = mover.get_extra_actions(p)
                     else:
                         all_actions = mover.get_actions(p)
-                    
+
                     action = None
-                         
+
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos and possible_action.attackpos == (x,y) and possible_action.move_with_attack:
+                        if possible_action.startpos == startpos and possible_action.attackpos == (x, y) and possible_action.move_with_attack:
                             if possible_action.endpos == startpos:
                                 action = possible_action
                                 break
@@ -468,79 +444,76 @@ def run_game():
                         startpos, endpos = None, None
                     else:
                         p, startpos, endpos = perform_action(action, p), None, None
-                
-                elif startpos and not endpos:
-                    print "Stop at", (x,y)
-                    endpos = (x,y)
-                   
-                elif startpos and endpos and (x,y) in p[1].units:
-                    print "Attack-Move", (x,y)
-                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, True)
-                    p, startpos, endpos = perform_action(action, p), None, None
-                    
 
-                elif startpos and endpos and (x,y) not in p[1].units:
-                    print "Move to", (x,y)
-                    action = mover.Action(p[0].unit, startpos, (x,y), None, False, False)
+                elif startpos and not endpos:
+                    print "Stop at", (x, y)
+                    endpos = (x, y)
+
+                elif startpos and endpos and (x, y) in p[1].units:
+                    print "Attack-Move", (x, y)
+                    action = mover.Action(p[0].unit, startpos, endpos, (x, y), True, False)
+
                     p, startpos, endpos = perform_action(action, p), None, None
-                    
-       
+
+                elif startpos and endpos and (x, y) not in p[1].units:
+                    print "Move to", (x, y)
+                    action = mover.Action(p[0].unit, startpos, (x, y), None, False, False)
+                    p, startpos, endpos = perform_action(action, p), None, None
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
                 x, y = get_pixel_position(event.pos)
-                
-                if startpos and (x,y) not in p[1].units:
-                    print "Move to", (x,y)
-                    action = mover.Action(p[0].unit, startpos, (x,y), None, False, False)
+
+                if startpos and (x, y) not in p[1].units:
+                    print "Move to", (x, y)
+                    action = mover.Action(p[0].unit, startpos, (x, y), None, False, False)
                     p, startpos, endpos = perform_action(action, p), None, None
 
 
-                if startpos and (x,y) in p[1].units:
-                    action = mover.Action(p[0].unit, startpos, (x,y), (x,y), True, False)
-                    chance_of_win = ai_methods.chance_of_win(p[0].unit, p[1].units[(x,y)], action)
+                if startpos and (x, y) in p[1].units:
+                    action = mover.Action(p[0].unit, startpos, (x, y), (x, y), True, False)
+                    chance_of_win = ai_methods.chance_of_win(p[0].unit, p[1].units[(x, y)], action)
                     print "Chance of win", round(chance_of_win *100), "%"
                     startpos = None
-                    
 
-
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:   
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 x, y = get_pixel_position(event.pos)
-                
+
                 if not startpos:
-                    show_unit(p, (x,y))  
-                
-                elif startpos and not endpos and (x,y) in p[1].units:
-                    print "Attack", (x,y)
-                    
+                    show_unit(p, (x, y))
+
+                elif startpos and not endpos and (x, y) in p[1].units:
+                    print "Attack", (x, y)
+
                     if hasattr(p[0], "extra_action"):
                         all_actions = mover.get_extra_actions(p)
                     else:
                         all_actions = mover.get_actions(p)
-                    
+
                     action = None
-                         
+
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos and possible_action.attackpos == (x,y) and not possible_action.move_with_attack:
+                        if possible_action.startpos == startpos and possible_action.attackpos == (x, y) and not possible_action.move_with_attack:
                             if possible_action.endpos == startpos:
                                 action = possible_action
                                 break
                             action = possible_action
-                    
+
                     if not action:
                         print "Action not possible"
                         startpos, endpos = None, None
                     else:
                         p, startpos, endpos = perform_action(action, p), None, None
 
-                elif startpos and endpos and (x,y) in p[1].units:
-                    print "Attack", (x,y)
-                    action = mover.Action(p[0].unit, startpos, endpos, (x,y), True, False)
+
+                elif startpos and endpos and (x, y) in p[1].units:
+                    print "Attack", (x, y)
+                    action = mover.Action(p[0].unit, startpos, endpos, (x, y), True, False)
                     p, startpos, endpos = perform_action(action, p), None, None
 
             if event.type == KEYDOWN and event.key == K_p:
                 print "paused"
                 pause()
-                
-  
+
             if event.type == KEYDOWN and event.key == K_a:
                 print
                 print "Possible actions:"
@@ -553,26 +526,50 @@ def run_game():
                     for action in p[0].actions:
                         print action
                 print
-                        
+
             if event.type == KEYDOWN and event.key == K_ESCAPE:
                 print "move cleared"
                 startpos, endpos = None, None
 
             elif event.type == KEYDOWN and command_q_down(event.key):
                 exit_game();
-    
+
             elif event.type == QUIT:
                 exit_game()
 
-            
             pygame.display.flip()
+
+
+def new_game():
+
+    
+    p = setup.get_startunits()
+
+    p[0].ai_name = settings.player1_ai
+    p[1].ai_name = settings.player2_ai
+
+    mover.initialize_turn([p[0], p[1]])
+    mover.initialize_turn([p[1], p[0]])
+    mover.initialize_action(p)
+   
+    p[0].actions_remaining = 1
+    print p[0].color
+
+    if  os.path.exists("./replay"):
+        shutil.rmtree('./replay')
+    
+    os.makedirs("./replay")
+
+    run_game(p)
 
 
 def command_q_down(key):
     return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
 
+
 def exit_game():
     sys.exit()
+
 
 def game_end(player):
     font = pygame.font.SysFont("monospace", 55, bold = True)
@@ -583,10 +580,13 @@ def game_end(player):
     exit_game()
 
 
+pygame.init()
+screen = pygame.display.set_mode(board_size)
+font = pygame.font.SysFont("arial", 18, True, False)
+font_big = pygame.font.SysFont("arial", 28, True, False)
+
+
 if __name__ == '__main__':
-    pygame.init()
-    screen = pygame.display.set_mode(board_size)
-    font = pygame.font.SysFont("arial", 18, True, False)
-    font_big = pygame.font.SysFont("arial", 28, True, False)
-    
-    run_game()
+
+    new_game()
+

@@ -293,13 +293,18 @@ def get_action(p, actions):
 
     actions_orig = find_action_scores_one_action(saved_gamestate, possible_actions)
      
+    actions_orig.sort(key = attrgetter("score"), reverse= True)
+
+    print "actions orig score", actions_orig[0].score 
+     
     if p[0].actions_remaining == 1:
                 
         actions = actions_orig
 
         rnd.shuffle(actions)
+
         actions.sort(key = attrgetter("score"), reverse=True)
-  
+
     else:
         actions = find_action_scores_two_actions(saved_gamestate, actions_orig)
 

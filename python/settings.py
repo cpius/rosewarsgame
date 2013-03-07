@@ -8,7 +8,7 @@ player1_ai = "Advancer"
 
 document_ai_actions = True
 
-use_special_units = []  #Special units that must be present in the game
+use_special_units = ["Crusader"]  #Special units that must be present in the game
 dont_use_special_units = ["Chariot", "Samurai"] #Special units that must not be present in the game
 
 

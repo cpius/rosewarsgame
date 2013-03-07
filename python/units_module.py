@@ -6,6 +6,7 @@ class Unit(object):
     xp = 0
     zoc = []
     abilities = []
+    used = False
     
     #double_attack_cost = defence_maneuverability = shield = scouting = extra_life = rage = cooldown = lancing = flag_bearing = longsword = charioting = berserking = triple_attack = push = abilities = samuraiing = False
 
