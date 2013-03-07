@@ -48,9 +48,9 @@
     return [[Canon alloc] init];
 }
 
-- (void)performedAction:(Action *)action {
+- (void)didPerformedAction:(Action *)action {
     
-    [super performedAction:action];
+    [super didPerformedAction:action];
 
     if (action.isAttack) {
         _isQuarantined = YES;

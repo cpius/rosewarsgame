@@ -8,6 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+@class TimedAbility;
+@protocol TimedAbilityDelegate <NSObject>
+
+@optional
+
+- (void)timedAbilityWillStart:(TimedAbility*)timedAbility;
+- (void)timedAbilityDidStart:(TimedAbility*)timedAbility;
+
+- (void)timedAbilityWillStop:(TimedAbility*)timedAbility;
+- (void)timedAbilityDidStop:(TimedAbility*)timedAbility;
+
+@end
+
 @class Card;
 @interface TimedAbility : NSObject {
     
@@ -16,10 +29,11 @@
 }
 
 @property (nonatomic, readonly) NSUInteger numberOfRounds;
+@property (nonatomic, weak) id<TimedAbilityDelegate> delegate;
 
-- (id)initForNumberOfRounds:(NSUInteger)numberOfRounds;
+- (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card;
 
-- (void)startTimedAbilityOnCard:(Card*)card;
+- (void)startTimedAbility;
 - (void)stopTimedAbility;
 
 @end

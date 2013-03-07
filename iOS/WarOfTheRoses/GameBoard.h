@@ -37,6 +37,7 @@
     CardSprite *_activeCard;
     
     NSMutableArray *_highlightedNodes;
+    NSMutableArray *_highlightedCards;
 }
 
 @property (nonatomic, weak) id<GameBoardActionProtocol> delegate;
@@ -68,8 +69,16 @@
 
 - (void)swapCardFromNode:(GameBoardNode*)fromNode toNode:(GameBoardNode*)toNode;
 
+- (void)highlightNodesForAttackDirectionAtLocations:(NSArray *)locations;
+- (void)highlightSelectedAttackDirectionAtLocation:(GridLocation*)location;
+- (void)deHighlightSelectedAttackDirectionAtLocation:(GridLocation*)location;
+
+
 - (void)highlightNodeAtLocation:(GridLocation*)location withColor:(ccColor3B)color;
+- (void)highlightCardAtLocation:(GridLocation *)location withColor:(ccColor3B)color;
 - (void)highlightCardAtLocation:(GridLocation*)location withColor:(ccColor3B)color actionType:(ActionTypes)actionType;
 - (void)deHighlightAllNodes;
+- (void)deHighlightNode:(GameBoardNode*)node;
+- (void)deHighlightNodeAtLocation:(GridLocation *)location;
 
 @end

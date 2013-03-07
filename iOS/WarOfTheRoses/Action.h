@@ -29,7 +29,7 @@
 @interface Action : NSObject
 
 @property (nonatomic, weak) id<ActionDelegate> delegate;
-@property (nonatomic, readonly) NSArray *path;
+@property (nonatomic, strong) NSArray *path;
 @property (nonatomic, readonly) Card *cardInAction;
 @property (nonatomic, readonly) Card *enemyCard;
 
@@ -42,6 +42,7 @@
 
 - (BOOL)isWithinRange;
 - (GridLocation*)getLastLocationInPath;
+- (GridLocation *)getEntryLocationInPath;
 
 - (void)performActionWithCompletion:(void (^)())completion;
 

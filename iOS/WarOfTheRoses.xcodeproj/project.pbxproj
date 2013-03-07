@@ -166,6 +166,18 @@
 		6DD5887516E542AC00466DDB /* scout_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887416E542AC00466DDB /* scout_icon.png */; };
 		6DD5887816E54ADB00466DDB /* green_cardindicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887616E54ADB00466DDB /* green_cardindicator.png */; };
 		6DD5887916E54ADB00466DDB /* red_cardindicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887716E54ADB00466DDB /* red_cardindicator.png */; };
+		6DD5887C16E676F700466DDB /* MinimumRequirementDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5887B16E676F700466DDB /* MinimumRequirementDeckStrategy.m */; };
+		6DD5887F16E6823900466DDB /* green_cardindicator-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887D16E6823800466DDB /* green_cardindicator-hd.png */; };
+		6DD5888016E6823900466DDB /* red_cardindicator-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5887E16E6823800466DDB /* red_cardindicator-hd.png */; };
+		6DD5888316E6884800466DDB /* FlagBearer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5888216E6884800466DDB /* FlagBearer.m */; };
+		6DD5888816E6896D00466DDB /* flagbearer_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888416E6896C00466DDB /* flagbearer_0-hd.png */; };
+		6DD5888916E6896D00466DDB /* flagbearer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888516E6896C00466DDB /* flagbearer_0.png */; };
+		6DD5888A16E6896D00466DDB /* flagbearer_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888616E6896D00466DDB /* flagbearer_icon-hd.png */; };
+		6DD5888B16E6896D00466DDB /* flagbearer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888716E6896D00466DDB /* flagbearer_icon.png */; };
+		6DD5888E16E68B5600466DDB /* HighMorale.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5888D16E68B5600466DDB /* HighMorale.m */; };
+		6DD5889116E7CE2A00466DDB /* attack_direction-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888F16E7CE2A00466DDB /* attack_direction-hd.png */; };
+		6DD5889216E7CE2A00466DDB /* attack_direction.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5889016E7CE2A00466DDB /* attack_direction.png */; };
+		6DD5889516E7E1CA00466DDB /* ActionCostLess.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5889416E7E1CA00466DDB /* ActionCostLess.m */; };
 		6DEA3468168C544400485F00 /* BaseRangedAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA3467168C544400485F00 /* BaseRangedAttribute.m */; };
 		6DEA346C168C555900485F00 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346B168C555900485F00 /* RawBonus.m */; };
 		6DEA346F168C556400485F00 /* TimedBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346E168C556400485F00 /* TimedBonus.m */; };
@@ -537,6 +549,22 @@
 		6DD5887416E542AC00466DDB /* scout_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scout_icon.png; path = Resources/Images/scout_icon.png; sourceTree = "<group>"; };
 		6DD5887616E54ADB00466DDB /* green_cardindicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green_cardindicator.png; path = Resources/Images/green_cardindicator.png; sourceTree = "<group>"; };
 		6DD5887716E54ADB00466DDB /* red_cardindicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red_cardindicator.png; path = Resources/Images/red_cardindicator.png; sourceTree = "<group>"; };
+		6DD5887A16E676F600466DDB /* MinimumRequirementDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimumRequirementDeckStrategy.h; sourceTree = "<group>"; };
+		6DD5887B16E676F700466DDB /* MinimumRequirementDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimumRequirementDeckStrategy.m; sourceTree = "<group>"; };
+		6DD5887D16E6823800466DDB /* green_cardindicator-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green_cardindicator-hd.png"; path = "Resources/Images/green_cardindicator-hd.png"; sourceTree = "<group>"; };
+		6DD5887E16E6823800466DDB /* red_cardindicator-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red_cardindicator-hd.png"; path = "Resources/Images/red_cardindicator-hd.png"; sourceTree = "<group>"; };
+		6DD5888116E6884800466DDB /* FlagBearer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagBearer.h; sourceTree = "<group>"; };
+		6DD5888216E6884800466DDB /* FlagBearer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlagBearer.m; sourceTree = "<group>"; };
+		6DD5888416E6896C00466DDB /* flagbearer_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "flagbearer_0-hd.png"; path = "Resources/Images/flagbearer_0-hd.png"; sourceTree = "<group>"; };
+		6DD5888516E6896C00466DDB /* flagbearer_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flagbearer_0.png; path = Resources/Images/flagbearer_0.png; sourceTree = "<group>"; };
+		6DD5888616E6896D00466DDB /* flagbearer_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "flagbearer_icon-hd.png"; path = "Resources/Images/flagbearer_icon-hd.png"; sourceTree = "<group>"; };
+		6DD5888716E6896D00466DDB /* flagbearer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flagbearer_icon.png; path = Resources/Images/flagbearer_icon.png; sourceTree = "<group>"; };
+		6DD5888C16E68B5500466DDB /* HighMorale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighMorale.h; sourceTree = "<group>"; };
+		6DD5888D16E68B5600466DDB /* HighMorale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HighMorale.m; sourceTree = "<group>"; };
+		6DD5888F16E7CE2A00466DDB /* attack_direction-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "attack_direction-hd.png"; path = "Resources/Images/attack_direction-hd.png"; sourceTree = "<group>"; };
+		6DD5889016E7CE2A00466DDB /* attack_direction.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = attack_direction.png; path = Resources/Images/attack_direction.png; sourceTree = "<group>"; };
+		6DD5889316E7E1CA00466DDB /* ActionCostLess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionCostLess.h; sourceTree = "<group>"; };
+		6DD5889416E7E1CA00466DDB /* ActionCostLess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionCostLess.m; sourceTree = "<group>"; };
 		6DEA3466168C544400485F00 /* BaseRangedAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRangedAttribute.h; sourceTree = "<group>"; };
 		6DEA3467168C544400485F00 /* BaseRangedAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseRangedAttribute.m; sourceTree = "<group>"; };
 		6DEA346A168C555900485F00 /* RawBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawBonus.h; sourceTree = "<group>"; };
@@ -890,6 +918,8 @@
 				6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */,
 				6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */,
 				6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */,
+				6DD5887A16E676F600466DDB /* MinimumRequirementDeckStrategy.h */,
+				6DD5887B16E676F700466DDB /* MinimumRequirementDeckStrategy.m */,
 			);
 			name = DeckStrategy;
 			sourceTree = "<group>";
@@ -960,6 +990,14 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DD5888F16E7CE2A00466DDB /* attack_direction-hd.png */,
+				6DD5889016E7CE2A00466DDB /* attack_direction.png */,
+				6DD5888416E6896C00466DDB /* flagbearer_0-hd.png */,
+				6DD5888516E6896C00466DDB /* flagbearer_0.png */,
+				6DD5888616E6896D00466DDB /* flagbearer_icon-hd.png */,
+				6DD5888716E6896D00466DDB /* flagbearer_icon.png */,
+				6DD5887D16E6823800466DDB /* green_cardindicator-hd.png */,
+				6DD5887E16E6823800466DDB /* red_cardindicator-hd.png */,
 				6DD5887616E54ADB00466DDB /* green_cardindicator.png */,
 				6DD5887716E54ADB00466DDB /* red_cardindicator.png */,
 				6DD5887416E542AC00466DDB /* scout_icon.png */,
@@ -1142,6 +1180,10 @@
 				6DD5886616E53B3000466DDB /* TimedAbility.m */,
 				6DD5886816E53C4B00466DDB /* Bribe.h */,
 				6DD5886916E53C4B00466DDB /* Bribe.m */,
+				6DD5888C16E68B5500466DDB /* HighMorale.h */,
+				6DD5888D16E68B5600466DDB /* HighMorale.m */,
+				6DD5889316E7E1CA00466DDB /* ActionCostLess.h */,
+				6DD5889416E7E1CA00466DDB /* ActionCostLess.m */,
 			);
 			name = Abilities;
 			sourceTree = "<group>";
@@ -1662,6 +1704,8 @@
 				6DC7F49E16E528B600CD5071 /* Berserker.m */,
 				6DD5886B16E540E200466DDB /* Scout.h */,
 				6DD5886C16E540E200466DDB /* Scout.m */,
+				6DD5888116E6884800466DDB /* FlagBearer.h */,
+				6DD5888216E6884800466DDB /* FlagBearer.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -1864,6 +1908,14 @@
 				6DD5887516E542AC00466DDB /* scout_icon.png in Resources */,
 				6DD5887816E54ADB00466DDB /* green_cardindicator.png in Resources */,
 				6DD5887916E54ADB00466DDB /* red_cardindicator.png in Resources */,
+				6DD5887F16E6823900466DDB /* green_cardindicator-hd.png in Resources */,
+				6DD5888016E6823900466DDB /* red_cardindicator-hd.png in Resources */,
+				6DD5888816E6896D00466DDB /* flagbearer_0-hd.png in Resources */,
+				6DD5888916E6896D00466DDB /* flagbearer_0.png in Resources */,
+				6DD5888A16E6896D00466DDB /* flagbearer_icon-hd.png in Resources */,
+				6DD5888B16E6896D00466DDB /* flagbearer_icon.png in Resources */,
+				6DD5889116E7CE2A00466DDB /* attack_direction-hd.png in Resources */,
+				6DD5889216E7CE2A00466DDB /* attack_direction.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2064,6 +2116,10 @@
 				6DD5886716E53B3000466DDB /* TimedAbility.m in Sources */,
 				6DD5886A16E53C4B00466DDB /* Bribe.m in Sources */,
 				6DD5886D16E540E200466DDB /* Scout.m in Sources */,
+				6DD5887C16E676F700466DDB /* MinimumRequirementDeckStrategy.m in Sources */,
+				6DD5888316E6884800466DDB /* FlagBearer.m in Sources */,
+				6DD5888E16E68B5600466DDB /* HighMorale.m in Sources */,
+				6DD5889516E7E1CA00466DDB /* ActionCostLess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

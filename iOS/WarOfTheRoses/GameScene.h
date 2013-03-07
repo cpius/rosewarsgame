@@ -38,6 +38,10 @@
     GameBoardNode *_showingDetailOfNode;
     
     Action *_actionInQueue;
+    NSArray *_pathInQueue;
+    GridLocation *_selectedAttackDirection;
+    NSDictionary *_attackDirections;
+    
     BattlePlan *_battlePlan;
     
     CCSprite *_turnIndicator;

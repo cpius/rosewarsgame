@@ -9,6 +9,7 @@
 #import "CCSprite.h"
 #import "RangeAttribute.h"
 #import "GridLocation.h"
+#import "TimedAbility.h"
 
 @class Card;
 @protocol CardDelegate <NSObject>
@@ -19,7 +20,7 @@
 @end
 
 @class Action;
-@interface Card : CCNode  {
+@interface Card : CCNode <TimedAbilityDelegate> {
 
     BOOL hasSpecialAbility;
 }
@@ -92,13 +93,17 @@
 @property(nonatomic, assign) BOOL hasPerformedActionThisRound;
 @property(nonatomic, assign) BOOL hasPerformedAttackThisRound;
 
+@property(nonatomic, readonly) NSMutableArray *timedAbilities;
+
 - (void)commonInit;
 
 - (void)consumeAllMoves;
 - (void)consumeMove;
 - (void)consumeMoves:(NSUInteger)moves;
 
-- (void)performedAction:(Action*)action;
+- (void)willPerformAction:(Action*)action;
+- (void)didPerformedAction:(Action*)action;
+
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount;
 - (BOOL)allowPath:(NSArray*)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary*)allLocations;
 
@@ -111,5 +116,7 @@
 
 - (void)combatFinishedAgainstDefender:(Card*)defender withOutcome:(CombatOutcome)combatOutcome;
 - (void)combatFinishedAgainstAttacker:(Card*)attacker withOutcome:(CombatOutcome)combatOutcome;
+
+- (void)addTimedAbility:(TimedAbility*)timedAbility;
 
 @end

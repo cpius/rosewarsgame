@@ -8,6 +8,7 @@
 
 #import "Chariot.h"
 #import "Action.h"
+#import "ActionCostLess.h"
 
 @implementation Chariot
 
@@ -52,10 +53,13 @@
     
 }
 
-- (void)performedAction:(Action *)action {
+- (void)didPerformedAction:(Action *)action {
     
     if (action.isAttack) {
         self.hasPerformedAttackThisRound = YES;
+        
+        [self addTimedAbility:[[ActionCostLess alloc] initForNumberOfRounds:1 onCard:self]];
+        
         CCLOG(@"Chariot has attacked but moves are not consumed");
     }
 }

@@ -12,14 +12,27 @@
 
 @implementation TimedAbility
 
-- (id)initForNumberOfRounds:(NSUInteger)numberOfRounds {
+@synthesize delegate = _delegate;
+
+- (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card {
     
     self = [super init];
     
     if (self) {
         _numberOfRounds = numberOfRounds;
+        _card = card;
         
         [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"currentRound" options:NSKeyValueObservingOptionNew context:nil];
+        
+        if ([_delegate respondsToSelector:@selector(timedAbilityWillStart:)]) {
+            [_delegate timedAbilityWillStart:self];
+        }
+        
+        [self startTimedAbility];
+
+        if ([_delegate respondsToSelector:@selector(timedAbilityDidStart:)]) {
+            [_delegate timedAbilityDidStart:self];
+        }
     }
     
     return self;
@@ -30,15 +43,24 @@
     if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"currentRound"]) {
         
         if ([GameManager sharedManager].currentGame.currentRound == _abilityStartedInRound + _numberOfRounds) {
+            
+            if ([_delegate respondsToSelector:@selector(timedAbilityWillStop:)]) {
+                [_delegate timedAbilityWillStop:self];
+            }
+
             [self stopTimedAbility];
+            
+            if ([_delegate respondsToSelector:@selector(timedAbilityDidStop:)]) {
+                [_delegate timedAbilityDidStop:self];
+            }
+
             [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"currentRound"];
         }
     }
 }
 
-- (void)startTimedAbilityOnCard:(Card*)card {
+- (void)startTimedAbility {
     
-    _card = card;
     _abilityStartedInRound = [GameManager sharedManager].currentGame.currentRound;
 }
 

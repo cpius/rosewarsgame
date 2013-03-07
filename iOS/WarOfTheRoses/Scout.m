@@ -52,18 +52,18 @@
         canPerformAction = NO;
     }
     
+    // Scout can't move the first round
+    if ([GameManager sharedManager].currentGame.currentRound == 1) {
+        canPerformAction = NO;
+    }
+
     return canPerformAction;
 }
 
 - (BOOL)allowPath:(NSArray *)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary *)allLocations {
     
     BOOL allowPath = [super allowPath:path forActionType:actionType allLocations:allLocations];
-    
-    // Scout can't move the first round
-    if ([GameManager sharedManager].currentGame.currentRound == 1) {
-        allowPath = NO;
-    }
-    
+        
     return allowPath;
 }
 

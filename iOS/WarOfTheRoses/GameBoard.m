@@ -34,6 +34,7 @@
         _redBackgroundImageName = @"redbackground.png";
         
         _highlightedNodes = [NSMutableArray array];
+        _highlightedCards = [NSMutableArray array];
     }
     
     return self;
@@ -275,8 +276,58 @@
     if (node != nil) {
         [node.nodeSprite setColor:color];
         
-        if (![_highlightedNodes containsObject:node.nodeSprite]) {
-            [_highlightedNodes addObject:node.nodeSprite];
+        if (![_highlightedNodes containsObject:node]) {
+            [_highlightedNodes addObject:node];
+        }
+    }
+}
+
+- (void)highlightNodesForAttackDirectionAtLocations:(NSArray *)locations {
+    
+    for (GridLocation *location in locations) {
+
+        GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+        
+        if (node != nil) {
+
+            [node highlightForType:kHighlightTypeAttackDirection];
+            
+            if (![_highlightedNodes containsObject:node]) {
+                [_highlightedNodes addObject:node];
+            }
+        }
+    }
+}
+
+- (void)highlightSelectedAttackDirectionAtLocation:(GridLocation *)location {
+    
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+    
+    if (node != nil && node.highlightedAs == kHighlightTypeAttackDirection) {
+        
+        [node focusType:kHighlightTypeAttackDirection];
+    }
+}
+
+- (void)deHighlightSelectedAttackDirectionAtLocation:(GridLocation *)location {
+    
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+    
+    if (node != nil && node.highlightedAs == kHighlightTypeAttackDirection) {
+        
+        [node unFocusType:kHighlightTypeAttackDirection];
+    }
+}
+
+- (void)highlightCardAtLocation:(GridLocation *)location withColor:(ccColor3B)color {
+    
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+    
+    if (node != nil && node.card != nil) {
+        [node.card setColor:color];
+        
+        if (![_highlightedNodes containsObject:node]) {
+            [_highlightedNodes addObject:node];
         }
     }
 }
@@ -289,50 +340,50 @@
         
         if (actionType == kActionTypeRanged) {
             
-            CCSprite *crosshair = [CCSprite spriteWithFile:@"crosshair.png"];
-            crosshair.scale = node.card.scaleX;
-            crosshair.anchorPoint = ccp(0.5, 0.5);
-            crosshair.position = ccp(node.card.contentSize.width / 2, node.card.contentSize.height / 2);
-            [node.card addChild:crosshair z:10 tag:10];
-            [crosshair runAction:[CCRepeatForever actionWithAction:
-                                  [CCSequence actions:[CCScaleTo actionWithDuration:0.2 scale:1.2],
-                                   [CCScaleTo actionWithDuration:0.2 scale:1.0],
-                                   nil]]];
+            [node highlightCardForType:kHighlightTypeRangedTarget];
         }
         else if (actionType == kActionTypeMelee) {
             
-            CCSprite *swordClash = [CCSprite spriteWithFile:@"swordclash.png"];
-            swordClash.scale = node.card.scaleX;
-            swordClash.anchorPoint = ccp(0.5, 0.5);
-            swordClash.position = ccp(node.card.contentSize.width / 2, node.card.contentSize.height / 2);
-            [node.card addChild:swordClash z:10 tag:10];
-            [swordClash runAction:[CCRepeatForever actionWithAction:
-                                  [CCSequence actions:[CCScaleTo actionWithDuration:0.2 scale:1.2],
-                                   [CCScaleTo actionWithDuration:0.2 scale:1.0],
-                                   nil]]];
+            [node highlightCardForType:kHighlightTypeMeleeTarget];
         }
         else {
             [node.card setColor:color];
         }
         
-        if (![_highlightedNodes containsObject:node.card]) {
-            [_highlightedNodes addObject:node.card];
+        if (![_highlightedNodes containsObject:node]) {
+            [_highlightedNodes addObject:node];
         }
     }
 }
 
-- (void)deHighlightAllNodes {
+- (void)deHighlightNodeAtLocation:(GridLocation *)location {
     
-    for (CCSprite *sprite in _highlightedNodes) {
-        [sprite setColor:ccc3(255, 255, 255)];
-        
-        CCSprite *crosshair = (CCSprite*)[sprite getChildByTag:10];
-        if (crosshair) {
-            [crosshair removeFromParentAndCleanup:YES];
-        }
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+    
+    [self deHighlightNode:node];
+}
+
+- (void)deHighlightNode:(GameBoardNode*)node {
+    
+    [node.nodeSprite setColor:ccc3(255, 255, 255)];
+
+    if (node.card != nil) {
+        [node.card setColor:ccc3(255, 255, 255)];
     }
     
-    [_highlightedNodes removeAllObjects];
+    [node deHighlight];
+    
+    [_highlightedNodes removeObject:node];
+}
+
+- (void)deHighlightAllNodes {
+    
+    NSArray *nodes = [NSArray arrayWithArray:_highlightedNodes];
+    
+    for (GameBoardNode *node in nodes) {
+        
+        [self deHighlightNode:node];
+    }
 }
 
 - (void)selectCardInGameBoardNode:(GameBoardNode *)node useHighlighting:(BOOL)highlight {

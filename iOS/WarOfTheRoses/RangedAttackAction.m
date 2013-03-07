@@ -45,8 +45,8 @@
     
     [self.delegate action:self hasResolvedRangedCombatWithOutcome:combatOutcome];
         
-    [self.cardInAction performedAction:self];
     [[GameManager sharedManager] actionUsed:self];
+    [self.cardInAction didPerformedAction:self];
     
     [self.delegate afterPerformAction:self];
 

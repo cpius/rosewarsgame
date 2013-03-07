@@ -52,6 +52,19 @@
     return nil;
 }
 
+- (GridLocation *)getEntryLocationInPath {
+    
+    if (_path != nil && _path.count > 1) {
+        return [[_path objectAtIndex:_path.count - 2] location];
+    }
+    
+    if (_path != nil && _path.count == 1) {
+        return [[_path lastObject] location];
+    }
+    
+    return nil;
+}
+
 - (ActionTypes)actionType {
     
     @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call on baseclass" userInfo:nil];

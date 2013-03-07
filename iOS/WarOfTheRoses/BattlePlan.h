@@ -16,5 +16,8 @@
 @property (nonatomic, readonly) NSArray *rangeActions;
 
 - (NSArray*)createBattlePlanForCard:(Card*)card enemyUnits:(NSArray*)enemyUnits unitLayout:(NSDictionary*)unitLayout;
+- (Action*)getActionToGridLocation:(GridLocation*)gridLocation;
+
+- (NSDictionary *)getAttackDirectionsForCard:(Card *)card whenAttackingEnemyCard:(Card*)enemyCard withUnitLayout:(NSDictionary*)unitLayout;
 
 @end

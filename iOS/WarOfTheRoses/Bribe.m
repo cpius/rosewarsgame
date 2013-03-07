@@ -12,15 +12,15 @@
 
 @implementation Bribe
 
-- (void)startTimedAbilityOnCard:(Card *)card {
+- (void)startTimedAbility {
     
-    [super startTimedAbilityOnCard:card];
+    [super startTimedAbility];
     
     // Bribe makes card change color
-    card.cardColor = !card.cardColor;
+    _card.cardColor = !_card.cardColor;
     
     // And adds a +1 attack bonus
-    [card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfRounds:1]];
+    [_card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfRounds:1]];
 }
 
 @end

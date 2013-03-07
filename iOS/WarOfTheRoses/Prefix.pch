@@ -16,4 +16,5 @@
 #import "SimpleAudioEngine.h"
 #import "SoundManager.h"
 #import "GridLocation.h"
+#import "TimedAbility.h"
 #endif

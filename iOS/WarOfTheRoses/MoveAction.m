@@ -56,8 +56,8 @@
             [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:endLocation];
         }
         
-        [self.cardInAction performedAction:self];
         [[GameManager sharedManager] actionUsed:self];
+        [self.cardInAction didPerformedAction:self];
         
         [self.delegate afterPerformAction:self];
 

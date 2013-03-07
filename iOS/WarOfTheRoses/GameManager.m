@@ -9,6 +9,7 @@
 #import "GameManager.h"
 #import "RandomDiceStrategy.h"
 #import "RandomDeckStrategy.h"
+#import "MinimumRequirementDeckStrategy.h"
 
 #import "AIStrategyAdvancer.h"
 #import "AIStrategyCatapulter.h"
@@ -67,10 +68,26 @@
     if (gameType == kGameTypeSinglePlayer) {
         
         _enemyPlayer = [[AIPlayer alloc] initWithStrategy:[[AIStrategyAdvancer alloc] init]];
-        _enemyPlayer.deckStrategy = [[RandomDeckStrategy alloc] init];
+        _enemyPlayer.deckStrategy = [MinimumRequirementDeckStrategy strategy];
         
-        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:1 cardColor:_currentGame.enemyColor];
-        [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
+        BOOL setupComplete = NO;
+        NSUInteger retries = 0;
+        
+        while (!setupComplete) {
+            
+            retries++;
+            _currentGame.enemyDeck = [_enemyPlayer.deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:1 cardColor:_currentGame.enemyColor];
+            [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
+        
+            if ([_enemyPlayer.deckStrategy respondsToSelector:@selector(deckSetupMatchesRequirements)]) {
+                setupComplete = [_enemyPlayer.deckStrategy deckSetupMatchesRequirements];
+            }
+            else {
+                setupComplete = YES;
+            }
+        }
+        
+        NSLog(@"Number of retries before deck met requirements: %d", retries);
     }
     
     // TODO: Random starter

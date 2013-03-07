@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "383315681.316184"
+         timestampString = "384374117.236341"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "223"
-         endingLineNumber = "223"
+         startingLineNumber = "224"
+         endingLineNumber = "224"
          landmarkName = "-layoutBoard"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "383315681.316184"
+         timestampString = "384374117.236341"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "97"
-         endingLineNumber = "97"
+         startingLineNumber = "98"
+         endingLineNumber = "98"
          landmarkName = "-getActionsfromGameBoardNode:toGameBoardNode:allLocations:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameScene.m"
-         timestampString = "383768701.000011"
+         timestampString = "384294309.802148"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "142"
-         endingLineNumber = "142"
+         startingLineNumber = "144"
+         endingLineNumber = "144"
          landmarkName = "-populateUnitLayout"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,38 +112,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/Card.m"
-         timestampString = "384118236.010174"
+         timestampString = "384297301.159766"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "183"
-         endingLineNumber = "183"
+         startingLineNumber = "202"
+         endingLineNumber = "202"
          landmarkName = "-canPerformActionOfType:withRemainingActionCount:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "383315681.316184"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "292"
-         endingLineNumber = "292"
-         landmarkName = "-highlightCardAtLocation:withColor:actionType:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRosesTest/SpecialUnitTest.m"
-         timestampString = "384124631.401174"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "88"
-         endingLineNumber = "88"
-         landmarkName = "-testBerserkerAttackingCannon"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

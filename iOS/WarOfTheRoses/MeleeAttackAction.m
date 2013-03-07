@@ -73,8 +73,8 @@
                     [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:retreatLocation];
                 }
                 
-                [self.cardInAction performedAction:self];
                 [[GameManager sharedManager] actionUsed:self];
+               [self.cardInAction didPerformedAction:self];
                 
                 [self.delegate afterPerformAction:self];
 
@@ -95,8 +95,8 @@
                         [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:retreatLocation];
                     }
                     
-                    [self.cardInAction performedAction:self];
                     [[GameManager sharedManager] actionUsed:self];
+                    [self.cardInAction didPerformedAction:self];
                     
                     [self.delegate afterPerformAction:self];
 
@@ -110,8 +110,8 @@
                 [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
                 [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:startLocation];
                 
-                [self.cardInAction performedAction:self];
                 [[GameManager sharedManager] actionUsed:self];
+                [self.cardInAction didPerformedAction:self];
                 
                 [self.delegate afterPerformAction:self];
 

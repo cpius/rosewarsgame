@@ -29,6 +29,8 @@
 - (void)showCardDetail;
 - (void)hideCardDetail;
 
+- (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType;
+
 - (void)displayCombatOutcome:(CombatOutcome)combatOutcome;
 
 @end
@@ -188,42 +190,50 @@
         
         if ([_gameboard nodeIsActive]) {
             
-            Action *action = [_gameboard getActionsToGameBoardNode:targetNode allLocations:_gameManager.currentGame.unitLayout];
+            Action *action = [_battlePlan getActionToGridLocation:targetNode.locationInGrid];
             
             if (action == nil || ![action isWithinRange]) {
                 
                 [self resetUserInterface];
                 _actionInQueue = nil;
+                _pathInQueue = nil;
+                _selectedAttackDirection = nil;
                 return;
             }
             
             if (_actionInQueue != nil) {
+                
+                if (_selectedAttackDirection != nil) {
+                    [_gameboard deHighlightSelectedAttackDirectionAtLocation:_selectedAttackDirection];
+                }
+                
+                _pathInQueue = [_attackDirections objectForKey:targetNode.locationInGrid];
+                if (_pathInQueue != nil) {
+                    _selectedAttackDirection = targetNode.locationInGrid;
+                    [_gameboard highlightSelectedAttackDirectionAtLocation:_selectedAttackDirection];
+                }
                 return;
             }
             
             action.delegate = self;
             
-            // TODO: Isolate in actions
             if ([action isKindOfClass:[MeleeAttackAction class]]) {
                 [_gameboard highlightCardAtLocation:action.enemyCard.cardLocation withColor:ccc3(235, 0, 0) actionType:kActionTypeMelee];
                 
                 if (_battlePlan.meleeActions.count > 0) {
                     _leftPanel.selectedCard = action.cardInAction;
+                    
+                    _attackDirections = [_battlePlan getAttackDirectionsForCard:action.cardInAction whenAttackingEnemyCard:action.enemyCard withUnitLayout:_gameManager.currentGame.unitLayout];
+                    
+                    [_gameboard highlightNodesForAttackDirectionAtLocations:_attackDirections.allKeys];
                 }
 
                 _actionInQueue = action;
             }
-            
-            else if ([action isKindOfClass:[RangedAttackAction class]]) {
+            else {
                 [action performActionWithCompletion:^{
                 }];
             }
-            
-            else if ([action isKindOfClass:[MoveAction class]]){
-                [action performActionWithCompletion:^{
-                }];
-            }
-
         }
         else {
             if (targetNode.hasCard && [targetNode.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
@@ -237,7 +247,7 @@
                 }
 
                 for (Action *meleeAction in _battlePlan.meleeActions) {
-                    [_gameboard highlightCardAtLocation:[meleeAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeMove];
+                    [_gameboard highlightCardAtLocation:[meleeAction getLastLocationInPath] withColor:ccc3(235, 0, 0)];
                 }
 
                 for (Action *rangeAction in _battlePlan.rangeActions) {
@@ -351,7 +361,6 @@
 
         [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
             [nextAction performActionWithCompletion:^{
-                [nextAction.cardInAction performedAction:nextAction];
                 [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
             }];
         }],nil]];
@@ -363,7 +372,6 @@
 
         [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
             [nextAction performActionWithCompletion:^{
-                [nextAction.cardInAction performedAction:nextAction];
                 [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
             }];
         }], nil]];
@@ -373,7 +381,6 @@
         
         [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
             [nextAction performActionWithCompletion:^{
-                [nextAction.cardInAction performedAction:nextAction];
                 [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
             }];
         }], nil]];
@@ -483,30 +490,33 @@
     _showingDetailOfNode = nil;
 }
 
-- (void)leftPanelAttackButtonPressed:(LeftPanel *)leftPanel {
+- (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType {
     
     if (_actionInQueue != nil) {
         MeleeAttackAction *action = (MeleeAttackAction*)_actionInQueue;
-        action.meleeAttackType = kMeleeAttackTypeNormal;
+        
+        action.meleeAttackType = attackType;
+        
+        if (_pathInQueue != nil) {
+            action.path = _pathInQueue;
+        }
         
         [_actionInQueue performActionWithCompletion:^{
-            [action.cardInAction performedAction:action];
             _actionInQueue = nil;
+            _pathInQueue = nil;
+            _selectedAttackDirection = nil;
         }];
     }
 }
 
+- (void)leftPanelAttackButtonPressed:(LeftPanel *)leftPanel {
+    
+    [self performQueuedMeleeActionWithAttackType:kMeleeAttackTypeNormal];
+}
+
 - (void)leftPanelAttackAndConquerButtonPressed:(LeftPanel *)leftPanel {
 
-    if (_actionInQueue != nil) {
-        MeleeAttackAction *action = (MeleeAttackAction*)_actionInQueue;
-        action.meleeAttackType = kMeleeAttackTypeConquer;
-        
-        [_actionInQueue performActionWithCompletion:^{
-            [action.cardInAction performedAction:action];
-            _actionInQueue = nil;
-        }];
-    }
+    [self performQueuedMeleeActionWithAttackType:kMeleeAttackTypeConquer];
 }
 
 - (void)displayCombatOutcome:(CombatOutcome)combatOutcome {

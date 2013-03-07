@@ -107,6 +107,9 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"berserker_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"berserker_icon.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"scout_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"scout_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"scout_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"scout_icon.png"];
+    
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"flagbearer_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"flagbearer_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"flagbearer_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"flagbearer_icon.png"];
 
     [[SoundManager sharedManager] preloadSoundEffects];
     

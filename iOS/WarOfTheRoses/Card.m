@@ -35,6 +35,7 @@
 @synthesize numberOfLevelsIncreased;
 @synthesize delegate = _delegate;
 @synthesize attackSound = _attackSound, defenceSound = _defenceSound, moveSound = _moveSound;
+@synthesize timedAbilities = _timedAbilities;
 
 - (id)init {
     
@@ -45,6 +46,7 @@
         _cardColor = kCardColorGreen;
         self.isShowingDetail = NO;
         
+        _timedAbilities = [NSMutableArray array];
     }
     
     return self;
@@ -79,6 +81,19 @@
     return description;
 }
 
+- (void)addTimedAbility:(TimedAbility*)timedAbility {
+    
+    timedAbility.delegate = self;
+    
+    [_timedAbilities addObject:timedAbility];
+}
+
+- (void)timedAbilityDidStop:(TimedAbility *)timedAbility {
+    
+    if ([_timedAbilities containsObject:timedAbility]) {
+        [_timedAbilities removeObject:timedAbility];
+    }
+}
 
 // Must be overloaded in subclasses
 - (BOOL)specialAbilityTriggersVersus:(Card *)opponent {
@@ -140,7 +155,11 @@
     }
 }
 
-- (void)performedAction:(Action *)action {
+- (void)willPerformAction:(Action *)action {
+    
+}
+
+- (void)didPerformedAction:(Action *)action {
 
     self.hasPerformedActionThisRound = YES;
     
