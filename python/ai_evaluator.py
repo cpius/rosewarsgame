@@ -62,8 +62,9 @@ def document_actions(actions, players):
             out.write("\n")
       
         if hasattr(action, "score_success"):
-            out.write("Score success: " + str(action.score_success) + ", Score failure: " + str(action.score_failure) + "\n")   
-        out.write("Action Score: " + str(round(action.score,2)) + "\n")
+            out.write("Score success: " + str(action.score_success)
+                      + ", Score failure: " + str(action.score_failure) + "\n")
+        out.write("Action Score: " + str(round(action.score, 2)) + "\n")
 
         out.write("\n")
         
@@ -73,20 +74,18 @@ def document_actions(actions, players):
                 out.write(str(action.next_action) + "\n")
                 if hasattr(action.next_action, "chance_of_win"):
                     out.write("Chance of win: " + str(action.next_action.chance_of_win) + "\n")
-                out.write("Action Score: " + str(round(action.next_action.score,2)) + "\n")
+                out.write("Action Score: " + str(round(action.next_action.score, 2)) + "\n")
             else:
                 out.write("No next actions\n")
             out.write("\n")
 
         if hasattr(action, "combined_score"):
-            out.write("Combined score: " + str(round(action.combined_score,2)) + "\n")
-
+            out.write("Combined score: " + str(round(action.combined_score, 2)) + "\n")
 
         out.write("\n\n\n")         
 
         out.write("\n")
     out.close()
-
 
 
 def perform_action(action, p):
@@ -98,8 +97,6 @@ def perform_action(action, p):
     p[0].ai.add_counters(p)
     
     return p
-    
-
 
 
 def find_action_scores_one_action(saved_gamestate, actions):
@@ -124,7 +121,6 @@ def find_action_scores_one_action(saved_gamestate, actions):
             
             action.values_success, action.score_success = get_values_and_score(action, p, p_orig)
            
-           
             p = gamestate.load_gamestate(saved_gamestate)
     
             action = get_action_failure(action)
@@ -133,8 +129,8 @@ def find_action_scores_one_action(saved_gamestate, actions):
     
             action.values_failure, action.score_failure = get_values_and_score(action, p, p_orig)
     
-            action.score = action.chance_of_win * action.score_success + (1- action.chance_of_win) * action.score_failure
-
+            action.score = action.chance_of_win * action.score_success \
+                + (1 - action.chance_of_win) * action.score_failure
 
         elif action.is_ability:
             
@@ -142,21 +138,17 @@ def find_action_scores_one_action(saved_gamestate, actions):
 
             action.values, action.score = get_values_and_score(action, p, p_orig)
 
-
         else:
     
             p = perform_action(action, p)
             
             action.values, action.score = get_values_and_score(action, p, p_orig)
             
-    
     return actions
 
 
-
 def get_next_action(action, actions, p):
-    
-    
+
     saved_gamestate = gamestate.save_gamestate(p)
     
     if hasattr(action, "double_cost"):
@@ -164,20 +156,21 @@ def get_next_action(action, actions, p):
 
     actions_copy = [copy.copy(action_c) for action_c in actions]
     
-    actions_copy = [action_copy for action_copy in actions_copy if action_copy.startpos != action.startpos and not hasattr(action_copy, "double_cost")]
+    actions_copy = [action_copy for action_copy in actions_copy if action_copy.startpos != action.startpos
+                    and not hasattr(action_copy, "double_cost")]
 
     for action_copy in actions_copy:
         if hasattr(p[0].units[action_copy.startpos], "improved_weapons") and action_copy.is_attack:
             
-            action_copy.chance_of_win = m.chance_of_win(p[0].units[action_copy.startpos], p[1].units[action_copy.attackpos], action_copy) 
+            action_copy.chance_of_win =\
+                m.chance_of_win(p[0].units[action_copy.startpos], p[1].units[action_copy.attackpos], action_copy)
 
             action_copy.chance_of_win = 1
         
-            action_copy.score = action_copy.chance_of_win * action_copy.score_success + (1- action_copy.chance_of_win) * action_copy.score_failure
+            action_copy.score = action_copy.chance_of_win * action_copy.score_success\
+                + (1 - action_copy.chance_of_win) * action_copy.score_failure
 
-
-    actions_copy.sort(key = attrgetter("score"), reverse= True)
-
+    actions_copy.sort(key=attrgetter("score"), reverse=True)
 
     return actions_copy[0]
 
@@ -196,29 +189,27 @@ def get_values_and_score(action, p, p_orig):
 
 def get_action_success(action):
     action.finalpos = action.endpos
-    action.rolls = (6,6)
+    action.rolls = (6, 6)
     for sub_action in action.sub_actions:
-        sub_action.rolls = (6,6)
+        sub_action.rolls = (6, 6)
         
     return action
 
 
 def get_action_failure(action):
     action.finalpos = action.endpos
-    action.rolls = (1,1)
+    action.rolls = (1, 1)
     for sub_action in action.sub_actions:
-        sub_action.rolls = (1,1)
+        sub_action.rolls = (1, 1)
         
     return action
                 
                 
 def find_action_scores_two_actions(saved_gamestate, actions_orig):
 
-    
     p_orig = gamestate.load_gamestate(saved_gamestate)
     
     actions = copy.copy(actions_orig)
-    
 
     for action in actions:
         p = gamestate.load_gamestate(saved_gamestate)
@@ -245,9 +236,8 @@ def find_action_scores_two_actions(saved_gamestate, actions_orig):
  
             action.values_failure, action.score_failure = get_values_and_score(action, p, p_orig)
     
-            
-    
-            action.score = action.chance_of_win * action.score_success + (1- action.chance_of_win) * action.score_failure
+            action.score = action.chance_of_win * action.score_success \
+                + (1 - action.chance_of_win) * action.score_failure
 
             action.next_action = get_next_action(action, actions_orig, p)
             
@@ -258,9 +248,6 @@ def find_action_scores_two_actions(saved_gamestate, actions_orig):
             else:
                 action.combined_score = action.score
 
-            
-            
-  
         elif action.is_ability:
             
             p = perform_action(action, p)
@@ -271,8 +258,6 @@ def find_action_scores_two_actions(saved_gamestate, actions_orig):
                 if action_copy.is_attack and action_copy.chance_of_win == 1:
                     print "before loop, chance of win 1"
 
-
-     
             action.next_action = get_next_action(action, actions_orig, p)
      
             if action.next_action:
@@ -300,11 +285,7 @@ def find_action_scores_two_actions(saved_gamestate, actions_orig):
     return actions
 
 
-
-
 def get_action(p, actions):
-
-
 
     saved_gamestate = gamestate.save_gamestate(p)
     
@@ -317,31 +298,28 @@ def get_action(p, actions):
         actions = actions_orig
 
         rnd.shuffle(actions)
-        actions.sort(key = attrgetter("score"), reverse= True)
+        actions.sort(key = attrgetter("score"), reverse=True)
   
     else:
         actions = find_action_scores_two_actions(saved_gamestate, actions_orig)
 
         rnd.shuffle(actions)
-        actions.sort(key = attrgetter("combined_score"), reverse= True)
+        actions.sort(key = attrgetter("combined_score"), reverse=True)
     
     if settings.document_ai_actions:
         document_actions(actions, p)
 
     return actions[0]    
-        
-        
+
 
 def put_counter(p, unit):
     unit.dcounters += 1
-    
 
 
 def evaluate_action_values(values):
     
     return sum(value for value in values["gained"].values()) - sum(value for value in values["lost"].values())
-    
-    
+
 
 def get_action_values(p, p_orig):
     
@@ -375,8 +353,7 @@ def get_action_values(p, p_orig):
             values["otherunit"] = 2  
     
         return values
-    
-             
+
     values = {}
     values["player1"] = {}
     values["player1"]["gained"] = {}
@@ -415,8 +392,5 @@ def get_action_values(p, p_orig):
     
     for pos in old_p1:
         values["player2"]["lost"] = get_values_unit(pos, p_orig[1].units[pos], p[1].backline)
-    
-    
 
     return values
-
