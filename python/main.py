@@ -149,8 +149,6 @@ def add_bcounters(unit):
     unit.bcounters = 0
     if hasattr(unit, "frozen"):
         unit.bcounters = unit.frozen
-    if hasattr(unit, "attack_frozen"):
-        unit.bcounters = unit.attack_frozen
     if hasattr(unit, "just_bribed"):
         unit.bcounters = 1
 
