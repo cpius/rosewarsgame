@@ -351,43 +351,44 @@ def get_action_values(p, p_orig):
     
         return values
 
-    values = {}
-    values["player1"] = {}
-    values["player1"]["gained"] = {}
-    values["player1"]["lost"] = {}
-    values["player2"] = {}
-    values["player2"]["gained"] = {}
-    values["player2"]["lost"] = {}
-    
-    for pos, unit in p[1].units.items():
-        if hasattr(unit, "bribed"):
-            p[0].units[pos] = p[1].units.pop(pos)
+    def give_back_bribed_units():
+        for pos, unit in p[1].units.items():
+            if hasattr(unit, "bribed"):
+                p[0].units[pos] = p[1].units.pop(pos)
 
-    for pos, unit in p[0].units.items():
-        if hasattr(unit, "bribed"):
-            p[1].units[pos] = p[0].units.pop(pos)
-  
-    new_p0 = set(p[0].units) - set(p_orig[0].units)
-    old_p0 = set(p_orig[0].units) - set(p[0].units)
+        for pos, unit in p[0].units.items():
+            if hasattr(unit, "bribed"):
+                p[1].units[pos] = p[0].units.pop(pos)
 
-    new_p1 = set(p[1].units) - set(p_orig[1].units)
-    old_p1 = set(p_orig[1].units) - set(p[1].units)
- 
-    for pos in new_p0:
-        values["player1"]["gained"] = get_values_unit(pos, p[0].units[pos], p[0].backline)
-    
-    for pos in old_p0:
-        values["player1"]["lost"] = get_values_unit(pos, p_orig[0].units[pos], p[0].backline)
-    
-    for key in values["player1"]["gained"].keys():
-        if key in values["player1"]["lost"].keys():
-            del values["player1"]["gained"][key]
-            del values["player1"]["lost"][key]
-    
-    for pos in new_p1:
-        values["player2"]["gained"] = get_values_unit(pos, p[1].units[pos], p[1].backline)
-    
-    for pos in old_p1:
-        values["player2"]["lost"] = get_values_unit(pos, p_orig[1].units[pos], p[1].backline)
+    def fill_values():
+
+        new_player1 = set(p[0].units) - set(p_orig[0].units)
+        old_player1 = set(p_orig[0].units) - set(p[0].units)
+
+        new_player2 = set(p[1].units) - set(p_orig[1].units)
+        old_player2 = set(p_orig[1].units) - set(p[1].units)
+
+        for pos in new_player1:
+            values["player1"]["gained"] = get_values_unit(pos, p[0].units[pos], p[0].backline)
+
+        for pos in old_player1:
+            values["player1"]["lost"] = get_values_unit(pos, p_orig[0].units[pos], p[0].backline)
+
+        for key in values["player1"]["gained"].keys():
+            if key in values["player1"]["lost"].keys():
+                del values["player1"]["gained"][key]
+                del values["player1"]["lost"][key]
+
+        for pos in new_player2:
+            values["player2"]["gained"] = get_values_unit(pos, p[1].units[pos], p[1].backline)
+
+        for pos in old_player2:
+            values["player2"]["lost"] = get_values_unit(pos, p_orig[1].units[pos], p[1].backline)
+
+    values = {"player1": {"gained": {}, "lost": {}}, "player2": {"gained": {}, "lost": {}}}
+
+    give_back_bribed_units()
+
+    fill_values()
 
     return values
