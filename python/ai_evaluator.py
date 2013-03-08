@@ -333,29 +333,21 @@ def get_action_values(p, p_orig):
         values = {}
 
         if pos[1] == (9 - backline):
-            values["line8"] = 1000
+            values["line 8"] = 1000
                  
-        if pos[1] == (9 - backline) -1:
-            values["line7"] = 4
+        if pos[1] == (9 - backline) - 1:
+            values["line 7"] = 4
     
-        if pos[1] == (9 - backline) -2:
-            values["line6"] = 2
+        if pos[1] == (9 - backline) - 2:
+            values["line 6"] = 2
 
-        if pos[1] == (9 - backline) -3:
-            values["line5"] = 0.5
+        if pos[1] == (9 - backline) - 3:
+            values["line 5"] = 0.5
             
-
-        if unit.name == "Ballista":
-            values["Ballista"] = 7
-        
-        elif unit.name == "Pikeman":
-            values["Pikeman"] = 4
-            
-        elif unit.name in setup.special_unit_names:
-            values["Special"] = 10
-            
+        if unit.name in settings.special_units:
+            values["Special unit"] = 8
         else:
-            values["otherunit"] = 2  
+            values["Basic unit"] = 4
     
         return values
 
