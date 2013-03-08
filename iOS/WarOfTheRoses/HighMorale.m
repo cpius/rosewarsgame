@@ -10,4 +10,16 @@
 
 @implementation HighMorale
 
+- (void)startTimedAbility {
+    
+    [super startTimedAbility];
+    
+}
+
+- (void)stopTimedAbility {
+    
+    [super stopTimedAbility];
+    
+}
+
 @end

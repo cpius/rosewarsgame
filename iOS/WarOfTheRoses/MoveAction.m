@@ -24,11 +24,6 @@
     return self;
 }
 
-/*- (BOOL)isWithinRange {
-    
-    return self.path.count <= self.cardInAction.movesRemaining;
-}*/
-
 - (BOOL)isAttack {
     
     return NO;
@@ -41,6 +36,7 @@
 
 - (void)performActionWithCompletion:(void (^)())completion {
     
+    [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
     GridLocation *startLocation = self.cardInAction.cardLocation;

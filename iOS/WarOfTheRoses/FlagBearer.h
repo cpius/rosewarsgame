@@ -10,4 +10,6 @@
 
 @interface FlagBearer : Card
 
++ (id)card;
+
 @end

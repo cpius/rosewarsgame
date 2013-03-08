@@ -22,10 +22,6 @@
     
     return self;
 }
-/*- (BOOL)isWithinRange {
-    
-    return self.path.count <= self.cardInAction.range;
-}*/
 
 - (BOOL)isAttack {
     
@@ -39,6 +35,7 @@
 
 - (void)performActionWithCompletion:(void (^)())completion {
     
+    [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
 
     CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard];

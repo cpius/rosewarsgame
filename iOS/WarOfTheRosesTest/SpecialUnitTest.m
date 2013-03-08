@@ -19,6 +19,7 @@
 #import "Berserker.h"
 #import "Scout.h"
 #import "Canon.h"
+#import "Lancer.h"
 
 @implementation SpecialUnitTest
 
@@ -146,6 +147,40 @@
     NSArray *moveActions = [pathFinder getMoveActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
     
     STAssertTrue(moveActions.count == 4, @"Berserker should only be able to move to adjacent nodes");
+}
+
+- (void)testLancerGetsAttackBonusWhenAttackingWithTwoEmptyNodes {
+    
+    Lancer *lancer = [Lancer card];
+    Archer *archer = [Archer card];
+    
+    lancer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    lancer.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    archer.cardColor = kCardColorRed;
+        
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:lancer]
+                                    player2Units:[NSArray arrayWithObjects:archer, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+
+    STAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
+    
+    [lancer willPerformAction:meleeAttacks[0]];
+    
+    STAssertTrue([lancer.attack calculateValue].lowerValue == 3, @"Lancer should receive +2A bonus when 2 empty tiles before attack");
+    STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    
+    [lancer didPerformedAction:meleeAttacks[0]];
+
+    STAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
+    STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
 }
 
 @end

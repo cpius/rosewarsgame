@@ -6,8 +6,8 @@
 //
 //
 
-#import "Card.h"
+#import "TimedAbility.h"
 
-@interface HighMorale : Card
+@interface HighMorale : TimedAbility
 
 @end

@@ -178,6 +178,11 @@
 		6DD5889116E7CE2A00466DDB /* attack_direction-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888F16E7CE2A00466DDB /* attack_direction-hd.png */; };
 		6DD5889216E7CE2A00466DDB /* attack_direction.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5889016E7CE2A00466DDB /* attack_direction.png */; };
 		6DD5889516E7E1CA00466DDB /* ActionCostLess.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5889416E7E1CA00466DDB /* ActionCostLess.m */; };
+		6DD5889816EA62A300466DDB /* Lancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5889716EA62A300466DDB /* Lancer.m */; };
+		6DD5889D16EA63A400466DDB /* lancer_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5889916EA63A400466DDB /* lancer_0-hd.png */; };
+		6DD5889E16EA63A400466DDB /* lancer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5889A16EA63A400466DDB /* lancer_0.png */; };
+		6DD5889F16EA63A400466DDB /* lancer_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5889B16EA63A400466DDB /* lancer_icon-hd.png */; };
+		6DD588A016EA63A400466DDB /* lancer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5889C16EA63A400466DDB /* lancer_icon.png */; };
 		6DEA3468168C544400485F00 /* BaseRangedAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA3467168C544400485F00 /* BaseRangedAttribute.m */; };
 		6DEA346C168C555900485F00 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346B168C555900485F00 /* RawBonus.m */; };
 		6DEA346F168C556400485F00 /* TimedBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA346E168C556400485F00 /* TimedBonus.m */; };
@@ -565,6 +570,12 @@
 		6DD5889016E7CE2A00466DDB /* attack_direction.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = attack_direction.png; path = Resources/Images/attack_direction.png; sourceTree = "<group>"; };
 		6DD5889316E7E1CA00466DDB /* ActionCostLess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionCostLess.h; sourceTree = "<group>"; };
 		6DD5889416E7E1CA00466DDB /* ActionCostLess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionCostLess.m; sourceTree = "<group>"; };
+		6DD5889616EA62A200466DDB /* Lancer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lancer.h; sourceTree = "<group>"; };
+		6DD5889716EA62A300466DDB /* Lancer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lancer.m; sourceTree = "<group>"; };
+		6DD5889916EA63A400466DDB /* lancer_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "lancer_0-hd.png"; path = "Resources/Images/lancer_0-hd.png"; sourceTree = "<group>"; };
+		6DD5889A16EA63A400466DDB /* lancer_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lancer_0.png; path = Resources/Images/lancer_0.png; sourceTree = "<group>"; };
+		6DD5889B16EA63A400466DDB /* lancer_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "lancer_icon-hd.png"; path = "Resources/Images/lancer_icon-hd.png"; sourceTree = "<group>"; };
+		6DD5889C16EA63A400466DDB /* lancer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lancer_icon.png; path = Resources/Images/lancer_icon.png; sourceTree = "<group>"; };
 		6DEA3466168C544400485F00 /* BaseRangedAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRangedAttribute.h; sourceTree = "<group>"; };
 		6DEA3467168C544400485F00 /* BaseRangedAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseRangedAttribute.m; sourceTree = "<group>"; };
 		6DEA346A168C555900485F00 /* RawBonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawBonus.h; sourceTree = "<group>"; };
@@ -990,6 +1001,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DD5889916EA63A400466DDB /* lancer_0-hd.png */,
+				6DD5889A16EA63A400466DDB /* lancer_0.png */,
+				6DD5889B16EA63A400466DDB /* lancer_icon-hd.png */,
+				6DD5889C16EA63A400466DDB /* lancer_icon.png */,
 				6DD5888F16E7CE2A00466DDB /* attack_direction-hd.png */,
 				6DD5889016E7CE2A00466DDB /* attack_direction.png */,
 				6DD5888416E6896C00466DDB /* flagbearer_0-hd.png */,
@@ -1706,6 +1721,8 @@
 				6DD5886C16E540E200466DDB /* Scout.m */,
 				6DD5888116E6884800466DDB /* FlagBearer.h */,
 				6DD5888216E6884800466DDB /* FlagBearer.m */,
+				6DD5889616EA62A200466DDB /* Lancer.h */,
+				6DD5889716EA62A300466DDB /* Lancer.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -1916,6 +1933,10 @@
 				6DD5888B16E6896D00466DDB /* flagbearer_icon.png in Resources */,
 				6DD5889116E7CE2A00466DDB /* attack_direction-hd.png in Resources */,
 				6DD5889216E7CE2A00466DDB /* attack_direction.png in Resources */,
+				6DD5889D16EA63A400466DDB /* lancer_0-hd.png in Resources */,
+				6DD5889E16EA63A400466DDB /* lancer_0.png in Resources */,
+				6DD5889F16EA63A400466DDB /* lancer_icon-hd.png in Resources */,
+				6DD588A016EA63A400466DDB /* lancer_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2120,6 +2141,7 @@
 				6DD5888316E6884800466DDB /* FlagBearer.m in Sources */,
 				6DD5888E16E68B5600466DDB /* HighMorale.m in Sources */,
 				6DD5889516E7E1CA00466DDB /* ActionCostLess.m in Sources */,
+				6DD5889816EA62A300466DDB /* Lancer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
