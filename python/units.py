@@ -1,14 +1,11 @@
- 
 class Unit(object):
-        
+
     acounters = 0
     dcounters = 0
     xp = 0
     zoc = []
     abilities = []
     used = False
-    
-    #double_attack_cost = defence_maneuverability = shield = scouting = extra_life = rage = cooldown = lancing = flag_bearing = longsword = charioting = berserking = triple_attack = push = abilities = samuraiing = False
 
     def __repr__(self):
         return self.name
@@ -32,7 +29,7 @@ class Pikeman(Unit):
     attack = 2
     defence = 2
     movement = 1
-    range= 1
+    range = 1
     abonus = {"Cavalry": 1}
     dbonus = {"Cavalry": 1}
     type = "Infantry"   
@@ -45,7 +42,7 @@ class Light_Cavalry(Unit):
     attack = 2
     defence = 2
     movement = 4
-    range= 1
+    range = 1
     abonus = {}
     dbonus = {}
     type = "Cavalry"
@@ -57,7 +54,7 @@ class Heavy_Cavalry(Unit):
     attack = 3
     defence = 3
     movement = 2
-    range= 1
+    range = 1
     abonus = {}
     dbonus = {}
     type = "Cavalry"
@@ -69,7 +66,7 @@ class Ballista(Unit):
     attack = 4
     defence = 1
     movement = 1
-    range= 3
+    range = 3
     abonus = {}
     dbonus = {}
     type = "Siege Weapon"
@@ -81,12 +78,12 @@ class Catapult(Unit):
     attack = 6
     defence = 2
     movement = 1
-    range= 3
+    range = 3
     abonus = {}
     dbonus = {}
     type = "Siege Weapon"
         
-    double_attack_cost = True #Attack takes two actions.
+    double_attack_cost = True  # Attack takes two actions.
 
 
 
@@ -96,14 +93,14 @@ class Royal_Guard(Unit):
     attack = 3
     defence = 3
     movement = 1
-    range= 1
+    range = 1
     abonus = {}
     dbonus = {}
     type = "Infantry"
     
     zoc = ["Cavalry", "Infantry", "Siege Weapon"]
-    defence_maneuverability = True #Can move two tiles if one of them is sideways.
-    shield = True #+1D v melee units.
+    defence_maneuverability = True  # Can move two tiles if one of them is sideways.
+    shield = True  # +1D v melee units.
 
 
 class Scout(Unit):
@@ -118,10 +115,13 @@ class Scout(Unit):
     zoc = []
     type = "Cavalry"
         
-    scouting = True #Can move past all units.
+    scouting = True  # Can move past all units.
 
 
 class Viking(Unit):
+
+    def __init__(self):
+        self.extra_life = True  # It takes two hits to kill viking
 
     name = "Viking"
     attack = 3
@@ -132,9 +132,8 @@ class Viking(Unit):
     dbonus = {"Siege Weapon": 1}
     zoc = []
     type = "Infantry"
-        
-    extra_life = True #It takes two hits to kill viking
-    rage = True # Can make an attack after it's move. (But not a second move)
+
+    rage = True  # Can make an attack after it's move. (But not a second move)
 
 
 class Cannon(Unit):
@@ -165,7 +164,7 @@ class Lancer(Unit):
     zoc = []
     type = "Cavalry"
         
-    lancing = True # If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A
+    lancing = True  # If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A
 
 
 class Flag_Bearer(Unit):
@@ -180,7 +179,7 @@ class Flag_Bearer(Unit):
     zoc = []
     type = "Cavalry"
         
-    flag_bearing = True # Friendly melee units receive +2A while adjacent to Flag Bearer
+    flag_bearing = True  # Friendly melee units receive +2A while adjacent to Flag Bearer
 
 
 class Longswordsman(Unit):
@@ -195,7 +194,7 @@ class Longswordsman(Unit):
     zoc = []
     type = "Infantry"
         
-    longsword = True #Also hits the 4 nearby tiles in the attack direction
+    longsword = True  # Also hits the 4 nearby tiles in the attack direction
 
 
 class Crusader(Unit):
@@ -210,7 +209,7 @@ class Crusader(Unit):
     zoc = []
     type = "Cavalry"
         
-    crusading = True # Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader gets +1A.
+    crusading = True  # Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader gets +1A.
 
 
 
@@ -226,7 +225,7 @@ class Berserker(Unit):
     zoc = []
     type = "Infantry"
         
-    berserking = True # Can move 4 tiles if movement ends with an attack.
+    berserking = True  # Can move 4 tiles if movement ends with an attack.
 
 
 class Chariot(Unit):
@@ -241,7 +240,7 @@ class Chariot(Unit):
     zoc = []
     type = "Cavalry"
         
-    charioting = True # Can use remaining moves after attacking
+    charioting = True  # Can use remaining moves after attacking
 
 
 class War_Elephant(Unit):
@@ -256,9 +255,9 @@ class War_Elephant(Unit):
     zoc = []
     type = "Cavalry"
         
-    double_attack_cost = True # Attack takes two actions
-    triple_attack = True #Also hits the two diagonally nearby tiles in the attack direction.
-    push = True #If attack and defence rolls both succees, it can still move forward. If not on back line, opponents selfs must retreat directly backwards or die.
+    double_attack_cost = True  # Attack takes two actions
+    triple_attack = True  # Also hits the two diagonally nearby tiles in the attack direction.
+    push = True  # If attack and defence rolls both succees, it can still move forward. If not on back line, opponents selfs must retreat directly backwards or die.
 
 
 class Samurai(Unit):
@@ -273,7 +272,7 @@ class Samurai(Unit):
     zoc = []
     type = "Infantry"
         
-    samuraiing = True # Can make an attack after it's first action. (But not a second move)
+    samuraiing = True  # Can make an attack after it's first action. (But not a second move)
     
 
 class Saboteur(Unit):
@@ -287,7 +286,8 @@ class Saboteur(Unit):
     dbonus = {}
     type = "Infantry"
     
-    abilities = ["sabotage", "poison"] #Sabotage: Reduces a units defence to 0 for 1 turn. Poison: Freezes a unit for 2 turns.
+    abilities = ["sabotage",  # Reduces a units defence to 0 for 1 turn.
+                 "poison"]  # Freezes a unit for 2 turns.
 
 
 class Diplomat(Unit):
@@ -301,8 +301,8 @@ class Diplomat(Unit):
     dbonus = {}
     type = "Infantry"
         
-    abilities = ["bribe"] #Bribe: You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe the same unit on your next turn. The unit gets +1A until end of turn.
-
+    abilities = ["bribe"]  # You can use an opponent's unit this turn. Your opponent can't use it on his next turn.
+                           # You can't bribe the same unit on your next turn. The unit gets +1A until end of turn.
 
 
 class Weaponsmith(Unit):
@@ -316,4 +316,4 @@ class Weaponsmith(Unit):
     dbonus = {}
     type = "Infantry"
     
-    abilities = ["improve_weapons"] #Improve weapons: Give melee unit +3A. +1D until your next turn
+    abilities = ["improve_weapons"]  # Improve weapons: Give melee unit +3A. +1D until your next turn
