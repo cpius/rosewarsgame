@@ -115,7 +115,7 @@ def update_finalpos(action):
 ###################
 
 
-def do_action(action, p, unit=None):
+def do_action(action, p):
 
     def player_has_won(action, unit, p):
         return (action.finalpos[1] == p[1].backline and not hasattr(unit, "bribed")) or \
@@ -154,8 +154,7 @@ def do_action(action, p, unit=None):
         if hasattr(unit, "attack_cooldown") and action.is_attack:
             unit.attack_frozen = unit.attack_cooldown
 
-    if not unit:
-        unit = p[0].units[action.startpos]
+    unit = p[0].units[action.startpos]
   
     add_target(action, p)
 
@@ -178,7 +177,7 @@ def do_action(action, p, unit=None):
 
     for sub_action in action.sub_actions:
         p[0].sub_action = True
-        do_action(sub_action, p, unit)
+        do_action(sub_action, p)
         del p[0].sub_action
 
     if action.startpos in p[0].units:
