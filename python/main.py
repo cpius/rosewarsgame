@@ -345,8 +345,10 @@ def show_unit(p, pos):
     unit = None
     if pos in p[0].units:
         unit = p[0].units[pos]
+        color = p[0].color
     if pos in p[1].units:
         unit = p[1].units[pos]
+        color = p[1].color
         
     if unit:
         print
