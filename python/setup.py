@@ -73,9 +73,9 @@ def get_units():
             pos = tiles_bag.pick(basic_units_list[name])      
             units[pos] = getattr(units_module, name.replace(" ", "_"))()
 
-            if len(units) == 0:
-                units[pos].acounters = 1
             if len(units) == 1:
+                units[pos].acounters = 1
+            if len(units) == 2:
                 units[pos].dcounters = 1
 
         return units
