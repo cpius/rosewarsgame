@@ -150,9 +150,9 @@ def do_action(action, p, unit=None):
             if hasattr(action, "double_cost"):
                 p[0].actions_remaining -= 1
 
-    def secondary_action_effects(unit, p):
-        if hasattr(unit, "cooldown"):
-            unit.frozen = unit.cooldown
+    def secondary_action_effects(action, unit):
+        if hasattr(unit, "attack_cooldown") and action.is_attack:
+            unit.attack_frozen = unit.attack_cooldown
 
     if not unit:
         unit = p[0].units[action.startpos]
@@ -161,7 +161,7 @@ def do_action(action, p, unit=None):
 
     unit.used = True
 
-    secondary_action_effects(unit, p)
+    secondary_action_effects(action, unit)
 
     if action.is_attack:
         if hasattr(action, "push"):
@@ -216,7 +216,13 @@ def initialize_turn(p):
                 del unit.frozen
             else:
                 unit.frozen -= 1
-        
+
+        def attack_frozen():
+            if unit.attack_frozen == 1:
+                del unit.attack_frozen
+            else:
+                unit.attack_frozen -= 1
+
         def sabotaged():
             del unit.sabotaged
     
@@ -226,7 +232,7 @@ def initialize_turn(p):
         def just_bribed():
             del unit.just_bribed
         
-        for attribute in ["frozen", "sabotaged", "improved_weapons", "just_bribed"]:
+        for attribute in ["frozen", "attack_frozen", "sabotaged", "improved_weapons", "just_bribed"]:
             if hasattr(unit, attribute):
                 locals()[attribute]() 
 

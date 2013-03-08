@@ -149,7 +149,7 @@ class Cannon(Unit):
     zoc = []
     type = "Siege Weapon"
         
-    cooldown = 3 #Can only attack every third turn.
+    attack_cooldown = 3  # Can only attack every third turn.
     
 
 class Lancer(Unit):
