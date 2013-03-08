@@ -157,6 +157,8 @@ def do_action(action, p, unit=None):
     if not unit:
         unit = p[0].units[action.startpos]
   
+    add_target(action, p)
+
     update_player_actions_remaining(action, p)
 
     unit.used = True
@@ -270,7 +272,7 @@ def settle_attack_push(action, p):
             gain_xp(action.unit)
             
             if hasattr(action.target_unit, "extra_life"):
-                del p[1].units[action.attackpos].extra_life
+                del action.target_unit.extra_life
                 
                 if not out_of_board_vertical(pushpos):
                     update_finalpos(action)
@@ -313,7 +315,7 @@ def settle_attack(action, p):
         gain_xp(action.unit)
         
         if hasattr(action.target_unit, "extra_life"):
-            del p[1].units[action.attackpos].extra_life
+            del action.target_unit.extra_life
         else:
             del p[1].units[action.attackpos]
             update_finalpos(action)
@@ -329,9 +331,9 @@ def settle_ability(action, p):
     
     def poison(action, p):
         if not hasattr(action.target_unit, "frozen"):
-            p[1].units[action.attackpos].frozen = 2
+            action.target_unit.frozen = 2
         else:
-            p[1].units[action.attackpos].frozen = max(action.target_unit.frozen, 2)
+            action.target_unit.frozen = max(action.target_unit.frozen, 2)
     
     def improve_weapons(action, p):
         p[0].units[action.attackpos].improved_weapons = True
@@ -351,21 +353,20 @@ def settle_ability(action, p):
 ###################
 
 
-def add_targets(actions, p):
-    """ Adds an attribute target_unit to the actions, holding the target of the action"""
-    for action in actions:
-        if action.is_attack:
+def add_target(action, p):
+    if action.is_attack:
+        action.target_unit = p[1].units[action.attackpos]
+    elif action.is_ability:
+        if action.attackpos in p[1].units:
             action.target_unit = p[1].units[action.attackpos]
-        elif action.is_ability:
-            if action.attackpos in p[1].units:
-                action.target_unit = p[1].units[action.attackpos]
-            elif action.attackpos in p[0].units:
-                action.target_unit = p[0].units[action.attackpos]
-        
-        add_targets(action.sub_actions, p)
+        elif action.attackpos in p[0].units:
+            action.target_unit = p[0].units[action.attackpos]
 
-        if hasattr(action.unit, "double_attack_cost") and action.is_attack:
-            action.double_cost = True
+    for sub_action in action.sub_actions:
+        add_target(sub_action, p)
+
+    if hasattr(action.unit, "double_attack_cost") and action.is_attack:
+        action.double_cost = True
 
 
 def add_modifiers(moves, attacks, abilities, p):    
@@ -407,7 +408,6 @@ def get_actions(p):
             else:
                 actions += moves + attacks + abilities
            
-            add_targets(actions, p)
 
     return actions
                 
@@ -465,7 +465,6 @@ def get_extra_actions(p):
             
             add_modifiers(moves, attacks, abilities, p)
             extra_actions = moves + attacks + abilities
-            add_targets(extra_actions, p)
 
     return extra_actions  
 
