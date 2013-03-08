@@ -324,24 +324,24 @@ def settle_attack(action, p):
 
 def settle_ability(action, p):
 
-    def sabotage():
-        p[1].units[action.attackpos].sabotaged = True
+    def sabotage(action, p):
+        action.target_unit.sabotaged = True
     
-    def poison():
+    def poison(action, p):
         if not hasattr(action.target_unit, "frozen"):
             p[1].units[action.attackpos].frozen = 2
         else:
             p[1].units[action.attackpos].frozen = max(action.target_unit.frozen, 2)
     
-    def improve_weapons():
+    def improve_weapons(action, p):
         p[0].units[action.attackpos].improved_weapons = True
     
-    def bribe():
+    def bribe(action, p):
         pos = action.attackpos
         p[0].units[pos] = p[1].units.pop(pos)
         p[0].units[pos].bribed = True
 
-    locals()[action.ability]()
+    locals()[action.ability](action, p)
 
 
 ###################
@@ -638,44 +638,47 @@ def get_special_unit_actions(unit, pos, units, p):
     
     def melee_units(unit, pos, units, p):
         
-        def rage(unit, startpos, moveset_with_leftover, moveset_no_leftover, enemy_units):
+        def rage(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
             attacks = []
-            for endpos, attackpos, move_with_attack in attack_generator(unit, moveset_with_leftover | {pos}, enemy_units):
-                attacks.append(Action(unit, startpos, endpos, attackpos, True, move_with_attack))
+            for endpos, attackpos, move_with_attack in attack_generator(unit, moveset_with_leftover | set([pos]),
+                                                                        enemy_units):
+                attacks.append(Action(unit, pos, endpos, attackpos, True, move_with_attack))
             for endpos, attackpos in attack_generator_no_zoc_check(moveset_no_leftover, enemy_units):
-                attacks.append(Action(unit, startpos, endpos, attackpos, True, False))
+                attacks.append(Action(unit, pos, endpos, attackpos, True, False))
         
-            moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
+            moves = move_actions(unit, pos, moveset_with_leftover | moveset_no_leftover)
             
             return moves, attacks
 
-        def berserking(unit, startpos, moveset_with_leftover, moveset_no_leftover, enemy_units):
+        def berserking(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
-            moveset_with_leftover_berserk, moveset_no_leftover_berserk = moves_sets(unit, startpos, units, enemy_units, 5)  # Det burde vaere 4, men virker med 5. :S
-            attacks = melee_attack_actions(unit, pos, moveset_with_leftover_berserk | {startpos}, enemy_units)
+            moveset_with_leftover_berserk, moveset_no_leftover_berserk = moves_sets(unit, pos, units, enemy_units, 5)
+            # Det burde vaere 4, men virker med 5. :S
+
+            attacks = melee_attack_actions(unit, pos, moveset_with_leftover_berserk | set([pos]), enemy_units)
         
-            moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
+            moves = move_actions(unit, pos, moveset_with_leftover | moveset_no_leftover)
             
             return moves, attacks
 
-        def longsword(unit, startpos, moveset_with_leftover, moveset_no_leftover, enemy_units):
+        def longsword(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
-            def get_attack(unit, startpos, endpos, attackpos, move_with_attack):
-                attack = Action(unit, startpos, endpos, attackpos, True, move_with_attack) 
+            def get_attack(unit, pos, endpos, attackpos, move_with_attack):
+                attack = Action(unit, pos, endpos, attackpos, True, move_with_attack)
                 for fpos in four_forward_tiles(endpos, attackpos):
                     if fpos in enemy_units:
-                        attack.sub_actions.append(Action(unit, startpos, endpos, fpos, True, False))
+                        attack.sub_actions.append(Action(unit, pos, endpos, fpos, True, False))
                 return attack
            
-            attacks = [get_attack(unit, startpos, endpos, attackpos, move_with_attack) for endpos, attackpos,
-                       move_with_attack in attack_generator(unit, moveset_with_leftover | {pos}, enemy_units)]
+            attacks = [get_attack(unit, pos, endpos, attackpos, move_with_attack) for endpos, attackpos,
+                       move_with_attack in attack_generator(unit, moveset_with_leftover | set([pos]), enemy_units)]
 
-            moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
+            moves = move_actions(unit, pos, moveset_with_leftover | moveset_no_leftover)
             
             return moves, attacks
 
-        def triple_attack(unit, startpos, moveset_with_leftover, moveset_no_leftover, enemy_units):
+        def triple_attack(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
             def get_attack(unit, startpos, endpos, attackpos, move_with_attack):
                 attack = Action(unit, startpos, endpos, attackpos, True, move_with_attack)
@@ -691,7 +694,7 @@ def get_special_unit_actions(unit, pos, units, p):
             
             return moves, attacks
 
-        def lancing(unit, startpos, moveset_with_leftover, moveset_no_leftover, enemy_units):
+        def lancing(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
             attacks = melee_attack_actions(unit, startpos, moveset_with_leftover | {startpos}, enemy_units)
             moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
@@ -702,7 +705,7 @@ def get_special_unit_actions(unit, pos, units, p):
             
             return moves, attacks
 
-        def defence_maneuverability(unit, startpos, moveset_with_leftover, moveset_no_leftover, enemy_units):
+        def defence_maneuverability(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             extended_moveset_no_leftover = set()
             for pos in moveset_no_leftover:
                 extended_moveset_no_leftover.add(pos)
