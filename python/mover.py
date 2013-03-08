@@ -388,6 +388,9 @@ def get_actions(p):
     def can_use_unit(unit):
         return not (unit.used or hasattr(unit, "frozen") or hasattr(unit, "just_bribed"))
     
+    def can_attack_with_unit(unit):
+        return not (p[0].actions_remaining == 1 and hasattr(unit, "double_attack_cost")) and not hasattr(unit, "attack_frozen")
+
     if hasattr(p[0], "extra_action"):
         return get_extra_actions(p)
 
@@ -403,11 +406,10 @@ def get_actions(p):
             
             add_modifiers(moves, attacks, abilities, p)
 
-            if p[0].actions_remaining == 1 and hasattr(unit, "double_attack_cost"):
-                actions += moves + abilities
-            else:
+            if can_attack_with_unit(unit):
                 actions += moves + attacks + abilities
-           
+            else:
+                actions += moves + abilities
 
     return actions
                 
