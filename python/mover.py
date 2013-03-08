@@ -512,36 +512,39 @@ def moves_sets(unit, pos, units, enemy_units, movement_remaining):
     moveset_with_leftover: The tiles it can move to, and still have leftover movement to make an attack.
     moveset_no_leftover: The tiles it can move to, with no leftover movement to make an attack.
     """
-    if movement_remaining > 0:
-        if movement_remaining != unit.movement: moveset_with_leftover = {pos}
-        else: moveset_with_leftover = set()
-        moveset_no_leftover = set()
-        
-        for newpos in adjacent_tiles_the_unit_can_move_to(unit, pos, enemy_units, units):
-            movesets = moves_sets(unit, newpos, units, enemy_units, movement_remaining - 1)
-            moveset_with_leftover |= movesets[0]
-            moveset_no_leftover |= movesets[1]
 
-        return moveset_with_leftover, moveset_no_leftover
-    
+    if movement_remaining == 0:
+        return set(), set([pos])
+
+    if movement_remaining != unit.movement:
+        moveset_with_leftover = set([pos])
     else:
-        return set(), {pos}
+        moveset_with_leftover = set()
+    moveset_no_leftover = set()
 
+    for newpos in adjacent_tiles_the_unit_can_move_to(unit, pos, enemy_units, units):
+        movesets = moves_sets(unit, newpos, units, enemy_units, movement_remaining - 1)
+        moveset_with_leftover |= movesets[0]
+        moveset_no_leftover |= movesets[1]
+
+    return moveset_with_leftover, moveset_no_leftover
+    
 
 def moves_set(unit, pos, units, enemy_units, movement_remaining):
     """Returns all the tiles a unit can move to, in one set. """
                   
-    if movement_remaining > 0:
-        if movement_remaining != unit.movement: moveset = {pos}
-        else: moveset = set()
-        
-        for newpos in adjacent_tiles_the_unit_can_move_to(unit, pos, enemy_units, units):
-            moveset |= moves_set(unit, newpos, units, enemy_units, movement_remaining - 1)
+    if movement_remaining == 0:
+        return set([pos])
 
-        return moveset
-    
+    if movement_remaining != unit.movement:
+        moveset = set([pos])
     else:
-        return {pos}
+        moveset = set()
+
+    for newpos in adjacent_tiles_the_unit_can_move_to(unit, pos, enemy_units, units):
+        moveset |= moves_set(unit, newpos, units, enemy_units, movement_remaining - 1)
+
+    return moveset
 
 
 def ranged_attacks_set(unit, pos, units, enemy_units, range_remaining):
