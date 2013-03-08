@@ -691,17 +691,17 @@ def get_special_unit_actions(unit, pos, units, p):
                         attack.sub_actions.append(Action(unit, startpos, endpos, fpos, True, False))
                 return attack
         
-            attacks = [get_attack(unit, startpos, endpos, attackpos, move_with_attack) for endpos, attackpos,
+            attacks = [get_attack(unit, pos, endpos, attackpos, move_with_attack) for endpos, attackpos,
                        move_with_attack in attack_generator(unit, moveset_with_leftover | set([pos]), enemy_units)]
 
-            moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
+            moves = move_actions(unit, pos, moveset_with_leftover | moveset_no_leftover)
             
             return moves, attacks
 
         def lancing(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
             attacks = melee_attack_actions(unit, pos, moveset_with_leftover | set([pos]), enemy_units)
-            moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
+            moves = move_actions(unit, pos, moveset_with_leftover | moveset_no_leftover)
 
             for attack in attacks:
                 if distance(attack.startpos, attack.attackpos) >= 3:
@@ -719,7 +719,7 @@ def get_special_unit_actions(unit, pos, units, p):
                         extended_moveset_no_leftover.add(newpos)
             
             attacks = melee_attack_actions(unit, pos, moveset_with_leftover | set([pos]), enemy_units)
-            moves = move_actions(unit, startpos, moveset_with_leftover | extended_moveset_no_leftover)
+            moves = move_actions(unit, pos, moveset_with_leftover | extended_moveset_no_leftover)
             
             return moves, attacks
 
