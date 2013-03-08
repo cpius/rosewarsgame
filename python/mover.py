@@ -430,14 +430,14 @@ def get_extra_actions(p):
     
     def charioting():
         moveset = moves_set(unit, pos, units, p[1].units, unit.movement_remaining)
-        moves = move_actions(unit, pos, moveset | {pos})
+        moves = move_actions(unit, pos, moveset | set([pos]))
         
         return moves, [], []
     
     def samuraiing():
         def melee_attacks_list_samurai_second(unit, startpos, moveset, enemy_units, movement_remaining):
             attacks = []
-            for pos, newpos, move_with_attack in attack_generator(unit, moveset | {startpos}, enemy_units):
+            for pos, newpos, move_with_attack in attack_generator(unit, moveset | set([startpos]), enemy_units):
                 if not move_with_attack:
                     attacks.append(Action(unit, startpos, pos, newpos, True, False))
                 else:
@@ -445,8 +445,8 @@ def get_extra_actions(p):
                         attacks.append(Action(unit, startpos, pos, newpos, True, True))
             return attacks
         
-        attacks = melee_attacks_list_samurai_second(unit, pos, {pos}, p[1].units, unit.movement_remaining)
-        moves = move_actions(unit, pos, {pos})
+        attacks = melee_attacks_list_samurai_second(unit, pos, set([pos]), p[1].units, unit.movement_remaining)
+        moves = move_actions(unit, pos, set([pos]))
         
         return moves, attacks, []
      
@@ -607,7 +607,7 @@ def melee_attack_actions(unit, startpos, moveset, enemy_units):
 
 def melee_actions(unit, pos, units, p):
     moveset_with_leftover, moveset_no_leftover = moves_sets(unit, pos, units, p[1].units, unit.movement)
-    attacks = melee_attack_actions(unit, pos, moveset_with_leftover | {pos}, p[1].units)
+    attacks = melee_attack_actions(unit, pos, moveset_with_leftover | set([pos]), p[1].units)
     moves = move_actions(unit, pos, moveset_with_leftover | moveset_no_leftover)
     
     return moves, attacks
@@ -687,7 +687,7 @@ def get_special_unit_actions(unit, pos, units, p):
                 return attack
         
             attacks = [get_attack(unit, startpos, endpos, attackpos, move_with_attack) for endpos, attackpos,
-                       move_with_attack in attack_generator(unit, moveset_with_leftover | {pos}, enemy_units)]
+                       move_with_attack in attack_generator(unit, moveset_with_leftover | set([pos]), enemy_units)]
 
             moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
             
@@ -695,7 +695,7 @@ def get_special_unit_actions(unit, pos, units, p):
 
         def lancing(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
             
-            attacks = melee_attack_actions(unit, startpos, moveset_with_leftover | {startpos}, enemy_units)
+            attacks = melee_attack_actions(unit, pos, moveset_with_leftover | set([pos]), enemy_units)
             moves = move_actions(unit, startpos, moveset_with_leftover | moveset_no_leftover)
 
             for attack in attacks:
@@ -713,7 +713,7 @@ def get_special_unit_actions(unit, pos, units, p):
                     if newpos in board and newpos not in units:
                         extended_moveset_no_leftover.add(newpos)
             
-            attacks = melee_attack_actions(unit, startpos, moveset_with_leftover | {startpos}, enemy_units)
+            attacks = melee_attack_actions(unit, pos, moveset_with_leftover | set([pos]), enemy_units)
             moves = move_actions(unit, startpos, moveset_with_leftover | extended_moveset_no_leftover)
             
             return moves, attacks
@@ -732,7 +732,7 @@ def get_special_unit_actions(unit, pos, units, p):
         enemy_units = p[1].units
      
         moveset_with_leftover, moveset_no_leftover = moves_sets(unit, pos, units, enemy_units, unit.movement)
-        attacks = melee_attack_actions(unit, pos, moveset_with_leftover | {pos}, enemy_units)
+        attacks = melee_attack_actions(unit, pos, moveset_with_leftover | set([pos]), enemy_units)
         moves = move_actions(unit, pos, moveset_with_leftover | moveset_no_leftover)
         
         for attribute in ["rage", "berserking", "longsword", "triple_attack", "defence_maneuverability", "lancing"]:
@@ -777,7 +777,7 @@ def get_special_unit_actions(unit, pos, units, p):
                 
                 if movement_remaining > 0:
                     if movement_remaining != unit.movement:
-                        moveset = {pos}
+                        moveset = set([pos])
                     else:
                         moveset = set()
                     
@@ -787,7 +787,7 @@ def get_special_unit_actions(unit, pos, units, p):
                     return moveset
                 
                 else:
-                    return {pos}
+                    return set([pos])
                     
             moveset = moves_set_scouting(unit, pos, units, p[1].units, unit.movement)
             moves = move_actions(unit, pos, moveset)
