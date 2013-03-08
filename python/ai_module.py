@@ -46,7 +46,10 @@ class AI(object):
                 if unit.defence + unit.dcounters == 4:
                     unit.acounters += 1
                 else:
-                    self.put_counter(p, unit)
+                    if not unit.attack:
+                        unit.dcounters += 1
+                    else:
+                        self.put_counter(unit, p)
                 unit.xp = 0
 
 

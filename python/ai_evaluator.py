@@ -317,8 +317,7 @@ def get_action(p, actions):
     return actions[0]    
 
 
-def put_counter(p, unit):
-    unit.dcounters += 1
+def put_counter(unit, p):
 
     if unit.name in ["Pikeman", "Heavy Cavalry", "Royal Guard", "Viking"]:
         unit.dcounters += 1
