@@ -40,12 +40,12 @@ class Gamestate:
 
     def set_ais(self):
         if settings.player1_ai != "Human":
-            self.players[0].ai = ai_module.AI(settings.player1_ai)
+            self.players[0].ai = ai_module.AI(self.players[0].ai_name)
         else:
             self.players[0].ai = "Human"
 
         if settings.player2_ai != "Human":
-            self.players[1].ai = ai_module.AI(settings.player2_ai)
+            self.players[1].ai = ai_module.AI(self.players[1].ai_name)
         else:
             self.players[1].ai = "Human"
 
