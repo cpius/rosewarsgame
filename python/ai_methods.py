@@ -50,8 +50,8 @@ def chance_of_win(a, d, action):
     if defence > 6:
         defence = 6
     
-    chance_of_attack_succesful = attack / 6
+    chance_of_attack_successful = attack / 6
     
-    chance_of_defence_unsuccesful = (6 - defence) / 6
+    chance_of_defence_unsuccessful = (6 - defence) / 6
 
-    return chance_of_attack_succesful * chance_of_defence_unsuccesful
+    return chance_of_attack_successful * chance_of_defence_unsuccessful
