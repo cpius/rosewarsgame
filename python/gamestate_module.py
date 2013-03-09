@@ -47,7 +47,8 @@ class Gamestate:
             self.players[1].ai = "Human"
 
     def turn_shift(self):
-        self.turn += 1
+        if self.players[0].color == "Green":
+            self.turn += 1
         self.units = [self.units[1], self.units[0]]
         self.players = [self.players[1], self.players[0]]
         self.initialize_turn()
