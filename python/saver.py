@@ -1,8 +1,8 @@
-import units2 as units_module
+import units as units_module
 import setup
-import mover
 import ai_module
 import gamestate_module
+from action import Action
 
 start_attributes_actions = ["unit", "startpos", "endpos", "attackpos", "is_attack", "move_with_attack",
                             "is_ability", "ability"]
@@ -77,44 +77,6 @@ def write_gamestate(p, path):
     out.close()
 
 
-def read_gamestate(path):
-    inp = open(path)
-
-    p = []
-
-    for i in range(2):
-        color = inp.readline().rstrip("\n")
-        player = setup.Player(color)
-        player.ai_name = inp.readline().split()[1].rstrip("\n")
-        player.actions_remaining = int(inp.readline().split()[2].rstrip("\n"))
-        if inp.readline().split()[2].rstrip("\n") == "True":
-            player.extra_action = True
-        inp.readline()
-        inp.readline()
-        line = inp.readline()
-        player.units = {}
-        while line != "\n":
-            line = line.split(":")
-            name = line[0]
-            pos = eval(line[1].rstrip("\n"))
-            player.units[pos] = getattr(units_module, name.replace(" ", "_"))()
-            d = eval(inp.readline())
-            for key, item in d.items():
-                setattr(player.units[pos], key, item)
-            inp.readline()
-            line = inp.readline()
-
-        p.append(player)
-
-    return p
-
-
-def copy_p(p):
-    
-    gamestate = save_gamestate(p)
-    return load_gamestate(gamestate)
-
-
 def save_action(action):
     
     action_state = [{}]
@@ -133,7 +95,7 @@ def save_action(action):
 
 def load_action(action_state):
 
-    action = mover.Action(action_state[0]["unit"], action_state[0]["startpos"], action_state[0]["endpos"], action_state[0]["attackpos"], action_state[0]["is_attack"], action_state[0]["move_with_attack"], action_state[0]["is_ability"], action_state[0]["ability"])
+    action = Action(action_state[0]["startpos"], action_state[0]["endpos"], action_state[0]["attackpos"], action_state[0]["is_attack"], action_state[0]["move_with_attack"], action_state[0]["is_ability"], action_state[0]["ability"])
     
     for key, item in action_state[0].items():
         if key not in start_attributes_actions:
@@ -142,7 +104,7 @@ def load_action(action_state):
     if len(action_state) > 1:
         action.sub_actions = []
         for i in range(1, len(action_state)):
-            action.sub_actions.append(mover.Action(action_state[i]["unit"], action_state[i]["startpos"], action_state[i]["endpos"], action_state[i]["attackpos"], action_state[i]["is_attack"], action_state[i]["move_with_attack"], action_state[i]["is_ability"], action_state[i]["ability"]))
+            action.sub_actions.append(Action(action_state[i]["startpos"], action_state[i]["endpos"], action_state[i]["attackpos"], action_state[i]["is_attack"], action_state[i]["move_with_attack"], action_state[i]["is_ability"], action_state[i]["ability"]))
             for key, item in action_state[i].items():
                 if key not in start_attributes_actions:
                     setattr(action.sub_actions[-1], key, item)
