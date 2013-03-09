@@ -49,6 +49,9 @@ def get_attack(attacking_unit, defending_unit, action):
     if hasattr(action, "lancing"):
         attack += 2
     
+    if hasattr(attacking_unit, "bribed"):
+        attack += 1
+
     if hasattr(action, "high_morale"):
         attack += 2
 
