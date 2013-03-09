@@ -1,8 +1,8 @@
 import battle
 
+
 class Action(object):
-    def __init__(self, unit, startpos, endpos, attackpos, is_attack, move_with_attack, is_ability=False, ability=""):
-        self.unit = unit
+    def __init__(self, startpos, endpos, attackpos, is_attack, move_with_attack, is_ability=False, ability=""):
         self.startpos = startpos  # The tile the unit starts it's action on
         self.endpos = endpos  # If the action is a movement, the tile the unit ends it movement on.
         # If the action is an attack, tile the unit stops at while attacking an adjacent tile.
@@ -14,16 +14,18 @@ class Action(object):
         self.sub_actions = []
         self.finalpos = endpos  # The tile a unit ends up at after attacks are resolved
 
-        self.target_unit = None
+        self.unit = None
+        self.target = None
+        self.unit_ref = None
+        self.target_ref = None
         self.rolls = None
         self.outcome = None
-
 
     def repr_attributes(self):
         return str(self.__dict__)
 
     def get_basic_string(self):
-        representation = self.unit.name
+        representation = self.unit_ref.name
 
         if self.startpos != self.endpos:
             representation += " move from " + coordinates(self.startpos)
@@ -34,13 +36,13 @@ class Action(object):
             representation += " at " + coordinates(self.startpos)
 
         if self.is_attack and not self.move_with_attack:
-            representation += " attack " + self.target_unit.name + " " + coordinates(self.attackpos)
+            representation += " attack " + self.target_ref.name + " " + coordinates(self.attackpos)
 
         if self.is_attack and self.move_with_attack:
-            representation += " attack-move " + self.target_unit.name + " " + coordinates(self.attackpos)
+            representation += " attack-move " + self.target_ref.name + " " + coordinates(self.attackpos)
 
         if self.is_ability:
-            representation += " use " + self.ability + " on " + self.target_unit.name + " " + coordinates(self.attackpos)
+            representation += " use " + self.ability + " on " + self.target_ref.name + " " + coordinates(self.attackpos)
 
         return representation
 
@@ -53,8 +55,8 @@ class Action(object):
     def get_full_battle_outcome_string(self):
         representation = ""
         if self.rolls:
-            attack = battle.get_attack(self.unit, self.target_unit, self)
-            defence = battle.get_defence(self.unit, self.target_unit, attack, self)
+            attack = battle.get_attack(self.unit_ref, self.target_ref, self)
+            defence = battle.get_defence(self.unit_ref, self.target_ref, attack, self)
 
             representation += "Stats A: " + str(attack) + ", D: " + str(defence)
             representation += " Rolls A: " + str(self.rolls[0]) + " D: " + str(self.rolls[1])
@@ -64,8 +66,8 @@ class Action(object):
             representation += "\n"
             representation += "and attack " + coordinates(sub_action.attackpos)
             if sub_action.rolls:
-                attack = battle.get_attack(self.unit, self.target_unit, self)
-                defence = battle.get_defence(self.unit, self.target_unit, attack, self)
+                attack = battle.get_attack(self.unit_ref, self.target_ref, self)
+                defence = battle.get_defence(self.unit_ref, self.target_ref, attack, self)
 
                 representation += ", Stats A: " + str(attack) + ", D: " + str(defence)
                 representation += " Rolls A: " + str(self.rolls[0]) + " D: " + str(self.rolls[1])
