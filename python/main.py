@@ -335,7 +335,7 @@ def perform_action(action, g):
 
 def show_unit(pos, g):
     
-    unit = None
+    unit = color = None
     if pos in g.units[0]:
         unit = g.units[0][pos]
         color = g.players[0].color
