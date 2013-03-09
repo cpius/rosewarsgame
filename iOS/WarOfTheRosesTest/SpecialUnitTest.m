@@ -178,9 +178,86 @@
     STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
     
     [lancer didPerformedAction:meleeAttacks[0]];
+    
+    [_manager endTurn];
+    [_manager endTurn];
 
     STAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
     STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
 }
+
+- (void)testLancerDoesntGetAttackBonusWhenAttackingWithLessThanTwoEmptyNodes {
+    
+    Lancer *lancer = [Lancer card];
+    Archer *archer = [Archer card];
+    
+    lancer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    lancer.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:lancer]
+                                    player2Units:[NSArray arrayWithObjects:archer, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
+    
+    [lancer willPerformAction:meleeAttacks[0]];
+    
+    STAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancer shouldn't receive +2A bonus when only one empty tiles before attack");
+    STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    
+    [lancer didPerformedAction:meleeAttacks[0]];
+    
+    STAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
+    STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+}
+
+- (void)testLancerDoesntGetAttackBonusWhenAttackingWithTwoNonEmptyNodes {
+    
+    Lancer *lancer = [Lancer card];
+    Archer *archer = [Archer card];
+    Archer *archer2 = [Archer card];
+    
+    lancer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    lancer.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    archer.cardColor = kCardColorRed;
+
+    archer2.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    archer2.cardColor = kCardColorRed;
+
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:lancer]
+                                    player2Units:[NSArray arrayWithObjects:archer,archer2, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
+    
+    [lancer willPerformAction:meleeAttacks[0]];
+    
+    STAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancer shouldn't receive +2A bonus when one of the two node are occupied");
+    STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    
+    [lancer didPerformedAction:meleeAttacks[0]];
+    
+    STAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
+    STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+}
+
+
 
 @end
