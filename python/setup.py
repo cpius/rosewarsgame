@@ -136,11 +136,8 @@ def flip_units(units):
 
 
 def get_start_units():
+
+    player1_units = get_units()
+    player2_units = flip_units(get_units())
     
-    player1 = Player("Green")
-    player2 = Player("Red")
-    
-    player1.units = get_units()
-    player2.units = flip_units(get_units())
-    
-    return [player1, player2]
+    return player1_units, player2_units
