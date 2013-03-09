@@ -1,7 +1,5 @@
-import mover
 import copy
 import imp
-import gamestate
 
 
 class AI(object):
@@ -21,27 +19,27 @@ class AI(object):
         self.put_counter = ai_type.put_counter
         self.name = name
 
-    def select_action(self, p):
+    def select_action(self, g):
 
-        p = gamestate.copy_p(p)
+        g = copy.deepcopy(g)
 
-        if p[0].backline == 8:
-            p = get_transformed_p(p)
+        if g.players[0].backline == 8:
+            g = get_transformed_g(g)
             transform_action = get_transformed_action
         else:
             transform_action = get_same_action
 
-        actions = mover.get_actions(p)
+        actions = g.get_actions()
 
         if actions:
-            action = self.get_action(p, actions)
+            action = self.get_action(actions, g)
             return transform_action(action)
         else:
             return None
 
-    def add_counters(self, p):
+    def add_counters(self, g):
 
-        for unit in p[0].units.values():
+        for unit in g.units[0].values():
             if unit.xp == 2:
                 if unit.defence + unit.dcounters == 4:
                     unit.acounters += 1
@@ -92,7 +90,7 @@ def get_transformed_action(action):
     action.endpos = t(action.endpos)
     action.attackpos = t(action.attackpos)
     for sub_action in action.sub_actions:
-        sub_action = get_transformed_action(sub_action)
+        action.sub_action = get_transformed_action(sub_action)
     if hasattr(action, "push"):
         action.push_direction = get_transformed_direction(action.push_direction)
 
@@ -104,17 +102,19 @@ def get_same_action(action):
     return action
 
 
-def get_transformed_p(p):
+def get_transformed_g(g):
 
-    newp = []
+    new_units_players = []
+    for units_player in g.units:
+        new_units = {}
+        for pos, unit in units_player.items():
+            new_units[t(pos)] = unit
 
-    for player in p:
-        pc = copy.copy(player)
-        pc.newunits = {}
-        for pos, unit in pc.units.items():
-            pc.newunits[t(pos)] = unit
-        pc.units = pc.newunits
-        pc.backline =  9 - player.backline
-        newp.append(pc)
+        new_units_players.append(new_units)
 
-    return newp
+    g.units = new_units_players
+
+    for player in g.players:
+        player.backline = 9 - player.backline
+
+    return g
