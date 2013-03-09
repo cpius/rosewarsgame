@@ -10,9 +10,9 @@ import ai_module
 def document_actions(actions, g):
 
     if g.players[0].actions_remaining == 1:
-        current_action = "1"
-    else:
         current_action = "2"
+    else:
+        current_action = "1"
 
     if hasattr(g.players[0], "extra_action"):
         current_action += ".2"
