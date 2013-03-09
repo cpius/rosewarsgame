@@ -1,14 +1,14 @@
 global turn
 turn = 1
 
-pause_for_animation = 550
+pause_for_animation = 650
 
 player2_ai = "Human"
-player1_ai = "Advancer"
+player1_ai = "Evaluator"
 
 document_ai_actions = True
 
-use_special_units = ["Crusader"]  # Special units that must be present in the game
+use_special_units = []  # Special units that must be present in the game
 dont_use_special_units = ["Chariot", "Samurai"]  # Special units that must not be present in the game
 
 
