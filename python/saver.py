@@ -25,6 +25,8 @@ def save_gamestate(g):
         
         gamestate.append(unit_states)
         
+    gamestate.append(g.turn)
+
     return gamestate
 
 
@@ -53,7 +55,7 @@ def load_gamestate(gamestate):
 
         units.append(load_units)
 
-    g = gamestate_module.Gamestate(players[0], units[0], players[1], units[1])
+    g = gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4])
     
     return g
 
