@@ -2,29 +2,27 @@ from operator import attrgetter
 import ai_methods as m
 import random as rnd
 import settings
-import gamestate
-import mover
+import gamestate_module
 import copy
-import setup
-import numpy as np
+import ai_module
 
 
-def document_actions(actions, players):
-    
-    if players[0].actions_remaining == 2:
-        taction = "1"
+def document_actions(actions, g):
+
+    if g.players[0].actions_remaining == 1:
+        current_action = "1"
     else:
-        taction = "2"
-        
-    if hasattr(players[0], "extra_action"):
-        taction += ".2"
-    
-    out = open("./replay/" + players[0].color + " AI actions " + str(settings.turn) + "." + taction + ".txt", 'w')
-    
+        current_action = "2"
+
+    if hasattr(g.players[0], "extra_action"):
+        current_action += ".2"
+
+    out = open("./replay/" + g.players[0].color + " AI actions " + str(g.turn) + "." + current_action + ".txt", 'w')
+
     for action in actions:
-        if players[0].color == "Red":
-            action = gamestate.copy_action(action)
-            get_transformed_action(action)
+        if g.players[0].color == "Red":
+            action = copy.copy(action)
+            ai_module.get_transformed_action(action)
             
         out.write(" -- " + str(action) + " -- \n")
         
@@ -88,98 +86,18 @@ def document_actions(actions, players):
     out.close()
 
 
-def perform_action(action, p):
-    
-    mover.do_action(action, p)
-    if hasattr(p[0], "extra_action"):
-        extra_action = p[0].ai.select_action(p)
-        p = perform_action(extra_action, p)
-    p[0].ai.add_counters(p)
-    
-    return p
+def perform_action(action, g):
+
+    g.do_action(action)
+    if hasattr(g.players[0], "extra_action"):
+        extra_action = g.players[0].ai.select_action(g)
+        perform_action(extra_action, g)
+    g.players[0].ai.add_counters(g)
 
 
-def find_action_scores_one_action(saved_gamestate, actions):
-    
-    p_orig = gamestate.load_gamestate(saved_gamestate)
-    
-    for action in actions:
-        
-        p = gamestate.load_gamestate(saved_gamestate)
-    
-        unit = p[0].units[action.startpos]
-        
-        if action.is_attack:
-    
-            enemy_unit = action.target_unit
-            
-            action.chance_of_win = m.chance_of_win(unit, enemy_unit, action)
-    
-            action = get_action_success(action)
-            
-            p = perform_action(action, p)
-            
-            action.values_success, action.score_success = get_values_and_score(action, p, p_orig)
-           
-            p = gamestate.load_gamestate(saved_gamestate)
-    
-            action = get_action_failure(action)
-                
-            p = perform_action(action, p)
-    
-            action.values_failure, action.score_failure = get_values_and_score(action, p, p_orig)
-    
-            action.score = action.chance_of_win * action.score_success \
-                + (1 - action.chance_of_win) * action.score_failure
+def get_values_and_score(g, g_orig):
 
-        elif action.is_ability:
-            
-            p = perform_action(action, p)
-
-            action.values, action.score = get_values_and_score(action, p, p_orig)
-
-        else:
-    
-            p = perform_action(action, p)
-            
-            action.values, action.score = get_values_and_score(action, p, p_orig)
-            
-    return actions
-
-
-def get_next_action(action, actions, p):
-
-    saved_gamestate = gamestate.save_gamestate(p)
-    
-    if hasattr(action, "double_cost"):
-        return []
-
-    actions_copy = [copy.copy(action_c) for action_c in actions]
-    
-    actions_copy = [action_copy for action_copy in actions_copy if action_copy.startpos != action.startpos
-                    and not hasattr(action_copy, "double_cost")]
-
-    for action_copy in actions_copy:
-        if hasattr(p[0].units[action_copy.startpos], "improved_weapons") and action_copy.is_attack:
-            
-            action_copy.chance_of_win =\
-                m.chance_of_win(p[0].units[action_copy.startpos], p[1].units[action_copy.attackpos], action_copy)
-
-            action_copy.chance_of_win = 1
-        
-            action_copy.score = action_copy.chance_of_win * action_copy.score_success\
-                + (1 - action_copy.chance_of_win) * action_copy.score_failure
-
-    actions_copy.sort(key=attrgetter("score"), reverse=True)
-
-    return actions_copy[0]
-
-
-def get_values_and_score(action, p, p_orig):
-
-    totals = {}
-
-    values = get_action_values(p, p_orig)
+    values = get_action_values(g, g_orig)
     player1_score = evaluate_action_values(values["player1"])
     player2_score = evaluate_action_values(values["player2"])
     score = player1_score - player2_score
@@ -189,130 +107,79 @@ def get_values_and_score(action, p, p_orig):
 
 def get_action_success(action):
     action.finalpos = action.endpos
-    action.rolls = (6, 6)
+    action.rolls = (1, 6)
     for sub_action in action.sub_actions:
-        sub_action.rolls = (6, 6)
+        sub_action.rolls = (1, 6)
         
     return action
 
 
 def get_action_failure(action):
     action.finalpos = action.endpos
-    action.rolls = (1, 1)
+    action.rolls = (6, 1)
     for sub_action in action.sub_actions:
-        sub_action.rolls = (1, 1)
+        sub_action.rolls = (6, 1)
         
     return action
-                
-                
-def find_action_scores_two_actions(saved_gamestate, actions_orig):
 
-    p_orig = gamestate.load_gamestate(saved_gamestate)
-    
-    actions = copy.copy(actions_orig)
+
+def find_action_scores_one_action(actions, g_orig):
+
+    gamestate = gamestate_module.save_gamestate(g_orig)
 
     for action in actions:
-        p = gamestate.load_gamestate(saved_gamestate)
-    
-        unit = p[0].units[action.startpos]
-        
+
+        g = gamestate_module.load_gamestate(gamestate)
+
         if action.is_attack:
-    
-            enemy_unit = action.target_unit
-            
-            action.chance_of_win = m.chance_of_win(unit, enemy_unit, action)
-    
+
+            action.chance_of_win = m.chance_of_win(action.unit_ref, action.target_ref, action)
+
             action = get_action_success(action)
 
-            p = perform_action(action, p)
+            perform_action(action, g)
 
-            action.values_success, action.score_success = get_values_and_score(action, p, p_orig)
-   
-            p = gamestate.load_gamestate(saved_gamestate)
-            
+            action.values_success, action.score_success = get_values_and_score(g, g_orig)
+
+            g = gamestate_module.load_gamestate(gamestate)
+
             action = get_action_failure(action)
-            
-            p = perform_action(action, p)
- 
-            action.values_failure, action.score_failure = get_values_and_score(action, p, p_orig)
-    
-            action.score = action.chance_of_win * action.score_success \
-                + (1 - action.chance_of_win) * action.score_failure
 
-            action.next_action = get_next_action(action, actions_orig, p)
-            
-            if action.next_action:
-                action.combined_score = action.score + action.next_action.score
-                if action.score < action.next_action.score:
-                    action.combined_score -= 0.01
-            else:
-                action.combined_score = action.score
+            perform_action(action, g)
+
+            action.values_failure, action.score_failure = get_values_and_score(g, g_orig)
+
+            action.score = action.chance_of_win * action.score_success +\
+                (1 - action.chance_of_win) * action.score_failure
 
         elif action.is_ability:
-            
-            p = perform_action(action, p)
 
-            action.values, action.score = get_values_and_score(action, p, p_orig)
+            perform_action(action, g)
 
-            for action_copy in actions_orig:
-                if action_copy.is_attack and action_copy.chance_of_win == 1:
-                    print "before loop, chance of win 1"
+            action.values, action.score = get_values_and_score(g, g_orig)
 
-            action.next_action = get_next_action(action, actions_orig, p)
-     
-            if action.next_action:
-                action.combined_score = action.score + action.next_action.score
-                if action.score < action.next_action.score:
-                    action.combined_score -= 0.1
-            else:
-                action.combined_score = action.score
-        
         else:
-    
-            p = perform_action(action, p)
-            
-            action.values, action.score = get_values_and_score(action, p, p_orig)
 
-            action.next_action = get_next_action(action, actions_orig, p)
-            
-            if action.next_action:
-                action.combined_score = action.score + action.next_action.score
-                if action.score < action.next_action.score:
-                    action.combined_score -= 0.1
-            else:
-                action.combined_score = action.score
-            
+            perform_action(action, g)
+
+            action.values, action.score = get_values_and_score(g, g_orig)
+
     return actions
 
 
-def get_action(p, actions):
+def get_action(actions, g):
 
-    saved_gamestate = gamestate.save_gamestate(p)
-    
-    possible_actions = mover.get_actions(p)
+    gc = g.copy()
 
-    actions_orig = find_action_scores_one_action(saved_gamestate, possible_actions)
-     
-    actions_orig.sort(key = attrgetter("score"), reverse= True)
+    actions = gc.get_actions()
 
-    print "actions orig score", actions_orig[0].score 
-     
-    if p[0].actions_remaining == 1:
-                
-        actions = actions_orig
+    actions = find_action_scores_one_action(actions, gc)
 
-        rnd.shuffle(actions)
-
-        actions.sort(key = attrgetter("score"), reverse=True)
-
-    else:
-        actions = find_action_scores_two_actions(saved_gamestate, actions_orig)
-
-        rnd.shuffle(actions)
-        actions.sort(key = attrgetter("combined_score"), reverse=True)
+    rnd.shuffle(actions)
+    actions.sort(key=attrgetter("score"), reverse=True)
     
     if settings.document_ai_actions:
-        document_actions(actions, p)
+        document_actions(actions, gc)
 
     return actions[0]    
 
@@ -330,7 +197,7 @@ def evaluate_action_values(values):
     return sum(value for value in values["gained"].values()) - sum(value for value in values["lost"].values())
 
 
-def get_action_values(p, p_orig):
+def get_action_values(g, g_orig):
     
     def get_values_unit(pos, unit, backline):
 
@@ -356,27 +223,27 @@ def get_action_values(p, p_orig):
         return values
 
     def give_back_bribed_units():
-        for pos, unit in p[1].units.items():
+        for pos, unit in g.units[1].items():
             if hasattr(unit, "bribed"):
-                p[0].units[pos] = p[1].units.pop(pos)
+                g.units[0][pos] = g.units[1].pop(pos)
 
-        for pos, unit in p[0].units.items():
+        for pos, unit in g.units[0].items():
             if hasattr(unit, "bribed"):
-                p[1].units[pos] = p[0].units.pop(pos)
+                g.units[1][pos] = g.units[0].pop(pos)
 
     def fill_values():
 
-        new_player1 = set(p[0].units) - set(p_orig[0].units)
-        old_player1 = set(p_orig[0].units) - set(p[0].units)
+        new_player1 = set(g.units[0]) - set(g_orig.units[0])
+        old_player1 = set(g_orig.units[0]) - set(g.units[0])
 
-        new_player2 = set(p[1].units) - set(p_orig[1].units)
-        old_player2 = set(p_orig[1].units) - set(p[1].units)
+        new_player2 = set(g.units[1]) - set(g_orig.units[1])
+        old_player2 = set(g_orig.units[1]) - set(g.units[1])
 
         for pos in new_player1:
-            values["player1"]["gained"] = get_values_unit(pos, p[0].units[pos], p[0].backline)
+            values["player1"]["gained"] = get_values_unit(pos, g.units[0][pos], g.players[0].backline)
 
         for pos in old_player1:
-            values["player1"]["lost"] = get_values_unit(pos, p_orig[0].units[pos], p[0].backline)
+            values["player1"]["lost"] = get_values_unit(pos, g_orig.units[0][pos], g.players[0].backline)
 
         for key in values["player1"]["gained"].keys():
             if key in values["player1"]["lost"].keys():
@@ -384,10 +251,10 @@ def get_action_values(p, p_orig):
                 del values["player1"]["lost"][key]
 
         for pos in new_player2:
-            values["player2"]["gained"] = get_values_unit(pos, p[1].units[pos], p[1].backline)
+            values["player2"]["gained"] = get_values_unit(pos, g.units[1][pos], g.players[1].backline)
 
         for pos in old_player2:
-            values["player2"]["lost"] = get_values_unit(pos, p_orig[1].units[pos], p[1].backline)
+            values["player2"]["lost"] = get_values_unit(pos, g_orig.units[1][pos], g.players[1].backline)
 
     values = {"player1": {"gained": {}, "lost": {}}, "player2": {"gained": {}, "lost": {}}}
 
