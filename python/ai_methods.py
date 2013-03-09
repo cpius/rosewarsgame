@@ -33,10 +33,10 @@ def document_actions(ai_type, actions, p):
     out.close()
 
 
-def chance_of_win(a, d, action):
+def chance_of_win(attacking_unit, defending_unit, action):
 
-    attack = battle.get_attack(a, d, action)
-    defence = battle.get_defence(a, d, attack, action)
+    attack = battle.get_attack(attacking_unit, defending_unit, action)
+    defence = battle.get_defence(attacking_unit, defending_unit, attack, action)
 
     if attack < 0:
         attack = 0
