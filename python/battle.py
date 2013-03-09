@@ -17,7 +17,7 @@ def get_defence(attacking_unit, defending_unit, attack, action):
     
     defence = defending_unit.defence
     
-    defence += defending_unit.dcounters
+    defence += defending_unit.defence_counters
     
     if attacking_unit.type in defending_unit.dbonus:
         defence += defending_unit.dbonus[attacking_unit.type]
@@ -41,7 +41,7 @@ def get_attack(attacking_unit, defending_unit, action):
     
     attack = attacking_unit.attack
     
-    attack += attacking_unit.acounters
+    attack += attacking_unit.attack_counters
     
     if hasattr(attacking_unit, "is_crusading"):
         attack += 1

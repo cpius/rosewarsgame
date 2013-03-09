@@ -41,11 +41,11 @@ class AI(object):
 
         for unit in g.units[0].values():
             if unit.xp == 2:
-                if unit.defence + unit.dcounters == 4:
-                    unit.acounters += 1
+                if unit.defence + unit.defence_counters == 4:
+                    unit.attack_counters += 1
                 else:
                     if not unit.attack:
-                        unit.dcounters += 1
+                        unit.defence_counters += 1
                     else:
                         self.put_counter(unit)
                 unit.xp = 0

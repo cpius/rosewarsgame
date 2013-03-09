@@ -187,9 +187,9 @@ def get_action(actions, g):
 def put_counter(unit):
 
     if unit.name in ["Pikeman", "Heavy Cavalry", "Royal Guard", "Viking"]:
-        unit.dcounters += 1
+        unit.defence_counters += 1
     else:
-        unit.acounters += 1
+        unit.attack_counters += 1
 
 
 def evaluate_action_values(values):

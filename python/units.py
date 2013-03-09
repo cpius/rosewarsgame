@@ -1,7 +1,7 @@
 class Unit(object):
 
-    acounters = 0
-    dcounters = 0
+    attack_counters = 0
+    defence_counters = 0
     xp = 0
     zoc = []
     abilities = []

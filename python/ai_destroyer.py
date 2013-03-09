@@ -26,5 +26,5 @@ def get_action(actions, g):
 
 
 def put_counter(unit):
-    unit.acounters += 1
+    unit.attack_counters += 1
 

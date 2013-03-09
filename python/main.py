@@ -78,31 +78,31 @@ def get_image(path):
         return image    
 
 
-def draw_acounters(unit, pos):
-    if unit.acounters:
+def draw_attack_counters(unit, pos):
+    if unit.attack_counters:
         pygame.draw.circle(screen, grey, acounter_coords.get(pos), 10, 0)
         pygame.draw.circle(screen, brown, acounter_coords.get(pos), 8, 0)
-        if unit.acounters != 1:
-            label = font.render(str(unit.acounters), 1, black)
+        if unit.attack_counters != 1:
+            label = font.render(str(unit.attack_counters), 1, black)
             screen.blit(label, afont_coords.get(pos)) 
 
 
-def draw_dcounters(unit, pos):
+def draw_defence_counters(unit, pos):
     
     if hasattr(unit, "sabotaged"):
-        dcounters = -1
+        defence_counters = -1
     else:
-        dcounters = unit.dcounters
+        defence_counters = unit.defence_counters
     
-    if dcounters:
+    if defence_counters:
         pygame.draw.circle(screen, grey, dcounter_coords.get(pos), 10, 0)
         pygame.draw.circle(screen, light_grey, dcounter_coords.get(pos), 8, 0)
         
-        if dcounters > 1:
-            label = font.render(str(dcounters), 1, black)
+        if defence_counters > 1:
+            label = font.render(str(defence_counters), 1, black)
             screen.blit(label, dfont_coords.get(pos))
 
-        if dcounters < 0:
+        if defence_counters < 0:
             label = font.render("x", 1, black)
             screen.blit(label, dfont_coords.get(pos))    
 
@@ -162,8 +162,8 @@ def draw_unit(unit, pos, color):
     pic = get_image("./units_small/" + get_unit_pic(unit.name, color))
     screen.blit(pic, base_coords.get(pos))
 
-    draw_acounters(unit, pos)
-    draw_dcounters(unit, pos)
+    draw_attack_counters(unit, pos)
+    draw_defence_counters(unit, pos)
     draw_xp(unit, pos)
  
     add_ycounters(unit)
@@ -229,11 +229,11 @@ def get_input_counter(unit):
     while True:
         for event in pygame.event.get():
             if event.type == KEYDOWN and event.key == K_a:
-                unit.acounters += 1
+                unit.attack_counters += 1
                 return
 
             if event.type == KEYDOWN and event.key == K_d:
-                unit.dcounters += 1
+                unit.defence_counters += 1
                 return
 
 
@@ -266,8 +266,8 @@ def pause():
 def add_counters(units):
     for unit in units.values():
         if unit.xp == 2:
-            if unit.defence + unit.dcounters == 4:
-                unit.acounters += 1
+            if unit.defence + unit.defence_counters == 4:
+                unit.attack_counters += 1
             else:
                 get_input_counter(unit)
                
