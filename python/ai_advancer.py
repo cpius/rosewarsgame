@@ -5,7 +5,7 @@ import random as rnd
 import settings
 
 
-def get_action(p, actions):
+def get_action(actions, g):
     
     for action in actions:
         action.score = action.endpos[1]

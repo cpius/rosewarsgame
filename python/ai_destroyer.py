@@ -5,26 +5,23 @@ import random as rnd
 import settings
 
 
-def get_action(actions, p):
+def get_action(actions, g):
 
     for action in actions:
         if action.is_attack:
-            enemy_unit = p[1].units[action.attackpos]
-            chance = m.chance_of_win(action.unit, enemy_unit, action)
+            enemy_unit = g.units[1][action.attackpos]
+            unit = g.units[0][action.startpos]
+            chance = m.chance_of_win(unit, enemy_unit, action)
             action.score = chance * 10
             if hasattr(action.unit, "double_attack_cost"):
                 action.score /= 2
         else:
             action.score = 0
 
-    if hasattr(action, "push"):
-        print "push"
-        action.score = 30
-
     rnd.shuffle(actions)
-    actions.sort(key = attrgetter("score"), reverse= True)
+    actions.sort(key=attrgetter("score"), reverse=True)
     if settings.document_ai_actions:
-        m.document_actions("Destroyer", actions, p)
+        m.document_actions(actions, g)
     return actions[0]
 
 
