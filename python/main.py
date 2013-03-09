@@ -410,7 +410,7 @@ def run_game(g):
                         selected_unit.abilities:
                     print "Ability", (x, y)
                     if len(selected_unit.abilities) > 1:
-                        index = get_input_abilities(g.selected_unit)
+                        index = get_input_abilities(selected_unit)
                         action = Action(startpos, startpos, (x, y), False, False, True, selected_unit.abilities[index])
                     else:
                         action = Action(startpos, startpos, (x, y), False, False, True, selected_unit.abilities[0])
