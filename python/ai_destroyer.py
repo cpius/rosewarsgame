@@ -28,6 +28,6 @@ def get_action(actions, p):
     return actions[0]
 
 
-def put_counter(unit, p):
+def put_counter(unit):
     unit.acounters += 1
 
