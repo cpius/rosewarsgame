@@ -10,7 +10,7 @@ import ai_module
 class Gamestate:
     
     def __init__(self, player1, player1_units, player2, player2_units):
-        self.turn = 0
+        self.turn = 1
         self.units = [player1_units, player2_units]
         self.players = [player1, player2]
 
