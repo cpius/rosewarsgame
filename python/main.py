@@ -412,7 +412,8 @@ def run_game(p):
                     startpos = (x, y)
                     p[0].unit = p[0].units[startpos]
 
-                elif startpos and not endpos and (x, y) in p[1].units and p[0].unit.abilities:
+                elif startpos and not endpos and ((x, y) in g.units[1] or (x, y) in g.units[0]) and \
+                        selected_unit.abilities:
                     print "Ability", (x, y)
                     if len(p[0].unit.abilities) > 1:
                         index = get_input_abilities(p[0].unit, p)
