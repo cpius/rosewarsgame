@@ -199,20 +199,20 @@ def evaluate_action_values(values):
 
 def get_action_values(g, g_orig):
     
-    def get_values_unit(pos, unit, backline):
+    def get_values_unit(pos, unit):
 
         values = {}
 
-        if pos[1] == (9 - backline):
+        if pos[1] == 8:
             values["line 8"] = 1000
                  
-        if pos[1] == (9 - backline) - 1:
+        if pos[1] == 7:
             values["line 7"] = 4
     
-        if pos[1] == (9 - backline) - 2:
+        if pos[1] == 6:
             values["line 6"] = 2
 
-        if pos[1] == (9 - backline) - 3:
+        if pos[1] == 5:
             values["line 5"] = 0.5
             
         if unit.name in settings.special_units:
@@ -240,10 +240,10 @@ def get_action_values(g, g_orig):
         old_player2 = set(g_orig.units[1]) - set(g.units[1])
 
         for pos in new_player1:
-            values["player1"]["gained"] = get_values_unit(pos, g.units[0][pos], g.players[0].backline)
+            values["player1"]["gained"] = get_values_unit(pos, g.units[0][pos])
 
         for pos in old_player1:
-            values["player1"]["lost"] = get_values_unit(pos, g_orig.units[0][pos], g.players[0].backline)
+            values["player1"]["lost"] = get_values_unit(pos, g_orig.units[0][pos])
 
         for key in values["player1"]["gained"].keys():
             if key in values["player1"]["lost"].keys():
@@ -251,10 +251,10 @@ def get_action_values(g, g_orig):
                 del values["player1"]["lost"][key]
 
         for pos in new_player2:
-            values["player2"]["gained"] = get_values_unit(pos, g.units[1][pos], g.players[1].backline)
+            values["player2"]["gained"] = get_values_unit(pos, g.units[1][pos])
 
         for pos in old_player2:
-            values["player2"]["lost"] = get_values_unit(pos, g_orig.units[1][pos], g.players[1].backline)
+            values["player2"]["lost"] = get_values_unit(pos, g_orig.units[1][pos])
 
     values = {"player1": {"gained": {}, "lost": {}}, "player2": {"gained": {}, "lost": {}}}
 
