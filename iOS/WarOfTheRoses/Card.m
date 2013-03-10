@@ -64,6 +64,14 @@
     self.experience = 0;
 }
 
+- (void)resetAfterNewRound {
+    
+    self.movesConsumed = 0;
+    self.hasReceivedExperiencePointsThisRound = NO;
+    self.hasPerformedActionThisRound = NO;
+    self.hasPerformedAttackThisRound = NO;
+}
+
 - (BOOL)isRanged {
     
     return self.range > 1;

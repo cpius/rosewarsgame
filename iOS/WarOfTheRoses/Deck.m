@@ -33,10 +33,7 @@
 - (void)resetMoveCounters {
     
     for (Card *card in _cards) {
-        card.movesConsumed = 0;
-        card.hasReceivedExperiencePointsThisRound = NO;
-        card.hasPerformedActionThisRound = NO;
-        card.hasPerformedAttackThisRound = NO;
+        [card resetAfterNewRound];
     }
 }
 

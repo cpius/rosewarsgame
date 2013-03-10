@@ -44,15 +44,6 @@
     return [[Chariot alloc] init];
 }
 
--(BOOL)specialAbilityTriggersVersus:(Card *)opponent {
-    
-    return NO;
-}
-
-- (void)addSpecialAbilityVersusOpponent:(Card *)opponent {
-    
-}
-
 - (void)didPerformedAction:(Action *)action {
     
     if (action.isAttack) {

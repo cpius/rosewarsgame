@@ -113,6 +113,11 @@
 		6DB2044C16ECADCF0004FFCB /* royalguard_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2044816ECADCF0004FFCB /* royalguard_0.png */; };
 		6DB2044D16ECADCF0004FFCB /* royalguard_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2044916ECADCF0004FFCB /* royalguard_icon-hd.png */; };
 		6DB2044E16ECADCF0004FFCB /* royalguard_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2044A16ECADCF0004FFCB /* royalguard_icon.png */; };
+		6DB2045116ECB9E10004FFCB /* Samurai.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2045016ECB9E10004FFCB /* Samurai.m */; };
+		6DB2045616ECBACF0004FFCB /* samurai_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2045216ECBACF0004FFCB /* samurai_0-hd.png */; };
+		6DB2045716ECBACF0004FFCB /* samurai_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2045316ECBACF0004FFCB /* samurai_0.png */; };
+		6DB2045816ECBACF0004FFCB /* samurai_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2045416ECBACF0004FFCB /* samurai_icon-hd.png */; };
+		6DB2045916ECBACF0004FFCB /* samurai_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2045516ECBACF0004FFCB /* samurai_icon.png */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -488,6 +493,12 @@
 		6DB2044816ECADCF0004FFCB /* royalguard_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = royalguard_0.png; path = Resources/Images/royalguard_0.png; sourceTree = "<group>"; };
 		6DB2044916ECADCF0004FFCB /* royalguard_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "royalguard_icon-hd.png"; path = "Resources/Images/royalguard_icon-hd.png"; sourceTree = "<group>"; };
 		6DB2044A16ECADCF0004FFCB /* royalguard_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = royalguard_icon.png; path = Resources/Images/royalguard_icon.png; sourceTree = "<group>"; };
+		6DB2044F16ECB9E10004FFCB /* Samurai.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Samurai.h; sourceTree = "<group>"; };
+		6DB2045016ECB9E10004FFCB /* Samurai.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Samurai.m; sourceTree = "<group>"; };
+		6DB2045216ECBACF0004FFCB /* samurai_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "samurai_0-hd.png"; path = "Resources/Images/samurai_0-hd.png"; sourceTree = "<group>"; };
+		6DB2045316ECBACF0004FFCB /* samurai_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = samurai_0.png; path = Resources/Images/samurai_0.png; sourceTree = "<group>"; };
+		6DB2045416ECBACF0004FFCB /* samurai_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "samurai_icon-hd.png"; path = "Resources/Images/samurai_icon-hd.png"; sourceTree = "<group>"; };
+		6DB2045516ECBACF0004FFCB /* samurai_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = samurai_icon.png; path = Resources/Images/samurai_icon.png; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1012,6 +1023,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DB2045216ECBACF0004FFCB /* samurai_0-hd.png */,
+				6DB2045316ECBACF0004FFCB /* samurai_0.png */,
+				6DB2045416ECBACF0004FFCB /* samurai_icon-hd.png */,
+				6DB2045516ECBACF0004FFCB /* samurai_icon.png */,
 				6DB2044716ECADCF0004FFCB /* royalguard_0-hd.png */,
 				6DB2044816ECADCF0004FFCB /* royalguard_0.png */,
 				6DB2044916ECADCF0004FFCB /* royalguard_icon-hd.png */,
@@ -1740,6 +1755,8 @@
 				6DD5889716EA62A300466DDB /* Lancer.m */,
 				6DB2044416ECACD00004FFCB /* RoyalGuard.h */,
 				6DB2044516ECACD00004FFCB /* RoyalGuard.m */,
+				6DB2044F16ECB9E10004FFCB /* Samurai.h */,
+				6DB2045016ECB9E10004FFCB /* Samurai.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -1958,6 +1975,10 @@
 				6DB2044C16ECADCF0004FFCB /* royalguard_0.png in Resources */,
 				6DB2044D16ECADCF0004FFCB /* royalguard_icon-hd.png in Resources */,
 				6DB2044E16ECADCF0004FFCB /* royalguard_icon.png in Resources */,
+				6DB2045616ECBACF0004FFCB /* samurai_0-hd.png in Resources */,
+				6DB2045716ECBACF0004FFCB /* samurai_0.png in Resources */,
+				6DB2045816ECBACF0004FFCB /* samurai_icon-hd.png in Resources */,
+				6DB2045916ECBACF0004FFCB /* samurai_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2164,6 +2185,7 @@
 				6DD5889516E7E1CA00466DDB /* ActionCostLess.m in Sources */,
 				6DD5889816EA62A300466DDB /* Lancer.m in Sources */,
 				6DB2044616ECACD00004FFCB /* RoyalGuard.m in Sources */,
+				6DB2045116ECB9E10004FFCB /* Samurai.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -117,6 +117,9 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"royalguard_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"royalguard_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"royalguard_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"royalguard_icon.png"];
 
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"samurai_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"samurai_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"samurai_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"samurai_icon.png"];
+
     [[SoundManager sharedManager] preloadSoundEffects];
     
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.

@@ -23,6 +23,8 @@
 #import "RoyalGuard.h"
 #import "Pikeman.h"
 #import "MovePathFinderStrategy.h"
+#import "Samurai.h"
+#import "LightCavalry.h"
 
 @implementation SpecialUnitTest
 
@@ -325,6 +327,61 @@
     NSArray *pathWithoutSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:4 column:3] usingStrategy:[MovePathFinderStrategy strategy] allLocations:_manager.currentGame.unitLayout];
     
     STAssertFalse([royalguard allowPath:pathWithoutSidewaysMovement forActionType:kActionTypeMove allLocations:_manager.currentGame.unitLayout], @"RoyalGuard shouldn't be able to move 2 tiles when none of them is sideways");
+}
+
+- (void)testSamuraiCanAttackTwice {
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
+    Samurai *samurai = [Samurai card];
+    
+    LightCavalry *lightCavalry1 = [LightCavalry card];
+    LightCavalry *lightCavalry2 = [LightCavalry card];
+    LightCavalry *lightCavalry3 = [LightCavalry card];
+    
+    samurai.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    samurai.cardColor = kCardColorGreen;
+    
+    lightCavalry1.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    lightCavalry1.cardColor = kCardColorRed;
+
+    lightCavalry2.cardLocation = [GridLocation gridLocationWithRow:2 column:4];
+    lightCavalry2.cardColor = kCardColorRed;
+
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:samurai]
+                                    player2Units:[NSArray arrayWithObjects:lightCavalry1, lightCavalry2, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 5;
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:samurai.cardLocation forCard:samurai enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(meleeAttacks.count == 2, @"Samurai should be able to attack both cavalry");
+    STAssertTrue([samurai canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai should be able to perform melee action");
+    STAssertTrue([samurai canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai should be able to perform move action");
+    
+    MeleeAttackAction *action1 = meleeAttacks[0];
+    
+    action1.delegate = mock;
+    
+    [action1 performActionWithCompletion:^{
+        STAssertTrue([samurai canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai should be able to perform a second melee action");
+        STAssertFalse([samurai canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai shouldn't be able to perform move action");
+    }];
+    
+    MeleeAttackAction *action2 = meleeAttacks[1];
+    
+    action2.delegate = mock;
+
+    [action2 performActionWithCompletion:^{
+        STAssertFalse([samurai canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai shouldn't be able to perform a third melee action");
+        STAssertFalse([samurai canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai shouldn't be able to perform move action");
+    }];
 }
 
 @end

@@ -97,6 +97,8 @@
 
 - (void)commonInit;
 
+- (void)resetAfterNewRound;
+
 - (void)consumeAllMoves;
 - (void)consumeMove;
 - (void)consumeMoves:(NSUInteger)moves;

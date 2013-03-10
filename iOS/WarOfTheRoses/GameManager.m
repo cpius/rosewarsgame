@@ -63,7 +63,7 @@
     
     // Only 1 action in first round
     _currentGame.numberOfAvailableActions = 1;
-    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:1 cardColor:_currentGame.myColor];
+    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:2 cardColor:_currentGame.myColor];
     
     if (gameType == kGameTypeSinglePlayer) {
         
@@ -76,7 +76,7 @@
         while (!setupComplete) {
             
             retries++;
-            _currentGame.enemyDeck = [_enemyPlayer.deckStrategy generateNewDeckWithNumberOfBasicType:7 andSpecialType:1 cardColor:_currentGame.enemyColor];
+            _currentGame.enemyDeck = [_enemyPlayer.deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:2 cardColor:_currentGame.enemyColor];
             [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
         
             if ([_enemyPlayer.deckStrategy respondsToSelector:@selector(deckSetupMatchesRequirements)]) {

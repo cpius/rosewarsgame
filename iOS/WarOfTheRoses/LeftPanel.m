@@ -49,7 +49,10 @@
     }
     else {
         [_attackButton runAction:[CCFadeIn actionWithDuration:0.2]];
-        [_moveAttackButton runAction:[CCFadeIn actionWithDuration:0.2]];
+        
+        if (selectedCard.movesRemaining > 0) {
+            [_moveAttackButton runAction:[CCFadeIn actionWithDuration:0.2]];
+        }
     }
 }
 
