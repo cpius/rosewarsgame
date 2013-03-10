@@ -1,6 +1,35 @@
 from __future__ import division
 import settings
 from action import Action
+import collections
+import functools
+
+
+class memoized(object):
+    """Decorator. Caches a function's return value each time it is called.
+    If called later with the same arguments, the cached value is returned
+    (not reevaluated).
+    """
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
+    def __call__(self, *args):
+        if not isinstance(args, collections.Hashable):
+            # uncacheable. a list, for instance.
+            # better to not cache than blow up.
+            return self.func(*args)
+        if args in self.cache:
+            return self.cache[args]
+        else:
+            value = self.func(*args)
+            self.cache[args] = value
+            return value
+
+    def __repr__(self):
+        return self.func.__doc__
+
+    def __get__(self, obj, objtype):
+        return functools.partial(self.__call__, obj)
 
 
 class Direction:
@@ -266,8 +295,8 @@ def moves_set(unit, pos, units, enemy_units, movement_remaining):
 
     return moveset
 
-
-def ranged_attacks_set(unit, pos, units, enemy_units, range_remaining):
+@memoized
+def ranged_attacks_set(pos, enemy_units, range_remaining):
     """ Returns all the tiles a ranged unit can attack, in a set."""
 
     attackset = set()
@@ -277,7 +306,7 @@ def ranged_attacks_set(unit, pos, units, enemy_units, range_remaining):
 
     if range_remaining > 0:
         for newpos in adjacent_tiles(pos):
-            attackset |= ranged_attacks_set(unit, newpos, units, enemy_units, range_remaining - 1)
+            attackset |= ranged_attacks_set(newpos, enemy_units, range_remaining - 1)
 
     return attackset
 
@@ -341,7 +370,7 @@ def melee_actions(unit, pos, units, enemy_units):
 
 
 def ranged_actions(unit, pos, units, enemy_units):
-    attackset = ranged_attacks_set(unit, pos, units, enemy_units, unit.range)
+    attackset = ranged_attacks_set(pos, frozenset(enemy_units), unit.range)
     moveset = moves_set(unit, pos, units, enemy_units, unit.movement)
     attacks = ranged_attack_actions(pos, attackset)
     moves = move_actions(pos, moveset)
