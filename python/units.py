@@ -6,6 +6,7 @@ class Unit(object):
     zoc = []
     abilities = []
     used = False
+    xp_gained_this_round = False
 
     def __repr__(self):
         return self.name
