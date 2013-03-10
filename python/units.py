@@ -213,7 +213,6 @@ class Crusader(Unit):
     crusading = True  # Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader gets +1A.
 
 
-
 class Berserker(Unit):
 
     name = "Berserker"
@@ -258,7 +257,8 @@ class War_Elephant(Unit):
         
     double_attack_cost = True  # Attack takes two actions
     triple_attack = True  # Also hits the two diagonally nearby tiles in the attack direction.
-    push = True  # If attack and defence rolls both succees, it can still move forward. If not on back line, opponents selfs must retreat directly backwards or die.
+    push = True  # If attack and defence rolls both succees, it can still move forward.
+                 # If not on back line, opponents selfs must retreat directly backwards or die.
 
 
 class Samurai(Unit):

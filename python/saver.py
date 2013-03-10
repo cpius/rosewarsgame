@@ -60,7 +60,6 @@ def load_gamestate(gamestate):
     return gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4])
 
 
-
 def write_gamestate(p, path):
 
     out = open(path, 'w')

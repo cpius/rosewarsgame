@@ -278,7 +278,7 @@ def moves_sets(pos, units, zoc_blocks, total_movement, movement_remaining):
     moveset_no_leftover = set()
 
     for newpos in adjacent_tiles_the_unit_can_move_to(pos, units, zoc_blocks):
-        movesets = moves_sets(newpos, units, zoc_blocks, total_movement, movement_remaining -1)
+        movesets = moves_sets(newpos, units, zoc_blocks, total_movement, movement_remaining - 1)
         moveset_with_leftover |= movesets[0]
         moveset_no_leftover |= movesets[1]
 
@@ -298,7 +298,7 @@ def moves_set(pos, units, zoc_blocks, total_movement, movement_remaining):
         moveset = set()
 
     for newpos in adjacent_tiles_the_unit_can_move_to(pos, units, zoc_blocks):
-        moveset |= moves_set(newpos, units, zoc_blocks, total_movement, movement_remaining -1)
+        moveset |= moves_set(newpos, units, zoc_blocks, total_movement, movement_remaining - 1)
 
     return moveset
 
@@ -408,7 +408,8 @@ def get_special_unit_actions(unit, pos, units, enemy_units, player_units):
 
         def berserking(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
-            moveset_with_leftover_berserk, moveset_no_leftover_berserk = moves_sets(pos, frozenset(units), unit.zoc_blocks, 5, 5)
+            moveset_with_leftover_berserk, moveset_no_leftover_berserk = moves_sets(pos, frozenset(units),
+                                                                                    unit.zoc_blocks, 5, 5)
             # Det burde vaere 4, men virker med 5. :S
 
             attacks = melee_attack_actions(unit, pos, moveset_with_leftover_berserk | {pos}, enemy_units)
