@@ -18,10 +18,12 @@ def save_gamestate(g):
         
         unit_states = []
         for pos, unit in g.units[i].items():
-            unit_state = {"pos": pos, "name": unit.name}
+            unit_state1 = [pos, unit.name.replace(" ", "_")]
+            unit_state2 = {}
             for key, item in unit.__dict__.items():
-                unit_state[key] = item
-            unit_states.append(unit_state)
+                if item:
+                    unit_state2[key] = item
+            unit_states.append((unit_state1, unit_state2))
         
         gamestate.append(unit_states)
         
@@ -36,11 +38,9 @@ def load_gamestate(gamestate):
     units = []
 
     for i in range(2):
-        
+
         player = setup.Player(gamestate[i * 2][0])
         player.ai_name = gamestate[i * 2][1]
-        if player.ai_name != "Human":
-            player.ai = ai_module.AI(player.ai_name)
         player.actions_remaining = gamestate[i * 2][2]
         if gamestate[i * 2][3]:
             player.extra_action = True
@@ -48,16 +48,17 @@ def load_gamestate(gamestate):
         players.append(player)
 
         load_units = {}
+
         for unit in gamestate[i * 2 + 1]:
-            load_units[unit['pos']] = getattr(units_module, unit['name'].replace(" ", "_"))()
-            for key, item in unit.items():
-                setattr(load_units[unit['pos']], key, item)
+            load_units[unit[0][0]] = getattr(units_module, unit[0][1])()
+
+            for key, item in unit[1].items():
+                setattr(load_units[unit[0][0]], key, item)
 
         units.append(load_units)
 
-    g = gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4])
-    
-    return g
+    return gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4])
+
 
 
 def write_gamestate(p, path):
