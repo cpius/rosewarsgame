@@ -62,19 +62,28 @@ def load_gamestates():
         gamestate.load_gamestate(saved_g)
 
 
+def get_many_actions():
+    for i in range(1000):
+        g.get_actions()
+
+
 def profiling(function_string):
 
-    cProfile.run(function_string, "foo")
+    cProfile.run(function_string, "./saves/foo")
 
-    p = pstats.Stats('foo')
+    p = pstats.Stats('./saves/foo')
     p.strip_dirs()
     p.sort_stats("cumulative")
     p.print_stats()
 
 
-g = make_gamestate()
+#g = make_gamestate()
+
+
+#print time_ai("Evaluator", g)
+
+g = pickle.load(open("./saves/save1.pickle", 'rb'))
 saved_g = gamestate.save_gamestate(g)
 
-profiling("gamestate.load_gamestate(saved_g)")
-
+profiling("get_many_actions()")
 
