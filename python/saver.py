@@ -1,8 +1,8 @@
 import units as units_module
 import setup
-import ai_module
 import gamestate_module
 from action import Action
+from player import Player
 
 start_attributes_actions = ["unit", "startpos", "endpos", "attackpos", "is_attack", "move_with_attack",
                             "is_ability", "ability"]
@@ -39,7 +39,7 @@ def load_gamestate(gamestate):
 
     for i in range(2):
 
-        player = setup.Player(gamestate[i * 2][0])
+        player = Player(gamestate[i * 2][0])
         player.ai_name = gamestate[i * 2][1]
         player.actions_remaining = gamestate[i * 2][2]
         if gamestate[i * 2][3]:
