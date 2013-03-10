@@ -409,8 +409,7 @@ def get_special_unit_actions(unit, pos, units, enemy_units, player_units):
         def berserking(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
             moveset_with_leftover_berserk, moveset_no_leftover_berserk = moves_sets(pos, frozenset(units),
-                                                                                    unit.zoc_blocks, 5, 5)
-            # Det burde vaere 4, men virker med 5. :S
+                                                                                    unit.zoc_blocks, 4, 4)
 
             attacks = melee_attack_actions(unit, pos, moveset_with_leftover_berserk | {pos}, enemy_units)
 
