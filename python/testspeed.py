@@ -5,6 +5,9 @@ import setup
 from time import time
 import copy
 from player import Player
+import pickle
+import pstats
+import cProfile
 
 
 def make_gamestate():
@@ -21,8 +24,6 @@ def make_gamestate():
 
     player1.actions_remaining = 2
     player2.actions_remaining = 0
-
-    g.set_ais()
 
     return g
 
@@ -43,25 +44,37 @@ def time_ai(ai_name, g):
     t = time()
     for i in range(10):
         g.players[0].ai.select_action(g)
-    return "Select action", ai_name, round((time() - t)*100, 5)
+    return "Select action", ai_name, round((time() - t) * 100, 5)
+
+
+def run_five_saves():
+    for i in range(5):
+        g = pickle.load(open("./saves/save" + str(i) + ".pickle", 'rb'))
+        g.players[0].ai_name = "Evaluator"
+        g.players[1].ai_name = "Human"
+        g.set_ais()
+
+        g.players[0].ai.select_action(g)
+
+
+def load_gamestates():
+    for i in range(10000):
+        gamestate.load_gamestate(saved_g)
+
+
+def profiling(function_string):
+
+    cProfile.run(function_string, "foo")
+
+    p = pstats.Stats('foo')
+    p.strip_dirs()
+    p.sort_stats("cumulative")
+    p.print_stats()
 
 
 g = make_gamestate()
 saved_g = gamestate.save_gamestate(g)
 
+profiling("gamestate.load_gamestate(saved_g)")
 
-print timer(copy.deepcopy, g)
-print timer(g.copy)
-print timer(gamestate.load_gamestate, saved_g)
-print timer(gamestate.save_gamestate, g)
-print timer(g.get_actions)
-
-g.players[0].ai.select_action(g)
-
-
-print time_ai("Destroyer", g)
-
-print time_ai("Advancer", g)
-
-print time_ai("Evaluator", g)
 
