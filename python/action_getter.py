@@ -69,11 +69,6 @@ directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1,
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
 
 
-def zoc(unit, pos, enemy_units):
-    """ Returns whether an enemy unit can exert ZOC on a friendly unit """
-    return pos in enemy_units and unit.type in enemy_units[pos].zoc
-
-
 def surrounding_tiles(pos):
     """ Returns the 8 surrounding tiles"""
     return set(direction.move(pos) for direction in eight_directions)
@@ -168,6 +163,8 @@ def get_actions(enemy_units, player_units, player):
 
 def get_unit_actions(unit, pos, units, enemy_units, player_units):
 
+    unit.zoc_blocks = frozenset(pos for pos, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
+
     if unit.name not in settings.special_units:
         if unit.range == 1:
             moves, attacks = melee_actions(unit, pos, units, enemy_units)
@@ -180,10 +177,17 @@ def get_unit_actions(unit, pos, units, enemy_units, player_units):
         return get_special_unit_actions(unit, pos, units, enemy_units, player_units)
 
 
+def generate_moveset(unit, pos, units):
+    return moves_set(pos, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
+
+def generate_movesets(unit, pos, units):
+    return moves_sets(pos, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
+
+
 def get_extra_actions(enemy_units, player_units, player):
 
     def charioting():
-        moveset = moves_set(unit, pos, units, enemy_units, unit.movement_remaining)
+        moveset = generate_moveset(unit, pos, units)
         moves = move_actions(pos, moveset | {pos})
 
         return moves, [], []
@@ -211,7 +215,7 @@ def get_extra_actions(enemy_units, player_units, player):
             friendly_units, enemy_units = find_all_friendly_units_except_current(pos, player_units), enemy_units
             units = dict(friendly_units.items() + enemy_units.items())
 
-            moveset = moves_set(unit, pos, units, enemy_units, unit.movement_remaining)
+            moveset = generate_moveset(unit, pos, units)
 
             for attribute in ["charioting", "samuraiing"]:
                 if hasattr(unit, attribute):
@@ -227,16 +231,16 @@ def get_extra_actions(enemy_units, player_units, player):
     return extra_actions
 
 
-def zoc_block(unit, pos, direction, enemy_units):
+def zoc_block(pos, direction, zoc_blocks):
     """ Returns whether an enemy unit exerting ZOC prevents you from going in 'direction' from 'pos'. """
-    return any(zoc(unit, perpendicular_pos, enemy_units) for perpendicular_pos in direction.perpendicular(pos))
+    return any(perpendicular_pos in zoc_blocks for perpendicular_pos in direction.perpendicular(pos))
 
 
-def adjacent_tiles_the_unit_can_move_to(unit, pos, enemy_units, units):
+def adjacent_tiles_the_unit_can_move_to(pos, units, zoc_blocks):
     for direction in directions:
         newpos = direction.move(pos)
         if newpos in board and newpos not in units:
-            if not zoc_block(unit, pos, direction, enemy_units):
+            if not zoc_block(pos, direction, zoc_blocks):
                 yield newpos
 
 
@@ -253,8 +257,8 @@ def adjacent_tiles(pos):
         if newpos in board:
             yield newpos
 
-
-def moves_sets(unit, pos, units, enemy_units, movement_remaining):
+@memoized
+def moves_sets(pos, units, zoc_blocks, total_movement, movement_remaining):
     """
     Returns all the tiles a unit can move to, in two sets.
 
@@ -265,33 +269,51 @@ def moves_sets(unit, pos, units, enemy_units, movement_remaining):
     if movement_remaining == 0:
         return set(), {pos}
 
-    if movement_remaining != unit.movement:
+    if movement_remaining != total_movement:
         moveset_with_leftover = {pos}
     else:
         moveset_with_leftover = set()
     moveset_no_leftover = set()
 
-    for newpos in adjacent_tiles_the_unit_can_move_to(unit, pos, enemy_units, units):
-        movesets = moves_sets(unit, newpos, units, enemy_units, movement_remaining - 1)
+    for newpos in adjacent_tiles_the_unit_can_move_to(pos, units, zoc_blocks):
+        movesets = moves_sets(newpos, units, zoc_blocks, total_movement, movement_remaining -1)
         moveset_with_leftover |= movesets[0]
         moveset_no_leftover |= movesets[1]
 
     return moveset_with_leftover, moveset_no_leftover
 
 
-def moves_set(unit, pos, units, enemy_units, movement_remaining):
+def adjacent_tiles_the_unit_can_move_to_old(unit, pos, enemy_units, units):
+    for direction in directions:
+        newpos = direction.move(pos)
+        if newpos in board and newpos not in units:
+            if not zoc_block_old(unit, pos, direction, enemy_units):
+                yield newpos
+
+
+def zoc(unit, pos, enemy_units):
+    """ Returns whether an enemy unit can exert ZOC on a friendly unit """
+    return pos in enemy_units and unit.type in enemy_units[pos].zoc
+
+
+def zoc_block_old(unit, pos, direction, enemy_units):
+    """ Returns whether an enemy unit exerting ZOC prevents you from going in 'direction' from 'pos'. """
+    return any(zoc(unit, perpendicular_pos, enemy_units) for perpendicular_pos in direction.perpendicular(pos))
+
+@memoized
+def moves_set(pos, units, zoc_blocks, total_movement, movement_remaining):
     """Returns all the tiles a unit can move to, in one set. """
 
     if movement_remaining == 0:
         return {pos}
 
-    if movement_remaining != unit.movement:
+    if movement_remaining != total_movement:
         moveset = {pos}
     else:
         moveset = set()
 
-    for newpos in adjacent_tiles_the_unit_can_move_to(unit, pos, enemy_units, units):
-        moveset |= moves_set(unit, newpos, units, enemy_units, movement_remaining - 1)
+    for newpos in adjacent_tiles_the_unit_can_move_to(pos, units, zoc_blocks):
+        moveset |= moves_set(newpos, units, zoc_blocks, total_movement, movement_remaining -1)
 
     return moveset
 
@@ -340,7 +362,7 @@ def attack_generator(unit, moveset, enemy_units):
         for direction in directions:
             newpos = direction.move(pos)
             if newpos in enemy_units:
-                if not zoc_block(unit, pos, direction, enemy_units):
+                if not zoc_block_old(unit, pos, direction, enemy_units):
                     yield pos, newpos, True
                 yield pos, newpos, False
 
@@ -361,7 +383,7 @@ def melee_attack_actions(unit, startpos, moveset, enemy_units):
 
 def melee_actions(unit, pos, units, enemy_units):
 
-    moveset_with_leftover, moveset_no_leftover = moves_sets(unit, pos, units, enemy_units, unit.movement)
+    moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, pos, units)
     attacks = melee_attack_actions(unit, pos, moveset_with_leftover | {pos}, enemy_units)
 
     moves = move_actions(pos, moveset_with_leftover | moveset_no_leftover)
@@ -371,7 +393,7 @@ def melee_actions(unit, pos, units, enemy_units):
 
 def ranged_actions(unit, pos, units, enemy_units):
     attackset = ranged_attacks_set(pos, frozenset(enemy_units), unit.range)
-    moveset = moves_set(unit, pos, units, enemy_units, unit.movement)
+    moveset = generate_moveset(unit, pos, units)
     attacks = ranged_attack_actions(pos, attackset)
     moves = move_actions(pos, moveset)
 
@@ -401,7 +423,7 @@ def get_special_unit_actions(unit, pos, units, enemy_units, player_units):
 
         def berserking(unit, pos, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
-            moveset_with_leftover_berserk, moveset_no_leftover_berserk = moves_sets(unit, pos, units, enemy_units, 5)
+            moveset_with_leftover_berserk, moveset_no_leftover_berserk = moves_sets(pos, frozenset(units), unit.zoc_blocks, 5, 5)
             # Det burde vaere 4, men virker med 5. :S
 
             attacks = melee_attack_actions(unit, pos, moveset_with_leftover_berserk | {pos}, enemy_units)
@@ -478,7 +500,7 @@ def get_special_unit_actions(unit, pos, units, enemy_units, player_units):
 
             return attacks
 
-        moveset_with_leftover, moveset_no_leftover = moves_sets(unit, pos, units, enemy_units, unit.movement)
+        moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, pos, units)
         attacks = melee_attack_actions(unit, pos, moveset_with_leftover | {pos}, enemy_units)
         moves = move_actions(pos, moveset_with_leftover | moveset_no_leftover)
 
@@ -543,7 +565,7 @@ def get_special_unit_actions(unit, pos, units, enemy_units, player_units):
 
             return moves
 
-        moveset = moves_set(unit, pos, units, enemy_units, unit.movement)
+        moveset = generate_moveset(unit, pos, units)
         moves = move_actions(pos, moveset)
 
         for attribute in ["scouting"]:
