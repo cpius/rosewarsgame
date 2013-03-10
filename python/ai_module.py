@@ -21,7 +21,7 @@ class AI(object):
 
     def select_action(self, g):
 
-        g = copy.deepcopy(g)
+        g = g.copy()
 
         if g.players[0].backline == 8:
             g = get_transformed_g(g)
