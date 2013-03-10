@@ -110,6 +110,14 @@
     return NO;
 }
 
+- (void)combatStartingAgainstDefender:(Card *)defender {
+    
+}
+
+- (void)combatStartingAgainstAttacker:(Card *)attacker {
+    
+}
+
 - (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
     
     if (IsAttackSuccessful(combatOutcome)) {

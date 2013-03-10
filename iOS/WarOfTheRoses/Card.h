@@ -114,6 +114,9 @@
 - (void)levelIncreased;
 - (BOOL)isOwnedByPlayerWithColor:(PlayerColors)playerColor;
 
+- (void)combatStartingAgainstDefender:(Card*)defender;
+- (void)combatStartingAgainstAttacker:(Card*)attacker;
+
 - (void)combatFinishedAgainstDefender:(Card*)defender withOutcome:(CombatOutcome)combatOutcome;
 - (void)combatFinishedAgainstAttacker:(Card*)attacker withOutcome:(CombatOutcome)combatOutcome;
 

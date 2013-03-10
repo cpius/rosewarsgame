@@ -156,6 +156,9 @@
 
 - (CombatOutcome)resolveCombatBetween:(Card *)attacker defender:(Card *)defender {
     
+    [attacker combatStartingAgainstDefender:defender];
+    [defender combatStartingAgainstAttacker:attacker];
+    
     [_delegate combatHasStartedBetweenAttacker:attacker andDefender:defender];
         
     CCLOG(@"Resolving combat between attacker: %@ and defender: %@", attacker, defender);
@@ -291,6 +294,7 @@
             return kGameResultVictory;
         }
     }
+    
 
     _currentGame.gameOver = NO;
     

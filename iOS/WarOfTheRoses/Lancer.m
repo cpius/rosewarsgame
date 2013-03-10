@@ -20,7 +20,7 @@
     if (self) {
         
         self.cardType = kCardTypeSpecialUnit;
-        self.unitType = kSpecialUnit;
+        self.unitType = kCavalry;
         self.unitName = kFlagBearer;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
@@ -47,20 +47,23 @@
 }
 
 - (void)willPerformAction:(Action *)action {
+    
+    [super willPerformAction:action];
 
     if (action.isAttack) {
         
         // If it starts with 2 empty tiles between lancer and the unit it attacks +2A
-        
-        GridLocation *firstLocation = [action.path[0] location];
-        GridLocation *secondLocation = [action.path[1] location];
-        
-        if ([[GameManager sharedManager].currentGame.unitLayout objectForKey:firstLocation] == nil &&
-            [[GameManager sharedManager].currentGame.unitLayout objectForKey:secondLocation] == nil) {
+        if (action.path.count > 1) {
+            GridLocation *firstLocation = [action.path[0] location];
+            GridLocation *secondLocation = [action.path[1] location];
             
-            CCLOG(@"Lancer gets +2A because 2 empty tiles exist between lancer and enemy");
-            
-            [self.attack addTimedBonus:[[TimedBonus alloc] initWithValue:2 forNumberOfRounds:1]];
+            if ([[GameManager sharedManager].currentGame.unitLayout objectForKey:firstLocation] == nil &&
+                [[GameManager sharedManager].currentGame.unitLayout objectForKey:secondLocation] == nil) {
+                
+                CCLOG(@"Lancer gets +2A because 2 empty tiles exist between lancer and enemy");
+                
+                [self.attack addTimedBonus:[[TimedBonus alloc] initWithValue:2 forNumberOfRounds:1]];
+            }
         }
         
         if (action.enemyCard.unitName == kLancer) {
@@ -76,6 +79,8 @@
 }
 
 - (void)didPerformedAction:(Action *)action {
+    
+    [super didPerformedAction:action];
     
     if (action.isAttack) {
         

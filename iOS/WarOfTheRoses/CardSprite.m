@@ -130,6 +130,7 @@
     }
     else {
         [bonusSprite removeFromParentAndCleanup:YES];
+        [_bonusSprites removeObject:bonusSprite];
     }
 }
 

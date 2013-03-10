@@ -20,6 +20,9 @@
 #import "Scout.h"
 #import "Canon.h"
 #import "Lancer.h"
+#import "RoyalGuard.h"
+#import "Pikeman.h"
+#import "MovePathFinderStrategy.h"
 
 @implementation SpecialUnitTest
 
@@ -258,6 +261,70 @@
     STAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
 }
 
+- (void)testRoyalGuardGetsDefenseBonusAgainstMelee {
+    
+    RoyalGuard *royalguard = [RoyalGuard card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    royalguard.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    royalguard.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    pikeman.cardColor = kCardColorRed;
+        
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:royalguard]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    [royalguard combatStartingAgainstAttacker:pikeman];
+    
+    STAssertTrue([royalguard.defence calculateValue].upperValue == 4, @"Royal guard should get +1D against melee attackers");
+    
+    [royalguard combatFinishedAgainstAttacker:pikeman withOutcome:kCombatOutcomeDefendSuccessful];
 
+    STAssertTrue([royalguard.defence calculateValue].upperValue == 3, @"Royal guards defense bonus should be removed after combat");
+}
+
+- (void)testRoyalGuardGetsIncreasedMovementWhenMovingSideways {
+    
+    RoyalGuard *royalguard = [RoyalGuard card];
+    
+    royalguard.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    royalguard.cardColor = kCardColorGreen;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:royalguard]
+                                    player2Units:[NSArray arrayWithObjects:nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    
+    NSArray *pathWithSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:3 column:4] usingStrategy:[MovePathFinderStrategy strategy] allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertTrue([royalguard allowPath:pathWithSidewaysMovement forActionType:kActionTypeMove allLocations:_manager.currentGame.unitLayout], @"RoyalGuard should be able to move 2 nodes when one of them is sideways");
+}
+
+- (void)testRoyalGuardDoesntGetIncreasedMovementWhenOnlyMovingUpOrDown {
+    
+    RoyalGuard *royalguard = [RoyalGuard card];
+    
+    royalguard.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    royalguard.cardColor = kCardColorGreen;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:royalguard]
+                                    player2Units:[NSArray arrayWithObjects:nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    
+    NSArray *pathWithoutSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:4 column:3] usingStrategy:[MovePathFinderStrategy strategy] allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertFalse([royalguard allowPath:pathWithoutSidewaysMovement forActionType:kActionTypeMove allLocations:_manager.currentGame.unitLayout], @"RoyalGuard shouldn't be able to move 2 tiles when none of them is sideways");
+}
 
 @end
