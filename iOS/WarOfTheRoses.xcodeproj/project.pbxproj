@@ -118,6 +118,12 @@
 		6DB2045716ECBACF0004FFCB /* samurai_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2045316ECBACF0004FFCB /* samurai_0.png */; };
 		6DB2045816ECBACF0004FFCB /* samurai_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2045416ECBACF0004FFCB /* samurai_icon-hd.png */; };
 		6DB2045916ECBACF0004FFCB /* samurai_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2045516ECBACF0004FFCB /* samurai_icon.png */; };
+		6DB2045C16ECDF710004FFCB /* Viking.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2045B16ECDF700004FFCB /* Viking.m */; };
+		6DB2045F16ED0B8A0004FFCB /* LongSwordsMan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2045E16ED0B890004FFCB /* LongSwordsMan.m */; };
+		6DB2046416ED12D30004FFCB /* viking_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2046016ED12D30004FFCB /* viking_0-hd.png */; };
+		6DB2046516ED12D30004FFCB /* viking_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2046116ED12D30004FFCB /* viking_0.png */; };
+		6DB2046616ED12D30004FFCB /* viking_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2046216ED12D30004FFCB /* viking_icon-hd.png */; };
+		6DB2046716ED12D30004FFCB /* viking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2046316ED12D30004FFCB /* viking_icon.png */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -499,6 +505,14 @@
 		6DB2045316ECBACF0004FFCB /* samurai_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = samurai_0.png; path = Resources/Images/samurai_0.png; sourceTree = "<group>"; };
 		6DB2045416ECBACF0004FFCB /* samurai_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "samurai_icon-hd.png"; path = "Resources/Images/samurai_icon-hd.png"; sourceTree = "<group>"; };
 		6DB2045516ECBACF0004FFCB /* samurai_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = samurai_icon.png; path = Resources/Images/samurai_icon.png; sourceTree = "<group>"; };
+		6DB2045A16ECDF700004FFCB /* Viking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Viking.h; sourceTree = "<group>"; };
+		6DB2045B16ECDF700004FFCB /* Viking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Viking.m; sourceTree = "<group>"; };
+		6DB2045D16ED0B880004FFCB /* LongSwordsMan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LongSwordsMan.h; sourceTree = "<group>"; };
+		6DB2045E16ED0B890004FFCB /* LongSwordsMan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LongSwordsMan.m; sourceTree = "<group>"; };
+		6DB2046016ED12D30004FFCB /* viking_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "viking_0-hd.png"; path = "Resources/Images/viking_0-hd.png"; sourceTree = "<group>"; };
+		6DB2046116ED12D30004FFCB /* viking_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = viking_0.png; path = Resources/Images/viking_0.png; sourceTree = "<group>"; };
+		6DB2046216ED12D30004FFCB /* viking_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "viking_icon-hd.png"; path = "Resources/Images/viking_icon-hd.png"; sourceTree = "<group>"; };
+		6DB2046316ED12D30004FFCB /* viking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = viking_icon.png; path = Resources/Images/viking_icon.png; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1023,6 +1037,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DB2046016ED12D30004FFCB /* viking_0-hd.png */,
+				6DB2046116ED12D30004FFCB /* viking_0.png */,
+				6DB2046216ED12D30004FFCB /* viking_icon-hd.png */,
+				6DB2046316ED12D30004FFCB /* viking_icon.png */,
 				6DB2045216ECBACF0004FFCB /* samurai_0-hd.png */,
 				6DB2045316ECBACF0004FFCB /* samurai_0.png */,
 				6DB2045416ECBACF0004FFCB /* samurai_icon-hd.png */,
@@ -1757,6 +1775,10 @@
 				6DB2044516ECACD00004FFCB /* RoyalGuard.m */,
 				6DB2044F16ECB9E10004FFCB /* Samurai.h */,
 				6DB2045016ECB9E10004FFCB /* Samurai.m */,
+				6DB2045A16ECDF700004FFCB /* Viking.h */,
+				6DB2045B16ECDF700004FFCB /* Viking.m */,
+				6DB2045D16ED0B880004FFCB /* LongSwordsMan.h */,
+				6DB2045E16ED0B890004FFCB /* LongSwordsMan.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -1979,6 +2001,10 @@
 				6DB2045716ECBACF0004FFCB /* samurai_0.png in Resources */,
 				6DB2045816ECBACF0004FFCB /* samurai_icon-hd.png in Resources */,
 				6DB2045916ECBACF0004FFCB /* samurai_icon.png in Resources */,
+				6DB2046416ED12D30004FFCB /* viking_0-hd.png in Resources */,
+				6DB2046516ED12D30004FFCB /* viking_0.png in Resources */,
+				6DB2046616ED12D30004FFCB /* viking_icon-hd.png in Resources */,
+				6DB2046716ED12D30004FFCB /* viking_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2186,6 +2212,8 @@
 				6DD5889816EA62A300466DDB /* Lancer.m in Sources */,
 				6DB2044616ECACD00004FFCB /* RoyalGuard.m in Sources */,
 				6DB2045116ECB9E10004FFCB /* Samurai.m in Sources */,
+				6DB2045C16ECDF710004FFCB /* Viking.m in Sources */,
+				6DB2045F16ED0B8A0004FFCB /* LongSwordsMan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

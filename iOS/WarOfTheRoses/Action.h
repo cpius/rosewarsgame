@@ -35,6 +35,7 @@
 
 @property (nonatomic, assign) NSUInteger score;
 @property (nonatomic, readonly) BOOL isAttack;
+@property (nonatomic, readonly) BOOL isMove;
 
 @property (nonatomic, readonly) ActionTypes actionType;
 

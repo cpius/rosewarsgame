@@ -17,6 +17,7 @@
 @synthesize enemyCard = _enemyCard;
 @synthesize score = _score;
 @synthesize isAttack = _isAttack;
+@synthesize isMove = _isMove;
 @synthesize delegate = _delegate;
 @synthesize actionType = _actionType;
 
@@ -31,6 +32,11 @@
     }
     
     return self;
+}
+
+- (BOOL)isMove {
+    
+    return NO;
 }
 
 - (BOOL)isWithinRange {

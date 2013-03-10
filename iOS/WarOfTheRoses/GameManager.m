@@ -106,11 +106,18 @@
 
 - (void)cardHasBeenDefeated:(Card *)card {
     
-    NSLog(@"Card: %@ has been defeated - remove from game", card);
+    card.hitpoints--;
     
-    card.dead = YES;
-    
-    [_currentGame.unitLayout removeObjectForKey:card.cardLocation];
+    if (card.hitpoints == 0) {
+        CCLOG(@"Card: %@ has been defeated - remove from game", card);
+        
+        card.dead = YES;
+        
+        [_currentGame.unitLayout removeObjectForKey:card.cardLocation];
+    }
+    else {
+        CCLOG(@"Card: %@ has lost in combat...Remaining hitpoints: %d", card, card.hitpoints);
+    }
 }
 
 - (NSUInteger)actionUsed:(Action*)action {

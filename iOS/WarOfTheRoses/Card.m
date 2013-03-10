@@ -36,6 +36,7 @@
 @synthesize delegate = _delegate;
 @synthesize attackSound = _attackSound, defenceSound = _defenceSound, moveSound = _moveSound;
 @synthesize timedAbilities = _timedAbilities;
+@synthesize hitpoints;
 
 - (id)init {
     
@@ -136,6 +137,7 @@
 - (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {
     
     if (IsAttackSuccessful(combatOutcome)) {
+        
         // Attack succcessfull - assign experience if applicable
         if (!self.hasReceivedExperiencePointsThisRound && self.experience < 4) {
             self.experience++;

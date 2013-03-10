@@ -21,6 +21,7 @@
 #import "Lancer.h"
 #import "RoyalGuard.h"
 #import "Samurai.h"
+#import "Viking.h"
 
 @interface CardPool()
 
@@ -72,6 +73,8 @@
             return [RoyalGuard card];
         case kSamurai:
             return [Samurai card];
+        case kViking:
+            return [Viking card];
         default:
             CCLOG(@"Unknown cardname: %d", unitName);
     }
@@ -103,7 +106,7 @@
         drawnCard = [self createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = (arc4random() % 6) + 6;
+        UnitName unitName = (arc4random() % 8) + 6;
         drawnCard = [self createCardOfName:unitName];
     }
     

@@ -30,6 +30,7 @@
         self.range = 4;
         self.move = 1;
         self.moveActionCost = self.attackActionCost = 1;
+        self.hitpoints = 1;
         
         _lastAttackInRound = 0;
         

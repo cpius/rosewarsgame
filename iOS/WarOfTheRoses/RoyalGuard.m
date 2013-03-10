@@ -28,6 +28,7 @@
         self.range = 1;
         self.move = 1;
         self.moveActionCost = self.attackActionCost = 1;
+        self.hitpoints = 1;
         
         self.attackSound = @"sword_sound.wav";
         self.frontImageSmall = @"royalguard_icon.png";
@@ -76,7 +77,7 @@
 - (BOOL)zoneOfControlAgainst:(Card *)opponent {
 
     // Opponents units can't move past royal guard
-    return self.cardColor != opponent.cardColor;
+    return (self.cardColor != opponent.cardColor) && opponent.unitName != kScout;
 }
 
 - (void)combatStartingAgainstAttacker:(Card *)attacker {

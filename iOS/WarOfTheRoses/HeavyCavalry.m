@@ -24,6 +24,7 @@
         self.range = 1;
         self.move = 2;
         self.moveActionCost = self.attackActionCost = 1;
+        self.hitpoints = 1;
         
         hasSpecialAbility = NO;
         

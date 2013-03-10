@@ -10,4 +10,6 @@
 
 @interface RangedAttackAction : Action
 
+@property (nonatomic, assign) CombatOutcome combatOutcome;
+
 @end

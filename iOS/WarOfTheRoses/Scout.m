@@ -27,6 +27,7 @@
         self.range = 0;
         self.move = 4;
         self.moveActionCost = self.attackActionCost = 1;
+        self.hitpoints = 1;
         
         self.attackSound = @"sword_sound.wav";
         self.frontImageSmall = @"scout_icon.png";

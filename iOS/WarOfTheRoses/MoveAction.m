@@ -29,6 +29,11 @@
     return NO;
 }
 
+- (BOOL)isMove {
+    
+    return YES;
+}
+
 - (ActionTypes)actionType {
     
     return kActionTypeMove;

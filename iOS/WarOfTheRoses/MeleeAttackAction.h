@@ -11,5 +11,6 @@
 @interface MeleeAttackAction : Action
 
 @property (nonatomic, assign) MeleeAttackTypes meleeAttackType;
+@property (nonatomic, assign) CombatOutcome combatOutcome;
 
 @end

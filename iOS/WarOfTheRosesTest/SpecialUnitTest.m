@@ -25,6 +25,8 @@
 #import "MovePathFinderStrategy.h"
 #import "Samurai.h"
 #import "LightCavalry.h"
+#import "Viking.h"
+#import "MoveAction.h"
 
 @implementation SpecialUnitTest
 
@@ -337,7 +339,6 @@
     
     LightCavalry *lightCavalry1 = [LightCavalry card];
     LightCavalry *lightCavalry2 = [LightCavalry card];
-    LightCavalry *lightCavalry3 = [LightCavalry card];
     
     samurai.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
     samurai.cardColor = kCardColorGreen;
@@ -383,5 +384,84 @@
         STAssertFalse([samurai canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai shouldn't be able to perform move action");
     }];
 }
+
+- (void)testVikingNeedsTwoSuccessfulHitsToDie {
+    
+    Viking *viking = [Viking card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    viking.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    viking.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:viking]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 5;
+
+    STAssertTrue(viking.hitpoints == 2, @"Viking should have 2 hitpoints");
+
+    [_manager resolveCombatBetween:pikeman defender:viking];
+    
+    STAssertFalse(viking.dead, @"Viking shouldn't die after a failed defense");
+    STAssertTrue(viking.hitpoints == 1, @"Viking should only have 1 hitpoint left after a failed defense");
+    
+    [_manager resolveCombatBetween:pikeman defender:viking];
+    
+    STAssertTrue(viking.dead, @"Viking should be dead!");
+}
+
+- (void)testVikingCanAttackAfterMove {
+    
+    Viking *viking = [Viking card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    viking.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    viking.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:viking]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 5;
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
+    MoveAction *moveAction = [[MoveAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:viking enemyCard:pikeman];
+    
+    STAssertTrue([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking should be able to perform move action");
+    
+    moveAction.delegate = mock;
+    
+    [moveAction performActionWithCompletion:^{
+        
+        STAssertFalse([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a second move action");
+        
+        STAssertTrue([viking canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking should be able to perform a melee action after a move action");
+        
+        MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:viking enemyCard:pikeman];
+        
+        meleeAction.delegate = mock;
+        
+        [meleeAction performActionWithCompletion:^{
+            STAssertFalse([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a move action after a melee action");
+
+            STAssertFalse([viking canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a second melee action");
+        }];
+    }];
+}
+
 
 @end

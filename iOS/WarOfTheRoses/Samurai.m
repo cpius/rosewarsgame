@@ -7,7 +7,7 @@
 //
 
 #import "Samurai.h"
-#import "Action.h"
+#import "MeleeAttackAction.h"
 
 @implementation Samurai
 
@@ -28,6 +28,7 @@
         self.move = 1;
         self.moveActionCost = 1;
         self.attackActionCost = 1;
+        self.hitpoints = 1;
         
         self.attackSound = @"sword_sound.wav";
         self.frontImageSmall = @"samurai_icon.png";
@@ -50,6 +51,7 @@
     
     _numberOfAttacksUsed = 0;
     self.attackActionCost = 1;
+    _hasPerformedMove = NO;
 }
 
 - (BOOL)allowPath:(NSArray *)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary *)allLocations {
@@ -73,6 +75,10 @@
         canPerformAction = YES;
     }
     
+    if (_hasPerformedMove) {
+        canPerformAction = NO;
+    }
+    
     return canPerformAction;
 }
 
@@ -80,11 +86,25 @@
     
     [super didPerformedAction:action];
     
+    if (action.isMove) {
+        _hasPerformedMove = YES;
+    }
+    
     if (action.isAttack) {
+        
+        MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
+        
         if (_numberOfAttacksUsed < 2) {
             _numberOfAttacksUsed++;
             self.hasPerformedAttackThisRound = NO;
             self.attackActionCost = 0;
+            
+            if (meleeAction.combatOutcome == kCombatOutcomeAttackSuccessful && meleeAction.meleeAttackType == kMeleeAttackTypeConquer) {
+                [self consumeAllMoves];
+            }
+            else {
+                self.movesConsumed = 0;
+            }
             
             CCLOG(@"Samurais first attack");
         }

@@ -82,7 +82,7 @@
 @property(nonatomic, assign) NSUInteger range;
 @property(nonatomic, readonly) BOOL isRanged;
 @property(nonatomic, assign) BOOL dead;
-
+@property(nonatomic, assign) NSUInteger hitpoints;
 /*
  Hver spiller har 2 actions hver tur. En action vil være et move eller et angreb, der er dog nogle units (catapult) hvis angreb tager 2 actions, derfor kan man ikke bevæge eller angribe med andre units hvis man burger catapult. Den samme unit kan ikke angribe OG bevæge sig I samme runde jo mindre andet er specificeret på kortet.
  */

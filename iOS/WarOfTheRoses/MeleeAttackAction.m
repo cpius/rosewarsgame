@@ -56,6 +56,7 @@
         
         CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard];
         
+        self.combatOutcome = combatOutcome;
         [self.delegate action:self hasResolvedRangedCombatWithOutcome:combatOutcome];
         
         if (IsDefenseSuccessful(combatOutcome)) {
