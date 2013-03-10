@@ -184,12 +184,26 @@ def get_action(actions, g):
     return actions[0]    
 
 
-def put_counter(unit):
+def put_counter(g):
 
-    if unit.name in ["Pikeman", "Heavy Cavalry", "Royal Guard", "Viking"]:
-        unit.defence_counters += 1
-    else:
-        unit.attack_counters += 1
+    def decide_counter(unit):
+        if unit.name in ["Pikeman", "Heavy Cavalry", "Royal Guard", "Viking"]:
+            unit.defence_counters += 1
+        else:
+            unit.attack_counters += 1
+
+    for unit in g.units[0].values():
+        if unit.xp == 2:
+            if unit.defence + unit.defence_counters == 4:
+                unit.attack_counters += 1
+            else:
+                if not unit.attack:
+                    unit.defence_counters += 1
+                else:
+                    decide_counter(unit)
+            unit.xp = 0
+
+
 
 
 def evaluate_action_values(values):

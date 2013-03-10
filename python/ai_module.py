@@ -39,16 +39,7 @@ class AI(object):
 
     def add_counters(self, g):
 
-        for unit in g.units[0].values():
-            if unit.xp == 2:
-                if unit.defence + unit.defence_counters == 4:
-                    unit.attack_counters += 1
-                else:
-                    if not unit.attack:
-                        unit.defence_counters += 1
-                    else:
-                        self.put_counter(unit)
-                unit.xp = 0
+        self.put_counter(g)
 
 
 class Direction:
