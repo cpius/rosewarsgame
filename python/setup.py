@@ -2,7 +2,6 @@ from __future__ import division
 import random
 import units as units_module
 import settings
-from player import Player
 
 
 class Tiles_bag(object):
@@ -33,6 +32,8 @@ special_units_list = settings.special_units
 unit_bag_size = settings.unit_bag_size
 special_unit_count = settings.special_unit_count
 basic_unit_count = settings.basic_unit_count
+dont_use_special_units = settings.dont_use_special_units
+use_special_units = settings.use_special_units
 board_rows = [1, 2, 3, 4]
 board_coloumns = [1, 2, 3, 4, 5]
 
@@ -100,10 +101,11 @@ def get_units():
         
         basic_units_bag = Unit_bag([name for name in basic_units_list for _ in range(unit_bag_size)])
         
-        special_units_first_bag = Unit_bag([name for name in settings.use_special_units])
+        special_units_first_bag = Unit_bag(list(use_special_units))
         
-        special_units_second_bag = Unit_bag([name for name in special_units_list
-                                             if name not in settings.dont_use_special_units])
+        special_units_second_bag = Unit_bag(list(set(special_units_list) - set(dont_use_special_units)
+                                                 - set(use_special_units)))
+
         
         tiles_bag = Tiles_bag()
         
