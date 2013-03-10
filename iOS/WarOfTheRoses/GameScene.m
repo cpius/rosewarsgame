@@ -290,7 +290,10 @@
         GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:action.enemyCard.cardLocation];
         
         [ParticleHelper applyBurstToNode:node];
-        [_gameboard removeCardAtGameBoardNode:node];
+        
+        if (action.enemyCard.dead) {
+            [_gameboard removeCardAtGameBoardNode:node];
+        }
     }
 }
 

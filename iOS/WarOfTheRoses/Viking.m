@@ -49,7 +49,6 @@
     [super resetAfterNewRound];
     
     self.attackActionCost = 1;
-    self.hitpoints = 2;
 }
 
 - (void)combatStartingAgainstAttacker:(Card *)attacker {

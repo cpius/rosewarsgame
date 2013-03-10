@@ -138,16 +138,18 @@
     
     if (IsAttackSuccessful(combatOutcome)) {
         
-        // Attack succcessfull - assign experience if applicable
-        if (!self.hasReceivedExperiencePointsThisRound && self.experience < 4) {
-            self.experience++;
-            
-            // Unit can only receive experience point once every round
-            self.hasReceivedExperiencePointsThisRound = YES;
-            
-            // Unit can only increase in level twice
-            if (self.numberOfLevelsIncreased < 2 && (self.experience % 2) == 0) {
-                [self levelIncreased];
+        if (defender.dead) {
+            // Attack succcessfull - assign experience if applicable
+            if (!self.hasReceivedExperiencePointsThisRound && self.experience < 4) {
+                self.experience++;
+                
+                // Unit can only receive experience point once every round
+                self.hasReceivedExperiencePointsThisRound = YES;
+                
+                // Unit can only increase in level twice
+                if (self.numberOfLevelsIncreased < 2 && (self.experience % 2) == 0) {
+                    [self levelIncreased];
+                }
             }
         }
     }

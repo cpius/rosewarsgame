@@ -82,8 +82,21 @@
         }
         else {
             
-            if (meleeAttackType == kMeleeAttackTypeNormal) {
+            if (meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) {
                 
+                [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
+                [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:startLocation];
+                
+                [[GameManager sharedManager] actionUsed:self];
+                [self.cardInAction didPerformedAction:self];
+                
+                [self.delegate afterPerformAction:self];
+                
+                if (completion != nil) {
+                    completion();
+                }
+            }
+            else {
                 [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:retreatLocation]] withCompletion:^(GridLocation *endLocation) {
                     
                     [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
@@ -96,25 +109,11 @@
                     [self.cardInAction didPerformedAction:self];
                     
                     [self.delegate afterPerformAction:self];
-
+                    
                     if (completion != nil) {
                         completion();
                     }
                 }];
-            }
-            else {
-                
-                [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
-                [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:startLocation];
-                
-                [[GameManager sharedManager] actionUsed:self];
-                [self.cardInAction didPerformedAction:self];
-                
-                [self.delegate afterPerformAction:self];
-
-                if (completion != nil) {
-                    completion();
-                }
             }
         }
     }];

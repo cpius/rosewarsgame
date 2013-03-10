@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/Card.m"
-         timestampString = "384634538.844661"
+         timestampString = "384642785.787819"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "220"
-         endingLineNumber = "220"
+         startingLineNumber = "222"
+         endingLineNumber = "222"
          landmarkName = "-canPerformActionOfType:withRemainingActionCount:"
          landmarkType = "5">
       </FileBreakpoint>
