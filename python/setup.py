@@ -106,7 +106,6 @@ def get_units():
         special_units_second_bag = Unit_bag(list(set(special_units_list) - set(dont_use_special_units)
                                                  - set(use_special_units)))
 
-        
         tiles_bag = Tiles_bag()
         
         return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
