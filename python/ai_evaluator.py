@@ -170,7 +170,7 @@ def get_action_failure(action):
 
 def calculate_two_action_score(action):
 
-    if action.next_action_if_success:
+    if hasattr(action, "next_action_if_success"):
 
         score_if_win = action.chance_of_win * (action.score_success + action.next_action_if_success.score)
         score_if_failure = (1 - action.chance_of_win) * (action.score_failure + action.next_action_if_failure.score)
