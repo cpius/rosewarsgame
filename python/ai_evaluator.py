@@ -217,16 +217,6 @@ def find_action_scores_two_actions(actions, original_gamestate):
 
             action.score_with_next = calculate_two_action_score(action)
 
-        elif action.is_ability:
-
-            perform_action(action, potential_gamestate)
-
-            action.next_action = get_next_action(potential_gamestate)
-
-            action.values, action.score = get_values_and_score(potential_gamestate, original_gamestate)
-
-            action.score_with_next = action.score + action.next_action.score
-
         else:
 
             perform_action(action, potential_gamestate)
