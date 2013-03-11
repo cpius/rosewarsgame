@@ -23,4 +23,4 @@ Heavy_Cavalry
 
 
 Expected outcome:
-Heavy Cavalry move from D6 to D7 and attack-move Royal Guard C7
+.*attack.*

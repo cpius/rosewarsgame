@@ -8,9 +8,9 @@ from player import Player
 class TestAI(unittest.TestCase):
     def test_AIEvaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
         self.parse_test_case()
+        test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
 
     def parse_test_case(self):
-        test_file = open('tests.txt', 'r')
 
         self.assertTrue(re.search('^== [A-Za-z0-9-_]+ ==\r?\n$', test_file.readline()),
                         'Please begin test specification with "== Test_Name ==')
