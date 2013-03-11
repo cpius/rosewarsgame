@@ -18,27 +18,27 @@ class AI(object):
         self.put_counter = ai_type.put_counter
         self.name = name
 
-    def select_action(self, g):
+    def select_action(self, gamestate):
 
-        g = g.copy()
+        gamestate = gamestate.copy()
 
-        if g.players[0].backline == 8:
-            g = get_transformed_g(g)
+        if gamestate.players[0].backline == 8:
+            gamestate = get_transformed_gamestate(gamestate)
             transform_action = get_transformed_action
         else:
             transform_action = get_same_action
 
-        actions = g.get_actions()
+        actions = gamestate.get_actions()
 
         if actions:
-            action = self.get_action(actions, g)
+            action = self.get_action(actions, gamestate)
             return transform_action(action)
         else:
             return None
 
-    def add_counters(self, g):
+    def add_counters(self, gamestate):
 
-        self.put_counter(g)
+        self.put_counter(gamestate)
 
 
 class Direction:
@@ -50,16 +50,16 @@ class Direction:
         self.x = x
         self.y = y
 
-    def move(self, pos):
-        return pos[0] + self. x, pos[1] + self.y
+    def move(self, position):
+        return position[0] + self. x, position[1] + self.y
 
-    def perpendicular(self, pos):
-        return (pos[0] + self.y, pos[1] + self.x), (pos[0] - self.y, pos[1] - self.x)
+    def perpendicular(self, position):
+        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
 
 
-def t(pos):
-    if pos:
-        return pos[0], 9 - pos[1]
+def transform_position(position):
+    if position:
+        return position[0], 9 - position[1]
     else:
         return None
 
@@ -77,9 +77,10 @@ def get_transformed_direction(direction):
 
 def get_transformed_action(action):
 
-    action.startpos = t(action.startpos)
-    action.endpos = t(action.endpos)
-    action.attackpos = t(action.attackpos)
+    action.startpos = transform_position(action.startpos)
+    action.endpos = transform_position(action.endpos)
+    action.attackpos = transform_position(action.attackpos)
+
     for sub_action in action.sub_actions:
         action.sub_action = get_transformed_action(sub_action)
     if hasattr(action, "push"):
@@ -93,19 +94,19 @@ def get_same_action(action):
     return action
 
 
-def get_transformed_g(g):
+def get_transformed_gamestate(gamestate):
 
     new_units_players = []
-    for units_player in g.units:
+    for units_player in gamestate.units:
         new_units = {}
-        for pos, unit in units_player.items():
-            new_units[t(pos)] = unit
+        for position, unit in units_player.items():
+            new_units[transform_position(position)] = unit
 
         new_units_players.append(new_units)
 
-    g.units = new_units_players
+    gamestate.units = new_units_players
 
-    for player in g.players:
+    for player in gamestate.players:
         player.backline = 9 - player.backline
 
-    return g
+    return gamestate
