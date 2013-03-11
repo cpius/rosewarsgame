@@ -55,15 +55,15 @@ class Coordinates(object):
 base_coords = Coordinates(0, 0)
 center_coords = Coordinates(35, 53.2)
 symbol_coords = Coordinates(13, 38.2)
-acounter_coords = Coordinates(50, 78)
-dcounter_coords = Coordinates(50, 58)
-dfont_coords = Coordinates(45, 48)
+attack_counter_coords = Coordinates(50, 78)
+defence_counter_coords = Coordinates(50, 58)
+defence_font_coords = Coordinates(45, 48)
 flag_coords = Coordinates(46, 10)
-ycounter_coords = Coordinates(50, 38)
-bcounter_coords = Coordinates(50, 18)
+yellow_counter_coords = Coordinates(50, 38)
+blue_counter_coords = Coordinates(50, 18)
 star_coords = Coordinates(8, 58)
-bfont_coords = Coordinates(45, 8)
-afont_coords = Coordinates(45, 68)
+blue_font_coords = Coordinates(45, 8)
+attack_font_coords = Coordinates(45, 68)
 
 
 _image_library = {}
@@ -80,11 +80,11 @@ def get_image(path):
 
 def draw_attack_counters(unit, pos):
     if unit.attack_counters:
-        pygame.draw.circle(screen, grey, acounter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, brown, acounter_coords.get(pos), 8, 0)
+        pygame.draw.circle(screen, grey, attack_counter_coords.get(pos), 10, 0)
+        pygame.draw.circle(screen, brown, attack_counter_coords.get(pos), 8, 0)
         if unit.attack_counters != 1:
             label = font.render(str(unit.attack_counters), 1, black)
-            screen.blit(label, afont_coords.get(pos)) 
+            screen.blit(label, attack_font_coords.get(pos)) 
 
 
 def draw_defence_counters(unit, pos):
@@ -95,16 +95,16 @@ def draw_defence_counters(unit, pos):
         defence_counters = unit.defence_counters
     
     if defence_counters:
-        pygame.draw.circle(screen, grey, dcounter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, light_grey, dcounter_coords.get(pos), 8, 0)
+        pygame.draw.circle(screen, grey, defence_counter_coords.get(pos), 10, 0)
+        pygame.draw.circle(screen, light_grey, defence_counter_coords.get(pos), 8, 0)
         
         if defence_counters > 1:
             label = font.render(str(defence_counters), 1, black)
-            screen.blit(label, dfont_coords.get(pos))
+            screen.blit(label, defence_font_coords.get(pos))
 
         if defence_counters < 0:
             label = font.render("x", 1, black)
-            screen.blit(label, dfont_coords.get(pos))    
+            screen.blit(label, defence_font_coords.get(pos))    
 
 
 def draw_xp(unit, pos):           
@@ -113,21 +113,21 @@ def draw_xp(unit, pos):
         screen.blit(pic, star_coords.get(pos))
 
 
-def draw_ycounters(unit, pos):
+def draw_yellow_counters(unit, pos):
     
-    if unit.ycounters:
-        pygame.draw.circle(screen, grey, ycounter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, yellow, ycounter_coords.get(pos), 8, 0)   
+    if unit.yellow_counters:
+        pygame.draw.circle(screen, grey, yellow_counter_coords.get(pos), 10, 0)
+        pygame.draw.circle(screen, yellow, yellow_counter_coords.get(pos), 8, 0)
 
 
-def draw_bcounters(unit, pos):
-    if unit.bcounters:
-        pygame.draw.circle(screen, grey, bcounter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, blue, bcounter_coords.get(pos), 8, 0)
+def draw_blue_counters(unit, pos):
+    if unit.blue_counters:
+        pygame.draw.circle(screen, grey, blue_counter_coords.get(pos), 10, 0)
+        pygame.draw.circle(screen, blue, blue_counter_coords.get(pos), 8, 0)
 
-        if unit.bcounters > 1:
-            label = font.render(str(unit.bcounters), 1, black)
-            screen.blit(label, bfont_coords.get(pos))     
+        if unit.blue_counters > 1:
+            label = font.render(str(unit.blue_counters), 1, black)
+            screen.blit(label, blue_font_coords.get(pos))     
 
 
 def draw_bribed(unit, pos):                 
@@ -142,19 +142,19 @@ def draw_crusading(unit, pos):
         screen.blit(pic, flag_coords.get(pos))      
 
 
-def add_ycounters(unit):
-    if hasattr(unit, "extra_life"): unit.ycounters = 1
-    else: unit.ycounters = 0
+def add_yellow_counters(unit):
+    if hasattr(unit, "extra_life"): unit.yellow_counters = 1
+    else: unit.yellow_counters = 0
 
 
-def add_bcounters(unit):
-    unit.bcounters = 0
+def add_blue_counters(unit):
+    unit.blue_counters = 0
     if hasattr(unit, "frozen"):
-        unit.bcounters = unit.frozen
+        unit.blue_counters = unit.frozen
     if hasattr(unit, "attack_frozen"):
-        unit.bcounters = unit.attack_frozen
+        unit.blue_counters = unit.attack_frozen
     if hasattr(unit, "just_bribed"):
-        unit.bcounters = 1
+        unit.blue_counters = 1
 
 
 def get_unit_pic(name, color):
@@ -169,11 +169,11 @@ def draw_unit(unit, pos, color):
     draw_defence_counters(unit, pos)
     draw_xp(unit, pos)
  
-    add_ycounters(unit)
-    draw_ycounters(unit, pos)
+    add_yellow_counters(unit)
+    draw_yellow_counters(unit, pos)
     
-    add_bcounters(unit)
-    draw_bcounters(unit, pos)
+    add_blue_counters(unit)
+    draw_blue_counters(unit, pos)
   
     draw_crusading(unit, pos)
     draw_bribed(unit, pos)
@@ -350,7 +350,7 @@ def show_unit(pos, g):
         print
         print unit
         for attribute, value in unit.__dict__.items():
-            if attribute not in ["name", "ycounters", "bcounters", "pic",
+            if attribute not in ["name", "yellow_counters", "blue_counters", "pic",
                                  "color", "range", "movement"]:
                 if value:
                     print attribute, value
@@ -391,7 +391,7 @@ def run_game(g):
                     if action:
                         g = perform_action(action, g)
                     else:
-                        g.next_turn()
+                        g.turn_shift()
                         draw_game(g)
 
                     if hasattr(g.players[0], "extra_action"):
