@@ -225,7 +225,10 @@ def find_action_scores_two_actions(actions, original_gamestate):
 
             action.values, action.score = get_values_and_score(potential_gamestate, original_gamestate)
 
-            action.score_with_next = action.score + action.next_action.score
+            if action.next_action:
+                action.score_with_next = action.score + action.next_action.score
+            else:
+                action.score_with_next = action.score
 
     return actions
 
