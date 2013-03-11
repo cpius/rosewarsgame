@@ -137,10 +137,7 @@ def get_chariot_pos(units):
 def perform_action(action, gamestate):
 
     gamestate.do_action(action)
-    #if hasattr(g.players[0], "extra_action"):
-    #    g_copy = g.copy()
-    #    extra_action = g.players[0].ai.select_action(g_copy)
-    #    perform_action(extra_action, g)
+
     put_counter(gamestate)
 
 
