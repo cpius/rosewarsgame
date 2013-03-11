@@ -22,7 +22,8 @@ def document_actions(actions, gamestate):
     if hasattr(gamestate.players[0], "extra_action"):
         current_action += ".2"
 
-    out = open("./replay/" + gamestate.players[0].color + " AI actions " + str(gamestate.turn) + "." + current_action + ".txt", 'w')
+    out = open("./replay/" + gamestate.players[0].color + " AI actions "
+               + str(gamestate.turn) + "." + current_action + ".txt", 'w')
 
     for action in actions:
         if gamestate.players[0].color == "Red":
@@ -205,7 +206,8 @@ def find_action_scores_two_actions(actions, original_gamestate):
                 (1 - action.chance_of_win) * action.score_failure
 
             if action.next_action_if_success:
-                action.score_with_next = action.chance_of_win * (action.score_success + action.next_action_if_success.score) +\
+                action.score_with_next = action.chance_of_win \
+                    * (action.score_success + action.next_action_if_success.score) +\
                     (1 - action.chance_of_win) * (action.score_failure + action.next_action_if_failure.score)
             else:
                 action.score_with_next = action.score
@@ -379,7 +381,8 @@ def get_action_values(gamestate, original_gamestate):
 
             if unit.name == "Berserker":
                 if math.ceil((8 - position[1]) / 4) == 1:
-                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1], friendly_units)[0]
+                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1],
+                                                             friendly_units)[0]
                     if any(action.endpos[1] == 8 for action in actions):
                         return "One action from backline", 20
                     elif any(action.is_attack and action.attackpos[1] == 8 and action.move_with_attack for
@@ -390,7 +393,8 @@ def get_action_values(gamestate, original_gamestate):
                             return "Berserking distance", 5
 
             if moves_to_backline == 1:
-                actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1], friendly_units)[0]
+                actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1],
+                                                         friendly_units)[0]
                 if any(action.endpos[1] == 8 for action in actions):
                     return "One action from backline", 20
                 elif any(action.is_attack and action.attackpos[1] == 8 and action.move_with_attack
@@ -477,7 +481,8 @@ def get_action_values(gamestate, original_gamestate):
 
             if unit.name == "Berserker":
                 if math.ceil((position[1] - 1) / 4):
-                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1], friendly_units)[0]
+                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1],
+                                                             friendly_units)[0]
                     if any(action.endpos[1] == 1 for action in actions):
                         return "One action from backline", 200
                     elif any(action.is_attack and action.attackpos[1] == 1 and action.move_with_attack for
@@ -487,7 +492,8 @@ def get_action_values(gamestate, original_gamestate):
                         return "Berserking distance", 4
 
             if moves_to_backline == 1:
-                actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1], friendly_units)[0]
+                actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.units[1],
+                                                         friendly_units)[0]
                 if any(action.endpos[1] == 1 for action in actions):
                     return "One action from backline", 200
                 elif any(action.is_attack and action.attackpos[1] == 1 and action.move_with_attack
@@ -566,7 +572,8 @@ def get_action_values(gamestate, original_gamestate):
             values["player1"]["gained"] = get_values_unit_player(gamestate.units[0][position], position, gamestate)
 
         for position in old_player1:
-            values["player1"]["lost"] = get_values_unit_player(original_gamestate.units[0][position], position, gamestate)
+            values["player1"]["lost"] = get_values_unit_player(original_gamestate.units[0][position], position,
+                                                               gamestate)
 
         for key in values["player1"]["gained"].keys():
             if key in values["player1"]["lost"].keys():
@@ -577,7 +584,8 @@ def get_action_values(gamestate, original_gamestate):
             values["player2"]["gained"] = get_values_unit_opponent(gamestate.units[1][position], position, gamestate)
 
         for position in old_player2:
-            values["player2"]["lost"] = get_values_unit_opponent(original_gamestate.units[1][position], position, gamestate)
+            values["player2"]["lost"] = get_values_unit_opponent(original_gamestate.units[1][position], position,
+                                                                 gamestate)
 
     values = {"player1": {"gained": {}, "lost": {}}, "player2": {"gained": {}, "lost": {}}}
 
