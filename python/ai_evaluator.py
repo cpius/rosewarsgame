@@ -9,7 +9,7 @@ import ai_module
 import action_getter
 import math
 
-board = set((i, j) for i in range(1, 6) for j in range(1, 9))
+board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 
 
 def document_actions(actions, gamestate):
