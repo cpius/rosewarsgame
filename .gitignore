@@ -3,6 +3,7 @@
 ##########
 python/replay/*
 python/demo/*
+python/saves/*
 
 
 #########

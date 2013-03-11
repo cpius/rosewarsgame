@@ -56,7 +56,7 @@ def game_end(player):
 
 def run_game():
     
-    p = setup.get_startunits()
+    p = setup.get_start_units()
     
     p[0].ai = ai_module.AI(settings.player1_ai)
     p[1].ai = ai_module.AI(settings.player2_ai)
