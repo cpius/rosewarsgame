@@ -79,7 +79,8 @@ class TestAI(unittest.TestCase):
 
             units[position] = getattr(units_module, match.group(1))(player.color)
 
-            self.assertTrue(re.search(test_file.readline(), '^\r?\n$'), 'Please wrap unit specifications in empty lines')
+            match = re.search('^\r?\n$', test_file.readline())
+            self.assertTrue(match, "Please wrap unit specifications in empty lines")
             line = test_file.readline()
         player.units = units
         return player
