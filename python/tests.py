@@ -17,11 +17,17 @@ class TestAI(unittest.TestCase):
 
         self.assertTrue(re.search(expected_outcome, str(action)), "The ai did not choose to attack")
 
+    def test_AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer(self):
 
-        self.assertTrue(re.search('^Expected outcome:\r?\n$', test_file.readline()),
-                        'Please specify an expected outcome')
+        test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer.txt", "r")
+        expected_outcome, gamestate = self.parse_test_case(test_file)
+        active_player_before = gamestate.players[0]
+        action = gamestate.players[0].ai.select_action(gamestate)
 
-        self.assertNotEqual(player1.actions_remaining, player2.actions_remaining, 'It is noones turn')
+#        gamestate.do_action(action)
+
+#        active_player_after = gamestate.players[0]
+#        self.assertNotEquals(active_player_before, active_player_after, "The turn did not switch")
 
     def parse_test_case(self, test_file):
 
