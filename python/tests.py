@@ -42,35 +42,35 @@ class TestAI(unittest.TestCase):
 
     def parse_player(self, test_file):
         self.assertTrue(re.search('^Player(1|2):\r?\n$', test_file.readline()),
-                        'Incorrect player specification. Please write: Player1/Player2')
+                        "Incorrect player specification. Please write: Player1/Player2")
 
         match = re.search('^(Red|Green)\r?\n$', test_file.readline())
-        self.assertTrue(match, 'Incorrect player color specification. Please write: Red/Green')
+        self.assertTrue(match, "Incorrect player color specification. Please write: Red/Green")
         player = Player(match.group(1))
 
         match = re.search('^([A-Za-z]+)\r?\n', test_file.readline())
-        self.assertTrue(match, 'Incorrect player specification. Please write either Human or a named AI')
-        if match.group(1) == 'Human':
+        self.assertTrue(match, "Incorrect player specification. Please write either Human or a named AI")
+        if match.group(1) == "Human":
             player.ai = match.group(1)
         else:
             player.ai = ai_module.AI(match.group(1))
 
         match = re.search('^Actions: ([0-2])\r?\n$', test_file.readline())
-        self.assertTrue(match, 'Incorrect action specification. Please write "Actions: [0..2]"')
+        self.assertTrue(match, "Incorrect action specification. Please write 'Actions: [0..2]'")
         player.actions_remaining = int(match.group(1))
 
         match = re.search('^Extra action: (True|False)\r?\n$', test_file.readline())
-        self.assertTrue(match, 'Incorrect extra action specification. Please write "Extra action: True/False"')
-        if match.group(1) == 'True':
+        self.assertTrue(match, "Incorrect extra action specification. Please write 'Extra action: True/False'")
+        if match.group(1) == "True":
             player.extra_action = True
 
-        self.assertTrue(re.search(test_file.readline(), '\r?\n'), 'Please wrap unit specifications in empty lines')
+        self.assertTrue(re.search("\r?\n", test_file.readline()), "Please wrap unit specifications in empty lines")
 
         units = {}
         line = test_file.readline()
         while line != '' and line != '\r\n' and line != '\n':
-            match = re.search('^([A-E][0-8])\r?\n$', line)
-            self.assertTrue(match, 'Incorrect unit specification. Please write something like "A1<newline>Archer')
+            match = re.search("^([A-E][0-8])\r?\n$", line)
+            self.assertTrue(match, "Incorrect unit specification. Please write something like 'A1<newline>Archer'")
 
             position = (ord(match.group(1)[0]) - 64, int(match.group(1)[1]))
 
@@ -85,5 +85,5 @@ class TestAI(unittest.TestCase):
         return player
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
