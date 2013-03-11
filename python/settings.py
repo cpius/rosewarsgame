@@ -3,8 +3,8 @@ turn = 1
 
 pause_for_animation = 650
 
-player2_ai = "Human"
-player1_ai = "Evaluator"
+player1_ai = "Human"
+player2_ai = "Evaluator"
 
 document_ai_actions = True
 
