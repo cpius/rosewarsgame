@@ -293,6 +293,9 @@ def get_next_action(gamestate):
 
     actions = gamestate_copy.get_actions()
 
+    if not actions:
+        return None
+
     if gamestate_copy.players[0].actions_remaining == 2:
         actions = find_action_scores_two_actions(actions, gamestate_copy)
         rnd.shuffle(actions)
