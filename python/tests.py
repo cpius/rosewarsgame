@@ -10,16 +10,16 @@ class TestAI(unittest.TestCase):
     def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
 
         test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
-        expected_outcome, gamestate = self.parse_test_case(test_file)
+        gamestate = self.parse_test_case(test_file)
 
         action = gamestate.players[0].ai.select_action(gamestate)
 
-        self.assertTrue(re.search(expected_outcome, str(action)), "The ai did not choose to attack")
+        self.assertTrue(re.search(".*attack.*", str(action)), "The ai did not choose to attack")
 
     def test_AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer(self):
 
         test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer.txt", "r")
-        expected_outcome, gamestate = self.parse_test_case(test_file)
+        gamestate = self.parse_test_case(test_file)
         active_player_before = gamestate.players[0]
         action = gamestate.players[0].ai.select_action(gamestate)
 
@@ -39,13 +39,6 @@ class TestAI(unittest.TestCase):
         player1, player1_units = self.parse_player(test_file)
         player2, player2_units = self.parse_player(test_file)
 
-        self.assertTrue(re.search('^Expected outcome:\r?\n$', test_file.readline()),
-                        "Please specify an expected outcome")
-
-        expected_outcome = test_file.readline()
-        match = re.search("(.*?)\r?\n", expected_outcome)
-        expected_outcome = match.group(1)
-
         self.assertNotEqual(player1.actions_remaining, player2.actions_remaining, "It is noones turn")
 
         if player1.actions_remaining > player2.actions_remaining:
@@ -55,7 +48,7 @@ class TestAI(unittest.TestCase):
 
         self.assertNotEqual("Human", gamestate.players[0].ai, "Active player is a human. It should be a computer")
 
-        return expected_outcome, gamestate
+        return gamestate
 
     def parse_player(self, test_file):
         self.assertTrue(re.search('^Player(1|2):\r?\n$', test_file.readline()),
