@@ -122,9 +122,8 @@ def document_actions(actions, gamestate):
         if hasattr(action, "combined_score"):
             out.write("Combined score: " + str(round(action.combined_score, 2)) + "\n")
 
-        out.write("\n\n\n")         
+        out.write("\n\n\n\n")
 
-        out.write("\n")
     out.close()
 
 
