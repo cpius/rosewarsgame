@@ -36,7 +36,7 @@ class Gamestate:
         return load_gamestate(saved_gamestate)
 
     def __eq__(self, other):
-        pass  # Write function here
+        pass
 
     def set_ais(self):
         if settings.player1_ai != "Human":
