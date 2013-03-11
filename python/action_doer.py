@@ -4,15 +4,15 @@ import action_getter
 import battle
 
 
-board = [(i, j) for i in range(1, 6) for j in range(1, 9)]
+board = [(column, row) for column in range(1, 6) for row in range(1, 9)]
 
 
-def out_of_board_vertical(pos):
-    return pos[1] < board[1][0] or pos[1] > board[1][-1]
+def out_of_board_vertical(position):
+    return position[1] < board[1][0] or position[1] > board[1][-1]
 
 
-def out_of_board_horizontal(pos):
-    return pos[0] < board[0][0] or pos[0] > board[0][-1]
+def out_of_board_horizontal(position):
+    return position[0] < board[0][0] or position[0] > board[0][-1]
 
 
 def do_action(action, enemy_units, player_units, opponent, player, unit=None):
@@ -204,7 +204,6 @@ def add_target(action, enemy_units, player_units):
 
     for sub_action in action.sub_actions:
         add_target(sub_action, enemy_units, player_units)
-
 
 
 def update_finalpos(action):
