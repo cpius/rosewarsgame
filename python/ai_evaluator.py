@@ -172,6 +172,20 @@ def get_action_failure(action):
     return action
 
 
+def calculate_two_action_score(action):
+
+    if action.next_action_if_success:
+
+        score_if_win = action.chance_of_win * (action.score_success + action.next_action_if_success.score)
+        score_if_failure = (1 - action.chance_of_win) * (action.score_failure + action.next_action_if_failure.score)
+
+        return score_if_win + score_if_failure
+
+    else:
+
+        return action.score
+
+
 def find_action_scores_two_actions(actions, original_gamestate):
 
     gamestate = gamestate_module.save_gamestate(original_gamestate)
@@ -205,12 +219,7 @@ def find_action_scores_two_actions(actions, original_gamestate):
             action.score = action.chance_of_win * action.score_success + \
                 (1 - action.chance_of_win) * action.score_failure
 
-            if action.next_action_if_success:
-                action.score_with_next = action.chance_of_win \
-                    * (action.score_success + action.next_action_if_success.score) +\
-                    (1 - action.chance_of_win) * (action.score_failure + action.next_action_if_failure.score)
-            else:
-                action.score_with_next = action.score
+            action.score_with_next = calculate_two_action_score(action)
 
         elif action.is_ability:
 
