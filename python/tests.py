@@ -9,37 +9,45 @@ from gamestate_module import Gamestate
 class TestAI(unittest.TestCase):
     def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
         self.parse_test_case()
+
         test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
+        expected_outcome, gamestate = self.parse_test_case(test_file)
 
-    def parse_test_case(self):
+        action = gamestate.players[0].ai.select_action(gamestate)
 
-        self.assertTrue(re.search('^== [A-Za-z0-9-_]+ ==\r?\n$', test_file.readline()),
-                        'Please begin test specification with "== Test_Name ==')
+        self.assertTrue(re.search(expected_outcome, str(action)), "The ai did not choose to attack")
 
-        player1 = self.parse_player(test_file)
-        player2 = self.parse_player(test_file)
 
         self.assertTrue(re.search('^Expected outcome:\r?\n$', test_file.readline()),
                         'Please specify an expected outcome')
 
         self.assertNotEqual(player1.actions_remaining, player2.actions_remaining, 'It is noones turn')
 
-        game_state = [player1, player2]
+    def parse_test_case(self, test_file):
 
-        if player2.actions_remaining > player1.actions_remaining:
-            game_state.reverse()
+        self.assertTrue(re.search('^== [A-Za-z0-9-_]+ ==\r?\n$', test_file.readline()),
+                        "Please begin test specification with '== Test_Name =='")
 
-        self.assertNotEqual('Human', game_state[0].ai, 'Active player is a human. It should be a computer')
+        player1, player1_units = self.parse_player(test_file)
+        player2, player2_units = self.parse_player(test_file)
 
-        match = re.search('(.*)\r?\n', test_file.readline())
+        self.assertTrue(re.search('^Expected outcome:\r?\n$', test_file.readline()),
+                        "Please specify an expected outcome")
+
+        expected_outcome = test_file.readline()
+        match = re.search("(.*?)\r?\n", expected_outcome)
         expected_outcome = match.group(1)
 
-        action = game_state[0].ai.select_action(game_state)
+        self.assertNotEqual(player1.actions_remaining, player2.actions_remaining, "It is noones turn")
 
-        print 'Expected outcome: ' + expected_outcome
-        print 'Actual outcome: ' + str(action)
+        if player1.actions_remaining > player2.actions_remaining:
+            gamestate = Gamestate(player1, player1_units, player2, player2_units)
+        else:
+            gamestate = Gamestate(player2, player2_units, player1, player1_units)
 
-        self.assertEquals(expected_outcome, str(action), 'The outcome was not as expected')
+        self.assertNotEqual("Human", gamestate.players[0].ai, "Active player is a human. It should be a computer")
+
+        return expected_outcome, gamestate
 
     def parse_player(self, test_file):
         self.assertTrue(re.search('^Player(1|2):\r?\n$', test_file.readline()),
