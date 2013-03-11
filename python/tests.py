@@ -7,7 +7,7 @@ from gamestate_module import Gamestate
 
 
 class TestAI(unittest.TestCase):
-    def test_AIEvaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
+    def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
         self.parse_test_case()
         test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
 
