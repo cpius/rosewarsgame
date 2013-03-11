@@ -391,7 +391,7 @@ def run_game(g):
                     if action:
                         g = perform_action(action, g)
                     else:
-                        g.next_turn()
+                        g.turn_shift()
                         draw_game(g)
 
                     if hasattr(g.players[0], "extra_action"):
