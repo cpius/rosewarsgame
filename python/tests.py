@@ -23,10 +23,13 @@ class TestAI(unittest.TestCase):
         active_player_before = gamestate.players[0]
         action = gamestate.players[0].ai.select_action(gamestate)
 
-#        gamestate.do_action(action)
+        print "Actions before: " + str(gamestate.players[0].actions_remaining)
+        gamestate.do_action(action)
+        print "Actions after: " + str(gamestate.players[0].actions_remaining)
 
-#        active_player_after = gamestate.players[0]
-#        self.assertNotEquals(active_player_before, active_player_after, "The turn did not switch")
+        active_player_after = gamestate.players[0]
+
+        self.assertNotEquals(active_player_before, active_player_after, "The turn did not switch")
 
     def parse_test_case(self, test_file):
 
