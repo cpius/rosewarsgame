@@ -1,5 +1,6 @@
 from __future__ import division
-import pygame, sys
+import pygame
+import sys
 from pygame.locals import *
 import setup
 from gamestate_module import Gamestate
@@ -143,8 +144,10 @@ def draw_crusading(unit, pos):
 
 
 def add_yellow_counters(unit):
-    if hasattr(unit, "extra_life"): unit.yellow_counters = 1
-    else: unit.yellow_counters = 0
+    if hasattr(unit, "extra_life"):
+        unit.yellow_counters = 1
+    else:
+        unit.yellow_counters = 0
 
 
 def add_blue_counters(unit):
@@ -491,7 +494,9 @@ def run_game(g):
                     action = None
 
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos and possible_action.attackpos == (x, y) and not possible_action.move_with_attack:
+                        if possible_action.startpos == startpos \
+                                and possible_action.attackpos == (x, y) \
+                                and not possible_action.move_with_attack:
 
                             if possible_action.endpos == startpos:
                                 action = possible_action
@@ -541,9 +546,11 @@ def run_game(g):
 
 def new_game():
 
-    player1, player2 = Player("Green"), Player("Red")
+    player1 = Player("Green")
+    player2 = Player("Red")
 
-    player1.ai_name, player2.ai_name = settings.player1_ai, settings.player2_ai
+    player1.ai_name = settings.player1_ai
+    player2.ai_name = settings.player2_ai
 
     player1_units, player2_units = setup.get_start_units()
 
@@ -572,7 +579,7 @@ def exit_game():
 
 
 def game_end(player):
-    font = pygame.font.SysFont("monospace", 55, bold = True)
+    font = pygame.font.SysFont("monospace", 55, bold=True)
     label = font.render(player.color + "\nWins", 1, black)
     screen.blit(label, (40, 400))
     pygame.display.update()
@@ -589,4 +596,3 @@ font_big = pygame.font.SysFont("arial", 28, True, False)
 if __name__ == '__main__':
 
     new_game()
-

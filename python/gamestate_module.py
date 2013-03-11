@@ -9,7 +9,7 @@ import ai_module
 
 class Gamestate:
     
-    def __init__(self, player1, player1_units, player2, player2_units, turn= 1):
+    def __init__(self, player1, player1_units, player2, player2_units, turn=1):
         self.turn = turn
         self.units = [player1_units, player2_units]
         self.players = [player1, player2]
@@ -36,7 +36,7 @@ class Gamestate:
         return load_gamestate(saved_gamestate)
 
     def __eq__(self, other):
-        pass  # Write function here
+        pass
 
     def set_ais(self):
         if settings.player1_ai != "Human":
