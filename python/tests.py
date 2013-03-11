@@ -1,8 +1,9 @@
 import unittest
 import re
-import units_module
+import units as units_module
 import ai_module
 from player import Player
+from gamestate_module import Gamestate
 
 
 class TestAI(unittest.TestCase):
@@ -50,6 +51,7 @@ class TestAI(unittest.TestCase):
 
         match = re.search('^([A-Za-z]+)\r?\n', test_file.readline())
         self.assertTrue(match, "Incorrect player specification. Please write either Human or a named AI")
+        player.ai_name = match.group(1)
         if match.group(1) == "Human":
             player.ai = match.group(1)
         else:
@@ -77,13 +79,13 @@ class TestAI(unittest.TestCase):
             line = test_file.readline()
             match = re.search('^([A-Za-z -_]+)\r?\n$', line)
 
-            units[position] = getattr(units_module, match.group(1))(player.color)
+            units[position] = getattr(units_module, match.group(1))()
 
             match = re.search('^\r?\n$', test_file.readline())
             self.assertTrue(match, "Please wrap unit specifications in empty lines")
             line = test_file.readline()
-        player.units = units
-        return player
+
+        return player, units
 
 
 if __name__ == "__main__":
