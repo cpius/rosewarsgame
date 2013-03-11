@@ -2,41 +2,38 @@ from __future__ import division
 import battle
 from ai_module import get_transformed_action
 import copy
-import gamestate
-import settings
 
 
-
-def document_actions(ai_type, actions, p):
+def document_actions(actions, g):
     
-    if p[0].actions_remaining == 1:
-        taction = "1"
+    if g.players[0].actions_remaining == 1:
+        current_action = "1"
     else:
-        taction = "2"
+        current_action = "2"
         
-    if hasattr(p[0], "extra_action"):
-        taction += ".2"
+    if hasattr(g.players[0], "extra_action"):
+        current_action += ".2"
     
-    out = open("./replay/" + p[0].color + " AI actions " + str(settings.turn) + "." + taction + ".txt", 'w')
+    out = open("./replay/" + g.players[0].color + " AI actions " + str(g.turn) + "." + current_action + ".txt", 'w')
     
     for action in actions:
-        if p[0].color == "Red":
-            #action = copy.deepcopy(action)
-            action = gamestate.copy_action(action)
-            get_transformed_action(action)
+        if g.players[0].color == "Red":
+            action = copy.copy(action)
+            action = get_transformed_action(action)
             
         out.write(str(action) + "\n")
-        out.write("Score: " + str(round(action.score,2)) + "\n")
+        out.write("Score: " + str(round(action.score, 2)) + "\n")
         if hasattr(action, "score_success"):
-            out.write("Score sucess: " + str(round(action.score_success)) + " Score failure: " + str(round(action.score_failure)) + "\n")
+            out.write("Score success: " + str(round(action.score_success)) + " Score failure: " +
+                      str(round(action.score_failure)) + "\n")
         out.write("\n")
     out.close()
 
 
-def chance_of_win(a, d, action):
+def chance_of_win(attacking_unit, defending_unit, action):
 
-    attack = battle.get_attack(a, d, action)
-    defence = battle.get_defence(a, d, attack, action)
+    attack = battle.get_attack(attacking_unit, defending_unit, action)
+    defence = battle.get_defence(attacking_unit, defending_unit, attack, action)
 
     if attack < 0:
         attack = 0
@@ -50,8 +47,8 @@ def chance_of_win(a, d, action):
     if defence > 6:
         defence = 6
     
-    chance_of_attack_succesful = attack / 6
+    chance_of_attack_successful = attack / 6
     
-    chance_of_defence_unsuccesful = (6 - defence) / 6
+    chance_of_defence_unsuccessful = (6 - defence) / 6
 
-    return chance_of_attack_succesful * chance_of_defence_unsuccesful
+    return chance_of_attack_successful * chance_of_defence_unsuccessful
