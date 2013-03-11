@@ -524,12 +524,6 @@ def get_action_values(gamestate, original_gamestate):
 
         if unit.name == "Longswordsman":
             pass
-            """
-            unit_actions = action_getter.get_unit_actions(unit, pos, all_units, g.units[1], g.units[1])
-
-            if unit_action.sub_actions:
-                values["Potential longsword attack"] = unit_action.sub_actions
-            """
 
         if unit.name == "Samurai":
             pass
