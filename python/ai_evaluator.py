@@ -23,7 +23,7 @@ def document_actions(actions, gamestate):
         current_action += ".2"
 
     out = open("./replay/" + gamestate.players[0].color + " AI actions "
-               + str(gamestate.turn) + "." + current_action + ".txt", 'w')
+               + str(gamestate.turn) + "." + current_action + ".txt", "w")
 
     for action in actions:
         if gamestate.players[0].color == "Red":

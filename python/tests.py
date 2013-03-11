@@ -84,18 +84,18 @@ class TestAI(unittest.TestCase):
 
         units = {}
         line = test_file.readline()
-        while line != '' and line != '\r\n' and line != '\n':
+        while line != "" and line != "\r\n" and line != "\n":
             match = re.search("^([A-E][0-8])\r?\n$", line)
             self.assertTrue(match, "Incorrect unit specification. Please write something like 'A1<newline>Archer'")
 
             position = (ord(match.group(1)[0]) - 64, int(match.group(1)[1]))
 
             line = test_file.readline()
-            match = re.search('^([A-Za-z -_]+)\r?\n$', line)
+            match = re.search("^([A-Za-z -_]+)\r?\n$", line)
 
             units[position] = getattr(units_module, match.group(1))()
 
-            match = re.search('^\r?\n$', test_file.readline())
+            match = re.search("^\r?\n$", test_file.readline())
             self.assertTrue(match, "Please wrap unit specifications in empty lines")
             line = test_file.readline()
 
