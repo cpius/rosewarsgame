@@ -1,4 +1,3 @@
-import copy
 import imp
 
 
@@ -44,7 +43,8 @@ class AI(object):
 
 class Direction:
     """ A object direction is one move up, down, left or right.
-    The class contains methods for returning the tile you will go to after the move, and for returning the tiles you should check for zone of control.
+    The class contains methods for returning the tile you will
+    go to after the move, and for returning the tiles you should check for zone of control.
     """
     def __init__(self, x, y):
         self.x = x
