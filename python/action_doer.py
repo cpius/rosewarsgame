@@ -213,7 +213,7 @@ def update_finalpos(action):
 
 
 def gain_xp(unit):
-    if not hasattr(unit, "xp_gained_this_round"):
+    if not unit.xp_gained_this_round:
         unit.xp += 1
         unit.xp_gained_this_round = True
 
