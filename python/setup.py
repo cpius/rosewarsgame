@@ -75,9 +75,9 @@ def get_units():
             units[pos] = getattr(units_module, name.replace(" ", "_"))()
 
             if len(units) == 1:
-                units[pos].acounters = 1
+                units[pos].attack_counters = 1
             if len(units) == 2:
-                units[pos].dcounters = 1
+                units[pos].defence_counters = 1
 
         return units
 
