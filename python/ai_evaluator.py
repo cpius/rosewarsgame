@@ -77,47 +77,43 @@ def document_actions(actions, gamestate):
 
         out.write("\n")
 
-        try:
-            if hasattr(action, "next_action_if_success"):
-                if hasattr(action, "next_action_if_failure") and action.next_action_if_success.score != \
-                        action.next_action_if_failure.score:
-                    out.write("Next Action If Success:\n")
-                    if action.next_action_if_success:
-                        out.write(str(action.next_action_if_success) + "\n")
-                        out.write("Action Score: " + str(round(action.next_action_if_success.score, 2)) + "\n")
-                    else:
-                        out.write("No next actions\n")
-                    out.write("\n")
-
-                    if hasattr(action, "next_action_if_failure"):
-                        out.write("Next Action If Failure:\n")
-                        if action.next_action_if_failure:
-                            out.write(str(action.next_action_if_failure) + "\n")
-                            out.write("Action Score: " + str(round(action.next_action_if_failure.score, 2)) + "\n")
-                        else:
-                            out.write("No next actions\n")
-                        out.write("\n")
-
-                else:
-                    out.write("Next Action:\n")
-                    if action.next_action_if_success:
-                        out.write(str(action.next_action_if_success) + "\n")
-                        out.write("Action Score: " + str(round(action.next_action_if_success.score, 2)) + "\n")
-                    else:
-                        out.write("No next actions\n")
-                    out.write("\n")
-
-            if hasattr(action, "next_action"):
-                out.write("Next Action:\n")
-                if action.next_action:
-                    out.write(str(action.next_action) + "\n")
-                    out.write("Action Score: " + str(round(action.next_action.score, 2)) + "\n")
+        if hasattr(action, "next_action_if_success"):
+            if hasattr(action, "next_action_if_failure") and action.next_action_if_success.score != \
+                    action.next_action_if_failure.score:
+                out.write("Next Action If Success:\n")
+                if action.next_action_if_success:
+                    out.write(str(action.next_action_if_success) + "\n")
+                    out.write("Action Score: " + str(round(action.next_action_if_success.score, 2)) + "\n")
                 else:
                     out.write("No next actions\n")
                 out.write("\n")
 
-        except AttributeError:
-            print "attribute error"
+                if hasattr(action, "next_action_if_failure"):
+                    out.write("Next Action If Failure:\n")
+                    if action.next_action_if_failure:
+                        out.write(str(action.next_action_if_failure) + "\n")
+                        out.write("Action Score: " + str(round(action.next_action_if_failure.score, 2)) + "\n")
+                    else:
+                        out.write("No next actions\n")
+                    out.write("\n")
+
+            else:
+                out.write("Next Action:\n")
+                if action.next_action_if_success:
+                    out.write(str(action.next_action_if_success) + "\n")
+                    out.write("Action Score: " + str(round(action.next_action_if_success.score, 2)) + "\n")
+                else:
+                    out.write("No next actions\n")
+                out.write("\n")
+
+        if hasattr(action, "next_action"):
+            out.write("Next Action:\n")
+            if action.next_action:
+                out.write(str(action.next_action) + "\n")
+                out.write("Action Score: " + str(round(action.next_action.score, 2)) + "\n")
+            else:
+                out.write("No next actions\n")
+            out.write("\n")
 
         if hasattr(action, "combined_score"):
             out.write("Combined score: " + str(round(action.combined_score, 2)) + "\n")
