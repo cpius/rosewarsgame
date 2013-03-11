@@ -87,7 +87,6 @@ class Catapult(Unit):
     double_attack_cost = True  # Attack takes two actions.
 
 
-
 class Royal_Guard(Unit):
   
     name = "Royal Guard"
@@ -210,7 +209,7 @@ class Crusader(Unit):
     zoc = []
     type = "Cavalry"
         
-    crusading = True  # Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader gets +1A.
+    crusading = True  # Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.
 
 
 class Berserker(Unit):
@@ -231,7 +230,7 @@ class Berserker(Unit):
 class Chariot(Unit):
   
     name = "Chariot"
-    attack = 3
+    attack = 4
     defence = 3
     movement = 3
     range = 1
@@ -257,14 +256,14 @@ class War_Elephant(Unit):
         
     double_attack_cost = True  # Attack takes two actions
     triple_attack = True  # Also hits the two diagonally nearby tiles in the attack direction.
-    push = True  # If attack and defence rolls both succees, it can still move forward.
-                 # If not on back line, opponents selfs must retreat directly backwards or die.
+    push = True  # If attack and defence rolls both succeed, it can still move forward.
+                 # If not on back line, opponents units must retreat directly backwards or die.
 
 
 class Samurai(Unit):
     
     name = "Samurai"
-    attack = 3
+    attack = 6
     defence = 3
     movement = 1
     range = 1
@@ -273,7 +272,7 @@ class Samurai(Unit):
     zoc = []
     type = "Infantry"
         
-    samuraiing = True  # Can make an attack after it's first action. (But not a second move)
+    samuraiing = True  # Can make an attack after its first action. (But not a second move)
     
 
 class Saboteur(Unit):
@@ -317,4 +316,4 @@ class Weaponsmith(Unit):
     dbonus = {}
     type = "Infantry"
     
-    abilities = ["improve_weapons"]  # Improve weapons: Give melee unit +3A. +1D until your next turn
+    abilities = ["improve_weapons"]  # Improve weapons: Give melee unit +3 attack, +1 defence until your next turn
