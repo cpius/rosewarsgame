@@ -9,7 +9,19 @@ start_attributes_actions = ["unit", "startpos", "endpos", "attackpos", "is_attac
 
 
 def save_gamestate(g):
-    
+
+    def save_item(key, value):
+        if key in ["xp_gained_this_round", "used"] and not value:
+            return False
+
+        if key in ["blue_counters", "yellow_counters"]:
+            return False
+
+        if key == "zoc_blocks":
+            return False
+
+        return True
+
     gamestate = []
 
     for i in range(2):
@@ -20,9 +32,9 @@ def save_gamestate(g):
         for pos, unit in g.units[i].items():
             unit_state1 = [pos, unit.name.replace(" ", "_")]
             unit_state2 = {}
-            for key, item in unit.__dict__.items():
-                if item:
-                    unit_state2[key] = item
+            for key, value in unit.__dict__.items():
+                if save_item(key, value):
+                    unit_state2[key] = value
             unit_states.append((unit_state1, unit_state2))
         
         gamestate.append(unit_states)
