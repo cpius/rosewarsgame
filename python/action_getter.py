@@ -192,7 +192,7 @@ def get_extra_actions(enemy_units, player_units, player):
             friendly_units, enemy_units = find_all_friendly_units_except_current(pos, player_units), enemy_units
             units = dict(friendly_units.items() + enemy_units.items())
 
-            moveset = generate_moveset(unit, pos, units)
+            moves, attacks, abilities = [], [], []
 
             for attribute in ["charioting", "samuraiing"]:
                 if hasattr(unit, attribute):
