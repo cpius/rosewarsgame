@@ -23,25 +23,16 @@ def do_action(action, enemy_units, player_units, opponent, player, unit=None):
 
     def prepare_extra_actions(action, unit):
 
-        def charioting():
-            if not hasattr(unit, "extra_action"):
-                unit.movement_remaining = unit.movement - distance(action.startpos, action.endpos)
-                if action.is_attack and not (action.move_with_attack and action.outcome == "Success"):
-                    unit.movement_remaining -= 1
-                unit.extra_action = True
-            else:
-                del unit.extra_action
+        if hasattr(unit, "charioting"):
+            unit.movement_remaining = unit.movement - distance(action.startpos, action.finalpos)
+            if (action.is_attack and not action.move_with_attack) or (action.is_attack and action.move_with_attack
+                                                                      and action.outcome != "Success"):
+                unit.movement_remaining -= 1
+            unit.extra_action = True
 
-        def samuraiing():
-            if not hasattr(unit, "extra_action"):
-                unit.movement_remaining = unit.movement - distance(action.startpos, action.endpos)
-                unit.extra_action = True
-            else:
-                del unit.extra_action
-
-        for attribute in ["charioting", "samuraiing"]:
-            if hasattr(unit, attribute):
-                locals()[attribute]()
+        if hasattr(unit, "samuraiing"):
+            unit.movement_remaining = unit.movement - distance(action.startpos, action.finalpos)
+            unit.extra_action = True
 
     def update_actions_remaining(action, player):
 
