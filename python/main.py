@@ -13,6 +13,8 @@ from action import Action
 
 pause_for_animation = settings.pause_for_animation
 
+action_index = 1
+
 black = (0, 0, 0)
 white = (255, 255, 255)
 green = (0, 255, 0)
@@ -306,6 +308,8 @@ def perform_action(action, g):
 
         g.do_action(action)
 
+        save_game(g)
+
         if settings.show_full_battle_result:
             print action.full_string()
         else:    
@@ -368,6 +372,15 @@ def show_unit(pos, g):
                     return
 
 
+def save_game(g):
+    global action_index
+
+    name = str(action_index) + ". " + g.players[0].color + ", " + str(g.turn) + "." + str(2 - g.players[0].actions_remaining)
+    pygame.image.save(screen, "./replay/" + name + ".jpeg")
+
+    action_index += 1
+
+
 def run_game(g):
 
     g.set_ais()
@@ -388,8 +401,6 @@ def run_game(g):
                     print "action", 3 - g.players[0].actions_remaining
                     print
 
-                    pygame.image.save(screen, "./replay/" + g.players[0].color + " " + str(settings.turn) + "." +
-                                              str(3 - g.players[0].actions_remaining) + ".jpeg")
                     action = g.players[0].ai.select_action(g)
                     if action:
                         g = perform_action(action, g)
