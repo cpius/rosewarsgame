@@ -192,6 +192,8 @@ def get_extra_actions(enemy_units, player_units, player):
             friendly_units, enemy_units = find_all_friendly_units_except_current(pos, player_units), enemy_units
             units = dict(friendly_units.items() + enemy_units.items())
 
+            unit.zoc_blocks = frozenset(pos for pos, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
+
             moves, attacks, abilities = [], [], []
 
             for attribute in ["charioting", "samuraiing"]:
