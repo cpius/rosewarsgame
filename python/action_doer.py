@@ -71,7 +71,11 @@ def do_action(action, enemy_units, player_units, opponent, player, unit=None):
     if action.is_ability:
         settle_ability(action, enemy_units, player_units)
 
-    prepare_extra_actions(action, unit)
+    if hasattr(player, "extra_action"):
+        del unit.extra_action
+        del unit.movement_remaining
+    else:
+        prepare_extra_actions(action, unit)
 
     for sub_action in action.sub_actions:
         player.sub_action = True
