@@ -67,8 +67,8 @@ def load_gamestate(saved_gamestate):
 
 
 def write_gamestate(gamestate, path):
-    saver.write_gamestate(gamestate, path)
+    pass
 
 
 def read_gamestate(path):
-    return saver.read_gamestate(path)
+    pass
