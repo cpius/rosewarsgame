@@ -72,25 +72,6 @@ def load_gamestate(gamestate):
     return gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4])
 
 
-def write_gamestate(p, path):
-
-    out = open(path, 'w')
-
-    for i in range(2):
-        out.write(p[i].color + "\n")
-        out.write("Player: " + p[i].ai_name + "\n")
-        out.write("Actions Remaining: " + str(p[i].actions_remaining) + "\n")
-        out.write("Extra Action: " + str(hasattr(p[i], "extra_action")) + "\n")
-        out.write("\n")
-        out.write("Units\n")
-        for pos, unit in p[i].units.items():
-            out.write(unit.name + ":" + "(" + str(pos[0]) + "," + str(pos[1]) + ")" + "\n")
-            out.write(str(unit.__dict__) + "\n\n")
-
-        out.write("\n")
-    out.close()
-
-
 def save_action(action):
     
     action_state = [{}]
