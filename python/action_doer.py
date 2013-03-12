@@ -90,10 +90,9 @@ def do_action(action, enemy_units, player_units, opponent, player, unit=None):
 
     if hasattr(player, "extra_action"):
         del player.extra_action
-    else:
-        all_extra_actions = action_getter.get_extra_actions(enemy_units, player_units, player)
-        if len(all_extra_actions) > 1:
-            player.extra_action = True
+
+    if hasattr(unit, "extra_action"):
+        player.extra_action = True
 
     return enemy_units, player_units, player
 
