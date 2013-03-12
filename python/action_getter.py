@@ -164,7 +164,7 @@ def get_actions(enemy_units, player_units, player):
 def get_extra_actions(enemy_units, player_units, player):
 
     def charioting():
-        moveset = generate_moveset(unit, pos, units)
+        moveset = generate_extra_moveset(unit, pos, units)
         moves = move_actions(pos, moveset | {pos})
 
         return moves, [], []
@@ -223,6 +223,9 @@ def get_unit_actions(unit, pos, units, enemy_units, player_units):
     else:
         return get_special_unit_actions(unit, pos, units, enemy_units, player_units)
 
+
+def generate_extra_moveset(unit, pos, units):
+    return moves_set(pos, frozenset(units), unit.zoc_blocks, unit.movement_remaining, unit.movement_remaining)
 
 def generate_moveset(unit, pos, units):
     return moves_set(pos, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
