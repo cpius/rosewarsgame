@@ -164,7 +164,7 @@ def get_actions(enemy_units, player_units, player):
 def get_extra_actions(enemy_units, player_units, player):
 
     def charioting():
-        moveset = generate_moveset(unit, pos, units)
+        moveset = generate_extra_moveset(unit, pos, units)
         moves = move_actions(pos, moveset | {pos})
 
         return moves, [], []
@@ -192,7 +192,9 @@ def get_extra_actions(enemy_units, player_units, player):
             friendly_units, enemy_units = find_all_friendly_units_except_current(pos, player_units), enemy_units
             units = dict(friendly_units.items() + enemy_units.items())
 
-            moveset = generate_moveset(unit, pos, units)
+            unit.zoc_blocks = frozenset(pos for pos, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
+
+            moves, attacks, abilities = [], [], []
 
             for attribute in ["charioting", "samuraiing"]:
                 if hasattr(unit, attribute):
@@ -223,6 +225,9 @@ def get_unit_actions(unit, pos, units, enemy_units, player_units):
     else:
         return get_special_unit_actions(unit, pos, units, enemy_units, player_units)
 
+
+def generate_extra_moveset(unit, pos, units):
+    return moves_set(pos, frozenset(units), unit.zoc_blocks, unit.movement_remaining, unit.movement_remaining)
 
 def generate_moveset(unit, pos, units):
     return moves_set(pos, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
