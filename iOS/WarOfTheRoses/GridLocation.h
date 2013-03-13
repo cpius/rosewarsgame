@@ -18,6 +18,7 @@
 
 - (NSArray*)perpendicularGridLocations;
 - (NSArray*)surroundingGridLocations;
+- (NSArray*)surroundingEightGridLocations;
 
 - (GridLocation*)locationAbove;
 - (GridLocation*)locationBelow;

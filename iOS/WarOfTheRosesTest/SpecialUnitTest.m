@@ -27,6 +27,7 @@
 #import "LightCavalry.h"
 #import "Viking.h"
 #import "MoveAction.h"
+#import "LongSwordsMan.h"
 
 @implementation SpecialUnitTest
 
@@ -460,6 +461,42 @@
 
             STAssertFalse([viking canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a second melee action");
         }];
+    }];
+}
+
+- (void)testLongswordsmanHitsSurroundingEnemies {
+    
+    LongSwordsMan *longswordsman = [LongSwordsMan card];
+    Pikeman *pikeman = [Pikeman card];
+    Archer *archer = [Archer card];
+    
+    longswordsman.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    longswordsman.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:longswordsman]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, archer, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 5;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:longswordsman enemyCard:pikeman];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertTrue(pikeman.dead, @"Pikeman should be dead");
+        STAssertTrue(archer.dead, @"Archer should be dead");
     }];
 }
 

@@ -97,4 +97,16 @@
     [GridLocation gridLocationWithRow:self.row + 1 column:self.column]];
 }
 
+- (NSArray*)surroundingEightGridLocations {
+    
+    return @[[GridLocation gridLocationWithRow:self.row column:self.column - 1],
+             [GridLocation gridLocationWithRow:self.row - 1 column:self.column - 1],
+             [GridLocation gridLocationWithRow:self.row column:self.column + 1],
+             [GridLocation gridLocationWithRow:self.row + 1 column:self.column + 1],
+             [GridLocation gridLocationWithRow:self.row - 1 column:self.column + 1],
+             [GridLocation gridLocationWithRow:self.row - 1 column:self.column],
+             [GridLocation gridLocationWithRow:self.row + 1 column:self.column - 1],
+             [GridLocation gridLocationWithRow:self.row + 1 column:self.column]];
+}
+
 @end

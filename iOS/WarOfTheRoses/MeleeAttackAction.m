@@ -15,6 +15,7 @@
 
 @synthesize meleeAttackType;
 @synthesize actionType = _actionType;
+@synthesize startLocation = _startLocation;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
@@ -44,7 +45,7 @@
     [self.delegate beforePerformAction:self];
     
     GridLocation *retreatLocation = self.cardInAction.cardLocation;
-    GridLocation *startLocation = self.cardInAction.cardLocation;
+    _startLocation = self.cardInAction.cardLocation;
     
     if (self.path.count > 1) {
         retreatLocation = [[self.path objectAtIndex:self.path.count - 2] location];
@@ -67,7 +68,7 @@
                 
                 if (![self.cardInAction.cardLocation isEqual:retreatLocation]) {
                     [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
-                    [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:retreatLocation];
+                    [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
                 }
                 
                 [[GameManager sharedManager] actionUsed:self];
@@ -85,7 +86,7 @@
             if (meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) {
                 
                 [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
-                [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:startLocation];
+                [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:_startLocation];
                 
                 [[GameManager sharedManager] actionUsed:self];
                 [self.cardInAction didPerformedAction:self];
@@ -101,8 +102,8 @@
                     
                     [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
                     
-                    if (![startLocation isEqual:retreatLocation]) {
-                        [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:retreatLocation];
+                    if (![_startLocation isEqual:retreatLocation]) {
+                        [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
                     }
                     
                     [[GameManager sharedManager] actionUsed:self];

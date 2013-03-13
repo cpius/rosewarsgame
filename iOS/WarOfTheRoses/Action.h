@@ -42,6 +42,7 @@
 - (id)initWithPath:(NSArray*)path andCardInAction:(Card*)card enemyCard:(Card*)enemyCard;
 
 - (BOOL)isWithinRange;
+- (GridLocation*)getFirstLocationInPath;
 - (GridLocation*)getLastLocationInPath;
 - (GridLocation *)getEntryLocationInPath;
 

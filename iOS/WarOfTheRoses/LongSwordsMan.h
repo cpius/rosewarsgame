@@ -10,4 +10,6 @@
 
 @interface LongSwordsMan : Card
 
++ (id)card;
+
 @end
