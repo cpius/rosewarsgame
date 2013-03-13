@@ -1,7 +1,4 @@
-import mover
-import copy
 import imp
-import gamestate
 
 
 class AI(object):
@@ -21,53 +18,48 @@ class AI(object):
         self.put_counter = ai_type.put_counter
         self.name = name
 
-    def select_action(self, p):
+    def select_action(self, gamestate):
 
-        p = gamestate.copy_p(p)
+        gamestate = gamestate.copy()
 
-        if p[0].backline == 8:
-            p = get_transformed_p(p)
+        if gamestate.players[0].backline == 8:
+            gamestate = get_transformed_gamestate(gamestate)
             transform_action = get_transformed_action
         else:
             transform_action = get_same_action
 
-        actions = mover.get_actions(p)
+        actions = gamestate.get_actions()
 
         if actions:
-            action = self.get_action(p, actions)
+            action = self.get_action(actions, gamestate)
             return transform_action(action)
         else:
             return None
 
-    def add_counters(self, p):
+    def add_counters(self, gamestate):
 
-        for unit in p[0].units.values():
-            if unit.xp == 2:
-                if unit.defence + unit.dcounters == 4:
-                    unit.acounters += 1
-                else:
-                    self.put_counter(p, unit)
-                unit.xp = 0
+        self.put_counter(gamestate)
 
 
 class Direction:
     """ A object direction is one move up, down, left or right.
-    The class contains methods for returning the tile you will go to after the move, and for returning the tiles you should check for zone of control.
+    The class contains methods for returning the tile you will
+    go to after the move, and for returning the tiles you should check for zone of control.
     """
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-    def move(self, pos):
-        return pos[0] + self. x, pos[1] + self.y
+    def move(self, position):
+        return position[0] + self. x, position[1] + self.y
 
-    def perpendicular(self, pos):
-        return (pos[0] + self.y, pos[1] + self.x), (pos[0] - self.y, pos[1] - self.x)
+    def perpendicular(self, position):
+        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
 
 
-def t(pos):
-    if pos:
-        return pos[0], 9 - pos[1]
+def transform_position(position):
+    if position:
+        return position[0], 9 - position[1]
     else:
         return None
 
@@ -85,11 +77,12 @@ def get_transformed_direction(direction):
 
 def get_transformed_action(action):
 
-    action.startpos = t(action.startpos)
-    action.endpos = t(action.endpos)
-    action.attackpos = t(action.attackpos)
+    action.startpos = transform_position(action.startpos)
+    action.endpos = transform_position(action.endpos)
+    action.attackpos = transform_position(action.attackpos)
+
     for sub_action in action.sub_actions:
-        sub_action = get_transformed_action(sub_action)
+        action.sub_action = get_transformed_action(sub_action)
     if hasattr(action, "push"):
         action.push_direction = get_transformed_direction(action.push_direction)
 
@@ -101,17 +94,19 @@ def get_same_action(action):
     return action
 
 
-def get_transformed_p(p):
+def get_transformed_gamestate(gamestate):
 
-    newp = []
+    new_units_players = []
+    for units_player in gamestate.units:
+        new_units = {}
+        for position, unit in units_player.items():
+            new_units[transform_position(position)] = unit
 
-    for player in p:
-        pc = copy.copy(player)
-        pc.newunits = {}
-        for pos, unit in pc.units.items():
-            pc.newunits[t(pos)] = unit
-        pc.units = pc.newunits
-        pc.backline =  9 - player.backline
-        newp.append(pc)
+        new_units_players.append(new_units)
 
-    return newp
+    gamestate.units = new_units_players
+
+    for player in gamestate.players:
+        player.backline = 9 - player.backline
+
+    return gamestate

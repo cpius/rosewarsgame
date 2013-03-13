@@ -5,7 +5,7 @@ import random as rnd
 import settings
 
 
-def get_action(p, actions):
+def get_action(actions, g):
     
     for action in actions:
         action.score = action.endpos[1]
@@ -22,9 +22,21 @@ def get_action(p, actions):
     actions.sort(key = attrgetter("score"), reverse= True)
     
     if settings.document_ai_actions:
-        m.document_actions("Advancer", actions, p)
+        m.document_actions(actions, g)
     return actions[0]
     
 
-def put_counter(p, unit):
-    unit.dcounters += 1
+def put_counter(g):
+    def decide_counter(unit):
+        unit.defence_counters += 1
+
+    for unit in g.units[0].values():
+        if unit.xp == 2:
+            if unit.defence + unit.defence_counters == 4:
+                unit.attack_counters += 1
+            else:
+                if not unit.attack:
+                    unit.defence_counters += 1
+                else:
+                    decide_counter(unit)
+            unit.xp = 0
