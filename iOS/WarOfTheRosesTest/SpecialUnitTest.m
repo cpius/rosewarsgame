@@ -28,6 +28,8 @@
 #import "Viking.h"
 #import "MoveAction.h"
 #import "LongSwordsMan.h"
+#import "Crusader.h"
+#import "FlagBearer.h"
 
 @implementation SpecialUnitTest
 
@@ -500,5 +502,103 @@
     }];
 }
 
+
+- (void)testCardAdjacentToCrusaderIsAffectedByAoeEffect {
+    
+    Crusader *crusader = [Crusader card];
+    Pikeman *pikeman = [Pikeman card];
+    Archer *archer = [Archer card];
+    
+    crusader.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    crusader.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObjects:crusader, pikeman, nil]
+                                    player2Units:[NSArray arrayWithObject:archer]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:pikeman enemyCard:archer];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    [meleeAction performActionWithCompletion:^{
+
+        STAssertTrue([pikeman.attack calculateValue].lowerValue == 4, @"Pikeman should have received +1A aoe effect from Crusader");
+    }];
+}
+
+- (void)testCardNotAdjacentToCrusaderIsNotAffectedByAoeEffect {
+    
+    Crusader *crusader = [Crusader card];
+    Pikeman *pikeman = [Pikeman card];
+    Archer *archer = [Archer card];
+    
+    crusader.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    crusader.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:7 column:3];
+    pikeman.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:7 column:4];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObjects:crusader, pikeman, nil]
+                                    player2Units:[NSArray arrayWithObject:archer]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:7 column:4]]] andCardInAction:pikeman enemyCard:archer];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman should have received +1A aoe effect from Crusader");
+    }];
+}
+
+- (void)testCardRecievesAttackBonusWhileAdjacentToFlagBearer {
+    
+    FlagBearer *flagbearer = [FlagBearer card];
+    Pikeman *pikeman = [Pikeman card];
+    Archer *archer = [Archer card];
+    
+    flagbearer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    flagbearer.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObjects:flagbearer, pikeman, nil]
+                                    player2Units:[NSArray arrayWithObject:archer]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:archer.cardLocation]] andCardInAction:pikeman enemyCard:archer];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertTrue([pikeman.attack calculateValue].lowerValue == 3, @"Pikeman should have received +1A aoe effect from Crusader");
+    }];
+}
 
 @end

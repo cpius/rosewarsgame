@@ -7,6 +7,9 @@
 //
 
 #import "FlagBearer.h"
+#import "MeleeAttackAction.h"
+#import "TimedBonus.h"
+#import "GameManager.h"
 
 @implementation FlagBearer
 
@@ -16,14 +19,14 @@
     if (self) {
         
         self.cardType = kCardTypeSpecialUnit;
-        self.unitType = kSpecialUnit;
+        self.unitType = kCavalry;
         self.unitName = kFlagBearer;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
         
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 3)];
         
-        self.range = 0;
+        self.range = 1;
         self.move = 3;
         self.moveActionCost = self.attackActionCost = 1;
         self.hitpoints = 1;
@@ -41,6 +44,35 @@
 + (id)card {
     
     return [[FlagBearer alloc] init];
+}
+
+- (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action {
+    
+    if (action.cardInAction == self) return;
+    if (![action.cardInAction isOwnedByPlayerWithColor:[GameManager sharedManager].currentPlayersTurn]) return;
+    
+    BOOL aoeIsApplicable = NO;
+    NSArray *surroundingLocations = [self.cardLocation surroundingEightGridLocations];
+    
+    if (action.actionType == kActionTypeMelee) {
+
+        if ([surroundingLocations containsObject:[action getEntryLocationInPath]]) {
+            aoeIsApplicable = YES;
+        }
+    }
+    else if (action.actionType == kActionTypeMove) {
+        
+        if ([surroundingLocations containsObject:[action getLastLocationInPath]]) {
+            aoeIsApplicable = YES;
+        }
+    }
+
+    if (aoeIsApplicable) {
+        [action.cardInAction.attack addTimedBonus:[[TimedBonus alloc] initWithValue:2 forNumberOfRounds:1]];
+        
+        NSLog(@"Card: %@ received FlagBearers AOE bonus", action.cardInAction);
+
+    }
 }
 
 @end

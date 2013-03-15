@@ -74,7 +74,8 @@
     }
     
     if (_path != nil && _path.count == 1) {
-        return [[_path lastObject] location];
+        // If path only contains 1 step, the entry location is the cards current location
+        return self.cardInAction.cardLocation;
     }
     
     return nil;

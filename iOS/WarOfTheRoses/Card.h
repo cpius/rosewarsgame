@@ -124,4 +124,6 @@
 
 - (void)addTimedAbility:(TimedAbility*)timedAbility;
 
+- (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action;
+
 @end

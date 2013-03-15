@@ -15,6 +15,8 @@
 #import "GameManager.h"
 #import "MoveAction.h"
 #import "TestHelper.h"
+#import "MeleeAttackAction.h"
+#import "PathFinderStep.h"
 
 @class GameManager;
 @implementation WarOfTheRosesTest
@@ -60,6 +62,42 @@
     STAssertTrue([test2 isEqualToString:string2], @"Wrong");
 }
 
+
+- (void)testGridLocationEntryPointWithOnlyOneStepInPath {
+    
+    Pikeman *pikeman = [Pikeman card];
+    Archer *archer = [Archer card];
+        
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObjects:pikeman, nil]
+                                    player2Units:[NSArray arrayWithObject:archer]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:pikeman enemyCard:archer];
+    
+    GridLocation *entryLocation = [meleeAction getEntryLocationInPath];
+    
+    STAssertTrue(entryLocation.row == 3, @"Entry location should be pikemans current cardlocation");
+    STAssertTrue(entryLocation.column == 3, @"Entry location should be pikemans current cardlocation");
+
+    GridLocation *lastLocation = [meleeAction getLastLocationInPath];
+    
+    STAssertTrue(lastLocation.row == 4, @"Last location should be archers cardlocation");
+    STAssertTrue(lastLocation.column == 3, @"Last location should be archers cardlocation");
+    
+    GridLocation *firstLocation = [meleeAction getFirstLocationInPath];
+
+    STAssertTrue(firstLocation.row == 4, @"First location should be archers cardlocation");
+    STAssertTrue(firstLocation.column == 3, @"First location should be archers cardlocation");
+}
+
 - (void)testShouldEndTurnIfOnlyOneUnitLeftWithInsufficientActions {
         
     LightCavalry *attacker = [LightCavalry card];
@@ -87,8 +125,6 @@
     attacker.hasPerformedActionThisRound = YES;
     
     STAssertTrue([_manager shouldEndTurn], @"shouldEndTurn should return YES");
-    
-    
 }
 
 @end

@@ -36,7 +36,7 @@
 
 - (ActionTypes)actionType {
     
-    return kActionTypeMove;
+    return _actionType;
 }
 
 - (void)performActionWithCompletion:(void (^)())completion {

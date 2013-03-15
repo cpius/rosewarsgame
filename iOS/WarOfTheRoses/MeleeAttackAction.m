@@ -44,13 +44,9 @@
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
-    GridLocation *retreatLocation = self.cardInAction.cardLocation;
+    GridLocation *retreatLocation = [self getEntryLocationInPath];
     _startLocation = self.cardInAction.cardLocation;
     
-    if (self.path.count > 1) {
-        retreatLocation = [[self.path objectAtIndex:self.path.count - 2] location];
-    }
-
     [self.delegate action:self wantsToMoveFollowingPath:self.path withCompletion:^(GridLocation *endLocation) {
         
         [self.cardInAction consumeMoves:self.path.count];

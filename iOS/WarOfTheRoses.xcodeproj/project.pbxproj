@@ -128,6 +128,11 @@
 		6DB2046D16F102C20004FFCB /* longswordsman_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2046916F102C20004FFCB /* longswordsman_0.png */; };
 		6DB2046E16F102C20004FFCB /* longswordsman_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2046A16F102C20004FFCB /* longswordsman_icon-hd.png */; };
 		6DB2046F16F102C20004FFCB /* longswordsman_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2046B16F102C20004FFCB /* longswordsman_icon.png */; };
+		6DB2047216F11EB40004FFCB /* Crusader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2047116F11EB30004FFCB /* Crusader.m */; };
+		6DB2047A16F25BD00004FFCB /* crusader_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2047616F25BD00004FFCB /* crusader_0-hd.png */; };
+		6DB2047B16F25BD00004FFCB /* crusader_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2047716F25BD00004FFCB /* crusader_0.png */; };
+		6DB2047C16F25BD00004FFCB /* crusader_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2047816F25BD00004FFCB /* crusader_icon-hd.png */; };
+		6DB2047D16F25BD00004FFCB /* crusader_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2047916F25BD00004FFCB /* crusader_icon.png */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -521,6 +526,12 @@
 		6DB2046916F102C20004FFCB /* longswordsman_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = longswordsman_0.png; path = Resources/Images/longswordsman_0.png; sourceTree = "<group>"; };
 		6DB2046A16F102C20004FFCB /* longswordsman_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "longswordsman_icon-hd.png"; path = "Resources/Images/longswordsman_icon-hd.png"; sourceTree = "<group>"; };
 		6DB2046B16F102C20004FFCB /* longswordsman_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = longswordsman_icon.png; path = Resources/Images/longswordsman_icon.png; sourceTree = "<group>"; };
+		6DB2047016F11EB20004FFCB /* Crusader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crusader.h; sourceTree = "<group>"; };
+		6DB2047116F11EB30004FFCB /* Crusader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Crusader.m; sourceTree = "<group>"; };
+		6DB2047616F25BD00004FFCB /* crusader_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "crusader_0-hd.png"; path = "Resources/Images/crusader_0-hd.png"; sourceTree = "<group>"; };
+		6DB2047716F25BD00004FFCB /* crusader_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = crusader_0.png; path = Resources/Images/crusader_0.png; sourceTree = "<group>"; };
+		6DB2047816F25BD00004FFCB /* crusader_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "crusader_icon-hd.png"; path = "Resources/Images/crusader_icon-hd.png"; sourceTree = "<group>"; };
+		6DB2047916F25BD00004FFCB /* crusader_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = crusader_icon.png; path = Resources/Images/crusader_icon.png; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1045,6 +1056,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DB2047616F25BD00004FFCB /* crusader_0-hd.png */,
+				6DB2047716F25BD00004FFCB /* crusader_0.png */,
+				6DB2047816F25BD00004FFCB /* crusader_icon-hd.png */,
+				6DB2047916F25BD00004FFCB /* crusader_icon.png */,
 				6DB2046816F102C20004FFCB /* longswordsman_0-hd.png */,
 				6DB2046916F102C20004FFCB /* longswordsman_0.png */,
 				6DB2046A16F102C20004FFCB /* longswordsman_icon-hd.png */,
@@ -1791,6 +1806,8 @@
 				6DB2045B16ECDF700004FFCB /* Viking.m */,
 				6DB2045D16ED0B880004FFCB /* LongSwordsMan.h */,
 				6DB2045E16ED0B890004FFCB /* LongSwordsMan.m */,
+				6DB2047016F11EB20004FFCB /* Crusader.h */,
+				6DB2047116F11EB30004FFCB /* Crusader.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -2021,6 +2038,10 @@
 				6DB2046D16F102C20004FFCB /* longswordsman_0.png in Resources */,
 				6DB2046E16F102C20004FFCB /* longswordsman_icon-hd.png in Resources */,
 				6DB2046F16F102C20004FFCB /* longswordsman_icon.png in Resources */,
+				6DB2047A16F25BD00004FFCB /* crusader_0-hd.png in Resources */,
+				6DB2047B16F25BD00004FFCB /* crusader_0.png in Resources */,
+				6DB2047C16F25BD00004FFCB /* crusader_icon-hd.png in Resources */,
+				6DB2047D16F25BD00004FFCB /* crusader_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2230,6 +2251,7 @@
 				6DB2045116ECB9E10004FFCB /* Samurai.m in Sources */,
 				6DB2045C16ECDF710004FFCB /* Viking.m in Sources */,
 				6DB2045F16ED0B8A0004FFCB /* LongSwordsMan.m in Sources */,
+				6DB2047216F11EB40004FFCB /* Crusader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

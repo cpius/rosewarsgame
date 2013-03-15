@@ -8,6 +8,7 @@
 
 #import "Card.h"
 #import "Action.h"
+#import "GameManager.h"
 
 @interface Card()
 
@@ -104,6 +105,10 @@
     }
 }
 
+- (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action {
+    
+}
+
 // Must be overloaded in subclasses
 - (BOOL)specialAbilityTriggersVersus:(Card *)opponent {
     
@@ -177,6 +182,18 @@
 
 - (void)willPerformAction:(Action *)action {
     
+    NSArray *cards;
+    
+    if ([GameManager sharedManager].currentPlayersTurn == [GameManager sharedManager].currentGame.myColor) {
+        cards = [GameManager sharedManager].currentGame.myDeck.cards;
+    }
+    else {
+        cards = [GameManager sharedManager].currentGame.enemyDeck.cards;
+    }
+    
+    for (Card *card in cards) {
+        [card applyAoeEffectIfApplicableWhilePerformingAction:action];
+    }
 }
 
 - (void)didPerformedAction:(Action *)action {

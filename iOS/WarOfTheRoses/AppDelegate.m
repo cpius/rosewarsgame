@@ -126,6 +126,9 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"longswordsman_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"longswordsman_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"longswordsman_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"longswordsman_icon.png"];
 
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"crusader_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"crusader_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"crusader_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"crusader_icon.png"];
+
     [[SoundManager sharedManager] preloadSoundEffects];
     
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.

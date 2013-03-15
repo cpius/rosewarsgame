@@ -49,6 +49,8 @@
 
 - (void)didPerformedAction:(Action *)action {
     
+    [super didPerformedAction:action];
+    
     MeleeAttackAction *meleeAttackAction = (MeleeAttackAction*)action;
     
     if (meleeAttackAction.isAttack) {
