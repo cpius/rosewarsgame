@@ -67,11 +67,15 @@ class Gamestate:
     def opponent_units(self):
         return self.units[1]
 
+    def get_actions_remaining(self):
+        return self.players[0].actions_remaining
+
     def set_actions_remaining(self, actions_remaining):
         self.players[0].actions_remaining = actions_remaining
 
     def decrement_actions_remaining(self):
         self.players[0].actions_remaining -= 1
+
 
 def save_gamestate(gamestate):
     return saver.save_gamestate(gamestate)
