@@ -70,6 +70,8 @@ class Gamestate:
     def set_actions_remaining(self, actions_remaining):
         self.players[0].actions_remaining = actions_remaining
 
+    def decrement_actions_remaining(self):
+        self.players[0].actions_remaining -= 1
 
 def save_gamestate(gamestate):
     return saver.save_gamestate(gamestate)
