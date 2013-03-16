@@ -131,7 +131,7 @@ def initialize_turn(gamestate):
             unit.just_bribed = True
             del player_units[position].bribed
 
-    gamestate.current_player().actions_remaining = 2
+    gamestate.set_actions_remaining(2)
 
     for position, unit in gamestate.player_units().items():
         unit.used = False
