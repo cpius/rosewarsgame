@@ -36,10 +36,12 @@ def do_action(gamestate, action, unit=None):
 
     def update_actions_remaining(action, player):
 
-        if not hasattr(player, "extra_action") and not hasattr(player, "sub_action"):
+        if hasattr(player, "extra_action") or hasattr(player, "sub_action"):
+            return
+
+        player.actions_remaining -= 1
+        if hasattr(action, "double_cost"):
             player.actions_remaining -= 1
-            if hasattr(action, "double_cost"):
-                player.actions_remaining -= 1
 
     def secondary_action_effects(action, unit):
         if hasattr(unit, "attack_cooldown") and action.is_attack:
