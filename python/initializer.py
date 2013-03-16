@@ -80,20 +80,19 @@ directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1,
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
 
 
-def initialize_action(player_units):
+def initialize_action(gamestate):
 
     def initialize_crusader():
-        for position, unit in player_units.items():
-            if any(surrounding_position in player_units and hasattr(player_units[surrounding_position], "crusading") and
-                   unit.range == 1 for surrounding_position in surrounding_tiles(position)):
+        for position, unit in gamestate.player_units().items():
+            if any(surrounding_position in gamestate.player_units()
+                   and hasattr(gamestate.player_units()[surrounding_position], "crusading") and unit.range == 1
+                   for surrounding_position in surrounding_tiles(position)):
                 unit.is_crusading = True
             else:
                 if hasattr(unit, "is_crusading"):
                     del unit.is_crusading
 
     initialize_crusader()
-
-    return player_units
 
 
 def initialize_turn(gamestate):

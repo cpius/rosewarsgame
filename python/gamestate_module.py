@@ -22,7 +22,7 @@ class Gamestate:
         initializer.initialize_turn(self)
 
     def initialize_action(self):
-        self.units[0] = initializer.initialize_action(self.units[0])
+        initializer.initialize_action(self)
 
     def get_actions(self):
         if hasattr(self.players[0], "extra_action"):
