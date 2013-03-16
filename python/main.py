@@ -588,7 +588,7 @@ def new_game():
 
     gamestate.set_actions_remaining(1)
 
-    if  os.path.exists("./replay"):
+    if os.path.exists("./replay"):
         shutil.rmtree('./replay')
     
     os.makedirs("./replay")
