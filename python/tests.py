@@ -36,15 +36,19 @@ class TestAI(unittest.TestCase):
         self.assertTrue(re.search('^== [A-Za-z0-9-_]+ ==\r?\n$', test_file.readline()),
                         "Please begin test specification with '== Test_Name =='")
 
+        match = re.search("^Turn: ([1-9][0-9]*)\r?\n$", test_file.readline())
+        self.assertTrue(match, "Incorrent turn specification. Please write Turn: [1..]")
+        turn = match.group(1)
+
         player1, player1_units = self.parse_player(test_file)
         player2, player2_units = self.parse_player(test_file)
 
         self.assertNotEqual(player1.actions_remaining, player2.actions_remaining, "It is noones turn")
 
         if player1.actions_remaining > player2.actions_remaining:
-            gamestate = Gamestate(player1, player1_units, player2, player2_units)
+            gamestate = Gamestate(player1, player1_units, player2, player2_units, turn)
         else:
-            gamestate = Gamestate(player2, player2_units, player1, player1_units)
+            gamestate = Gamestate(player2, player2_units, player1, player1_units, turn)
 
         self.assertNotEqual("Human", gamestate.players[0].ai, "Active player is a human. It should be a computer")
 

@@ -1,4 +1,5 @@
 == WhenBothMoveAttackAndMoveIsAvailable_ThenChooseMoveAttack ==
+Turn: 1
 Player1:
 Red
 Human
