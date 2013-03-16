@@ -15,8 +15,7 @@ class Gamestate:
         self.players = [player1, player2]
 
     def do_action(self, action):
-        self.units[1], self.units[0], self.players[0] = \
-            action_doer.do_action(action, self.units[1], self.units[0], self.players[1], self.players[0])
+        action_doer.do_action(self, action)
 
     def initialize_turn(self):
         self.units[1], self.units[0], self.players[0] = \
@@ -56,6 +55,18 @@ class Gamestate:
         self.players = [self.players[1], self.players[0]]
         self.initialize_turn()
         self.initialize_action()
+
+    def current_player(self):
+        return self.players[0]
+
+    def opponent_player(self):
+        return self.players[1]
+
+    def player_units(self):
+        return self.units[0]
+
+    def opponent_units(self):
+        return self.units[1]
 
 
 def save_gamestate(gamestate):
