@@ -6,7 +6,7 @@ import settings
 
 class Tiles_bag(object):
     def __init__(self):
-        self.tiles = [(column, row) for column in board_coloumns for row in board_rows]
+        self.tiles = [(column, row) for column in board_columns for row in board_rows]
         
     def pick(self, rows):
         pick = random.choice([item for item in self.tiles if item[1] in rows])
