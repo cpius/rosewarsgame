@@ -19,7 +19,7 @@ def get_action(actions, g):
                 action.score += 0.5
     
     rnd.shuffle(actions)
-    actions.sort(key = attrgetter("score"), reverse= True)
+    actions.sort(key=attrgetter("score"), reverse=True)
     
     if settings.document_ai_actions:
         m.document_actions(actions, g)
