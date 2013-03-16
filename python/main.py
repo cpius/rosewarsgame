@@ -292,12 +292,12 @@ def add_counters(units):
             unit.xp = 0
             
 
-def perform_action(action, g):
+def perform_action(action, gamestate):
     
-    if hasattr(g.current_player(), "extra_action"):
-        all_actions = g.get_actions()
+    if hasattr(gamestate.current_player(), "extra_action"):
+        all_actions = gamestate.get_actions()
     else:
-        all_actions = g.get_actions()
+        all_actions = gamestate.get_actions()
     
     matchco = 0
     for possible_action in all_actions:
@@ -316,9 +316,9 @@ def perform_action(action, g):
         draw_action(action)
         pygame.time.delay(settings.pause_for_animation)
 
-        g.do_action(action)
+        gamestate.do_action(action)
 
-        save_game(g)
+        save_game(gamestate)
 
         if settings.show_full_battle_result:
             print action.full_string()
@@ -326,31 +326,31 @@ def perform_action(action, g):
             print action.string_with_outcome()
         print
 
-        if hasattr(g.current_player(), "won"):
-            game_end(g.current_player())
+        if hasattr(gamestate.current_player(), "won"):
+            game_end(gamestate.current_player())
 
-        draw_game(g)
+        draw_game(gamestate)
 
-        if g.current_player().ai_name == "Human":
-            add_counters(g.units[0])
+        if gamestate.current_player().ai_name == "Human":
+            add_counters(gamestate.units[0])
         else:
-            g.current_player().ai.add_counters(g)
+            gamestate.current_player().ai.add_counters(gamestate)
             
-        draw_game(g)
+        draw_game(gamestate)
 
-        g.initialize_action()
+        gamestate.initialize_action()
         
-        if (g.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(g.current_player(), "extra_action"):
-            g.turn_shift()
+        if (gamestate.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(gamestate.current_player(), "extra_action"):
+            gamestate.turn_shift()
           
-        draw_game(g)
+        draw_game(gamestate)
         
-        if hasattr(g.current_player(), "extra_action"):
-            print g.current_player().color, "extra action"
+        if hasattr(gamestate.current_player(), "extra_action"):
+            print gamestate.current_player().color, "extra action"
         else:
-            print g.current_player().color
+            print gamestate.current_player().color
 
-    return g
+    return gamestate
 
 
 def show_unit(position, gamestate):
