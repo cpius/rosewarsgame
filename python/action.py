@@ -92,8 +92,9 @@ class Action(object):
         return self.get_basic_string()
 
     def full_string(self):
-        return self.get_basic_string() + ", " + self.get_battle_outcome_string() + "\n" \
-               + self.get_full_battle_outcome_string()
+        return self.get_basic_string() + ", "\
+                                       + self.get_battle_outcome_string() + "\n" \
+                                       + self.get_full_battle_outcome_string()
 
     def string_with_outcome(self):
         return self.get_basic_string() + ", " + self.get_battle_outcome_string()

@@ -13,6 +13,7 @@ class memoized(object):
     def __init__(self, func):
         self.func = func
         self.cache = {}
+
     def __call__(self, *args):
         if not isinstance(args, collections.Hashable):
             # uncacheable. a list, for instance.
