@@ -203,8 +203,9 @@ def get_extra_actions(gamestate):
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
             units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
+            opponent_units = gamestate.opponent_units()
             unit.zoc_blocks = frozenset(position for position,
-                                        enemy_unit in gamestate.opponent_units().items() if unit.type in enemy_unit.zoc)
+                                        opponent_unit in opponent_units.items() if unit.type in opponent_unit.zoc)
 
             moves, attacks, abilities = [], [], []
 
