@@ -53,7 +53,8 @@ class Coordinates(object):
         else:
             y_border = y_border_bottom
             
-        return int((position[0] - 1) * unit_width + x_border + self.add_x), int((8 - position[1]) * unit_height + y_border + self.add_y)
+        return int((position[0] - 1) * unit_width + x_border + self.add_x),\
+            int((8 - position[1]) * unit_height + y_border + self.add_y)
 
 base_coords = Coordinates(0, 0)
 center_coords = Coordinates(35, 53.2)
@@ -436,14 +437,28 @@ def run_game(gamestate):
                     start_position = (x, y)
                     selected_unit = gamestate.units[0][start_position]
 
-                elif start_position and not end_position and ((x, y) in gamestate.units[1] or (x, y) in gamestate.units[0]) and \
-                        selected_unit.abilities:
+                elif start_position \
+                        and not end_position \
+                        and ((x, y) in gamestate.units[1]
+                             or (x, y) in gamestate.units[0]) and selected_unit.abilities:
                     print "Ability", (x, y)
                     if len(selected_unit.abilities) > 1:
                         index = get_input_abilities(selected_unit)
-                        action = Action(start_position, start_position, (x, y), False, False, True, selected_unit.abilities[index])
+                        action = Action(start_position,
+                                        start_position,
+                                        (x, y),
+                                        False,
+                                        False,
+                                        True,
+                                        selected_unit.abilities[index])
                     else:
-                        action = Action(start_position, start_position, (x, y), False, False, True, selected_unit.abilities[0])
+                        action = Action(start_position,
+                                        start_position,
+                                        (x, y),
+                                        False,
+                                        False,
+                                        True,
+                                        selected_unit.abilities[0])
                     gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
                 elif start_position and not end_position and (x, y) in gamestate.units[1] and selected_unit.range > 1:
@@ -462,8 +477,9 @@ def run_game(gamestate):
                     action = None
 
                     for possible_action in all_actions:
-                        if possible_action.start_position == start_position and possible_action.attack_position == (x, y) and \
-                                possible_action.move_with_attack:
+                        if possible_action.start_position == start_position \
+                                and possible_action.attack_position == (x, y) \
+                                and possible_action.move_with_attack:
                             if possible_action.end_position == start_position:
                                 action = possible_action
                                 break
