@@ -192,7 +192,7 @@ def get_extra_actions(enemy_units, player_units, player):
 
     for position, unit in player_units.items():
         if hasattr(unit, "extra_action"):
-            friendly_units, enemy_units = find_all_friendly_units_except_current(position, player_units), enemy_units
+            friendly_units = find_all_friendly_units_except_current(position, player_units)
             units = dict(friendly_units.items() + enemy_units.items())
 
             unit.zoc_blocks = frozenset(position for position,
