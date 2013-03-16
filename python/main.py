@@ -487,7 +487,8 @@ def run_game(gamestate):
 
                     if not action:
                         print "Action not possible"
-                        start_position, end_position = None, None
+                        start_position = None
+                        end_position = None
                     else:
                         gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
