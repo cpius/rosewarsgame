@@ -125,9 +125,9 @@ def initialize_turn(gamestate):
             if hasattr(unit, attribute):
                 locals()[attribute]()
 
-    def initialize_abilities_opponent(unit, enemy_units, player_units):
+    def resolve_bribe(unit, opponent_units, player_units):
         if hasattr(unit, "bribed"):
-            player_units[position] = enemy_units.pop(position)
+            player_units[position] = opponent_units.pop(position)
             unit.just_bribed = True
             del player_units[position].bribed
 
@@ -138,8 +138,8 @@ def initialize_turn(gamestate):
         unit.xp_gained_this_round = False
         initialize_abilities(unit)
 
-    for position, unit in gamestate.opponent_units().items():
-        unit.used = False
-        initialize_abilities_opponent(unit, gamestate.opponent_units(), gamestate.player_units())
+    for opponent_unit_position, opponent_unit in gamestate.opponent_units().items():
+        opponent_unit.used = False
+        resolve_bribe(opponent_unit, gamestate.opponent_units(), gamestate.player_units())
 
     return gamestate.opponent_units(), gamestate.player_units(), gamestate.current_player()
