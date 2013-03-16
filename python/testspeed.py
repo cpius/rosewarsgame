@@ -47,17 +47,7 @@ def time_ai(ai_name, g):
     return "Select action", ai_name, round((time() - t) * 100, 5)
 
 
-def run_five_saves():
-    for i in range(5):
-        g = pickle.load(open("./saves/save" + str(i) + ".pickle", 'rb'))
-        g.players[0].ai_name = "Evaluator"
-        g.players[1].ai_name = "Human"
-        g.set_ais()
-
-        g.players[0].ai.select_action(g)
-
-
-def load_gamestates():
+def load_gamestates(saved_g):
     for i in range(10000):
         gamestate.load_gamestate(saved_g)
 
@@ -77,13 +67,10 @@ def profiling(function_string):
     p.print_stats()
 
 
-#g = make_gamestate()
+g = make_gamestate()
+
+g.set_ais()
 
 
-#print time_ai("Evaluator", g)
-
-g = pickle.load(open("./saves/save1.pickle", 'rb'))
-saved_g = gamestate.save_gamestate(g)
-
-profiling("get_many_actions()")
+profiling("g.players[0].ai.select_action(g)")
 
