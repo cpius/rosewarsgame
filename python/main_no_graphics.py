@@ -71,7 +71,6 @@ def new_game():
     gamestate.initialize_action()
 
     gamestate.set_actions_remaining(1)
-    player2.actions_remaining = 0
 
     run_game(gamestate)
 

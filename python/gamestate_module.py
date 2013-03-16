@@ -9,10 +9,11 @@ import ai_module
 
 class Gamestate:
     
-    def __init__(self, player1, player1_units, player2, player2_units, turn=1):
+    def __init__(self, player1, player1_units, player2, player2_units, turn=1, actions_remaining=2):
         self.turn = turn
         self.units = [player1_units, player2_units]
         self.players = [player1, player2]
+        self.actions_remaining = actions_remaining
 
     def do_action(self, action):
         action_doer.do_action(self, action)
@@ -68,13 +69,13 @@ class Gamestate:
         return self.units[1]
 
     def get_actions_remaining(self):
-        return self.players[0].actions_remaining
+        return self.actions_remaining
 
     def set_actions_remaining(self, actions_remaining):
-        self.players[0].actions_remaining = actions_remaining
+        self.actions_remaining = actions_remaining
 
     def decrement_actions_remaining(self):
-        self.players[0].actions_remaining -= 1
+        self.actions_remaining -= 1
 
 
 def save_gamestate(gamestate):

@@ -1,9 +1,18 @@
 == WhenBothMoveAttackAndMoveIsAvailable_ThenChooseMoveAttack ==
 Turn: 1
+Actions: 2
 Player1:
+Green
+Evaluator
+Extra action: False
+
+D6
+Heavy_Cavalry
+
+
+Player2:
 Red
 Human
-Actions: 0
 Extra action: False
 
 C7
@@ -11,14 +20,4 @@ Royal_Guard
 
 E7
 Archer
-
-
-Player2:
-Green
-Evaluator
-Actions: 2
-Extra action: False
-
-D6
-Heavy_Cavalry
 

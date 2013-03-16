@@ -31,10 +31,7 @@ def save_gamestate(g):
     gamestate = []
 
     for i in range(2):
-        gamestate.append([g.players[i].color,
-                          g.players[i].ai_name,
-                          g.players[i].actions_remaining,
-                          hasattr(g.players[i], "extra_action")])
+        gamestate.append([g.players[i].color, g.players[i].ai_name, hasattr(g.players[i], "extra_action")])
         
         unit_states = []
         for position, unit in g.units[i].items():
@@ -48,6 +45,7 @@ def save_gamestate(g):
         gamestate.append(unit_states)
         
     gamestate.append(g.turn)
+    gamestate.append(g.actions_remaining)
 
     return gamestate
 
@@ -61,8 +59,7 @@ def load_gamestate(gamestate):
 
         player = Player(gamestate[i * 2][0])
         player.ai_name = gamestate[i * 2][1]
-        player.actions_remaining = gamestate[i * 2][2]
-        if gamestate[i * 2][3]:
+        if gamestate[i * 2][2]:
             player.extra_action = True
 
         players.append(player)
@@ -77,7 +74,7 @@ def load_gamestate(gamestate):
 
         units.append(load_units)
 
-    return gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4])
+    return gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4], gamestate[5])
 
 
 def save_action(action):

@@ -17,13 +17,10 @@ def make_gamestate():
 
     player1_units, player2_units = setup.get_start_units()
 
-    g = gamestate.Gamestate(player1, player1_units, player2, player2_units)
+    g = gamestate.Gamestate(player1, player1_units, player2, player2_units, 1, 2)
 
     g.initialize_turn()
     g.initialize_action()
-
-    player1.actions_remaining = 2
-    player2.actions_remaining = 0
 
     return g
 
