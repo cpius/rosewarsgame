@@ -49,18 +49,18 @@ def test_coloumn_blocks(units):
     """ Tests whether there on each coloumn are at least two 'blocks'.
     A block is either a unit, or a Pikeman zoc tile. """
     
-    cols = [pos[0] + x for x in [-1, +1] for pos, unit in units.items() if unit.name == "Pikeman"]\
-        + [pos[0] for pos in units]
+    columns = [position[0] + x for x in [-1, +1] for position, unit in units.items() if unit.name == "Pikeman"]\
+        + [position[0] for position in units]
 
-    return not any(cols.count(col) < 2 for col in board_coloumns)
+    return not any(columns.count(column) < 2 for column in board_columns)
      
 
 def test_pikeman_coloumn(units):
     """ Tests whether there is more than one Pikeman on any coloumn."""
     
-    cols = [pos[0] for pos, unit in units.items() if unit.name == "Pikeman"]
+    columns = [position[0] for position, unit in units.items() if unit.name == "Pikeman"]
     
-    return not any(cols.count(col) > 1 for col in board_coloumns)
+    return not any(columns.count(column) > 1 for column in board_columns)
 
 
 def get_units():
@@ -71,13 +71,13 @@ def get_units():
         
         while len(units) < basic_unit_count: 
             name = basic_units_bag.pick()
-            pos = tiles_bag.pick(basic_units_list[name])      
-            units[pos] = getattr(units_module, name.replace(" ", "_"))()
+            position = tiles_bag.pick(basic_units_list[name])
+            units[position] = getattr(units_module, name.replace(" ", "_"))()
 
             if len(units) == 1:
-                units[pos].attack_counters = 1
+                units[position].attack_counters = 1
             if len(units) == 2:
-                units[pos].defence_counters = 1
+                units[position].defence_counters = 1
 
         return units
 
@@ -87,13 +87,13 @@ def get_units():
 
         while len(units) < special_unit_count and special_units_first_bag.has_units():
             name = special_units_first_bag.pick()
-            pos = tiles_bag.pick(special_units_list[name])
-            units[pos] = getattr(units_module, name.replace(" ", "_"))()
+            position = tiles_bag.pick(special_units_list[name])
+            units[position] = getattr(units_module, name.replace(" ", "_"))()
 
         while len(units) < special_unit_count:
             name = special_units_second_bag.pick()
-            pos = tiles_bag.pick(special_units_list[name])
-            units[pos] = getattr(units_module, name.replace(" ", "_"))()
+            position = tiles_bag.pick(special_units_list[name])
+            units[position] = getattr(units_module, name.replace(" ", "_"))()
 
         return units
 
@@ -130,10 +130,10 @@ def get_units():
 
 def flip_units(units):
     
-    def flip(pos):
-        return pos[0], 9 - pos[1]
+    def flip(position):
+        return position[0], 9 - position[1]
     
-    return dict((flip(pos), unit) for pos, unit in units.items())
+    return dict((flip(position), unit) for position, unit in units.items())
 
 
 def get_start_units():

@@ -10,11 +10,11 @@ class Direction:
         self.x = x
         self.y = y
 
-    def move(self, pos):
-        return pos[0] + self. x, pos[1] + self.y
+    def move(self, position):
+        return position[0] + self. x, position[1] + self.y
 
-    def perpendicular(self, pos):
-        return (pos[0] + self.y, pos[1] + self.x), (pos[0] - self.y, pos[1] - self.x)
+    def perpendicular(self, position):
+        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
 
     def __repr__(self):
 
@@ -31,52 +31,51 @@ class Direction:
             return "Up"
 
 
-def zoc(unit, pos, enemy_units):
+def zoc(unit, position, enemy_units):
     """ Returns whether an enemy unit can exert ZOC on a friendly unit """
-    return pos in enemy_units and unit.type in enemy_units[pos].zoc
+    return position in enemy_units and unit.type in enemy_units[position].zoc
 
 
-def surrounding_tiles(pos):
+def surrounding_tiles(position):
     """ Returns the 8 surrounding tiles"""
-    return set(direction.move(pos) for direction in eight_directions)
+    return set(direction.move(position) for direction in eight_directions)
 
 
-def four_forward_tiles(pos, forward_pos):
-    """ Returns the 4 other nearby tiles in the direction towards forward_pos. """
-    return surrounding_tiles(pos) & surrounding_tiles(forward_pos)
+def four_forward_tiles(position, forward_position):
+    """ Returns the 4 other nearby tiles in the direction towards forward_position. """
+    return surrounding_tiles(position) & surrounding_tiles(forward_position)
 
 
-def two_forward_tiles(pos, forward_pos):
-    """ Returns the 2 other nearby tiles in the direction towards forward_pos. """
-    return set(direction.move(pos) for direction in eight_directions) & \
-           set(direction.move(forward_pos) for direction in directions)
+def two_forward_tiles(position, forward_position):
+    """ Returns the 2 other nearby tiles in the direction towards forward_position. """
+    return set(direction.move(position) for direction in eight_directions) & \
+           set(direction.move(forward_position) for direction in directions)
 
 
-def get_direction(pos, forward_pos):
-    """ Returns the direction would take you from pos to forward_pos. """
-    return Direction(-pos[0] + forward_pos[0], -pos[1] + forward_pos[1])
+def get_direction(position, forward_position):
+    """ Returns the direction would take you from position to forward_position. """
+    return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
 
 
-def distance(p1, p2):
-    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+def distance(position1, position2):
+    return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
 
 
 def find_all_friendly_units_except_current(current_unit_position, p):
-    return dict((pos, p[0].units[pos]) for pos in p[0].units if pos != current_unit_position)
+    return dict((position, p[0].units[position]) for position in p[0].units if position != current_unit_position)
 
 
-def out_of_board_vertical(pos):
-    return pos[1] < 1 or pos[1] > 8
+def out_of_board_vertical(position):
+    return position[1] < 1 or position[1] > 8
 
 
-def out_of_board_horizontal(pos):
-    return pos[0] < 1 or pos[0] > 5
-
+def out_of_board_horizontal(position):
+    return position[0] < 1 or position[0] > 5
 
 
 #global variables
 _action = 0
-board = set((i, j) for i in range(1, 6) for j in range(1, 9))
+board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
 
@@ -84,9 +83,9 @@ eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if no
 def initialize_action(player_units):
 
     def initialize_crusader():
-        for pos, unit in player_units.items():
-            if any(surrounding_pos in player_units and hasattr(player_units[surrounding_pos], "crusading") and
-                   unit.range == 1 for surrounding_pos in surrounding_tiles(pos)):
+        for position, unit in player_units.items():
+            if any(surrounding_position in player_units and hasattr(player_units[surrounding_position], "crusading") and
+                   unit.range == 1 for surrounding_position in surrounding_tiles(position)):
                 unit.is_crusading = True
             else:
                 if hasattr(unit, "is_crusading"):
@@ -128,18 +127,18 @@ def initialize_turn(enemy_units, player_units, player):
 
     def initialize_abilities_opponent(unit, enemy_units, player_units):
         if hasattr(unit, "bribed"):
-            player_units[pos] = enemy_units.pop(pos)
+            player_units[position] = enemy_units.pop(position)
             unit.just_bribed = True
-            del player_units[pos].bribed
+            del player_units[position].bribed
 
     player.actions_remaining = 2
 
-    for pos, unit in player_units.items():
+    for position, unit in player_units.items():
         unit.used = False
         unit.xp_gained_this_round = False
         initialize_abilities(unit)
 
-    for pos, unit in enemy_units.items():
+    for position, unit in enemy_units.items():
         unit.used = False
         initialize_abilities_opponent(unit, enemy_units, player_units)
 

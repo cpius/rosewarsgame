@@ -4,8 +4,14 @@ import gamestate_module
 from action import Action
 from player import Player
 
-start_attributes_actions = ["unit", "startpos", "endpos", "attackpos", "is_attack", "move_with_attack",
-                            "is_ability", "ability"]
+start_attributes_actions = ["unit",
+                            "start_position",
+                            "end_position",
+                            "attack_position",
+                            "is_attack",
+                            "move_with_attack",
+                            "is_ability",
+                            "ability"]
 
 
 def save_gamestate(g):
@@ -29,8 +35,8 @@ def save_gamestate(g):
                           hasattr(g.players[i], "extra_action")])
         
         unit_states = []
-        for pos, unit in g.units[i].items():
-            unit_state1 = [pos, unit.name.replace(" ", "_")]
+        for position, unit in g.units[i].items():
+            unit_state1 = [position, unit.name.replace(" ", "_")]
             unit_state2 = {}
             for key, value in unit.__dict__.items():
                 if save_item(key, value):
@@ -90,7 +96,13 @@ def save_action(action):
 
 def load_action(action_state):
 
-    action = Action(action_state[0]["startpos"], action_state[0]["endpos"], action_state[0]["attackpos"], action_state[0]["is_attack"], action_state[0]["move_with_attack"], action_state[0]["is_ability"], action_state[0]["ability"])
+    action = Action(action_state[0]["start_position"],
+                    action_state[0]["end_position"],
+                    action_state[0]["attack_position"],
+                    action_state[0]["is_attack"],
+                    action_state[0]["move_with_attack"],
+                    action_state[0]["is_ability"],
+                    action_state[0]["ability"])
     
     for key, item in action_state[0].items():
         if key not in start_attributes_actions:
@@ -99,7 +111,13 @@ def load_action(action_state):
     if len(action_state) > 1:
         action.sub_actions = []
         for i in range(1, len(action_state)):
-            action.sub_actions.append(Action(action_state[i]["startpos"], action_state[i]["endpos"], action_state[i]["attackpos"], action_state[i]["is_attack"], action_state[i]["move_with_attack"], action_state[i]["is_ability"], action_state[i]["ability"]))
+            action.sub_actions.append(Action(action_state[i]["start_position"],
+                                             action_state[i]["end_position"],
+                                             action_state[i]["attack_position"],
+                                             action_state[i]["is_attack"],
+                                             action_state[i]["move_with_attack"],
+                                             action_state[i]["is_ability"],
+                                             action_state[i]["ability"]))
             for key, item in action_state[i].items():
                 if key not in start_attributes_actions:
                     setattr(action.sub_actions[-1], key, item)

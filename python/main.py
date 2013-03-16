@@ -47,13 +47,13 @@ class Coordinates(object):
         self.add_x = x
         self.add_y = y
     
-    def get(self, pos):
-        if pos[1] >= 5:
+    def get(self, position):
+        if position[1] >= 5:
             y_border = y_border_top
         else:
             y_border = y_border_bottom
             
-        return int((pos[0] - 1) * unit_width + x_border + self.add_x), int((8 - pos[1]) * unit_height + y_border + self.add_y)
+        return int((position[0] - 1) * unit_width + x_border + self.add_x), int((8 - position[1]) * unit_height + y_border + self.add_y)
 
 base_coords = Coordinates(0, 0)
 center_coords = Coordinates(35, 53.2)
@@ -81,16 +81,16 @@ def get_image(path):
         return image    
 
 
-def draw_attack_counters(unit, pos):
+def draw_attack_counters(unit, position):
     if unit.attack_counters:
-        pygame.draw.circle(screen, grey, attack_counter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, brown, attack_counter_coords.get(pos), 8, 0)
+        pygame.draw.circle(screen, grey, attack_counter_coords.get(position), 10, 0)
+        pygame.draw.circle(screen, brown, attack_counter_coords.get(position), 8, 0)
         if unit.attack_counters != 1:
             label = font.render(str(unit.attack_counters), 1, black)
-            screen.blit(label, attack_font_coords.get(pos)) 
+            screen.blit(label, attack_font_coords.get(position))
 
 
-def draw_defence_counters(unit, pos):
+def draw_defence_counters(unit, position):
     
     if hasattr(unit, "sabotaged"):
         defence_counters = -1
@@ -98,51 +98,51 @@ def draw_defence_counters(unit, pos):
         defence_counters = unit.defence_counters
     
     if defence_counters:
-        pygame.draw.circle(screen, grey, defence_counter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, light_grey, defence_counter_coords.get(pos), 8, 0)
+        pygame.draw.circle(screen, grey, defence_counter_coords.get(position), 10, 0)
+        pygame.draw.circle(screen, light_grey, defence_counter_coords.get(position), 8, 0)
         
         if defence_counters > 1:
             label = font.render(str(defence_counters), 1, black)
-            screen.blit(label, defence_font_coords.get(pos))
+            screen.blit(label, defence_font_coords.get(position))
 
         if defence_counters < 0:
             label = font.render("x", 1, black)
-            screen.blit(label, defence_font_coords.get(pos))    
+            screen.blit(label, defence_font_coords.get(position))
 
 
-def draw_xp(unit, pos):           
+def draw_xp(unit, position):
     if unit.xp == 1:
         pic = get_image("./other/star.gif")
-        screen.blit(pic, star_coords.get(pos))
+        screen.blit(pic, star_coords.get(position))
 
 
-def draw_yellow_counters(unit, pos):
+def draw_yellow_counters(unit, position):
     
     if unit.yellow_counters:
-        pygame.draw.circle(screen, grey, yellow_counter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, yellow, yellow_counter_coords.get(pos), 8, 0)
+        pygame.draw.circle(screen, grey, yellow_counter_coords.get(position), 10, 0)
+        pygame.draw.circle(screen, yellow, yellow_counter_coords.get(position), 8, 0)
 
 
-def draw_blue_counters(unit, pos):
+def draw_blue_counters(unit, position):
     if unit.blue_counters:
-        pygame.draw.circle(screen, grey, blue_counter_coords.get(pos), 10, 0)
-        pygame.draw.circle(screen, blue, blue_counter_coords.get(pos), 8, 0)
+        pygame.draw.circle(screen, grey, blue_counter_coords.get(position), 10, 0)
+        pygame.draw.circle(screen, blue, blue_counter_coords.get(position), 8, 0)
 
         if unit.blue_counters > 1:
             label = font.render(str(unit.blue_counters), 1, black)
-            screen.blit(label, blue_font_coords.get(pos))     
+            screen.blit(label, blue_font_coords.get(position))
 
 
-def draw_bribed(unit, pos):                 
+def draw_bribed(unit, position):
     if hasattr(unit, "bribed"):
         pic = get_image("./other/ability.gif")
-        screen.blit(pic, symbol_coords.get(pos))  
+        screen.blit(pic, symbol_coords.get(position))
 
 
-def draw_crusading(unit, pos):           
+def draw_crusading(unit, position):
     if hasattr(unit, "is_crusading"):
         pic = get_image("./other/flag.gif")
-        screen.blit(pic, flag_coords.get(pos))      
+        screen.blit(pic, flag_coords.get(position))
 
 
 def add_yellow_counters(unit):
@@ -166,44 +166,52 @@ def get_unit_pic(name, color):
     return name.replace(" ", "-") + ",-" + color.lower() + ".jpg"
 
 
-def draw_unit(unit, pos, color):
+def draw_unit(unit, position, color):
     pic = get_image("./units_small/" + get_unit_pic(unit.name, color))
-    screen.blit(pic, base_coords.get(pos))
+    screen.blit(pic, base_coords.get(position))
 
-    draw_attack_counters(unit, pos)
-    draw_defence_counters(unit, pos)
-    draw_xp(unit, pos)
+    draw_attack_counters(unit, position)
+    draw_defence_counters(unit, position)
+    draw_xp(unit, position)
  
     add_yellow_counters(unit)
-    draw_yellow_counters(unit, pos)
+    draw_yellow_counters(unit, position)
     
     add_blue_counters(unit)
-    draw_blue_counters(unit, pos)
+    draw_blue_counters(unit, position)
   
-    draw_crusading(unit, pos)
-    draw_bribed(unit, pos)
+    draw_crusading(unit, position)
+    draw_bribed(unit, position)
 
 
-def draw_game(g):
+def draw_game(gamestate):
     
     pic = get_image("./other/board.gif")
     screen.blit(pic, (0, 0))
  
-    for pos, unit in g.units[0].items():
-        draw_unit(unit, pos, g.players[0].color)
+    for position, unit in gamestate.units[0].items():
+        draw_unit(unit, position, gamestate.players[0].color)
 
-    for pos, unit in g.units[1].items():
-        draw_unit(unit, pos, g.players[1].color)
+    for position, unit in gamestate.units[1].items():
+        draw_unit(unit, position, gamestate.players[1].color)
 
     pygame.display.update()  
 
 
 def draw_action(action):
-    pygame.draw.circle(screen, black, center_coords.get(action.startpos), 10)
-    pygame.draw.line(screen, black, center_coords.get(action.startpos), center_coords.get(action.endpos), 5)
+    pygame.draw.circle(screen, black, center_coords.get(action.start_position), 10)
+    pygame.draw.line(screen,
+                     black,
+                     center_coords.get(action.start_position),
+                     center_coords.get(action.end_position),
+                     5)
     
     if action.is_attack:
-        pygame.draw.line(screen, black, center_coords.get(action.endpos), center_coords.get(action.attackpos), 5)
+        pygame.draw.line(screen,
+                         black,
+                         center_coords.get(action.end_position),
+                         center_coords.get(action.attack_position),
+                         5)
         if action.move_with_attack:
             pic = get_image("./other/moveattack.gif")
         else:
@@ -211,18 +219,21 @@ def draw_action(action):
 
         if hasattr(action, "high_morale"):
             pic = get_image("./other/flag.gif")
-            screen.blit(pic, flag_coords.get(action.endpos))    
+            screen.blit(pic, flag_coords.get(action.end_position))
 
-        screen.blit(pic, symbol_coords.get(action.attackpos))
+        screen.blit(pic, symbol_coords.get(action.attack_position))
 
     elif action.is_ability:
-        pygame.draw.line(screen, black, center_coords.get(action.endpos), center_coords.get(action.attackpos), 5)
+        pygame.draw.line(screen,
+                         black,
+                         center_coords.get(action.end_position),
+                         center_coords.get(action.attack_position), 5)
         pic = get_image("./other/ability.gif")
-        screen.blit(pic, symbol_coords.get(action.attackpos))      
+        screen.blit(pic, symbol_coords.get(action.attack_position))
 
     else:
             pic = get_image("./other/move.gif")
-            screen.blit(pic, symbol_coords.get(action.endpos))
+            screen.blit(pic, symbol_coords.get(action.end_position))
     
     pygame.display.update()
 
@@ -313,7 +324,7 @@ def perform_action(action, g):
         if settings.show_full_battle_result:
             print action.full_string()
         else:    
-            print action.string_with_outcome()                 
+            print action.string_with_outcome()
         print
 
         if hasattr(g.players[0], "won"):
@@ -343,15 +354,15 @@ def perform_action(action, g):
     return g
 
 
-def show_unit(pos, g):
+def show_unit(position, gamestate):
     
     unit = color = None
-    if pos in g.units[0]:
-        unit = g.units[0][pos]
-        color = g.players[0].color
-    if pos in g.units[1]:
-        unit = g.units[1][pos]
-        color = g.players[1].color
+    if position in gamestate.units[0]:
+        unit = gamestate.units[0][position]
+        color = gamestate.players[0].color
+    if position in gamestate.units[1]:
+        unit = gamestate.units[1][position]
+        color = gamestate.players[1].color
         
     if unit:
         print
@@ -368,162 +379,162 @@ def show_unit(pos, g):
         while 1:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN or event.type == KEYDOWN:
-                    draw_game(g)
+                    draw_game(gamestate)
                     return
 
 
-def save_game(g):
+def save_game(gamestate):
     global action_index
 
-    name = str(action_index) + ". " + g.players[0].color + ", " + str(g.turn) + "." + str(2 - g.players[0].actions_remaining)
+    name = str(action_index) + ". " + gamestate.players[0].color + ", " + str(gamestate.turn) + "." + str(2 - gamestate.players[0].actions_remaining)
     pygame.image.save(screen, "./replay/" + name + ".jpeg")
 
     action_index += 1
 
 
-def run_game(g):
+def run_game(gamestate):
 
-    g.set_ais()
+    gamestate.set_ais()
 
     pygame.time.set_timer(USEREVENT + 1, 1000)
-    startpos, endpos = None, None
+    start_position, end_position = None, None
 
-    draw_game(g)
+    draw_game(gamestate)
 
     while True:
         for event in pygame.event.get():
 
             if event.type == USEREVENT + 1:
 
-                if g.players[0].ai_name != "Human":
+                if gamestate.players[0].ai_name != "Human":
 
-                    print "turn", g.turn
-                    print "action", 3 - g.players[0].actions_remaining
+                    print "turn", gamestate.turn
+                    print "action", 3 - gamestate.players[0].actions_remaining
                     print
 
-                    action = g.players[0].ai.select_action(g)
+                    action = gamestate.players[0].ai.select_action(gamestate)
                     if action:
-                        g = perform_action(action, g)
+                        gamestate = perform_action(action, gamestate)
                     else:
-                        g.turn_shift()
-                        draw_game(g)
+                        gamestate.turn_shift()
+                        draw_game(gamestate)
 
-                    if hasattr(g.players[0], "extra_action"):
-                        extra_action = g.players[0].ai.select_action(g)
-                        g = perform_action(extra_action, g)
+                    if hasattr(gamestate.players[0], "extra_action"):
+                        extra_action = gamestate.players[0].ai.select_action(gamestate)
+                        gamestate = perform_action(extra_action, gamestate)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = get_pixel_position(event.pos)
 
-                if not startpos and (x, y) in g.units[0]:
+                if not start_position and (x, y) in gamestate.units[0]:
                     print "Start at", (x, y)
-                    startpos = (x, y)
-                    selected_unit = g.units[0][startpos]
+                    start_position = (x, y)
+                    selected_unit = gamestate.units[0][start_position]
 
-                elif startpos and not endpos and ((x, y) in g.units[1] or (x, y) in g.units[0]) and \
+                elif start_position and not end_position and ((x, y) in gamestate.units[1] or (x, y) in gamestate.units[0]) and \
                         selected_unit.abilities:
                     print "Ability", (x, y)
                     if len(selected_unit.abilities) > 1:
                         index = get_input_abilities(selected_unit)
-                        action = Action(startpos, startpos, (x, y), False, False, True, selected_unit.abilities[index])
+                        action = Action(start_position, start_position, (x, y), False, False, True, selected_unit.abilities[index])
                     else:
-                        action = Action(startpos, startpos, (x, y), False, False, True, selected_unit.abilities[0])
-                    g, startpos, endpos = perform_action(action, g), None, None
+                        action = Action(start_position, start_position, (x, y), False, False, True, selected_unit.abilities[0])
+                    gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
-                elif startpos and not endpos and (x, y) in g.units[1] and selected_unit.range > 1:
+                elif start_position and not end_position and (x, y) in gamestate.units[1] and selected_unit.range > 1:
                     print "Attack", (x, y)
-                    action = Action(startpos, startpos, (x, y), True, False)
-                    g, startpos, endpos = perform_action(action, g), None, None
+                    action = Action(start_position, start_position, (x, y), True, False)
+                    gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
-                elif startpos and not endpos and (x, y) in g.units[1]:
+                elif start_position and not end_position and (x, y) in gamestate.units[1]:
                     print "Attack-Move", (x, y)
 
-                    if hasattr(g.players[0], "extra_action"):
-                        all_actions = g.get_actions()
+                    if hasattr(gamestate.players[0], "extra_action"):
+                        all_actions = gamestate.get_actions()
                     else:
-                        all_actions = g.get_actions()
+                        all_actions = gamestate.get_actions()
 
                     action = None
 
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos and possible_action.attackpos == (x, y) and \
+                        if possible_action.start_position == start_position and possible_action.attack_position == (x, y) and \
                                 possible_action.move_with_attack:
-                            if possible_action.endpos == startpos:
+                            if possible_action.end_position == start_position:
                                 action = possible_action
                                 break
                             action = possible_action
 
                     if not action:
                         print "Action not possible"
-                        startpos, endpos = None, None
+                        start_position, end_position = None, None
                     else:
-                        g, startpos, endpos = perform_action(action, g), None, None
+                        gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
-                elif startpos and not endpos:
+                elif start_position and not end_position:
                     print "Stop at", (x, y)
-                    endpos = (x, y)
+                    end_position = (x, y)
 
-                elif startpos and endpos and (x, y) in g.units[1]:
+                elif start_position and end_position and (x, y) in gamestate.units[1]:
                     print "Attack-Move", (x, y)
-                    action = Action(startpos, endpos, (x, y), True, False)
+                    action = Action(start_position, end_position, (x, y), True, False)
 
-                    g, startpos, endpos = perform_action(action, g), None, None
+                    gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
-                elif startpos and endpos and (x, y) not in g.units[1]:
+                elif start_position and end_position and (x, y) not in gamestate.units[1]:
                     print "Move to", (x, y)
-                    action = Action(startpos, (x, y), None, False, False)
-                    g, startpos, endpos = perform_action(action, g), None, None
+                    action = Action(start_position, (x, y), None, False, False)
+                    gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
                 x, y = get_pixel_position(event.pos)
 
-                if startpos and (x, y) not in g.units[1]:
+                if start_position and (x, y) not in gamestate.units[1]:
                     print "Move to", (x, y)
-                    action = Action(startpos, (x, y), None, False, False)
-                    g, startpos, endpos = perform_action(action, g), None, None
+                    action = Action(start_position, (x, y), None, False, False)
+                    gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
-                if startpos and (x, y) in g.units[1]:
-                    action = Action(startpos, (x, y), (x, y), True, False)
-                    chance_of_win = ai_methods.chance_of_win(selected_unit, g.units[1][(x, y)], action)
+                if start_position and (x, y) in gamestate.units[1]:
+                    action = Action(start_position, (x, y), (x, y), True, False)
+                    chance_of_win = ai_methods.chance_of_win(selected_unit, gamestate.units[1][(x, y)], action)
                     print "Chance of win", round(chance_of_win * 100), "%"
-                    startpos = None
+                    start_position = None
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 x, y = get_pixel_position(event.pos)
 
-                if not startpos:
-                    show_unit((x, y), g)
+                if not start_position:
+                    show_unit((x, y), gamestate)
 
-                elif startpos and not endpos and (x, y) in g.units[1]:
+                elif start_position and not end_position and (x, y) in gamestate.units[1]:
                     print "Attack", (x, y)
 
-                    if hasattr(g.players[0], "extra_action"):
-                        all_actions = g.get_actions()
+                    if hasattr(gamestate.players[0], "extra_action"):
+                        all_actions = gamestate.get_actions()
                     else:
-                        all_actions = g.get_actions()
+                        all_actions = gamestate.get_actions()
 
                     action = None
 
                     for possible_action in all_actions:
-                        if possible_action.startpos == startpos \
-                                and possible_action.attackpos == (x, y) \
+                        if possible_action.start_position == start_position \
+                                and possible_action.attack_position == (x, y) \
                                 and not possible_action.move_with_attack:
 
-                            if possible_action.endpos == startpos:
+                            if possible_action.end_position == start_position:
                                 action = possible_action
                                 break
                             action = possible_action
 
                     if not action:
                         print "Action not possible"
-                        startpos, endpos = None, None
+                        start_position, end_position = None, None
                     else:
-                        g, startpos, endpos = perform_action(action, g), None, None
+                        gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
-                elif startpos and endpos and (x, y) in g.units[1]:
+                elif start_position and end_position and (x, y) in gamestate.units[1]:
                     print "Attack", (x, y)
-                    action = Action(startpos, endpos, (x, y), True, False)
-                    g, startpos, endpos = perform_action(action, g), None, None
+                    action = Action(start_position, end_position, (x, y), True, False)
+                    gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
             if event.type == KEYDOWN and event.key == K_p:
                 print "paused"
@@ -532,19 +543,19 @@ def run_game(g):
             if event.type == KEYDOWN and event.key == K_a:
                 print
                 print "Possible actions:"
-                if hasattr(g.players[0], "extra_action"):
-                    actions = g.get_actions()
+                if hasattr(gamestate.players[0], "extra_action"):
+                    actions = gamestate.get_actions()
                     for action in actions:
                         print action
                 else:
-                    actions = g.get_actions()
+                    actions = gamestate.get_actions()
                     for action in actions:
                         print action
                 print
 
             if event.type == KEYDOWN and event.key == K_ESCAPE:
                 print "move cleared"
-                startpos, endpos, selected_unit = None, None, None
+                start_position, end_position, selected_unit = None, None, None
 
             elif event.type == KEYDOWN and command_q_down(event.key):
                 exit_game()
