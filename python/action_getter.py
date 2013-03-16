@@ -87,7 +87,7 @@ def two_forward_tiles(position, forward_position):
 
 
 def get_direction(position, forward_position):
-    """ Returns the direction would take you from position to forward_position """
+    """ Returns the direction that would take you from position to forward_position """
     return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
 
 
