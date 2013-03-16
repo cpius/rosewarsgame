@@ -299,16 +299,16 @@ def perform_action(action, gamestate):
     else:
         all_actions = gamestate.get_actions()
     
-    matchco = 0
+    matching_actions = 0
     for possible_action in all_actions:
         if action == possible_action:
-            matchco += 1
+            matching_actions += 1
             action = possible_action
 
-    if matchco == 0:
+    if matching_actions == 0:
         print "Action not allowed"
     
-    elif matchco > 1:
+    elif matching_actions > 1:
         print "Action ambiguous"
     
     else:
