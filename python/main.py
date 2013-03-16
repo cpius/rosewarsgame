@@ -190,7 +190,7 @@ def draw_game(gamestate):
     screen.blit(pic, (0, 0))
  
     for position, unit in gamestate.units[0].items():
-        draw_unit(unit, position, gamestate.players[0].color)
+        draw_unit(unit, position, gamestate.current_player().color)
 
     for position, unit in gamestate.units[1].items():
         draw_unit(unit, position, gamestate.players[1].color)
@@ -295,7 +295,7 @@ def add_counters(units):
 
 def perform_action(action, g):
     
-    if hasattr(g.players[0], "extra_action"):
+    if hasattr(g.current_player(), "extra_action"):
         all_actions = g.get_actions()
     else:
         all_actions = g.get_actions()
@@ -327,29 +327,29 @@ def perform_action(action, g):
             print action.string_with_outcome()
         print
 
-        if hasattr(g.players[0], "won"):
-            game_end(g.players[0])
+        if hasattr(g.current_player(), "won"):
+            game_end(g.current_player())
 
         draw_game(g)
 
-        if g.players[0].ai_name == "Human":
+        if g.current_player().ai_name == "Human":
             add_counters(g.units[0])
         else:
-            g.players[0].ai.add_counters(g)
+            g.current_player().ai.add_counters(g)
             
         draw_game(g)
 
         g.initialize_action()
         
-        if (g.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(g.players[0], "extra_action"):
+        if (g.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(g.current_player(), "extra_action"):
             g.turn_shift()
           
         draw_game(g)
         
-        if hasattr(g.players[0], "extra_action"):
-            print g.players[0].color, "extra action"
+        if hasattr(g.current_player(), "extra_action"):
+            print g.current_player().color, "extra action"
         else:
-            print g.players[0].color
+            print g.current_player().color
 
     return g
 
@@ -359,7 +359,7 @@ def show_unit(position, gamestate):
     unit = color = None
     if position in gamestate.units[0]:
         unit = gamestate.units[0][position]
-        color = gamestate.players[0].color
+        color = gamestate.current_player().color
     if position in gamestate.units[1]:
         unit = gamestate.units[1][position]
         color = gamestate.players[1].color
@@ -387,7 +387,7 @@ def save_game(gamestate):
     global action_index
 
     name = str(action_index) + ". "\
-                             + gamestate.players[0].color\
+                             + gamestate.current_player().color\
                              + ", "\
                              + str(gamestate.turn)\
                              + "."\
@@ -411,21 +411,21 @@ def run_game(gamestate):
 
             if event.type == USEREVENT + 1:
 
-                if gamestate.players[0].ai_name != "Human":
+                if gamestate.current_player().ai_name != "Human":
 
                     print "turn", gamestate.turn
                     print "action", 3 - gamestate.get_actions_remaining()
                     print
 
-                    action = gamestate.players[0].ai.select_action(gamestate)
+                    action = gamestate.current_player().ai.select_action(gamestate)
                     if action:
                         gamestate = perform_action(action, gamestate)
                     else:
                         gamestate.turn_shift()
                         draw_game(gamestate)
 
-                    if hasattr(gamestate.players[0], "extra_action"):
-                        extra_action = gamestate.players[0].ai.select_action(gamestate)
+                    if hasattr(gamestate.current_player(), "extra_action"):
+                        extra_action = gamestate.current_player().ai.select_action(gamestate)
                         gamestate = perform_action(extra_action, gamestate)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -454,7 +454,7 @@ def run_game(gamestate):
                 elif start_position and not end_position and (x, y) in gamestate.units[1]:
                     print "Attack-Move", (x, y)
 
-                    if hasattr(gamestate.players[0], "extra_action"):
+                    if hasattr(gamestate.current_player(), "extra_action"):
                         all_actions = gamestate.get_actions()
                     else:
                         all_actions = gamestate.get_actions()
@@ -513,7 +513,7 @@ def run_game(gamestate):
                 elif start_position and not end_position and (x, y) in gamestate.units[1]:
                     print "Attack", (x, y)
 
-                    if hasattr(gamestate.players[0], "extra_action"):
+                    if hasattr(gamestate.current_player(), "extra_action"):
                         all_actions = gamestate.get_actions()
                     else:
                         all_actions = gamestate.get_actions()
@@ -548,7 +548,7 @@ def run_game(gamestate):
             if event.type == KEYDOWN and event.key == K_a:
                 print
                 print "Possible actions:"
-                if hasattr(gamestate.players[0], "extra_action"):
+                if hasattr(gamestate.current_player(), "extra_action"):
                     actions = gamestate.get_actions()
                     for action in actions:
                         print action

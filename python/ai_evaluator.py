@@ -19,14 +19,14 @@ def document_actions(actions, gamestate):
     else:
         current_action = "1"
 
-    if hasattr(gamestate.players[0], "extra_action"):
+    if hasattr(gamestate.current_player(), "extra_action"):
         current_action += ".2"
 
-    out = open("./replay/" + gamestate.players[0].color + " AI actions "
+    out = open("./replay/" + gamestate.current_player().color + " AI actions "
                + str(gamestate.turn) + "." + current_action + ".txt", "w")
 
     for action in actions:
-        if gamestate.players[0].color == "Red":
+        if gamestate.current_player().color == "Red":
             action = copy.copy(action)
             ai_module.get_transformed_action(action)
             

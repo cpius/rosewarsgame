@@ -34,13 +34,13 @@ def timer(function, *args):
 
 
 def time_ai(ai_name, gamestate):
-    gamestate.players[0].ai_name = ai_name
+    gamestate.current_player().ai_name = ai_name
     gamestate.players[1].ai_name = "Human"
     gamestate.set_ais()
 
     t = time()
     for i in range(10):
-        gamestate.players[0].ai.select_action(gamestate)
+        gamestate.current_player().ai.select_action(gamestate)
     return "Select action", ai_name, round((time() - t) * 100, 5)
 
 

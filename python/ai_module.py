@@ -22,7 +22,7 @@ class AI(object):
 
         gamestate = gamestate.copy()
 
-        if gamestate.players[0].backline == 8:
+        if gamestate.current_player().backline == 8:
             gamestate = get_transformed_gamestate(gamestate)
             transform_action = get_transformed_action
         else:

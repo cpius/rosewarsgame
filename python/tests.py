@@ -12,7 +12,7 @@ class TestAI(unittest.TestCase):
         test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
         gamestate = self.parse_test_case(test_file)
 
-        action = gamestate.players[0].ai.select_action(gamestate)
+        action = gamestate.current_player().ai.select_action(gamestate)
 
         self.assertTrue(re.search(".*attack.*", str(action)), "The ai did not choose to attack")
 
@@ -20,14 +20,14 @@ class TestAI(unittest.TestCase):
 
         test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer.txt", "r")
         gamestate = self.parse_test_case(test_file)
-        active_player_before = gamestate.players[0]
-        action = gamestate.players[0].ai.select_action(gamestate)
+        active_player_before = gamestate.current_player()
+        action = gamestate.current_player().ai.select_action(gamestate)
 
         print "Actions before: " + str(gamestate.get_actions_remaining())
         gamestate.do_action(action)
         print "Actions after: " + str(gamestate.get_actions_remaining())
 
-        active_player_after = gamestate.players[0]
+        active_player_after = gamestate.current_player()
 
         self.assertNotEquals(active_player_before, active_player_after, "The turn did not switch")
 
@@ -49,7 +49,7 @@ class TestAI(unittest.TestCase):
 
         gamestate = Gamestate(player1, player1_units, player2, player2_units, turn, actions_remaining)
 
-        self.assertNotEqual("Human", gamestate.players[0].ai, "Active player is a human. It should be a computer")
+        self.assertNotEqual("Human", gamestate.current_player().ai, "Active player is a human. It should be a computer")
 
         return gamestate
 
