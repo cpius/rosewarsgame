@@ -307,48 +307,48 @@ def perform_action(action, gamestate):
 
     if matching_actions == 0:
         print "Action not allowed"
+        return gamestate
     
     elif matching_actions > 1:
         print "Action ambiguous"
+        return gamestate
     
+    draw_action(action)
+    pygame.time.delay(settings.pause_for_animation)
+
+    gamestate.do_action(action)
+
+    save_game(gamestate)
+
+    if settings.show_full_battle_result:
+        print action.full_string()
     else:
-        
-        draw_action(action)
-        pygame.time.delay(settings.pause_for_animation)
+        print action.string_with_outcome()
+    print
 
-        gamestate.do_action(action)
+    if hasattr(gamestate.current_player(), "won"):
+        game_end(gamestate.current_player())
 
-        save_game(gamestate)
+    draw_game(gamestate)
 
-        if settings.show_full_battle_result:
-            print action.full_string()
-        else:    
-            print action.string_with_outcome()
-        print
+    if gamestate.current_player().ai_name == "Human":
+        add_counters(gamestate.units[0])
+    else:
+        gamestate.current_player().ai.add_counters(gamestate)
 
-        if hasattr(gamestate.current_player(), "won"):
-            game_end(gamestate.current_player())
+    draw_game(gamestate)
 
-        draw_game(gamestate)
+    gamestate.initialize_action()
 
-        if gamestate.current_player().ai_name == "Human":
-            add_counters(gamestate.units[0])
-        else:
-            gamestate.current_player().ai.add_counters(gamestate)
-            
-        draw_game(gamestate)
+    if (gamestate.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(gamestate.current_player(), "extra_action"):
+        gamestate.turn_shift()
 
-        gamestate.initialize_action()
-        
-        if (gamestate.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(gamestate.current_player(), "extra_action"):
-            gamestate.turn_shift()
-          
-        draw_game(gamestate)
-        
-        if hasattr(gamestate.current_player(), "extra_action"):
-            print gamestate.current_player().color, "extra action"
-        else:
-            print gamestate.current_player().color
+    draw_game(gamestate)
+
+    if hasattr(gamestate.current_player(), "extra_action"):
+        print gamestate.current_player().color, "extra action"
+    else:
+        print gamestate.current_player().color
 
     return gamestate
 
