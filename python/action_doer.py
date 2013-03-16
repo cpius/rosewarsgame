@@ -34,14 +34,15 @@ def do_action(gamestate, action, unit=None):
             unit.movement_remaining = unit.movement - distance(action.start_position, action.final_position)
             unit.extra_action = True
 
-    def update_actions_remaining(action, player):
+    def update_actions_remaining(action):
 
-        if hasattr(player, "extra_action") or hasattr(player, "sub_action"):
+        if hasattr(gamestate.current_player(), "extra_action") or hasattr(gamestate.current_player(), "sub_action"):
             return
 
-        player.actions_remaining -= 1
+        gamestate.decrement_actions_remaining()
+
         if hasattr(action, "double_cost"):
-            player.actions_remaining -= 1
+            gamestate.decrement_actions_remaining()
 
     def secondary_action_effects(action, unit):
         if hasattr(unit, "attack_cooldown") and action.is_attack:
@@ -60,7 +61,7 @@ def do_action(gamestate, action, unit=None):
 
     secondary_action_effects(action, unit)
 
-    update_actions_remaining(action, gamestate.current_player())
+    update_actions_remaining(action)
 
     unit.used = True
 
