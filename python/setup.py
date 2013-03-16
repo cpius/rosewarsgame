@@ -35,7 +35,7 @@ basic_unit_count = settings.basic_unit_count
 dont_use_special_units = settings.dont_use_special_units
 use_special_units = settings.use_special_units
 board_rows = [1, 2, 3, 4]
-board_coloumns = [1, 2, 3, 4, 5]
+board_columns = [1, 2, 3, 4, 5]
 
 
 def any(iterable):  # For compatibility with older python versions.
