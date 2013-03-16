@@ -17,9 +17,9 @@ def out_of_board_horizontal(position):
 
 def do_action(gamestate, action, unit=None):
 
-    def player_has_won(action, unit, enemy_units, opponent):
+    def player_has_won(action, unit, opponent_units, opponent):
         return (action.final_position[1] == opponent.backline and not hasattr(unit, "bribed")) or \
-               (not enemy_units and not action.ability == "bribe")
+               (not opponent_units and not action.ability == "bribe")
 
     def prepare_extra_actions(action, unit):
 
