@@ -96,7 +96,7 @@ def initialize_action(player_units):
     return player_units
 
 
-def initialize_turn(enemy_units, player_units, player):
+def initialize_turn(gamestate):
 
     def initialize_abilities(unit):
 
@@ -131,15 +131,15 @@ def initialize_turn(enemy_units, player_units, player):
             unit.just_bribed = True
             del player_units[position].bribed
 
-    player.actions_remaining = 2
+    gamestate.current_player().actions_remaining = 2
 
-    for position, unit in player_units.items():
+    for position, unit in gamestate.player_units().items():
         unit.used = False
         unit.xp_gained_this_round = False
         initialize_abilities(unit)
 
-    for position, unit in enemy_units.items():
+    for position, unit in gamestate.opponent_units().items():
         unit.used = False
-        initialize_abilities_opponent(unit, enemy_units, player_units)
+        initialize_abilities_opponent(unit, gamestate.opponent_units(), gamestate.player_units())
 
-    return enemy_units, player_units, player
+    return gamestate.opponent_units(), gamestate.player_units(), gamestate.current_player()

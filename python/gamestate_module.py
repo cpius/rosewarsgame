@@ -18,8 +18,7 @@ class Gamestate:
         action_doer.do_action(self, action)
 
     def initialize_turn(self):
-        self.units[1], self.units[0], self.players[0] = \
-            initializer.initialize_turn(self.units[1], self.units[0], self.players[0])
+        initializer.initialize_turn(self)
 
     def initialize_action(self):
         self.units[0] = initializer.initialize_action(self.units[0])
