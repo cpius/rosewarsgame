@@ -82,7 +82,7 @@ def four_forward_tiles(pos, forward_pos):
 def two_forward_tiles(pos, forward_pos):
     """ Returns the 2 other nearby tiles in the direction towards forward_pos. """
     return set(direction.move(pos) for direction in eight_directions) & \
-           set(direction.move(forward_pos) for direction in directions)
+        set(direction.move(forward_pos) for direction in directions)
 
 
 def get_direction(pos, forward_pos):
@@ -561,4 +561,3 @@ def get_special_unit_actions(unit, pos, units, enemy_units, player_units):
         attacks = []
 
     return moves, attacks, abilities
-
