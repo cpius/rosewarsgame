@@ -340,7 +340,8 @@ def perform_action(action, gamestate):
 
     gamestate.initialize_action()
 
-    if (gamestate.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(gamestate.current_player(), "extra_action"):
+    if (gamestate.get_actions_remaining() < 1
+            or len(all_actions) == 1) and not hasattr(gamestate.current_player(), "extra_action"):
         gamestate.turn_shift()
 
     draw_game(gamestate)
