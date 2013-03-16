@@ -11,8 +11,6 @@ import ai_methods
 from player import Player
 from action import Action
 
-pause_for_animation = settings.pause_for_animation
-
 action_index = 1
 
 black = (0, 0, 0)
@@ -316,7 +314,7 @@ def perform_action(action, g):
     else:
         
         draw_action(action)
-        pygame.time.delay(pause_for_animation)
+        pygame.time.delay(settings.pause_for_animation)
 
         g.do_action(action)
 
