@@ -65,7 +65,7 @@ class Direction:
 
 #global variables
 _action = 0
-board = set((i, j) for i in range(1, 6) for j in range(1, 9))
+board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
 
