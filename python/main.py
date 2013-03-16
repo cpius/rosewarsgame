@@ -75,8 +75,8 @@ def get_image(path):
         global _image_library
         image = _image_library.get(path)
         if not image:
-                image = pygame.image.load(path).convert()
-                _image_library[path] = image
+            image = pygame.image.load(path).convert()
+            _image_library[path] = image
         return image    
 
 
