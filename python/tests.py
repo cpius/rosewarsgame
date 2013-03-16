@@ -54,7 +54,7 @@ class TestAI(unittest.TestCase):
         self.assertTrue(re.search('^Player(1|2):\r?\n$', test_file.readline()),
                         "Incorrect player specification. Please write: Player1/Player2")
 
-        match = re.search('^(Red|Green)\r?\n$', test_file.readline())
+        match = re.search("^(Red|Green)\r?\n$", test_file.readline())
         self.assertTrue(match, "Incorrect player color specification. Please write: Red/Green")
         player = Player(match.group(1))
 
