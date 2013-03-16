@@ -31,7 +31,7 @@ y_border_top = 22
 y_border_bottom = 39
 
 
-def get_pixel_position(coordinates):
+def get_position_from_mouse_click(coordinates):
     x = int((coordinates[0] - x_border) / unit_width) + 1
     if coordinates[1] > 454:
         y = 8 - int((coordinates[1] - y_border_bottom) / unit_height)
@@ -430,7 +430,7 @@ def run_game(gamestate):
                         gamestate = perform_action(extra_action, gamestate)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                x, y = get_pixel_position(event.pos)
+                x, y = get_position_from_mouse_click(event.pos)
 
                 if not start_position and (x, y) in gamestate.units[0]:
                     print "Start at", (x, y)
@@ -508,7 +508,7 @@ def run_game(gamestate):
                     gamestate, start_position, end_position = perform_action(action, gamestate), None, None
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
-                x, y = get_pixel_position(event.pos)
+                x, y = get_position_from_mouse_click(event.pos)
 
                 if start_position and (x, y) not in gamestate.units[1]:
                     print "Move to", (x, y)
@@ -522,7 +522,7 @@ def run_game(gamestate):
                     start_position = None
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-                x, y = get_pixel_position(event.pos)
+                x, y = get_position_from_mouse_click(event.pos)
 
                 if not start_position:
                     show_unit((x, y), gamestate)
