@@ -402,7 +402,8 @@ def run_game(gamestate):
     gamestate.set_ais()
 
     pygame.time.set_timer(USEREVENT + 1, 1000)
-    start_position, end_position = None, None
+    start_position = None
+    end_position = None
 
     draw_game(gamestate)
 
