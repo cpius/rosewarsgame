@@ -126,29 +126,33 @@ def add_modifiers(attacks, player_units):
         modifier()
 
 
-def get_actions(enemy_units, player_units, player):
+def get_actions(gamestate):
 
     def can_use_unit(unit):
         return not (unit.used or hasattr(unit, "frozen") or hasattr(unit, "just_bribed"))
 
     def can_attack_with_unit(unit):
-        return not (player.actions_remaining == 1 and hasattr(unit, "double_attack_cost")) \
+        return not (gamestate.current_player().actions_remaining == 1 and hasattr(unit, "double_attack_cost")) \
             and not hasattr(unit, "attack_frozen")
 
-    if hasattr(player, "extra_action"):
-        return get_extra_actions(enemy_units, player_units, player)
+    if hasattr(gamestate.current_player(), "extra_action"):
+        return get_extra_actions(gamestate)
 
     actions = []
 
-    for position, unit in player_units.items():
+    for position, unit in gamestate.player_units().items():
         if can_use_unit(unit):
 
-            friendly_units = find_all_friendly_units_except_current(position, player_units)
-            units = dict(friendly_units.items() + enemy_units.items())
+            friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
+            units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
-            moves, attacks, abilities = get_unit_actions(unit, position, units, enemy_units, player_units)
+            moves, attacks, abilities = get_unit_actions(unit,
+                                                         position,
+                                                         units,
+                                                         gamestate.opponent_units(),
+                                                         gamestate.player_units())
 
-            add_modifiers(attacks, player_units)
+            add_modifiers(attacks, gamestate.player_units())
 
             if can_attack_with_unit(unit):
                 actions += moves + attacks + abilities
@@ -156,13 +160,13 @@ def get_actions(enemy_units, player_units, player):
                 actions += moves + abilities
 
     for action in actions:
-        action.unit_reference = player_units[action.start_position]
-        add_target_reference(action, enemy_units, player_units)
+        action.unit_reference = gamestate.player_units()[action.start_position]
+        add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
 
     return actions
 
 
-def get_extra_actions(enemy_units, player_units, player):
+def get_extra_actions(gamestate):
 
     def charioting():
         moveset = generate_extra_moveset(unit, position, units)
@@ -183,20 +187,24 @@ def get_extra_actions(enemy_units, player_units, player):
                         attacks.append(Action(start_position, position, new_position, True, True))
             return attacks
 
-        attacks = melee_attacks_list_samurai_second(unit, position, {position}, enemy_units, unit.movement_remaining)
+        attacks = melee_attacks_list_samurai_second(unit,
+                                                    position,
+                                                    {position},
+                                                    gamestate.opponent_units(),
+                                                    unit.movement_remaining)
         moves = move_actions(position, {position})
 
         return moves, attacks, []
 
     extra_actions = []
 
-    for position, unit in player_units.items():
+    for position, unit in gamestate.player_units().items():
         if hasattr(unit, "extra_action"):
-            friendly_units = find_all_friendly_units_except_current(position, player_units)
-            units = dict(friendly_units.items() + enemy_units.items())
+            friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
+            units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
             unit.zoc_blocks = frozenset(position for position,
-                                        enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
+                                        enemy_unit in gamestate.opponent_units().items() if unit.type in enemy_unit.zoc)
 
             moves, attacks, abilities = [], [], []
 
@@ -204,12 +212,12 @@ def get_extra_actions(enemy_units, player_units, player):
                 if hasattr(unit, attribute):
                     moves, attacks, abilities = locals()[attribute]()
 
-            add_modifiers(attacks, player_units)
+            add_modifiers(attacks, gamestate.player_units())
             extra_actions = moves + attacks + abilities
 
     for action in extra_actions:
-        action.unit_reference = player_units[action.start_position]
-        add_target_reference(action, enemy_units, player_units)
+        action.unit_reference = gamestate.player_units()[action.start_position]
+        add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
 
     return extra_actions
 

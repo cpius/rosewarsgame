@@ -25,9 +25,9 @@ class Gamestate:
 
     def get_actions(self):
         if hasattr(self.players[0], "extra_action"):
-            return action_getter.get_extra_actions(self.units[1], self.units[0], self.players[0])
+            return action_getter.get_extra_actions(self)
         else:
-            return action_getter.get_actions(self.units[1], self.units[0], self.players[0])
+            return action_getter.get_actions(self)
 
     def copy(self):
         saved_gamestate = save_gamestate(self)
