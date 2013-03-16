@@ -132,7 +132,7 @@ def get_actions(gamestate):
         return not (unit.used or hasattr(unit, "frozen") or hasattr(unit, "just_bribed"))
 
     def can_attack_with_unit(unit):
-        return not (gamestate.current_player().actions_remaining == 1 and hasattr(unit, "double_attack_cost")) \
+        return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
             and not hasattr(unit, "attack_frozen")
 
     if hasattr(gamestate.current_player(), "extra_action"):

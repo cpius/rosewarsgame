@@ -23,9 +23,9 @@ class TestAI(unittest.TestCase):
         active_player_before = gamestate.players[0]
         action = gamestate.players[0].ai.select_action(gamestate)
 
-        print "Actions before: " + str(gamestate.players[0].actions_remaining)
+        print "Actions before: " + str(gamestate.get_actions_remaining())
         gamestate.do_action(action)
-        print "Actions after: " + str(gamestate.players[0].actions_remaining)
+        print "Actions after: " + str(gamestate.get_actions_remaining())
 
         active_player_after = gamestate.players[0]
 

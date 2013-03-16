@@ -14,7 +14,7 @@ board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 
 def document_actions(actions, gamestate):
 
-    if gamestate.players[0].actions_remaining == 1:
+    if gamestate.get_actions_remaining() == 1:
         current_action = "2"
     else:
         current_action = "1"
@@ -278,7 +278,7 @@ def find_action_scores_one_action(actions, original_gamestate):
 
 def get_next_action(gamestate):
 
-    if gamestate.players[0].actions_remaining == 0:
+    if gamestate.get_actions_remaining() == 0:
         return None
 
     gamestate_copy = gamestate.copy()
@@ -288,7 +288,7 @@ def get_next_action(gamestate):
     if not actions:
         return None
 
-    if gamestate_copy.players[0].actions_remaining == 2:
+    if gamestate_copy.get_actions_remaining() == 2:
         actions = find_action_scores_two_actions(actions, gamestate_copy)
         rnd.shuffle(actions)
         actions.sort(key=attrgetter("score"), reverse=True)
@@ -304,7 +304,7 @@ def get_action(actions, gamestate):
 
     gamestate_copy = gamestate.copy()
 
-    if gamestate_copy.players[0].actions_remaining == 2:
+    if gamestate_copy.get_actions_remaining() == 2:
         actions = find_action_scores_two_actions(actions, gamestate_copy)
         rnd.shuffle(actions)
         actions.sort(key=attrgetter("score_with_next"), reverse=True)

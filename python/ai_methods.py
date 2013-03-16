@@ -6,7 +6,7 @@ import copy
 
 def document_actions(actions, g):
     
-    if g.players[0].actions_remaining == 1:
+    if g.get_actions_remaining() == 1:
         current_action = "1"
     else:
         current_action = "2"

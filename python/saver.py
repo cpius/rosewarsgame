@@ -31,7 +31,9 @@ def save_gamestate(g):
     gamestate = []
 
     for i in range(2):
-        gamestate.append([g.players[i].color, g.players[i].ai_name, g.players[i].actions_remaining,
+        gamestate.append([g.players[i].color,
+                          g.players[i].ai_name,
+                          g.players[i].actions_remaining,
                           hasattr(g.players[i], "extra_action")])
         
         unit_states = []

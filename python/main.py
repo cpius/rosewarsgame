@@ -341,7 +341,7 @@ def perform_action(action, g):
 
         g.initialize_action()
         
-        if (g.players[0].actions_remaining < 1 or len(all_actions) == 1) and not hasattr(g.players[0], "extra_action"):
+        if (g.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(g.players[0], "extra_action"):
             g.turn_shift()
           
         draw_game(g)
@@ -386,7 +386,12 @@ def show_unit(position, gamestate):
 def save_game(gamestate):
     global action_index
 
-    name = str(action_index) + ". " + gamestate.players[0].color + ", " + str(gamestate.turn) + "." + str(2 - gamestate.players[0].actions_remaining)
+    name = str(action_index) + ". "\
+                             + gamestate.players[0].color\
+                             + ", "\
+                             + str(gamestate.turn)\
+                             + "."\
+                             + str(2 - gamestate.get_actions_remaining())
     pygame.image.save(screen, "./replay/" + name + ".jpeg")
 
     action_index += 1
@@ -409,7 +414,7 @@ def run_game(gamestate):
                 if gamestate.players[0].ai_name != "Human":
 
                     print "turn", gamestate.turn
-                    print "action", 3 - gamestate.players[0].actions_remaining
+                    print "action", 3 - gamestate.get_actions_remaining()
                     print
 
                     action = gamestate.players[0].ai.select_action(gamestate)
@@ -581,7 +586,7 @@ def new_game():
     gamestate.initialize_turn()
     gamestate.initialize_action()
 
-    player1.actions_remaining = 1
+    gamestate.set_actions_remaining(1)
     player2.actions_remaining = 0
 
     if  os.path.exists("./replay"):
