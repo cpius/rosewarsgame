@@ -19,8 +19,8 @@ class Gamestate:
         action_doer.do_action(self, action)
 
         if self.actions_remaining > 0:
-            available_actions = action_getter.get_actions(self)
-            if not available_actions:
+            self.available_actions = action_getter.get_actions(self)
+            if not self.available_actions:
                 self.actions_remaining = 0
 
     def initialize_turn(self):
@@ -32,6 +32,8 @@ class Gamestate:
     def get_actions(self):
         if hasattr(self.players[0], "extra_action"):
             return action_getter.get_extra_actions(self)
+        if self.actions_remaining == 1 and hasattr(self, "available_actions"):
+            return self.available_actions
         else:
             return action_getter.get_actions(self)
 
