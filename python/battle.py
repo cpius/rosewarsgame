@@ -1,43 +1,43 @@
 def attack_successful(action):
     
-    attack = get_attack(action.unit, action.target_unit, action)
+    attack = get_attack_rating(action.unit, action.target_unit, action)
     
     return action.rolls[0] <= attack
 
 
 def defence_successful(action):
 
-    attack = get_attack(action.unit, action.target_unit, action)
-    defence = get_defence(action.unit, action.target_unit, attack, action)
+    attack_rating = get_attack_rating(action.unit, action.target_unit, action)
+    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating)
     
-    return action.rolls[1] <= defence
+    return action.rolls[1] <= defence_rating
     
 
-def get_defence(attacking_unit, defending_unit, attack, action):
+def get_defence_rating(attacking_unit, defending_unit, attack_rating):
     
-    defence = defending_unit.defence
+    defence_rating = defending_unit.defence
     
-    defence += defending_unit.defence_counters
+    defence_rating += defending_unit.defence_counters
     
     if attacking_unit.type in defending_unit.dbonus:
-        defence += defending_unit.dbonus[attacking_unit.type]
+        defence_rating += defending_unit.dbonus[attacking_unit.type]
 
     if hasattr(defending_unit, "improved_weapons"):
-        defence += 1
+        defence_rating += 1
 
     if hasattr(defending_unit, "shield") and attacking_unit.range == 1:
-        defence += 1
+        defence_rating += 1
 
-    if attack > 6:
-        defence = defending_unit.defence - attack + 6
+    if attack_rating > 6:
+        defence_rating = defending_unit.defence - attack_rating + 6
     
     if hasattr(defending_unit, "sabotaged"):
-        defence = 0
+        defence_rating = 0
     
-    return defence
+    return defence_rating
 
 
-def get_attack(attacking_unit, defending_unit, action):
+def get_attack_rating(attacking_unit, defending_unit, action):
     
     attack = attacking_unit.attack
     
