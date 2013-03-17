@@ -15,31 +15,34 @@ def out_of_board_horizontal(position):
     return position[0] < board[0][0] or position[0] > board[0][-1]
 
 
-def do_action(action, enemy_units, player_units, opponent, player, unit=None):
+def do_action(gamestate, action, unit=None):
 
-    def player_has_won(action, unit, enemy_units, opponent):
-        return (action.finalpos[1] == opponent.backline and not hasattr(unit, "bribed")) or \
-               (not enemy_units and not action.ability == "bribe")
+    def player_has_won(action, unit, opponent_units, opponent):
+        return (action.final_position[1] == opponent.backline and not hasattr(unit, "bribed")) or \
+               (not opponent_units and not action.ability == "bribe")
 
     def prepare_extra_actions(action, unit):
 
         if hasattr(unit, "charioting"):
-            unit.movement_remaining = unit.movement - distance(action.startpos, action.finalpos)
+            unit.movement_remaining = unit.movement - distance(action.start_position, action.final_position)
             if (action.is_attack and not action.move_with_attack) or (action.is_attack and action.move_with_attack
                                                                       and action.outcome != "Success"):
                 unit.movement_remaining -= 1
             unit.extra_action = True
 
         if hasattr(unit, "samuraiing"):
-            unit.movement_remaining = unit.movement - distance(action.startpos, action.finalpos)
+            unit.movement_remaining = unit.movement - distance(action.start_position, action.final_position)
             unit.extra_action = True
 
-    def update_actions_remaining(action, player):
+    def update_actions_remaining(action):
 
-        if not hasattr(player, "extra_action") and not hasattr(player, "sub_action"):
-            player.actions_remaining -= 1
-            if hasattr(action, "double_cost"):
-                player.actions_remaining -= 1
+        if hasattr(gamestate.current_player(), "extra_action") or hasattr(gamestate.current_player(), "sub_action"):
+            return
+
+        gamestate.decrement_actions_remaining()
+
+        if hasattr(action, "double_cost"):
+            gamestate.decrement_actions_remaining()
 
     def secondary_action_effects(action, unit):
         if hasattr(unit, "attack_cooldown") and action.is_attack:
@@ -49,52 +52,50 @@ def do_action(action, enemy_units, player_units, opponent, player, unit=None):
             action.double_cost = True
 
     if not unit:
-        action.unit = player_units[action.startpos]
+        action.unit = gamestate.player_units()[action.start_position]
         unit = action.unit
     else:
         action.unit = unit
 
-    add_target(action, enemy_units, player_units)
+    add_target(action, gamestate.opponent_units(), gamestate.player_units())
 
     secondary_action_effects(action, unit)
 
-    update_actions_remaining(action, player)
+    update_actions_remaining(action)
 
     unit.used = True
 
     if action.is_attack:
         if hasattr(action, "push"):
-            settle_attack_push(action, enemy_units, player_units)
+            settle_attack_push(action, gamestate.opponent_units(), gamestate.player_units())
         else:
-            settle_attack(action, enemy_units)
+            settle_attack(action, gamestate.opponent_units())
 
     if action.is_ability:
-        settle_ability(action, enemy_units, player_units)
+        settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
-    if hasattr(player, "extra_action"):
+    if hasattr(gamestate.current_player(), "extra_action"):
         del unit.extra_action
         del unit.movement_remaining
     else:
         prepare_extra_actions(action, unit)
 
     for sub_action in action.sub_actions:
-        player.sub_action = True
-        do_action(sub_action, enemy_units, player_units, opponent, player, unit)
-        del player.sub_action
+        gamestate.current_player().sub_action = True
+        do_action(gamestate, sub_action, unit)
+        del gamestate.current_player().sub_action
 
-    if action.startpos in player_units:
-        player_units[action.finalpos] = player_units.pop(action.startpos)
+    if action.start_position in gamestate.player_units():
+        gamestate.player_units()[action.final_position] = gamestate.player_units().pop(action.start_position)
 
-    if player_has_won(action, unit, enemy_units, opponent):
-        player.won = True
+    if player_has_won(action, unit, gamestate.opponent_units(), gamestate.opponent_player()):
+        gamestate.current_player().won = True
 
-    if hasattr(player, "extra_action"):
-        del player.extra_action
+    if hasattr(gamestate.current_player(), "extra_action"):
+        del gamestate.current_player().extra_action
 
     if hasattr(unit, "extra_action"):
-        player.extra_action = True
-
-    return enemy_units, player_units, player
+        gamestate.current_player().extra_action = True
 
 
 def settle_attack_push(action, enemy_units, player_units):
@@ -105,7 +106,7 @@ def settle_attack_push(action, enemy_units, player_units):
 
     if battle.attack_successful(action):
 
-        pushpos = action.push_direction.move(action.attackpos)
+        push_position = action.push_direction.move(action.attack_position)
 
         if not battle.defence_successful(action):
             action.outcome = "Success"
@@ -115,27 +116,27 @@ def settle_attack_push(action, enemy_units, player_units):
             if hasattr(action.target_unit, "extra_life"):
                 del action.target_unit.extra_life
 
-                if not out_of_board_vertical(pushpos):
-                    update_finalpos(action)
-                    if pushpos in player_units or pushpos in enemy_units or out_of_board_horizontal(pushpos):
-                        del enemy_units[action.attackpos]
+                if not out_of_board_vertical(push_position):
+                    update_final_position(action)
+                    if push_position in player_units or push_position in enemy_units or out_of_board_horizontal(push_position):
+                        del enemy_units[action.attack_position]
                     else:
-                        enemy_units[pushpos] = enemy_units.pop(action.attackpos)
+                        enemy_units[push_position] = enemy_units.pop(action.attack_position)
 
             else:
-                update_finalpos(action)
-                del enemy_units[action.attackpos]
+                update_final_position(action)
+                del enemy_units[action.attack_position]
 
         else:
-            if not out_of_board_vertical(pushpos):
+            if not out_of_board_vertical(push_position):
                 action.outcome = "Push"
-                update_finalpos(action)
-                if pushpos in player_units or pushpos in enemy_units or out_of_board_horizontal(pushpos):
+                update_final_position(action)
+                if push_position in player_units or push_position in enemy_units or out_of_board_horizontal(push_position):
                     gain_xp(action.unit)
-                    del enemy_units[action.attackpos]
+                    del enemy_units[action.attack_position]
 
                 else:
-                    enemy_units[pushpos] = enemy_units.pop(action.attackpos)
+                    enemy_units[push_position] = enemy_units.pop(action.attack_position)
 
             else:
                 action.outcome = "Failure"
@@ -158,8 +159,8 @@ def settle_attack(action, enemy_units):
         if hasattr(action.target_unit, "extra_life"):
             del action.target_unit.extra_life
         else:
-            del enemy_units[action.attackpos]
-            update_finalpos(action)
+            del enemy_units[action.attack_position]
+            update_final_position(action)
 
     else:
         action.outcome = "Failure"
@@ -180,29 +181,29 @@ def settle_ability(action, enemy_units, player_units):
         action.target_unit.improved_weapons = True
 
     def bribe():
-        pos = action.attackpos
-        player_units[pos] = enemy_units.pop(pos)
-        player_units[pos].bribed = True
+        position = action.attack_position
+        player_units[position] = enemy_units.pop(position)
+        player_units[position].bribed = True
 
     locals()[action.ability]()
 
 
 def add_target(action, enemy_units, player_units):
     if action.is_attack:
-        action.target_unit = enemy_units[action.attackpos]
+        action.target_unit = enemy_units[action.attack_position]
     elif action.is_ability:
-        if action.attackpos in enemy_units:
-            action.target_unit = enemy_units[action.attackpos]
-        elif action.attackpos in player_units:
-            action.target_unit = player_units[action.attackpos]
+        if action.attack_position in enemy_units:
+            action.target_unit = enemy_units[action.attack_position]
+        elif action.attack_position in player_units:
+            action.target_unit = player_units[action.attack_position]
 
     for sub_action in action.sub_actions:
         add_target(sub_action, enemy_units, player_units)
 
 
-def update_finalpos(action):
+def update_final_position(action):
     if action.move_with_attack:
-        action.finalpos = action.attackpos
+        action.final_position = action.attack_position
 
 
 def gain_xp(unit):

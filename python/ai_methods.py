@@ -6,7 +6,7 @@ import copy
 
 def document_actions(actions, g):
     
-    if g.players[0].actions_remaining == 1:
+    if g.get_actions_remaining() == 1:
         current_action = "1"
     else:
         current_action = "2"
@@ -32,23 +32,23 @@ def document_actions(actions, g):
 
 def chance_of_win(attacking_unit, defending_unit, action):
 
-    attack = battle.get_attack(attacking_unit, defending_unit, action)
-    defence = battle.get_defence(attacking_unit, defending_unit, attack, action)
+    attack_rating = battle.get_attack_rating(attacking_unit, defending_unit, action)
+    defence_rating = battle.get_defence_rating(attacking_unit, defending_unit, attack_rating)
 
-    if attack < 0:
-        attack = 0
+    if attack_rating < 0:
+        attack_rating = 0
     
-    if attack > 6:
-        attack = 6
+    if attack_rating > 6:
+        attack_rating = 6
         
-    if defence < 0:
-        defence = 0
+    if defence_rating < 0:
+        defence_rating = 0
     
-    if defence > 6:
-        defence = 6
+    if defence_rating > 6:
+        defence_rating = 6
     
-    chance_of_attack_successful = attack / 6
+    chance_of_attack_successful = attack_rating / 6
     
-    chance_of_defence_unsuccessful = (6 - defence) / 6
+    chance_of_defence_unsuccessful = (6 - defence_rating) / 6
 
     return chance_of_attack_successful * chance_of_defence_unsuccessful

@@ -9,8 +9,8 @@ def get_action(actions, g):
 
     for action in actions:
         if action.is_attack:
-            enemy_unit = g.units[1][action.attackpos]
-            unit = g.units[0][action.startpos]
+            enemy_unit = g.units[1][action.attack_position]
+            unit = g.units[0][action.start_position]
             chance = m.chance_of_win(unit, enemy_unit, action)
             action.score = chance * 10
             if hasattr(action.unit, "double_attack_cost"):

@@ -22,7 +22,7 @@ class AI(object):
 
         gamestate = gamestate.copy()
 
-        if gamestate.players[0].backline == 8:
+        if gamestate.current_player().backline == 8:
             gamestate = get_transformed_gamestate(gamestate)
             transform_action = get_transformed_action
         else:
@@ -77,9 +77,9 @@ def get_transformed_direction(direction):
 
 def get_transformed_action(action):
 
-    action.startpos = transform_position(action.startpos)
-    action.endpos = transform_position(action.endpos)
-    action.attackpos = transform_position(action.attackpos)
+    action.start_position = transform_position(action.start_position)
+    action.end_position = transform_position(action.end_position)
+    action.attack_position = transform_position(action.attack_position)
 
     for sub_action in action.sub_actions:
         action.sub_action = get_transformed_action(sub_action)

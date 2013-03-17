@@ -12,7 +12,7 @@ class TestAI(unittest.TestCase):
         test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
         gamestate = self.parse_test_case(test_file)
 
-        action = gamestate.players[0].ai.select_action(gamestate)
+        action = gamestate.current_player().ai.select_action(gamestate)
 
         self.assertTrue(re.search(".*attack.*", str(action)), "The ai did not choose to attack")
 
@@ -20,14 +20,14 @@ class TestAI(unittest.TestCase):
 
         test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer.txt", "r")
         gamestate = self.parse_test_case(test_file)
-        active_player_before = gamestate.players[0]
-        action = gamestate.players[0].ai.select_action(gamestate)
+        active_player_before = gamestate.current_player()
+        action = gamestate.current_player().ai.select_action(gamestate)
 
-        print "Actions before: " + str(gamestate.players[0].actions_remaining)
+        print "Actions before: " + str(gamestate.get_actions_remaining())
         gamestate.do_action(action)
-        print "Actions after: " + str(gamestate.players[0].actions_remaining)
+        print "Actions after: " + str(gamestate.get_actions_remaining())
 
-        active_player_after = gamestate.players[0]
+        active_player_after = gamestate.current_player()
 
         self.assertNotEquals(active_player_before, active_player_after, "The turn did not switch")
 
@@ -36,17 +36,20 @@ class TestAI(unittest.TestCase):
         self.assertTrue(re.search('^== [A-Za-z0-9-_]+ ==\r?\n$', test_file.readline()),
                         "Please begin test specification with '== Test_Name =='")
 
+        match = re.search("^Turn: ([1-9][0-9]*)\r?\n$", test_file.readline())
+        self.assertTrue(match, "Incorrent turn specification. Please write Turn: [1..]")
+        turn = int(match.group(1))
+
+        match = re.search('^Actions: ([0-2])\r?\n$', test_file.readline())
+        self.assertTrue(match, "Incorrect action specification. Please write 'Actions: [0..2]'")
+        actions_remaining = int(match.group(1))
+
         player1, player1_units = self.parse_player(test_file)
         player2, player2_units = self.parse_player(test_file)
 
-        self.assertNotEqual(player1.actions_remaining, player2.actions_remaining, "It is noones turn")
+        gamestate = Gamestate(player1, player1_units, player2, player2_units, turn, actions_remaining)
 
-        if player1.actions_remaining > player2.actions_remaining:
-            gamestate = Gamestate(player1, player1_units, player2, player2_units)
-        else:
-            gamestate = Gamestate(player2, player2_units, player1, player1_units)
-
-        self.assertNotEqual("Human", gamestate.players[0].ai, "Active player is a human. It should be a computer")
+        self.assertNotEqual("Human", gamestate.current_player().ai, "Active player is a human. It should be a computer")
 
         return gamestate
 
@@ -54,7 +57,7 @@ class TestAI(unittest.TestCase):
         self.assertTrue(re.search('^Player(1|2):\r?\n$', test_file.readline()),
                         "Incorrect player specification. Please write: Player1/Player2")
 
-        match = re.search('^(Red|Green)\r?\n$', test_file.readline())
+        match = re.search("^(Red|Green)\r?\n$", test_file.readline())
         self.assertTrue(match, "Incorrect player color specification. Please write: Red/Green")
         player = Player(match.group(1))
 
@@ -65,10 +68,6 @@ class TestAI(unittest.TestCase):
             player.ai = match.group(1)
         else:
             player.ai = ai_module.AI(match.group(1))
-
-        match = re.search('^Actions: ([0-2])\r?\n$', test_file.readline())
-        self.assertTrue(match, "Incorrect action specification. Please write 'Actions: [0..2]'")
-        player.actions_remaining = int(match.group(1))
 
         match = re.search('^Extra action: (True|False)\r?\n$', test_file.readline())
         self.assertTrue(match, "Incorrect extra action specification. Please write 'Extra action: True/False'")
