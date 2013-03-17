@@ -38,7 +38,7 @@ class TestAI(unittest.TestCase):
 
         match = re.search("^Turn: ([1-9][0-9]*)\r?\n$", test_file.readline())
         self.assertTrue(match, "Incorrent turn specification. Please write Turn: [1..]")
-        turn = match.group(1)
+        turn = int(match.group(1))
 
         match = re.search('^Actions: ([0-2])\r?\n$', test_file.readline())
         self.assertTrue(match, "Incorrect action specification. Please write 'Actions: [0..2]'")
