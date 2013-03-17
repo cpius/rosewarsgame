@@ -13,8 +13,6 @@
 
 @interface BasePathFinderStrategy : NSObject <PathFinderStrategy>
 
-- (BOOL)isGrindLocationInsideGameBoard:(GridLocation*)location;
-
 - (BOOL)card:(Card*)card blockedByZoneOfControlUnitWhenMovingFromLocation:(GridLocation*)fromLocation toLocation:(GridLocation*)toLocation allLocations:(NSDictionary *)allLocations;
 
 @end

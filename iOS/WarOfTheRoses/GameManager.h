@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "Game.h"
 #import "AIPlayer.h"
-#import "DiceStrategy.h"
 #import "DeckStrategy.h"
+#import "BattleStrategy.h"
 
 @protocol GameManagerProtocol <NSObject>
 
@@ -31,12 +31,10 @@
 @property (nonatomic, strong) Game *currentGame;
 @property (nonatomic, assign) PlayerColors currentPlayersTurn;
 
-@property (nonatomic, strong) id<DiceStrategy> attackerDiceStrategy;
-@property (nonatomic, strong) id<DiceStrategy> defenderDiceStrategy;
 @property (nonatomic, strong) id<DeckStrategy> deckStrategy;
 
 - (Action*)getActionForEnemeyPlayer;
-- (CombatOutcome)resolveCombatBetween:(Card*)attacker defender:(Card*)defender;
+- (CombatOutcome)resolveCombatBetween:(Card*)attacker defender:(Card*)defender battleStrategy:(id<BattleStrategy>)battleStrategy;
 
 - (NSUInteger)actionUsed:(Action*)action;
 
@@ -46,6 +44,8 @@
 
 - (void)card:(Card*)card movedToGridLocation:(GridLocation*)location;
 - (void)cardHasBeenDefeated:(Card*)card;
+
+- (Card*)cardLocatedAtGridLocation:(GridLocation*)gridLocation;
 
 - (GameResults)checkForEndGame;
 

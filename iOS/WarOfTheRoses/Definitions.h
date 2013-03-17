@@ -49,6 +49,7 @@ typedef enum {
     kCombatOutcomeAttackSuccessful = 0,
     kCombatOutcomeDefendSuccessful = 1,
     kCombatOutcomeDefendSuccessfulMissed = 2,
+    kCombatOutcomePush = 3
     
 } CombatOutcome;
 

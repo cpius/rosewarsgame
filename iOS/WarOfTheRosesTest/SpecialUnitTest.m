@@ -30,6 +30,7 @@
 #import "LongSwordsMan.h"
 #import "Crusader.h"
 #import "FlagBearer.h"
+#import "StandardBattleStrategy.h"
 
 @implementation SpecialUnitTest
 
@@ -42,8 +43,10 @@
     _attackerFixedStrategy = [FixedDiceStrategy strategy];
     _defenderFixedStrategy = [FixedDiceStrategy strategy];
     
-    _manager.attackerDiceStrategy = _attackerFixedStrategy;
-    _manager.defenderDiceStrategy = _defenderFixedStrategy;
+    _battleStrategy = [StandardBattleStrategy strategy];
+    
+    _battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    _battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
 }
 
 - (void)testChariotCanMoveAfterAttack {
@@ -410,12 +413,12 @@
 
     STAssertTrue(viking.hitpoints == 2, @"Viking should have 2 hitpoints");
 
-    [_manager resolveCombatBetween:pikeman defender:viking];
+    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:_battleStrategy];
     
     STAssertFalse(viking.dead, @"Viking shouldn't die after a failed defense");
     STAssertTrue(viking.hitpoints == 1, @"Viking should only have 1 hitpoint left after a failed defense");
     
-    [_manager resolveCombatBetween:pikeman defender:viking];
+    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:_battleStrategy];
     
     STAssertTrue(viking.dead, @"Viking should be dead!");
 }
@@ -493,7 +496,9 @@
     MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:longswordsman enemyCard:pikeman];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
     meleeAction.delegate = mock;
+    meleeAction.battleStrategy = _battleStrategy;
     
     [meleeAction performActionWithCompletion:^{
         

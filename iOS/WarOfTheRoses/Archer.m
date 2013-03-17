@@ -45,25 +45,12 @@
     return [[Archer alloc] init];
 }
 
--(BOOL)specialAbilityTriggersVersus:(Card *)opponent {
+- (void)combatStartingAgainstDefender:(Card *)defender {
     
-    return opponent.unitType == kInfantry;
-}
-
-- (void)addSpecialAbilityVersusOpponent:(Card *)opponent {
-
-    if (opponent.unitType == kInfantry) {
+    if (defender.unitType == kInfantry) {
         _bonusAgainstInfantry = [[RawBonus alloc] initWithValue:1];
         [self.attack addRawBonus:_bonusAgainstInfantry];
     }
-}
-
-- (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
-    
-    [super combatFinishedAgainstAttacker:attacker withOutcome:combatOutcome];
-    
-    [self.attack removeRawBonus:_bonusAgainstInfantry];
-    _bonusAgainstInfantry = nil;
 }
 
 - (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {

@@ -22,7 +22,7 @@
     
     for (GridLocation *gridLocation in surroundingGridLocations) {
         
-        if ([self isGrindLocationInsideGameBoard:gridLocation]) {
+        if ([gridLocation isInsideGameBoard]) {
             [adjacentLocations addObject:gridLocation];
         }
     }

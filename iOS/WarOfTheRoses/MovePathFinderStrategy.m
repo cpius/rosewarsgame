@@ -24,7 +24,7 @@
     
     for (GridLocation *gridLocation in surroundingGridLocations) {
         
-        if ([self isGrindLocationInsideGameBoard:gridLocation]) {
+        if ([gridLocation isInsideGameBoard]) {
             Card *cardAtToLocation = [allLocations objectForKey:gridLocation];
             
             if (cardAtToLocation == nil && ![self card:card blockedByZoneOfControlUnitWhenMovingFromLocation:fromLocation toLocation:gridLocation allLocations:allLocations]) {

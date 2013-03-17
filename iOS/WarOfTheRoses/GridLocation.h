@@ -17,13 +17,19 @@
 + (id)gridLocationWithRow:(NSUInteger)row column:(NSUInteger)column;
 - (id)initWithRow:(NSUInteger)row column:(NSUInteger)column;
 
+- (BOOL)isInsideGameBoard;
+
 - (NSArray*)perpendicularGridLocations;
 - (NSArray*)surroundingGridLocations;
 - (NSArray*)surroundingEightGridLocations;
+
+- (BOOL)isSameLocationAs:(GridLocation*)location;
 
 - (GridLocation*)locationAbove;
 - (GridLocation*)locationBelow;
 - (GridLocation*)locationToTheLeft;
 - (GridLocation*)locationToTheRight;
+
+- (GridLocation *)getPushLocationForGridLocationWhenComingFromGridLocation:(GridLocation *)comingFromLocation;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "RangedAttackAction.h"
 #import "GameManager.h"
+#import "StandardBattleStrategy.h"
 
 @implementation RangedAttackAction
 @synthesize actionType = _actionType;
@@ -38,10 +39,10 @@
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
 
-    CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard];
+    CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:[StandardBattleStrategy strategy]];
     
     self.combatOutcome = combatOutcome;
-    [self.delegate action:self hasResolvedRangedCombatWithOutcome:combatOutcome];
+    [self.delegate action:self hasResolvedCombatWithOutcome:combatOutcome];
         
     [[GameManager sharedManager] actionUsed:self];
     [self.cardInAction didPerformedAction:self];

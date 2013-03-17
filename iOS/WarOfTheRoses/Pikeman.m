@@ -49,25 +49,12 @@
     return (self.cardColor != opponent.cardColor) && (opponent.unitType == kCavalry);
 }
 
--(BOOL)specialAbilityTriggersVersus:(Card *)opponent {
+- (void)combatStartingAgainstDefender:(Card *)defender {
     
-    return opponent.unitType == kCavalry;
-}
-
-- (void)addSpecialAbilityVersusOpponent:(Card *)opponent {
-    
-    if (opponent.unitType == kCavalry) {
+    if (defender.unitType == kCavalry) {
         _bonusAgainstCavalry = [[RawBonus alloc] initWithValue:1];
         [self.attack addRawBonus:_bonusAgainstCavalry];
     }
-}
-
-- (void)combatFinishedAgainstAttacker:(Card *)attacker withOutcome:(CombatOutcome)combatOutcome {
-    
-    [super combatFinishedAgainstAttacker:attacker withOutcome:combatOutcome];
-    
-    [self.attack removeRawBonus:_bonusAgainstCavalry];
-    _bonusAgainstCavalry = nil;
 }
 
 - (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {

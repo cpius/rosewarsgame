@@ -110,8 +110,6 @@
 - (BOOL)allowPath:(NSArray*)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary*)allLocations;
 
 - (BOOL)zoneOfControlAgainst:(Card*)opponent;
-- (BOOL)specialAbilityTriggersVersus:(Card*) opponent;
-- (void)addSpecialAbilityVersusOpponent:(Card*)opponent;
 
 - (void)levelIncreased;
 - (BOOL)isOwnedByPlayerWithColor:(PlayerColors)playerColor;

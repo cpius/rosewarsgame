@@ -26,10 +26,7 @@
     _manager = [GameManager sharedManager];
     
     _attackerFixedStrategy = [FixedDiceStrategy strategy];
-    _defenderFixedStrategy = [FixedDiceStrategy strategy];
-    
-    _manager.attackerDiceStrategy = _attackerFixedStrategy;
-    _manager.defenderDiceStrategy = _defenderFixedStrategy;
+    _defenderFixedStrategy = [FixedDiceStrategy strategy];    
 }
 
 - (void)testUnitShouldBeBlockedByZocUsingMoveStrategy {

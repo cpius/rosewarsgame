@@ -15,17 +15,6 @@
     @throw [NSException exceptionWithName:@"PathFinderException" reason:@"Must be overridden in subclass" userInfo:nil];
 }
 
-- (BOOL)isGrindLocationInsideGameBoard:(GridLocation *)location {
-    
-    if (location.column >= 1 &&
-        location.column <= BOARDSIZE_COLUMNS &&
-        location.row >= 1 &&
-        location.row <= BOARDSIZE_ROWS) {
-        return YES;
-    }
-    
-    return NO;
-}
 
 - (BOOL)card:(Card*)card blockedByZoneOfControlUnitWhenMovingFromLocation:(GridLocation*)fromLocation toLocation:(GridLocation*)toLocation allLocations:(NSDictionary *)allLocations {
     

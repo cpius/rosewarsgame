@@ -10,6 +10,7 @@
 #import "GridLocation.h"
 #import "PathFinderStep.h"
 #import "GameManager.h"
+#import "StandardBattleStrategy.h"
 
 @implementation MeleeAttackAction
 
@@ -23,6 +24,7 @@
     
     if (self) {
         _actionType = kActionTypeMelee;
+        _battleStrategy = [StandardBattleStrategy strategy];
     }
     
     return self;
@@ -51,10 +53,10 @@
         
         [self.cardInAction consumeMoves:self.path.count];
         
-        CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard];
+        CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:_battleStrategy];
         
         self.combatOutcome = combatOutcome;
-        [self.delegate action:self hasResolvedRangedCombatWithOutcome:combatOutcome];
+        [self.delegate action:self hasResolvedCombatWithOutcome:combatOutcome];
         
         if (IsDefenseSuccessful(combatOutcome)) {
             

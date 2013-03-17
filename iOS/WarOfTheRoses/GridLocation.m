@@ -63,6 +63,23 @@
     return isEqual;
 }
 
+- (BOOL)isSameLocationAs:(GridLocation*)location {
+    
+    return [self isEqual:location];
+}
+
+- (BOOL)isInsideGameBoard {
+    
+    if (self.column >= 1 &&
+        self.column <= BOARDSIZE_COLUMNS &&
+        self.row >= 1 &&
+        self.row <= BOARDSIZE_ROWS) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (GridLocation*)locationAbove {
     
     return [GridLocation gridLocationWithRow:self.row - 1 column:self.column];
@@ -91,10 +108,10 @@
 
 - (NSArray *)surroundingGridLocations {
     
-    return @[[GridLocation gridLocationWithRow:self.row column:self.column - 1],
-    [GridLocation gridLocationWithRow:self.row column:self.column + 1],
-    [GridLocation gridLocationWithRow:self.row - 1 column:self.column],
-    [GridLocation gridLocationWithRow:self.row + 1 column:self.column]];
+    return @[[self locationAbove],
+    [self locationBelow],
+    [self locationToTheLeft],
+    [self locationToTheRight]];
 }
 
 - (NSArray*)surroundingEightGridLocations {
@@ -107,6 +124,33 @@
              [GridLocation gridLocationWithRow:self.row - 1 column:self.column],
              [GridLocation gridLocationWithRow:self.row + 1 column:self.column - 1],
              [GridLocation gridLocationWithRow:self.row + 1 column:self.column]];
+}
+
+- (GridLocation *)getPushLocationForGridLocationWhenComingFromGridLocation:(GridLocation *)comingFromLocation {
+    
+    GridLocation *pushLocation;
+    
+    if ([comingFromLocation isSameLocationAs:[self locationAbove]]) {
+        pushLocation = [self locationBelow];
+    }
+    
+    if ([comingFromLocation isSameLocationAs:[self locationBelow]]) {
+        pushLocation = [self locationAbove];
+    }
+    
+    if ([comingFromLocation isSameLocationAs:[self locationToTheLeft]]) {
+        pushLocation = [self locationToTheRight];
+    }
+    
+    if ([comingFromLocation isSameLocationAs:[self locationToTheRight]]) {
+        pushLocation = [self locationToTheLeft];
+    }
+    
+    if ([pushLocation isInsideGameBoard]) {
+        return pushLocation;
+    }
+
+    return nil;
 }
 
 @end

@@ -133,6 +133,10 @@
 		6DB2047B16F25BD00004FFCB /* crusader_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2047716F25BD00004FFCB /* crusader_0.png */; };
 		6DB2047C16F25BD00004FFCB /* crusader_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2047816F25BD00004FFCB /* crusader_icon-hd.png */; };
 		6DB2047D16F25BD00004FFCB /* crusader_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2047916F25BD00004FFCB /* crusader_icon.png */; };
+		6DB2048016F30D470004FFCB /* WarElephant.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2047F16F30D450004FFCB /* WarElephant.m */; };
+		6DB2048516F354AB0004FFCB /* StandardBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2048416F354AB0004FFCB /* StandardBattleStrategy.m */; };
+		6DB2048816F356080004FFCB /* BaseBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2048716F356070004FFCB /* BaseBattleStrategy.m */; };
+		6DB2048B16F3B6D80004FFCB /* WarElephantBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2048A16F3B6D70004FFCB /* WarElephantBattleStrategy.m */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -532,6 +536,15 @@
 		6DB2047716F25BD00004FFCB /* crusader_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = crusader_0.png; path = Resources/Images/crusader_0.png; sourceTree = "<group>"; };
 		6DB2047816F25BD00004FFCB /* crusader_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "crusader_icon-hd.png"; path = "Resources/Images/crusader_icon-hd.png"; sourceTree = "<group>"; };
 		6DB2047916F25BD00004FFCB /* crusader_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = crusader_icon.png; path = Resources/Images/crusader_icon.png; sourceTree = "<group>"; };
+		6DB2047E16F30D430004FFCB /* WarElephant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarElephant.h; sourceTree = "<group>"; };
+		6DB2047F16F30D450004FFCB /* WarElephant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarElephant.m; sourceTree = "<group>"; };
+		6DB2048216F353820004FFCB /* BattleStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattleStrategy.h; sourceTree = "<group>"; };
+		6DB2048316F354AB0004FFCB /* StandardBattleStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardBattleStrategy.h; sourceTree = "<group>"; };
+		6DB2048416F354AB0004FFCB /* StandardBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StandardBattleStrategy.m; sourceTree = "<group>"; };
+		6DB2048616F356070004FFCB /* BaseBattleStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseBattleStrategy.h; sourceTree = "<group>"; };
+		6DB2048716F356070004FFCB /* BaseBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseBattleStrategy.m; sourceTree = "<group>"; };
+		6DB2048916F3B6D70004FFCB /* WarElephantBattleStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarElephantBattleStrategy.h; sourceTree = "<group>"; };
+		6DB2048A16F3B6D70004FFCB /* WarElephantBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarElephantBattleStrategy.m; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1251,6 +1264,20 @@
 			name = UI;
 			sourceTree = "<group>";
 		};
+		6DB2048116F353080004FFCB /* BattleStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				6DB2048216F353820004FFCB /* BattleStrategy.h */,
+				6DB2048316F354AB0004FFCB /* StandardBattleStrategy.h */,
+				6DB2048416F354AB0004FFCB /* StandardBattleStrategy.m */,
+				6DB2048616F356070004FFCB /* BaseBattleStrategy.h */,
+				6DB2048716F356070004FFCB /* BaseBattleStrategy.m */,
+				6DB2048916F3B6D70004FFCB /* WarElephantBattleStrategy.h */,
+				6DB2048A16F3B6D70004FFCB /* WarElephantBattleStrategy.m */,
+			);
+			name = BattleStrategy;
+			sourceTree = "<group>";
+		};
 		6DC7F48116DCECD500CD5071 /* DiceStrategy */ = {
 			isa = PBXGroup;
 			children = (
@@ -1732,6 +1759,7 @@
 		6DF2FD1F165C21CD00F08664 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				6DB2048116F353080004FFCB /* BattleStrategy */,
 				6DD5886416E53B1C00466DDB /* Abilities */,
 				6DC7F48116DCECD500CD5071 /* DiceStrategy */,
 				6D0CBF0616D2069D00D241A7 /* AI */,
@@ -1808,6 +1836,8 @@
 				6DB2045E16ED0B890004FFCB /* LongSwordsMan.m */,
 				6DB2047016F11EB20004FFCB /* Crusader.h */,
 				6DB2047116F11EB30004FFCB /* Crusader.m */,
+				6DB2047E16F30D430004FFCB /* WarElephant.h */,
+				6DB2047F16F30D450004FFCB /* WarElephant.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -2252,6 +2282,10 @@
 				6DB2045C16ECDF710004FFCB /* Viking.m in Sources */,
 				6DB2045F16ED0B8A0004FFCB /* LongSwordsMan.m in Sources */,
 				6DB2047216F11EB40004FFCB /* Crusader.m in Sources */,
+				6DB2048016F30D470004FFCB /* WarElephant.m in Sources */,
+				6DB2048516F354AB0004FFCB /* StandardBattleStrategy.m in Sources */,
+				6DB2048816F356080004FFCB /* BaseBattleStrategy.m in Sources */,
+				6DB2048B16F3B6D80004FFCB /* WarElephantBattleStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

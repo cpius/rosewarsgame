@@ -11,6 +11,7 @@
 #import "GameManager.h"
 #import "PathFinderStep.h"
 #import "MeleeAttackAction.h"
+#import "StandardBattleStrategy.h"
 
 @implementation LongSwordsMan
 
@@ -66,15 +67,15 @@
         
         for (GridLocation *gridLocation in surroundingMyCard.allObjects) {
             
-            Card *cardInLocation = [[GameManager sharedManager].currentGame.unitLayout objectForKey:gridLocation];
+            Card *cardInLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:gridLocation];
             
             if (cardInLocation != nil && cardInLocation.cardColor != meleeAttackAction.cardInAction.cardColor) {
                 
                 MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
                 
-                CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation];
+                CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:meleeAttackAction.battleStrategy];
 
-                [action.delegate action:meleeAction hasResolvedRangedCombatWithOutcome:outcome];
+                [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome];
             }
         }
     }

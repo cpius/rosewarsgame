@@ -23,7 +23,7 @@
     STAssertTrue([archer.attack calculateValue].lowerValue == 5, @"Archer lowerValye base attack should be 5");
     
     // Attacker has special against defender
-    [archer addSpecialAbilityVersusOpponent:pikeman];
+    [archer combatStartingAgainstDefender:pikeman];
     
     STAssertTrue([archer.attack calculateValue].lowerValue == 4, @"Archer should have +1 attack against infantry");
     
@@ -40,7 +40,7 @@
     STAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman lowerValue base attack should be 5");
     
     // Attacker has special against defender
-    [pikeman addSpecialAbilityVersusOpponent:lightCavalry];
+    [pikeman combatStartingAgainstDefender:lightCavalry];
     
     STAssertTrue([pikeman.attack calculateValue].lowerValue == 4, @"Pikeman should have +1 attack against cavalry");
     

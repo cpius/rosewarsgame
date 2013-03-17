@@ -11,9 +11,12 @@
 #import "FixedDeckStrategy.h"
 
 @class GameManager;
+@class StandardBattleStrategy;
 @interface CombatTest : SenTestCase {
     
     GameManager *_manager;
+    
+    StandardBattleStrategy *_battleStrategy;
     
     FixedDiceStrategy *_attackerFixedStrategy;
     FixedDiceStrategy *_defenderFixedStrategy;

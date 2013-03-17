@@ -17,4 +17,5 @@
 #import "SoundManager.h"
 #import "GridLocation.h"
 #import "TimedAbility.h"
+#import "GameManager.h"
 #endif

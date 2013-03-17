@@ -18,7 +18,7 @@
 
 - (void)action:(Action*)action wantsToMoveCard:(Card*)card fromLocation:(GridLocation*)fromLocation toLocation:(GridLocation*)toLocation;
 - (void)action:(Action*)action wantsToMoveFollowingPath:(NSArray*)path withCompletion:(void (^)(GridLocation*))completion;
-- (void)action:(Action*)action hasResolvedRangedCombatWithOutcome:(CombatOutcome)combatOutcome;
+- (void)action:(Action*)action hasResolvedCombatWithOutcome:(CombatOutcome)combatOutcome;
 - (void)action:(Action*)action wantsToReplaceCardAtLocation:(GridLocation*)replaceLocation withCardAtLocation:(GridLocation*)withLocation;
 
 - (void)afterPerformAction:(Action*)action;

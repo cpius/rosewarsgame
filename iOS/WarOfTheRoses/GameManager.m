@@ -19,8 +19,6 @@
 @synthesize delegate = _delegate;
 @synthesize currentGame = _currentGame;
 @synthesize currentPlayersTurn = _currentPlayersTurn;
-@synthesize attackerDiceStrategy = _attackerDiceStrategy;
-@synthesize defenderDiceStrategy = _defenderDiceStrategy;
 
 - (id)init {
     
@@ -29,10 +27,7 @@
     if (self) {
         
         _currentGame = [[Game alloc] init];
-        
-        self.attackerDiceStrategy = [RandomDiceStrategy strategy];
-        self.defenderDiceStrategy = [RandomDiceStrategy strategy];
-        
+                
         self.deckStrategy = [RandomDeckStrategy strategy];
     }
     
@@ -92,6 +87,11 @@
     
     // TODO: Random starter
     _currentPlayersTurn = kPlayerGreen;
+}
+
+- (Card*)cardLocatedAtGridLocation:(GridLocation*)gridLocation {
+    
+    return [_currentGame.unitLayout objectForKey:gridLocation];
 }
 
 - (void)card:(Card *)card movedToGridLocation:(GridLocation *)location {
@@ -161,66 +161,9 @@
     return YES;
 }
 
-- (CombatOutcome)resolveCombatBetween:(Card *)attacker defender:(Card *)defender {
+- (CombatOutcome)resolveCombatBetween:(Card*)attacker defender:(Card*)defender battleStrategy:(id<BattleStrategy>)battleStrategy {
     
-    [attacker combatStartingAgainstDefender:defender];
-    [defender combatStartingAgainstAttacker:attacker];
-    
-    [_delegate combatHasStartedBetweenAttacker:attacker andDefender:defender];
-        
-    CCLOG(@"Resolving combat between attacker: %@ and defender: %@", attacker, defender);
-    
-    if ([attacker specialAbilityTriggersVersus:defender]) {
-        
-        // Attacker has special against defender
-        [attacker addSpecialAbilityVersusOpponent:defender];
-    }
-    
-    if ([defender specialAbilityTriggersVersus:attacker]) {
-        
-        // Defender has special against attacker
-        [defender addSpecialAbilityVersusOpponent:attacker];
-    }
-    
-    AttributeRange attackValue = [attacker.attack calculateValue];
-    AttributeRange defendValue = [defender.defence calculateValue];
-    
-    CCLOG(@"Attack value: %@", AttributeRangeToNSString(attackValue));
-    CCLOG(@"Defend value: %@", AttributeRangeToNSString(defendValue));
-    
-    NSUInteger attackRoll = [_attackerDiceStrategy rollDiceWithDie:6];
-    NSUInteger defenceRoll = [_defenderDiceStrategy rollDiceWithDie:6];
-    
-    CCLOG(@"Attack roll: %d", attackRoll);
-    CCLOG(@"Defence roll: %d", defenceRoll);
-    
-    CombatOutcome outcome;
-    
-    // Check attackroll
-    if (attackRoll >= attackValue.lowerValue && attackRoll <= attackValue.upperValue) {
-        // Check defenceroll
-        if (defenceRoll >= defendValue.lowerValue && defenceRoll <= defendValue.upperValue) {
-            outcome = kCombatOutcomeDefendSuccessful;
-        }
-        else {
-            outcome = kCombatOutcomeAttackSuccessful;
-        }
-    }
-    else {
-        outcome = kCombatOutcomeDefendSuccessfulMissed;
-    }
-    
-    if (IsAttackSuccessful(outcome)) {
-        CCLOG(@"Attack successful");
-        [self cardHasBeenDefeated:defender];
-        [_delegate cardHasBeenDefeatedInCombat:defender];
-    }
-    else {
-        CCLOG(@"Defend successful");
-    }
-    
-    [attacker combatFinishedAgainstDefender:defender withOutcome:outcome];
-    [defender combatFinishedAgainstAttacker:attacker withOutcome:outcome];
+    CombatOutcome outcome = [battleStrategy resolveCombatBetweenAttacker:attacker defender:defender gameManager:self];
     
     return outcome;
 }

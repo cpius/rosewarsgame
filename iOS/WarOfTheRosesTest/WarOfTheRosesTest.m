@@ -29,9 +29,6 @@
     
     _attackerFixedStrategy = [FixedDiceStrategy strategy];
     _defenderFixedStrategy = [FixedDiceStrategy strategy];
-    
-    _manager.attackerDiceStrategy = _attackerFixedStrategy;
-    _manager.defenderDiceStrategy = _defenderFixedStrategy;
 }
 
 - (void)tearDown
@@ -60,6 +57,25 @@
     
     STAssertTrue([test isEqualToString:string2], @"Wrong");
     STAssertTrue([test2 isEqualToString:string2], @"Wrong");
+}
+
+- (void)testValidPushLocation {
+    
+    GridLocation *myLocation = [GridLocation gridLocationWithRow:1 column:3];
+    GridLocation *enemyLocation = [GridLocation gridLocationWithRow:2 column:3];
+    GridLocation *pushLocation = [enemyLocation getPushLocationForGridLocationWhenComingFromGridLocation:myLocation];
+    
+    STAssertTrue(pushLocation.row == 3, @"Should push unit to row 3");
+    STAssertTrue(pushLocation.column == 3, @"Should push unit to row 3");
+}
+
+- (void)testInvalidPushLocation {
+    
+    GridLocation *myLocation = [GridLocation gridLocationWithRow:1 column:4];
+    GridLocation *enemyLocation = [GridLocation gridLocationWithRow:1 column:5];
+    GridLocation *pushLocation = [enemyLocation getPushLocationForGridLocationWhenComingFromGridLocation:myLocation];
+
+    STAssertNil(pushLocation, @"Push location should be nil, because it's outside gameboard");
 }
 
 

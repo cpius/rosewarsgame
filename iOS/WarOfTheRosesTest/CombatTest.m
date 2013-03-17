@@ -12,9 +12,10 @@
 #import "Archer.h"
 #import "Pikeman.h"
 #import "LightCavalry.h"
-#import "GameManager.h"
 #import "TestHelper.h"
 #import "TimedBonus.h"
+#import "StandardBattleStrategy.h"
+#import "GameManager.h"
 
 @implementation CombatTest
 
@@ -26,9 +27,11 @@
     
     _attackerFixedStrategy = [FixedDiceStrategy strategy];
     _defenderFixedStrategy = [FixedDiceStrategy strategy];
-      
-    _manager.attackerDiceStrategy = _attackerFixedStrategy;
-    _manager.defenderDiceStrategy = _defenderFixedStrategy;
+    
+    _battleStrategy = [StandardBattleStrategy strategy];
+    
+    _battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    _battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
 }
 
 - (void)testSimpleCombatDefenceSucces {
@@ -46,7 +49,7 @@
     _attackerFixedStrategy.fixedDieValue = 3;
     _defenderFixedStrategy.fixedDieValue = 1;
     
-    CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender];
+    CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
     
     STAssertTrue(IsDefenseSuccessful(outcome), @"Pike should have defended successfully");
 
@@ -69,7 +72,7 @@
     _attackerFixedStrategy.fixedDieValue = 5;
     _defenderFixedStrategy.fixedDieValue = 4;
     
-    CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender];
+    CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
     
     STAssertTrue(IsAttackSuccessful(outcome), @"Attack should be successful");
     
@@ -94,11 +97,11 @@
     _attackerFixedStrategy.fixedDieValue = 5;
     _defenderFixedStrategy.fixedDieValue = 5;
     
-    [_manager resolveCombatBetween:attacker defender:defender1];
+    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:_battleStrategy];
     
     STAssertTrue(attacker.experience == 1, @"Attacker should have gained 1 XP");
 
-    [_manager resolveCombatBetween:attacker defender:defender2];
+    [_manager resolveCombatBetween:attacker defender:defender2 battleStrategy:_battleStrategy];
 
     STAssertTrue(attacker.experience == 1, @"Attacker should not have gained extra XP this round");
 }
@@ -120,13 +123,13 @@
     _attackerFixedStrategy.fixedDieValue = 5;
     _defenderFixedStrategy.fixedDieValue = 5;
     
-    [_manager resolveCombatBetween:attacker defender:defender1];
+    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:_battleStrategy];
     
     STAssertTrue(attacker.experience == 1, @"Attacker should have gained 1 XP");
     
     [_manager endTurn];
     
-    [_manager resolveCombatBetween:attacker defender:defender2];
+    [_manager resolveCombatBetween:attacker defender:defender2 battleStrategy:_battleStrategy];
     
     STAssertTrue(attacker.experience == 2, @"Attacker should have gained 2 XP");
     STAssertTrue(attacker.numberOfLevelsIncreased == 1, @"Attacker should have increased a level");

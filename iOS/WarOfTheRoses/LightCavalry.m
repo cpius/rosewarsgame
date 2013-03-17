@@ -44,14 +44,4 @@
     return [[LightCavalry alloc] init];
 }
 
--(BOOL)specialAbilityTriggersVersus:(Card *)opponent {
-    
-    return NO;
-}
-
-- (void)addSpecialAbilityVersusOpponent:(Card *)opponent {
-    
-    
-}
-
 @end
