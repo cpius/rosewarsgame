@@ -16,20 +16,16 @@ class TestAI(unittest.TestCase):
 
         self.assertTrue(re.search(".*attack.*", str(action)), "The ai did not choose to attack")
 
-    def test_AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer(self):
+    def test_AI_Evaluator_WhenNoActionsAreAvailable_ThenReduceActionsToZero(self):
 
-        test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenPassTurnToOtherPlayer.txt", "r")
+        test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenReduceActionsToZero.txt", "r")
         gamestate = self.parse_test_case(test_file)
-        active_player_before = gamestate.current_player()
+
         action = gamestate.current_player().ai.select_action(gamestate)
 
-        print "Actions before: " + str(gamestate.get_actions_remaining())
         gamestate.do_action(action)
-        print "Actions after: " + str(gamestate.get_actions_remaining())
 
-        active_player_after = gamestate.current_player()
-
-        self.assertNotEquals(active_player_before, active_player_after, "The turn did not switch")
+        self.assertEquals(0, gamestate.get_actions_remaining(), "There are too many actions left")
 
     def parse_test_case(self, test_file):
 
