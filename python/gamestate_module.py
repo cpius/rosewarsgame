@@ -17,9 +17,11 @@ class Gamestate:
 
     def do_action(self, action):
         action_doer.do_action(self, action)
-        self.available_actions = action_getter.get_actions(self)
-        if not self.available_actions:
-            self.actions_remaining = 0
+
+        if self.actions_remaining > 0:
+            available_actions = action_getter.get_actions(self)
+            if not available_actions:
+                self.actions_remaining = 0
 
     def initialize_turn(self):
         initializer.initialize_turn(self)
