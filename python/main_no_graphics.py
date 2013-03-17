@@ -29,7 +29,7 @@ def perform_action(action, g):
 
         g.initialize_action()
 
-        if (g.players[0].actions_remaining < 1 or len(all_actions) == 1) and not hasattr(g.players[0], "extra_action"):
+        if (g.get_actions_remaining() < 1 or len(all_actions) == 1) and not hasattr(g.players[0], "extra_action"):
             g.turn_shift()
 
     return g
@@ -41,7 +41,7 @@ def run_game(g):
 
     while not hasattr(g.players[0], "won"):
 
-        print g.turn, 3 - g.players[0].actions_remaining
+        print g.turn, 3 - g.get_actions_remaining()
         print g.players[0].color
 
         action = g.players[0].ai.select_action(g)
@@ -70,8 +70,7 @@ def new_game():
     gamestate.initialize_turn()
     gamestate.initialize_action()
 
-    player1.actions_remaining = 1
-    player2.actions_remaining = 0
+    gamestate.set_actions_remaining(1)
 
     run_game(gamestate)
 

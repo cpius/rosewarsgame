@@ -4,8 +4,14 @@ import gamestate_module
 from action import Action
 from player import Player
 
-start_attributes_actions = ["unit", "startpos", "endpos", "attackpos", "is_attack", "move_with_attack",
-                            "is_ability", "ability"]
+start_attributes_actions = ["unit",
+                            "start_position",
+                            "end_position",
+                            "attack_position",
+                            "is_attack",
+                            "move_with_attack",
+                            "is_ability",
+                            "ability"]
 
 
 def save_gamestate(g):
@@ -25,12 +31,11 @@ def save_gamestate(g):
     gamestate = []
 
     for i in range(2):
-        gamestate.append([g.players[i].color, g.players[i].ai_name, g.players[i].actions_remaining,
-                          hasattr(g.players[i], "extra_action")])
+        gamestate.append([g.players[i].color, g.players[i].ai_name, hasattr(g.players[i], "extra_action")])
         
         unit_states = []
-        for pos, unit in g.units[i].items():
-            unit_state1 = [pos, unit.name.replace(" ", "_")]
+        for position, unit in g.units[i].items():
+            unit_state1 = [position, unit.name.replace(" ", "_")]
             unit_state2 = {}
             for key, value in unit.__dict__.items():
                 if save_item(key, value):
@@ -40,6 +45,7 @@ def save_gamestate(g):
         gamestate.append(unit_states)
         
     gamestate.append(g.turn)
+    gamestate.append(g.actions_remaining)
 
     return gamestate
 
@@ -53,8 +59,7 @@ def load_gamestate(gamestate):
 
         player = Player(gamestate[i * 2][0])
         player.ai_name = gamestate[i * 2][1]
-        player.actions_remaining = gamestate[i * 2][2]
-        if gamestate[i * 2][3]:
+        if gamestate[i * 2][2]:
             player.extra_action = True
 
         players.append(player)
@@ -69,7 +74,7 @@ def load_gamestate(gamestate):
 
         units.append(load_units)
 
-    return gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4])
+    return gamestate_module.Gamestate(players[0], units[0], players[1], units[1], gamestate[4], gamestate[5])
 
 
 def save_action(action):
@@ -90,7 +95,13 @@ def save_action(action):
 
 def load_action(action_state):
 
-    action = Action(action_state[0]["startpos"], action_state[0]["endpos"], action_state[0]["attackpos"], action_state[0]["is_attack"], action_state[0]["move_with_attack"], action_state[0]["is_ability"], action_state[0]["ability"])
+    action = Action(action_state[0]["start_position"],
+                    action_state[0]["end_position"],
+                    action_state[0]["attack_position"],
+                    action_state[0]["is_attack"],
+                    action_state[0]["move_with_attack"],
+                    action_state[0]["is_ability"],
+                    action_state[0]["ability"])
     
     for key, item in action_state[0].items():
         if key not in start_attributes_actions:
@@ -99,7 +110,13 @@ def load_action(action_state):
     if len(action_state) > 1:
         action.sub_actions = []
         for i in range(1, len(action_state)):
-            action.sub_actions.append(Action(action_state[i]["startpos"], action_state[i]["endpos"], action_state[i]["attackpos"], action_state[i]["is_attack"], action_state[i]["move_with_attack"], action_state[i]["is_ability"], action_state[i]["ability"]))
+            action.sub_actions.append(Action(action_state[i]["start_position"],
+                                             action_state[i]["end_position"],
+                                             action_state[i]["attack_position"],
+                                             action_state[i]["is_attack"],
+                                             action_state[i]["move_with_attack"],
+                                             action_state[i]["is_ability"],
+                                             action_state[i]["ability"]))
             for key, item in action_state[i].items():
                 if key not in start_attributes_actions:
                     setattr(action.sub_actions[-1], key, item)
