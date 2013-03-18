@@ -40,6 +40,23 @@ class Controller(object):
 
         self.run_game()
 
+    def trigger_artificial_intelligence(self):
+        print "turn", self.gamestate.turn
+        print "action", 3 - self.gamestate.get_actions_remaining()
+        print
+
+        action = self.gamestate.current_player().ai.select_action(self.gamestate)
+
+        if action:
+            self.perform_action(action)
+        else:
+            self.gamestate.turn_shift()
+            self.gamestate.recalculate_special_counters()
+            self.view.draw_game(self.gamestate)
+
+        if hasattr(self.gamestate.current_player(), "extra_action"):
+            extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
+            self.perform_action(extra_action)
     def run_game(self):
 
         self.gamestate.set_ais()
@@ -58,21 +75,7 @@ class Controller(object):
 
                     if self.gamestate.current_player().ai_name != "Human":
 
-                        print "turn", self.gamestate.turn
-                        print "action", 3 - self.gamestate.get_actions_remaining()
-                        print
-
-                        action = self.gamestate.current_player().ai.select_action(self.gamestate)
-                        if action:
-                            self.perform_action(action)
-                        else:
-                            self.gamestate.turn_shift()
-                            self.recalculate_special_counters()
-                            self.view.draw_game(self.gamestate)
-
-                        if hasattr(self.gamestate.current_player(), "extra_action"):
-                            extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
-                            self.perform_action(extra_action)
+                        self.trigger_artificial_intelligence()
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     x, y = self.view.get_position_from_mouse_click(event.pos)
