@@ -38,6 +38,7 @@
 @property (nonatomic, readonly) BOOL isMove;
 
 @property (nonatomic, readonly) ActionTypes actionType;
+@property (nonatomic, readonly) GridLocation *startLocation;
 
 - (id)initWithPath:(NSArray*)path andCardInAction:(Card*)card enemyCard:(Card*)enemyCard;
 

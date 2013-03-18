@@ -23,8 +23,8 @@
     self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
     
     if (self) {
-        _actionType = kActionTypeMelee;
-        _battleStrategy = [StandardBattleStrategy strategy];
+        _actionType = kActionTypeMelee;        
+        _startLocation = card.cardLocation;
     }
     
     return self;
@@ -47,13 +47,12 @@
     [self.delegate beforePerformAction:self];
     
     GridLocation *retreatLocation = [self getEntryLocationInPath];
-    _startLocation = self.cardInAction.cardLocation;
     
     [self.delegate action:self wantsToMoveFollowingPath:self.path withCompletion:^(GridLocation *endLocation) {
         
         [self.cardInAction consumeMoves:self.path.count];
         
-        CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:_battleStrategy];
+        CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
         
         self.combatOutcome = combatOutcome;
         [self.delegate action:self hasResolvedCombatWithOutcome:combatOutcome];

@@ -25,6 +25,7 @@
 #import "LongSwordsMan.h"
 #import "Crusader.h"
 #import "FlagBearer.h"
+#import "WarElephant.h"
 
 @interface CardPool()
 
@@ -84,6 +85,8 @@
             return [Crusader card];
         case kFlagBearer:
             return [FlagBearer card];
+        case kWarElephant:
+            return [WarElephant card];
         default:
             CCLOG(@"Unknown cardname: %d", unitName);
     }
@@ -115,7 +118,7 @@
         drawnCard = [self createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = kFlagBearer;//(arc4random() % 10) + 6;
+        UnitName unitName = kViking;//(arc4random() % 11) + 6;
         drawnCard = [self createCardOfName:unitName];
     }
     

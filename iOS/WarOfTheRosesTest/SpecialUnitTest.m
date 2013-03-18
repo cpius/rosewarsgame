@@ -31,6 +31,8 @@
 #import "Crusader.h"
 #import "FlagBearer.h"
 #import "StandardBattleStrategy.h"
+#import "WarElephant.h"
+#import "WarElephantBattleStrategy.h"
 
 @implementation SpecialUnitTest
 
@@ -498,7 +500,7 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
     meleeAction.delegate = mock;
-    meleeAction.battleStrategy = _battleStrategy;
+    longswordsman.battleStrategy = _battleStrategy;
     
     [meleeAction performActionWithCompletion:^{
         
@@ -603,6 +605,225 @@
     [meleeAction performActionWithCompletion:^{
         
         STAssertTrue([pikeman.attack calculateValue].lowerValue == 3, @"Pikeman should have received +1A aoe effect from Crusader");
+    }];
+}
+
+- (void)testWarElephantPushesEnemyWhenDefenseIsSuccesful {
+    
+    WarElephant *warelephant = [WarElephant card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    warelephant.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:warelephant]
+                                    player2Units:[NSArray arrayWithObject:pikeman]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 1;
+
+    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+        
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertTrue(pikeman.cardLocation.row == 4, @"Pikeman should be pushed");
+        STAssertTrue(pikeman.cardLocation.column == 3, @"Pikeman should be pushed");
+    }];
+}
+
+- (void)testWarElephantPushesVikingAndVikingLosesOneHitPoint {
+    
+    WarElephant *warelephant = [WarElephant card];
+    Viking *viking = [Viking card];
+    
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    warelephant.cardColor = kCardColorGreen;
+    
+    viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    viking.cardColor = kCardColorRed;
+    
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:warelephant]
+                                    player2Units:[NSArray arrayWithObject:viking]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 5;
+    
+    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertFalse(viking.dead, @"Viking should survice attack");
+        STAssertTrue(viking.hitpoints == 1, @"Viking should only have 1 hitpoint left");
+        STAssertTrue(viking.cardLocation.row == 4, @"Viking should be pushed");
+        STAssertTrue(viking.cardLocation.column == 3, @"Viking should be pushed");
+    }];
+}
+
+- (void)testWarElephantKillsVikingIfPushIsNotPossible {
+    
+    WarElephant *warelephant = [WarElephant card];
+    Viking *viking = [Viking card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    warelephant.cardColor = kCardColorGreen;
+    
+    viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    viking.cardColor = kCardColorRed;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:warelephant]
+                                    player2Units:[NSArray arrayWithObjects:viking, pikeman, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 5;
+    
+    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertTrue(viking.dead, @"Viking should be dead");
+        STAssertTrue(viking.hitpoints == 0, @"Viking should be dead");
+        STAssertFalse(pikeman.dead, @"Pikeman should survice");
+    }];
+}
+
+
+- (void)testWarElephantHitsSurroundingEnemies {
+    
+    WarElephant *warelephant = [WarElephant card];
+    Pikeman *pikeman = [Pikeman card];
+    Pikeman *pikeman2 = [Pikeman card];
+    Pikeman *pikeman3 = [Pikeman card];
+    
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    warelephant.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorRed;
+    pikeman2.cardLocation = [GridLocation gridLocationWithRow:3 column:2];
+    pikeman2.cardColor = kCardColorRed;
+    pikeman3.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
+    pikeman3.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:warelephant]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, pikeman2, pikeman3, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 1;
+    
+    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    
+    StandardBattleStrategy *aoeBattleStrategy = [StandardBattleStrategy strategy];
+
+    FixedDiceStrategy *attackDiceStrategy = [FixedDiceStrategy strategy];
+    attackDiceStrategy.fixedDieValue = 5;
+    
+    FixedDiceStrategy *defenderDiceStrategy = [FixedDiceStrategy strategy];
+    defenderDiceStrategy.fixedDieValue = 5;
+
+    aoeBattleStrategy.attackerDiceStrategy = attackDiceStrategy;
+    aoeBattleStrategy.defenderDiceStrategy = defenderDiceStrategy;
+    
+    warelephant.aoeBattleStrategy = aoeBattleStrategy;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertTrue(pikeman.cardLocation.row == 4, @"Pikeman should be pushed");
+        STAssertTrue(pikeman.cardLocation.column == 3, @"Pikeman should be pushed");
+        
+        STAssertTrue(pikeman2.dead, @"Pikeman2 should be dead");
+        STAssertTrue(pikeman3.dead, @"Pikeman3 should be dead");
+    }];
+}
+
+- (void)testWarElephantPushesVikingWithoutLossOfLifeIfVikingDefenseIsSuccessful {
+    
+    WarElephant *warelephant = [WarElephant card];
+    Viking *viking = [Viking card];
+    
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    warelephant.cardColor = kCardColorGreen;
+    
+    viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    viking.cardColor = kCardColorRed;
+        
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:warelephant]
+                                    player2Units:[NSArray arrayWithObject:viking]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 2;
+    
+    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertFalse(viking.dead, @"Viking should be alive");
+        STAssertTrue(viking.hitpoints == 2, @"Viking should still have 2 hitpoints");
+        STAssertTrue(viking.cardLocation.row == 4, @"Viking should be pushed");
+        STAssertTrue(viking.cardLocation.column == 3, @"Viking should be pushed");
     }];
 }
 

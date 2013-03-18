@@ -10,9 +10,7 @@
 
 @interface MeleeAttackAction : Action
 
-@property (nonatomic, strong) id<BattleStrategy> battleStrategy;
 @property (nonatomic, assign) MeleeAttackTypes meleeAttackType;
 @property (nonatomic, assign) CombatOutcome combatOutcome;
-@property (nonatomic, readonly) GridLocation *startLocation;
 
 @end

@@ -12,6 +12,7 @@
 @implementation MoveAction
 
 @synthesize actionType = _actionType;
+@synthesize startLocation = _startLocation;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
@@ -19,6 +20,7 @@
     
     if (self) {
         _actionType = kActionTypeMove;
+        _startLocation = card.cardLocation;
     }
     
     return self;
@@ -40,12 +42,10 @@
 }
 
 - (void)performActionWithCompletion:(void (^)())completion {
-    
+
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
-    GridLocation *startLocation = self.cardInAction.cardLocation;
-
     [self.delegate action:self wantsToMoveFollowingPath:self.path withCompletion:^(GridLocation *endLocation) {
         
         [self.cardInAction consumeMoves:self.path.count];
@@ -54,7 +54,7 @@
             
             [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];
             
-            [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:startLocation toLocation:endLocation];
+            [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:endLocation];
         }
         
         [[GameManager sharedManager] actionUsed:self];

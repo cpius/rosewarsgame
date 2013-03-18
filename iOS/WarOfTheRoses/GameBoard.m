@@ -125,7 +125,9 @@
     return action;
 }
 
-- (void)moveActiveGameBoardNodeFollowingPath:(NSArray *)path onCompletion:(void (^)())completion {
+- (void)moveCardAtLocation:(GridLocation *)location followingPath:(NSArray *)path onCompletion:(void (^)())completion {
+
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
     
     NSMutableArray *tempPath = [NSMutableArray arrayWithArray:path];
     
@@ -135,7 +137,7 @@
     else {
         _isMoving = YES;
     }
-        
+    
     PathFinderStep *step = [tempPath objectAtIndex:0];
     
     GameBoardNode *nextNode = [self getGameBoardNodeForGridLocation:step.location];
@@ -145,7 +147,7 @@
     CCCallBlock *popStep = [CCCallBlock actionWithBlock:^{
         
         if ([_delegate respondsToSelector:@selector(card:movedToNode:)]) {
-            [_delegate card:_activeNode.card movedToNode:nextNode];
+            [_delegate card:node.card movedToNode:nextNode];
         }
         
         if (tempPath.count == 0) {
@@ -154,13 +156,18 @@
             completion();
         }
         else {
-            [self moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithArray:tempPath] onCompletion:completion];
+            [self moveCardAtLocation:location followingPath:[NSArray arrayWithArray:tempPath] onCompletion:completion];//[self moveActiveGameBoardNodeFollowingPath:[NSArray arrayWithArray:tempPath] onCompletion:completion];
         }
     }];
     
     [tempPath removeObject:step];
+    
+    [node.card runAction:[CCSequence actions:moveAction, popStep, nil]];
+}
 
-    [_activeNode.card runAction:[CCSequence actions:moveAction, popStep, nil]];
+- (void)moveActiveGameBoardNodeFollowingPath:(NSArray *)path onCompletion:(void (^)())completion {
+    
+    [self moveCardAtLocation:_activeCard.model.cardLocation followingPath:path onCompletion:completion];
 }
 
 - (void)placeCard:(CardSprite *)cardSprite inGameBoardNode:(GameBoardNode *)node useHighLighting:(BOOL)highlighting onCompletion:(void (^)())completion {

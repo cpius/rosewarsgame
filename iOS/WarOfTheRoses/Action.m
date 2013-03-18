@@ -20,6 +20,7 @@
 @synthesize isMove = _isMove;
 @synthesize delegate = _delegate;
 @synthesize actionType = _actionType;
+@synthesize startLocation = _startLocation;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
@@ -74,8 +75,8 @@
     }
     
     if (_path != nil && _path.count == 1) {
-        // If path only contains 1 step, the entry location is the cards current location
-        return self.cardInAction.cardLocation;
+        // If path only contains 1 step, the entry location is the cards start location
+        return self.startLocation;
     }
     
     return nil;

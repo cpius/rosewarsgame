@@ -43,7 +43,7 @@
 - (void)endTurn;
 
 - (void)card:(Card*)card movedToGridLocation:(GridLocation*)location;
-- (void)cardHasBeenDefeated:(Card*)card;
+- (void)attackSuccessfulAgainstCard:(Card*)card;
 
 - (Card*)cardLocatedAtGridLocation:(GridLocation*)gridLocation;
 

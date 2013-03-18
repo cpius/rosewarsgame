@@ -12,8 +12,12 @@
 #import "PathFinderStep.h"
 #import "StandardBattleStrategy.h"
 #import "WarElephantBattleStrategy.h"
+#import "MoveAction.h"
 
 @implementation WarElephant
+
+@synthesize battleStrategy = _battleStrategy;
+@synthesize aoeBattleStrategy = _aoeBattleStrategy;
 
 -(id)init {
     self = [super init];
@@ -30,12 +34,15 @@
         
         self.range = 1;
         self.move = 2;
-        self.moveActionCost = self.attackActionCost = 2;
+        self.moveActionCost = 1;
+        self.attackActionCost = 2;
         self.hitpoints = 1;
         
         self.attackSound = @"sword_sound.wav";
-        self.frontImageSmall = @"crusader_icon.png";
-        self.frontImageLarge = [NSString stringWithFormat:@"crusader_%d.png", self.cardColor];
+        self.frontImageSmall = @"warelephant_icon.png";
+        self.frontImageLarge = [NSString stringWithFormat:@"warelephant_%d.png", self.cardColor];
+        
+        _aoeBattleStrategy = [StandardBattleStrategy strategy];
         
         [self commonInit];
     }
@@ -48,51 +55,62 @@
     return [[WarElephant alloc] init];
 }
 
-- (void)willPerformAction:(Action *)action {
+- (id<BattleStrategy>)battleStrategy {
     
-    if (action.isAttack) {
-        
-        MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
-        meleeAction.battleStrategy = [WarElephantBattleStrategy strategy];
+    if (_battleStrategy == nil) {
+        _battleStrategy = [WarElephantBattleStrategy strategy];
     }
+    
+    return _battleStrategy;
 }
 
 - (void)didPerformedAction:(Action *)action {
     
     [super didPerformedAction:action];
     
-    MeleeAttackAction *meleeAttackAction = (MeleeAttackAction*)action;
-    
-    // Get 2 diagonally nodes in attackdirection
-    GridLocation *startLocation = meleeAttackAction.startLocation;
-    
-    NSMutableSet *surroundingMyCard = [NSMutableSet setWithArray:[startLocation surroundingEightGridLocations]];
-    NSSet *surroundingEnemyCard = [NSSet setWithArray:[action.enemyCard.cardLocation surroundingGridLocations]];
-    
-    [surroundingMyCard intersectSet:surroundingEnemyCard];
-    
-    for (GridLocation *gridLocation in surroundingMyCard.allObjects) {
+    if (action.isAttack) {
+        MeleeAttackAction *meleeAttackAction = (MeleeAttackAction*)action;
         
-        Card *cardInLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:gridLocation];
+        // Get 2 diagonally nodes in attackdirection
+        GridLocation *startLocation = [meleeAttackAction getEntryLocationInPath];
         
-        if (cardInLocation != nil && cardInLocation.cardColor != meleeAttackAction.cardInAction.cardColor) {
+        NSMutableSet *surroundingMyCard = [NSMutableSet setWithArray:[startLocation surroundingEightGridLocations]];
+        NSSet *surroundingEnemyCard = [NSSet setWithArray:[action.enemyCard.cardLocation surroundingGridLocations]];
+        
+        [surroundingMyCard intersectSet:surroundingEnemyCard];
+        
+        for (GridLocation *gridLocation in surroundingMyCard.allObjects) {
             
-            MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
+            Card *cardInLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:gridLocation];
             
-            CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:[StandardBattleStrategy strategy]];
-            
-            [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome];
+            if (cardInLocation != nil && cardInLocation.cardColor != meleeAttackAction.cardInAction.cardColor) {
+                
+                MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
+                
+                CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:_aoeBattleStrategy];
+                
+                [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome];
+            }
         }
-    }
-    
-    if (meleeAttackAction.combatOutcome == kCombatOutcomePush) {
         
-        GridLocation *pushLocation = [action.enemyCard.cardLocation getPushLocationForGridLocationWhenComingFromGridLocation:[meleeAttackAction getEntryLocationInPath]];
-        
-        Card *cardAtPushLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:pushLocation];
-        
-        if (cardAtPushLocation == nil) {
-            <#statements#>
+        if (IsPushSuccessful(meleeAttackAction.combatOutcome) && !action.enemyCard.dead) {
+            
+            GridLocation *pushLocation = [action.enemyCard.cardLocation getPushLocationForGridLocationWhenComingFromGridLocation:[meleeAttackAction getEntryLocationInPath]];
+            
+            Card *cardAtPushLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:pushLocation];
+            
+            if (cardAtPushLocation == nil) {
+
+                MoveAction *pushAction = [[MoveAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard enemyCard:nil];
+                
+                pushAction.delegate = action.delegate;
+                [pushAction performActionWithCompletion:^{
+                    
+                }];
+            }
+            else {
+                [[GameManager sharedManager] attackSuccessfulAgainstCard:action.enemyCard];
+            }
         }
     }
 }

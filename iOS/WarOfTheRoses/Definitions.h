@@ -49,18 +49,24 @@ typedef enum {
     kCombatOutcomeAttackSuccessful = 0,
     kCombatOutcomeDefendSuccessful = 1,
     kCombatOutcomeDefendSuccessfulMissed = 2,
-    kCombatOutcomePush = 3
+    kCombatOutcomePush = 3,
+    kCombatOutcomeAttackSuccessfulAndPush = 4
     
 } CombatOutcome;
 
 NS_INLINE BOOL IsAttackSuccessful(CombatOutcome outcome) {
     
-    return outcome == kCombatOutcomeAttackSuccessful;
+    return outcome == kCombatOutcomeAttackSuccessful || outcome == kCombatOutcomeAttackSuccessfulAndPush;
 }
 
 NS_INLINE BOOL IsDefenseSuccessful(CombatOutcome outcome) {
     
     return outcome == kCombatOutcomeDefendSuccessful || outcome == kCombatOutcomeDefendSuccessfulMissed;
+}
+
+NS_INLINE BOOL IsPushSuccessful(CombatOutcome outcome) {
+    
+    return outcome == kCombatOutcomePush || outcome == kCombatOutcomeAttackSuccessfulAndPush;
 }
 
 typedef enum {

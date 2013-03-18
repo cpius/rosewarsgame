@@ -12,7 +12,7 @@
 @implementation LeftPanel
 
 @synthesize delegate = _delegate;
-@synthesize selectedCard = _selectedCard;
+@synthesize selectedAction = _selectedAction;
 
 - (id)init {
     
@@ -39,18 +39,18 @@
     return self;
 }
 
-- (void)setSelectedCard:(Card *)selectedCard {
+- (void)setSelectedAction:(Action *)selectedAction {
     
-    _selectedCard = selectedCard;
+    _selectedAction = selectedAction;
     
-    if (_selectedCard == nil || _selectedCard.isRanged) {
+    if (_selectedAction == nil || _selectedAction.cardInAction.isRanged) {
         [_attackButton runAction:[CCFadeOut actionWithDuration:0.2]];
         [_moveAttackButton runAction:[CCFadeOut actionWithDuration:0.2]];
     }
     else {
         [_attackButton runAction:[CCFadeIn actionWithDuration:0.2]];
         
-        if (selectedCard.movesRemaining > 0) {
+        if (_selectedAction.cardInAction.movesRemaining > 0) {
             [_moveAttackButton runAction:[CCFadeIn actionWithDuration:0.2]];
         }
     }

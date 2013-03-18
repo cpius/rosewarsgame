@@ -12,6 +12,7 @@
 
 @implementation RangedAttackAction
 @synthesize actionType = _actionType;
+@synthesize startLocation = _startLocation;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
@@ -19,6 +20,7 @@
     
     if (self) {
         _actionType = kActionTypeRanged;
+        _startLocation = card.cardLocation;
     }
     
     return self;
@@ -39,7 +41,7 @@
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
 
-    CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:[StandardBattleStrategy strategy]];
+    CombatOutcome combatOutcome = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
     
     self.combatOutcome = combatOutcome;
     [self.delegate action:self hasResolvedCombatWithOutcome:combatOutcome];

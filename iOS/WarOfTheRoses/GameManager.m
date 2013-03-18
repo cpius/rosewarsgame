@@ -104,7 +104,7 @@
     [_currentGame.unitLayout setObject:card forKey:location];
 }
 
-- (void)cardHasBeenDefeated:(Card *)card {
+- (void)attackSuccessfulAgainstCard:(Card *)card {
     
     card.hitpoints--;
     
@@ -114,6 +114,10 @@
         card.dead = YES;
         
         [_currentGame.unitLayout removeObjectForKey:card.cardLocation];
+
+        if ([_delegate respondsToSelector:@selector(cardHasBeenDefeatedInCombat:)]) {
+            [_delegate cardHasBeenDefeatedInCombat:card];
+        }
     }
     else {
         CCLOG(@"Card: %@ has lost in combat...Remaining hitpoints: %d", card, card.hitpoints);

@@ -76,7 +76,7 @@
     BOOL allowPath = [super allowPath:path forActionType:actionType allLocations:allLocations];
     
     if (actionType == kActionTypeMelee) {
-        if ((path != nil && path.count == 1)) {
+        if ((path != nil && path.count <= 2)) {
             allowPath = YES;
         }
     }

@@ -9,6 +9,7 @@
 #import "Card.h"
 #import "Action.h"
 #import "GameManager.h"
+#import "StandardBattleStrategy.h"
 
 @interface Card()
 
@@ -38,6 +39,7 @@
 @synthesize attackSound = _attackSound, defenceSound = _defenceSound, moveSound = _moveSound;
 @synthesize timedAbilities = _timedAbilities;
 @synthesize hitpoints;
+@synthesize battleStrategy = _battleStrategy;
 
 - (id)init {
     
@@ -64,6 +66,15 @@
     
     self.numberOfLevelsIncreased = 0;
     self.experience = 0;
+}
+
+- (id<BattleStrategy>)battleStrategy {
+    
+    if (_battleStrategy == nil) {
+        _battleStrategy = [StandardBattleStrategy strategy];
+    }
+    
+    return _battleStrategy;
 }
 
 - (void)resetAfterNewRound {

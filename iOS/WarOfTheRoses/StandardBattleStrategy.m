@@ -52,8 +52,7 @@
     
     if (IsAttackSuccessful(outcome)) {
         CCLOG(@"Attack successful");
-        [manager cardHasBeenDefeated:defender];
-        [manager.delegate cardHasBeenDefeatedInCombat:defender];
+        [manager attackSuccessfulAgainstCard:defender];
     }
     else {
         CCLOG(@"Defend successful");

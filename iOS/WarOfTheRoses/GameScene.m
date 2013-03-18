@@ -221,7 +221,7 @@
                 [_gameboard highlightCardAtLocation:action.enemyCard.cardLocation withColor:ccc3(235, 0, 0) actionType:kActionTypeMelee];
                 
                 if (_battlePlan.meleeActions.count > 0) {
-                    _leftPanel.selectedCard = action.cardInAction;
+                    _leftPanel.selectedAction = action;
                     
                     _attackDirections = [_battlePlan getAttackDirectionsForCard:action.cardInAction whenAttackingEnemyCard:action.enemyCard withUnitLayout:_gameManager.currentGame.unitLayout];
                     
@@ -273,7 +273,7 @@
 
 - (void)action:(Action *)action wantsToMoveFollowingPath:(NSArray *)path withCompletion:(void (^)(GridLocation *))completion {
     
-    [_gameboard moveActiveGameBoardNodeFollowingPath:path onCompletion:^{
+    [_gameboard moveCardAtLocation:action.cardInAction.cardLocation followingPath:path onCompletion:^{
         
         PathFinderStep *lastStep = path.lastObject;
         
@@ -287,13 +287,7 @@
     
     if (IsAttackSuccessful(combatOutcome)) {
         
-        GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:action.enemyCard.cardLocation];
-        
-        [ParticleHelper applyBurstToNode:node];
-        
-        if (action.enemyCard.dead) {
-            [_gameboard removeCardAtGameBoardNode:node];
-        }
+        [self cardHasBeenDefeatedInCombat:action.enemyCard];
     }
 }
 
@@ -416,6 +410,14 @@
 - (void)cardHasBeenDefeatedInCombat:(Card *)card {
     
     [[SoundManager sharedManager] playSoundEffectWithName:BOOM_SOUND];
+    
+    GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:card.cardLocation];
+    
+    [ParticleHelper applyBurstToNode:node];
+    
+    if (card.dead) {
+        [_gameboard removeCardAtGameBoardNode:node];
+    }
 }
 
 - (void)checkForEndTurn {
@@ -452,7 +454,7 @@
 
 - (void)showToolsPanel {
     
-    _leftPanel.selectedCard = nil;
+    _leftPanel.selectedAction = nil;
     [_leftPanel runAction:[CCMoveTo actionWithDuration:0.5 position:ccp((_leftPanel.contentSize.width / 2) - 5, _winSize.height / 2)]];
 }
 
@@ -542,8 +544,12 @@
         
         [label setColor:ccc3(0, 0, 0)];
     }
-    else {
+    else if (IsAttackSuccessful(combatOutcome)) {
         label = [CCLabelTTF labelWithString:@"Attack successful" fontName:APP_FONT fontSize:24];
+        [label setColor:ccc3(0, 0, 0)];
+    }
+    else if (IsPushSuccessful(combatOutcome)) {
+        label = [CCLabelTTF labelWithString:@"Pushed!" fontName:APP_FONT fontSize:24];
         [label setColor:ccc3(0, 0, 0)];
     }
     

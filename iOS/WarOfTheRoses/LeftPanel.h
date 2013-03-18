@@ -7,7 +7,7 @@
 //
 
 #import "CCSprite.h"
-#import "Card.h"
+#import "Action.h"
 
 @class LeftPanel;
 @protocol LeftPanelProtocol <NSObject>
@@ -29,7 +29,7 @@
 }
 
 @property (nonatomic, weak) id<LeftPanelProtocol> delegate;
-@property (nonatomic, strong) Card *selectedCard;
+@property (nonatomic, strong) Action *selectedAction;
 
 - (void)reset;
 

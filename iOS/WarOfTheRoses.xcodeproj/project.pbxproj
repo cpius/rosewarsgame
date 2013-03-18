@@ -137,6 +137,10 @@
 		6DB2048516F354AB0004FFCB /* StandardBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2048416F354AB0004FFCB /* StandardBattleStrategy.m */; };
 		6DB2048816F356080004FFCB /* BaseBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2048716F356070004FFCB /* BaseBattleStrategy.m */; };
 		6DB2048B16F3B6D80004FFCB /* WarElephantBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2048A16F3B6D70004FFCB /* WarElephantBattleStrategy.m */; };
+		6DB2049016F664DC0004FFCB /* warelephant_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2048C16F664DB0004FFCB /* warelephant_0-hd.png */; };
+		6DB2049116F664DC0004FFCB /* warelephant_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2048D16F664DB0004FFCB /* warelephant_0.png */; };
+		6DB2049216F664DC0004FFCB /* warelephant_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2048E16F664DC0004FFCB /* warelephant_icon-hd.png */; };
+		6DB2049316F664DC0004FFCB /* warelephant_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2048F16F664DC0004FFCB /* warelephant_icon.png */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -545,6 +549,10 @@
 		6DB2048716F356070004FFCB /* BaseBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseBattleStrategy.m; sourceTree = "<group>"; };
 		6DB2048916F3B6D70004FFCB /* WarElephantBattleStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarElephantBattleStrategy.h; sourceTree = "<group>"; };
 		6DB2048A16F3B6D70004FFCB /* WarElephantBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarElephantBattleStrategy.m; sourceTree = "<group>"; };
+		6DB2048C16F664DB0004FFCB /* warelephant_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "warelephant_0-hd.png"; path = "Resources/Images/warelephant_0-hd.png"; sourceTree = "<group>"; };
+		6DB2048D16F664DB0004FFCB /* warelephant_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = warelephant_0.png; path = Resources/Images/warelephant_0.png; sourceTree = "<group>"; };
+		6DB2048E16F664DC0004FFCB /* warelephant_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "warelephant_icon-hd.png"; path = "Resources/Images/warelephant_icon-hd.png"; sourceTree = "<group>"; };
+		6DB2048F16F664DC0004FFCB /* warelephant_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = warelephant_icon.png; path = Resources/Images/warelephant_icon.png; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1069,6 +1077,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DB2048C16F664DB0004FFCB /* warelephant_0-hd.png */,
+				6DB2048D16F664DB0004FFCB /* warelephant_0.png */,
+				6DB2048E16F664DC0004FFCB /* warelephant_icon-hd.png */,
+				6DB2048F16F664DC0004FFCB /* warelephant_icon.png */,
 				6DB2047616F25BD00004FFCB /* crusader_0-hd.png */,
 				6DB2047716F25BD00004FFCB /* crusader_0.png */,
 				6DB2047816F25BD00004FFCB /* crusader_icon-hd.png */,
@@ -2072,6 +2084,10 @@
 				6DB2047B16F25BD00004FFCB /* crusader_0.png in Resources */,
 				6DB2047C16F25BD00004FFCB /* crusader_icon-hd.png in Resources */,
 				6DB2047D16F25BD00004FFCB /* crusader_icon.png in Resources */,
+				6DB2049016F664DC0004FFCB /* warelephant_0-hd.png in Resources */,
+				6DB2049116F664DC0004FFCB /* warelephant_0.png in Resources */,
+				6DB2049216F664DC0004FFCB /* warelephant_icon-hd.png in Resources */,
+				6DB2049316F664DC0004FFCB /* warelephant_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

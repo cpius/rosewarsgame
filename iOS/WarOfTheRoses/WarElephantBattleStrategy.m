@@ -43,7 +43,7 @@
             outcome = kCombatOutcomePush;
         }
         else {
-            outcome = kCombatOutcomeAttackSuccessful;
+            outcome = kCombatOutcomeAttackSuccessfulAndPush;
         }
     }
     else {
@@ -52,8 +52,7 @@
     
     if (IsAttackSuccessful(outcome)) {
         CCLOG(@"Attack successful");
-        [manager cardHasBeenDefeated:defender];
-        [manager.delegate cardHasBeenDefeatedInCombat:defender];
+        [manager attackSuccessfulAgainstCard:defender];
     }
     
     [attacker combatFinishedAgainstDefender:defender withOutcome:outcome];
