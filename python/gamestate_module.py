@@ -84,6 +84,30 @@ class Gamestate:
     def decrement_actions_remaining(self):
         self.actions_remaining -= 1
 
+    def recalculate_special_counters(self):
+        for unit in self.units[0].itervalues():
+            self.add_yellow_counters(unit)
+            self.add_blue_counters(unit)
+
+        for unit in self.units[1].itervalues():
+            self.add_yellow_counters(unit)
+            self.add_blue_counters(unit)
+
+    def add_yellow_counters(self, unit):
+        if hasattr(unit, "extra_life"):
+            unit.yellow_counters = 1
+        else:
+            unit.yellow_counters = 0
+
+    def add_blue_counters(self, unit):
+        unit.blue_counters = 0
+        if hasattr(unit, "frozen"):
+            unit.blue_counters = unit.frozen
+        if hasattr(unit, "attack_frozen"):
+            unit.blue_counters = unit.attack_frozen
+        if hasattr(unit, "just_bribed"):
+            unit.blue_counters = 1
+
 
 def save_gamestate(gamestate):
     return saver.save_gamestate(gamestate)

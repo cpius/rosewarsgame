@@ -57,6 +57,7 @@ class Controller(object):
         if hasattr(self.gamestate.current_player(), "extra_action"):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
             self.perform_action(extra_action)
+
     def run_game(self):
 
         self.gamestate.set_ais()
@@ -65,16 +66,14 @@ class Controller(object):
         start_position = None
         end_position = None
 
-        self.recalculate_special_counters()
+        self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
         while True:
             for event in pygame.event.get():
 
                 if event.type == USEREVENT + 1:
-
                     if self.gamestate.current_player().ai_name != "Human":
-
                         self.trigger_artificial_intelligence()
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -277,30 +276,6 @@ class Controller(object):
                 if event.type == KEYDOWN and event.key == K_2:
                     return 1
 
-    def recalculate_special_counters(self):
-        for unit in self.gamestate.units[0].itervalues():
-            self.add_yellow_counters(unit)
-            self.add_blue_counters(unit)
-
-        for unit in self.gamestate.units[1].itervalues():
-            self.add_yellow_counters(unit)
-            self.add_blue_counters(unit)
-
-    def add_yellow_counters(self, unit):
-        if hasattr(unit, "extra_life"):
-            unit.yellow_counters = 1
-        else:
-            unit.yellow_counters = 0
-
-    def add_blue_counters(self, unit):
-        unit.blue_counters = 0
-        if hasattr(unit, "frozen"):
-            unit.blue_counters = unit.frozen
-        if hasattr(unit, "attack_frozen"):
-            unit.blue_counters = unit.attack_frozen
-        if hasattr(unit, "just_bribed"):
-            unit.blue_counters = 1
-
     def pause(self):
         while True:
             for event in pygame.event.get():
@@ -362,7 +337,7 @@ class Controller(object):
         else:
             self.gamestate.current_player().ai.add_counters(self.gamestate)
 
-        self.recalculate_special_counters()
+        self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
         self.gamestate.initialize_action()
@@ -371,7 +346,7 @@ class Controller(object):
                 and not hasattr(self.gamestate.current_player(), "extra_action"):
             self.gamestate.turn_shift()
 
-        self.recalculate_special_counters()
+        self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
         if hasattr(self.gamestate.current_player(), "extra_action"):
@@ -403,7 +378,7 @@ class Controller(object):
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN or event.type == KEYDOWN:
-                        self.recalculate_special_counters()
+                        self.gamestate.recalculate_special_counters()
                         self.view.draw_game(self.gamestate)
                         return
 
