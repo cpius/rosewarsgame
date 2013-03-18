@@ -166,10 +166,7 @@ class View(object):
         self.draw_defence_counters(unit, position)
         self.draw_xp(unit, position)
 
-        #self.add_yellow_counters(unit)
         self.draw_yellow_counters(unit, position)
-
-        #self.add_blue_counters(unit)
         self.draw_blue_counters(unit, position)
 
         self.draw_crusading(unit, position)
