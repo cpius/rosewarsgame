@@ -90,7 +90,7 @@ class View(object):
 
     def draw_game_end(self, color):
         font = pygame.font.SysFont("monospace", 55, bold=True)
-        label = font.render(color + "\nWins", 1, black)
+        label = font.render(color + " Wins", 1, black)
         self.screen.blit(label, (40, 400))
         pygame.display.update()
 
