@@ -239,7 +239,7 @@ class Controller(object):
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     print "move cleared"
-                    start_position, end_position, selected_unit = None, None, None
+                    self.start_position = self.end_position = self.selected_unit = None
 
                 elif event.type == KEYDOWN and self.command_q_down(event.key):
                     self.exit_game()
