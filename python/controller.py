@@ -247,7 +247,7 @@ class Controller(object):
                 elif event.type == QUIT:
                     self.exit_game()
 
-                pygame.display.flip()
+                self.view.refresh()
 
     def exit_game(self):
         sys.exit()

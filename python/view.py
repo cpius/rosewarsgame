@@ -226,3 +226,6 @@ class View(object):
 
     def get_unit_pic(self, name, color):
         return name.replace(" ", "-") + ",-" + color.lower() + ".jpg"
+
+    def refresh(self):
+        pygame.display.flip()
