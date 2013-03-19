@@ -38,6 +38,10 @@ class Controller(object):
 
         os.makedirs("./replay")
 
+        self.start_position = None
+        self.end_position = None
+        self.selected_unit = None
+
         self.run_game()
 
     def trigger_artificial_intelligence(self):
@@ -58,6 +62,146 @@ class Controller(object):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
             self.perform_action(extra_action)
 
+    def left_click(self, click_coordinates):
+        x, y = self.view.get_position_from_mouse_click(click_coordinates)
+        if not self.start_position and (x, y) in self.gamestate.units[0]:
+            print "Start at", (x, y)
+            self.start_position = (x, y)
+            self.selected_unit = self.gamestate.units[0][self.start_position]
+
+        elif self.start_position \
+            and not self.end_position \
+            and ((x, y) in self.gamestate.units[1]
+                 or (x, y) in self.gamestate.units[0]) and self.selected_unit.abilities:
+            print "Ability", (x, y)
+            if len(self.selected_unit.abilities) > 1:
+                index = self.get_input_abilities(self.selected_unit)
+                action = Action(self.start_position,
+                                self.start_position,
+                                (x, y),
+                                False,
+                                False,
+                                True,
+                                self.selected_unit.abilities[index])
+            else:
+                action = Action(self.start_position,
+                                self.start_position,
+                                (x, y),
+                                False,
+                                False,
+                                True,
+                                self.selected_unit.abilities[0])
+            self.perform_action(action)
+            self.start_position = None
+            self.end_position = None
+
+        elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1] and self.selected_unit.range > 1:
+            print "Attack", (x, y)
+            action = Action(self.start_position, self.start_position, (x, y), True, False)
+            self.perform_action(action)
+            self.start_position = None
+            self.end_position = None
+
+        elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1]:
+            print "Attack-Move", (x, y)
+
+            if hasattr(self.gamestate.current_player(), "extra_action"):
+                all_actions = self.gamestate.get_actions()
+            else:
+                all_actions = self.gamestate.get_actions()
+
+            action = None
+
+            for possible_action in all_actions:
+                if possible_action.start_position == self.start_position \
+                        and possible_action.attack_position == (x, y) \
+                        and possible_action.move_with_attack:
+                    if possible_action.end_position == self.start_position:
+                        action = possible_action
+                        break
+                    action = possible_action
+
+            if not action:
+                print "Action not possible"
+                self.start_position = None
+                self.end_position = None
+            else:
+                self.perform_action(action)
+                self.start_position = None
+                self.end_position = None
+
+        elif self.start_position and not self.end_position:
+            print "Stop at", (x, y)
+            self.end_position = (x, y)
+
+        elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
+            print "Attack-Move", (x, y)
+            action = Action(self.start_position, self.end_position, (x, y), True, False)
+            self.perform_action(action)
+            self.start_position = None
+            self.end_position = None
+
+        elif self.start_position and self.end_position and (x, y) not in self.gamestate.units[1]:
+            print "Move to", (x, y)
+            action = Action(self.start_position, (x, y), None, False, False)
+            self.perform_action(action)
+            self.start_position = None
+            self.end_position = None
+
+    def right_click(self, click_coordinates):
+        x, y = self.view.get_position_from_mouse_click(click_coordinates)
+        if self.start_position and (x, y) not in self.gamestate.units[1]:
+            print "Move to", (x, y)
+            action = Action(self.start_position, (x, y), None, False, False)
+            self.perform_action(action)
+            self.start_position = None
+            self.end_position = None
+        if self.start_position and (x, y) in self.gamestate.units[1]:
+            action = Action(self.start_position, (x, y), (x, y), True, False)
+            chance_of_win = ai_methods.chance_of_win(self.selected_unit, self.gamestate.units[1][(x, y)], action)
+            print "Chance of win", round(chance_of_win * 100), "%"
+            self.start_position = None
+
+    def middle_click(self, click_coordinates):
+        x, y = self.view.get_position_from_mouse_click(click_coordinates)
+        if not self.start_position:
+            self.show_unit((x, y))
+
+        elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1]:
+            print "Attack", (x, y)
+
+            if hasattr(self.gamestate.current_player(), "extra_action"):
+                all_actions = self.gamestate.get_actions()
+            else:
+                all_actions = self.gamestate.get_actions()
+
+            action = None
+
+            for possible_action in all_actions:
+                if possible_action.start_position == self.start_position \
+                        and possible_action.attack_position == (x, y) \
+                        and not possible_action.move_with_attack:
+
+                    if possible_action.end_position == self.start_position:
+                        action = possible_action
+                        break
+                    action = possible_action
+
+            if not action:
+                print "Action not possible"
+                self.start_position = self.end_position = None
+            else:
+                self.perform_action(action)
+                self.start_position = None
+                self.end_position = None
+
+        elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
+            print "Attack", (x, y)
+            action = Action(self.start_position, self.end_position, (x, y), True, False)
+            self.perform_action(action)
+            self.start_position = None
+            self.end_position = None
+
     def list_actions(self):
         print
         print "Possible actions:"
@@ -76,8 +220,6 @@ class Controller(object):
         self.gamestate.set_ais()
 
         pygame.time.set_timer(USEREVENT + 1, 1000)
-        start_position = None
-        end_position = None
 
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
@@ -90,148 +232,13 @@ class Controller(object):
                         self.trigger_artificial_intelligence()
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    x, y = self.view.get_position_from_mouse_click(event.pos)
-
-                    if not start_position and (x, y) in self.gamestate.units[0]:
-                        print "Start at", (x, y)
-                        start_position = (x, y)
-                        selected_unit = self.gamestate.units[0][start_position]
-
-                    elif start_position \
-                        and not end_position \
-                        and ((x, y) in self.gamestate.units[1]
-                             or (x, y) in self.gamestate.units[0]) and selected_unit.abilities:
-                        print "Ability", (x, y)
-                        if len(selected_unit.abilities) > 1:
-                            index = self.get_input_abilities(selected_unit)
-                            action = Action(start_position,
-                                            start_position,
-                                            (x, y),
-                                            False,
-                                            False,
-                                            True,
-                                            selected_unit.abilities[index])
-                        else:
-                            action = Action(start_position,
-                                            start_position,
-                                            (x, y),
-                                            False,
-                                            False,
-                                            True,
-                                            selected_unit.abilities[0])
-                        self.perform_action(action)
-                        start_position = None
-                        end_position = None
-
-                    elif start_position and not end_position and (x, y) in self.gamestate.units[1] and selected_unit.range > 1:
-                        print "Attack", (x, y)
-                        action = Action(start_position, start_position, (x, y), True, False)
-                        self.perform_action(action)
-                        start_position = None
-                        end_position = None
-
-                    elif start_position and not end_position and (x, y) in self.gamestate.units[1]:
-                        print "Attack-Move", (x, y)
-
-                        if hasattr(self.gamestate.current_player(), "extra_action"):
-                            all_actions = self.gamestate.get_actions()
-                        else:
-                            all_actions = self.gamestate.get_actions()
-
-                        action = None
-
-                        for possible_action in all_actions:
-                            if possible_action.start_position == start_position \
-                                    and possible_action.attack_position == (x, y) \
-                                    and possible_action.move_with_attack:
-                                if possible_action.end_position == start_position:
-                                    action = possible_action
-                                    break
-                                action = possible_action
-
-                        if not action:
-                            print "Action not possible"
-                            start_position = None
-                            end_position = None
-                        else:
-                            self.perform_action(action)
-                            start_position = None
-                            end_position = None
-
-                    elif start_position and not end_position:
-                        print "Stop at", (x, y)
-                        end_position = (x, y)
-
-                    elif start_position and end_position and (x, y) in self.gamestate.units[1]:
-                        print "Attack-Move", (x, y)
-                        action = Action(start_position, end_position, (x, y), True, False)
-                        self.perform_action(action)
-                        start_position = None
-                        end_position = None
-
-                    elif start_position and end_position and (x, y) not in self.gamestate.units[1]:
-                        print "Move to", (x, y)
-                        action = Action(start_position, (x, y), None, False, False)
-                        self.perform_action(action)
-                        start_position = None
-                        end_position = None
+                    self.left_click(event.pos)
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
-                    x, y = self.view.get_position_from_mouse_click(event.pos)
-
-                    if start_position and (x, y) not in self.gamestate.units[1]:
-                        print "Move to", (x, y)
-                        action = Action(start_position, (x, y), None, False, False)
-                        self.perform_action(action)
-                        start_position = None
-                        end_position = None
-
-                    if start_position and (x, y) in self.gamestate.units[1]:
-                        action = Action(start_position, (x, y), (x, y), True, False)
-                        chance_of_win = ai_methods.chance_of_win(selected_unit, self.gamestate.units[1][(x, y)], action)
-                        print "Chance of win", round(chance_of_win * 100), "%"
-                        start_position = None
+                    self.right_click(event.pos)
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-                    x, y = self.view.get_position_from_mouse_click(event.pos)
-
-                    if not start_position:
-                        self.show_unit((x, y))
-
-                    elif start_position and not end_position and (x, y) in self.gamestate.units[1]:
-                        print "Attack", (x, y)
-
-                        if hasattr(self.gamestate.current_player(), "extra_action"):
-                            all_actions = self.gamestate.get_actions()
-                        else:
-                            all_actions = self.gamestate.get_actions()
-
-                        action = None
-
-                        for possible_action in all_actions:
-                            if possible_action.start_position == start_position \
-                                    and possible_action.attack_position == (x, y) \
-                                    and not possible_action.move_with_attack:
-
-                                if possible_action.end_position == start_position:
-                                    action = possible_action
-                                    break
-                                action = possible_action
-
-                        if not action:
-                            print "Action not possible"
-                            start_position = end_position = None
-                        else:
-                            self.perform_action(action)
-                            start_position = None
-                            end_position = None
-
-                    elif start_position and end_position and (x, y) in self.gamestate.units[1]:
-                        print "Attack", (x, y)
-                        action = Action(start_position, end_position, (x, y), True, False)
-                        self.perform_action(action)
-                        start_position = None
-                        end_position = None
+                    self.middle_click(event.pos)
 
                 if event.type == KEYDOWN and event.key == K_p:
                     print "paused"
