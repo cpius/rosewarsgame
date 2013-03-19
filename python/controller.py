@@ -13,7 +13,7 @@ from action import Action
 
 
 class Controller(object):
-    def new_game(self, view):
+    def __init__(self, view):
         self.view = view
 
         self.action_index = 1
@@ -39,7 +39,6 @@ class Controller(object):
         os.makedirs("./replay")
 
         self.clear_move()
-        self.run_game()
 
     def trigger_artificial_intelligence(self):
         print "turn", self.gamestate.turn
