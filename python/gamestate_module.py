@@ -3,7 +3,6 @@ import action_doer
 import initializer
 import action_getter
 import saver
-import settings
 import ai_module
 
 
