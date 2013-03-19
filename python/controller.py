@@ -58,6 +58,19 @@ class Controller(object):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
             self.perform_action(extra_action)
 
+    def list_actions(self):
+        print
+        print "Possible actions:"
+        if hasattr(self.gamestate.current_player(), "extra_action"):
+            actions = self.gamestate.get_actions()
+            for action in actions:
+                print action
+        else:
+            actions = self.gamestate.get_actions()
+            for action in actions:
+                print action
+        print
+
     def run_game(self):
 
         self.gamestate.set_ais()
@@ -225,17 +238,7 @@ class Controller(object):
                     self.pause()
 
                 if event.type == KEYDOWN and event.key == K_a:
-                    print
-                    print "Possible actions:"
-                    if hasattr(self.gamestate.current_player(), "extra_action"):
-                        actions = self.gamestate.get_actions()
-                        for action in actions:
-                            print action
-                    else:
-                        actions = self.gamestate.get_actions()
-                        for action in actions:
-                            print action
-                    print
+                    self.list_actions()
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     print "move cleared"
