@@ -38,10 +38,7 @@ class Controller(object):
 
         os.makedirs("./replay")
 
-        self.start_position = None
-        self.end_position = None
-        self.selected_unit = None
-
+        self.clear_move()
         self.run_game()
 
     def trigger_artificial_intelligence(self):
@@ -92,15 +89,13 @@ class Controller(object):
                                 True,
                                 self.selected_unit.abilities[0])
             self.perform_action(action)
-            self.start_position = None
-            self.end_position = None
+            self.clear_move()
 
         elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1] and self.selected_unit.range > 1:
             print "Attack", (x, y)
             action = Action(self.start_position, self.start_position, (x, y), True, False)
             self.perform_action(action)
-            self.start_position = None
-            self.end_position = None
+            self.clear_move()
 
         elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1]:
             print "Attack-Move", (x, y)
@@ -123,12 +118,10 @@ class Controller(object):
 
             if not action:
                 print "Action not possible"
-                self.start_position = None
-                self.end_position = None
+                self.clear_move()
             else:
                 self.perform_action(action)
-                self.start_position = None
-                self.end_position = None
+                self.clear_move()
 
         elif self.start_position and not self.end_position:
             print "Stop at", (x, y)
@@ -138,15 +131,13 @@ class Controller(object):
             print "Attack-Move", (x, y)
             action = Action(self.start_position, self.end_position, (x, y), True, False)
             self.perform_action(action)
-            self.start_position = None
-            self.end_position = None
+            self.clear_move()
 
         elif self.start_position and self.end_position and (x, y) not in self.gamestate.units[1]:
             print "Move to", (x, y)
             action = Action(self.start_position, (x, y), None, False, False)
             self.perform_action(action)
-            self.start_position = None
-            self.end_position = None
+            self.clear_move()
 
     def right_click(self, click_coordinates):
         x, y = self.view.get_position_from_mouse_click(click_coordinates)
@@ -154,8 +145,7 @@ class Controller(object):
             print "Move to", (x, y)
             action = Action(self.start_position, (x, y), None, False, False)
             self.perform_action(action)
-            self.start_position = None
-            self.end_position = None
+            self.clear_move()
         if self.start_position and (x, y) in self.gamestate.units[1]:
             action = Action(self.start_position, (x, y), (x, y), True, False)
             chance_of_win = ai_methods.chance_of_win(self.selected_unit, self.gamestate.units[1][(x, y)], action)
@@ -189,18 +179,16 @@ class Controller(object):
 
             if not action:
                 print "Action not possible"
-                self.start_position = self.end_position = None
+                self.clear_move()
             else:
                 self.perform_action(action)
-                self.start_position = None
-                self.end_position = None
+                self.clear_move()
 
         elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
             print "Attack", (x, y)
             action = Action(self.start_position, self.end_position, (x, y), True, False)
             self.perform_action(action)
-            self.start_position = None
-            self.end_position = None
+            self.clear_move()
 
     def list_actions(self):
         print
@@ -214,6 +202,9 @@ class Controller(object):
             for action in actions:
                 print action
         print
+
+    def clear_move(self):
+        self.start_position = self.end_position = self.selected_unit = None
 
     def run_game(self):
 
@@ -248,8 +239,8 @@ class Controller(object):
                     self.list_actions()
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
+                    self.clear_move()
                     print "move cleared"
-                    self.start_position = self.end_position = self.selected_unit = None
 
                 elif event.type == KEYDOWN and self.command_q_down(event.key):
                     self.exit_game()
