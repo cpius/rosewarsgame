@@ -50,7 +50,7 @@ _image_library = {}
 
 
 class View(object):
-    def initialize(self):
+    def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode(board_size)
         self.font = pygame.font.SysFont("arial", 18, True, False)
