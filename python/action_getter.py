@@ -140,6 +140,9 @@ def get_actions(gamestate):
 
     actions = []
 
+    if gamestate.get_actions_remaining() == 0:
+        return actions
+
     for position, unit in gamestate.player_units().items():
         if can_use_unit(unit):
 
