@@ -1,6 +1,3 @@
-global turn
-turn = 1
-
 pause_for_animation = 650
 
 player1_ai = "Human"
