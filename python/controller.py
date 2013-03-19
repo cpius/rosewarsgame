@@ -89,13 +89,11 @@ class Controller(object):
                                 True,
                                 self.selected_unit.abilities[0])
             self.perform_action(action)
-            self.clear_move()
 
         elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1] and self.selected_unit.range > 1:
             print "Attack", (x, y)
             action = Action(self.start_position, self.start_position, (x, y), True, False)
             self.perform_action(action)
-            self.clear_move()
 
         elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1]:
             print "Attack-Move", (x, y)
@@ -121,7 +119,6 @@ class Controller(object):
                 self.clear_move()
             else:
                 self.perform_action(action)
-                self.clear_move()
 
         elif self.start_position and not self.end_position:
             print "Stop at", (x, y)
@@ -131,13 +128,11 @@ class Controller(object):
             print "Attack-Move", (x, y)
             action = Action(self.start_position, self.end_position, (x, y), True, False)
             self.perform_action(action)
-            self.clear_move()
 
         elif self.start_position and self.end_position and (x, y) not in self.gamestate.units[1]:
             print "Move to", (x, y)
             action = Action(self.start_position, (x, y), None, False, False)
             self.perform_action(action)
-            self.clear_move()
 
     def right_click(self, click_coordinates):
         x, y = self.view.get_position_from_mouse_click(click_coordinates)
@@ -145,7 +140,6 @@ class Controller(object):
             print "Move to", (x, y)
             action = Action(self.start_position, (x, y), None, False, False)
             self.perform_action(action)
-            self.clear_move()
         if self.start_position and (x, y) in self.gamestate.units[1]:
             action = Action(self.start_position, (x, y), (x, y), True, False)
             chance_of_win = ai_methods.chance_of_win(self.selected_unit, self.gamestate.units[1][(x, y)], action)
@@ -182,13 +176,11 @@ class Controller(object):
                 self.clear_move()
             else:
                 self.perform_action(action)
-                self.clear_move()
 
         elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
             print "Attack", (x, y)
             action = Action(self.start_position, self.end_position, (x, y), True, False)
             self.perform_action(action)
-            self.clear_move()
 
     def list_actions(self):
         print
@@ -310,10 +302,12 @@ class Controller(object):
 
         if matching_actions == 0:
             print "Action not allowed"
+            self.clear_move()
             return
 
         elif matching_actions > 1:
             print "Action ambiguous"
+            self.clear_move()
             return
 
         self.view.draw_action(action)
@@ -354,6 +348,7 @@ class Controller(object):
             print self.gamestate.current_player().color, "extra action"
         else:
             print self.gamestate.current_player().color
+        self.clear_move()
 
     def show_unit(self, position):
 
