@@ -59,8 +59,7 @@ class Controller(object):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
             self.perform_action(extra_action)
 
-    def left_click(self, click_coordinates):
-        x, y = self.view.get_position_from_mouse_click(click_coordinates)
+    def left_click(self, x, y):
         if not self.start_position and (x, y) in self.gamestate.units[0]:
             print "Start at", (x, y)
             self.start_position = (x, y)
@@ -134,8 +133,7 @@ class Controller(object):
             action = Action(self.start_position, (x, y), None, False, False)
             self.perform_action(action)
 
-    def right_click(self, click_coordinates):
-        x, y = self.view.get_position_from_mouse_click(click_coordinates)
+    def right_click(self, x, y):
         if self.start_position and (x, y) not in self.gamestate.units[1]:
             print "Move to", (x, y)
             action = Action(self.start_position, (x, y), None, False, False)
@@ -146,8 +144,7 @@ class Controller(object):
             print "Chance of win", round(chance_of_win * 100), "%"
             self.start_position = None
 
-    def middle_click(self, click_coordinates):
-        x, y = self.view.get_position_from_mouse_click(click_coordinates)
+    def middle_click(self, x, y):
         if not self.start_position:
             self.show_unit((x, y))
 
@@ -214,14 +211,15 @@ class Controller(object):
                     if self.gamestate.current_player().ai_name != "Human":
                         self.trigger_artificial_intelligence()
 
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    self.left_click(event.pos)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = self.view.get_position_from_mouse_click(event.pos)
 
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
-                    self.right_click(event.pos)
-
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-                    self.middle_click(event.pos)
+                    if event.button == 1:
+                        self.left_click(x, y)
+                    elif event.button == 2:
+                        self.right_click(x, y)
+                    elif event.button == 3:
+                        self.middle_click(x, y)
 
                 if event.type == KEYDOWN and event.key == K_p:
                     print "paused"
