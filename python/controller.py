@@ -199,17 +199,11 @@ class Controller(object):
 
         self.gamestate.set_ais()
 
-        pygame.time.set_timer(USEREVENT + 1, 1000)
-
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
         while True:
             for event in pygame.event.get():
-
-                if event.type == USEREVENT + 1:
-                    if self.gamestate.current_player().ai_name != "Human":
-                        self.trigger_artificial_intelligence()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = self.view.get_position_from_mouse_click(event.pos)
@@ -346,7 +340,11 @@ class Controller(object):
             print self.gamestate.current_player().color, "extra action"
         else:
             print self.gamestate.current_player().color
+
         self.clear_move()
+
+        if self.gamestate.current_player().ai_name != "Human":
+            self.trigger_artificial_intelligence()
 
     def show_unit(self, position):
 
