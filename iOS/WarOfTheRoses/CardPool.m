@@ -27,6 +27,7 @@
 #import "FlagBearer.h"
 #import "WarElephant.h"
 #import "WeaponSmith.h"
+#import "Diplomat.h"
 
 @interface CardPool()
 
@@ -90,6 +91,8 @@
             return [WarElephant card];
         case kWeaponSmith:
             return [WeaponSmith card];
+        case kDiplomat:
+            return [Diplomat card];
         default:
             CCLOG(@"Unknown cardname: %d", unitName);
     }
@@ -121,7 +124,7 @@
         drawnCard = [self createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = kWeaponSmith;//(arc4random() % 12) + 6;
+        UnitName unitName = kDiplomat;//(arc4random() % 13) + 6;
         drawnCard = [self createCardOfName:unitName];
     }
     

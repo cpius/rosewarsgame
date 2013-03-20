@@ -14,6 +14,7 @@
 #import "ParticleHelper.h"
 #import "GameManager.h"
 #import "CardSprite.h"
+#import "RandomDeckStrategy.h"
 
 @interface ConstructDeckScene()
 
@@ -54,6 +55,15 @@
         _deckOfCards.position = ccp(20, [_deckOfCards contentSize].height + 20);
         [self addChild:_deckOfCards];
         
+        CCMenuItem *refreshButton = [CCMenuItemImage itemWithNormalImage:@"refreshbutton.png" selectedImage:@"refreshbutton.png" target:self selector:@selector(refreshButtonPressed:)];
+        
+        refreshButton.anchorPoint = ccp(1, 0);
+        refreshButton.position = ccp(_screenSize.width - 20, 60);
+        
+        CCMenu *menu = [CCMenu menuWithItems:refreshButton, nil];
+        menu.position = CGPointZero;
+        [self addChild:menu];
+        
         CardSprite *tempSprite = [[CardSprite alloc] initWithCard:[[GameManager sharedManager].currentGame.myDeck.cards objectAtIndex:0]];
         _cardSize = CGSizeMake(tempSprite.contentSize.width * 0.5, tempSprite.contentSize.height * 0.5);
         
@@ -63,6 +73,20 @@
     }
     
     return self;
+}
+
+- (void)refreshButtonPressed:(id)sender {
+    
+    for (CCSprite *cardSprite in self.children) {
+        
+        if ([cardSprite isKindOfClass:[CardSprite class]]) {
+            [cardSprite removeFromParentAndCleanup:YES];
+        }
+    }
+    
+    [GameManager sharedManager].currentGame.myDeck = [[RandomDeckStrategy strategy] generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:[GameManager sharedManager].currentGame.myColor];
+    
+    [self presentCards];
 }
 
 - (void)nextScenePressed:(id)sender {
@@ -105,6 +129,7 @@
         
         CardSprite *cardSprite = [[CardSprite alloc] initWithCard:card];
         
+        cardSprite.tag = 100;
         cardSprite.scale = 0.8;
         cardSprite.position = ccp(_deckOfCards.position.x + 30, _deckOfCards.position.y - 40);
         cardSprite.rotation = -10;

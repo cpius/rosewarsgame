@@ -151,6 +151,13 @@
 		6DB204A716F9E9C70004FFCB /* AbilityFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204A616F9E9C60004FFCB /* AbilityFactory.m */; };
 		6DB204AB16F9F7B70004FFCB /* Elephant.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204AA16F9F7B70004FFCB /* Elephant.mp3 */; };
 		6DB204AD16F9FCBA0004FFCB /* fanfare.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204AC16F9FCBA0004FFCB /* fanfare.mp3 */; };
+		6DB204B016FA5B450004FFCB /* refreshbutton-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204AE16FA5B450004FFCB /* refreshbutton-hd.png */; };
+		6DB204B116FA5B450004FFCB /* refreshbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204AF16FA5B450004FFCB /* refreshbutton.png */; };
+		6DB204B416FA5D850004FFCB /* Diplomat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204B316FA5D820004FFCB /* Diplomat.m */; };
+		6DB204B916FA61980004FFCB /* diplomat_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B516FA61970004FFCB /* diplomat_0-hd.png */; };
+		6DB204BA16FA61980004FFCB /* diplomat_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B616FA61970004FFCB /* diplomat_0.png */; };
+		6DB204BB16FA61980004FFCB /* diplomat_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B716FA61970004FFCB /* diplomat_icon-hd.png */; };
+		6DB204BC16FA61980004FFCB /* diplomat_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B816FA61980004FFCB /* diplomat_icon.png */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -577,6 +584,14 @@
 		6DB204A616F9E9C60004FFCB /* AbilityFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbilityFactory.m; sourceTree = "<group>"; };
 		6DB204AA16F9F7B70004FFCB /* Elephant.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Elephant.mp3; path = Resources/Sounds/Elephant.mp3; sourceTree = "<group>"; };
 		6DB204AC16F9FCBA0004FFCB /* fanfare.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fanfare.mp3; path = Resources/Sounds/fanfare.mp3; sourceTree = "<group>"; };
+		6DB204AE16FA5B450004FFCB /* refreshbutton-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "refreshbutton-hd.png"; path = "Resources/Images/refreshbutton-hd.png"; sourceTree = "<group>"; };
+		6DB204AF16FA5B450004FFCB /* refreshbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refreshbutton.png; path = Resources/Images/refreshbutton.png; sourceTree = "<group>"; };
+		6DB204B216FA5D7E0004FFCB /* Diplomat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Diplomat.h; sourceTree = "<group>"; };
+		6DB204B316FA5D820004FFCB /* Diplomat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Diplomat.m; sourceTree = "<group>"; };
+		6DB204B516FA61970004FFCB /* diplomat_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "diplomat_0-hd.png"; path = "Resources/Images/diplomat_0-hd.png"; sourceTree = "<group>"; };
+		6DB204B616FA61970004FFCB /* diplomat_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = diplomat_0.png; path = Resources/Images/diplomat_0.png; sourceTree = "<group>"; };
+		6DB204B716FA61970004FFCB /* diplomat_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "diplomat_icon-hd.png"; path = "Resources/Images/diplomat_icon-hd.png"; sourceTree = "<group>"; };
+		6DB204B816FA61980004FFCB /* diplomat_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = diplomat_icon.png; path = Resources/Images/diplomat_icon.png; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1103,6 +1118,12 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DB204B516FA61970004FFCB /* diplomat_0-hd.png */,
+				6DB204B616FA61970004FFCB /* diplomat_0.png */,
+				6DB204B716FA61970004FFCB /* diplomat_icon-hd.png */,
+				6DB204B816FA61980004FFCB /* diplomat_icon.png */,
+				6DB204AE16FA5B450004FFCB /* refreshbutton-hd.png */,
+				6DB204AF16FA5B450004FFCB /* refreshbutton.png */,
 				6DB2049A16F8F21B0004FFCB /* weaponsmith_0-hd.png */,
 				6DB2049B16F8F21B0004FFCB /* weaponsmith_0.png */,
 				6DB2049C16F8F21B0004FFCB /* weaponsmith_icon-hd.png */,
@@ -1888,6 +1909,8 @@
 				6DB2047F16F30D450004FFCB /* WarElephant.m */,
 				6DB2049416F8DE110004FFCB /* WeaponSmith.h */,
 				6DB2049516F8DE140004FFCB /* WeaponSmith.m */,
+				6DB204B216FA5D7E0004FFCB /* Diplomat.h */,
+				6DB204B316FA5D820004FFCB /* Diplomat.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -2132,6 +2155,12 @@
 				6DB204A116F8F21B0004FFCB /* weaponsmith_icon.png in Resources */,
 				6DB204AB16F9F7B70004FFCB /* Elephant.mp3 in Resources */,
 				6DB204AD16F9FCBA0004FFCB /* fanfare.mp3 in Resources */,
+				6DB204B016FA5B450004FFCB /* refreshbutton-hd.png in Resources */,
+				6DB204B116FA5B450004FFCB /* refreshbutton.png in Resources */,
+				6DB204B916FA61980004FFCB /* diplomat_0-hd.png in Resources */,
+				6DB204BA16FA61980004FFCB /* diplomat_0.png in Resources */,
+				6DB204BB16FA61980004FFCB /* diplomat_icon-hd.png in Resources */,
+				6DB204BC16FA61980004FFCB /* diplomat_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2350,6 +2379,7 @@
 				6DB2049916F8DEA50004FFCB /* AbilityAction.m in Sources */,
 				6DB204A416F8F9EC0004FFCB /* ImproveWeapons.m in Sources */,
 				6DB204A716F9E9C70004FFCB /* AbilityFactory.m in Sources */,
+				6DB204B416FA5D850004FFCB /* Diplomat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
