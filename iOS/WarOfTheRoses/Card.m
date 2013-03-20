@@ -29,7 +29,7 @@
 @synthesize move;
 @synthesize experience;
 @synthesize range;
-@synthesize isRanged;
+@synthesize isRanged, isMelee, isCaster;
 @synthesize dead;
 @synthesize moveActionCost;
 @synthesize attackActionCost;
@@ -37,7 +37,7 @@
 @synthesize numberOfLevelsIncreased;
 @synthesize delegate = _delegate;
 @synthesize attackSound = _attackSound, defenceSound = _defenceSound, moveSound = _moveSound;
-@synthesize timedAbilities = _timedAbilities;
+@synthesize currentlyAffectedByAbilities = _currentlyAffectedByAbilities;
 @synthesize hitpoints;
 @synthesize battleStrategy = _battleStrategy;
 
@@ -50,7 +50,7 @@
         _cardColor = kCardColorGreen;
         self.isShowingDetail = NO;
         
-        _timedAbilities = [NSMutableArray array];
+        _currentlyAffectedByAbilities = [NSMutableArray array];
     }
     
     return self;
@@ -85,9 +85,24 @@
     self.hasPerformedAttackThisRound = NO;
 }
 
+- (NSArray*)abilities {
+    
+    return nil;
+}
+
+- (BOOL)isCaster {
+    
+    return self.unitAttackType == kUnitAttackTypeCaster;
+}
+
+- (BOOL)isMelee {
+    
+    return self.unitAttackType == kUnitAttackTypeMelee;
+}
+
 - (BOOL)isRanged {
     
-    return self.range > 1;
+    return self.unitAttackType == kUnitAttackTypeRanged;
 }
 
 - (NSString *)description {
@@ -106,13 +121,13 @@
     
     timedAbility.delegate = self;
     
-    [_timedAbilities addObject:timedAbility];
+    [_currentlyAffectedByAbilities addObject:timedAbility];
 }
 
 - (void)timedAbilityDidStop:(TimedAbility *)timedAbility {
     
-    if ([_timedAbilities containsObject:timedAbility]) {
-        [_timedAbilities removeObject:timedAbility];
+    if ([_currentlyAffectedByAbilities containsObject:timedAbility]) {
+        [_currentlyAffectedByAbilities removeObject:timedAbility];
     }
 }
 
@@ -218,6 +233,11 @@
     }
 }
 
+- (BOOL)isValidTarget:(Card*)targetCard {
+    
+    return YES;
+}
+
 - (BOOL)allowPath:(NSArray *)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary *)allLocations {
     
     BOOL allowPath = NO;
@@ -237,6 +257,11 @@
             allowPath = YES;
         }
     }
+    else if (actionType == kActionTypeAbility) {
+        if ((path != nil && path.count > 0) && path.count <= self.range) {
+            allowPath = YES;
+        }
+    }
     
     return allowPath;
 }
@@ -251,10 +276,7 @@
             
         case kActionTypeMove:
             return self.moveActionCost <= remainingActionCount && self.movesRemaining > 0;
-            
-        case kActionTypeAbility:
-            return self.moveActionCost <= remainingActionCount;
-            
+                        
         case kActionTypeMelee:
             if (self.movesRemaining == 0 || self.hasPerformedAttackThisRound) {
                 return NO;
@@ -272,6 +294,15 @@
             else {
                 // Unit cannot move and attack the same round
                 return (self.attackActionCost <= remainingActionCount) && self.isRanged;
+            }
+            
+        case kActionTypeAbility:
+            
+            if (self.movesRemaining == 0 || self.hasPerformedActionThisRound) {
+                return NO;
+            }
+            else {
+                return (self.attackActionCost <= remainingActionCount) && self.abilities.count > 0;
             }
     }
 }
@@ -294,6 +325,17 @@
 - (NSInteger)movesRemaining {
     
     return move - movesConsumed;
+}
+
+- (BOOL)isOwnedByMe {
+    
+    return (self.cardColor == kCardColorGreen && [GameManager sharedManager].currentGame.myColor == kPlayerGreen) ||
+        (self.cardColor == kCardColorRed && [GameManager sharedManager].currentGame.myColor == kPlayerRed);
+}
+
+- (BOOL)isOwnedByEnemy {
+    
+    return ![self isOwnedByMe];
 }
 
 - (BOOL)isOwnedByPlayerWithColor:(PlayerColors)playerColor {

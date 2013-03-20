@@ -67,22 +67,29 @@
     Action *foundAction = nil;
     
     for (Action *moveAction in _moveActions) {
-        if ([[moveAction getLastLocationInPath] isEqual:gridLocation]) {
+        if ([[moveAction getLastLocationInPath] isSameLocationAs:gridLocation]) {
             foundAction = moveAction;
             break;
         }
     }
     
     for (Action *meleeAction in _meleeActions) {
-        if ([[meleeAction getLastLocationInPath] isEqual:gridLocation]) {
+        if ([[meleeAction getLastLocationInPath] isSameLocationAs:gridLocation]) {
             foundAction = meleeAction;
             break;
         }
     }
     
     for (Action *rangeAction in _rangeActions) {
-        if ([[rangeAction getLastLocationInPath] isEqual:gridLocation]) {
+        if ([[rangeAction getLastLocationInPath] isSameLocationAs:gridLocation]) {
             foundAction = rangeAction;
+            break;
+        }
+    }
+    
+    for (Action *abilityAction in _abilityActions) {
+        if ([[abilityAction getLastLocationInPath] isSameLocationAs:gridLocation]) {
+            foundAction = abilityAction;
             break;
         }
     }
@@ -90,7 +97,7 @@
     return foundAction;
 }
 
-- (NSArray *)createBattlePlanForCard:(Card *)card enemyUnits:(NSArray *)enemyUnits unitLayout:(NSDictionary *)unitLayout {
+- (NSArray *)createBattlePlanForCard:(Card *)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray *)enemyUnits unitLayout:(NSDictionary *)unitLayout {
     
     PathFinder *pathFinder = [[PathFinder alloc] init];
     
@@ -108,7 +115,11 @@
         _rangeActions = [pathFinder getRangedAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
     }
     
-    return [[_moveActions arrayByAddingObjectsFromArray:_meleeActions] arrayByAddingObjectsFromArray:_rangeActions];
+    if ([card canPerformActionOfType:kActionTypeAbility withRemainingActionCount:remainingActionCount]) {
+        _abilityActions = [pathFinder getAbilityActionsFromLocation:card.cardLocation forCard:card friendlyUnits:friendlyUnits enemyUnits:enemyUnits allLocations:unitLayout];
+    }
+    
+    return [[[_moveActions arrayByAddingObjectsFromArray:_meleeActions] arrayByAddingObjectsFromArray:_rangeActions] arrayByAddingObjectsFromArray:_abilityActions];
 }
 
 @end

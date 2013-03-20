@@ -141,6 +141,16 @@
 		6DB2049116F664DC0004FFCB /* warelephant_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2048D16F664DB0004FFCB /* warelephant_0.png */; };
 		6DB2049216F664DC0004FFCB /* warelephant_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2048E16F664DC0004FFCB /* warelephant_icon-hd.png */; };
 		6DB2049316F664DC0004FFCB /* warelephant_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2048F16F664DC0004FFCB /* warelephant_icon.png */; };
+		6DB2049616F8DE170004FFCB /* WeaponSmith.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2049516F8DE140004FFCB /* WeaponSmith.m */; };
+		6DB2049916F8DEA50004FFCB /* AbilityAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2049816F8DEA40004FFCB /* AbilityAction.m */; };
+		6DB2049E16F8F21B0004FFCB /* weaponsmith_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2049A16F8F21B0004FFCB /* weaponsmith_0-hd.png */; };
+		6DB2049F16F8F21B0004FFCB /* weaponsmith_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2049B16F8F21B0004FFCB /* weaponsmith_0.png */; };
+		6DB204A016F8F21B0004FFCB /* weaponsmith_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2049C16F8F21B0004FFCB /* weaponsmith_icon-hd.png */; };
+		6DB204A116F8F21B0004FFCB /* weaponsmith_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB2049D16F8F21B0004FFCB /* weaponsmith_icon.png */; };
+		6DB204A416F8F9EC0004FFCB /* ImproveWeapons.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204A316F8F9EB0004FFCB /* ImproveWeapons.m */; };
+		6DB204A716F9E9C70004FFCB /* AbilityFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204A616F9E9C60004FFCB /* AbilityFactory.m */; };
+		6DB204AB16F9F7B70004FFCB /* Elephant.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204AA16F9F7B70004FFCB /* Elephant.mp3 */; };
+		6DB204AD16F9FCBA0004FFCB /* fanfare.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204AC16F9FCBA0004FFCB /* fanfare.mp3 */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -553,6 +563,20 @@
 		6DB2048D16F664DB0004FFCB /* warelephant_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = warelephant_0.png; path = Resources/Images/warelephant_0.png; sourceTree = "<group>"; };
 		6DB2048E16F664DC0004FFCB /* warelephant_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "warelephant_icon-hd.png"; path = "Resources/Images/warelephant_icon-hd.png"; sourceTree = "<group>"; };
 		6DB2048F16F664DC0004FFCB /* warelephant_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = warelephant_icon.png; path = Resources/Images/warelephant_icon.png; sourceTree = "<group>"; };
+		6DB2049416F8DE110004FFCB /* WeaponSmith.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeaponSmith.h; sourceTree = "<group>"; };
+		6DB2049516F8DE140004FFCB /* WeaponSmith.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponSmith.m; sourceTree = "<group>"; };
+		6DB2049716F8DEA30004FFCB /* AbilityAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbilityAction.h; sourceTree = "<group>"; };
+		6DB2049816F8DEA40004FFCB /* AbilityAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbilityAction.m; sourceTree = "<group>"; };
+		6DB2049A16F8F21B0004FFCB /* weaponsmith_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "weaponsmith_0-hd.png"; path = "Resources/Images/weaponsmith_0-hd.png"; sourceTree = "<group>"; };
+		6DB2049B16F8F21B0004FFCB /* weaponsmith_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = weaponsmith_0.png; path = Resources/Images/weaponsmith_0.png; sourceTree = "<group>"; };
+		6DB2049C16F8F21B0004FFCB /* weaponsmith_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "weaponsmith_icon-hd.png"; path = "Resources/Images/weaponsmith_icon-hd.png"; sourceTree = "<group>"; };
+		6DB2049D16F8F21B0004FFCB /* weaponsmith_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = weaponsmith_icon.png; path = Resources/Images/weaponsmith_icon.png; sourceTree = "<group>"; };
+		6DB204A216F8F9EA0004FFCB /* ImproveWeapons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImproveWeapons.h; sourceTree = "<group>"; };
+		6DB204A316F8F9EB0004FFCB /* ImproveWeapons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImproveWeapons.m; sourceTree = "<group>"; };
+		6DB204A516F9E9C50004FFCB /* AbilityFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbilityFactory.h; sourceTree = "<group>"; };
+		6DB204A616F9E9C60004FFCB /* AbilityFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbilityFactory.m; sourceTree = "<group>"; };
+		6DB204AA16F9F7B70004FFCB /* Elephant.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Elephant.mp3; path = Resources/Sounds/Elephant.mp3; sourceTree = "<group>"; };
+		6DB204AC16F9FCBA0004FFCB /* fanfare.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fanfare.mp3; path = Resources/Sounds/fanfare.mp3; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1022,6 +1046,8 @@
 				6D0CBED716CF880F00D241A7 /* MeleeAttackAction.m */,
 				6D0CBEFB16D0F67700D241A7 /* RangedAttackAction.h */,
 				6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */,
+				6DB2049716F8DEA30004FFCB /* AbilityAction.h */,
+				6DB2049816F8DEA40004FFCB /* AbilityAction.m */,
 			);
 			name = Action;
 			sourceTree = "<group>";
@@ -1077,6 +1103,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DB2049A16F8F21B0004FFCB /* weaponsmith_0-hd.png */,
+				6DB2049B16F8F21B0004FFCB /* weaponsmith_0.png */,
+				6DB2049C16F8F21B0004FFCB /* weaponsmith_icon-hd.png */,
+				6DB2049D16F8F21B0004FFCB /* weaponsmith_icon.png */,
 				6DB2048C16F664DB0004FFCB /* warelephant_0-hd.png */,
 				6DB2048D16F664DB0004FFCB /* warelephant_0.png */,
 				6DB2048E16F664DC0004FFCB /* warelephant_icon-hd.png */,
@@ -1236,6 +1266,8 @@
 		6D6900E41695A13B0071EC22 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				6DB204AC16F9FCBA0004FFCB /* fanfare.mp3 */,
+				6DB204AA16F9F7B70004FFCB /* Elephant.mp3 */,
 				6DC7F44216D902A200CD5071 /* catapult_attacksound.wav */,
 				6DC7F44316D902A200CD5071 /* sword_sound.wav */,
 				6DC7F44016D8FA6D00CD5071 /* bow_fired.wav */,
@@ -1313,6 +1345,10 @@
 				6DD5888D16E68B5600466DDB /* HighMorale.m */,
 				6DD5889316E7E1CA00466DDB /* ActionCostLess.h */,
 				6DD5889416E7E1CA00466DDB /* ActionCostLess.m */,
+				6DB204A216F8F9EA0004FFCB /* ImproveWeapons.h */,
+				6DB204A316F8F9EB0004FFCB /* ImproveWeapons.m */,
+				6DB204A516F9E9C50004FFCB /* AbilityFactory.h */,
+				6DB204A616F9E9C60004FFCB /* AbilityFactory.m */,
 			);
 			name = Abilities;
 			sourceTree = "<group>";
@@ -1850,6 +1886,8 @@
 				6DB2047116F11EB30004FFCB /* Crusader.m */,
 				6DB2047E16F30D430004FFCB /* WarElephant.h */,
 				6DB2047F16F30D450004FFCB /* WarElephant.m */,
+				6DB2049416F8DE110004FFCB /* WeaponSmith.h */,
+				6DB2049516F8DE140004FFCB /* WeaponSmith.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -2088,6 +2126,12 @@
 				6DB2049116F664DC0004FFCB /* warelephant_0.png in Resources */,
 				6DB2049216F664DC0004FFCB /* warelephant_icon-hd.png in Resources */,
 				6DB2049316F664DC0004FFCB /* warelephant_icon.png in Resources */,
+				6DB2049E16F8F21B0004FFCB /* weaponsmith_0-hd.png in Resources */,
+				6DB2049F16F8F21B0004FFCB /* weaponsmith_0.png in Resources */,
+				6DB204A016F8F21B0004FFCB /* weaponsmith_icon-hd.png in Resources */,
+				6DB204A116F8F21B0004FFCB /* weaponsmith_icon.png in Resources */,
+				6DB204AB16F9F7B70004FFCB /* Elephant.mp3 in Resources */,
+				6DB204AD16F9FCBA0004FFCB /* fanfare.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2302,6 +2346,10 @@
 				6DB2048516F354AB0004FFCB /* StandardBattleStrategy.m in Sources */,
 				6DB2048816F356080004FFCB /* BaseBattleStrategy.m in Sources */,
 				6DB2048B16F3B6D80004FFCB /* WarElephantBattleStrategy.m in Sources */,
+				6DB2049616F8DE170004FFCB /* WeaponSmith.m in Sources */,
+				6DB2049916F8DEA50004FFCB /* AbilityAction.m in Sources */,
+				6DB204A416F8F9EC0004FFCB /* ImproveWeapons.m in Sources */,
+				6DB204A716F9E9C70004FFCB /* AbilityFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,4 +23,9 @@
     [_card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfRounds:1]];
 }
 
+- (BOOL)friendlyAbility {
+    
+    return NO;
+}
+
 @end

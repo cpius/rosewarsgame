@@ -60,7 +60,7 @@
         
         if (!unit.dead) {
             BattlePlan *battlePlan = [[BattlePlan alloc] init];
-            [battlePlan createBattlePlanForCard:unit enemyUnits:enemyUnits unitLayout:unitLayout];
+            [battlePlan createBattlePlanForCard:unit friendlyUnits:units enemyUnits:enemyUnits unitLayout:unitLayout];
             
             [_battlePlans setObject:battlePlan forKey:unit.cardLocation];
         }

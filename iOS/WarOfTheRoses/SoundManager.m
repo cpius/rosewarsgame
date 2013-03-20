@@ -49,6 +49,7 @@
     [[SimpleAudioEngine sharedEngine] preloadEffect:BOOM_SOUND];
     [[SimpleAudioEngine sharedEngine] preloadEffect:SWOOSH_SOUND];
     [[SimpleAudioEngine sharedEngine] preloadEffect:CARDFLIP_SOUND];
+    [[SimpleAudioEngine sharedEngine] preloadEffect:FANFARE];
 }
 
 - (void)playSoundEffectWithName:(NSString*)name {

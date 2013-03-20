@@ -18,6 +18,7 @@
         self.cardType = kCardTypeBasicUnit;
         self.unitType = kCavalry;
         self.unitName = kHeavyCalavry;
+        self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 3)];

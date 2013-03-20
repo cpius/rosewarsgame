@@ -33,6 +33,7 @@
 @property (nonatomic, assign) CardType cardType;
 @property (nonatomic, assign) UnitType unitType;
 @property (nonatomic, assign) UnitName unitName;
+@property (nonatomic, assign) UnitAttackTypes unitAttackType;
 @property (nonatomic, assign) CardColors cardColor;
 @property (nonatomic, strong) NSString *frontImageLarge;
 @property (nonatomic, strong) NSString *frontImageSmall;
@@ -83,7 +84,11 @@
  Angiver rækkevidden på en units angreb, hver square tæller for 1 range, dvs en unit med range 1 kan angribe de  felter umiddelbart ved siden af sig.
  */
 @property(nonatomic, assign) NSUInteger range;
+
 @property(nonatomic, readonly) BOOL isRanged;
+@property(nonatomic, readonly) BOOL isMelee;
+@property(nonatomic, readonly) BOOL isCaster;
+
 @property(nonatomic, assign) BOOL dead;
 @property(nonatomic, assign) NSUInteger hitpoints;
 /*
@@ -92,11 +97,13 @@
 @property(nonatomic, assign) NSUInteger attackActionCost;
 @property(nonatomic, assign) NSUInteger moveActionCost;
 
+@property (nonatomic, readonly) NSArray *abilities;
+
 @property(nonatomic, assign) BOOL hasReceivedExperiencePointsThisRound;
 @property(nonatomic, assign) BOOL hasPerformedActionThisRound;
 @property(nonatomic, assign) BOOL hasPerformedAttackThisRound;
 
-@property(nonatomic, readonly) NSMutableArray *timedAbilities;
+@property(nonatomic, readonly) NSMutableArray *currentlyAffectedByAbilities;
 
 - (void)commonInit;
 
@@ -111,10 +118,14 @@
 
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount;
 - (BOOL)allowPath:(NSArray*)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary*)allLocations;
+- (BOOL)isValidTarget:(Card*)targetCard;
 
 - (BOOL)zoneOfControlAgainst:(Card*)opponent;
 
 - (void)levelIncreased;
+
+- (BOOL)isOwnedByMe;
+- (BOOL)isOwnedByEnemy;
 - (BOOL)isOwnedByPlayerWithColor:(PlayerColors)playerColor;
 
 - (void)combatStartingAgainstDefender:(Card*)defender;

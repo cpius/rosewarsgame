@@ -70,6 +70,14 @@ NS_INLINE BOOL IsPushSuccessful(CombatOutcome outcome) {
 }
 
 typedef enum {
+    
+    kAbilityImprovedWeapons = 0,
+    kAbilityBribe,
+    kAbilityHighMorale,
+    kAbilityActionCoseLess
+} AbilityTypes;
+
+typedef enum {
     kCardTypeBasicUnit,
     kCardTypeSpecialUnit
 } CardType;
@@ -80,6 +88,12 @@ typedef enum {
     kCavalry,
     kSpecialUnit
 } UnitType;
+
+typedef enum {
+    kUnitAttackTypeMelee = 0,
+    kUnitAttackTypeRanged,
+    kUnitAttackTypeCaster
+} UnitAttackTypes;
 
 typedef enum {
     kArcher = 0,

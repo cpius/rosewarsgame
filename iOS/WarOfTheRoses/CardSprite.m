@@ -15,7 +15,7 @@
 - (void)updateBonusSprite:(BonusSprite*)bonusSprite;
 - (void)updateBonusSpriteForAttribute:(RangeAttribute*)rangeAttribute;
 - (void)updateAllBonusSprites;
-- (void)updateBonusSpritePositions;
+- (void)updateSpritePositions;
 - (BonusSprite*)getBonusSpriteForAttribute:(RangeAttribute*)attribute;
 
 @end
@@ -42,16 +42,15 @@
         [self updateBonusSpriteForAttribute:_model.attack];
         [self updateBonusSpriteForAttribute:_model.defence];
 
-        CCSprite *cardIndicator;
         if (_model.cardColor == kCardColorGreen) {
-            cardIndicator = [CCSprite spriteWithFile:@"green_cardindicator.png"];
+            _cardIndicator = [CCSprite spriteWithFile:@"green_cardindicator.png"];
         }
         else {
-            cardIndicator = [CCSprite spriteWithFile:@"red_cardindicator.png"];
+            _cardIndicator = [CCSprite spriteWithFile:@"red_cardindicator.png"];
         }
         
-        cardIndicator.position = ccp(self.contentSize.width - 15, self.contentSize.height - 15);
-        [self addChild:cardIndicator];
+        _cardIndicator.position = ccp(self.contentSize.width - 15, self.contentSize.height - 15);
+        [self addChild:_cardIndicator];
     }
     
     return self;
@@ -160,11 +159,16 @@
     }
 }
 
-- (void)updateBonusSpritePositions {
+- (void)updateSpritePositions {
+    
+    NSUInteger counter = 1;
     
     for (BonusSprite *bonusSprite in _bonusSprites) {
-        bonusSprite.position = ccp(0.0, self.contentSize.height - ((bonusSprite.contentSize.height + 5) * (_bonusSprites.count)));
+        bonusSprite.position = ccp(0.0, self.contentSize.height - ((bonusSprite.contentSize.height + 5) * counter));
+        counter++;
     }
+    
+    _cardIndicator.position = ccp(self.contentSize.width - 15, self.contentSize.height - 15);
 }
 
 
@@ -204,7 +208,7 @@
     CCAction* skewAction = [CCSkewBy    actionWithDuration:.25f skewX:0.0f skewY:20.0f];
     CCAction* waitAction     = [CCDelayTime actionWithDuration:.25f];
     CCAction* callCompleteFuncAction = [CCCallFuncO actionWithTarget:self selector:@selector(completeFlipWithScale:) object:@(scale)];
-    CCAction* repositionBonusSprites = [CCCallFunc actionWithTarget:self selector:@selector(updateBonusSpritePositions)];
+    CCAction* repositionBonusSprites = [CCCallFunc actionWithTarget:self selector:@selector(updateSpritePositions)];
     CCAction* completeFlipAction = [CCSequence actions:(CCFiniteTimeAction*)waitAction, callCompleteFuncAction, repositionBonusSprites, nil];
     CCAction* flipActions1 = [CCSpawn actions:(CCFiniteTimeAction*)scaleXAction, skewAction, completeFlipAction, nil];
     [self runAction:flipActions1];

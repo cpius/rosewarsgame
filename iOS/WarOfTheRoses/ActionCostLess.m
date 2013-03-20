@@ -30,4 +30,9 @@
     _card.attackActionCost = _originalAttackActionCost;
 }
 
+- (BOOL)friendlyAbility {
+    
+    return YES;
+}
+
 @end

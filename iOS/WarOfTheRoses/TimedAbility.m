@@ -13,6 +13,7 @@
 @implementation TimedAbility
 
 @synthesize delegate = _delegate;
+@synthesize friendlyAbility = _friendlyAbility;
 
 - (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card {
     

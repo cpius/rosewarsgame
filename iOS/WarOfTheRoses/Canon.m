@@ -22,6 +22,7 @@
         self.cardType = kCardTypeSpecialUnit;
         self.unitType = kSpecialUnit;
         self.unitName = kCannon;
+        self.unitAttackType = kUnitAttackTypeRanged;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(2, 6)];
         

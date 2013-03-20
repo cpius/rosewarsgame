@@ -27,6 +27,7 @@
         self.cardType = kCardTypeSpecialUnit;
         self.unitType = kCavalry;
         self.unitName = kWarElephant;
+        self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];
         
@@ -38,7 +39,7 @@
         self.attackActionCost = 2;
         self.hitpoints = 1;
         
-        self.attackSound = @"sword_sound.wav";
+        self.attackSound = @"Elephant.mp3";
         self.frontImageSmall = @"warelephant_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"warelephant_%d.png", self.cardColor];
         
@@ -99,17 +100,17 @@
             
             Card *cardAtPushLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:pushLocation];
             
-            if (cardAtPushLocation == nil) {
+            if (cardAtPushLocation != nil || ![pushLocation isInsideGameBoard]) {
 
+                [[GameManager sharedManager] attackSuccessfulAgainstCard:action.enemyCard];
+            }
+            else {
                 MoveAction *pushAction = [[MoveAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard enemyCard:nil];
                 
                 pushAction.delegate = action.delegate;
                 [pushAction performActionWithCompletion:^{
                     
                 }];
-            }
-            else {
-                [[GameManager sharedManager] attackSuccessfulAgainstCard:action.enemyCard];
             }
         }
     }

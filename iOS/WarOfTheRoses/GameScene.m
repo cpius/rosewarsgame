@@ -12,6 +12,7 @@
 #import "EndTurnLayer.h"
 #import "MainMenuScene.h"
 #import "BattlePlan.h"
+#import "AbilityAction.h"
 
 @interface GameScene()
 
@@ -240,7 +241,7 @@
                 [_gameboard selectCardInGameBoardNode:targetNode useHighlighting:NO];
 
                 _battlePlan = [[BattlePlan alloc] init];
-                [_battlePlan createBattlePlanForCard:targetNode.card.model enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
+                [_battlePlan createBattlePlanForCard:targetNode.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
                 
                 for (Action *moveAction in _battlePlan.moveActions) {
                     [_gameboard highlightNodeAtLocation:[moveAction getLastLocationInPath] withColor:ccc3(0, 235, 0)];
@@ -252,6 +253,10 @@
 
                 for (Action *rangeAction in _battlePlan.rangeActions) {
                     [_gameboard highlightCardAtLocation:[rangeAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
+                }
+
+                for (Action *abilityAction in _battlePlan.abilityActions) {
+                    [_gameboard highlightCardAtLocation:[abilityAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
                 }
                 
                 [self showToolsPanel];
@@ -436,6 +441,7 @@
         if (result == kGameResultVictory) {
             gameoverStatus = [CCLabelTTF labelWithString:@"Victory!" fontName:APP_FONT fontSize:48];
             [gameoverStatus setColor:ccc3(0, 255.0, 0)];
+            [[SoundManager sharedManager] playSoundEffectWithName:FANFARE];
         }
         else {
             gameoverStatus = [CCLabelTTF labelWithString:@"Defeat!" fontName:APP_FONT fontSize:48];

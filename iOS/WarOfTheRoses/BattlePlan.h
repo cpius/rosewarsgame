@@ -14,8 +14,9 @@
 @property (nonatomic, readonly) NSArray *moveActions;
 @property (nonatomic, readonly) NSArray *meleeActions;
 @property (nonatomic, readonly) NSArray *rangeActions;
+@property (nonatomic, readonly) NSArray *abilityActions;
 
-- (NSArray*)createBattlePlanForCard:(Card*)card enemyUnits:(NSArray*)enemyUnits unitLayout:(NSDictionary*)unitLayout;
+- (NSArray*)createBattlePlanForCard:(Card*)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray*)enemyUnits unitLayout:(NSDictionary*)unitLayout;
 - (Action*)getActionToGridLocation:(GridLocation*)gridLocation;
 
 - (NSDictionary *)getAttackDirectionsForCard:(Card *)card whenAttackingEnemyCard:(Card*)enemyCard withUnitLayout:(NSDictionary*)unitLayout;

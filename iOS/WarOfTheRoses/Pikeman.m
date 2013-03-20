@@ -18,6 +18,7 @@
         self.cardType = kCardTypeBasicUnit;
         self.unitType = kInfantry;
         self.unitName = kPikeman;
+        self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 3)];

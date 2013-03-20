@@ -22,4 +22,9 @@
     
 }
 
+- (BOOL)friendlyAbility {
+    
+    return YES;
+}
+
 @end

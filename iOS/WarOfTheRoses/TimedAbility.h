@@ -29,6 +29,7 @@
 }
 
 @property (nonatomic, readonly) NSUInteger numberOfRounds;
+@property (nonatomic, readonly) BOOL friendlyAbility;
 @property (nonatomic, weak) id<TimedAbilityDelegate> delegate;
 
 - (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card;

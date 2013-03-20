@@ -18,6 +18,7 @@
         self.cardType = kCardTypeBasicUnit;
         self.unitType = kSiege;
         self.unitName = kBallista;
+        self.unitAttackType = kUnitAttackTypeRanged;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(3, 6)];
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 1)];

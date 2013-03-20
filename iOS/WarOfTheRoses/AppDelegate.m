@@ -132,6 +132,9 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"warelephant_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"warelephant_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"warelephant_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"warelephant_icon.png"];
 
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"weaponsmith_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"weaponsmith_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"weaponsmith_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"weaponsmith_icon.png"];
+
     [[SoundManager sharedManager] preloadSoundEffects];
     
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.

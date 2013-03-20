@@ -12,6 +12,7 @@
 #define BOOM_SOUND @"boom.wav"
 #define SWOOSH_SOUND @"swoosh.wav"
 #define CARDFLIP_SOUND @"pageflip.mp3"
+#define FANFARE @"fanfare.mp3"
 
 typedef enum {
     

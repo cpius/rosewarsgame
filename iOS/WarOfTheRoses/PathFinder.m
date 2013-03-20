@@ -11,6 +11,7 @@
 #import "MoveAction.h"
 #import "MeleeAttackAction.h"
 #import "RangedAttackAction.h"
+#import "AbilityAction.h"
 
 @interface PathFinder()
 
@@ -216,6 +217,27 @@
     }
     
     return [NSArray arrayWithArray:attackActions];
+}
+
+- (NSArray *)getAbilityActionsFromLocation:(GridLocation *)fromLocation forCard:(Card *)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray *)enemyUnits allLocations:(NSDictionary *)allLocations {
+    
+    NSMutableArray *abilityActions = [NSMutableArray array];
+    NSArray *allUnits = allLocations.allValues;
+    
+    for (Card *targetCard in allUnits) {
+        
+        if (targetCard.dead) continue;
+        
+        GridLocation *targetLocation = targetCard.cardLocation;
+        
+        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:targetLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
+        
+        if ([card allowPath:path forActionType:kActionTypeAbility allLocations:allLocations] && [card isValidTarget:targetCard]) {
+            [abilityActions addObject:[[AbilityAction alloc] initWithPath:path andCardInAction:card targetCard:targetCard]];
+        }
+    }
+    
+    return [NSArray arrayWithArray:abilityActions];
 }
 
 @end

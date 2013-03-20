@@ -18,6 +18,7 @@
         self.cardType = kCardTypeBasicUnit;
         self.unitType = kInfantry;
         self.unitName = kArcher;
+        self.unitAttackType = kUnitAttackTypeRanged;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
         

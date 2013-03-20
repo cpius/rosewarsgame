@@ -646,6 +646,44 @@
     }];
 }
 
+- (void)testWarElephantKillsEnemyWhenPushedOutOfGameBoard {
+    
+    WarElephant *warelephant = [WarElephant card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:1 column:4];
+    warelephant.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:1 column:5];
+    pikeman.cardColor = kCardColorRed;
+    
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:warelephant]
+                                    player2Units:[NSArray arrayWithObject:pikeman]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    meleeAction.delegate = mock;
+    
+    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 1;
+    
+    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
+    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    
+    [meleeAction performActionWithCompletion:^{
+        
+        STAssertTrue(pikeman.dead, @"Pikeman should be dead");
+    }];
+}
+
+
 - (void)testWarElephantPushesVikingAndVikingLosesOneHitPoint {
     
     WarElephant *warelephant = [WarElephant card];

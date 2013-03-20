@@ -22,6 +22,7 @@
         self.cardType = kCardTypeSpecialUnit;
         self.unitType = kCavalry;
         self.unitName = kFlagBearer;
+        self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
         

@@ -329,6 +329,7 @@
   //  [self removeAllChildrenWithCleanup:YES];
         
     [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
+    [[SoundManager sharedManager] playSoundEffectWithName:FANFARE];
     
     [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[GameScene scene]]];
 }
