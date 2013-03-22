@@ -50,7 +50,7 @@ _image_library = {}
 
 
 class View(object):
-    def initialize(self):
+    def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode(board_size)
         self.font = pygame.font.SysFont("arial", 18, True, False)
@@ -90,7 +90,7 @@ class View(object):
 
     def draw_game_end(self, color):
         font = pygame.font.SysFont("monospace", 55, bold=True)
-        label = font.render(color + "\nWins", 1, black)
+        label = font.render(color + " Wins", 1, black)
         self.screen.blit(label, (40, 400))
         pygame.display.update()
 
@@ -166,10 +166,7 @@ class View(object):
         self.draw_defence_counters(unit, position)
         self.draw_xp(unit, position)
 
-        #self.add_yellow_counters(unit)
         self.draw_yellow_counters(unit, position)
-
-        #self.add_blue_counters(unit)
         self.draw_blue_counters(unit, position)
 
         self.draw_crusading(unit, position)
@@ -229,3 +226,6 @@ class View(object):
 
     def get_unit_pic(self, name, color):
         return name.replace(" ", "-") + ",-" + color.lower() + ".jpg"
+
+    def refresh(self):
+        pygame.display.flip()
