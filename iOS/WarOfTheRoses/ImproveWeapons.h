@@ -10,6 +10,4 @@
 
 @interface ImproveWeapons : TimedAbility
 
-- (id)initWithCard:(Card *)card;
-
 @end

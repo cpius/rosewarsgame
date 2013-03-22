@@ -12,6 +12,7 @@
 @interface Diplomat()
 
 - (BOOL)canBribeOpponent:(Card*)opponent;
+- (void)bribeOpponent:(Card*)opponent;
 
 @end
 
@@ -77,6 +78,12 @@
     return YES;
 }
 
+- (void)bribeOpponent:(Card *)opponent {
+    
+    _bribedOpponent = opponent;
+    _opponentBribedInRound = [GameManager sharedManager].currentGame.currentRound;
+}
+
 - (BOOL)isValidTarget:(Card*)targetCard {
     
     return [targetCard isOwnedByEnemy] && [self canBribeOpponent:targetCard];
@@ -86,8 +93,7 @@
     
     if ([action isKindOfClass:[AbilityAction class]]) {
         
-        _bribedOpponent = action.enemyCard;
-        _opponentBribedInRound = [GameManager sharedManager].currentGame.currentRound;
+        [self bribeOpponent:action.enemyCard];
     }
 }
 @end

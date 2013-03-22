@@ -158,6 +158,7 @@
 		6DB204BA16FA61980004FFCB /* diplomat_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B616FA61970004FFCB /* diplomat_0.png */; };
 		6DB204BB16FA61980004FFCB /* diplomat_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B716FA61970004FFCB /* diplomat_icon-hd.png */; };
 		6DB204BC16FA61980004FFCB /* diplomat_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B816FA61980004FFCB /* diplomat_icon.png */; };
+		6DB204BF16FB9E5F0004FFCB /* CoolDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204BE16FB9E5E0004FFCB /* CoolDown.m */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -592,6 +593,8 @@
 		6DB204B616FA61970004FFCB /* diplomat_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = diplomat_0.png; path = Resources/Images/diplomat_0.png; sourceTree = "<group>"; };
 		6DB204B716FA61970004FFCB /* diplomat_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "diplomat_icon-hd.png"; path = "Resources/Images/diplomat_icon-hd.png"; sourceTree = "<group>"; };
 		6DB204B816FA61980004FFCB /* diplomat_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = diplomat_icon.png; path = Resources/Images/diplomat_icon.png; sourceTree = "<group>"; };
+		6DB204BD16FB9E5C0004FFCB /* CoolDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoolDown.h; sourceTree = "<group>"; };
+		6DB204BE16FB9E5E0004FFCB /* CoolDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoolDown.m; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -1370,6 +1373,8 @@
 				6DB204A316F8F9EB0004FFCB /* ImproveWeapons.m */,
 				6DB204A516F9E9C50004FFCB /* AbilityFactory.h */,
 				6DB204A616F9E9C60004FFCB /* AbilityFactory.m */,
+				6DB204BD16FB9E5C0004FFCB /* CoolDown.h */,
+				6DB204BE16FB9E5E0004FFCB /* CoolDown.m */,
 			);
 			name = Abilities;
 			sourceTree = "<group>";
@@ -2380,6 +2385,7 @@
 				6DB204A416F8F9EC0004FFCB /* ImproveWeapons.m in Sources */,
 				6DB204A716F9E9C70004FFCB /* AbilityFactory.m in Sources */,
 				6DB204B416FA5D850004FFCB /* Diplomat.m in Sources */,
+				6DB204BF16FB9E5F0004FFCB /* CoolDown.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

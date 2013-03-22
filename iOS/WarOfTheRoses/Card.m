@@ -120,6 +120,7 @@
 - (void)addTimedAbility:(TimedAbility*)timedAbility {
     
     timedAbility.delegate = self;
+    timedAbility.card = self;
     
     [_currentlyAffectedByAbilities addObject:timedAbility];
 }

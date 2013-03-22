@@ -24,14 +24,16 @@
 @class Card;
 @interface TimedAbility : NSObject {
     
-    Card *_card;
     NSUInteger _abilityStartedInRound;
 }
 
 @property (nonatomic, readonly) NSUInteger numberOfRounds;
 @property (nonatomic, readonly) BOOL friendlyAbility;
 @property (nonatomic, weak) id<TimedAbilityDelegate> delegate;
+@property (nonatomic, strong) Card *card;
 
+
+- (id)initOnCard:(Card*)card;
 - (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card;
 
 - (void)startTimedAbility;

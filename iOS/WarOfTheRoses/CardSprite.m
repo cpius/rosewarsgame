@@ -18,6 +18,8 @@
 - (void)updateSpritePositions;
 - (BonusSprite*)getBonusSpriteForAttribute:(RangeAttribute*)attribute;
 
+- (void)setCardColorIndicator;
+
 @end
 
 @implementation CardSprite
@@ -42,18 +44,40 @@
         [self updateBonusSpriteForAttribute:_model.attack];
         [self updateBonusSpriteForAttribute:_model.defence];
 
-        if (_model.cardColor == kCardColorGreen) {
-            _cardIndicator = [CCSprite spriteWithFile:@"green_cardindicator.png"];
-        }
-        else {
-            _cardIndicator = [CCSprite spriteWithFile:@"red_cardindicator.png"];
-        }
+        [self setCardColorIndicator];
         
-        _cardIndicator.position = ccp(self.contentSize.width - 15, self.contentSize.height - 15);
-        [self addChild:_cardIndicator];
+        [_model addObserver:self forKeyPath:@"cardColor" options:NSKeyValueObservingOptionNew context:nil];
     }
     
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    CCLOG(@"Card: %@ changed color to %d", self, _model.cardColor);
+    
+    if ([keyPath isEqualToString:@"cardColor"]) {
+        [self setCardColorIndicator];
+    }
+}
+
+- (void)setCardColorIndicator {
+    
+    if ([self getChildByTag:COLOR_INDICATOR_TAG]) {
+        [self removeChildByTag:COLOR_INDICATOR_TAG cleanup:YES];
+    }
+    
+    if (_model.cardColor == kCardColorGreen) {
+        _cardIndicator = [CCSprite spriteWithFile:@"green_cardindicator.png"];
+    }
+    else {
+        _cardIndicator = [CCSprite spriteWithFile:@"red_cardindicator.png"];
+    }
+    
+    _cardIndicator.position = ccp(self.contentSize.width - 15, self.contentSize.height - 15);
+    
+    _cardIndicator.tag = COLOR_INDICATOR_TAG;
+    [self addChild:_cardIndicator];
 }
 
 - (void)rangeAttribute:(RangeAttribute *)attribute addedRawBonus:(RawBonus *)rawBonus {

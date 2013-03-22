@@ -8,14 +8,25 @@
 
 #import "AbilityFactory.h"
 #import "ImproveWeapons.h"
+#import "CoolDown.h"
+#import "Bribe.h"
 
 @implementation AbilityFactory
 
-+ (TimedAbility *)createAbilityOfType:(AbilityTypes)abilityType onCard:(Card *)card {
++ (TimedAbility *)addAbilityOfType:(AbilityTypes)abilityType onCard:(Card *)card {
     
     switch (abilityType) {
         case kAbilityImprovedWeapons:
-            [card addTimedAbility:[[ImproveWeapons alloc] initWithCard:card]];
+            [card addTimedAbility:[[ImproveWeapons alloc] initOnCard:card]];
+            break;
+            
+        case kAbilityCoolDown:
+            [card addTimedAbility:[[CoolDown alloc] initOnCard:card]];
+            break;
+            
+        case kAbilityBribe:
+            [card addTimedAbility:[[Bribe alloc] initOnCard:card]];
+            break;
             
         default:
             break;

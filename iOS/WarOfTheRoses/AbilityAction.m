@@ -45,7 +45,7 @@
     [self.delegate beforePerformAction:self];
     
     if (_availableAbilities.count == 1) {
-        [AbilityFactory createAbilityOfType:(AbilityTypes)[_availableAbilities[0] integerValue] onCard:self.enemyCard];
+        [AbilityFactory addAbilityOfType:(AbilityTypes)[_availableAbilities[0] integerValue] onCard:self.enemyCard];
     }
         
     [[GameManager sharedManager] actionUsed:self];

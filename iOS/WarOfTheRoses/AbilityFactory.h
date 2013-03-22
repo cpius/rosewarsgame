@@ -11,6 +11,6 @@
 
 @interface AbilityFactory : NSObject
 
-+ (TimedAbility*)createAbilityOfType:(AbilityTypes)abilityType onCard:(Card*)card;
++ (TimedAbility*)addAbilityOfType:(AbilityTypes)abilityType onCard:(Card*)card;
 
 @end

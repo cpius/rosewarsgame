@@ -14,6 +14,12 @@
 
 @synthesize delegate = _delegate;
 @synthesize friendlyAbility = _friendlyAbility;
+@synthesize card = _card;
+
+- (id)initOnCard:(Card *)card {
+    
+    return [self initForNumberOfRounds:1 onCard:card];
+}
 
 - (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card {
     

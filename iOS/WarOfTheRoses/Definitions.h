@@ -74,7 +74,8 @@ typedef enum {
     kAbilityImprovedWeapons = 0,
     kAbilityBribe,
     kAbilityHighMorale,
-    kAbilityActionCoseLess
+    kAbilityActionCoseLess,
+    kAbilityCoolDown
 } AbilityTypes;
 
 typedef enum {

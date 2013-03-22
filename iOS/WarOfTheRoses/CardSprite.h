@@ -11,6 +11,7 @@
 #import "Card.h"
 
 #define BONUSSPRITE_TAG  500
+#define COLOR_INDICATOR_TAG 501
 
 @interface CardSprite : CCSprite <RangeAttributeDelegate> {
     

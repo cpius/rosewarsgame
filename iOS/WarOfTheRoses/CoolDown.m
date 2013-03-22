@@ -1,15 +1,14 @@
 //
-//  ActionCostLess.m
+//  CoolDown.m
 //  WarOfTheRoses
 //
-//  Created by Heine Skov Kristensen on 3/6/13.
+//  Created by Heine Skov Kristensen on 3/21/13.
 //
 //
 
-#import "ActionCostLess.h"
-#import "Card.h"
+#import "CoolDown.h"
 
-@implementation ActionCostLess
+@implementation CoolDown
 
 - (void)startTimedAbility {
     
@@ -18,8 +17,10 @@
     _originalAttackActionCost = self.card.attackActionCost;
     _originalMoveActionCost = self.card.moveActionCost;
     
-    self.card.moveActionCost = 0;
-    self.card.attackActionCost = 0;
+    self.card.moveActionCost = 10;
+    self.card.attackActionCost = 10;
+    
+    CCLOG(@"Card: %@ has cooldown", self.card);
 }
 
 - (void)stopTimedAbility {
@@ -28,11 +29,7 @@
     
     self.card.moveActionCost = _originalMoveActionCost;
     self.card.attackActionCost = _originalAttackActionCost;
-}
-
-- (BOOL)friendlyAbility {
     
-    return YES;
+    CCLOG(@"Card: %@ ended cooldown", self.card);
 }
-
 @end
