@@ -12,11 +12,29 @@ use_special_units = []  # Special units that must be present in the game
 dont_use_special_units = ["Chariot", "Samurai"]  # Special units that must not be present in the game
 
 
-basic_units = {"Archer": (1, 2, 3), "Ballista": (1, 2, 3), "Catapult": (1, 2, 3), "Light Cavalry": (2, 3),
-               "Heavy Cavalry": (2, 3, 4), "Pikeman": (2, 3, 4)}
-special_units = {"Chariot": (3, 4), "Diplomat": (2, 3), "Samurai": (4,), "War Elephant": (4,), "Weaponsmith": (2, 3),
-                 "Scout": (2, 3), "Lancer": (3, 4), "Cannon": (2, ), "Saboteur": (2, 3), "Royal Guard": (2, 3),
-                 "Viking": (4,), "Berserker": (2, 3), "Crusader": (3, 4), "Longswordsman": (4,), "Flag Bearer": (3, 4)}
+# Rows that the units can start on, in the pseudo-random computer-generated start position
+basic_units = {"Archer": (1, 2, 3),
+               "Ballista": (1, 2, 3),
+               "Catapult": (1, 2, 3),
+               "Heavy Cavalry": (2, 3, 4),
+               "Light Cavalry": (2, 3),
+               "Pikeman": (2, 3, 4)}
+
+special_units = {"Berserker": (2, 3),
+                 "Cannon": (2, ),
+                 "Chariot": (3, 4),
+                 "Crusader": (3, 4),
+                 "Diplomat": (2, 3),
+                 "Flag Bearer": (3, 4),
+                 "Lancer": (3, 4),
+                 "Longswordsman": (4,),
+                 "Royal Guard": (2, 3),
+                 "Saboteur": (2, 3),
+                 "Samurai": (4,),
+                 "Scout": (2, 3),
+                 "Viking": (4,),
+                 "War Elephant": (4,),
+                 "Weaponsmith": (2, 3)}
 
 unit_bag_size = 4
 special_unit_count = 3
