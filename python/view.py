@@ -103,7 +103,7 @@ class View(object):
 
     def draw_xp(self, unit, position):
         if unit.xp == 1:
-            pic = self.get_image("./other/star.gif")
+            pic = self.get_image(settings.star_icon)
             self.screen.blit(pic, self.star_coordinates.get(position))
 
     def draw_yellow_counters(self, unit, position):
@@ -122,12 +122,12 @@ class View(object):
 
     def draw_bribed(self, unit, position):
         if hasattr(unit, "bribed"):
-            pic = self.get_image("./other/ability.gif")
+            pic = self.get_image(settings.ability_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(position))
 
     def draw_crusading(self, unit, position):
         if hasattr(unit, "is_crusading"):
-            pic = self.get_image("./other/flag.gif")
+            pic = self.get_image(settings.crusading_icon)
             self.screen.blit(pic, self.flag_coordinates.get(position))
 
     def draw_unit(self, unit, position, color):
@@ -146,7 +146,7 @@ class View(object):
 
     def draw_game(self, gamestate):
 
-        pic = self.get_image("./other/board.gif")
+        pic = self.get_image(settings.board_image)
         self.screen.blit(pic, (0, 0))
 
         for position, unit in gamestate.units[0].items():
@@ -172,12 +172,12 @@ class View(object):
                              self.center_coordinates.get(action.attack_position),
                              5)
             if action.move_with_attack:
-                pic = self.get_image("./other/moveattack.gif")
+                pic = self.get_image(settings.move_attack_icon)
             else:
-                pic = self.get_image("./other/attack.gif")
+                pic = self.get_image(settings.attack_icon)
 
             if hasattr(action, "high_morale"):
-                pic = self.get_image("./other/flag.gif")
+                pic = self.get_image(settings.high_morale_icon)
                 self.screen.blit(pic, self.flag_coordinates.get(action.end_position))
 
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
@@ -187,11 +187,11 @@ class View(object):
                              settings.black,
                              self.center_coordinates.get(action.end_position),
                              self.center_coordinates.get(action.attack_position), 5)
-            pic = self.get_image("./other/ability.gif")
+            pic = self.get_image(settings.ability_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
         else:
-            pic = self.get_image("./other/move.gif")
+            pic = self.get_image(settings.move_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.end_position))
 
         pygame.display.update()

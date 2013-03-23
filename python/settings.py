@@ -83,3 +83,12 @@ attack_font_coordinates = (45, 68)
 normal_font_name = "arial"
 normal_font_size = 18
 big_font_size = 28
+
+board_image = "./other/board.gif"
+move_attack_icon = "./other/moveattack.gif"
+attack_icon = "./other/attack.gif"
+star_icon = "./other/star.gif"
+ability_icon = "./other/ability.gif"
+crusading_icon = "./other/flag.gif"
+high_morale_icon = "./other/flag.gif"
+move_icon = "./other/move.gif"
