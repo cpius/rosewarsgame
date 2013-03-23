@@ -44,6 +44,16 @@ def time_ai(ai_name, gamestate):
     return "Select action", ai_name, round((time() - t) * 100, 5)
 
 
+def time_do_action(gamestate, action):
+    total_time = 0
+    for i in range(1000):
+        gamestate_copy = gamestate.copy()
+        t = time()
+        gamestate_copy.do_action(action)
+        total_time += time() - t
+    return total_time
+
+
 def load_gamestates(saved_gamestate):
     for i in range(10000):
         saver.load_gamestate(saved_gamestate)
