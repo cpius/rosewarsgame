@@ -62,31 +62,34 @@ dark_red = (204, 0, 16)
 ### Interface ###
 #################
 
-unit_width = 70
-unit_height = 106.5
-board_size = [391, 908]
-x_border = 22
-y_border_top = 22
-y_border_bottom = 39
+unit_width = 75
+unit_height = 75
+board_size = [375, 600]
+x_border = 0
+y_border_top = 0
+y_border_bottom = 0
 
 base_coordinates = (0, 0)
-center_coordinates = (35, 53.2)
+center_coordinates = (37.5, 37.5)
+
 symbol_coordinates = (13, 38.2)
-attack_counter_coordinates = (50, 78)
-defence_counter_coordinates = (50, 58)
-defence_font_coordinates = (45, 48)
-flag_coordinates = (46, 10)
-yellow_counter_coordinates = (50, 38)
-blue_counter_coordinates = (50, 18)
-star_coordinates = (8, 58)
-blue_font_coordinates = (45, 8)
-attack_font_coordinates = (45, 68)
+
+first_symbol_coordinates = (2, 58)
+second_symbol_coordinates = (18, 58)
+
+first_counter_coordinates = (62, 62)
+second_counter_coordinates = (62, 41)
+third_counter_coordinates = (62, 21)
+
+first_font_coordinates = (57, 52)
+second_font_coordinates = (57, 31)
+third_font_coordinates = (57, 10)
 
 normal_font_name = "arial"
 normal_font_size = 18
 big_font_size = 28
 
-board_image = "./other/board.gif"
+board_image = "./other/board.png"
 move_attack_icon = "./other/moveattack.gif"
 attack_icon = "./other/attack.gif"
 star_icon = "./other/star.gif"

@@ -14,18 +14,8 @@ class View(object):
 
         self.font = pygame.font.SysFont(settings.normal_font_name, settings.normal_font_size, True, False)
         self.font_big = pygame.font.SysFont(settings.normal_font_name, settings.big_font_size, True, False)
-
         self.base_coordinates = Coordinates(settings.base_coordinates)
         self.center_coordinates = Coordinates(settings.center_coordinates)
-        self.attack_counter_coordinates = Coordinates(settings.attack_counter_coordinates)
-        self.defence_counter_coordinates = Coordinates(settings.defence_counter_coordinates)
-        self.defence_font_coordinates = Coordinates(settings.defence_font_coordinates)
-        self.flag_coordinates = Coordinates(settings.flag_coordinates)
-        self.yellow_counter_coordinates = Coordinates(settings.yellow_counter_coordinates)
-        self.blue_counter_coordinates = Coordinates(settings.blue_counter_coordinates)
-        self.star_coordinates = Coordinates(settings.star_coordinates)
-        self.blue_font_coordinates = Coordinates(settings.blue_font_coordinates)
-        self.attack_font_coordinates = Coordinates(settings.attack_font_coordinates)
         self.symbol_coordinates = Coordinates(settings.symbol_coordinates)
 
     def get_position_from_mouse_click(self, coordinates):
@@ -53,8 +43,8 @@ class View(object):
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
-        pic = self.get_image("./units_big/" + self.get_unit_pic(unit_name, color))
-        self.screen.blit(pic, (40, 40))
+        pic = self.get_image("./units_big/" + self.get_unit_pic(unit_name, True, color))
+        self.screen.blit(pic, (24, 49))
         pygame.display.flip()
 
     def save_screenshot(self, name):
@@ -63,7 +53,7 @@ class View(object):
     def draw_game_end(self, color):
         font = pygame.font.SysFont("monospace", 55, bold=True)
         label = font.render(color + " Wins", 1, settings.black)
-        self.screen.blit(label, (40, 400))
+        self.screen.blit(label, (40, 300))
         pygame.display.update()
 
     def get_image(self, path):
@@ -74,75 +64,122 @@ class View(object):
             _image_library[path] = image
         return image
 
-    def draw_attack_counters(self, unit, position):
+    def draw_counters(self, unit, position):
+        counters_drawn = 0
+
         if unit.attack_counters:
-            pygame.draw.circle(self.screen, settings.grey, self.attack_counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, settings.brown, self.attack_counter_coordinates.get(position), 8, 0)
-            if unit.attack_counters != 1:
-                label = self.font.render(str(unit.attack_counters), 1, settings.black)
-                self.screen.blit(label, self.attack_font_coordinates.get(position))
+            counter_coordinates = self.get_counter_coordinates(counters_drawn)
+            font_coordinates = self.get_font_coordinates(counters_drawn)
+            self.draw_attack_counters(unit, position, counter_coordinates, font_coordinates)
+            counters_drawn += 1
+        if unit.defence_counters or hasattr(unit, "sabotaged"):
+            counter_coordinates = self.get_counter_coordinates(counters_drawn)
+            font_coordinates = self.get_font_coordinates(counters_drawn)
+            self.draw_defence_counters(unit, position, counter_coordinates, font_coordinates)
+            counters_drawn += 1
+        if unit.blue_counters:
+            counter_coordinates = self.get_counter_coordinates(counters_drawn)
+            font_coordinates = self.get_font_coordinates(counters_drawn)
+            self.draw_blue_counters(unit, position, counter_coordinates, font_coordinates)
+            counters_drawn += 1
+        if unit.yellow_counters:
+            counter_coordinates = self.get_counter_coordinates(counters_drawn)
+            self.draw_yellow_counters(unit, position, counter_coordinates)
 
-    def draw_defence_counters(self, unit, position):
+    def get_counter_coordinates(self, counters_drawn):
+        return {
+            0: Coordinates(settings.first_counter_coordinates),
+            1: Coordinates(settings.second_counter_coordinates),
+            2: Coordinates(settings.third_counter_coordinates),
+            3: Coordinates(settings.third_counter_coordinates)
+        }[counters_drawn]
 
+    def get_font_coordinates(self, counters_drawn):
+        return {
+            0: Coordinates(settings.first_font_coordinates),
+            1: Coordinates(settings.second_font_coordinates),
+            2: Coordinates(settings.third_font_coordinates),
+            3: Coordinates(settings.third_counter_coordinates)
+        }[counters_drawn]
+
+    def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
+        pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, settings.brown, counter_coordinates.get(position), 8, 0)
+        if unit.attack_counters != 1:
+            label = self.font.render(str(unit.attack_counters), 1, settings.black)
+            self.screen.blit(label, font_coordinates.get(position))
+
+    def draw_defence_counters(self, unit, position, counter_coordinates, font_coordinates):
         if hasattr(unit, "sabotaged"):
             defence_counters = -1
         else:
             defence_counters = unit.defence_counters
 
-        if defence_counters:
-            pygame.draw.circle(self.screen, settings.grey, self.defence_counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, settings.light_grey, self.defence_counter_coordinates.get(position), 8, 0)
+        pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, settings.light_grey, counter_coordinates.get(position), 8, 0)
 
-            if defence_counters > 1:
-                label = self.font.render(str(defence_counters), 1, settings.black)
-                self.screen.blit(label, self.defence_font_coordinates.get(position))
+        counter_text = None
+        if defence_counters > 1:
+            counter_text = str(defence_counters)
+        elif defence_counters < 0:
+            counter_text = "x"
 
-            if defence_counters < 0:
-                label = self.font.render("x", 1, settings.black)
-                self.screen.blit(label, self.defence_font_coordinates.get(position))
+        if counter_text:
+            label = self.font.render(counter_text, 1, settings.black)
+            self.screen.blit(label, font_coordinates.get(position))
 
-    def draw_xp(self, unit, position):
-        if unit.xp == 1:
-            pic = self.get_image(settings.star_icon)
-            self.screen.blit(pic, self.star_coordinates.get(position))
-
-    def draw_yellow_counters(self, unit, position):
+    def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
-            pygame.draw.circle(self.screen, settings.grey, self.yellow_counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, settings.yellow, self.yellow_counter_coordinates.get(position), 8, 0)
+            pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, settings.yellow, counter_coordinates.get(position), 8, 0)
 
-    def draw_blue_counters(self, unit, position):
+    def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
-            pygame.draw.circle(self.screen, settings.grey, self.blue_counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, settings.blue, self.blue_counter_coordinates.get(position), 8, 0)
+            pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, settings.blue, counter_coordinates.get(position), 8, 0)
 
             if unit.blue_counters > 1:
                 label = self.font.render(str(unit.blue_counters), 1, settings.black)
-                self.screen.blit(label, self.blue_font_coordinates.get(position))
+                self.screen.blit(label, font_coordinates.get(position))
 
-    def draw_bribed(self, unit, position):
+    def draw_symbols(self, unit, position):
+        coordinates = Coordinates(settings.first_symbol_coordinates)
+        if unit.xp == 1:
+            self.draw_xp(position, coordinates)
+            coordinates = Coordinates(settings.second_symbol_coordinates)
         if hasattr(unit, "bribed"):
-            pic = self.get_image(settings.ability_icon)
-            self.screen.blit(pic, self.symbol_coordinates.get(position))
-
-    def draw_crusading(self, unit, position):
+            self.draw_bribed(position, coordinates)
+            coordinates = Coordinates(settings.second_symbol_coordinates)
         if hasattr(unit, "is_crusading"):
-            pic = self.get_image(settings.crusading_icon)
-            self.screen.blit(pic, self.flag_coordinates.get(position))
+            self.draw_crusading(position, coordinates)
+
+    def draw_xp(self, position, coordinates):
+        pic = self.get_image(settings.star_icon)
+        self.screen.blit(pic, coordinates.get(position))
+
+    def draw_bribed(self, position, coordinates):
+        pic = self.get_image(settings.ability_icon)
+        self.screen.blit(pic, coordinates.get(position))
+
+    def draw_crusading(self, position, coordinates):
+        pic = self.get_image(settings.crusading_icon)
+        self.screen.blit(pic, coordinates.get(position))
 
     def draw_unit(self, unit, position, color):
-        pic = self.get_image("./units_small/" + self.get_unit_pic(unit.name, color))
+        pic = self.get_image("./units_small/" + self.get_unit_pic(unit.name))
         self.screen.blit(pic, self.base_coordinates.get(position))
 
-        self.draw_attack_counters(unit, position)
-        self.draw_defence_counters(unit, position)
-        self.draw_xp(unit, position)
+        base = self.base_coordinates.get(position)
+        position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
 
-        self.draw_yellow_counters(unit, position)
-        self.draw_blue_counters(unit, position)
+        if color == "Red":
+            rectangle_color = settings.dark_red
+        else:
+            rectangle_color = settings.dark_green
+        pygame.draw.rect(self.screen, rectangle_color, position_and_size, 3)
 
-        self.draw_crusading(unit, position)
-        self.draw_bribed(unit, position)
+        self.draw_counters(unit, position)
+        self.draw_symbols(unit, position)
 
     def draw_game(self, gamestate):
 
@@ -178,7 +215,8 @@ class View(object):
 
             if hasattr(action, "high_morale"):
                 pic = self.get_image(settings.high_morale_icon)
-                self.screen.blit(pic, self.flag_coordinates.get(action.end_position))
+                coordinates = Coordinates(settings.first_symbol_coordinates)
+                self.screen.blit(pic, coordinates.get(action.end_position))
 
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
@@ -196,8 +234,11 @@ class View(object):
 
         pygame.display.update()
 
-    def get_unit_pic(self, name, color):
-        return name.replace(" ", "-") + ",-" + color.lower() + ".jpg"
+    def get_unit_pic(self, name, zoomed=False, color=None):
+        if zoomed:
+            return name.replace(" ", "-") + ",-" + color + ".jpg"
+        else:
+            return name.replace(" ", "-") + ".jpg"
 
     def refresh(self):
         pygame.display.flip()
