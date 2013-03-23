@@ -40,5 +40,46 @@ unit_bag_size = 4
 special_unit_count = 3
 basic_unit_count = 6
 
-
 show_full_battle_result = True
+
+##############
+### Colors ###
+##############
+
+black = (0, 0, 0)
+white = (255, 255, 255)
+green = (0, 255, 0)
+red = (255, 0, 0)
+brown = (128, 64, 0)
+grey = (48, 48, 48)
+yellow = (200, 200, 0)
+light_grey = (223, 223, 223)
+blue = (0, 102, 204)
+
+#################
+### Interface ###
+#################
+
+unit_width = 70
+unit_height = 106.5
+board_size = [391, 908]
+x_border = 22
+y_border_top = 22
+y_border_bottom = 39
+
+base_coordinates = (0, 0)
+center_coordinates = (35, 53.2)
+symbol_coordinates = (13, 38.2)
+attack_counter_coordinates = (50, 78)
+defence_counter_coordinates = (50, 58)
+defence_font_coordinates = (45, 48)
+flag_coordinates = (46, 10)
+yellow_counter_coordinates = (50, 38)
+blue_counter_coordinates = (50, 18)
+star_coordinates = (8, 58)
+blue_font_coordinates = (45, 8)
+attack_font_coordinates = (45, 68)
+
+normal_font_name = "arial"
+normal_font_size = 18
+big_font_size = 28
