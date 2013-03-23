@@ -1,4 +1,5 @@
 import pygame
+from coordinates import Coordinates
 
 
 black = (0, 0, 0)
@@ -18,20 +19,6 @@ x_border = 22
 y_border_top = 22
 y_border_bottom = 39
 
-
-class Coordinates(object):
-    def __init__(self, x, y):
-        self.add_x = x
-        self.add_y = y
-
-    def get(self, position):
-        if position[1] >= 5:
-            y_border = y_border_top
-        else:
-            y_border = y_border_bottom
-
-        return int((position[0] - 1) * unit_width + x_border + self.add_x), \
-            int((8 - position[1]) * unit_height + y_border + self.add_y)
 
 base_coords = Coordinates(0, 0)
 center_coords = Coordinates(35, 53.2)
