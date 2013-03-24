@@ -100,3 +100,7 @@ third_counter_coordinates = None
 first_font_coordinates = None
 second_font_coordinates = None
 third_font_coordinates = None
+
+unit_padding_width = None
+unit_padding_height = None
+x_border = 0
