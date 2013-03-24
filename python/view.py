@@ -14,6 +14,7 @@ class View(object):
 
         self.font = pygame.font.SysFont(settings.normal_font_name, settings.normal_font_size, True, False)
         self.font_big = pygame.font.SysFont(settings.normal_font_name, settings.big_font_size, True, False)
+
         self.base_coordinates = Coordinates(settings.base_coordinates)
         self.center_coordinates = Coordinates(settings.center_coordinates)
         self.symbol_coordinates = Coordinates(settings.symbol_coordinates)
