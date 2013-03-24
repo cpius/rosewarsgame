@@ -107,7 +107,7 @@ class View(object):
         }[counters_drawn]
 
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
-        pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
         pygame.draw.circle(self.screen, settings.brown, counter_coordinates.get(position), 8, 0)
         if unit.attack_counters != 1:
             label = self.font.render(str(unit.attack_counters), 1, settings.black)
@@ -119,7 +119,7 @@ class View(object):
         else:
             defence_counters = unit.defence_counters
 
-        pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
         pygame.draw.circle(self.screen, settings.light_grey, counter_coordinates.get(position), 8, 0)
 
         counter_text = None
@@ -134,12 +134,12 @@ class View(object):
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
-            pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
             pygame.draw.circle(self.screen, settings.yellow, counter_coordinates.get(position), 8, 0)
 
     def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
-            pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
             pygame.draw.circle(self.screen, settings.blue, counter_coordinates.get(position), 8, 0)
 
             if unit.blue_counters > 1:
