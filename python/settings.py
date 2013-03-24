@@ -77,7 +77,8 @@ high_morale_icon = "./other/flag.gif"
 move_icon = "./other/move.gif"
 
 # The rest of these will be set in the interface module
-board_image = None
+board_image = ""
+unit_folder = ""
 
 unit_width = None
 unit_height = None

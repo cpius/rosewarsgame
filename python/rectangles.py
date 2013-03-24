@@ -2,6 +2,7 @@ import settings
 
 
 settings.board_image = "./rectangles/board.gif"
+settings.unit_folder = "./rectangles/"
 
 settings.unit_padding_width = 5
 settings.unit_padding_height = 6.5

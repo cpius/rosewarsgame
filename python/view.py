@@ -46,7 +46,7 @@ class View(object):
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
-        unit_pic = self.get_unit_pic(settings.interface, unit_name, color, True)
+        unit_pic = self.get_unit_pic(unit_name, color, True)
         pic = self.get_image(unit_pic)
         self.screen.blit(pic, (24, 49))
         pygame.display.flip()
@@ -170,14 +170,14 @@ class View(object):
         self.screen.blit(pic, coordinates.get(position))
 
     def draw_unit(self, unit, position, color):
-        unit_pic = self.get_unit_pic(settings.interface, unit.name, color)
+        unit_pic = self.get_unit_pic(unit.name, color)
         pic = self.get_image(unit_pic)
         self.screen.blit(pic, self.base_coordinates.get(position))
 
         base = self.base_coordinates.get(position)
         position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
 
-        if settings.interface in ["square", "rectangles"]:
+        if settings.interface in ["square", "rectangles", "rectangles2"]:
             if color == "Red":
                 rectangle_color = settings.dark_red
             else:
@@ -240,13 +240,13 @@ class View(object):
 
         pygame.display.update()
 
-    def get_unit_pic(self, interface, name, color=None, zoomed=False):
+    def get_unit_pic(self, name, color=None, zoomed=False):
         if zoomed:
             return "./zoomed/" + name.replace(" ", "-") + ",-" + color + ".jpg"
-        elif interface == "original":
-            return "./" + interface + "/" + name.replace(" ", "-") + ",-" + color + ".jpg"
+        elif settings.interface == "original":
+            return "./" + settings.unit_folder + "/" + name.replace(" ", "-") + ",-" + color + ".jpg"
         else:
-            return "./" + interface + "/" + name.replace(" ", "-") + ".jpg"
+            return "./" + settings.unit_folder + "/" + name.replace(" ", "-") + ".jpg"
 
     def refresh(self):
         pygame.display.flip()
