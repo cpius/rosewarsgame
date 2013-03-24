@@ -77,10 +77,11 @@ high_morale_icon = "./other/flag.gif"
 move_icon = "./other/move.gif"
 
 # The rest of these will be set in the interface module
-board_image = None
+board_image = ""
+unit_folder = ""
 
-unit_width = None
-unit_height = None
+unit_width = 0
+unit_height = 0
 board_size = None
 x_border = None
 y_border_top = None
@@ -100,3 +101,12 @@ third_counter_coordinates = None
 first_font_coordinates = None
 second_font_coordinates = None
 third_font_coordinates = None
+
+unit_padding_width = None
+unit_padding_height = None
+x_border = 0
+
+green_player_color = None
+red_player_color = None
+
+counter_circle_color = black

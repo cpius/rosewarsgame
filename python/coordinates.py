@@ -12,7 +12,7 @@ class Coordinates(object):
         else:
             y_border = settings.y_border_bottom
 
-        x = int((position[0] - 1) * settings.unit_width + settings.x_border + self.add_x)
-        y = int((8 - position[1]) * settings.unit_height + y_border + self.add_y)
+        x = int((position[0] - 1) * (settings.unit_width + settings.unit_padding_width) + settings.x_border + self.add_x)
+        y = int((8 - position[1]) * (settings.unit_height + settings.unit_padding_height) + y_border + self.add_y)
 
         return x, y
