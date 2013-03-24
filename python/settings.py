@@ -80,8 +80,8 @@ move_icon = "./other/move.gif"
 board_image = ""
 unit_folder = ""
 
-unit_width = None
-unit_height = None
+unit_width = 0
+unit_height = 0
 board_size = None
 x_border = None
 y_border_top = None
