@@ -10,6 +10,8 @@ class View(object):
     def __init__(self):
         pygame.init()
 
+        exec("import %s" % settings.interface)
+
         self.screen = pygame.display.set_mode(settings.board_size)
 
         self.font = pygame.font.SysFont(settings.normal_font_name, settings.normal_font_size, True, False)
@@ -44,7 +46,7 @@ class View(object):
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
-        pic = self.get_image("./units_big/" + self.get_unit_pic(unit_name, True, color))
+        pic = self.get_image("./units_big/" + self.get_unit_pic(unit_name, color, True))
         self.screen.blit(pic, (24, 49))
         pygame.display.flip()
 
@@ -167,17 +169,22 @@ class View(object):
         self.screen.blit(pic, coordinates.get(position))
 
     def draw_unit(self, unit, position, color):
-        pic = self.get_image("./units_small/" + self.get_unit_pic(unit.name))
+        if settings.interface == "square":
+            unit_pic = self.get_unit_pic(unit.name)
+        else:
+            unit_pic = self.get_unit_pic(unit.name, color)
+        pic = self.get_image("./units_small/" + unit_pic)
         self.screen.blit(pic, self.base_coordinates.get(position))
 
         base = self.base_coordinates.get(position)
         position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
 
-        if color == "Red":
-            rectangle_color = settings.dark_red
-        else:
-            rectangle_color = settings.dark_green
-        pygame.draw.rect(self.screen, rectangle_color, position_and_size, 3)
+        if settings.interface == "square":
+            if color == "Red":
+                rectangle_color = settings.dark_red
+            else:
+                rectangle_color = settings.dark_green
+            pygame.draw.rect(self.screen, rectangle_color, position_and_size, 3)
 
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
@@ -235,8 +242,8 @@ class View(object):
 
         pygame.display.update()
 
-    def get_unit_pic(self, name, zoomed=False, color=None):
-        if zoomed:
+    def get_unit_pic(self, name, color=None, zoomed=False):
+        if zoomed or color:
             return name.replace(" ", "-") + ",-" + color + ".jpg"
         else:
             return name.replace(" ", "-") + ".jpg"

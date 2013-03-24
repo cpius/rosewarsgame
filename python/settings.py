@@ -1,5 +1,7 @@
 pause_for_animation = 650
 
+interface = "original"  # Choose between original and square
+
 player1_ai = "Human"
 player2_ai = "Evaluator"
 
@@ -59,34 +61,13 @@ dark_red = (204, 0, 16)
 ### Interface ###
 #################
 
-unit_width = 75
-unit_height = 75
-board_size = [375, 600]
-x_border = 0
-y_border_top = 0
-y_border_bottom = 0
 
 base_coordinates = (0, 0)
-center_coordinates = (37.5, 37.5)
-
-symbol_coordinates = (22.5, 22.5)
-
-first_symbol_coordinates = (2, 58)
-second_symbol_coordinates = (18, 58)
-
-first_counter_coordinates = (62, 62)
-second_counter_coordinates = (62, 41)
-third_counter_coordinates = (62, 21)
-
-first_font_coordinates = (57, 52)
-second_font_coordinates = (57, 31)
-third_font_coordinates = (57, 10)
 
 normal_font_name = "arial"
 normal_font_size = 18
 big_font_size = 28
 
-board_image = "./other/board.png"
 move_attack_icon = "./other/moveattack.gif"
 attack_icon = "./other/attack.gif"
 star_icon = "./other/star.gif"
@@ -94,3 +75,28 @@ ability_icon = "./other/ability.gif"
 crusading_icon = "./other/flag.gif"
 high_morale_icon = "./other/flag.gif"
 move_icon = "./other/move.gif"
+
+# The rest of these will be set in the interface module
+board_image = None
+
+unit_width = None
+unit_height = None
+board_size = None
+x_border = None
+y_border_top = None
+y_border_bottom = None
+
+center_coordinates = None
+
+symbol_coordinates = None
+
+first_symbol_coordinates = None
+second_symbol_coordinates = None
+
+first_counter_coordinates = None
+second_counter_coordinates = None
+third_counter_coordinates = None
+
+first_font_coordinates = None
+second_font_coordinates = None
+third_font_coordinates = None
