@@ -46,7 +46,8 @@ class View(object):
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
-        pic = self.get_image("./units_big/" + self.get_unit_pic(unit_name, color, True))
+        unit_pic = self.get_unit_pic(unit_name, color, True)
+        pic = self.get_image(unit_pic)
         self.screen.blit(pic, (24, 49))
         pygame.display.flip()
 
@@ -106,7 +107,7 @@ class View(object):
         }[counters_drawn]
 
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
-        pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
         pygame.draw.circle(self.screen, settings.brown, counter_coordinates.get(position), 8, 0)
         if unit.attack_counters != 1:
             label = self.font.render(str(unit.attack_counters), 1, settings.black)
@@ -118,7 +119,7 @@ class View(object):
         else:
             defence_counters = unit.defence_counters
 
-        pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
         pygame.draw.circle(self.screen, settings.light_grey, counter_coordinates.get(position), 8, 0)
 
         counter_text = None
@@ -133,12 +134,12 @@ class View(object):
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
-            pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
             pygame.draw.circle(self.screen, settings.yellow, counter_coordinates.get(position), 8, 0)
 
     def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
-            pygame.draw.circle(self.screen, settings.grey, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
             pygame.draw.circle(self.screen, settings.blue, counter_coordinates.get(position), 8, 0)
 
             if unit.blue_counters > 1:
@@ -169,15 +170,25 @@ class View(object):
         self.screen.blit(pic, coordinates.get(position))
 
     def draw_unit(self, unit, position, color):
-        if settings.interface == "square":
-            unit_pic = self.get_unit_pic(unit.name)
-        else:
-            unit_pic = self.get_unit_pic(unit.name, color)
-        pic = self.get_image("./units_small/" + unit_pic)
+        unit_pic = self.get_unit_pic(unit.name, color)
+        pic = self.get_image(unit_pic)
         self.screen.blit(pic, self.base_coordinates.get(position))
 
         base = self.base_coordinates.get(position)
         position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
+
+        if settings.interface == "rectangles":
+
+            position_and_size_fill = (base[0] - 2, base[1] - 2, settings.unit_width + 4, settings.unit_height + 4)
+            position_and_size_outer = (base[0] - 4, base[1] - 4, settings.unit_width + 8, settings.unit_height + 8)
+
+            if color == "Red":
+                rectangle_color = settings.red_player_color
+            else:
+                rectangle_color = settings.green_player_color
+            pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
+            pygame.draw.rect(self.screen, settings.black, position_and_size, 1)
+            pygame.draw.rect(self.screen, settings.black, position_and_size_outer, 1)
 
         if settings.interface == "square":
             if color == "Red":
@@ -243,10 +254,12 @@ class View(object):
         pygame.display.update()
 
     def get_unit_pic(self, name, color=None, zoomed=False):
-        if zoomed or color:
-            return name.replace(" ", "-") + ",-" + color + ".jpg"
+        if zoomed:
+            return "./zoomed/" + name.replace(" ", "-") + ",-" + color + ".jpg"
+        elif settings.interface == "original":
+            return "./" + settings.unit_folder + "/" + name.replace(" ", "-") + ",-" + color + ".jpg"
         else:
-            return name.replace(" ", "-") + ".jpg"
+            return "./" + settings.unit_folder + "/" + name.replace(" ", "-") + ".jpg"
 
     def refresh(self):
         pygame.display.flip()

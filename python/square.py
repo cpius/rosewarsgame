@@ -1,8 +1,11 @@
 import settings
 
 
-settings.board_image = "./other/board.png"
+settings.board_image = "./square/board.png"
+settings.unit_folder = "./square/"
 
+settings.unit_padding_height = 0
+settings.unit_padding_width = 0
 settings.unit_width = 75
 settings.unit_height = 75
 settings.board_size = [375, 600]
@@ -24,3 +27,6 @@ settings.third_counter_coordinates = (62, 21)
 settings.first_font_coordinates = (57, 52)
 settings.second_font_coordinates = (57, 31)
 settings.third_font_coordinates = (57, 10)
+
+settings.red_player_color = settings.dark_red
+settings.green_player_color = settings.dark_green
