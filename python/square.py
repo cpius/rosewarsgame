@@ -27,3 +27,6 @@ settings.third_counter_coordinates = (62, 21)
 settings.first_font_coordinates = (57, 52)
 settings.second_font_coordinates = (57, 31)
 settings.third_font_coordinates = (57, 10)
+
+settings.red_player_color = settings.dark_red
+settings.green_player_color = settings.dark_green
