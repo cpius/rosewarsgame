@@ -27,13 +27,6 @@ class Unit_bag(object):
         return self.units
 
 
-basic_units_list = settings.basic_units
-special_units_list = settings.special_units
-unit_bag_size = settings.unit_bag_size
-special_unit_count = settings.special_unit_count
-basic_unit_count = settings.basic_unit_count
-dont_use_special_units = settings.dont_use_special_units
-use_special_units = settings.use_special_units
 board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
 
@@ -69,9 +62,9 @@ def get_units():
 
         units = {}
         
-        while len(units) < basic_unit_count: 
+        while len(units) < settings.basic_unit_count:
             name = basic_units_bag.pick()
-            position = tiles_bag.pick(basic_units_list[name])
+            position = tiles_bag.pick(settings.basic_units[name])
             units[position] = getattr(units_module, name.replace(" ", "_"))()
 
             if len(units) == 1:
@@ -85,26 +78,26 @@ def get_units():
 
         units = {}
 
-        while len(units) < special_unit_count and special_units_first_bag.has_units():
+        while len(units) < settings.special_unit_count and special_units_first_bag.has_units():
             name = special_units_first_bag.pick()
-            position = tiles_bag.pick(special_units_list[name])
+            position = tiles_bag.pick(settings.special_units[name])
             units[position] = getattr(units_module, name.replace(" ", "_"))()
 
-        while len(units) < special_unit_count:
+        while len(units) < settings.special_unit_count:
             name = special_units_second_bag.pick()
-            position = tiles_bag.pick(special_units_list[name])
+            position = tiles_bag.pick(settings.special_units[name])
             units[position] = getattr(units_module, name.replace(" ", "_"))()
 
         return units
 
     def fill_bags():
         
-        basic_units_bag = Unit_bag([name for name in basic_units_list for _ in range(unit_bag_size)])
+        basic_units_bag = Unit_bag([name for name in settings.basic_units for _ in range(settings.unit_bag_size)])
         
-        special_units_first_bag = Unit_bag(list(use_special_units))
+        special_units_first_bag = Unit_bag(list(settings.use_special_units))
         
-        special_units_second_bag = Unit_bag(list(set(special_units_list) - set(dont_use_special_units)
-                                                 - set(use_special_units)))
+        special_units_second_bag = Unit_bag(list(set(settings.special_units) - set(settings.dont_use_special_units)
+                                                 - set(settings.use_special_units)))
 
         tiles_bag = Tiles_bag()
         
