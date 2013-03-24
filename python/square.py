@@ -1,8 +1,10 @@
 import settings
 
 
-settings.board_image = "./other/board.png"
+settings.board_image = "./square/board.png"
 
+settings.unit_padding_height = 0
+settings.unit_padding_width = 0
 settings.unit_width = 75
 settings.unit_height = 75
 settings.board_size = [375, 600]
