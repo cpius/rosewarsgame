@@ -3,8 +3,10 @@ import settings
 
 settings.board_image = "./other/board.gif"
 
-settings.unit_width = 70
-settings.unit_height = 106.5
+settings.unit_padding_width = 5
+settings.unit_padding_height = 6.5
+settings.unit_width = 65
+settings.unit_height = 100
 settings.board_size = [391, 908]
 settings.x_border = 22
 settings.y_border_top = 22
