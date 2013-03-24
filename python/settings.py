@@ -69,7 +69,7 @@ y_border_bottom = 0
 base_coordinates = (0, 0)
 center_coordinates = (37.5, 37.5)
 
-symbol_coordinates = (13, 38.2)
+symbol_coordinates = (22.5, 22.5)
 
 first_symbol_coordinates = (2, 58)
 second_symbol_coordinates = (18, 58)
