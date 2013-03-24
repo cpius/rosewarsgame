@@ -25,3 +25,6 @@ settings.third_counter_coordinates = (50, 38)
 settings.first_font_coordinates = (45, 68)
 settings.second_font_coordinates = (45, 48)
 settings.third_font_coordinates = (45, 28)
+
+settings.dark_green = (0, 60, 0)
+settings.dark_red = (120, 0, 0)
