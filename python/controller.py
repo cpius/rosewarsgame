@@ -127,8 +127,9 @@ class Controller(object):
                     action = possible_action
 
             if not action:
-                print "Action not possible"
+                self.view.draw_message("Action not possible")
                 self.clear_move()
+                self.view.draw_game(self.gamestate)
             else:
                 self.perform_action(action)
 
