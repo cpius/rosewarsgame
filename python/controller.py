@@ -81,7 +81,6 @@ class Controller(object):
                         move_positions.add(action.end_position)
 
             self.view.draw_game(self.gamestate, (x, y), attack_positions, ability_positions, move_positions)
-            self.view.draw_game(self.gamestate, (x, y))
 
         elif self.start_position \
             and not self.end_position \
