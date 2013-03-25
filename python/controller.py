@@ -214,7 +214,7 @@ class Controller(object):
     def run_game(self):
 
         self.gamestate.set_ais()
-        self.gamestate.available_actions = self.gamestate.get_actions()
+        self.gamestate.set_available_actions()
 
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)

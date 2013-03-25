@@ -54,6 +54,10 @@ class Gamestate:
         else:
             self.players[1].ai = "Human"
 
+    def set_available_actions(self):
+        self.available_actions = self.get_actions()
+
+
     def turn_shift(self):
         if self.players[0].color == "Green":
             self.turn += 1
@@ -61,7 +65,7 @@ class Gamestate:
         self.players = [self.players[1], self.players[0]]
         self.initialize_turn()
         self.initialize_action()
-        self.available_actions = self.get_actions()
+        self.set_available_actions()
 
     def current_player(self):
         return self.players[0]
