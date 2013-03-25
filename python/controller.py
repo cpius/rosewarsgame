@@ -64,7 +64,6 @@ class Controller(object):
             self.view.draw_game(self.gamestate)
 
         elif not self.start_position and (x, y) in self.gamestate.units[0]:
-            print "Start at", (x, y)
             self.start_position = (x, y)
             self.selected_unit = self.gamestate.units[0][self.start_position]
 
@@ -86,7 +85,6 @@ class Controller(object):
             and not self.end_position \
             and ((x, y) in self.gamestate.units[1]
                  or (x, y) in self.gamestate.units[0]) and self.selected_unit.abilities:
-            print "Ability", (x, y)
             if len(self.selected_unit.abilities) > 1:
                 index = self.get_input_abilities(self.selected_unit)
                 action = Action(self.start_position,
@@ -107,12 +105,10 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1] and self.selected_unit.range > 1:
-            print "Attack", (x, y)
             action = Action(self.start_position, self.start_position, (x, y), True, False)
             self.perform_action(action)
 
         elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1]:
-            print "Attack-Move", (x, y)
 
             if hasattr(self.gamestate.current_player(), "extra_action"):
                 all_actions = self.gamestate.get_actions()
@@ -137,16 +133,13 @@ class Controller(object):
                 self.perform_action(action)
 
         elif self.start_position and not self.end_position:
-            print "Stop at", (x, y)
             self.end_position = (x, y)
 
         elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
-            print "Attack-Move", (x, y)
             action = Action(self.start_position, self.end_position, (x, y), True, False)
             self.perform_action(action)
 
         elif self.start_position and self.end_position and (x, y) not in self.gamestate.units[1]:
-            print "Move to", (x, y)
             action = Action(self.start_position, (x, y), None, False, False)
             self.perform_action(action)
 
@@ -311,7 +304,6 @@ class Controller(object):
                 action = possible_action
 
         if matching_actions == 0:
-            print "Action not allowed"
             self.clear_move()
             return
 
