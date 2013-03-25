@@ -63,6 +63,20 @@ class Controller(object):
             print "Start at", (x, y)
             self.start_position = (x, y)
             self.selected_unit = self.gamestate.units[0][self.start_position]
+
+            attack_positions = set()
+            move_positions = set()
+            ability_positions = set()
+            for action in self.gamestate.available_actions:
+                if action.start_position == (x, y):
+                    if action.is_attack:
+                        attack_positions.add(action.attack_position)
+                    elif action.is_ability:
+                        ability_positions.add(action.attack_position)
+                    else:
+                        move_positions.add(action.end_position)
+
+            self.view.draw_game(self.gamestate, (x, y), attack_positions, ability_positions, move_positions)
             self.view.draw_game(self.gamestate, (x, y))
 
         elif self.start_position \
