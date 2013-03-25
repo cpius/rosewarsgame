@@ -12,7 +12,7 @@ class Interface(object):
     star_icon = "./other/star.gif"
     ability_icon = "./other/ability.gif"
     crusading_icon = "./other/flag.gif"
-    high_morale_icon = "./other/flag.gif"
+    high_morale_icon = "./other/flag_black.gif"
     move_icon = "./other/move.gif"
 
 
