@@ -46,11 +46,11 @@ class View(object):
 
     def draw_ask_about_ability(self, ability1, ability2):
         label = self.font_big.render("Select ability:", 1, settings.black)
-        self.screen.blit(label, (130, 400))
+        self.screen.blit(label, (460, 330))
         label = self.font_big.render("1 for " + ability1, 1, settings.black)
-        self.screen.blit(label, (130, 435))
+        self.screen.blit(label, (460, 365))
         label = self.font_big.render("2 for " + ability2, 1, settings.black)
-        self.screen.blit(label, (130, 470))
+        self.screen.blit(label, (460, 400))
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
