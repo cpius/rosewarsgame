@@ -62,9 +62,9 @@ class Controller(object):
             self.clear_move()
             self.view.draw_game(self.gamestate)
 
-        elif not self.start_position and pos in self.gamestate.units[0]:
+        elif not self.start_position and pos in self.gamestate.player_units():
             self.start_position = pos
-            self.selected_unit = self.gamestate.units[0][self.start_position]
+            self.selected_unit = self.gamestate.player_units()[self.start_position]
 
             attack_positions = set()
             move_positions = set()
@@ -83,7 +83,7 @@ class Controller(object):
         elif self.start_position \
             and not self.end_position \
             and (pos in self.gamestate.units[1]
-                 or pos in self.gamestate.units[0]) and self.selected_unit.abilities:
+                 or pos in self.gamestate.player_units()) and self.selected_unit.abilities:
             if len(self.selected_unit.abilities) > 1:
                 index = self.get_input_abilities(self.selected_unit)
                 action = Action(self.start_position,
@@ -103,11 +103,11 @@ class Controller(object):
                                 self.selected_unit.abilities[0])
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and pos in self.gamestate.units[1] and self.selected_unit.range > 1:
+        elif self.start_position and not self.end_position and pos in self.gamestate.opponent_units() and self.selected_unit.range > 1:
             action = Action(self.start_position, self.start_position, pos, True, False)
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and pos in self.gamestate.units[1]:
+        elif self.start_position and not self.end_position and pos in self.gamestate.opponent_units():
 
             if hasattr(self.gamestate.current_player(), "extra_action"):
                 all_actions = self.gamestate.get_actions()
@@ -140,11 +140,11 @@ class Controller(object):
                 self.view.draw_message("Stop at " + str(pos))
                 self.end_position = pos
 
-        elif self.start_position and self.end_position and pos in self.gamestate.units[1]:
+        elif self.start_position and self.end_position and pos in self.gamestate.opponent_units():
             action = Action(self.start_position, self.end_position, pos, True, False)
             self.perform_action(action)
 
-        elif self.start_position and self.end_position and pos not in self.gamestate.units[1]:
+        elif self.start_position and self.end_position and pos not in self.gamestate.opponent_units():
             action = Action(self.start_position, pos, None, False, False)
             self.perform_action(action)
 
@@ -152,7 +152,7 @@ class Controller(object):
         if not self.start_position:
             self.show_unit(pos)
 
-        elif self.start_position and not self.end_position and pos in self.gamestate.units[1]:
+        elif self.start_position and not self.end_position and pos in self.gamestate.opponent_units():
 
             if hasattr(self.gamestate.current_player(), "extra_action"):
                 all_actions = self.gamestate.get_actions()
@@ -177,7 +177,7 @@ class Controller(object):
             else:
                 self.perform_action(action)
 
-        elif self.start_position and self.end_position and pos in self.gamestate.units[1]:
+        elif self.start_position and self.end_position and pos in self.gamestate.opponent_units():
             action = Action(self.start_position, self.end_position, pos, True, False)
             self.perform_action(action)
 
