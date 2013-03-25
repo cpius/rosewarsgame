@@ -1,3 +1,5 @@
+import colors
+
 class Interface(object):
     base_coordinates = (0, 0)
 
@@ -46,7 +48,6 @@ class Rectangles(Interface):
     second_font_coordinates = (counter_base_x - 5, counter_base_y + 28)
     third_font_coordinates = (counter_base_x - 5, counter_base_y + 8)
     
-    green_player_color = (150, 130, 15)
-    red_player_color = (190, 55, 55)
-
-    counter_circle_color = (0, 0, 0)
+    green_player_color = colors.gold
+    red_player_color = colors.dull_red
+    counter_circle_color = colors.black

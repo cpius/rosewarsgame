@@ -2,6 +2,7 @@ import pygame
 import settings
 from coordinates import Coordinates
 import battle
+import colors
 
 
 _image_library = {}
@@ -11,7 +12,6 @@ class View(object):
     def __init__(self):
         pygame.init()
 
-        self.colors = settings.Colors()
         self.interface = settings.interface
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
@@ -41,22 +41,22 @@ class View(object):
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
-        label = self.font_big.render("Select counter for", 1, self.colors.black)
+        label = self.font_big.render("Select counter for", 1, colors.black)
         self.screen.blit(label, (410, 490))
-        label = self.font_big.render(unit_name, 1, self.colors.black)
+        label = self.font_big.render(unit_name, 1, colors.black)
         self.screen.blit(label, (410, 515))
-        label = self.font_big.render("'a' for attack", 1, self.colors.black)
+        label = self.font_big.render("'a' for attack", 1, colors.black)
         self.screen.blit(label, (410, 540))
-        label = self.font_big.render("'d' for defence", 1, self.colors.black)
+        label = self.font_big.render("'d' for defence", 1, colors.black)
         self.screen.blit(label, (410, 565))
         pygame.display.update()
 
     def draw_ask_about_ability(self, ability1, ability2):
-        label = self.font_big.render("Select ability:", 1, self.colors.black)
+        label = self.font_big.render("Select ability:", 1, colors.black)
         self.screen.blit(label, (460, 330))
-        label = self.font_big.render("1 for " + ability1, 1, self.colors.black)
+        label = self.font_big.render("1 for " + ability1, 1, colors.black)
         self.screen.blit(label, (460, 365))
-        label = self.font_big.render("2 for " + ability2, 1, self.colors.black)
+        label = self.font_big.render("2 for " + ability2, 1, colors.black)
         self.screen.blit(label, (460, 400))
         pygame.display.update()
 
@@ -73,7 +73,7 @@ class View(object):
         pic = self.get_image("./other/wood.jpg")
         self.screen.blit(pic, (391, 0))
         font = pygame.font.SysFont("monospace", 55, bold=True)
-        label = font.render(color + " Wins", 1, self.colors.black)
+        label = font.render(color + " Wins", 1, colors.black)
         self.screen.blit(label, (440, 300))
         pygame.display.update()
 
@@ -125,9 +125,9 @@ class View(object):
 
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
         pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-        pygame.draw.circle(self.screen, self.colors.brown, counter_coordinates.get(position), 8, 0)
+        pygame.draw.circle(self.screen, colors.brown, counter_coordinates.get(position), 8, 0)
         if unit.attack_counters != 1:
-            label = self.font.render(str(unit.attack_counters), 1, self.colors.black)
+            label = self.font.render(str(unit.attack_counters), 1, colors.black)
             self.screen.blit(label, font_coordinates.get(position))
 
     def draw_defence_counters(self, unit, position, counter_coordinates, font_coordinates):
@@ -137,7 +137,7 @@ class View(object):
             defence_counters = unit.defence_counters
 
         pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-        pygame.draw.circle(self.screen, self.colors.light_grey, counter_coordinates.get(position), 8, 0)
+        pygame.draw.circle(self.screen, colors.light_grey, counter_coordinates.get(position), 8, 0)
 
         counter_text = None
         if defence_counters > 1:
@@ -146,21 +146,21 @@ class View(object):
             counter_text = "x"
 
         if counter_text:
-            label = self.font.render(counter_text, 1, self.colors.black)
+            label = self.font.render(counter_text, 1, colors.black)
             self.screen.blit(label, font_coordinates.get(position))
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
             pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, self.colors.yellow, counter_coordinates.get(position), 8, 0)
+            pygame.draw.circle(self.screen, colors.yellow, counter_coordinates.get(position), 8, 0)
 
     def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
             pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, self.colors.blue, counter_coordinates.get(position), 8, 0)
+            pygame.draw.circle(self.screen, colors.blue, counter_coordinates.get(position), 8, 0)
 
             if unit.blue_counters > 1:
-                label = self.font.render(str(unit.blue_counters), 1, self.colors.black)
+                label = self.font.render(str(unit.blue_counters), 1, colors.black)
                 self.screen.blit(label, font_coordinates.get(position))
 
     def draw_symbols(self, unit, position):
@@ -187,7 +187,7 @@ class View(object):
         self.screen.blit(pic, coordinates.get(position))
 
     def draw_message(self, string):
-        label = self.font_big.render(string, 1, self.colors.black)
+        label = self.font_big.render(string, 1, colors.black)
         self.screen.blit(label, (440, 350))
 
     def draw_unit(self, unit, position, color, selected=False):
@@ -212,8 +212,8 @@ class View(object):
             rectangle_color = self.interface.green_player_color
 
         pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
-        pygame.draw.rect(self.screen, self.colors.black, position_and_size, 1)
-        pygame.draw.rect(self.screen, self.colors.black, position_and_size_outer, 1)
+        pygame.draw.rect(self.screen, colors.black, position_and_size, 1)
+        pygame.draw.rect(self.screen, colors.black, position_and_size_outer, 1)
 
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
@@ -255,16 +255,16 @@ class View(object):
         pygame.display.update()
 
     def draw_action(self, action, gamestate):
-        pygame.draw.circle(self.screen, self.colors.black, self.center_coordinates.get(action.start_position), 10)
+        pygame.draw.circle(self.screen, colors.black, self.center_coordinates.get(action.start_position), 10)
         pygame.draw.line(self.screen,
-                         self.colors.black,
+                         colors.black,
                          self.center_coordinates.get(action.start_position),
                          self.center_coordinates.get(action.end_position),
                          5)
 
         if action.is_attack:
             pygame.draw.line(self.screen,
-                             self.colors.black,
+                             colors.black,
                              self.center_coordinates.get(action.end_position),
                              self.center_coordinates.get(action.attack_position),
                              5)
@@ -282,7 +282,7 @@ class View(object):
 
         elif action.is_ability:
             pygame.draw.line(self.screen,
-                             self.colors.black,
+                             colors.black,
                              self.center_coordinates.get(action.end_position),
                              self.center_coordinates.get(action.attack_position), 5)
             pic = self.get_image(self.interface.ability_icon)
@@ -308,7 +308,7 @@ class View(object):
             else:
                 outcome = "Missed"
 
-            label = self.font_bigger.render(str(outcome), 1, self.colors.black)
+            label = self.font_bigger.render(str(outcome), 1, colors.black)
             self.screen.blit(label, (440, 350))
 
             if gamestate.current_player().color == "Red":
@@ -317,7 +317,7 @@ class View(object):
                 pic = self.get_image(unit_pic)
                 self.screen.blit(pic, (440, 120))
 
-                label = self.font_big.render("Attack: " + str(attack), 1, self.colors.black)
+                label = self.font_big.render("Attack: " + str(attack), 1, colors.black)
                 self.screen.blit(label, (510, 140))
 
                 if outcome != "Missed":
@@ -331,7 +331,7 @@ class View(object):
                 pic = self.get_image(unit_pic)
                 self.screen.blit(pic, (440, 550))
 
-                label = self.font_big.render("Defence: " + str(defence), 1, self.colors.black)
+                label = self.font_big.render("Defence: " + str(defence), 1, colors.black)
                 self.screen.blit(label, (510, 570))
 
             else:
@@ -340,7 +340,7 @@ class View(object):
                 pic = self.get_image(unit_pic)
                 self.screen.blit(pic, (440, 550))
 
-                label = self.font_big.render("Attack: " + str(attack), 1, self.colors.black)
+                label = self.font_big.render("Attack: " + str(attack), 1, colors.black)
                 self.screen.blit(label, (510, 570))
 
                 if outcome != "Missed":
@@ -354,7 +354,7 @@ class View(object):
                 pic = self.get_image(unit_pic)
                 self.screen.blit(pic, (440, 120))
 
-                label = self.font_big.render("Defence: " + str(defence), 1, self.colors.black)
+                label = self.font_big.render("Defence: " + str(defence), 1, colors.black)
                 self.screen.blit(label, (510, 140))
 
         pygame.display.update()
