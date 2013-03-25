@@ -42,8 +42,6 @@ unit_bag_size = 4
 special_unit_count = 3
 basic_unit_count = 6
 
-show_full_battle_result = True
-
 ##############
 ### Colors ###
 ##############
