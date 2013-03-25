@@ -1,6 +1,6 @@
 pause_for_animation = 650
 
-interface = "original"  # Choose between original and square
+interface = "rectangles2"  # Choose between original and square
 
 player1_ai = "Human"
 player2_ai = "Evaluator"
