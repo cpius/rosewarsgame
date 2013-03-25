@@ -177,7 +177,7 @@ class View(object):
         base = self.base_coordinates.get(position)
         position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
 
-        if settings.interface == "rectangles":
+        if settings.interface in ["rectangles", "rectangles2"]:
 
             position_and_size_fill = (base[0] - 2, base[1] - 2, settings.unit_width + 4, settings.unit_height + 4)
             position_and_size_outer = (base[0] - 4, base[1] - 4, settings.unit_width + 8, settings.unit_height + 8)
