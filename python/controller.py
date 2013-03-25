@@ -332,7 +332,10 @@ class Controller(object):
 
         self.save_game()
 
-        pygame.time.delay(settings.pause_for_animation)
+        if action.is_attack:
+            pygame.time.delay(settings.pause_for_animation_attack)
+        else:
+            pygame.time.delay(settings.pause_for_animation)
 
         if settings.show_full_battle_result:
             print action.full_string()
