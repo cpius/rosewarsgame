@@ -134,7 +134,12 @@ class Controller(object):
                 self.perform_action(action)
 
         elif self.start_position and not self.end_position:
-            self.end_position = (x, y)
+            if not any(action.is_attack and action.start_position == self.start_position and action.end_position == (x,y) for action in self.gamestate.available_actions):
+                action = Action(self.start_position, (x, y), None, False, False)
+                self.perform_action(action)
+            else:
+                self.view.draw_message("Stop at " + str((x, y)))
+                self.end_position = (x, y)
 
         elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
             action = Action(self.start_position, self.end_position, (x, y), True, False)
