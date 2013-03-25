@@ -177,6 +177,10 @@ class View(object):
         pic = self.get_image(settings.crusading_icon)
         self.screen.blit(pic, coordinates.get(position))
 
+    def draw_message(self, string):
+        label = self.font_big.render(string, 1, settings.black)
+        self.screen.blit(label, (440, 350))
+
     def draw_unit(self, unit, position, color, selected=False):
         unit_pic = self.get_unit_pic(unit.name, color)
         pic = self.get_image(unit_pic)
