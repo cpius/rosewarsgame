@@ -118,8 +118,7 @@ class Controller(object):
 
             for possible_action in all_actions:
                 if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == pos \
-                        and possible_action.move_with_attack:
+                        and possible_action.attack_position == pos:
                     if possible_action.end_position == self.start_position:
                         action = possible_action
                         break
