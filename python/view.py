@@ -218,6 +218,9 @@ class View(object):
         pic = self.get_image(settings.board_image)
         self.screen.blit(pic, (0, 0))
 
+        pic = self.get_image("./other/wood.jpg")
+        self.screen.blit(pic, (391, 0))
+
         for position, unit in gamestate.units[0].items():
             if position == selected_position:
                 self.draw_unit(unit, position, gamestate.current_player().color, True)
