@@ -11,32 +11,33 @@ class View(object):
     def __init__(self):
         pygame.init()
 
-        exec("import %s" % settings.interface)
-
         self.colors = settings.Colors()
+        self.interface = settings.interface
 
-        self.screen = pygame.display.set_mode(settings.board_size)
+        self.screen = pygame.display.set_mode(self.interface.board_size)
 
         pic = self.get_image("./other/wood.jpg")
         self.screen.blit(pic, (391, 0))
 
-        self.font = pygame.font.SysFont(settings.normal_font_name, settings.normal_font_size, True, False)
-        self.font_big = pygame.font.SysFont(settings.normal_font_name, settings.big_font_size, True, False)
-        self.font_bigger = pygame.font.SysFont(settings.normal_font_name, settings.bigger_font_size, True, False)
-        self.font_dice = pygame.font.SysFont(settings.normal_font_name, settings.dice_font_size, True, False)
+        self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True, False)
+        self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True, False)
+        self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True,
+                                               False)
+        self.font_dice = pygame.font.SysFont(self.interface.normal_font_name, self.interface.dice_font_size, True,
+                                             False)
 
-        self.base_coordinates = Coordinates(settings.base_coordinates)
-        self.center_coordinates = Coordinates(settings.center_coordinates)
-        self.symbol_coordinates = Coordinates(settings.symbol_coordinates)
+        self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
+        self.center_coordinates = Coordinates(self.interface.center_coordinates, self.interface)
+        self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
 
     def get_position_from_mouse_click(self, coordinates):
-        x = int((coordinates[0] - settings.x_border) / (settings.unit_width + settings.unit_padding_width)) + 1
-        if coordinates[1] > settings.board_size[1] / 2:
-            y = 8 - int((coordinates[1] - settings.y_border_bottom) /
-                        (settings.unit_height + settings.unit_padding_height))
+        x = int((coordinates[0] - self.interface.x_border) / (self.interface.unit_width + self.interface.unit_padding_width)) + 1
+        if coordinates[1] > self.interface.board_size[1] / 2:
+            y = 8 - int((coordinates[1] - self.interface.y_border_bottom) /
+                        (self.interface.unit_height + self.interface.unit_padding_height))
         else:
-            y = 8 - int((coordinates[1] - settings.y_border_top) /
-                        (settings.unit_height + settings.unit_padding_height))
+            y = 8 - int((coordinates[1] - self.interface.y_border_top) /
+                        (self.interface.unit_height + self.interface.unit_padding_height))
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
@@ -108,22 +109,22 @@ class View(object):
 
     def get_counter_coordinates(self, counters_drawn):
         return {
-            0: Coordinates(settings.first_counter_coordinates),
-            1: Coordinates(settings.second_counter_coordinates),
-            2: Coordinates(settings.third_counter_coordinates),
-            3: Coordinates(settings.third_counter_coordinates)
+            0: Coordinates(self.interface.first_counter_coordinates, self.interface),
+            1: Coordinates(self.interface.second_counter_coordinates, self.interface),
+            2: Coordinates(self.interface.third_counter_coordinates, self.interface),
+            3: Coordinates(self.interface.third_counter_coordinates, self.interface)
         }[counters_drawn]
 
     def get_font_coordinates(self, counters_drawn):
         return {
-            0: Coordinates(settings.first_font_coordinates),
-            1: Coordinates(settings.second_font_coordinates),
-            2: Coordinates(settings.third_font_coordinates),
-            3: Coordinates(settings.third_counter_coordinates)
+            0: Coordinates(self.interface.first_font_coordinates, self.interface),
+            1: Coordinates(self.interface.second_font_coordinates, self.interface),
+            2: Coordinates(self.interface.third_font_coordinates, self.interface),
+            3: Coordinates(self.interface.third_counter_coordinates, self.interface)
         }[counters_drawn]
 
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
-        pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
         pygame.draw.circle(self.screen, self.colors.brown, counter_coordinates.get(position), 8, 0)
         if unit.attack_counters != 1:
             label = self.font.render(str(unit.attack_counters), 1, self.colors.black)
@@ -135,7 +136,7 @@ class View(object):
         else:
             defence_counters = unit.defence_counters
 
-        pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
+        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
         pygame.draw.circle(self.screen, self.colors.light_grey, counter_coordinates.get(position), 8, 0)
 
         counter_text = None
@@ -150,12 +151,12 @@ class View(object):
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
-            pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
             pygame.draw.circle(self.screen, self.colors.yellow, counter_coordinates.get(position), 8, 0)
 
     def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
-            pygame.draw.circle(self.screen, settings.counter_circle_color, counter_coordinates.get(position), 10, 0)
+            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
             pygame.draw.circle(self.screen, self.colors.blue, counter_coordinates.get(position), 8, 0)
 
             if unit.blue_counters > 1:
@@ -163,26 +164,26 @@ class View(object):
                 self.screen.blit(label, font_coordinates.get(position))
 
     def draw_symbols(self, unit, position):
-        coordinates = Coordinates(settings.first_symbol_coordinates)
+        coordinates = Coordinates(self.interface.first_symbol_coordinates, self.interface)
         if unit.xp == 1:
             self.draw_xp(position, coordinates)
-            coordinates = Coordinates(settings.second_symbol_coordinates)
+            coordinates = Coordinates(self.interface.second_symbol_coordinates, self.interface)
         if hasattr(unit, "bribed"):
             self.draw_bribed(position, coordinates)
-            coordinates = Coordinates(settings.second_symbol_coordinates)
+            coordinates = Coordinates(self.interface.second_symbol_coordinates, self.interface)
         if hasattr(unit, "is_crusading"):
             self.draw_crusading(position, coordinates)
 
     def draw_xp(self, position, coordinates):
-        pic = self.get_image(settings.star_icon)
+        pic = self.get_image(self.interface.star_icon)
         self.screen.blit(pic, coordinates.get(position))
 
     def draw_bribed(self, position, coordinates):
-        pic = self.get_image(settings.ability_icon)
+        pic = self.get_image(self.interface.ability_icon)
         self.screen.blit(pic, coordinates.get(position))
 
     def draw_crusading(self, position, coordinates):
-        pic = self.get_image(settings.crusading_icon)
+        pic = self.get_image(self.interface.crusading_icon)
         self.screen.blit(pic, coordinates.get(position))
 
     def draw_message(self, string):
@@ -197,18 +198,18 @@ class View(object):
         base = self.base_coordinates.get(position)
 
         if selected:
-            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
             rect.fill((0, 0, 0, 160))
             self.screen.blit(rect, base)
 
-        position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
-        position_and_size_fill = (base[0] - 2, base[1] - 2, settings.unit_width + 4, settings.unit_height + 4)
-        position_and_size_outer = (base[0] - 4, base[1] - 4, settings.unit_width + 8, settings.unit_height + 8)
+        position_and_size = (base[0], base[1], self.interface.unit_width, self.interface.unit_height)
+        position_and_size_fill = (base[0] - 2, base[1] - 2, self.interface.unit_width + 4, self.interface.unit_height + 4)
+        position_and_size_outer = (base[0] - 4, base[1] - 4, self.interface.unit_width + 8, self.interface.unit_height + 8)
 
         if color == "Red":
-            rectangle_color = settings.red_player_color
+            rectangle_color = self.interface.red_player_color
         else:
-            rectangle_color = settings.green_player_color
+            rectangle_color = self.interface.green_player_color
 
         pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
         pygame.draw.rect(self.screen, self.colors.black, position_and_size, 1)
@@ -219,7 +220,7 @@ class View(object):
 
     def draw_game(self, gamestate, selected_position=None, attack_positions=set(), ability_positions=set(), move_positions=set()):
 
-        pic = self.get_image(settings.board_image)
+        pic = self.get_image(self.interface.board_image)
         self.screen.blit(pic, (0, 0))
 
         pic = self.get_image("./other/wood.jpg")
@@ -234,20 +235,20 @@ class View(object):
         for position, unit in gamestate.units[1].items():
             self.draw_unit(unit, position, gamestate.players[1].color)
 
-        coordinates = Coordinates((0, 0))
+        coordinates = Coordinates((0, 0), self.interface)
 
         for move_position in move_positions:
-            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
             rect.fill((0, 0, 0, 160))
             self.screen.blit(rect, coordinates.get((move_position[0], move_position[1])))
 
         for attack_position in attack_positions:
-            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
             rect.fill((130, 0, 0, 170))
             self.screen.blit(rect, coordinates.get((attack_position[0], attack_position[1])))
 
         for ability_position in ability_positions:
-            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
             rect.fill((0, 0, 150, 130))
             self.screen.blit(rect, coordinates.get((ability_position[0], ability_position[1])))
 
@@ -268,13 +269,13 @@ class View(object):
                              self.center_coordinates.get(action.attack_position),
                              5)
             if action.move_with_attack:
-                pic = self.get_image(settings.move_attack_icon)
+                pic = self.get_image(self.interface.move_attack_icon)
             else:
-                pic = self.get_image(settings.attack_icon)
+                pic = self.get_image(self.interface.attack_icon)
 
             if hasattr(action, "high_morale"):
-                pic = self.get_image(settings.high_morale_icon)
-                coordinates = Coordinates(settings.first_symbol_coordinates)
+                pic = self.get_image(self.interface.high_morale_icon)
+                coordinates = Coordinates(self.interface.first_symbol_coordinates, self.interface)
                 self.screen.blit(pic, coordinates.get(action.end_position))
 
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
@@ -284,11 +285,11 @@ class View(object):
                              self.colors.black,
                              self.center_coordinates.get(action.end_position),
                              self.center_coordinates.get(action.attack_position), 5)
-            pic = self.get_image(settings.ability_icon)
+            pic = self.get_image(self.interface.ability_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
         else:
-            pic = self.get_image(settings.move_icon)
+            pic = self.get_image(self.interface.move_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.end_position))
 
         if action.is_attack:
@@ -320,10 +321,10 @@ class View(object):
                 self.screen.blit(label, (510, 140))
 
                 if outcome != "Missed":
-                    label = self.font_dice.render(str(action.rolls[1]), 1, settings.green_player_color)
+                    label = self.font_dice.render(str(action.rolls[1]), 1, self.interface.green_player_color)
                     self.screen.blit(label, (590, 370))
 
-                label = self.font_dice.render(str(action.rolls[0]), 1, settings.red_player_color)
+                label = self.font_dice.render(str(action.rolls[0]), 1, self.interface.red_player_color)
                 self.screen.blit(label, (590, 300))
 
                 unit_pic = self.get_unit_pic(defending_unit.name, "Green")
@@ -343,10 +344,10 @@ class View(object):
                 self.screen.blit(label, (510, 570))
 
                 if outcome != "Missed":
-                    label = self.font_dice.render(str(action.rolls[1]), 4, settings.red_player_color)
+                    label = self.font_dice.render(str(action.rolls[1]), 4, self.interface.red_player_color)
                     self.screen.blit(label, (590, 300))
 
-                label = self.font_dice.render(str(action.rolls[0]), 4, settings.green_player_color)
+                label = self.font_dice.render(str(action.rolls[0]), 4, self.interface.green_player_color)
                 self.screen.blit(label, (590, 370))
 
                 unit_pic = self.get_unit_pic(defending_unit.name, "Red")
@@ -362,7 +363,7 @@ class View(object):
         if zoomed:
             return "./zoomed/" + name.replace(" ", "-") + ",-" + color + ".jpg"
         else:
-            return "./" + settings.unit_folder + "/" + name.replace(" ", "-") + ".jpg"
+            return "./" + self.interface.unit_folder + "/" + name.replace(" ", "-") + ".jpg"
 
     def refresh(self):
         pygame.display.flip()
