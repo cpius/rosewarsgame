@@ -59,7 +59,11 @@ class Controller(object):
             self.perform_action(extra_action)
 
     def left_click(self, x, y):
-        if not self.start_position and (x, y) in self.gamestate.units[0]:
+        if self.start_position and self.start_position == (x, y):
+            self.clear_move()
+            self.view.draw_game(self.gamestate)
+
+        elif not self.start_position and (x, y) in self.gamestate.units[0]:
             print "Start at", (x, y)
             self.start_position = (x, y)
             self.selected_unit = self.gamestate.units[0][self.start_position]
