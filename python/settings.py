@@ -8,7 +8,7 @@ player2_ai = "Evaluator"
 document_ai_actions = True
 
 use_special_units = []  # Special units that must be present in the game
-dont_use_special_units = ["Chariot", "Samurai"]  # Special units that must not be present in the game
+dont_use_special_units = ["Chariot", "Samurai", "Diplomat"]  # Special units that must not be present in the game
 
 
 # Rows that the units can start on, in the pseudo-random computer-generated start position
