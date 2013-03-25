@@ -200,17 +200,18 @@ class View(object):
             rect.fill((0, 0, 0, 160))
             self.screen.blit(rect, base)
 
+        position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
+        position_and_size_fill = (base[0] - 2, base[1] - 2, settings.unit_width + 4, settings.unit_height + 4)
+        position_and_size_outer = (base[0] - 4, base[1] - 4, settings.unit_width + 8, settings.unit_height + 8)
 
-            position_and_size_fill = (base[0] - 2, base[1] - 2, settings.unit_width + 4, settings.unit_height + 4)
-            position_and_size_outer = (base[0] - 4, base[1] - 4, settings.unit_width + 8, settings.unit_height + 8)
+        if color == "Red":
+            rectangle_color = settings.red_player_color
+        else:
+            rectangle_color = settings.green_player_color
 
-            if color == "Red":
-                rectangle_color = settings.red_player_color
-            else:
-                rectangle_color = settings.green_player_color
-            pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
-            pygame.draw.rect(self.screen, settings.black, position_and_size, 1)
-            pygame.draw.rect(self.screen, settings.black, position_and_size_outer, 1)
+        pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
+        pygame.draw.rect(self.screen, settings.black, position_and_size, 1)
+        pygame.draw.rect(self.screen, settings.black, position_and_size_outer, 1)
 
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
