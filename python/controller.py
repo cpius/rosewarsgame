@@ -184,19 +184,6 @@ class Controller(object):
             action = Action(self.start_position, self.end_position, (x, y), True, False)
             self.perform_action(action)
 
-    def list_actions(self):
-        print
-        print "Possible actions:"
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            actions = self.gamestate.get_actions()
-            for action in actions:
-                print action
-        else:
-            actions = self.gamestate.get_actions()
-            for action in actions:
-                print action
-        print
-
     def clear_move(self):
         self.start_position = self.end_position = self.selected_unit = None
 
@@ -222,9 +209,6 @@ class Controller(object):
                 if event.type == KEYDOWN and event.key == K_p:
                     print "paused"
                     self.pause()
-
-                if event.type == KEYDOWN and event.key == K_a:
-                    self.list_actions()
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     self.clear_move()
