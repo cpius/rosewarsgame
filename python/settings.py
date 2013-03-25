@@ -1,4 +1,4 @@
-pause_for_animation = 650
+pause_for_animation = 1000
 
 interface = "rectangles2"  # Choose between original and square
 
