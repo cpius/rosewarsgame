@@ -261,6 +261,9 @@ class Controller(object):
                     unit.defence_counters += 1
                     return
 
+                elif event.type == QUIT:
+                    self.exit_game()
+
     def get_input_abilities(self, unit):
         self.view.draw_ask_about_ability(unit.abilities[0], unit.abilities[1])
 
@@ -271,6 +274,9 @@ class Controller(object):
 
                 if event.type == KEYDOWN and event.key == K_2:
                     return 1
+
+                elif event.type == QUIT:
+                    self.exit_game()
 
     def pause(self):
         while True:
