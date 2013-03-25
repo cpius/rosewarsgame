@@ -1,3 +1,16 @@
+class Colors():
+    black = (0, 0, 0)
+    white = (255, 255, 255)
+    green = (0, 255, 0)
+    red = (255, 0, 0)
+    brown = (128, 64, 0)
+    grey = (48, 48, 48)
+    yellow = (200, 200, 0)
+    light_grey = (223, 223, 223)
+    blue = (0, 102, 204)
+    dark_green = (60, 113, 50)
+    dark_red = (204, 0, 16)
+
 pause_for_animation_attack = 1000
 pause_for_animation = 500
 
@@ -46,17 +59,7 @@ basic_unit_count = 6
 ### Colors ###
 ##############
 
-black = (0, 0, 0)
-white = (255, 255, 255)
-green = (0, 255, 0)
-red = (255, 0, 0)
-brown = (128, 64, 0)
-grey = (48, 48, 48)
-yellow = (200, 200, 0)
-light_grey = (223, 223, 223)
-blue = (0, 102, 204)
-dark_green = (60, 113, 50)
-dark_red = (204, 0, 16)
+
 
 #################
 ### Interface ###
@@ -112,4 +115,5 @@ x_border = 0
 green_player_color = None
 red_player_color = None
 
-counter_circle_color = black
+colors = Colors()
+counter_circle_color = colors.black
