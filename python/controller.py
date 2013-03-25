@@ -305,6 +305,8 @@ class Controller(object):
 
         if matching_actions == 0:
             self.clear_move()
+            self.view.draw_game(self.gamestate)
+            self.view.draw_message("Action not allowed")
             return
 
         elif matching_actions > 1:
