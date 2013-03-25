@@ -63,6 +63,7 @@ class Controller(object):
             print "Start at", (x, y)
             self.start_position = (x, y)
             self.selected_unit = self.gamestate.units[0][self.start_position]
+            self.view.draw_game(self.gamestate, (x, y))
 
         elif self.start_position \
             and not self.end_position \
@@ -223,7 +224,7 @@ class Controller(object):
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     self.clear_move()
-                    print "move cleared"
+                    self.view.draw_game(self.gamestate)
 
                 elif event.type == KEYDOWN and self.command_q_down(event.key):
                     self.exit_game()

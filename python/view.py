@@ -169,13 +169,18 @@ class View(object):
         pic = self.get_image(settings.crusading_icon)
         self.screen.blit(pic, coordinates.get(position))
 
-    def draw_unit(self, unit, position, color):
+    def draw_unit(self, unit, position, color, selected=False):
         unit_pic = self.get_unit_pic(unit.name, color)
         pic = self.get_image(unit_pic)
         self.screen.blit(pic, self.base_coordinates.get(position))
 
         base = self.base_coordinates.get(position)
         position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
+
+        if selected:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 0, 160))
+            self.screen.blit(rect, (base[0], base[1]))
 
         if settings.interface in ["rectangles", "rectangles2"]:
 
@@ -200,13 +205,16 @@ class View(object):
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
 
-    def draw_game(self, gamestate):
+    def draw_game(self, gamestate, selected_position=None):
 
         pic = self.get_image(settings.board_image)
         self.screen.blit(pic, (0, 0))
 
         for position, unit in gamestate.units[0].items():
-            self.draw_unit(unit, position, gamestate.current_player().color)
+            if position == selected_position:
+                self.draw_unit(unit, position, gamestate.current_player().color, True)
+            else:
+                self.draw_unit(unit, position, gamestate.current_player().color)
 
         for position, unit in gamestate.units[1].items():
             self.draw_unit(unit, position, gamestate.players[1].color)
