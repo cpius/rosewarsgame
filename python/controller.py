@@ -304,6 +304,8 @@ class Controller(object):
 
     def perform_action(self, action):
 
+        self.view.draw_game(self.gamestate)
+
         if hasattr(self.gamestate.current_player(), "extra_action"):
             all_actions = self.gamestate.get_actions()
         else:
