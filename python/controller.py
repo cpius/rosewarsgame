@@ -320,12 +320,13 @@ class Controller(object):
             self.clear_move()
             return
 
-        self.view.draw_action(action)
-        pygame.time.delay(settings.pause_for_animation)
-
         self.gamestate.do_action(action)
 
+        self.view.draw_action(action)
+
         self.save_game()
+
+        pygame.time.delay(settings.pause_for_animation)
 
         if settings.show_full_battle_result:
             print action.full_string()

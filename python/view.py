@@ -19,6 +19,7 @@ class View(object):
 
         self.font = pygame.font.SysFont(settings.normal_font_name, settings.normal_font_size, True, False)
         self.font_big = pygame.font.SysFont(settings.normal_font_name, settings.big_font_size, True, False)
+        self.font_dice = pygame.font.SysFont(settings.normal_font_name, settings.dice_font_size, True, False)
 
         self.base_coordinates = Coordinates(settings.base_coordinates)
         self.center_coordinates = Coordinates(settings.center_coordinates)
@@ -278,6 +279,16 @@ class View(object):
         else:
             pic = self.get_image(settings.move_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.end_position))
+
+        if action.is_attack and settings.interface == "rectangles2":
+            label = self.font_big.render(str(action.outcome), 1, settings.black)
+            self.screen.blit(label, (440, 350))
+
+            label = self.font_dice.render(str(action.rolls[0]), 4, settings.green_player_color)
+            self.screen.blit(label, (590, 300))
+
+            label = self.font_dice.render(str(action.rolls[0]), 4, settings.red_player_color)
+            self.screen.blit(label, (590, 370))
 
         pygame.display.update()
 
