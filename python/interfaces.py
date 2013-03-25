@@ -1,5 +1,6 @@
 import colors
 
+
 class Interface(object):
     base_coordinates = (0, 0)
 
