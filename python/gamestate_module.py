@@ -61,6 +61,7 @@ class Gamestate:
         self.players = [self.players[1], self.players[0]]
         self.initialize_turn()
         self.initialize_action()
+        self.available_actions = self.get_actions()
 
     def current_player(self):
         return self.players[0]
