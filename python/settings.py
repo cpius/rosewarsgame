@@ -105,8 +105,8 @@ first_font_coordinates = None
 second_font_coordinates = None
 third_font_coordinates = None
 
-unit_padding_width = None
-unit_padding_height = None
+unit_padding_width = 0
+unit_padding_height = 0
 x_border = 0
 
 green_player_color = None
