@@ -13,15 +13,15 @@ settings.x_border = 29
 settings.y_border_top = 26
 settings.y_border_bottom = 26
 
-settings.center_coordinates = (35, 53.2)
-settings.symbol_coordinates = (18, 38.2)
-
-settings.first_symbol_coordinates = (2, 78)
-settings.second_symbol_coordinates = (18, 78)
-
 
 counter_base_x = 45
 counter_base_y = 0
+
+settings.center_coordinates = (35, counter_base_y + 33.2)
+settings.symbol_coordinates = (18, counter_base_y + 18.2)
+
+settings.first_symbol_coordinates = (2, counter_base_y + 58)
+settings.second_symbol_coordinates = (18, counter_base_y + 58)
 
 settings.first_counter_coordinates = (counter_base_x, counter_base_y + 58)
 settings.second_counter_coordinates = (counter_base_x, counter_base_y + 38)
