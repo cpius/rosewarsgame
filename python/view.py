@@ -1,6 +1,7 @@
 import pygame
 import settings
 from coordinates import Coordinates
+import battle
 
 
 _image_library = {}
@@ -256,7 +257,7 @@ class View(object):
 
         pygame.display.update()
 
-    def draw_action(self, action):
+    def draw_action(self, action, gamestate):
         pygame.draw.circle(self.screen, settings.black, self.center_coordinates.get(action.start_position), 10)
         pygame.draw.line(self.screen,
                          settings.black,
@@ -295,14 +296,69 @@ class View(object):
             self.screen.blit(pic, self.symbol_coordinates.get(action.end_position))
 
         if action.is_attack and settings.interface == "rectangles2":
-            label = self.font_big.render(str(action.outcome), 1, settings.black)
+
+            attacking_unit = action.unit_reference
+            defending_unit = action.target_reference
+
+            attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
+            defence = battle.get_defence_rating(attacking_unit, defending_unit, attack)
+
+            if action.rolls[0] <= attack:
+                if action.rolls[1] <= defence:
+                    outcome = "Defended"
+                else:
+                    outcome = "Success"
+            else:
+                outcome = "Missed"
+
+            label = self.font_bigger.render(str(outcome), 1, settings.black)
             self.screen.blit(label, (440, 350))
 
-            label = self.font_dice.render(str(action.rolls[0]), 4, settings.green_player_color)
-            self.screen.blit(label, (590, 300))
+            if gamestate.current_player().color == "Red":
 
-            label = self.font_dice.render(str(action.rolls[0]), 4, settings.red_player_color)
-            self.screen.blit(label, (590, 370))
+                unit_pic = self.get_unit_pic(attacking_unit.name, "Red")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 120))
+
+                label = self.font_big.render("Attack: " + str(attack), 1, settings.black)
+                self.screen.blit(label, (510, 140))
+
+                if outcome != "Missed":
+                    label = self.font_dice.render(str(action.rolls[1]), 1, settings.green_player_color)
+                    self.screen.blit(label, (590, 370))
+
+                label = self.font_dice.render(str(action.rolls[0]), 1, settings.red_player_color)
+                self.screen.blit(label, (590, 300))
+
+                unit_pic = self.get_unit_pic(defending_unit.name, "Green")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 550))
+
+                label = self.font_big.render("Defence: " + str(defence), 1, settings.black)
+                self.screen.blit(label, (510, 570))
+
+            else:
+
+                unit_pic = self.get_unit_pic(attacking_unit.name, "Green")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 550))
+
+                label = self.font_big.render("Attack: " + str(attack), 1, settings.black)
+                self.screen.blit(label, (510, 570))
+
+                if outcome != "Missed":
+                    label = self.font_dice.render(str(action.rolls[1]), 4, settings.red_player_color)
+                    self.screen.blit(label, (590, 300))
+
+                label = self.font_dice.render(str(action.rolls[0]), 4, settings.green_player_color)
+                self.screen.blit(label, (590, 370))
+
+                unit_pic = self.get_unit_pic(defending_unit.name, "Red")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 120))
+
+                label = self.font_big.render("Defence: " + str(defence), 1, settings.black)
+                self.screen.blit(label, (510, 140))
 
         pygame.display.update()
 
