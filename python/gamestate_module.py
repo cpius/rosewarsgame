@@ -57,7 +57,6 @@ class Gamestate:
     def set_available_actions(self):
         self.available_actions = self.get_actions()
 
-
     def turn_shift(self):
         if self.players[0].color == "Green":
             self.turn += 1

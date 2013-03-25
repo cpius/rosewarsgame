@@ -218,7 +218,8 @@ class View(object):
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
 
-    def draw_game(self, gamestate, selected_position=None, attack_positions=set(), ability_positions=set(), move_positions=set()):
+    def draw_game(self, gamestate, selected_position=None, attack_positions=set(), ability_positions=set(),
+                  move_positions=set()):
 
         pic = self.get_image(self.interface.board_image)
         self.screen.blit(pic, (0, 0))
