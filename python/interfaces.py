@@ -7,7 +7,7 @@ class Interface(object):
     bigger_font_size = 38
     dice_font_size = 78
 
-    move_attack_icon = "./other/moveattack.gif"
+    move_attack_icon = "./other/attack.gif"
     attack_icon = "./other/attack.gif"
     star_icon = "./other/star.gif"
     ability_icon = "./other/ability.gif"
