@@ -22,11 +22,11 @@ class View(object):
         self.symbol_coordinates = Coordinates(settings.symbol_coordinates)
 
     def get_position_from_mouse_click(self, coordinates):
-        x = int((coordinates[0] - settings.x_border) / settings.unit_width) + 1
-        if coordinates[1] > 454:
-            y = 8 - int((coordinates[1] - settings.y_border_bottom) / settings.unit_height)
+        x = int((coordinates[0] - settings.x_border) / (settings.unit_width + settings.unit_padding_width)) + 1
+        if coordinates[1] > settings.board_size[1] / 2:
+            y = 8 - int((coordinates[1] - settings.y_border_bottom) / (settings.unit_height + settings.unit_padding_height))
         else:
-            y = 8 - int((coordinates[1] - settings.y_border_top) / settings.unit_height)
+            y = 8 - int((coordinates[1] - settings.y_border_top) / (settings.unit_height + settings.unit_padding_height))
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
@@ -177,7 +177,7 @@ class View(object):
         base = self.base_coordinates.get(position)
         position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
 
-        if settings.interface == "rectangles":
+        if settings.interface in ["rectangles", "rectangles2"]:
 
             position_and_size_fill = (base[0] - 2, base[1] - 2, settings.unit_width + 4, settings.unit_height + 4)
             position_and_size_outer = (base[0] - 4, base[1] - 4, settings.unit_width + 8, settings.unit_height + 8)
