@@ -196,7 +196,7 @@ class View(object):
         if selected:
             rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
             rect.fill((0, 0, 0, 160))
-            self.screen.blit(rect, (base[0], base[1]))
+            self.screen.blit(rect, base)
 
         if settings.interface in ["rectangles", "rectangles2"]:
 
