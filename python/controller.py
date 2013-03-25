@@ -149,18 +149,7 @@ class Controller(object):
             action = Action(self.start_position, (x, y), None, False, False)
             self.perform_action(action)
 
-    def right_click(self, x, y):
-        if self.start_position and (x, y) not in self.gamestate.units[1]:
-            print "Move to", (x, y)
-            action = Action(self.start_position, (x, y), None, False, False)
-            self.perform_action(action)
-        if self.start_position and (x, y) in self.gamestate.units[1]:
-            action = Action(self.start_position, (x, y), (x, y), True, False)
-            chance_of_win = ai_methods.chance_of_win(self.selected_unit, self.gamestate.units[1][(x, y)], action)
-            print "Chance of win", round(chance_of_win * 100), "%"
-            self.start_position = None
-
-    def middle_click(self, x, y):
+    def right_click(self, pos):
         if not self.start_position:
             self.show_unit((x, y))
 
@@ -226,11 +215,9 @@ class Controller(object):
                     x, y = self.view.get_position_from_mouse_click(event.pos)
 
                     if event.button == 1:
-                        self.left_click(x, y)
-                    elif event.button == 2:
-                        self.right_click(x, y)
+                        self.left_click(pos)
                     elif event.button == 3:
-                        self.middle_click(x, y)
+                        self.right_click(pos)
 
                 if event.type == KEYDOWN and event.key == K_p:
                     print "paused"
