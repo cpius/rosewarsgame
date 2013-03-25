@@ -193,7 +193,6 @@ class View(object):
         self.screen.blit(pic, self.base_coordinates.get(position))
 
         base = self.base_coordinates.get(position)
-        position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
 
         if selected:
             rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
