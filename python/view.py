@@ -200,7 +200,6 @@ class View(object):
             rect.fill((0, 0, 0, 160))
             self.screen.blit(rect, base)
 
-        if settings.interface in ["rectangles", "rectangles2"]:
 
             position_and_size_fill = (base[0] - 2, base[1] - 2, settings.unit_width + 4, settings.unit_height + 4)
             position_and_size_outer = (base[0] - 4, base[1] - 4, settings.unit_width + 8, settings.unit_height + 8)
@@ -212,13 +211,6 @@ class View(object):
             pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
             pygame.draw.rect(self.screen, settings.black, position_and_size, 1)
             pygame.draw.rect(self.screen, settings.black, position_and_size_outer, 1)
-
-        if settings.interface == "square":
-            if color == "Red":
-                rectangle_color = settings.dark_red
-            else:
-                rectangle_color = settings.dark_green
-            pygame.draw.rect(self.screen, rectangle_color, position_and_size, 3)
 
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
@@ -297,7 +289,7 @@ class View(object):
             pic = self.get_image(settings.move_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.end_position))
 
-        if action.is_attack and settings.interface == "rectangles2":
+        if action.is_attack:
 
             attacking_unit = action.unit_reference
             defending_unit = action.target_reference
@@ -367,8 +359,6 @@ class View(object):
     def get_unit_pic(self, name, color=None, zoomed=False):
         if zoomed:
             return "./zoomed/" + name.replace(" ", "-") + ",-" + color + ".jpg"
-        elif settings.interface == "original":
-            return "./" + settings.unit_folder + "/" + name.replace(" ", "-") + ",-" + color + ".jpg"
         else:
             return "./" + settings.unit_folder + "/" + name.replace(" ", "-") + ".jpg"
 
