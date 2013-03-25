@@ -9,7 +9,7 @@ import java.util.Map;
 import com.wotr.model.Direction;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
-import com.wotr.strategy.facade.ActionResolverFactory;
+import com.wotr.strategy.factory.ActionResolverFactory;
 
 public class MeleeActionResolverStrategy extends AbstractActionResolverStrategy {
 

@@ -1,4 +1,4 @@
-package com.wotr.strategy.facade;
+package com.wotr.strategy.factory;
 
 import com.wotr.strategy.DiceStrategy;
 import com.wotr.strategy.battle.AttackStrategy;
@@ -9,6 +9,8 @@ import com.wotr.strategy.battle.DefaultDefenceStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
 import com.wotr.strategy.battle.unit.ArcherAttackStrategy;
 import com.wotr.strategy.battle.unit.PikemanAttackStrategy;
+import com.wotr.strategy.game.DefaultTurnStrategy;
+import com.wotr.strategy.game.TurnStrategy;
 import com.wotr.strategy.impl.Random6DiceStrategy;
 
 public class DefaultGameFactory implements GameFactory {
@@ -35,5 +37,9 @@ public class DefaultGameFactory implements GameFactory {
 
 	public AttackStrategy getPikemanAttackStrategy() {
 		return new PikemanAttackStrategy();
+	}
+
+	public TurnStrategy getTurnStrategy() {
+		return new DefaultTurnStrategy();
 	}
 }

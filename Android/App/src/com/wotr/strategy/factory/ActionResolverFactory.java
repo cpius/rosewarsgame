@@ -1,4 +1,4 @@
-package com.wotr.strategy.facade;
+package com.wotr.strategy.factory;
 
 import com.wotr.strategy.action.ActionResolverStrategy;
 import com.wotr.strategy.action.MeleeActionResolverStrategy;

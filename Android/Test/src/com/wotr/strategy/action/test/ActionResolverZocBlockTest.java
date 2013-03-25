@@ -17,7 +17,7 @@ import com.wotr.model.unit.Pikeman;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.action.UnitTypeZocBlockStrategy;
-import com.wotr.strategy.facade.ActionResolverFactory;
+import com.wotr.strategy.factory.ActionResolverFactory;
 import com.wotr.strategy.impl.ActionResolver;
 
 public class ActionResolverZocBlockTest {

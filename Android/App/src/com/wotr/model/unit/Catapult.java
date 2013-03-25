@@ -32,4 +32,8 @@ public class Catapult extends RangedUnit {
 	public UnitType getType() {
 		return UnitType.SIEGE_WEAPON;
 	}
+
+	public int getActionsUsedForAttack() {
+		return 2;
+	}
 }

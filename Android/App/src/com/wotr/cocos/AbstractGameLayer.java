@@ -42,7 +42,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 
 			if (card.getBoundingBox().contains(event.getRawX(), winSize.height - event.getRawY())) {
 
-				boolean cardTouchStarted = tch.touchStarted(event.getRawX(), winSize.height - event.getRawY());
+				boolean cardTouchStarted = isTurn((Position) card.getUserData()) && tch.touchStarted(event.getRawX(), winSize.height - event.getRawY());
 				if (cardTouchStarted) {
 					selectedCard = card;
 
@@ -60,9 +60,13 @@ public abstract class AbstractGameLayer extends CCLayer {
 		return super.ccTouchesBegan(event);
 	}
 
+	protected boolean isTurn(Position unit) {
+		return true;
+	}
+
 	protected void selectCardForMove(CCSprite selectedCard) {
 		CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 2f);
-		selectedCard.runAction(action);		
+		selectedCard.runAction(action);
 	}
 
 	@Override

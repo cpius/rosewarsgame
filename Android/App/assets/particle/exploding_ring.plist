@@ -103,6 +103,6 @@
 	<key>tangentialAcceleration</key>
 	<real>0.0</real>
 	<key>textureFileName</key>
-	<string>explodingRing.png</string>
+	<string>particle/explodingRing.png</string>
 </dict>
 </plist>

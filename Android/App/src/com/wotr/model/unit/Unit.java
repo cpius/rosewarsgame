@@ -43,7 +43,7 @@ public abstract class Unit implements Cloneable {
 	public abstract boolean isRanged();
 
 	public abstract UnitType getType();
-
+	
 	public UnitType[] getZoc() {
 		return new UnitType[0];
 	}
@@ -67,5 +67,9 @@ public abstract class Unit implements Cloneable {
 
 	public DefenceStrategy getDefenceStrategy() {
 		return GameManager.getFactory().getDefenceStrategy();
+	}
+	
+	public int getActionsUsedForAttack() {
+		return 1;
 	}
 }

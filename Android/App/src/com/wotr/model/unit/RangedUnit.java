@@ -1,7 +1,7 @@
 package com.wotr.model.unit;
 
 import com.wotr.strategy.action.ActionResolverStrategy;
-import com.wotr.strategy.facade.ActionResolverFactory;
+import com.wotr.strategy.factory.ActionResolverFactory;
 
 public abstract class RangedUnit extends Unit {
 

@@ -11,7 +11,7 @@ import com.wotr.model.unit.Pikeman;
 import com.wotr.model.unit.Unit;
 import com.wotr.strategy.DiceStrategy;
 import com.wotr.strategy.battle.BattleStrategy;
-import com.wotr.strategy.facade.DefaultGameFactory;
+import com.wotr.strategy.factory.DefaultGameFactory;
 import com.wotr.strategy.impl.StaticDiceStrategy;
 
 public class BasicUnitBattleTest {
