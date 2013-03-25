@@ -1,6 +1,8 @@
 pause_for_animation_attack = 1000
 pause_for_animation = 500
 
+pause_for_attack_until_click = True
+
 interface = "rectangles2"  # Choose between original and square
 
 player1_ai = "Human"

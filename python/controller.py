@@ -335,7 +335,10 @@ class Controller(object):
         self.save_game()
 
         if action.is_attack:
-            pygame.time.delay(settings.pause_for_animation_attack)
+            if settings.pause_for_attack_until_click:
+                self.pause()
+            else:
+                pygame.time.delay(settings.pause_for_animation_attack)
         else:
             pygame.time.delay(settings.pause_for_animation)
 
