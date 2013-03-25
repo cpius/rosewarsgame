@@ -15,39 +15,6 @@ class Interface(object):
     high_morale_icon = "./other/flag.gif"
     move_icon = "./other/move.gif"
 
-    # The rest of these will be set in the interface module
-    board_image = ""
-    unit_folder = ""
-
-    unit_width = 0
-    unit_height = 0
-    board_size = None
-    x_border = None
-    y_border_top = None
-    y_border_bottom = None
-
-    center_coordinates = None
-
-    symbol_coordinates = None
-
-    first_symbol_coordinates = None
-    second_symbol_coordinates = None
-
-    first_counter_coordinates = None
-    second_counter_coordinates = None
-    third_counter_coordinates = None
-
-    first_font_coordinates = None
-    second_font_coordinates = None
-    third_font_coordinates = None
-
-    unit_padding_width = 0
-    unit_padding_height = 0
-    x_border = 0
-
-    green_player_color = None
-    red_player_color = None
-
 
 class Rectangles(Interface):
     board_image = "./rectangles/board.gif"
