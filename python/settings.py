@@ -1,6 +1,9 @@
-pause_for_animation = 650
+pause_for_animation_attack = 1000
+pause_for_animation = 500
 
-interface = "original"  # Choose between original and square
+pause_for_attack_until_click = True
+
+interface = "rectangles2"  # Choose between original and square
 
 player1_ai = "Human"
 player2_ai = "Evaluator"
@@ -8,7 +11,7 @@ player2_ai = "Evaluator"
 document_ai_actions = True
 
 use_special_units = []  # Special units that must be present in the game
-dont_use_special_units = ["Chariot", "Samurai"]  # Special units that must not be present in the game
+dont_use_special_units = ["Chariot", "Samurai", "Diplomat"]  # Special units that must not be present in the game
 
 
 # Rows that the units can start on, in the pseudo-random computer-generated start position
@@ -67,6 +70,8 @@ base_coordinates = (0, 0)
 normal_font_name = "arial"
 normal_font_size = 18
 big_font_size = 28
+bigger_font_size = 38
+dice_font_size = 78
 
 move_attack_icon = "./other/moveattack.gif"
 attack_icon = "./other/attack.gif"

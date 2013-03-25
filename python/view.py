@@ -1,6 +1,7 @@
 import pygame
 import settings
 from coordinates import Coordinates
+import battle
 
 
 _image_library = {}
@@ -14,8 +15,13 @@ class View(object):
 
         self.screen = pygame.display.set_mode(settings.board_size)
 
+        pic = self.get_image("./other/wood.jpg")
+        self.screen.blit(pic, (391, 0))
+
         self.font = pygame.font.SysFont(settings.normal_font_name, settings.normal_font_size, True, False)
         self.font_big = pygame.font.SysFont(settings.normal_font_name, settings.big_font_size, True, False)
+        self.font_bigger = pygame.font.SysFont(settings.normal_font_name, settings.bigger_font_size, True, False)
+        self.font_dice = pygame.font.SysFont(settings.normal_font_name, settings.dice_font_size, True, False)
 
         self.base_coordinates = Coordinates(settings.base_coordinates)
         self.center_coordinates = Coordinates(settings.center_coordinates)
@@ -30,19 +36,23 @@ class View(object):
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
-        label = self.font_big.render("Select counter for " + unit_name, 1, settings.black)
-        self.screen.blit(label, (20, 400))
-        label = self.font_big.render("'a' for attack, 'd' for defence", 1, settings.black)
-        self.screen.blit(label, (20, 435))
+        label = self.font_big.render("Select counter for", 1, settings.black)
+        self.screen.blit(label, (410, 490))
+        label = self.font_big.render(unit_name, 1, settings.black)
+        self.screen.blit(label, (410, 515))
+        label = self.font_big.render("'a' for attack", 1, settings.black)
+        self.screen.blit(label, (410, 540))
+        label = self.font_big.render("'d' for defence", 1, settings.black)
+        self.screen.blit(label, (410, 565))
         pygame.display.update()
 
     def draw_ask_about_ability(self, ability1, ability2):
         label = self.font_big.render("Select ability:", 1, settings.black)
-        self.screen.blit(label, (130, 400))
+        self.screen.blit(label, (460, 330))
         label = self.font_big.render("1 for " + ability1, 1, settings.black)
-        self.screen.blit(label, (130, 435))
+        self.screen.blit(label, (460, 365))
         label = self.font_big.render("2 for " + ability2, 1, settings.black)
-        self.screen.blit(label, (130, 470))
+        self.screen.blit(label, (460, 400))
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
@@ -55,9 +65,11 @@ class View(object):
         pygame.image.save(self.screen, "./replay/" + name + ".jpeg")
 
     def draw_game_end(self, color):
+        pic = self.get_image("./other/wood.jpg")
+        self.screen.blit(pic, (391, 0))
         font = pygame.font.SysFont("monospace", 55, bold=True)
         label = font.render(color + " Wins", 1, settings.black)
-        self.screen.blit(label, (40, 300))
+        self.screen.blit(label, (440, 300))
         pygame.display.update()
 
     def get_image(self, path):
@@ -169,13 +181,22 @@ class View(object):
         pic = self.get_image(settings.crusading_icon)
         self.screen.blit(pic, coordinates.get(position))
 
-    def draw_unit(self, unit, position, color):
+    def draw_message(self, string):
+        label = self.font_big.render(string, 1, settings.black)
+        self.screen.blit(label, (440, 350))
+
+    def draw_unit(self, unit, position, color, selected=False):
         unit_pic = self.get_unit_pic(unit.name, color)
         pic = self.get_image(unit_pic)
         self.screen.blit(pic, self.base_coordinates.get(position))
 
         base = self.base_coordinates.get(position)
         position_and_size = (base[0], base[1], settings.unit_width, settings.unit_height)
+
+        if selected:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 0, 160))
+            self.screen.blit(rect, base)
 
         if settings.interface in ["rectangles", "rectangles2"]:
 
@@ -200,20 +221,43 @@ class View(object):
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
 
-    def draw_game(self, gamestate):
+    def draw_game(self, gamestate, selected_position=None, attack_positions=set(), ability_positions=set(), move_positions=set()):
 
         pic = self.get_image(settings.board_image)
         self.screen.blit(pic, (0, 0))
 
+        pic = self.get_image("./other/wood.jpg")
+        self.screen.blit(pic, (391, 0))
+
         for position, unit in gamestate.units[0].items():
-            self.draw_unit(unit, position, gamestate.current_player().color)
+            if position == selected_position:
+                self.draw_unit(unit, position, gamestate.current_player().color, True)
+            else:
+                self.draw_unit(unit, position, gamestate.current_player().color)
 
         for position, unit in gamestate.units[1].items():
             self.draw_unit(unit, position, gamestate.players[1].color)
 
+        coordinates = Coordinates((0, 0))
+
+        for move_position in move_positions:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 0, 160))
+            self.screen.blit(rect, coordinates.get((move_position[0], move_position[1])))
+
+        for attack_position in attack_positions:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((130, 0, 0, 170))
+            self.screen.blit(rect, coordinates.get((attack_position[0], attack_position[1])))
+
+        for ability_position in ability_positions:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 150, 130))
+            self.screen.blit(rect, coordinates.get((ability_position[0], ability_position[1])))
+
         pygame.display.update()
 
-    def draw_action(self, action):
+    def draw_action(self, action, gamestate):
         pygame.draw.circle(self.screen, settings.black, self.center_coordinates.get(action.start_position), 10)
         pygame.draw.line(self.screen,
                          settings.black,
@@ -250,6 +294,71 @@ class View(object):
         else:
             pic = self.get_image(settings.move_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.end_position))
+
+        if action.is_attack and settings.interface == "rectangles2":
+
+            attacking_unit = action.unit_reference
+            defending_unit = action.target_reference
+
+            attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
+            defence = battle.get_defence_rating(attacking_unit, defending_unit, attack)
+
+            if action.rolls[0] <= attack:
+                if action.rolls[1] <= defence:
+                    outcome = "Defended"
+                else:
+                    outcome = "Success"
+            else:
+                outcome = "Missed"
+
+            label = self.font_bigger.render(str(outcome), 1, settings.black)
+            self.screen.blit(label, (440, 350))
+
+            if gamestate.current_player().color == "Red":
+
+                unit_pic = self.get_unit_pic(attacking_unit.name, "Red")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 120))
+
+                label = self.font_big.render("Attack: " + str(attack), 1, settings.black)
+                self.screen.blit(label, (510, 140))
+
+                if outcome != "Missed":
+                    label = self.font_dice.render(str(action.rolls[1]), 1, settings.green_player_color)
+                    self.screen.blit(label, (590, 370))
+
+                label = self.font_dice.render(str(action.rolls[0]), 1, settings.red_player_color)
+                self.screen.blit(label, (590, 300))
+
+                unit_pic = self.get_unit_pic(defending_unit.name, "Green")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 550))
+
+                label = self.font_big.render("Defence: " + str(defence), 1, settings.black)
+                self.screen.blit(label, (510, 570))
+
+            else:
+
+                unit_pic = self.get_unit_pic(attacking_unit.name, "Green")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 550))
+
+                label = self.font_big.render("Attack: " + str(attack), 1, settings.black)
+                self.screen.blit(label, (510, 570))
+
+                if outcome != "Missed":
+                    label = self.font_dice.render(str(action.rolls[1]), 4, settings.red_player_color)
+                    self.screen.blit(label, (590, 300))
+
+                label = self.font_dice.render(str(action.rolls[0]), 4, settings.green_player_color)
+                self.screen.blit(label, (590, 370))
+
+                unit_pic = self.get_unit_pic(defending_unit.name, "Red")
+                pic = self.get_image(unit_pic)
+                self.screen.blit(pic, (440, 120))
+
+                label = self.font_big.render("Defence: " + str(defence), 1, settings.black)
+                self.screen.blit(label, (510, 140))
 
         pygame.display.update()
 
