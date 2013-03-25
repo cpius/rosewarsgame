@@ -205,7 +205,7 @@ class View(object):
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
 
-    def draw_game(self, gamestate, selected_position=None):
+    def draw_game(self, gamestate, selected_position=None, attack_positions=set(), ability_positions=set(), move_positions=set()):
 
         pic = self.get_image(settings.board_image)
         self.screen.blit(pic, (0, 0))
@@ -218,6 +218,23 @@ class View(object):
 
         for position, unit in gamestate.units[1].items():
             self.draw_unit(unit, position, gamestate.players[1].color)
+
+        coordinates = Coordinates((0, 0))
+
+        for move_position in move_positions:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 0, 160))
+            self.screen.blit(rect, coordinates.get((move_position[0], move_position[1])))
+
+        for attack_position in attack_positions:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((130, 0, 0, 170))
+            self.screen.blit(rect, coordinates.get((attack_position[0], attack_position[1])))
+
+        for ability_position in ability_positions:
+            rect = pygame.Surface((settings.unit_width, settings.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 150, 130))
+            self.screen.blit(rect, coordinates.get((ability_position[0], ability_position[1])))
 
         pygame.display.update()
 
