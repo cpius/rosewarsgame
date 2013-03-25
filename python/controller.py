@@ -330,7 +330,7 @@ class Controller(object):
 
         self.gamestate.do_action(action)
 
-        self.view.draw_action(action)
+        self.view.draw_action(action, self.gamestate)
 
         self.save_game()
 
