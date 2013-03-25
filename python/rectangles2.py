@@ -31,5 +31,5 @@ settings.first_font_coordinates = (counter_base_x - 5, counter_base_y + 48)
 settings.second_font_coordinates = (counter_base_x - 5, counter_base_y + 28)
 settings.third_font_coordinates = (counter_base_x - 5, counter_base_y + 8)
 
-settings.green_player_color = (150, 130, 70)
+settings.green_player_color = (150, 130, 15)
 settings.red_player_color = (190, 55, 55)
