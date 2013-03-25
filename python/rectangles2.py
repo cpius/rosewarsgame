@@ -17,8 +17,8 @@ settings.y_border_bottom = 26
 counter_base_x = 45
 counter_base_y = 0
 
-settings.center_coordinates = (35, counter_base_y + 33.2)
-settings.symbol_coordinates = (18, counter_base_y + 18.2)
+settings.center_coordinates = (settings.unit_width / 2, settings.unit_height / 2)
+settings.symbol_coordinates = (settings.unit_width / 2 - 15, settings.unit_height / 2 - 15)
 
 settings.first_symbol_coordinates = (2, counter_base_y + 58)
 settings.second_symbol_coordinates = (18, counter_base_y + 58)
