@@ -342,11 +342,6 @@ class Controller(object):
         else:
             pygame.time.delay(settings.pause_for_animation)
 
-        if settings.show_full_battle_result:
-            print action.full_string()
-        else:
-            print action.string_with_outcome()
-        print
 
         if hasattr(self.gamestate.current_player(), "won"):
             self.game_end(self.gamestate.current_player())
