@@ -7,7 +7,6 @@ from gamestate_module import Gamestate
 import os
 import settings
 import shutil
-import ai_methods
 from player import Player
 from action import Action
 
@@ -134,7 +133,8 @@ class Controller(object):
                 self.perform_action(action)
 
         elif self.start_position and not self.end_position:
-            if not any(action.is_attack and action.start_position == self.start_position and action.end_position == pos for action in self.gamestate.available_actions):
+            if not any(action.is_attack and action.start_position == self.start_position and action.end_position == pos
+                       for action in self.gamestate.available_actions):
                 action = Action(self.start_position, pos, None, False, False)
                 self.perform_action(action)
             else:
