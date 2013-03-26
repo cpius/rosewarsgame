@@ -228,13 +228,13 @@ class View(object):
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
 
-    def draw_game(self, gamestate, actions=[]):
+    def draw_game(self, gamestate, start_position=None, actions=()):
 
         pic = self.get_image(self.interface.board_image)
         self.screen.blit(pic, (0, 0))
 
         for position, unit in gamestate.units[0].items():
-            if actions and position == actions[0].start_position:
+            if actions and position == start_position:
                 self.draw_unit(unit, position, gamestate.current_player().color, True)
             else:
                 self.draw_unit(unit, position, gamestate.current_player().color)

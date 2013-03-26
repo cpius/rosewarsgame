@@ -66,13 +66,9 @@ class Controller(object):
             self.start_position = position
             self.selected_unit = self.gamestate.player_units()[self.start_position]
 
-            illustrate_actions = []
+            illustrate_actions = (action for action in self.gamestate.get_actions() if action.start_position == position)
 
-            for action in self.gamestate.get_actions():
-                if action.start_position == position:
-                    illustrate_actions.append(action)
-
-            self.view.draw_game(self.gamestate, illustrate_actions)
+            self.view.draw_game(self.gamestate, position, illustrate_actions)
 
         elif self.start_position \
             and not self.end_position \
