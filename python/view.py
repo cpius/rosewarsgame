@@ -218,8 +218,7 @@ class View(object):
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
 
-    def draw_game(self, gamestate, selected_position=None, attack_positions=set(), ability_positions=set(),
-                  move_positions=set()):
+    def draw_game(self, gamestate, actions=[]):
 
         pic = self.get_image(self.interface.board_image)
         self.screen.blit(pic, (0, 0))
@@ -228,7 +227,7 @@ class View(object):
         self.screen.blit(pic, (391, 0))
 
         for position, unit in gamestate.units[0].items():
-            if position == selected_position:
+            if actions and position == actions[0].start_position:
                 self.draw_unit(unit, position, gamestate.current_player().color, True)
             else:
                 self.draw_unit(unit, position, gamestate.current_player().color)
@@ -238,20 +237,21 @@ class View(object):
 
         coordinates = Coordinates((0, 0), self.interface)
 
-        for move_position in move_positions:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 0, 160))
-            self.screen.blit(rect, coordinates.get((move_position[0], move_position[1])))
+        for action in actions:
+            if not action.is_attack and not action.is_ability:
+                rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
+                rect.fill((0, 0, 0, 160))
+                self.screen.blit(rect, coordinates.get(action.end_position))
 
-        for attack_position in attack_positions:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((130, 0, 0, 170))
-            self.screen.blit(rect, coordinates.get((attack_position[0], attack_position[1])))
+            if action.is_attack:
+                rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
+                rect.fill((130, 0, 0, 110))
+                self.screen.blit(rect, coordinates.get(action.attack_position))
 
-        for ability_position in ability_positions:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 150, 130))
-            self.screen.blit(rect, coordinates.get((ability_position[0], ability_position[1])))
+            if action.is_ability:
+                rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
+                rect.fill((0, 0, 150, 130))
+                self.screen.blit(rect, coordinates.get(action.attack_position))
 
         pygame.display.update()
 
