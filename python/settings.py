@@ -1,10 +1,10 @@
 import interfaces
 
 
-pause_for_animation_attack = 1000
-pause_for_animation = 500
+pause_for_animation_attack = 700
+pause_for_animation = 400
 
-pause_for_attack_until_click = True
+pause_for_attack_until_click = False
 
 interface = interfaces.Rectangles(1.3)
 
