@@ -6,7 +6,7 @@ pause_for_animation = 500
 
 pause_for_attack_until_click = True
 
-interface = interfaces.Rectangles()
+interface = interfaces.Rectangles(1.3)
 
 player1_ai = "Human"
 player2_ai = "Evaluator"
