@@ -17,8 +17,7 @@ class View(object):
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
 
-        pic = self.get_image("./other/wood.jpg")
-        self.screen.blit(pic, (391, 0))
+        pygame.draw.rect(self.screen, colors.light_grey, (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom))
 
         self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True, False)
         self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True, False)
