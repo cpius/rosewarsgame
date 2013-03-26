@@ -67,7 +67,8 @@ class Controller(object):
             self.selected_unit = self.gamestate.player_units()[self.start_position]
 
             illustrate_actions = []
-            for action in self.gamestate.available_actions:
+
+            for action in self.gamestate.get_actions():
                 if action.start_position == position:
                     illustrate_actions.append(action)
 
