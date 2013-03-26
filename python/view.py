@@ -206,21 +206,25 @@ class View(object):
             rect.fill((0, 0, 0, 160))
             self.screen.blit(rect, base)
 
-        position_and_size = (base[0], base[1], self.interface.unit_width, self.interface.unit_height)
-        position_and_size_fill = (base[0] - 2, base[1] - 2, self.interface.unit_width + 4, self.interface.unit_height + 4)
-        position_and_size_outer = (base[0] - 4, base[1] - 4, self.interface.unit_width + 8, self.interface.unit_height + 8)
-
         if color == "Red":
-            rectangle_color = self.interface.red_player_color
+            border_color = self.interface.red_player_color
         else:
-            rectangle_color = self.interface.green_player_color
-        base_corners = [(base[0], base[1]), (base[0] + self.interface.unit_width, base[1]), (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height), (base[0], base[1] + self.interface.unit_height)]
+            border_color = self.interface.green_player_color
+
+        base_corners = [(base[0], base[1]), (base[0] + self.interface.unit_width, base[1]),
+                        (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height),
+                        (base[0], base[1] + self.interface.unit_height)]
 
         pygame.draw.lines(self.screen, colors.black, True, base_corners)
 
-        pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
-        pygame.draw.rect(self.screen, colors.black, position_and_size, 1)
-        pygame.draw.rect(self.screen, colors.black, position_and_size_outer, 1)
+        line_count = int(5 * self.zoom)
+
+        for i in range(1, line_count):
+            middle_corners = increase_corners(base_corners, i)
+            pygame.draw.lines(self.screen, border_color, True, middle_corners)
+
+        outer_corners = increase_corners(base_corners, line_count)
+        pygame.draw.lines(self.screen, colors.black, True, outer_corners)
 
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
