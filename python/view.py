@@ -374,3 +374,14 @@ class View(object):
 
     def refresh(self):
         pygame.display.flip()
+
+
+def increase_corners(corners, inc):
+
+    corner1 = (corners[0][0] - inc, corners[0][1] - inc)
+    corner2 = (corners[1][0] + inc, corners[1][1] - inc)
+    corner3 = (corners[2][0] + inc, corners[2][1] + inc)
+    corner4 = (corners[3][0] - inc, corners[3][1] + inc)
+
+    return [corner1, corner2, corner3, corner4]
+
