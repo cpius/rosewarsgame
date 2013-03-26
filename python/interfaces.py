@@ -34,7 +34,8 @@ class Rectangles(Interface):
     
     counter_base_x = 45
     counter_base_y = 0
-    
+
+    cow_coordinates = (unit_width / 4, 0)
     center_coordinates = (unit_width / 2, unit_height / 2)
     symbol_coordinates = (unit_width / 2 - 15, unit_height / 2 - 15)
     

@@ -27,6 +27,7 @@ class View(object):
                                              False)
 
         self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
+        self.cow_coordinates = Coordinates(self.interface.cow_coordinates, self.interface)
         self.center_coordinates = Coordinates(self.interface.center_coordinates, self.interface)
         self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
 
@@ -247,6 +248,8 @@ class View(object):
                 rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
                 rect.fill((130, 0, 0, 110))
                 self.screen.blit(rect, coordinates.get(action.attack_position))
+                label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
+                self.screen.blit(label, self.cow_coordinates.get(action.attack_position))
 
             if action.is_ability:
                 rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
