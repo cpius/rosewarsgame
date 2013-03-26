@@ -211,6 +211,9 @@ class View(object):
             rectangle_color = self.interface.red_player_color
         else:
             rectangle_color = self.interface.green_player_color
+        base_corners = [(base[0], base[1]), (base[0] + self.interface.unit_width, base[1]), (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height), (base[0], base[1] + self.interface.unit_height)]
+
+        pygame.draw.lines(self.screen, colors.black, True, base_corners)
 
         pygame.draw.rect(self.screen, rectangle_color, position_and_size_fill, 4)
         pygame.draw.rect(self.screen, colors.black, position_and_size, 1)
