@@ -32,7 +32,8 @@ class View(object):
         self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
 
     def get_position_from_mouse_click(self, coordinates):
-        x = int((coordinates[0] - self.interface.x_border) / (self.interface.unit_width + self.interface.unit_padding_width)) + 1
+        x = int((coordinates[0] - self.interface.x_border) /
+                (self.interface.unit_width + self.interface.unit_padding_width)) + 1
         if coordinates[1] > self.interface.board_size[1] / 2:
             y = 8 - int((coordinates[1] - self.interface.y_border_bottom) /
                         (self.interface.unit_height + self.interface.unit_padding_height))

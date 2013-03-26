@@ -93,7 +93,8 @@ class Controller(object):
                                 self.selected_unit.abilities[0])
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units() and self.selected_unit.range > 1:
+        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units() \
+                and self.selected_unit.range > 1:
             action = Action(self.start_position, self.start_position, position, True, False)
             self.perform_action(action)
 
