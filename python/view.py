@@ -13,6 +13,7 @@ class View(object):
         pygame.init()
 
         self.interface = settings.interface
+        self.zoom = self.interface.zoom
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
 
