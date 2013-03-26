@@ -1,9 +1,12 @@
+import interfaces
+
+
 pause_for_animation_attack = 1000
 pause_for_animation = 500
 
 pause_for_attack_until_click = True
 
-interface = "rectangles2"  # Choose between original and square
+interface = interfaces.Rectangles()
 
 player1_ai = "Human"
 player2_ai = "Evaluator"
@@ -41,77 +44,3 @@ special_units = {"Berserker": (2, 3),
 unit_bag_size = 4
 special_unit_count = 3
 basic_unit_count = 6
-
-show_full_battle_result = True
-
-##############
-### Colors ###
-##############
-
-black = (0, 0, 0)
-white = (255, 255, 255)
-green = (0, 255, 0)
-red = (255, 0, 0)
-brown = (128, 64, 0)
-grey = (48, 48, 48)
-yellow = (200, 200, 0)
-light_grey = (223, 223, 223)
-blue = (0, 102, 204)
-dark_green = (60, 113, 50)
-dark_red = (204, 0, 16)
-
-#################
-### Interface ###
-#################
-
-
-base_coordinates = (0, 0)
-
-normal_font_name = "arial"
-normal_font_size = 18
-big_font_size = 28
-bigger_font_size = 38
-dice_font_size = 78
-
-move_attack_icon = "./other/moveattack.gif"
-attack_icon = "./other/attack.gif"
-star_icon = "./other/star.gif"
-ability_icon = "./other/ability.gif"
-crusading_icon = "./other/flag.gif"
-high_morale_icon = "./other/flag.gif"
-move_icon = "./other/move.gif"
-
-# The rest of these will be set in the interface module
-board_image = ""
-unit_folder = ""
-
-unit_width = 0
-unit_height = 0
-board_size = None
-x_border = None
-y_border_top = None
-y_border_bottom = None
-
-center_coordinates = None
-
-symbol_coordinates = None
-
-first_symbol_coordinates = None
-second_symbol_coordinates = None
-
-first_counter_coordinates = None
-second_counter_coordinates = None
-third_counter_coordinates = None
-
-first_font_coordinates = None
-second_font_coordinates = None
-third_font_coordinates = None
-
-unit_padding_width = None
-unit_padding_height = None
-x_border = 0
-
-green_player_color = None
-red_player_color = None
-
-counter_circle_color = black
