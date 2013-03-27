@@ -272,6 +272,15 @@ class View(object):
             rect.fill((0, 0, 150, 130))
             self.screen.blit(rect, coordinates.get(action.attack_position))
 
+        for attack in attacks:
+            for sub_attack in attack.sub_actions:
+                if not any(check_attack.attack_position == sub_attack.attack_position for check_attack in attacks):
+                    rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
+                    rect.fill((130, 0, 0, 110))
+                    self.screen.blit(rect, coordinates.get(sub_attack.attack_position))
+                    label = self.font.render(str(int(round(sub_attack.chance_of_win * 100))) + "%", 1, colors.yellow)
+                    self.screen.blit(label, self.cow_sub_coordinates.get(sub_attack.attack_position))
+
         pygame.display.update()
 
     def draw_action(self, action, gamestate):
