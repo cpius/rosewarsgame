@@ -90,12 +90,15 @@ class View(object):
         self.screen.blit(label, self.message_coordinates)
         pygame.display.update()
 
-    def get_image(self, path):
+    def get_image(self, path, dimensions=None):
         global _image_library
         image = _image_library.get(path)
         if not image:
             image = pygame.image.load(path).convert()
-            image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom), int(image.get_size()[1] * self.zoom)))
+            if dimensions:
+                image = pygame.transform.scale(image, dimensions)
+            else:
+                image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom), int(image.get_size()[1] * self.zoom)))
             _image_library[path] = image
         return image
 
@@ -206,7 +209,8 @@ class View(object):
 
     def draw_unit(self, unit, position, color, selected=False):
         unit_pic = self.get_unit_pic(unit.name, color)
-        pic = self.get_image(unit_pic)
+        dimensions = (int(self.interface.unit_width), int(self.interface.unit_height))
+        pic = self.get_image(unit_pic, dimensions)
 
         self.screen.blit(pic, self.base_coordinates.get(position))
 
