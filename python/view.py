@@ -350,6 +350,8 @@ class View(object):
 
     def draw_log(self):
 
+        pygame.draw.rect(self.screen, colors.light_grey, (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom))
+
 
 def increase_corners(corners, inc):
 
