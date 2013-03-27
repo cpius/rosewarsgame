@@ -339,3 +339,16 @@ def increase_corners(corners, inc):
 
     return [corner1, corner2, corner3, corner4]
 
+
+def get_outcome(attacking_unit, defending_unit, action):
+
+    attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
+    defence = battle.get_defence_rating(attacking_unit, defending_unit, attack)
+
+    if action.rolls[0] <= attack:
+        if action.rolls[1] <= defence:
+            return "Defend"
+        else:
+            return" Win"
+    else:
+        return " Miss"
