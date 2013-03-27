@@ -288,6 +288,8 @@ class View(object):
                     label = self.font.render(str(int(round(sub_attack.chance_of_win * 100))) + "%", 1, colors.yellow)
                     self.screen.blit(label, self.cow_sub_coordinates.get(sub_attack.attack_position))
 
+        self.draw_right()
+
         pygame.display.update()
 
     def draw_action(self, action, gamestate):
@@ -410,6 +412,9 @@ class View(object):
                 if log.player_color == "Red":
                     self.draw_unit_right(moving_unit.name, "Red", 0, 0.7, hpos, vpos)
 
+    def draw_right(self):
+        pygame.draw.rect(self.screen, colors.light_grey, (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom))
+        self.draw_log()
 
     def draw_outcome(self, outcome, hpos, vpos):
         label = self.font_bigger.render(str(outcome), 1, colors.black)
