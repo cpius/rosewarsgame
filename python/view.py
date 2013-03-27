@@ -360,6 +360,10 @@ class View(object):
 
             self.draw_turn_box(log, hpos, vpos)
 
+            startpos = (int(hpos * self.zoom), int((vpos + 62) * self.zoom))
+            endpos = (int(self.interface.board_size[1] * self.zoom), int((vpos + 62) * self.zoom))
+            pygame.draw.line(self.screen, colors.black, startpos, endpos, 4)
+
     def draw_turn_box(self, log, hpos, vpos):
         position_and_size = (hpos * self.zoom, vpos * self.zoom, 40 * self.zoom, 62 * self.zoom)
 
