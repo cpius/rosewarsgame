@@ -364,6 +364,24 @@ class View(object):
             endpos = (int(self.interface.board_size[1] * self.zoom), int((vpos + 62) * self.zoom))
             pygame.draw.line(self.screen, colors.black, startpos, endpos, 4)
 
+            if action.is_attack:
+                attacking_unit = action.unit_reference
+                defending_unit = action.target_reference
+                outcome = get_outcome(attacking_unit, defending_unit, action)
+
+                self.draw_outcome(outcome, hpos, vpos)
+
+                pic = self.get_image(self.interface.attack_icon)
+                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
+
+                if log.player_color == "Green":
+                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, hpos, vpos)
+                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, hpos, vpos)
+
+                if log.player_color == "Red":
+                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, hpos, vpos)
+                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, hpos, vpos)
+
     def draw_turn_box(self, log, hpos, vpos):
         position_and_size = (hpos * self.zoom, vpos * self.zoom, 40 * self.zoom, 62 * self.zoom)
 
