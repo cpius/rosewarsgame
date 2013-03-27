@@ -164,10 +164,7 @@ class Controller(object):
                         break
                     action = possible_action
 
-            if not action:
-                print "Action not possible"
-                self.clear_move()
-            else:
+            if action:
                 self.perform_action(action)
 
         elif self.start_position and self.end_position and position in self.gamestate.opponent_units():
