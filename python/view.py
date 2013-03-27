@@ -28,6 +28,7 @@ class View(object):
 
         self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
         self.cow_coordinates = Coordinates(self.interface.cow_coordinates, self.interface)
+        self.cow_sub_coordinates = Coordinates(self.interface.cow_sub_coordinates, self.interface)
         self.center_coordinates = Coordinates(self.interface.center_coordinates, self.interface)
         self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
 

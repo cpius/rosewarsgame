@@ -40,6 +40,7 @@ class Rectangles(Interface):
         counter_base_y = 0 * zoom
 
         self.cow_coordinates = (self.unit_width / 4, 0)
+        self.cow_sub_coordinates = (self.unit_width / 4, 0)
         self.center_coordinates = (self.unit_width / 2, self.unit_height / 2)
         self.symbol_coordinates = (self.unit_width / 2 - 15 * zoom, self.unit_height / 2 - 15 * zoom)
 
