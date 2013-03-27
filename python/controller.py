@@ -348,14 +348,6 @@ class Controller(object):
             color = self.gamestate.players[1].color
 
         if unit:
-            print
-            print unit
-            for attribute, value in unit.__dict__.items():
-                if attribute not in ["name", "yellow_counters", "blue_counters", "pic",
-                                     "color", "range", "movement"]:
-                    if value:
-                        print attribute, value
-
             self.view.show_unit_zoomed(unit.name, color)
 
             while True:
