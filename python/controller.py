@@ -349,13 +349,9 @@ class Controller(object):
 
         if unit:
             self.view.show_unit_zoomed(unit.name, color)
-
-            while True:
-                for event in pygame.event.get():
-                    if event.type == pygame.MOUSEBUTTONDOWN or event.type == KEYDOWN:
-                        self.gamestate.recalculate_special_counters()
-                        self.view.draw_game(self.gamestate)
-                        return
+            self.pause()
+            self.view.draw_game(self.gamestate)
+            return
 
     def save_game(self):
         name = str(self.action_index) + ". " \
