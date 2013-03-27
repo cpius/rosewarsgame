@@ -52,14 +52,16 @@ class View(object):
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
+        xpos = self.message_coordinates[0]
+        ypos = self.message_coordinates[1]
         label = self.font_big.render("Select counter for", 1, colors.black)
-        self.screen.blit(label, (410, 490))
+        self.screen.blit(label, (xpos, ypos))
         label = self.font_big.render(unit_name, 1, colors.black)
-        self.screen.blit(label, (410, 515))
+        self.screen.blit(label, (xpos, ypos + 25 * self.zoom))
         label = self.font_big.render("'a' for attack", 1, colors.black)
-        self.screen.blit(label, (410, 540))
+        self.screen.blit(label, (xpos, ypos + 50 * self.zoom))
         label = self.font_big.render("'d' for defence", 1, colors.black)
-        self.screen.blit(label, (410, 565))
+        self.screen.blit(label, (xpos, ypos + 75 * self.zoom))
         pygame.display.update()
 
     def draw_ask_about_ability(self, ability1, ability2):
