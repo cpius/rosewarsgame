@@ -1,5 +1,6 @@
 package com.wotr.cocos;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cocos2d.actions.instant.CCCallFunc;
@@ -17,6 +18,7 @@ import android.view.MotionEvent;
 
 import com.wotr.R;
 import com.wotr.model.Position;
+import com.wotr.model.unit.Unit;
 import com.wotr.touch.CardTouchHandler;
 
 public abstract class AbstractGameLayer extends CCLayer {
@@ -32,8 +34,12 @@ public abstract class AbstractGameLayer extends CCLayer {
 	protected CGPoint originalPosition;
 
 	protected CardTouchHandler tch;
+	
+	protected Collection<CCSprite> cardBackgroundList = new ArrayList<CCSprite>();
 
 	protected abstract Collection<CCSprite> getCardSprites();
+	
+	
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -42,7 +48,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 
 			if (card.getBoundingBox().contains(event.getRawX(), winSize.height - event.getRawY())) {
 
-				boolean cardTouchStarted = isTurn((Position) card.getUserData()) && tch.touchStarted(event.getRawX(), winSize.height - event.getRawY());
+				boolean cardTouchStarted = isTurn((Unit) card.getUserData()) && tch.touchStarted(event.getRawX(), winSize.height - event.getRawY());
 				if (cardTouchStarted) {
 					selectedCard = card;
 
@@ -60,7 +66,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 		return super.ccTouchesBegan(event);
 	}
 
-	protected boolean isTurn(Position unit) {
+	protected boolean isTurn(Unit unit) {
 		return true;
 	}
 
@@ -92,7 +98,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 		selectedCard.runAction(scaleAction);
 	}
 
-	protected void moveCardToPosition() {
+	protected void dropCardToPosition() {
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
 		CCScaleTo scaleAction = CCScaleTo.action(0.3f, sizeScale);
 		CCCallFunc sparks = CCCallFunc.action(this, "spark");
@@ -120,7 +126,8 @@ public abstract class AbstractGameLayer extends CCLayer {
 				cardBackground.setPosition(position);
 				cardBackground.setScale(sizeScale * 0.95f);
 				cardBackground.setUserData(new Position(x, y));
-				addChild(cardBackground);
+				addChild(cardBackground);				
+				cardBackgroundList.add(cardBackground);
 			}
 		}
 	}

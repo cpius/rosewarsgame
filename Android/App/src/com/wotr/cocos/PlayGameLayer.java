@@ -1,9 +1,7 @@
 package com.wotr.cocos;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -26,6 +24,7 @@ import com.wotr.model.MoveAction;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
+import com.wotr.strategy.battle.BattleListener;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
 import com.wotr.strategy.game.MultiplayerGame;
@@ -35,13 +34,11 @@ import com.wotr.strategy.player.Player;
 import com.wotr.touch.CardTouchHandler;
 import com.wotr.touch.CardTouchListener;
 
-public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener {
+public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener {
 
-	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
+	private Collection<CCSprite> unitList = new ArrayList<CCSprite>();
 	private int xCount;
 	private int yCount;
-	//private final UnitMap<Position, Unit> playerOneMap;
-	//private final UnitMap<Position, Unit> playerTwoMap;
 	private Collection<Action> actions;
 	private CCLabel nameLabel;
 	private CCLabel turnLabel;
@@ -59,7 +56,6 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		playerOne = new HumanPlayer(playerOneMap, "Player 1");
 		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2");
 
-		// this.cards = cards;
 		setIsTouchEnabled(true);
 
 		winSize = CCDirector.sharedDirector().displaySize();
@@ -105,10 +101,12 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		Game game = new MultiplayerGame(playerOne, playerTwo);
 		game.addGameEventListener(this);
 		GameManager.setGame(game);
+		GameManager.getFactory().getBattleStrategy().addBattleListener(this);
+
 		game.startGame();
 	}
 
-	protected void moveCardToPosition() {
+	protected void dropCardToPosition() {
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
 		CCScaleTo scaleAction = CCScaleTo.action(0.3f, sizeScale);
 		CCSequence seq = CCSequence.actions(scaleAction);
@@ -123,10 +121,10 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			CCSprite cardSprite = CCSprite.sprite(card.getImage());
 			cardSprite.setPosition(point);
 			cardSprite.setScale(sizeScale);
-			cardSprite.setUserData(pos);
+			cardSprite.setUserData(card);
 			addChild(cardSprite);
 
-			modelMap.put(cardSprite, card);
+			unitList.add(cardSprite);
 		}
 	}
 
@@ -140,11 +138,34 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		if (pInP == null) {
 			moveCardToOriginalPosition();
 		} else {
-			moveCardToPosition();
-			
-			GameManager.getGame().move((Position)selectedCard.getUserData(), pInP);
 
-			selectedCard.setUserData(pInP);
+			dropCardToPosition();
+
+			// If player has card at position
+			if (GameManager.getGame().getAttackingPlayer().getUnitMap().containsKey(pInP)) {
+				moveCardToOriginalPosition();
+			} else {
+
+				Unit attackingUnit = (Unit) selectedCard.getUserData();
+
+				Unit defendingUnit = GameManager.getGame().getDefendingPlayer().getUnitMap().get(pInP);
+
+				if (defendingUnit != null) {
+					boolean succes = GameManager.getGame().attack(attackingUnit, defendingUnit);
+					if (succes) {
+						removeCCSprite(defendingUnit);
+						
+						if(attackingUnit.isRanged()) {
+							moveCardToOriginalPosition();
+						}
+					} else {
+						moveCardToOriginalPosition();
+					}
+
+				} else {
+					GameManager.getGame().move(attackingUnit.getPosistion(), pInP);
+				}
+			}
 		}
 
 		reorderChild(selectedCard, 0);
@@ -152,11 +173,20 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	private void resetActionSelection() {
-		List<CCNode> children = getChildren();
+		
 		for (Action action : actions) {
-			for (CCNode ccNode : children) {
-				boolean contains = action.getPosition().equals(ccNode.getUserData());
-				if (contains) {
+			for (CCNode ccNode : unitList) {
+
+				Unit unit = (Unit) ccNode.getUserData();
+				if (action.getPosition().equals(unit.getPosistion())) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
+					ccNode.runAction(tin);
+				}
+			}
+
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (action.getPosition().equals(pos)) {
 					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
 					ccNode.runAction(tin);
 				}
@@ -167,19 +197,23 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	protected void selectCardForMove(CCSprite selectedCard) {
 		super.selectCardForMove(selectedCard);
 
-		Unit unit = modelMap.get(selectedCard);
-
+		Unit unit = (Unit) selectedCard.getUserData();
 		ActionResolver ar = new ActionResolver(xCount, yCount);
-
 		Game game = GameManager.getGame();
-		
+
 		actions = ar.getActions(unit, game.getAttackingPlayer().getUnitMap(), game.getDefendingPlayer().getUnitMap());
-		
-		List<CCNode> children = getChildren();
+
 		for (Action action : actions) {
-			for (CCNode ccNode : children) {
-				boolean contains = action.getPosition().equals(ccNode.getUserData());
-				if (contains) {
+			for (CCNode ccNode : unitList) {
+				Unit u = (Unit) ccNode.getUserData();
+				if (action.getPosition().equals(u.getPosistion())) {
+					markeNodeForAction(action, ccNode);
+				}
+			}
+
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (action.getPosition().equals(pos)) {
 					markeNodeForAction(action, ccNode);
 				}
 			}
@@ -221,7 +255,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	@Override
 	protected Collection<CCSprite> getCardSprites() {
-		return modelMap.keySet();
+		return unitList;
 	}
 
 	@Override
@@ -234,8 +268,8 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	public void startTurn(Player player, int actionsLeft) {
 		turnLabel.setString("" + actionsLeft);
 		nameLabel.setString(player.getName());
-		
-		if(player.equals(playerOne)) {
+
+		if (player.equals(playerOne)) {
 			turnLabel.setColor(ccColor3B.ccGREEN);
 			nameLabel.setColor(ccColor3B.ccGREEN);
 		} else {
@@ -250,8 +284,47 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	@Override
-	protected boolean isTurn(Position pos) {
-		return GameManager.getGame().getAttackingPlayer().getUnitMap().containsKey(pos);
+	protected boolean isTurn(Unit unit) {
+		return GameManager.getGame().getAttackingPlayer().getUnitMap().containsValue(unit);
+	}
+
+	private void removeCCSprite(Unit defendingUnit) {
+		for (CCSprite unitSpite : unitList) {
+			Unit unit = (Unit) unitSpite.getUserData();
+			if(unit.equals(defendingUnit)) {
+				removeChild(unitSpite, true);
+			}			
+		}
+	}
+
+	@Override
+	public void attackStarted() {
+
+	}
+
+	@Override
+	public void attackSuccessful(int attackRoll) {
+
+	}
+
+	@Override
+	public void attackFailed(int attackRoll) {
+
+	}
+
+	@Override
+	public void defenceStarted() {
+
+	}
+
+	@Override
+	public void defenceSuccessful(int attackRoll) {
+
+	}
+
+	@Override
+	public void defenceFailed(int attackRoll) {
+
 	}
 
 }

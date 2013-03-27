@@ -16,13 +16,13 @@ public class DefaultTurnStrategy implements TurnStrategy {
 	}
 
 	@Override
-	public boolean canAttack(Unit attackingUnit) {
-		return remainingActions >= attackingUnit.getActionsUsedForAttack();
+	public boolean canAttack(Unit unit) {
+		return remainingActions >= unit.getActionsUsedForAttack() && !hasUsedTurn(unit);
 	}
 
 	@Override
-	public boolean canMove(Unit attackingUnit) {
-		return remainingActions >= 1;
+	public boolean canMove(Unit unit) {
+		return remainingActions >= 1 && !hasUsedTurn(unit);
 	}
 
 	@Override
@@ -49,5 +49,9 @@ public class DefaultTurnStrategy implements TurnStrategy {
 	public void resetGame() {
 		resetTurn();
 		remainingActions = 1;
+	}
+
+	boolean hasUsedTurn(Unit unit) {
+		return hasAttacked.contains(unit) || hasMoved.contains(unit);
 	}
 }
