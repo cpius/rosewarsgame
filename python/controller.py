@@ -57,31 +57,31 @@ class Controller(object):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
             self.perform_action(extra_action)
 
-    def left_click(self, pos):
-        if self.start_position and self.start_position == pos:
+    def left_click(self, position):
+        if self.start_position and self.start_position == position:
             self.clear_move()
             self.view.draw_game(self.gamestate)
 
-        elif not self.start_position and pos in self.gamestate.player_units():
-            self.start_position = pos
+        elif not self.start_position and position in self.gamestate.player_units():
+            self.start_position = position
             self.selected_unit = self.gamestate.player_units()[self.start_position]
 
             illustrate_actions = []
             for action in self.gamestate.available_actions:
-                if action.start_position == pos:
+                if action.start_position == position:
                     illustrate_actions.append(action)
 
             self.view.draw_game(self.gamestate, illustrate_actions)
 
         elif self.start_position \
             and not self.end_position \
-            and (pos in self.gamestate.units[1]
-                 or pos in self.gamestate.player_units()) and self.selected_unit.abilities:
+            and (position in self.gamestate.units[1]
+                 or position in self.gamestate.player_units()) and self.selected_unit.abilities:
             if len(self.selected_unit.abilities) > 1:
                 index = self.get_input_abilities(self.selected_unit)
                 action = Action(self.start_position,
                                 self.start_position,
-                                pos,
+                                position,
                                 False,
                                 False,
                                 True,
@@ -89,18 +89,18 @@ class Controller(object):
             else:
                 action = Action(self.start_position,
                                 self.start_position,
-                                pos,
+                                position,
                                 False,
                                 False,
                                 True,
                                 self.selected_unit.abilities[0])
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and pos in self.gamestate.opponent_units() and self.selected_unit.range > 1:
-            action = Action(self.start_position, self.start_position, pos, True, False)
+        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units() and self.selected_unit.range > 1:
+            action = Action(self.start_position, self.start_position, position, True, False)
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and pos in self.gamestate.opponent_units():
+        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units():
 
             if hasattr(self.gamestate.current_player(), "extra_action"):
                 all_actions = self.gamestate.get_actions()
@@ -111,7 +111,7 @@ class Controller(object):
 
             for possible_action in all_actions:
                 if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == pos:
+                        and possible_action.attack_position == position:
                     if possible_action.end_position == self.start_position:
                         action = possible_action
                         break
@@ -125,27 +125,27 @@ class Controller(object):
                 self.perform_action(action)
 
         elif self.start_position and not self.end_position:
-            if not any(action.is_attack and action.start_position == self.start_position and action.end_position == pos
+            if not any(action.is_attack and action.start_position == self.start_position and action.end_position == position
                        for action in self.gamestate.available_actions):
-                action = Action(self.start_position, pos, None, False, False)
+                action = Action(self.start_position, position, None, False, False)
                 self.perform_action(action)
             else:
-                self.view.draw_message("Stop at " + str(pos))
-                self.end_position = pos
+                self.view.draw_message("Stop at " + str(position))
+                self.end_position = position
 
-        elif self.start_position and self.end_position and pos in self.gamestate.opponent_units():
-            action = Action(self.start_position, self.end_position, pos, True, False)
+        elif self.start_position and self.end_position and position in self.gamestate.opponent_units():
+            action = Action(self.start_position, self.end_position, position, True, False)
             self.perform_action(action)
 
-        elif self.start_position and self.end_position and pos not in self.gamestate.opponent_units():
-            action = Action(self.start_position, pos, None, False, False)
+        elif self.start_position and self.end_position and position not in self.gamestate.opponent_units():
+            action = Action(self.start_position, position, None, False, False)
             self.perform_action(action)
 
-    def right_click(self, pos):
+    def right_click(self, position):
         if not self.start_position:
-            self.show_unit(pos)
+            self.show_unit(position)
 
-        elif self.start_position and not self.end_position and pos in self.gamestate.opponent_units():
+        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units():
 
             if hasattr(self.gamestate.current_player(), "extra_action"):
                 all_actions = self.gamestate.get_actions()
@@ -156,7 +156,7 @@ class Controller(object):
 
             for possible_action in all_actions:
                 if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == pos \
+                        and possible_action.attack_position == position \
                         and not possible_action.move_with_attack:
 
                     if possible_action.end_position == self.start_position:
@@ -170,8 +170,8 @@ class Controller(object):
             else:
                 self.perform_action(action)
 
-        elif self.start_position and self.end_position and pos in self.gamestate.opponent_units():
-            action = Action(self.start_position, self.end_position, pos, True, False)
+        elif self.start_position and self.end_position and position in self.gamestate.opponent_units():
+            action = Action(self.start_position, self.end_position, position, True, False)
             self.perform_action(action)
 
     def clear_move(self):
@@ -189,12 +189,12 @@ class Controller(object):
             for event in pygame.event.get():
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = self.view.get_position_from_mouse_click(event.pos)
+                    position = self.view.get_position_from_mouse_click(event.pos)
 
                     if event.button == 1:
-                        self.left_click(pos)
+                        self.left_click(position)
                     elif event.button == 3:
-                        self.right_click(pos)
+                        self.right_click(position)
 
                 if event.type == KEYDOWN and event.key == K_p:
                     print "paused"
