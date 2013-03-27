@@ -23,9 +23,6 @@ class View(object):
         self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True, False)
         self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True,
                                                False)
-        self.font_dice = pygame.font.SysFont(self.interface.normal_font_name, self.interface.dice_font_size, True,
-                                             False)
-
         self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
         self.cow_coordinates = Coordinates(self.interface.cow_coordinates, self.interface)
         self.cow_sub_coordinates = Coordinates(self.interface.cow_sub_coordinates, self.interface)

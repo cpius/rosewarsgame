@@ -9,7 +9,6 @@ class Interface(object):
     normal_font_size = 18
     big_font_size = 28
     bigger_font_size = 38
-    dice_font_size = 78
 
     move_attack_icon = "./other/attack.gif"
     attack_icon = "./other/attack.gif"
