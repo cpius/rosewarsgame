@@ -22,7 +22,9 @@ import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.DeckDrawStrategy;
+import com.wotr.strategy.DeckLayoutStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
+import com.wotr.strategy.impl.RandomDeckLayoutStrategy;
 import com.wotr.touch.CardTouchHandler;
 import com.wotr.touch.CardTouchListener;
 
@@ -88,17 +90,26 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	}
 
 	private void addCards() {
-		DeckDrawStrategy deck = new FixedDeckDrawStrategy();
-		Collection<Unit> drawDeck = deck.drawDeck();
-		for (Unit unit : drawDeck) {
-			CGPoint position = CGPoint.ccp(100, 100);
+		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
+		Collection<Unit> deck = deckStrategy.drawDeck();
+
+		DeckLayoutStrategy layoutStrategy = new RandomDeckLayoutStrategy(xCount, yCount);
+		UnitMap<Position, Unit> layoutDeck = layoutStrategy.layoutDeck(deck);
+
+		//CGPoint position = CGPoint.ccp(100, 100);
+
+		for (Unit unit : layoutDeck.values()) {
+
 			CCSprite player = CCSprite.sprite(unit.getImage());
-			player.setPosition(position);
+			// player.setPosition(position);
+
+			CGPoint point = bordframe.getPosition(unit.getPosistion());
+			player.setPosition(point);
+
 			player.setScale(sizeScale);
 			addChild(player);
 
 			cardList.add(player);
-
 			modelMap.put(player, unit);
 		}
 	}
@@ -120,7 +131,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		try {
 			CCParticleSystem particle = new CCQuadParticleSystem("particle/exploding_ring.plist");
 			particle.setPosition(sparkCard.getPosition());
-			//particle.setScale(sizeScale);
+			// particle.setScale(sizeScale);
 			addChild(particle);
 
 		} catch (Exception e) {
@@ -136,7 +147,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		if (pInP == null || getCardInPosition(pInP) != null) {
 			moveCardToOriginalPosition();
 		} else {
-			moveCardToPosition();
+			dropCardToPosition();
 			Unit abstractCard = modelMap.get(selectedCard);
 			abstractCard.setPosistion(pInP);
 		}
@@ -153,7 +164,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			selectedCard.setPosition(x, y);
 		} else {
 			CGPoint position = bordframe.getPosition(pInP.getX(), pInP.getY());
-			selectedCard.setPosition(position);			
+			selectedCard.setPosition(position);
 		}
 	}
 

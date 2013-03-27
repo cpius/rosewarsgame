@@ -58,6 +58,10 @@ public class Boardframe {
 		}
 		return positions[x][y];
 	}
+	
+	public CGPoint getPosition(Position position) {
+		return getPosition(position.getX(), position.getY());		
+	}
 
 	public CGRect getPerimeter(int x, int y) {
 		if (perimeters[x][y] == null) {
@@ -88,5 +92,5 @@ public class Boardframe {
 
 	public float getLaneWidth() {
 		return xOffset;
-	}
+	}	
 }

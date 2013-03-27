@@ -15,8 +15,15 @@ import com.wotr.strategy.impl.Random6DiceStrategy;
 
 public class DefaultGameFactory implements GameFactory {
 
+	private BattleStrategy battleStrategy;
+	private DefaultTurnStrategy turnStrategy;
+
 	public BattleStrategy getBattleStrategy() {
-		return new DefaultBattleStrategy();
+
+		if (battleStrategy == null) {
+			battleStrategy = new DefaultBattleStrategy();
+		}
+		return battleStrategy;
 	}
 
 	public DiceStrategy getDiceStrategy() {
@@ -40,6 +47,9 @@ public class DefaultGameFactory implements GameFactory {
 	}
 
 	public TurnStrategy getTurnStrategy() {
-		return new DefaultTurnStrategy();
+		if (turnStrategy == null) {
+			turnStrategy = new DefaultTurnStrategy();
+		}
+		return turnStrategy;
 	}
 }

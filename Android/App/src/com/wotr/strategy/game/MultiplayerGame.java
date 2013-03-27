@@ -22,7 +22,7 @@ public class MultiplayerGame implements Game {
 
 	private Player currentPlayer;
 	private GameEventListener listener;
-	private TurnStrategy ts;
+	private TurnStrategy turnStrategy;
 
 	public MultiplayerGame(Player playerOne, Player playerTwo) {
 		this.playerOne = playerOne;
@@ -32,14 +32,14 @@ public class MultiplayerGame implements Game {
 	@Override
 	public void startGame() {
 
-		ts = GameManager.getFactory().getTurnStrategy();
-		ts.resetGame();
+		turnStrategy = GameManager.getFactory().getTurnStrategy();
+		turnStrategy.resetGame();
 		listener.gameStarted();
 
 		Random random = new Random();
 		currentPlayer = random.nextBoolean() ? playerOne : playerTwo;
 
-		listener.startTurn(currentPlayer, ts.getRemainingActions());
+		listener.startTurn(currentPlayer, turnStrategy.getRemainingActions());
 	}
 
 	@Override
@@ -59,31 +59,39 @@ public class MultiplayerGame implements Game {
 
 	@Override
 	public boolean attack(Unit attackingUnit, Unit defendingUnit) {
-		ts.attack(attackingUnit);
+		turnStrategy.attack(attackingUnit);
 		BattleStrategy bs = GameManager.getFactory().getBattleStrategy();
-		boolean result = bs.battle(attackingUnit, defendingUnit);
-		doAction();
-		return result;
+		boolean succes = bs.battle(attackingUnit, defendingUnit);
+		if (succes) {
+			Position defendingPosition = defendingUnit.getPosistion();
+			getDefendingPlayer().getUnitMap().remove(defendingPosition);
+
+			if (!attackingUnit.isRanged()) {
+				getAttackingPlayer().getUnitMap().remove(attackingUnit.getPosistion());
+				getAttackingPlayer().getUnitMap().put(defendingPosition, attackingUnit);
+			}
+		}
+		notifyGameActionListener();
+		return succes;
 	}
 
 	@Override
 	public void move(Position oldPosition, Position newPosition) {
-
-		Unit movedUnit = currentPlayer.getUnitMap().remove(oldPosition);
+		Unit movedUnit = getAttackingPlayer().getUnitMap().remove(oldPosition);
 		if (movedUnit != null) {
-			currentPlayer.getUnitMap().put(newPosition, movedUnit);
+			getAttackingPlayer().getUnitMap().put(newPosition, movedUnit);
 		}
 
-		ts.move(movedUnit);
-		doAction();
+		turnStrategy.move(movedUnit);
+		notifyGameActionListener();
 	}
 
-	private void doAction() {
-		if (ts.getRemainingActions() == 0) {
+	private void notifyGameActionListener() {
+		if (turnStrategy.getRemainingActions() == 0) {
 			currentPlayer = getDefendingPlayer();
-			listener.startTurn(currentPlayer, ts.resetTurn());
+			listener.startTurn(currentPlayer, turnStrategy.resetTurn());
 		} else {
-			listener.actionPerformed(currentPlayer, ts.getRemainingActions());
+			listener.actionPerformed(currentPlayer, turnStrategy.getRemainingActions());
 		}
 	}
 }
