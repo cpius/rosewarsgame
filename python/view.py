@@ -8,6 +8,14 @@ import colors
 _image_library = {}
 
 
+class Log():
+    def __init__(self, action, turn, action_number, player_color):
+        self.action = action
+        self.turn = turn
+        self.action_number = action_number
+        self.player_color = player_color
+
+
 class View(object):
     def __init__(self):
         pygame.init()
@@ -28,6 +36,8 @@ class View(object):
         self.cow_sub_coordinates = Coordinates(self.interface.cow_sub_coordinates, self.interface)
         self.center_coordinates = Coordinates(self.interface.center_coordinates, self.interface)
         self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
+
+        self.logbook = []
 
     def get_position_from_mouse_click(self, coordinates):
         x = int((coordinates[0] - self.interface.x_border) /
