@@ -335,6 +335,8 @@ class View(object):
             pic = self.get_image(self.interface.move_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.end_position))
 
+        self.draw_log()
+
         pygame.display.update()
 
     def get_unit_pic(self, name, color=None, zoomed=False):
@@ -345,6 +347,8 @@ class View(object):
 
     def refresh(self):
         pygame.display.flip()
+
+    def draw_log(self):
 
 
 def increase_corners(corners, inc):
