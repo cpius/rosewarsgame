@@ -284,10 +284,7 @@ class Controller(object):
             self.view.draw_message("Action not allowed")
             return
 
-        elif matching_actions > 1:
-            print "Action ambiguous"
-            self.clear_move()
-            return
+        assert matching_actions <= 1
 
         self.gamestate.do_action(action)
 
