@@ -26,7 +26,7 @@ class View(object):
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
 
-        pygame.draw.rect(self.screen, colors.light_grey, (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom))
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
 
         self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True, False)
         self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True, False)
@@ -345,7 +345,7 @@ class View(object):
 
     def draw_log(self):
 
-        pygame.draw.rect(self.screen, colors.light_grey, (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom))
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
 
         for index, log in enumerate(self.logbook):
 
@@ -448,6 +448,7 @@ class View(object):
         start_coordinates = self.center_coordinates.get(start_position)
         end_coordinates = self.center_coordinates.get(end_position)
         pygame.draw.line(self.screen, colors.black, start_coordinates, end_coordinates, 5)
+
 
 def increase_corners(corners, inc):
 
