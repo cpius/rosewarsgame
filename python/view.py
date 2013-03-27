@@ -352,6 +352,12 @@ class View(object):
 
         pygame.draw.rect(self.screen, colors.light_grey, (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom))
 
+        for index, log in enumerate(self.logbook):
+
+            action = log.action
+            vpos = index * 64
+            hpos = 391
+
 
 def increase_corners(corners, inc):
 
