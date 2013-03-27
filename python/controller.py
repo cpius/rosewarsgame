@@ -109,11 +109,16 @@ class Controller(object):
 
             for possible_action in all_actions:
                 if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == position:
+                        and possible_action.attack_position == position and possible_action.move_with_attack:
                     if possible_action.end_position == self.start_position:
                         action = possible_action
                         break
                     action = possible_action
+
+            if not action:
+                for possible_action in all_actions:
+                    if possible_action.start_position == self.start_position and possible_action.attack_position == pos:
+                        action = possible_action
 
             if not action:
                 self.view.draw_message("Action not possible")
