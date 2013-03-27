@@ -196,10 +196,6 @@ class Controller(object):
                     elif event.button == 3:
                         self.right_click(position)
 
-                if event.type == KEYDOWN and event.key == K_p:
-                    print "paused"
-                    self.pause()
-
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     self.clear_move()
                     self.view.draw_game(self.gamestate)
