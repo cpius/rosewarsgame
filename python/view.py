@@ -22,6 +22,7 @@ class View(object):
 
         self.interface = settings.interface
         self.zoom = self.interface.zoom
+        self.message_coordinates = self.interface.message_coordinates
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
 
