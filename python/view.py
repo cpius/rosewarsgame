@@ -202,7 +202,7 @@ class View(object):
 
     def draw_message(self, string):
         label = self.font_big.render(string, 1, colors.black)
-        self.screen.blit(label, (440, 350))
+        self.screen.blit(label, self.message_coordinates)
 
     def draw_unit(self, unit, position, color, selected=False):
         unit_pic = self.get_unit_pic(unit.name, color)
