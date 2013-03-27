@@ -78,7 +78,7 @@ class View(object):
     def show_unit_zoomed(self, unit_name, color):
         unit_pic = self.get_unit_pic(unit_name, color, True)
         pic = self.get_image(unit_pic)
-        self.screen.blit(pic, (24, 49))
+        self.screen.blit(pic, self.interface.show_unit_coordinates)
         pygame.display.flip()
 
     def save_screenshot(self, name):
