@@ -382,6 +382,21 @@ class View(object):
                     self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, hpos, vpos)
                     self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, hpos, vpos)
 
+            elif action.is_ability:
+
+                attacking_unit = action.unit_reference
+                defending_unit = action.target_reference
+
+                pic = self.get_image(self.interface.ability_icon)
+                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
+
+                if log.player_color == "Green":
+                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, hpos, vpos)
+                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, hpos, vpos)
+
+                if log.player_color == "Red":
+                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, hpos, vpos)
+                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, hpos, vpos)
     def draw_turn_box(self, log, hpos, vpos):
         position_and_size = (hpos * self.zoom, vpos * self.zoom, 40 * self.zoom, 62 * self.zoom)
 
