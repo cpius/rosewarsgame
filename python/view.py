@@ -245,8 +245,14 @@ class View(object):
 
         coordinates = Coordinates((0, 0), self.interface)
 
+        attacks, moves, abilities = [], [], []
         for action in actions:
             if action.is_attack:
+                attacks.append(action)
+            elif action.is_ability:
+                abilities.append(action)
+            else:
+                moves.append(action)
 
         pygame.display.update()
 
