@@ -291,6 +291,9 @@ class View(object):
         pygame.display.update()
 
     def draw_action(self, action, gamestate):
+
+        log = Log(action, gamestate.turn, gamestate.get_actions_remaining(), gamestate.current_player().color)
+        self.logbook.append(log)
         pygame.draw.circle(self.screen, colors.black, self.center_coordinates.get(action.start_position), 10)
         pygame.draw.line(self.screen,
                          colors.black,
