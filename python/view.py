@@ -255,6 +255,23 @@ class View(object):
             else:
                 moves.append(action)
 
+        for action in moves:
+            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 0, 160))
+            self.screen.blit(rect, coordinates.get(action.end_position))
+
+        for action in attacks:
+            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((130, 0, 0, 110))
+            self.screen.blit(rect, coordinates.get(action.attack_position))
+            label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
+            self.screen.blit(label, self.cow_coordinates.get(action.attack_position))
+
+        for action in abilities:
+            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
+            rect.fill((0, 0, 150, 130))
+            self.screen.blit(rect, coordinates.get(action.attack_position))
+
         pygame.display.update()
 
     def draw_action(self, action, gamestate):
