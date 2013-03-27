@@ -377,6 +377,25 @@ class View(object):
         label = self.font_bigger.render(str(2 - log.action_number), 1, colors.black)
         self.screen.blit(label, ((hpos + 7) * self.zoom, vpos * self.zoom))
 
+    def draw_unit_right(self, unit_name, unit_color, index, resize, hpos, vpos):
+
+        vpos = (vpos + 4) * self.zoom
+        hpos = (hpos + 65 + index * 100) * self.zoom
+        unit_pic = self.get_unit_pic(unit_name, unit_color)
+        pic = self.get_image(unit_pic)
+        pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize), int(self.interface.unit_height * resize)))
+        self.screen.blit(pic, (hpos, vpos))
+
+        position_and_size_fill = (hpos - 2, vpos - 2, self.interface.unit_width * resize + 4, self.interface.unit_height * resize + 4)
+
+        if unit_color == "Green":
+            rect_color = self.interface.green_player_color
+        else:
+            rect_color = self.interface.red_player_color
+
+        pygame.draw.rect(self.screen, rect_color, position_and_size_fill, 3)
+
+
 def increase_corners(corners, inc):
 
     corner1 = (corners[0][0] - inc, corners[0][1] - inc)
