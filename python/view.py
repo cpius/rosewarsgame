@@ -304,18 +304,11 @@ class View(object):
             self.logbook.pop(0)
 
         pygame.draw.circle(self.screen, colors.black, self.center_coordinates.get(action.start_position), 10)
-        pygame.draw.line(self.screen,
-                         colors.black,
-                         self.center_coordinates.get(action.start_position),
-                         self.center_coordinates.get(action.end_position),
-                         5)
+        self.draw_line(action.start_position, action.end_position)
 
         if action.is_attack:
-            pygame.draw.line(self.screen,
-                             colors.black,
-                             self.center_coordinates.get(action.end_position),
-                             self.center_coordinates.get(action.attack_position),
-                             5)
+            self.draw_line(action.end_position, action.attack_position)
+
             if action.move_with_attack:
                 pic = self.get_image(self.interface.move_attack_icon)
             else:
@@ -329,10 +322,7 @@ class View(object):
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
         elif action.is_ability:
-            pygame.draw.line(self.screen,
-                             colors.black,
-                             self.center_coordinates.get(action.end_position),
-                             self.center_coordinates.get(action.attack_position), 5)
+            self.draw_line(action.end_position, action.attack_position)
             pic = self.get_image(self.interface.ability_icon)
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
@@ -454,6 +444,10 @@ class View(object):
 
         pygame.draw.rect(self.screen, rect_color, position_and_size_fill, 3)
 
+    def draw_line(self, start_position, end_position):
+        start_coordinates = self.center_coordinates.get(start_position)
+        end_coordinates = self.center_coordinates.get(end_position)
+        pygame.draw.line(self.screen, colors.black, start_coordinates, end_coordinates, 5)
 
 def increase_corners(corners, inc):
 
