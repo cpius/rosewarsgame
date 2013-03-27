@@ -358,6 +358,20 @@ class View(object):
             vpos = index * 64
             hpos = 391
 
+            self.draw_turn_box(log, hpos, vpos)
+
+    def draw_turn_box(self, log, hpos, vpos):
+        position_and_size = (hpos * self.zoom, vpos * self.zoom, 40 * self.zoom, 62 * self.zoom)
+
+        if log.player_color == "Green":
+            border_color = self.interface.green_player_color
+        else:
+            border_color = self.interface.red_player_color
+
+        pygame.draw.rect(self.screen, border_color, position_and_size)
+
+        label = self.font_bigger.render(str(2 - log.action_number), 1, colors.black)
+        self.screen.blit(label, ((hpos + 7) * self.zoom, vpos * self.zoom))
 
 def increase_corners(corners, inc):
 
