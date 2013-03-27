@@ -85,11 +85,9 @@ class View(object):
         pygame.image.save(self.screen, "./replay/" + name + ".jpeg")
 
     def draw_game_end(self, color):
-        pic = self.get_image("./other/wood.jpg")
-        self.screen.blit(pic, (391, 0))
         font = pygame.font.SysFont("monospace", 55, bold=True)
         label = font.render(color + " Wins", 1, colors.black)
-        self.screen.blit(label, (440, 300))
+        self.screen.blit(label, self.message_coordinates)
         pygame.display.update()
 
     def get_image(self, path):
