@@ -40,9 +40,6 @@ class Controller(object):
         self.clear_move()
 
     def trigger_artificial_intelligence(self):
-        print "turn", self.gamestate.turn
-        print "action", 3 - self.gamestate.get_actions_remaining()
-        print
 
         action = self.gamestate.current_player().ai.select_action(self.gamestate)
 
@@ -326,11 +323,6 @@ class Controller(object):
 
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
-
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            print self.gamestate.current_player().color, "extra action"
-        else:
-            print self.gamestate.current_player().color
 
         self.clear_move()
 
