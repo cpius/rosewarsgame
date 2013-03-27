@@ -406,7 +406,7 @@ class View(object):
                     self.draw_unit_right(moving_unit.name, "Red", 0, 0.7, hpos, vpos)
 
     def draw_right(self):
-        pygame.draw.rect(self.screen, colors.light_grey, (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom))
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
         self.draw_log()
 
     def draw_outcome(self, outcome, hpos, vpos):
