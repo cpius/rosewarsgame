@@ -57,3 +57,7 @@ class Rectangles(Interface):
         self.green_player_color = colors.gold
         self.red_player_color = colors.dull_red
         self.counter_circle_color = colors.black
+
+        self.normal_font_size = int(self.normal_font_size * zoom)
+        self.big_font_size = int(self.big_font_size * zoom)
+        self.bigger_font_size = int(self.bigger_font_size * zoom)
