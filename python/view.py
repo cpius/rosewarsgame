@@ -29,11 +29,12 @@ class View(object):
 
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
 
-        self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True)
+        self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, bold=True)
         self.font_messages = pygame.font.SysFont(self.interface.normal_font_name,
-                                                 self.interface.message_font_size, True)
-        self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True)
-        self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True)
+                                                 self.interface.message_font_size, bold=True)
+        self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, bold=True)
+        self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, 
+                                               self.interface.bigger_font_size, bold=True)
         self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
         self.percentage_coordinates = Coordinates(self.interface.percentage_coordinates, self.interface)
         self.percentage_sub_coordinates = Coordinates(self.interface.percentage_sub_coordinates, self.interface)
