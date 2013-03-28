@@ -460,6 +460,11 @@ class View(object):
     def draw_message(self, string):
         self.write_message(string, self.message_location)
 
+    def draw_rectangle(self, dimensions, location, color):
+        rectangle = pygame.Surface(dimensions, pygame.SRCALPHA, 32)
+        rectangle.fill(color)
+        self.screen.blit(rectangle, location)
+
 
 def increase_corners(corners, inc):
 
