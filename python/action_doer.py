@@ -1,6 +1,5 @@
 from __future__ import division
 import random as rnd
-import action_getter
 import battle
 
 
