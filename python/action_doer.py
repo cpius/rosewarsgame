@@ -173,9 +173,9 @@ def settle_ability(action, enemy_units, player_units):
 
     def poison():
         if not hasattr(action.target_unit, "frozen"):
-            action.target_unit.frozen = 2
+            action.target_unit.frozen = 3
         else:
-            action.target_unit.frozen = max(action.target_unit.frozen, 2)
+            action.target_unit.frozen = max(action.target_unit.frozen, 3)
 
     def improve_weapons():
         action.target_unit.improved_weapons = True
