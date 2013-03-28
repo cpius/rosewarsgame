@@ -431,12 +431,11 @@ class View(object):
 
     def draw_unit_right(self, unit_name, color, index, resize, base_x, base_y):
 
-        vpos = (vpos + 4) * self.zoom
-        hpos = (hpos + 65 + index * 100) * self.zoom
+        location = (base_x + (65 + index * 100) * self.zoom, base_y + 4 * self.zoom )
         unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize), int(self.interface.unit_height * resize)))
-        self.screen.blit(pic, (hpos, vpos))
+        self.screen.blit(pic, location)
 
     def draw_line(self, start_position, end_position):
         start_coordinates = self.center_coordinates.get(start_position)
