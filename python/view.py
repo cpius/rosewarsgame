@@ -248,17 +248,28 @@ class View(object):
 
         unit_dimensions = (self.interface.unit_width, self.interface.unit_height)
 
+        move_locations, attack_locations, ability_locations = set(), set(), set()
+
         for action in moves:
-            self.draw_rectangle(unit_dimensions, coordinates.get(action.end_position), self.interface.move_shading)
+            location = coordinates.get(action.end_position)
+            if location not in move_locations:
+                move_locations.add(location)
+                self.draw_rectangle(unit_dimensions, location, self.interface.move_shading)
 
         for action in attacks:
-            self.draw_rectangle(unit_dimensions, coordinates.get(action.attack_position), self.interface.attack_shading)
-            label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
-            self.screen.blit(label, self.percentage_coordinates.get(action.attack_position))
+            location = coordinates.get(action.attack_position)
+            if location not in attack_locations:
+                attack_locations.add(location)
+                self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
+                label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
+                self.screen.blit(label, self.percentage_coordinates.get(action.attack_position))
 
         for action in abilities:
             location = coordinates.get(action.attack_position)
-            self.draw_rectangle(unit_dimensions, location, self.interface.ability_shading)
+            if location not in ability_locations:
+                ability_locations.add(location)
+                location = coordinates.get(action.attack_position)
+                self.draw_rectangle(unit_dimensions, location, self.interface.ability_shading)
 
         for attack in attacks:
             for sub_attack in attack.sub_actions:
@@ -478,7 +489,6 @@ class View(object):
 
         outer_corners = increase_corners(base_corners, thickness)
         pygame.draw.lines(self.screen, colors.black, True, outer_corners)
-
 
 
 def get_outcome(attacking_unit, defending_unit, action):
