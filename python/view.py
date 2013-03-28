@@ -146,8 +146,7 @@ class View(object):
         }[counters_drawn]
 
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
-        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
-        pygame.draw.circle(self.screen, colors.brown, counter_coordinates.get(position), self.counter_size, 0)
+        self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.brown)
         if unit.attack_counters != 1:
             label = self.font.render(str(unit.attack_counters), 1, colors.black)
             self.screen.blit(label, font_coordinates.get(position))
@@ -158,8 +157,7 @@ class View(object):
         else:
             defence_counters = unit.defence_counters
 
-        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
-        pygame.draw.circle(self.screen, colors.light_grey, counter_coordinates.get(position), self.counter_size, 0)
+        self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.light_grey)
 
         counter_text = None
         if defence_counters > 1:
@@ -173,13 +171,11 @@ class View(object):
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
-            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
-            pygame.draw.circle(self.screen, colors.yellow, counter_coordinates.get(position), self.counter_size, 0)
+            self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.yellow)
 
     def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
-            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
-            pygame.draw.circle(self.screen, colors.blue, counter_coordinates.get(position),  self.counter_size, 0)
+            self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.blue)
 
             if unit.blue_counters > 1:
                 label = self.font.render(str(unit.blue_counters), 1, colors.black)
@@ -463,6 +459,10 @@ class View(object):
         rectangle = pygame.Surface(dimensions, pygame.SRCALPHA, 32)
         rectangle.fill(color)
         self.screen.blit(rectangle, location)
+
+    def draw_bordered_circle(self, position, size, color):
+        pygame.draw.circle(self.screen, colors.black, position, size + 2)
+        pygame.draw.circle(self.screen, color, position, size)
 
 
 def increase_corners(corners, inc):
