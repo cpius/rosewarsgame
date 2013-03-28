@@ -438,15 +438,6 @@ class View(object):
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize), int(self.interface.unit_height * resize)))
         self.screen.blit(pic, (hpos, vpos))
 
-        position_and_size_fill = (hpos - 2, vpos - 2, self.interface.unit_width * resize + 4, self.interface.unit_height * resize + 4)
-
-        if unit_color == "Green":
-            rect_color = self.interface.green_player_color
-        else:
-            rect_color = self.interface.red_player_color
-
-        pygame.draw.rect(self.screen, rect_color, position_and_size_fill, 3)
-
     def draw_line(self, start_position, end_position):
         start_coordinates = self.center_coordinates.get(start_position)
         end_coordinates = self.center_coordinates.get(end_position)
