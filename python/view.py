@@ -357,23 +357,7 @@ class View(object):
             endpos = (int(self.interface.board_size[1] * self.zoom), int((vpos + 62) * self.zoom))
             pygame.draw.line(self.screen, colors.black, startpos, endpos, 4)
 
-            if action.is_attack:
-                attacking_unit = action.unit_reference
-                defending_unit = action.target_reference
-                outcome = get_outcome(attacking_unit, defending_unit, action)
 
-                self.draw_outcome(outcome, hpos, vpos)
-
-                pic = self.get_image(self.interface.attack_icon)
-                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
-
-                if log.player_color == "Green":
-                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, hpos, vpos)
-
-                if log.player_color == "Red":
-                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, hpos, vpos)
 
             elif action.is_ability:
 
@@ -402,6 +386,24 @@ class View(object):
 
                 if log.player_color == "Red":
                     self.draw_unit_right(moving_unit.name, "Red", 0, 0.7, hpos, vpos)
+
+    def draw_attack(self, action, base_x, base_y, symbol_location, log):
+        attacking_unit = action.unit_reference
+        defending_unit = action.target_reference
+        outcome = get_outcome(attacking_unit, defending_unit, action)
+
+        self.draw_outcome(outcome, base_x, base_y)
+
+        pic = self.get_image(self.interface.attack_icon)
+        self.screen.blit(pic, symbol_location)
+
+        if log.player_color == "Green":
+            self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, base_x, base_y)
+            self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, base_x, base_y)
+
+        if log.player_color == "Red":
+            self.draw_unit_right(attacking_unit.name,  "Red", 0, 0.7, base_x, base_y)
+            self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, base_x, base_y)
 
     def draw_right(self):
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
