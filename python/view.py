@@ -345,6 +345,8 @@ class View(object):
         pygame.display.flip()
 
     def draw_log(self):
+        zoom = self.zoom
+        log_heights = 64 * zoom
 
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
 
