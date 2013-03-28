@@ -353,9 +353,10 @@ class View(object):
 
             self.draw_turn_box(log, base_x, base_y)
 
-            startpos = (int(hpos * self.zoom), int((vpos + 62) * self.zoom))
-            endpos = (int(self.interface.board_size[1] * self.zoom), int((vpos + 62) * self.zoom))
-            pygame.draw.line(self.screen, colors.black, startpos, endpos, 4)
+            line_thickness = int(3 * zoom)
+            line_start = (base_x, base_y + log_heights - line_thickness / 2)
+            line_end = (int(self.interface.board_size[1] * self.zoom), base_y + log_heights - line_thickness / 2)
+            pygame.draw.line(self.screen, colors.black, line_start, line_end, line_thickness)
 
             symbol_location = (base_x + 118 * zoom, base_y + 12 * zoom)
 
