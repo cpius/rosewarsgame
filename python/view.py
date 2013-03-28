@@ -4,6 +4,7 @@ from coordinates import Coordinates
 import battle
 import colors
 
+FONT_ANTIALIASING = True
 
 _image_library = {}
 
@@ -417,8 +418,14 @@ class View(object):
         label = self.font_bigger.render(str(outcome), 1, colors.black)
         self.screen.blit(label, ((hpos + 230) * self.zoom, (vpos + 5) * self.zoom))
 
-    def draw_turn_box(self, log, hpos, vpos):
-        position_and_size = (hpos * self.zoom, vpos * self.zoom, 40 * self.zoom, 62 * self.zoom)
+    def draw_turn_box(self, log, upper_left_x, upper_left_y):
+        box_width = 40
+        box_height = 62
+
+        position_and_size = (upper_left_x * self.zoom,
+                             upper_left_y * self.zoom,
+                             box_width * self.zoom,
+                             box_height * self.zoom)
 
         if log.player_color == "Green":
             border_color = self.interface.green_player_color
@@ -427,8 +434,10 @@ class View(object):
 
         pygame.draw.rect(self.screen, border_color, position_and_size)
 
-        label = self.font_bigger.render(str(2 - log.action_number), 1, colors.black)
-        self.screen.blit(label, ((hpos + 7) * self.zoom, vpos * self.zoom))
+        current_action = str(2 - log.action_number)
+        label = self.font_bigger.render(current_action, FONT_ANTIALIASING, colors.black)
+        horizontal_margin = 7
+        self.screen.blit(label, ((upper_left_x + horizontal_margin) * self.zoom, upper_left_y * self.zoom))
 
     def draw_unit_right(self, unit_name, unit_color, index, resize, hpos, vpos):
 
