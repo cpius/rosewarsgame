@@ -55,39 +55,32 @@ class Controller(object):
             self.perform_action(extra_action)
 
     def left_click(self, position):
-        if self.start_position and self.start_position == position:
+        if self.deselecting_active_unit(position):
             self.clear_move()
             self.view.draw_game(self.gamestate)
 
-        elif not self.start_position and position in self.gamestate.player_units():
+        elif self.selecting_active_unit(position):
             self.start_position = position
             self.selected_unit = self.gamestate.player_units()[self.start_position]
-
             illustrate_actions = (action for action in self.gamestate.get_actions() if action.start_position == position)
-
             self.view.draw_game(self.gamestate, position, illustrate_actions)
 
-        elif self.start_position \
-            and not self.end_position \
-            and (position in self.gamestate.units[1]
-                 or position in self.gamestate.player_units()) and self.selected_unit.abilities:
+        elif self.selecting_ability_target(position):
             if len(self.selected_unit.abilities) > 1:
                 index = self.get_input_abilities(self.selected_unit)
 
                 ability = self.selected_unit.abilities[index]
-
             else:
                 ability = self.selected_unit.abilities[0]
 
             action = Action(self.start_position, ability_position=position, ability=ability)
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units() and \
-                self.selected_unit.range > 1:
+        elif self.selecting_ranged_target(position):
             action = Action(self.start_position, attack_position=position, move_with_attack=False)
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units():
+        elif self.selecting_melee_target(position):
 
             if hasattr(self.gamestate.current_player(), "extra_action"):
                 all_actions = self.gamestate.get_actions()
@@ -116,54 +109,15 @@ class Controller(object):
             else:
                 self.perform_action(action)
 
-        elif self.start_position and not self.end_position:
-            if not any(action.is_attack and action.start_position == self.start_position
-                       and action.end_position == position for action in self.gamestate.available_actions):
-                action = Action(self.start_position, end_position=position)
-                self.perform_action(action)
-            else:
-                self.view.draw_message("Stop at " + str(position))
-                self.end_position = position
-
-        elif self.start_position and self.end_position and position in self.gamestate.opponent_units():
-            action = Action(self.start_position, end_position=self.end_position,
-                            attack_position=position, move_with_attack=True)
-            self.perform_action(action)
-
-        elif self.start_position and self.end_position and position not in self.gamestate.opponent_units():
+        elif self.selecting_move(position):
             action = Action(self.start_position, end_position=position)
             self.perform_action(action)
 
     def right_click(self, position):
         if not self.start_position:
             self.show_unit(position)
-
-        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units():
-
-            if hasattr(self.gamestate.current_player(), "extra_action"):
-                all_actions = self.gamestate.get_actions()
-            else:
-                all_actions = self.gamestate.get_actions()
-
-            action = None
-
-            for possible_action in all_actions:
-                if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == position \
-                        and not possible_action.move_with_attack:
-
-                    if possible_action.end_position == self.start_position:
-                        action = possible_action
-                        break
-                    action = possible_action
-
-            if action:
-                self.perform_action(action)
-
-        elif self.start_position and self.end_position and position in self.gamestate.opponent_units():
-            action = Action(self.start_position, end_position=self.end_position, attack_position=position,
-                            move_with_attack=False)
-            self.perform_action(action)
+        else:
+            pass  # Show attack stuff
 
     def clear_move(self):
         self.start_position = self.end_position = self.selected_unit = None
@@ -345,3 +299,30 @@ class Controller(object):
         self.view.draw_game_end(player.color)
         self.pause()
         self.exit_game()
+
+    def selecting_active_unit(self, position):
+        return not self.start_position and position in self.gamestate.player_units()
+
+    def selecting_ability_target(self, position):
+        return self.start_position and (position in self.gamestate.opponent_units() or position in self.gamestate.player_units()) and self.selected_unit.abilities
+
+    def selecting_attack_target_unit(self, position):
+        pass
+
+    def selecting_attack_ranged_target(self, position):
+        return self.start_position and position in self.gamestate.opponent_units() and \
+            self.selected_unit.range > 1
+
+    def deselecting_active_unit(self, position):
+        return self.start_position and self.start_position == position
+
+    def selecting_ranged_target(self, position):
+        return self.start_position and position in self.gamestate.opponent_units() and \
+            self.selected_unit.range > 1
+
+    def selecting_melee_target(self, position):
+        return self.start_position and position in self.gamestate.opponent_units() and \
+            self.selected_unit.range == 1
+
+    def selecting_move(self, position):
+        return self.start_position and position not in self.gamestate.opponent_units()
