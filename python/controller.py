@@ -321,16 +321,14 @@ class Controller(object):
 
     def show_unit(self, position):
 
-        unit = color = None
+        unit = None
         if position in self.gamestate.units[0]:
             unit = self.gamestate.units[0][position]
-            color = self.gamestate.current_player().color
         if position in self.gamestate.units[1]:
             unit = self.gamestate.units[1][position]
-            color = self.gamestate.players[1].color
 
         if unit:
-            self.view.show_unit_zoomed(unit.name, color)
+            self.view.show_unit_zoomed(unit)
             self.pause()
             self.view.draw_game(self.gamestate)
             return

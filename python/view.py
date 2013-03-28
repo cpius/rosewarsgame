@@ -80,8 +80,8 @@ class View(object):
 
         pygame.display.update()
 
-    def show_unit_zoomed(self, unit_name, color):
-        unit_pic = self.get_unit_pic(unit_name, color, True)
+    def show_unit_zoomed(self, unit):
+        unit_pic = self.get_unit_pic(unit.name)
         pic = self.get_image(unit_pic)
         self.screen.blit(pic, self.interface.show_unit_coordinates)
         pygame.display.flip()
