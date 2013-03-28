@@ -465,16 +465,16 @@ class View(object):
                         (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height),
                         (base[0], base[1] + self.interface.unit_height)]
 
-        pygame.draw.lines(self.screen, colors.black, closed=True, pointlist=base_corners)
+        pygame.draw.lines(self.screen, colors.black, True, base_corners)
 
         thickness = int(5 * self.zoom)
 
         for i in range(1, thickness):
             middle_corners = increase_corners(base_corners, i)
-            pygame.draw.lines(self.screen, border_color, closed=True, pointlist=middle_corners)
+            pygame.draw.lines(self.screen, border_color, True, middle_corners)
 
         outer_corners = increase_corners(base_corners, thickness)
-        pygame.draw.lines(self.screen, colors.black, closed=True, pointlist=outer_corners)
+        pygame.draw.lines(self.screen, colors.black, True, outer_corners)
 
 
 
