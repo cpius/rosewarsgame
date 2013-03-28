@@ -348,8 +348,8 @@ class View(object):
         for index, log in enumerate(self.logbook):
 
             action = log.action
-            vpos = index * 64
-            hpos = 391
+            base_x = int(391 * zoom)
+            base_y = int(index * log_heights)
 
             self.draw_turn_box(log, hpos, vpos)
 
