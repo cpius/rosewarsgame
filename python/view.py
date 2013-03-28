@@ -261,8 +261,9 @@ class View(object):
             if location not in attack_locations:
                 attack_locations.add(location)
                 self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
-                label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
-                self.screen.blit(label, self.percentage_coordinates.get(action.attack_position))
+                string = str(int(round(action.chance_of_win * 100))) + "%"
+                location = self.percentage_coordinates.get(action.attack_position)
+                self.write(string, location, self.font, colors.dodger_blue)
 
         for action in abilities:
             location = coordinates.get(action.attack_position)
@@ -440,8 +441,8 @@ class View(object):
         label = self.font_messages.render(string, _anti_alias, colors.black)
         self.screen.blit(label, pos)
 
-    def write(self, string, pos, font):
-        label = font.render(string, _anti_alias, colors.black)
+    def write(self, string, pos, font, color=colors.black):
+        label = font.render(string, _anti_alias, color)
         self.screen.blit(label, pos)
 
     def draw_message(self, string):
