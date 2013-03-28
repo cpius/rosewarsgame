@@ -278,8 +278,9 @@ class View(object):
                     rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
                     rect.fill(self.interface.attack_shading)
                     self.screen.blit(rect, coordinates.get(sub_attack.attack_position))
-                    label = self.font.render(str(int(round(sub_attack.chance_of_win * 100))) + "%", 1, colors.yellow)
-                    self.screen.blit(label, self.percentage_sub_coordinates.get(sub_attack.attack_position))
+                    string = str(int(round(sub_attack.chance_of_win * 100))) + "%"
+                    location = self.percentage_sub_coordinates.get(sub_attack.attack_position)
+                    self.write(string, location, self.font, colors.yellow)
 
         self.draw_right()
 
