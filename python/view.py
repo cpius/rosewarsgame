@@ -70,6 +70,17 @@ class View(object):
         pygame.display.update()
 
     def draw_ask_about_ability(self, unit):
+        x, y = self.message_coordinates
+        lines = ["Select ability:"]
+        for ability in unit.abilities:
+            string = ability + ": " + unit.descriptions[ability]
+            lines += textwrap.wrap(string, 40)
+
+        for i, line in enumerate(lines):
+            line_y = y + i * self.message_line_distance
+            label = self.font_messages.render(line, 1, colors.black)
+            self.screen.blit(label, (x, line_y))
+
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
