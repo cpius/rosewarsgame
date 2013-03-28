@@ -181,7 +181,7 @@ def settle_ability(action, enemy_units, player_units):
         action.target_unit.improved_weapons = True
 
     def bribe():
-        position = action.attack_position
+        position = action.ability_position
         player_units[position] = enemy_units.pop(position)
         player_units[position].bribed = True
 
@@ -192,10 +192,10 @@ def add_target(action, enemy_units, player_units):
     if action.is_attack:
         action.target_unit = enemy_units[action.attack_position]
     elif action.is_ability:
-        if action.attack_position in enemy_units:
-            action.target_unit = enemy_units[action.attack_position]
-        elif action.attack_position in player_units:
-            action.target_unit = player_units[action.attack_position]
+        if action.ability_position in enemy_units:
+            action.target_unit = enemy_units[action.ability_position]
+        elif action.ability_position in player_units:
+            action.target_unit = player_units[action.ability_position]
 
     for sub_action in action.sub_actions:
         add_target(sub_action, enemy_units, player_units)

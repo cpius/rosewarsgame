@@ -267,11 +267,11 @@ class View(object):
                 self.write(string, location, self.font, colors.dodger_blue)
 
         for action in abilities:
-            location = coordinates.get(action.attack_position)
+            location = coordinates.get(action.ability_position)
             if location not in ability_locations:
                 ability_locations.add(location)
 
-                location = coordinates.get(action.attack_position)
+                location = coordinates.get(action.ability_position)
                 self.draw_rectangle(unit_dimensions, location, self.interface.ability_shading)
 
         for attack in attacks:
@@ -315,9 +315,9 @@ class View(object):
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
         elif action.is_ability:
-            self.draw_line(action.end_position, action.attack_position)
+            self.draw_line(action.end_position, action.ability_position)
             pic = self.get_image(self.interface.ability_icon)
-            self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
+            self.screen.blit(pic, self.symbol_coordinates.get(action.ability_position))
 
         else:
             pic = self.get_image(self.interface.move_icon)
