@@ -213,9 +213,8 @@ class View(object):
         base = self.base_coordinates.get(position)
 
         if selected:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill(self.interface.selected_shading)
-            self.screen.blit(rect, base)
+            dimensions = (self.interface.unit_width, self.interface.unit_height)
+            self.draw_rectangle(dimensions, base, self.interface.selected_shading)
 
         if color == "Red":
             border_color = self.interface.red_player_color
