@@ -351,7 +351,7 @@ class View(object):
             base_x = int(391 * zoom)
             base_y = int(index * log_heights)
 
-            self.draw_turn_box(log, hpos, vpos)
+            self.draw_turn_box(log, base_x, base_y)
 
             startpos = (int(hpos * self.zoom), int((vpos + 62) * self.zoom))
             endpos = (int(self.interface.board_size[1] * self.zoom), int((vpos + 62) * self.zoom))
