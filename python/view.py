@@ -52,27 +52,27 @@ class View(object):
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
-        xpos = self.message_coordinates[0]
-        ypos = self.message_coordinates[1]
+        x = self.message_coordinates[0]
+        y = self.message_coordinates[1]
         label = self.font_big.render("Select counter for", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos))
+        self.screen.blit(label, (x, y))
         label = self.font_big.render(unit_name, 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 25 * self.zoom))
+        self.screen.blit(label, (x, y + 25 * self.zoom))
         label = self.font_big.render("'a' for attack", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 50 * self.zoom))
+        self.screen.blit(label, (x, y + 50 * self.zoom))
         label = self.font_big.render("'d' for defence", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 75 * self.zoom))
+        self.screen.blit(label, (x, y + 75 * self.zoom))
         pygame.display.update()
 
     def draw_ask_about_ability(self, ability1, ability2):
-        xpos = self.message_coordinates[0]
-        ypos = self.message_coordinates[1]
+        x = self.message_coordinates[0]
+        y = self.message_coordinates[1]
         label = self.font_big.render("Select ability:", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos))
-        label = self.font_big.render("1 for " + ability1, 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 25 * self.zoom))
-        label = self.font_big.render("2 for " + ability2, 1, colors.black)
-        self.screen.blit(label, (xpos,  ypos + 50 * self.zoom))
+        self.screen.blit(label, (x, y))
+        label = self.font_big.render("1 for " + ability1 + ": " + unit.descriptions[ability1], 1, colors.black)
+        self.screen.blit(label, (x, y + 25 * self.zoom))
+        label = self.font_big.render("2 for " + ability2 + ": " + unit.descriptions[ability2], 1, colors.black)
+        self.screen.blit(label, (x, y + 50 * self.zoom))
         pygame.display.update()
 
     def show_unit_zoomed(self, unit_name, color):
