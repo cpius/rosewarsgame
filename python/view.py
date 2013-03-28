@@ -29,6 +29,7 @@ class View(object):
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
 
         self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True, False)
+        self.font_messages = pygame.font.SysFont(self.interface.normal_font_name, self.interface.message_font_size, True, False)
         self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True, False)
         self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True,
                                                False)
