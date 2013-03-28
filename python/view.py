@@ -93,13 +93,15 @@ class View(object):
 
     def get_image(self, path, dimensions=None):
         global _image_library
+
+        if dimensions:
+            image = pygame.image.load(path).convert()
+            return pygame.transform.scale(image, dimensions)
+
         image = _image_library.get(path)
         if not image:
             image = pygame.image.load(path).convert()
-            if dimensions:
-                image = pygame.transform.scale(image, dimensions)
-            else:
-                image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom), int(image.get_size()[1] * self.zoom)))
+            image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom), int(image.get_size()[1] * self.zoom)))
             _image_library[path] = image
         return image
 
