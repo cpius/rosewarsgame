@@ -460,12 +460,12 @@ class View(object):
 
     def draw_unit_box(self, base, color):
 
-        def increase_corners(corners, inc):
+        def scale_rectangle(corners, pixels):
 
-            corner1 = (corners[0][0] - inc, corners[0][1] - inc)
-            corner2 = (corners[1][0] + inc, corners[1][1] - inc)
-            corner3 = (corners[2][0] + inc, corners[2][1] + inc)
-            corner4 = (corners[3][0] - inc, corners[3][1] + inc)
+            corner1 = (corners[0][0] - pixels, corners[0][1] - pixels)
+            corner2 = (corners[1][0] + pixels, corners[1][1] - pixels)
+            corner3 = (corners[2][0] + pixels, corners[2][1] + pixels)
+            corner4 = (corners[3][0] - pixels, corners[3][1] + pixels)
 
             return [corner1, corner2, corner3, corner4]
 
