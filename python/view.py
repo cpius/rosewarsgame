@@ -33,8 +33,8 @@ class View(object):
         self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True,
                                                False)
         self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
-        self.cow_coordinates = Coordinates(self.interface.cow_coordinates, self.interface)
-        self.cow_sub_coordinates = Coordinates(self.interface.cow_sub_coordinates, self.interface)
+        self.percentage_coordinates = Coordinates(self.interface.percentage_coordinates, self.interface)
+        self.percentage_sub_coordinates = Coordinates(self.interface.percentage_sub_coordinates, self.interface)
         self.center_coordinates = Coordinates(self.interface.center_coordinates, self.interface)
         self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
 
@@ -279,7 +279,7 @@ class View(object):
             rect.fill((130, 0, 0, 110))
             self.screen.blit(rect, coordinates.get(action.attack_position))
             label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
-            self.screen.blit(label, self.cow_coordinates.get(action.attack_position))
+            self.screen.blit(label, self.percentage_coordinates.get(action.attack_position))
 
         for action in abilities:
             rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
@@ -293,7 +293,7 @@ class View(object):
                     rect.fill((130, 0, 0, 110))
                     self.screen.blit(rect, coordinates.get(sub_attack.attack_position))
                     label = self.font.render(str(int(round(sub_attack.chance_of_win * 100))) + "%", 1, colors.yellow)
-                    self.screen.blit(label, self.cow_sub_coordinates.get(sub_attack.attack_position))
+                    self.screen.blit(label, self.percentage_sub_coordinates.get(sub_attack.attack_position))
 
         self.draw_right()
 
