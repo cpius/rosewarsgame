@@ -432,6 +432,8 @@ class View(object):
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
                                            int(self.interface.unit_height * resize)))
         self.screen.blit(pic, location)
+        self.draw_unit_box(location, color, resize)
+
 
     def draw_line(self, start_position, end_position):
         start_coordinates = self.center_coordinates.get(start_position)
@@ -458,7 +460,7 @@ class View(object):
         pygame.draw.circle(self.screen, colors.black, position, size + 2)
         pygame.draw.circle(self.screen, color, position, size)
 
-    def draw_unit_box(self, base, color):
+    def draw_unit_box(self, base, color, resize=1):
 
         def scale_rectangle(corners, pixels):
 
@@ -486,7 +488,7 @@ class View(object):
 
         pygame.draw.lines(self.screen, colors.black, True, base_corners)
 
-        thickness = int(5 * self.zoom)
+        thickness = int(5 * self.zoom * resize)
 
         for i in range(1, thickness):
             middle_corners = increase_corners(base_corners, i)
