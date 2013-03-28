@@ -29,11 +29,11 @@ class View(object):
 
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
 
-        self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True, False)
-        self.font_messages = pygame.font.SysFont(self.interface.normal_font_name, self.interface.message_font_size, True, False)
-        self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True, False)
-        self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True,
-                                               False)
+        self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True)
+        self.font_messages = pygame.font.SysFont(self.interface.normal_font_name,
+                                                 self.interface.message_font_size, True)
+        self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True)
+        self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True)
         self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
         self.percentage_coordinates = Coordinates(self.interface.percentage_coordinates, self.interface)
         self.percentage_sub_coordinates = Coordinates(self.interface.percentage_sub_coordinates, self.interface)
@@ -103,7 +103,8 @@ class View(object):
         image = _image_library.get(path)
         if not image:
             image = pygame.image.load(path).convert()
-            image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom), int(image.get_size()[1] * self.zoom)))
+            image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom),
+                                                   int(image.get_size()[1] * self.zoom)))
             _image_library[path] = image
         return image
 
@@ -436,7 +437,8 @@ class View(object):
         location = (base_x + (65 + index * 100) * self.zoom, base_y + 4 * self.zoom )
         unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
-        pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize), int(self.interface.unit_height * resize)))
+        pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
+                                           int(self.interface.unit_height * resize)))
         self.screen.blit(pic, location)
 
     def draw_line(self, start_position, end_position):
