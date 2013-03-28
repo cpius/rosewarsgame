@@ -416,8 +416,8 @@ class View(object):
         self.draw_log()
 
     def draw_outcome(self, outcome, base_x, base_y):
-        label = self.font_bigger.render(str(outcome), 1, colors.black)
-        self.screen.blit(label, (base_x + 230 * self.zoom, base_y + 5 * self.zoom))
+        location = (base_x + 230 * self.zoom, base_y + 5 * self.zoom)
+        self.write(outcome, location, self.font_bigger)
 
     def draw_turn_box(self, log, base_x, base_y):
         box_width, box_height = 40 * self.zoom, 62 * self.zoom
