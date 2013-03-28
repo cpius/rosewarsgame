@@ -461,9 +461,12 @@ class View(object):
         else:
             border_color = self.interface.green_player_color
 
-        base_corners = [(base[0], base[1]), (base[0] + self.interface.unit_width, base[1]),
-                        (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height),
-                        (base[0], base[1] + self.interface.unit_height)]
+        corner1 = (base[0], base[1])
+        corner2 = (base[0] + self.interface.unit_width, base[1])
+        corner3 = (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height)
+        corner4 = (base[0], base[1] + self.interface.unit_height)
+
+        base_corners = [corner1, corner2, corner3, corner4]
 
         pygame.draw.lines(self.screen, colors.black, True, base_corners)
 
