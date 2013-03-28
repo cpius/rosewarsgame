@@ -69,8 +69,8 @@ class View(object):
     def draw_ask_about_ability(self, unit):
         x, y = self.message_location
         lines = ["Select ability:"]
-        for ability in unit.abilities:
-            string = ability + ": " + unit.descriptions[ability]
+        for i, ability in enumerate(unit.abilities):
+            string = str(i + 1) + ". " + ability + ": " + unit.descriptions[ability]
             lines += textwrap.wrap(string, 40)
 
         for i, line in enumerate(lines):
