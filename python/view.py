@@ -260,6 +260,7 @@ class View(object):
             location = coordinates.get(action.attack_position)
             if location not in attack_locations:
                 attack_locations.add(location)
+
                 self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
                 string = str(int(round(action.chance_of_win * 100))) + "%"
                 location = self.percentage_coordinates.get(action.attack_position)
@@ -269,6 +270,7 @@ class View(object):
             location = coordinates.get(action.attack_position)
             if location not in ability_locations:
                 ability_locations.add(location)
+
                 location = coordinates.get(action.attack_position)
                 self.draw_rectangle(unit_dimensions, location, self.interface.ability_shading)
 
@@ -429,8 +431,11 @@ class View(object):
         location = (base_x + (65 + index * 100) * self.zoom, base_y + 8 * self.zoom)
         unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
+
+
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
                                            int(self.interface.unit_height * resize)))
+
         self.screen.blit(pic, location)
         self.draw_unit_box(location, color, resize)
 
