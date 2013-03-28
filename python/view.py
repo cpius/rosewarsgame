@@ -149,8 +149,7 @@ class View(object):
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
         self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.brown)
         if unit.attack_counters != 1:
-            label = self.font.render(str(unit.attack_counters), 1, colors.black)
-            self.screen.blit(label, font_coordinates.get(position))
+            self.write(str(unit.attack_counters), font_coordinates.get(position), self.font)
 
     def draw_defence_counters(self, unit, position, counter_coordinates, font_coordinates):
         if hasattr(unit, "sabotaged"):
@@ -160,15 +159,15 @@ class View(object):
 
         self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.light_grey)
 
-        counter_text = None
         if defence_counters > 1:
             counter_text = str(defence_counters)
         elif defence_counters < 0:
             counter_text = "x"
+        else:
+            counter_text = None
 
         if counter_text:
-            label = self.font.render(counter_text, 1, colors.black)
-            self.screen.blit(label, font_coordinates.get(position))
+            self.write(counter_text, font_coordinates.get(position), self.font)
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
@@ -179,8 +178,7 @@ class View(object):
             self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.blue)
 
             if unit.blue_counters > 1:
-                label = self.font.render(str(unit.blue_counters), 1, colors.black)
-                self.screen.blit(label, font_coordinates.get(position))
+                self.write(str(unit.blue_counters), font_coordinates.get(position), self.font)
 
     def draw_symbols(self, unit, position):
         coordinates = Coordinates(self.interface.first_symbol_coordinates, self.interface)
