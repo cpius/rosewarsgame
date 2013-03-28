@@ -74,3 +74,4 @@ class Rectangles(Interface):
         self.ability_shading = pygame.Color(0, 0, 150, 130)
         self.selected_shading = pygame.Color(0, 0, 0, 160)
 
+        self.counter_size = int(7 * zoom)

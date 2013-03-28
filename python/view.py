@@ -44,6 +44,7 @@ class View(object):
         self.maximum_number_of_logs = 5
 
         self.message_line_distance = 30 * self.zoom
+        self.counter_size = self.interface.counter_size
 
     def get_position_from_mouse_click(self, coordinates):
         x = int((coordinates[0] - self.interface.x_border) /
@@ -145,8 +146,8 @@ class View(object):
         }[counters_drawn]
 
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
-        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-        pygame.draw.circle(self.screen, colors.brown, counter_coordinates.get(position), 8, 0)
+        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
+        pygame.draw.circle(self.screen, colors.brown, counter_coordinates.get(position), self.counter_size, 0)
         if unit.attack_counters != 1:
             label = self.font.render(str(unit.attack_counters), 1, colors.black)
             self.screen.blit(label, font_coordinates.get(position))
@@ -157,8 +158,8 @@ class View(object):
         else:
             defence_counters = unit.defence_counters
 
-        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-        pygame.draw.circle(self.screen, colors.light_grey, counter_coordinates.get(position), 8, 0)
+        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
+        pygame.draw.circle(self.screen, colors.light_grey, counter_coordinates.get(position), self.counter_size, 0)
 
         counter_text = None
         if defence_counters > 1:
@@ -172,13 +173,13 @@ class View(object):
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
-            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, colors.yellow, counter_coordinates.get(position), 8, 0)
+            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
+            pygame.draw.circle(self.screen, colors.yellow, counter_coordinates.get(position), self.counter_size, 0)
 
     def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
-            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, colors.blue, counter_coordinates.get(position), 8, 0)
+            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), self.counter_size + 2, 0)
+            pygame.draw.circle(self.screen, colors.blue, counter_coordinates.get(position),  self.counter_size, 0)
 
             if unit.blue_counters > 1:
                 label = self.font.render(str(unit.blue_counters), 1, colors.black)
