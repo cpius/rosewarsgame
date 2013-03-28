@@ -5,7 +5,7 @@ import battle
 import colors
 import textwrap
 
-
+_anti_alias = 1
 _image_library = {}
 
 
