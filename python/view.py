@@ -3,6 +3,7 @@ import settings
 from coordinates import Coordinates
 import battle
 import colors
+import textwrap
 
 
 _image_library = {}
