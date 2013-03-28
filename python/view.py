@@ -343,11 +343,8 @@ class View(object):
 
         pygame.display.update()
 
-    def get_unit_pic(self, name, color=None, zoomed=False):
-        if zoomed:
-            return "./zoomed/" + name.replace(" ", "-") + ",-" + color + ".jpg"
-        else:
-            return "./" + self.interface.unit_folder + "/" + name.replace(" ", "-") + ".jpg"
+    def get_unit_pic(self, name):
+        return "./" + self.interface.unit_folder + "/" + name.replace(" ", "_") + ".jpg"
 
     def refresh(self):
         pygame.display.flip()
