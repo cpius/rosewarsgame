@@ -62,7 +62,7 @@ class View(object):
         lines = ["Select counter for", unit_name, "'a' for attack", "'d' for defence"]
         for i, line in enumerate(lines):
             line_y = y + i * self.message_line_distance
-            self.write(line, (x, line_y))
+            self.write_message(line, (x, line_y))
         pygame.display.update()
 
     def draw_ask_about_ability(self, unit):
