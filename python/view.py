@@ -207,10 +207,6 @@ class View(object):
         pic = self.get_image(self.interface.crusading_icon)
         self.screen.blit(pic, coordinates.get(position))
 
-    def draw_message(self, string):
-        label = self.font_big.render(string, 1, colors.black)
-        self.screen.blit(label, self.message_coordinates)
-
     def draw_unit(self, unit, position, color, selected=False):
         unit_pic = self.get_unit_pic(unit.name)
         dimensions = (int(self.interface.unit_width), int(self.interface.unit_height))
@@ -453,6 +449,13 @@ class View(object):
         start_coordinates = self.center_coordinates.get(start_position)
         end_coordinates = self.center_coordinates.get(end_position)
         pygame.draw.line(self.screen, colors.black, start_coordinates, end_coordinates, 5)
+
+    def write_message(self, string, pos):
+        label = self.font_messages.render(string, _anti_alias, colors.black)
+        self.screen.blit(label, pos)
+
+    def draw_message(self, string):
+        self.write_message(string, self.message_coordinates)
 
 
 def increase_corners(corners, inc):
