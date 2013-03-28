@@ -1,4 +1,5 @@
 import colors
+import pygame
 
 
 class Interface(object):
