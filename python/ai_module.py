@@ -80,6 +80,7 @@ def get_transformed_action(action):
     action.start_position = transform_position(action.start_position)
     action.end_position = transform_position(action.end_position)
     action.attack_position = transform_position(action.attack_position)
+    action.ability_position = transform_position(action.ability_position)
 
     for sub_action in action.sub_actions:
         action.sub_action = get_transformed_action(sub_action)
