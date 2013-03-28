@@ -451,8 +451,12 @@ class View(object):
         label = self.font_messages.render(string, _anti_alias, colors.black)
         self.screen.blit(label, pos)
 
+    def write(self, string, pos, font):
+        label = font.render(string, _anti_alias, colors.black)
+        self.screen.blit(label, pos)
+
     def draw_message(self, string):
-        self.write_message(string, self.message_coordinates)
+        self.write_message(string, self.message_location)
 
 
 def increase_corners(corners, inc):
