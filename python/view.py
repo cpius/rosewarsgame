@@ -368,12 +368,12 @@ class View(object):
                 self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, hpos, vpos)
+                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, base_x, base_y)
+                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, base_x, base_y)
 
                 if log.player_color == "Red":
-                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, hpos, vpos)
+                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, base_x, base_y)
+                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, base_x, base_y)
 
             else:
                 moving_unit = action.unit_reference
@@ -382,10 +382,10 @@ class View(object):
                 self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(moving_unit.name, "Green", 0, 0.7, hpos, vpos)
+                    self.draw_unit_right(moving_unit.name, "Green", 0, 0.7, base_x, base_y)
 
                 if log.player_color == "Red":
-                    self.draw_unit_right(moving_unit.name, "Red", 0, 0.7, hpos, vpos)
+                    self.draw_unit_right(moving_unit.name, "Red", 0, 0.7, base_x, base_y)
 
     def draw_attack(self, action, base_x, base_y, symbol_location, log):
         attacking_unit = action.unit_reference
@@ -409,12 +409,13 @@ class View(object):
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
         self.draw_log()
 
-    def draw_outcome(self, outcome, hpos, vpos):
+    def draw_outcome(self, outcome, base_x, base_y):
         label = self.font_bigger.render(str(outcome), 1, colors.black)
-        self.screen.blit(label, ((hpos + 230) * self.zoom, (vpos + 5) * self.zoom))
+        self.screen.blit(label, (base_x + 230 * self.zoom, base_y + 5 * self.zoom))
 
-    def draw_turn_box(self, log, hpos, vpos):
-        position_and_size = (hpos * self.zoom, vpos * self.zoom, 40 * self.zoom, 62 * self.zoom)
+    def draw_turn_box(self, log, base_x, base_y):
+        box_width, box_height = 40 * self.zoom, 62 * self.zoom
+        position_and_size = (base_x, base_y, box_width, box_height)
 
         if log.player_color == "Green":
             border_color = self.interface.green_player_color
