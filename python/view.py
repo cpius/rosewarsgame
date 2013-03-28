@@ -70,7 +70,7 @@ class View(object):
         x, y = self.message_location
         lines = ["Select ability:"]
         for i, ability in enumerate(unit.abilities):
-            string = str(i + 1) + ". " + ability + ": " + unit.descriptions[ability]
+            string = str(i + 1) + ". " + ability.title() + ": " + unit.descriptions[ability]
             lines += textwrap.wrap(string, self.interface.message_line_length)
 
         for i, line in enumerate(lines):
