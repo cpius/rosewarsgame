@@ -90,7 +90,7 @@ class View(object):
         pygame.image.save(self.screen, "./replay/" + name + ".jpeg")
 
     def draw_game_end(self, color):
-        self.write_message(color + " Wins")
+        self.write(color + " Wins", self.message_location, self.font_big)
         pygame.display.update()
 
     def get_image(self, path, dimensions=None):
