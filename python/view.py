@@ -447,6 +447,15 @@ class View(object):
 
     def draw_unit_box(self, base, color):
 
+        def increase_corners(corners, inc):
+
+            corner1 = (corners[0][0] - inc, corners[0][1] - inc)
+            corner2 = (corners[1][0] + inc, corners[1][1] - inc)
+            corner3 = (corners[2][0] + inc, corners[2][1] + inc)
+            corner4 = (corners[3][0] - inc, corners[3][1] + inc)
+
+            return [corner1, corner2, corner3, corner4]
+
         if color == "Red":
             border_color = self.interface.red_player_color
         else:
@@ -467,15 +476,6 @@ class View(object):
         outer_corners = increase_corners(base_corners, line_count)
         pygame.draw.lines(self.screen, colors.black, closed=True, pointlist=outer_corners)
 
-
-def increase_corners(corners, inc):
-
-    corner1 = (corners[0][0] - inc, corners[0][1] - inc)
-    corner2 = (corners[1][0] + inc, corners[1][1] - inc)
-    corner3 = (corners[2][0] + inc, corners[2][1] + inc)
-    corner4 = (corners[3][0] - inc, corners[3][1] + inc)
-
-    return [corner1, corner2, corner3, corner4]
 
 
 def get_outcome(attacking_unit, defending_unit, action):
