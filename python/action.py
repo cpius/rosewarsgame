@@ -23,15 +23,8 @@ class Action(object):
         self.sub_actions = []
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
 
-        if attack_position:
-            self.is_attack = True
-        else:
-            self.is_attack = False
-
-        if ability:
-            self.is_ability = True
-        else:
-            self.is_ability = False
+        self.is_attack = bool(attack_position)
+        self.is_ability = bool(ability)
 
         self.unit = None
         self.target = None
