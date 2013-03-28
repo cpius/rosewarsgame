@@ -269,22 +269,19 @@ class View(object):
             else:
                 moves.append(action)
 
+        unit_dimensions = (self.interface.unit_width, self.interface.unit_height)
+
         for action in moves:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill(self.interface.move_shading)
-            self.screen.blit(rect, coordinates.get(action.end_position))
+            self.draw_rectangle(unit_dimensions, coordinates.get(action.end_position), self.interface.move_shading)
 
         for action in attacks:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill(self.interface.attack_shading)
-            self.screen.blit(rect, coordinates.get(action.attack_position))
+            self.draw_rectangle(unit_dimensions, coordinates.get(action.attack_position), self.interface.attack_shading)
             label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
             self.screen.blit(label, self.percentage_coordinates.get(action.attack_position))
 
         for action in abilities:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill(self.interface.ability_shading)
-            self.screen.blit(rect, coordinates.get(action.attack_position))
+            location = coordinates.get(action.attack_position)
+            self.draw_rectangle(unit_dimensions, location, self.interface.ability_shading)
 
         for attack in attacks:
             for sub_attack in attack.sub_actions:
