@@ -421,8 +421,10 @@ class View(object):
 
         pygame.draw.rect(self.screen, border_color, position_and_size)
 
-        label = self.font_bigger.render(str(2 - log.action_number), 1, colors.black)
-        self.screen.blit(label, ((hpos + 7) * self.zoom, vpos * self.zoom))
+        current_action = 2 - log.action_number
+        string = str(current_action)
+        location = (base_x + 7 * self.zoom, base_y)
+        self.write(string, location, self.font_bigger)
 
     def draw_unit_right(self, unit_name, unit_color, index, resize, hpos, vpos):
 
