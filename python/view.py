@@ -272,26 +272,26 @@ class View(object):
 
         for action in moves:
             rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 0, 160))
+            rect.fill(self.interface.move_shading)
             self.screen.blit(rect, coordinates.get(action.end_position))
 
         for action in attacks:
             rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((130, 0, 0, 110))
+            rect.fill(self.interface.attack_shading)
             self.screen.blit(rect, coordinates.get(action.attack_position))
             label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
             self.screen.blit(label, self.percentage_coordinates.get(action.attack_position))
 
         for action in abilities:
             rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 150, 130))
+            rect.fill(self.interface.ability_shading)
             self.screen.blit(rect, coordinates.get(action.attack_position))
 
         for attack in attacks:
             for sub_attack in attack.sub_actions:
                 if not any(check_attack.attack_position == sub_attack.attack_position for check_attack in attacks):
                     rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-                    rect.fill((130, 0, 0, 110))
+                    rect.fill(self.interface.attack_shading)
                     self.screen.blit(rect, coordinates.get(sub_attack.attack_position))
                     label = self.font.render(str(int(round(sub_attack.chance_of_win * 100))) + "%", 1, colors.yellow)
                     self.screen.blit(label, self.percentage_sub_coordinates.get(sub_attack.attack_position))
