@@ -39,6 +39,7 @@ class View(object):
         self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
 
         self.logbook = []
+        self.maximum_number_of_logs = 5
 
     def get_position_from_mouse_click(self, coordinates):
         x = int((coordinates[0] - self.interface.x_border) /
@@ -304,7 +305,7 @@ class View(object):
         log = Log(action, gamestate.turn, gamestate.get_actions_remaining(), gamestate.current_player().color)
         self.logbook.append(log)
 
-        if len(self.logbook) > 5:
+        if len(self.logbook) > self.maximum_number_of_logs:
             self.logbook.pop(0)
 
         pygame.draw.circle(self.screen, colors.black, self.center_coordinates.get(action.start_position), 10)
