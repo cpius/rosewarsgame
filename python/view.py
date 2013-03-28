@@ -67,7 +67,7 @@ class View(object):
         self.screen.blit(label, (x, y + 75 * self.zoom))
         pygame.display.update()
 
-    def draw_ask_about_ability(self, ability1, ability2):
+    def draw_ask_about_ability(self, unit):
         x = self.message_coordinates[0]
         y = self.message_coordinates[1]
         label = self.font_big.render("Select ability:", 1, colors.black)

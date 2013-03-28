@@ -225,7 +225,7 @@ class Controller(object):
                     self.exit_game()
 
     def get_input_abilities(self, unit):
-        self.view.draw_ask_about_ability(unit.abilities[0], unit.abilities[1])
+        self.view.draw_ask_about_ability(unit)
 
         while True:
             for event in pygame.event.get():
