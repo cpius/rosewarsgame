@@ -469,15 +469,18 @@ class View(object):
 
             return [corner1, corner2, corner3, corner4]
 
+        height = self.interface.unit_height * resize
+        width = self.interface.unit_width * resize
+
         if color == "Red":
             border_color = self.interface.red_player_color
         else:
             border_color = self.interface.green_player_color
 
         corner1 = (base[0], base[1])
-        corner2 = (base[0] + self.interface.unit_width, base[1])
-        corner3 = (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height)
-        corner4 = (base[0], base[1] + self.interface.unit_height)
+        corner2 = (base[0] + width, base[1])
+        corner3 = (base[0] + width, base[1] + height)
+        corner4 = (base[0], base[1] + height)
 
         base_corners = [corner1, corner2, corner3, corner4]
 
