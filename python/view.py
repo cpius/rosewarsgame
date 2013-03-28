@@ -246,7 +246,7 @@ class View(object):
 
         for position, unit in gamestate.units[0].items():
             if actions and position == start_position:
-                self.draw_unit(unit, position, gamestate.current_player().color, True)
+                self.draw_unit(unit, position, gamestate.current_player().color, selected=True)
             else:
                 self.draw_unit(unit, position, gamestate.current_player().color)
 
