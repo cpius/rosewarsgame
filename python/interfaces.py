@@ -72,3 +72,5 @@ class Rectangles(Interface):
         self.move_shading = pygame.Color(0, 0, 0, 160)
         self.attack_shading = pygame.Color(130, 0, 0, 110)
         self.ability_shading = pygame.Color(0, 0, 150, 130)
+        self.selected_shading = pygame.Color(0, 0, 0, 160)
+

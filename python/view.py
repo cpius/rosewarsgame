@@ -218,7 +218,7 @@ class View(object):
 
         if selected:
             rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 0, 160))
+            rect.fill(self.interface.selected_shading)
             self.screen.blit(rect, base)
 
         if color == "Red":
