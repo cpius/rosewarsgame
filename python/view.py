@@ -425,8 +425,8 @@ class View(object):
 
     def draw_unit_right(self, unit_name, color, index, base_x, base_y):
 
-        resize = 0.6 * self.zoom
-        location = (base_x + (65 + index * 100) * self.zoom, base_y + 4 * self.zoom )
+        resize = 0.5 * self.zoom
+        location = (base_x + (65 + index * 100) * self.zoom, base_y + 8 * self.zoom)
         unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
