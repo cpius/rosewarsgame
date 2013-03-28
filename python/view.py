@@ -71,7 +71,7 @@ class View(object):
         lines = ["Select ability:"]
         for i, ability in enumerate(unit.abilities):
             string = str(i + 1) + ". " + ability + ": " + unit.descriptions[ability]
-            lines += textwrap.wrap(string, 40)
+            lines += textwrap.wrap(string, self.interface.message_line_length)
 
         for i, line in enumerate(lines):
             line_y = y + i * self.message_line_distance

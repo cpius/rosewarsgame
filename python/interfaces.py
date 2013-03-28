@@ -75,3 +75,5 @@ class Rectangles(Interface):
         self.selected_shading = pygame.Color(0, 0, 0, 160)
 
         self.counter_size = int(7 * zoom)
+
+        self.message_line_length = 30 * zoom
