@@ -486,15 +486,17 @@ class View(object):
 
         base_corners = [corner1, corner2, corner3, corner4]
 
-        pygame.draw.lines(self.screen, colors.black, True, base_corners)
+        inner_corners = scale_rectangle(base_corners, -1)
+
+        pygame.draw.lines(self.screen, colors.black, True, inner_corners)
 
         thickness = int(5 * self.zoom * resize)
 
-        for i in range(1, thickness):
-            middle_corners = increase_corners(base_corners, i)
+        for i in range(thickness):
+            middle_corners = scale_rectangle(base_corners, i)
             pygame.draw.lines(self.screen, border_color, True, middle_corners)
 
-        outer_corners = increase_corners(base_corners, thickness)
+        outer_corners = scale_rectangle(base_corners, thickness)
         pygame.draw.lines(self.screen, colors.black, True, outer_corners)
 
 
