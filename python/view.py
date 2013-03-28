@@ -216,25 +216,7 @@ class View(object):
             dimensions = (self.interface.unit_width, self.interface.unit_height)
             self.draw_rectangle(dimensions, base, self.interface.selected_shading)
 
-        if color == "Red":
-            border_color = self.interface.red_player_color
-        else:
-            border_color = self.interface.green_player_color
-
-        base_corners = [(base[0], base[1]), (base[0] + self.interface.unit_width, base[1]),
-                        (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height),
-                        (base[0], base[1] + self.interface.unit_height)]
-
-        pygame.draw.lines(self.screen, colors.black, True, base_corners)
-
-        line_count = int(5 * self.zoom)
-
-        for i in range(1, line_count):
-            middle_corners = increase_corners(base_corners, i)
-            pygame.draw.lines(self.screen, border_color, True, middle_corners)
-
-        outer_corners = increase_corners(base_corners, line_count)
-        pygame.draw.lines(self.screen, colors.black, True, outer_corners)
+        self.draw_unit_box(base, color)
 
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
@@ -462,6 +444,27 @@ class View(object):
     def draw_bordered_circle(self, position, size, color):
         pygame.draw.circle(self.screen, colors.black, position, size + 2)
         pygame.draw.circle(self.screen, color, position, size)
+
+    def draw_unit_box(self, base, color):
+        if color == "Red":
+            border_color = self.interface.red_player_color
+        else:
+            border_color = self.interface.green_player_color
+
+        base_corners = [(base[0], base[1]), (base[0] + self.interface.unit_width, base[1]),
+                        (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height),
+                        (base[0], base[1] + self.interface.unit_height)]
+
+        pygame.draw.lines(self.screen, colors.black, True, base_corners)
+
+        line_count = int(5 * self.zoom)
+
+        for i in range(1, line_count):
+            middle_corners = increase_corners(base_corners, i)
+            pygame.draw.lines(self.screen, border_color, True, middle_corners)
+
+        outer_corners = increase_corners(base_corners, line_count)
+        pygame.draw.lines(self.screen, colors.black, True, outer_corners)
 
 
 def increase_corners(corners, inc):
