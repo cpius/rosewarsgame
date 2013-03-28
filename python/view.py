@@ -248,7 +248,7 @@ class View(object):
 
         unit_dimensions = (self.interface.unit_width, self.interface.unit_height)
 
-        move_locations, attack_locations, ability_locations = set(), set(), set()
+        move_locations, attack_locations, ability_locations, sub_attack_locations = set(), set(), set(), set()
 
         for action in moves:
             location = coordinates.get(action.end_position)
@@ -274,10 +274,10 @@ class View(object):
 
         for attack in attacks:
             for sub_attack in attack.sub_actions:
-                if not any(check_attack.attack_position == sub_attack.attack_position for check_attack in attacks):
-                    rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-                    rect.fill(self.interface.attack_shading)
-                    self.screen.blit(rect, coordinates.get(sub_attack.attack_position))
+                location = coordinates.get(sub_attack.attack_position)
+                if location not in sub_attack_locations and location not in attack_locations:
+                    sub_attack_locations.add(location)
+                    self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
                     string = str(int(round(sub_attack.chance_of_win * 100))) + "%"
                     location = self.percentage_sub_coordinates.get(sub_attack.attack_position)
                     self.write(string, location, self.font, colors.yellow)
