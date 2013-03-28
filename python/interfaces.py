@@ -66,7 +66,7 @@ class Rectangles(Interface):
         self.message_location = (410 * zoom, 400 * zoom)
         self.message_font_size = int(23 * zoom)
 
-        self.show_unit_coordinates = (400 * zoom, 20 * zoom)
+        self.show_unit_coordinates = (450 * zoom, 40 * zoom)
         self.right_side_rectangle = (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom)
 
         self.move_shading = pygame.Color(0, 0, 0, 160)
