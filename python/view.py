@@ -377,12 +377,11 @@ class View(object):
                 self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, base_x, base_y)
-                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, base_x, base_y)
-
-                if log.player_color == "Red":
-                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, base_x, base_y)
-                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, base_x, base_y)
+                    self.draw_unit_right(attacking_unit.name, "Green", 0, base_x, base_y)
+                    self.draw_unit_right(defending_unit.name, "Red", 1, base_x, base_y)
+                elif log.player_color == "Red":
+                    self.draw_unit_right(attacking_unit.name, "Red", 0, base_x, base_y)
+                    self.draw_unit_right(defending_unit.name, "Green", 1, base_x, base_y)
 
             else:
                 moving_unit = action.unit_reference
@@ -391,10 +390,9 @@ class View(object):
                 self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(moving_unit.name, "Green", 0, 0.7, base_x, base_y)
-
-                if log.player_color == "Red":
-                    self.draw_unit_right(moving_unit.name, "Red", 0, 0.7, base_x, base_y)
+                    self.draw_unit_right(moving_unit.name, "Green", 0, base_x, base_y)
+                elif log.player_color == "Red":
+                    self.draw_unit_right(moving_unit.name, "Red", 0, base_x, base_y)
 
     def draw_attack(self, action, base_x, base_y, symbol_location, log):
         attacking_unit = action.unit_reference
@@ -407,12 +405,11 @@ class View(object):
         self.screen.blit(pic, symbol_location)
 
         if log.player_color == "Green":
-            self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, base_x, base_y)
-            self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, base_x, base_y)
-
-        if log.player_color == "Red":
-            self.draw_unit_right(attacking_unit.name,  "Red", 0, 0.7, base_x, base_y)
-            self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, base_x, base_y)
+            self.draw_unit_right(attacking_unit.name, "Green", 0, base_x, base_y)
+            self.draw_unit_right(defending_unit.name, "Red", 1, base_x, base_y)
+        elif log.player_color == "Red":
+            self.draw_unit_right(attacking_unit.name,  "Red", 0, base_x, base_y)
+            self.draw_unit_right(defending_unit.name, "Green", 1, base_x, base_y)
 
     def draw_right(self):
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
@@ -438,8 +435,9 @@ class View(object):
         location = (base_x + 7 * self.zoom, base_y)
         self.write(string, location, self.font_bigger)
 
-    def draw_unit_right(self, unit_name, color, index, resize, base_x, base_y):
+    def draw_unit_right(self, unit_name, color, index, base_x, base_y):
 
+        resize = 0.6 * self.zoom
         location = (base_x + (65 + index * 100) * self.zoom, base_y + 4 * self.zoom )
         unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
