@@ -357,7 +357,10 @@ class View(object):
             endpos = (int(self.interface.board_size[1] * self.zoom), int((vpos + 62) * self.zoom))
             pygame.draw.line(self.screen, colors.black, startpos, endpos, 4)
 
+            symbol_location = (base_x + 118 * zoom, base_y + 12 * zoom)
 
+            if action.is_attack:
+                self.draw_attack(action, base_x, base_y, symbol_location, log)
 
             elif action.is_ability:
 
@@ -365,7 +368,7 @@ class View(object):
                 defending_unit = action.target_reference
 
                 pic = self.get_image(self.interface.ability_icon)
-                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
+                self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
                     self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, base_x, base_y)
@@ -379,7 +382,7 @@ class View(object):
                 moving_unit = action.unit_reference
 
                 pic = self.get_image(self.interface.move_icon)
-                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
+                self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
                     self.draw_unit_right(moving_unit.name, "Green", 0, 0.7, base_x, base_y)
