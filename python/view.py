@@ -213,7 +213,7 @@ class View(object):
         self.screen.blit(label, self.message_coordinates)
 
     def draw_unit(self, unit, position, color, selected=False):
-        unit_pic = self.get_unit_pic(unit.name, color)
+        unit_pic = self.get_unit_pic(unit.name)
         dimensions = (int(self.interface.unit_width), int(self.interface.unit_height))
         pic = self.get_image(unit_pic, dimensions)
 
@@ -436,7 +436,7 @@ class View(object):
 
         vpos = (vpos + 4) * self.zoom
         hpos = (hpos + 65 + index * 100) * self.zoom
-        unit_pic = self.get_unit_pic(unit_name, unit_color)
+        unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize), int(self.interface.unit_height * resize)))
         self.screen.blit(pic, (hpos, vpos))
