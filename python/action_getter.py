@@ -450,10 +450,12 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
         def longsword(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
             def get_attack(position, end_position, attack_position, move_with_attack):
-                attack = Action(position, end_position, attack_position, True, move_with_attack)
+                attack = Action(position, end_position=end_position, attack_position=attack_position,
+                                move_with_attack=move_with_attack)
                 for forward_position in four_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
-                        attack.sub_actions.append(Action(position, end_position, forward_position, True, False))
+                        attack.sub_actions.append(Action(position, end_position=end_position,
+                                                         attack_position=forward_position, move_with_attack=False))
                 return attack
 
             attacks = [get_attack(position, end_position, attack_position, move_with_attack) for end_position,
@@ -467,7 +469,8 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
         def triple_attack(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
             def get_attack(start_position, end_position, attack_position, move_with_attack):
-                attack = Action(start_position, end_position, attack_position, True, move_with_attack)
+                attack = Action(start_position, end_position=end_position, attack_position=attack_position,
+                                move_with_attack=move_with_attack)
                 for forward_position in two_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
                         attack.sub_actions.append(Action(start_position, end_position=end_position,
