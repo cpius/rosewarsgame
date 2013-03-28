@@ -43,6 +43,8 @@ class View(object):
         self.logbook = []
         self.maximum_number_of_logs = 5
 
+        self.message_line_distance = 30 * self.zoom
+
     def get_position_from_mouse_click(self, coordinates):
         x = int((coordinates[0] - self.interface.x_border) /
                 (self.interface.unit_width + self.interface.unit_padding_width)) + 1
