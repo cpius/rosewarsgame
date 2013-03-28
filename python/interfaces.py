@@ -63,7 +63,7 @@ class Rectangles(Interface):
         self.big_font_size = int(self.big_font_size * zoom)
         self.bigger_font_size = int(self.bigger_font_size * zoom)
 
-        self.message_coordinates = (410 * zoom, 400 * zoom)
+        self.message_location = (410 * zoom, 400 * zoom)
         self.message_font_size = int(23 * zoom)
 
         self.show_unit_coordinates = (400 * zoom, 20 * zoom)

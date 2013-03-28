@@ -23,7 +23,7 @@ class View(object):
 
         self.interface = settings.interface
         self.zoom = self.interface.zoom
-        self.message_coordinates = self.interface.message_coordinates
+        self.message_location = self.interface.message_location
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
 
@@ -57,8 +57,8 @@ class View(object):
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
-        x = self.message_coordinates[0]
-        y = self.message_coordinates[1]
+        x = self.message_location[0]
+        y = self.message_location[1]
         lines = ["Select counter for", unit_name, "'a' for attack", "'d' for defence"]
         for i, line in enumerate(lines):
             line_y = y + i * self.message_line_distance
@@ -66,7 +66,7 @@ class View(object):
         pygame.display.update()
 
     def draw_ask_about_ability(self, unit):
-        x, y = self.message_coordinates
+        x, y = self.message_location
         lines = ["Select ability:"]
         for ability in unit.abilities:
             string = ability + ": " + unit.descriptions[ability]
