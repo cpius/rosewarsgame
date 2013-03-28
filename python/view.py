@@ -429,7 +429,7 @@ class View(object):
         location = (base_x + 7 * self.zoom, base_y)
         self.write(string, location, self.font_bigger)
 
-    def draw_unit_right(self, unit_name, unit_color, index, resize, hpos, vpos):
+    def draw_unit_right(self, unit_name, color, index, resize, base_x, base_y):
 
         vpos = (vpos + 4) * self.zoom
         hpos = (hpos + 65 + index * 100) * self.zoom
