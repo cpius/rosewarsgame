@@ -208,9 +208,8 @@ class View(object):
         dimensions = (int(self.interface.unit_width), int(self.interface.unit_height))
         pic = self.get_image(unit_pic, dimensions)
 
-        self.screen.blit(pic, self.base_coordinates.get(position))
-
         base = self.base_coordinates.get(position)
+        self.screen.blit(pic, base)
 
         if selected:
             dimensions = (self.interface.unit_width, self.interface.unit_height)
