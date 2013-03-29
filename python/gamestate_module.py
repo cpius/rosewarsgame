@@ -15,8 +15,8 @@ class Gamestate:
         self.players = [player1, player2]
         self.actions_remaining = actions_remaining
 
-    def do_action(self, action):
-        action_doer.do_action(self, action)
+    def do_action(self, action, controller=None):
+        action_doer.do_action(self, action, controller)
 
         if self.actions_remaining > 0:
             self.available_actions = action_getter.get_actions(self)
