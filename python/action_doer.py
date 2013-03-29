@@ -210,7 +210,6 @@ def add_target(action, enemy_units, player_units):
 def update_final_position(action, controller=None):
 
     if action.unit.range == 1 and controller:
-        print "controller"
         move_with_attack = controller.ask_about_move_with_attack(action)
     else:
         move_with_attack = action.move_with_attack
