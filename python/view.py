@@ -67,6 +67,18 @@ class View(object):
             self.write_message(line, (x, line_y))
         pygame.display.update()
 
+    def draw_ask_about_move_with_attack(self, position):
+
+        base = self.base_coordinates.get(position)
+
+        dimensions = (self.interface.unit_width, self.interface.unit_height)
+        self.draw_rectangle(dimensions, base, self.interface.selected_shading)
+
+        self.write_message("Click the tile you want to stand on.", self.message_location)
+        pygame.display.update()
+
+        return True
+
     def draw_ask_about_ability(self, unit):
         x, y = self.message_location
         lines = ["Select ability:"]

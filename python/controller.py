@@ -186,6 +186,24 @@ class Controller(object):
                 elif event.type == QUIT:
                     self.exit_game()
 
+    def ask_about_move_with_attack(self, action):
+
+        self.view.draw_ask_about_move_with_attack(action.attack_position)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    position = self.view.get_position_from_mouse_click(event.pos)
+
+                    if event.button == 1:
+                        if position == action.attack_position:
+                            return True
+                        if position == action.end_position:
+                            return False
+
+                elif event.type == QUIT:
+                    self.exit_game()
+
     def pause(self):
         while True:
             for event in pygame.event.get():
