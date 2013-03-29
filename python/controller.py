@@ -82,32 +82,23 @@ class Controller(object):
 
         elif self.selecting_melee_target(position):
 
-            if hasattr(self.gamestate.current_player(), "extra_action"):
-                all_actions = self.gamestate.get_actions()
-            else:
-                all_actions = self.gamestate.get_actions()
+            possible_actions = [action for action in self.gamestate.get_actions() if
+                                action.start_position == self.start_position and action.attack_position == position and
+                                not action.move_with_attack]
 
-            action = None
-
-            for possible_action in all_actions:
-                if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == position and possible_action.move_with_attack:
-                    if possible_action.end_position == self.start_position:
-                        action = possible_action
-                        break
-                    action = possible_action
-
-            if not action:
-                for possible_action in all_actions:
-                    if possible_action.start_position == self.start_position and possible_action.attack_position == pos:
-                        action = possible_action
-
-            if not action:
+            if not possible_actions:
                 self.view.draw_message("Action not possible")
                 self.clear_move()
                 self.view.draw_game(self.gamestate)
+                return
+
+            if len(possible_actions) == 1:
+                action = possible_actions[0]
             else:
-                self.perform_action(action)
+                self.view.draw_game(self.gamestate)
+                action = self.pick_action_end_position(possible_actions)
+
+            self.perform_action(action)
 
         elif self.selecting_move(position):
             action = Action(self.start_position, end_position=position)
