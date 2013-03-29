@@ -300,13 +300,10 @@ class View(object):
 
         pygame.display.update()
 
+
     def draw_action(self, action, gamestate):
 
-        log = Log(action, gamestate.turn, gamestate.get_actions_remaining(), gamestate.current_player().color)
-        self.logbook.append(log)
-
-        if len(self.logbook) > self.maximum_number_of_logs:
-            self.logbook.pop(0)
+        self.draw_log(action, gamestate)
 
         pygame.draw.circle(self.screen, colors.black, self.center_coordinates.get(action.start_position), 10)
         self.draw_line(action.start_position, action.end_position)
@@ -345,7 +342,15 @@ class View(object):
     def refresh(self):
         pygame.display.flip()
 
-    def draw_log(self):
+    def draw_log(self, action=None, gamestate=None):
+
+        if action:
+            log = Log(action, gamestate.turn, gamestate.get_actions_remaining(), gamestate.current_player().color)
+            self.logbook.append(log)
+
+        if len(self.logbook) > self.maximum_number_of_logs:
+            self.logbook.pop(0)
+
         zoom = self.zoom
         log_heights = 64 * zoom
 
