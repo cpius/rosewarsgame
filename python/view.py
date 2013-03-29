@@ -300,6 +300,15 @@ class View(object):
 
         pygame.display.update()
 
+    def shade_positions(self, positions):
+        for position in positions:
+            base = self.base_coordinates.get(position)
+
+            dimensions = (self.interface.unit_width, self.interface.unit_height)
+            self.draw_rectangle(dimensions, base, self.interface.selected_shading)
+            self.draw_message("Click a tile to attack from")
+
+        pygame.display.update()
 
     def draw_action(self, action, gamestate):
 

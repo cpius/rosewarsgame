@@ -104,6 +104,27 @@ class Controller(object):
             action = Action(self.start_position, end_position=position)
             self.perform_action(action)
 
+    def pick_action_end_position(self, possible_actions):
+
+        end_positions = [action.end_position for action in possible_actions]
+
+        self.view.shade_positions(end_positions)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    position = self.view.get_position_from_mouse_click(event.pos)
+
+                    if event.button == 1:
+                        for action in possible_actions:
+                            if position == action.end_position:
+                                return action
+
+                elif event.type == QUIT:
+                    self.exit_game()
+
+
+
     def right_click(self, position):
         if not self.start_position:
             self.show_unit(position)
