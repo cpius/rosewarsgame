@@ -77,7 +77,7 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.selecting_ranged_target(position):
-            action = Action(self.start_position, attack_position=position, move_with_attack=False)
+            action = Action(self.start_position, attack_position=position)
             self.perform_action(action)
 
         elif self.selecting_melee_target(position):
