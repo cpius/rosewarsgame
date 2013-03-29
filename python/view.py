@@ -97,6 +97,18 @@ class View(object):
         pic = self.get_image(unit_pic, (int(236 * self.zoom), int(271 * self.zoom)))
         self.screen.blit(pic, self.interface.show_unit_coordinates)
 
+        x, y = self.interface.message_location
+        i = 0
+        if hasattr(unit, "descriptions"):
+            for attribute, description in unit.descriptions.items():
+                string = attribute.replace("_", " ").title() + ": " + description
+                lines = textwrap.wrap(string, self.interface.message_line_length)
+                for line in lines:
+                    i += 1
+                    line_y = y + i * self.message_line_distance
+                    self.write_message(line, (x, line_y))
+                i += 1
+
         pygame.display.flip()
 
     def save_screenshot(self, name):
