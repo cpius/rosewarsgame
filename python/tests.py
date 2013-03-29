@@ -4,9 +4,19 @@ import units as units_module
 import ai_module
 from player import Player
 from gamestate_module import Gamestate
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 
 class TestAI(unittest.TestCase):
+    def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
+        client = MongoClient()
+        database = client.unnamed
+        games = database.games
+
+        game = games.find_one({"_id": ObjectId("51521c97d288594d25090e5f")})
+        self.assertEqual(1, game["Turn"])
+
     def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
 
         test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
