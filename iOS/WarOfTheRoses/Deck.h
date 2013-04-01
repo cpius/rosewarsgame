@@ -11,7 +11,6 @@
 #import "BaseDeckStrategy.h"
 
 @interface Deck : NSObject {
-    
 }
 
 @property (nonatomic, strong) NSArray *cards;

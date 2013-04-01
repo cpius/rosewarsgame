@@ -100,7 +100,7 @@
             self.hasPerformedAttackThisRound = NO;
             self.attackActionCost = 0;
             
-            if (meleeAction.combatOutcome == kCombatOutcomeAttackSuccessful && meleeAction.meleeAttackType == kMeleeAttackTypeConquer) {
+            if (meleeAction.battleResult.combatOutcome == kCombatOutcomeAttackSuccessful && meleeAction.meleeAttackType == kMeleeAttackTypeConquer) {
                 [self consumeAllMoves];
             }
             else {

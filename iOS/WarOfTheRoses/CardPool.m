@@ -33,7 +33,6 @@
 
 -(NSArray*)shuffle:(NSArray *)array;
 
-- (Card*)createCardOfName:(UnitName)unitName;
 
 @end
 
@@ -50,7 +49,7 @@
     return self;
 }
 
-- (Card *)createCardOfName:(UnitName)unitName {
++ (Card *)createCardOfName:(UnitName)unitName {
     
     switch (unitName) {
         case kArcher:
@@ -121,11 +120,11 @@
     
     if (cardType == kCardTypeBasicUnit) {
         UnitName unitName = (arc4random() % 6);
-        drawnCard = [self createCardOfName:unitName];
+        drawnCard = [CardPool createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = kDiplomat;//(arc4random() % 13) + 6;
-        drawnCard = [self createCardOfName:unitName];
+        UnitName unitName = (arc4random() % 13) + 6;
+        drawnCard = [CardPool createCardOfName:unitName];
     }
     
     return drawnCard;

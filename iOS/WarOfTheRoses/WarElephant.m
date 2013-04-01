@@ -88,13 +88,13 @@
                 
                 MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
                 
-                CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:_aoeBattleStrategy];
+                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:_aoeBattleStrategy];
                 
-                [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome];
+                [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome.combatOutcome];
             }
         }
         
-        if (IsPushSuccessful(meleeAttackAction.combatOutcome) && !action.enemyCard.dead) {
+        if (IsPushSuccessful(meleeAttackAction.battleResult.combatOutcome) && !action.enemyCard.dead) {
             
             GridLocation *pushLocation = [action.enemyCard.cardLocation getPushLocationForGridLocationWhenComingFromGridLocation:[meleeAttackAction getEntryLocationInPath]];
             

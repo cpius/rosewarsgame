@@ -41,6 +41,9 @@
     
     game.currentRound = 1;
     
+    // During unittests myColor is always green
+    game.myColor = kPlayerGreen;
+    
     return game;
 }
 

@@ -37,4 +37,9 @@
     return NO;
 }
 
+- (AbilityTypes)abilityType {
+    
+    return kAbilityBribe;
+}
+
 @end

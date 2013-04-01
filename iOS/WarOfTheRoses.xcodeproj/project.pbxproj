@@ -18,7 +18,6 @@
 		6D0CBE9D16C233EA00D241A7 /* Background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBE9C16C233EA00D241A7 /* Background-ipad.png */; };
 		6D0CBEA316C25DCE00D241A7 /* EndTurnLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEA216C25DCD00D241A7 /* EndTurnLayer.m */; };
 		6D0CBEA516C26A2700D241A7 /* pageflip.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEA416C26A2700D241A7 /* pageflip.mp3 */; };
-		6D0CBEA716C282D900D241A7 /* testframe.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEA616C282D900D241A7 /* testframe.png */; };
 		6D0CBEAA16C2D80100D241A7 /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEA916C2D7FD00D241A7 /* SoundManager.m */; };
 		6D0CBEAD16C81F0800D241A7 /* CardSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEAC16C81F0600D241A7 /* CardSprite.m */; };
 		6D0CBEB016C971F500D241A7 /* attackbutton-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D0CBEAE16C971F400D241A7 /* attackbutton-hd.png */; };
@@ -68,8 +67,6 @@
 		6D61517216A88275007A104E /* archer_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61516A16A88272007A104E /* archer_icon-hd.png */; };
 		6D61517316A88275007A104E /* ballista_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61516B16A88272007A104E /* ballista_icon-hd.png */; };
 		6D61517416A88275007A104E /* catapult_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61516C16A88272007A104E /* catapult_icon-hd.png */; };
-		6D61517516A88275007A104E /* darkwood-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61516D16A88273007A104E /* darkwood-hd.png */; };
-		6D61517616A88275007A104E /* darkwood.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61516E16A88273007A104E /* darkwood.png */; };
 		6D61517716A88275007A104E /* heavycavalry_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61516F16A88274007A104E /* heavycavalry_icon-hd.png */; };
 		6D61517816A88275007A104E /* lightcavalry_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61517016A88275007A104E /* lightcavalry_icon-hd.png */; };
 		6D61517916A88275007A104E /* pikeman_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61517116A88275007A104E /* pikeman_icon-hd.png */; };
@@ -82,7 +79,6 @@
 		6D61518816A8867B007A104E /* exploding_ring.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D61518716A8867B007A104E /* exploding_ring.plist */; };
 		6D61518B16A89B9C007A104E /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D61518A16A89B9C007A104E /* GameScene.m */; };
 		6D61519116ADD357007A104E /* woddenbackground-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61518F16ADD355007A104E /* woddenbackground-hd.png */; };
-		6D61519216ADD357007A104E /* woddenbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61519016ADD356007A104E /* woddenbackground.png */; };
 		6D61519516ADD654007A104E /* redbackground-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61519316ADD652007A104E /* redbackground-hd.png */; };
 		6D61519616ADD654007A104E /* redbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D61519416ADD653007A104E /* redbackground.png */; };
 		6D6151A116AF2F9A007A104E /* AIPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6151A016AF2F99007A104E /* AIPlayer.m */; };
@@ -97,7 +93,6 @@
 		6D6900E1169588470071EC22 /* right_arrow-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D6900DF169588470071EC22 /* right_arrow-hd.png */; };
 		6D6900E2169588470071EC22 /* right_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D6900E0169588470071EC22 /* right_arrow.png */; };
 		6D6900E61695A1480071EC22 /* buttonclick.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6D6900E51695A1480071EC22 /* buttonclick.wav */; };
-		6D69010D1696C8740071EC22 /* rose.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D69010C1696C8740071EC22 /* rose.png */; };
 		6D6901101696CD4F0071EC22 /* boom.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6D69010F1696CD4F0071EC22 /* boom.wav */; };
 		6D6901121696CF350071EC22 /* swoosh.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6D6901111696CF350071EC22 /* swoosh.wav */; };
 		6D69011B169715DB0071EC22 /* greenboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D69011A169715DB0071EC22 /* greenboard.png */; };
@@ -159,6 +154,11 @@
 		6DB204BB16FA61980004FFCB /* diplomat_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B716FA61970004FFCB /* diplomat_icon-hd.png */; };
 		6DB204BC16FA61980004FFCB /* diplomat_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DB204B816FA61980004FFCB /* diplomat_icon.png */; };
 		6DB204BF16FB9E5F0004FFCB /* CoolDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204BE16FB9E5E0004FFCB /* CoolDown.m */; };
+		6DB204C316FED24F0004FFCB /* CardForSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204C216FED24F0004FFCB /* CardForSerialization.m */; };
+		6DB204C61700479D0004FFCB /* TimedAbilityForSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204C51700479D0004FFCB /* TimedAbilityForSerialization.m */; };
+		6DB204C917004BF70004FFCB /* GameCenterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204C817004BF70004FFCB /* GameCenterTest.m */; };
+		6DB204CC170385AA0004FFCB /* BattleReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204CB170385A80004FFCB /* BattleReport.m */; };
+		6DB204CF170386C30004FFCB /* BattleResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB204CE170386C10004FFCB /* BattleResult.m */; };
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
@@ -373,8 +373,6 @@
 		6DF2FD68165D68D700F08664 /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2FD67165D68D600F08664 /* Deck.m */; };
 		6DF2FD6D165D767F00F08664 /* deckgreencard-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DF2FD6B165D767F00F08664 /* deckgreencard-hd.png */; };
 		6DF2FD6E165D767F00F08664 /* deckgreencard.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DF2FD6C165D767F00F08664 /* deckgreencard.png */; };
-		6DF2FD71165D78C100F08664 /* darkwood-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DF2FD6F165D78C100F08664 /* darkwood-hd.png */; };
-		6DF2FD72165D78C100F08664 /* darkwood.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DF2FD70165D78C100F08664 /* darkwood.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -405,7 +403,6 @@
 		6D0CBEA116C25DCD00D241A7 /* EndTurnLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndTurnLayer.h; sourceTree = "<group>"; };
 		6D0CBEA216C25DCD00D241A7 /* EndTurnLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EndTurnLayer.m; sourceTree = "<group>"; };
 		6D0CBEA416C26A2700D241A7 /* pageflip.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = pageflip.mp3; path = Resources/Sounds/pageflip.mp3; sourceTree = "<group>"; };
-		6D0CBEA616C282D900D241A7 /* testframe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = testframe.png; path = Resources/Images/testframe.png; sourceTree = "<group>"; };
 		6D0CBEA816C2D7F900D241A7 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
 		6D0CBEA916C2D7FD00D241A7 /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundManager.m; sourceTree = "<group>"; };
 		6D0CBEAB16C81F0500D241A7 /* CardSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardSprite.h; sourceTree = "<group>"; };
@@ -481,8 +478,6 @@
 		6D61516A16A88272007A104E /* archer_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "archer_icon-hd.png"; path = "Resources/Images/archer_icon-hd.png"; sourceTree = "<group>"; };
 		6D61516B16A88272007A104E /* ballista_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ballista_icon-hd.png"; path = "Resources/Images/ballista_icon-hd.png"; sourceTree = "<group>"; };
 		6D61516C16A88272007A104E /* catapult_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "catapult_icon-hd.png"; path = "Resources/Images/catapult_icon-hd.png"; sourceTree = "<group>"; };
-		6D61516D16A88273007A104E /* darkwood-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "darkwood-hd.png"; path = "Resources/Images/darkwood-hd.png"; sourceTree = "<group>"; };
-		6D61516E16A88273007A104E /* darkwood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = darkwood.png; path = Resources/Images/darkwood.png; sourceTree = "<group>"; };
 		6D61516F16A88274007A104E /* heavycavalry_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "heavycavalry_icon-hd.png"; path = "Resources/Images/heavycavalry_icon-hd.png"; sourceTree = "<group>"; };
 		6D61517016A88275007A104E /* lightcavalry_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "lightcavalry_icon-hd.png"; path = "Resources/Images/lightcavalry_icon-hd.png"; sourceTree = "<group>"; };
 		6D61517116A88275007A104E /* pikeman_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pikeman_icon-hd.png"; path = "Resources/Images/pikeman_icon-hd.png"; sourceTree = "<group>"; };
@@ -496,7 +491,6 @@
 		6D61518916A89B9C007A104E /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		6D61518A16A89B9C007A104E /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
 		6D61518F16ADD355007A104E /* woddenbackground-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "woddenbackground-hd.png"; path = "Resources/woddenbackground-hd.png"; sourceTree = "<group>"; };
-		6D61519016ADD356007A104E /* woddenbackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = woddenbackground.png; path = Resources/woddenbackground.png; sourceTree = "<group>"; };
 		6D61519316ADD652007A104E /* redbackground-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "redbackground-hd.png"; path = "Resources/Images/redbackground-hd.png"; sourceTree = "<group>"; };
 		6D61519416ADD653007A104E /* redbackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = redbackground.png; path = Resources/Images/redbackground.png; sourceTree = "<group>"; };
 		6D61519F16AF2F99007A104E /* AIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIPlayer.h; sourceTree = "<group>"; };
@@ -514,7 +508,6 @@
 		6D6900DF169588470071EC22 /* right_arrow-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "right_arrow-hd.png"; path = "Resources/Images/right_arrow-hd.png"; sourceTree = "<group>"; };
 		6D6900E0169588470071EC22 /* right_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right_arrow.png; path = Resources/Images/right_arrow.png; sourceTree = "<group>"; };
 		6D6900E51695A1480071EC22 /* buttonclick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = buttonclick.wav; sourceTree = "<group>"; };
-		6D69010C1696C8740071EC22 /* rose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rose.png; sourceTree = "<group>"; };
 		6D69010F1696CD4F0071EC22 /* boom.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = boom.wav; sourceTree = "<group>"; };
 		6D6901111696CF350071EC22 /* swoosh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = swoosh.wav; sourceTree = "<group>"; };
 		6D69011A169715DB0071EC22 /* greenboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = greenboard.png; path = Resources/greenboard.png; sourceTree = "<group>"; };
@@ -595,6 +588,16 @@
 		6DB204B816FA61980004FFCB /* diplomat_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = diplomat_icon.png; path = Resources/Images/diplomat_icon.png; sourceTree = "<group>"; };
 		6DB204BD16FB9E5C0004FFCB /* CoolDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoolDown.h; sourceTree = "<group>"; };
 		6DB204BE16FB9E5E0004FFCB /* CoolDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoolDown.m; sourceTree = "<group>"; };
+		6DB204C116FED24F0004FFCB /* CardForSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardForSerialization.h; sourceTree = "<group>"; };
+		6DB204C216FED24F0004FFCB /* CardForSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardForSerialization.m; sourceTree = "<group>"; };
+		6DB204C41700479C0004FFCB /* TimedAbilityForSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimedAbilityForSerialization.h; sourceTree = "<group>"; };
+		6DB204C51700479D0004FFCB /* TimedAbilityForSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimedAbilityForSerialization.m; sourceTree = "<group>"; };
+		6DB204C717004BF60004FFCB /* GameCenterTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCenterTest.h; sourceTree = "<group>"; };
+		6DB204C817004BF70004FFCB /* GameCenterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCenterTest.m; sourceTree = "<group>"; };
+		6DB204CA170385A60004FFCB /* BattleReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattleReport.h; sourceTree = "<group>"; };
+		6DB204CB170385A80004FFCB /* BattleReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BattleReport.m; sourceTree = "<group>"; };
+		6DB204CD170386BF0004FFCB /* BattleResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattleResult.h; sourceTree = "<group>"; };
+		6DB204CE170386C10004FFCB /* BattleResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BattleResult.m; sourceTree = "<group>"; };
 		6DB9A28216D2B18400B4F546 /* FixedDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedDeckStrategy.h; sourceTree = "<group>"; };
 		6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28516D2B37D00B4F546 /* BaseDeckStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDeckStrategy.h; sourceTree = "<group>"; };
@@ -981,8 +984,6 @@
 		6DF2FD67165D68D600F08664 /* Deck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deck.m; sourceTree = "<group>"; };
 		6DF2FD6B165D767F00F08664 /* deckgreencard-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deckgreencard-hd.png"; sourceTree = "<group>"; };
 		6DF2FD6C165D767F00F08664 /* deckgreencard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deckgreencard.png; sourceTree = "<group>"; };
-		6DF2FD6F165D78C100F08664 /* darkwood-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "darkwood-hd.png"; sourceTree = "<group>"; };
-		6DF2FD70165D78C100F08664 /* darkwood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = darkwood.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1066,6 +1067,10 @@
 				6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */,
 				6DB2049716F8DEA30004FFCB /* AbilityAction.h */,
 				6DB2049816F8DEA40004FFCB /* AbilityAction.m */,
+				6DB204CA170385A60004FFCB /* BattleReport.h */,
+				6DB204CB170385A80004FFCB /* BattleReport.m */,
+				6DB204CD170386BF0004FFCB /* BattleResult.h */,
+				6DB204CE170386C10004FFCB /* BattleResult.m */,
 			);
 			name = Action;
 			sourceTree = "<group>";
@@ -1088,6 +1093,8 @@
 				6DC7F48D16DEAF0D00CD5071 /* SpecialUnitTest.m */,
 				6DC7F48F16DFDD3100CD5071 /* GameBoardMockup.h */,
 				6DC7F49016DFDD3200CD5071 /* GameBoardMockup.m */,
+				6DB204C717004BF60004FFCB /* GameCenterTest.h */,
+				6DB204C817004BF70004FFCB /* GameCenterTest.m */,
 			);
 			path = WarOfTheRosesTest;
 			sourceTree = "<group>";
@@ -1214,10 +1221,6 @@
 				6DC7F44A16D94F9A00CD5071 /* chariot_icon.png */,
 				6DC7F43C16D7F17700CD5071 /* crosshair-hd.png */,
 				6DC7F43D16D7F17700CD5071 /* crosshair.png */,
-				6D61516D16A88273007A104E /* darkwood-hd.png */,
-				6DF2FD6F165D78C100F08664 /* darkwood-hd.png */,
-				6D61516E16A88273007A104E /* darkwood.png */,
-				6DF2FD70165D78C100F08664 /* darkwood.png */,
 				6DF2FD6B165D767F00F08664 /* deckgreencard-hd.png */,
 				6DF2FD6C165D767F00F08664 /* deckgreencard.png */,
 				6DF2FB9316596C5C00F08664 /* Default.png */,
@@ -1265,12 +1268,9 @@
 				6D61519416ADD653007A104E /* redbackground.png */,
 				6D6900DF169588470071EC22 /* right_arrow-hd.png */,
 				6D6900E0169588470071EC22 /* right_arrow.png */,
-				6D69010C1696C8740071EC22 /* rose.png */,
 				6DC7F47216DCA0ED00CD5071 /* swordclash-hd.png */,
 				6DC7F47316DCA0ED00CD5071 /* swordclash.png */,
-				6D0CBEA616C282D900D241A7 /* testframe.png */,
 				6D61518F16ADD355007A104E /* woddenbackground-hd.png */,
-				6D61519016ADD356007A104E /* woddenbackground.png */,
 				6D6151A716AFD67B007A104E /* woddenbackground2-hd.png */,
 				6D6151A816AFD67B007A104E /* woddenbackground2.png */,
 			);
@@ -1344,6 +1344,17 @@
 				6DB2048A16F3B6D70004FFCB /* WarElephantBattleStrategy.m */,
 			);
 			name = BattleStrategy;
+			sourceTree = "<group>";
+		};
+		6DB204C016FED21D0004FFCB /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				6DB204C116FED24F0004FFCB /* CardForSerialization.h */,
+				6DB204C216FED24F0004FFCB /* CardForSerialization.m */,
+				6DB204C41700479C0004FFCB /* TimedAbilityForSerialization.h */,
+				6DB204C51700479D0004FFCB /* TimedAbilityForSerialization.m */,
+			);
+			name = Serialization;
 			sourceTree = "<group>";
 		};
 		6DC7F48116DCECD500CD5071 /* DiceStrategy */ = {
@@ -1833,6 +1844,7 @@
 		6DF2FD1F165C21CD00F08664 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				6DB204C016FED21D0004FFCB /* Serialization */,
 				6DB2048116F353080004FFCB /* BattleStrategy */,
 				6DD5886416E53B1C00466DDB /* Abilities */,
 				6DC7F48116DCECD500CD5071 /* DiceStrategy */,
@@ -2014,8 +2026,6 @@
 				6DF2FD1B165C1DF300F08664 /* Background-hd.png in Resources */,
 				6DF2FD6D165D767F00F08664 /* deckgreencard-hd.png in Resources */,
 				6DF2FD6E165D767F00F08664 /* deckgreencard.png in Resources */,
-				6DF2FD71165D78C100F08664 /* darkwood-hd.png in Resources */,
-				6DF2FD72165D78C100F08664 /* darkwood.png in Resources */,
 				6D5E595D166D42C0007429BD /* archer_icon.png in Resources */,
 				6D5E595F166D4426007429BD /* archer_0.png in Resources */,
 				6D5E5A39167FB425007429BD /* ballista_icon.png in Resources */,
@@ -2034,7 +2044,6 @@
 				6D6900E1169588470071EC22 /* right_arrow-hd.png in Resources */,
 				6D6900E2169588470071EC22 /* right_arrow.png in Resources */,
 				6D6900E61695A1480071EC22 /* buttonclick.wav in Resources */,
-				6D69010D1696C8740071EC22 /* rose.png in Resources */,
 				6D6901101696CD4F0071EC22 /* boom.wav in Resources */,
 				6D6901121696CF350071EC22 /* swoosh.wav in Resources */,
 				6D69011B169715DB0071EC22 /* greenboard.png in Resources */,
@@ -2045,8 +2054,6 @@
 				6D61517216A88275007A104E /* archer_icon-hd.png in Resources */,
 				6D61517316A88275007A104E /* ballista_icon-hd.png in Resources */,
 				6D61517416A88275007A104E /* catapult_icon-hd.png in Resources */,
-				6D61517516A88275007A104E /* darkwood-hd.png in Resources */,
-				6D61517616A88275007A104E /* darkwood.png in Resources */,
 				6D61517716A88275007A104E /* heavycavalry_icon-hd.png in Resources */,
 				6D61517816A88275007A104E /* lightcavalry_icon-hd.png in Resources */,
 				6D61517916A88275007A104E /* pikeman_icon-hd.png in Resources */,
@@ -2058,7 +2065,6 @@
 				6D61518516A88393007A104E /* pikeman_0-hd.png in Resources */,
 				6D61518816A8867B007A104E /* exploding_ring.plist in Resources */,
 				6D61519116ADD357007A104E /* woddenbackground-hd.png in Resources */,
-				6D61519216ADD357007A104E /* woddenbackground.png in Resources */,
 				6D61519516ADD654007A104E /* redbackground-hd.png in Resources */,
 				6D61519616ADD654007A104E /* redbackground.png in Resources */,
 				6D6151A516AFC32D007A104E /* battle-hd.png in Resources */,
@@ -2071,7 +2077,6 @@
 				6D0CBE9816C1968600D241A7 /* flame.plist in Resources */,
 				6D0CBE9D16C233EA00D241A7 /* Background-ipad.png in Resources */,
 				6D0CBEA516C26A2700D241A7 /* pageflip.mp3 in Resources */,
-				6D0CBEA716C282D900D241A7 /* testframe.png in Resources */,
 				6D0CBEB016C971F500D241A7 /* attackbutton-hd.png in Resources */,
 				6D0CBEB116C971F500D241A7 /* attackbutton.png in Resources */,
 				6D0CBEB416C9777D00D241A7 /* backbutton-hd.png in Resources */,
@@ -2199,6 +2204,7 @@
 				6DC7F48B16DE875C00CD5071 /* TestHelper.m in Sources */,
 				6DC7F48E16DEAF0E00CD5071 /* SpecialUnitTest.m in Sources */,
 				6DC7F49116DFDD3200CD5071 /* GameBoardMockup.m in Sources */,
+				6DB204C917004BF70004FFCB /* GameCenterTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2386,6 +2392,10 @@
 				6DB204A716F9E9C70004FFCB /* AbilityFactory.m in Sources */,
 				6DB204B416FA5D850004FFCB /* Diplomat.m in Sources */,
 				6DB204BF16FB9E5F0004FFCB /* CoolDown.m in Sources */,
+				6DB204C316FED24F0004FFCB /* CardForSerialization.m in Sources */,
+				6DB204C61700479D0004FFCB /* TimedAbilityForSerialization.m in Sources */,
+				6DB204CC170385AA0004FFCB /* BattleReport.m in Sources */,
+				6DB204CF170386C30004FFCB /* BattleResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

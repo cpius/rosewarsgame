@@ -16,6 +16,7 @@
 #import "TimedBonus.h"
 #import "StandardBattleStrategy.h"
 #import "GameManager.h"
+#import "BattleResult.h"
 
 @implementation CombatTest
 
@@ -49,9 +50,9 @@
     _attackerFixedStrategy.fixedDieValue = 3;
     _defenderFixedStrategy.fixedDieValue = 1;
     
-    CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
+    BattleResult *outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
     
-    STAssertTrue(IsDefenseSuccessful(outcome), @"Pike should have defended successfully");
+    STAssertTrue(IsDefenseSuccessful(outcome.combatOutcome), @"Pike should have defended successfully");
 
     STAssertTrue(!defender.dead, @"Defender isn't dead");
     STAssertTrue(!attacker.dead, @"Attacker isn't dead");
@@ -72,9 +73,9 @@
     _attackerFixedStrategy.fixedDieValue = 5;
     _defenderFixedStrategy.fixedDieValue = 4;
     
-    CombatOutcome outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
+    BattleResult *outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
     
-    STAssertTrue(IsAttackSuccessful(outcome), @"Attack should be successful");
+    STAssertTrue(IsAttackSuccessful(outcome.combatOutcome), @"Attack should be successful");
     
     STAssertTrue(defender.dead, @"Defender is dead");
     STAssertTrue(!attacker.dead, @"Attacker isn't dead");

@@ -29,8 +29,6 @@
         self.moveActionCost = self.attackActionCost = 1;
         self.hitpoints = 1;
         
-        hasSpecialAbility = YES;
-        
         self.attackSound = @"bow_fired.wav";
         self.frontImageSmall = @"archer_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"archer_%d.png", self.cardColor];

@@ -32,4 +32,6 @@
 
 - (GridLocation *)getPushLocationForGridLocationWhenComingFromGridLocation:(GridLocation *)comingFromLocation;
 
+- (GridLocation*)flipBacklineFromCurrentBackline:(NSUInteger)currentBackline;
+
 @end

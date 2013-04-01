@@ -13,12 +13,12 @@
 
 #import "AIStrategyAdvancer.h"
 #import "AIStrategyCatapulter.h"
+#import "GCTurnBasedMatchHelper.h"
 
 @implementation GameManager
 
 @synthesize delegate = _delegate;
 @synthesize currentGame = _currentGame;
-@synthesize currentPlayersTurn = _currentPlayersTurn;
 
 - (id)init {
     
@@ -48,6 +48,12 @@
     return _instance;
 }
 
+- (void)continueExistingGame {
+    
+    _currentGame = [[Game alloc] init];
+    _currentGame.gametype = kGameTypeMultiPlayer;
+}
+
 - (void)startNewGameOfType:(GameTypes)gameType {
     
     _currentGame = [[Game alloc] init];
@@ -59,6 +65,11 @@
     // Only 1 action in first round
     _currentGame.numberOfAvailableActions = 1;
     _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:_currentGame.myColor];
+    
+    if (gameType == kGameTypeMultiPlayer) {
+        
+        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:_currentGame.enemyColor];
+    }
     
     if (gameType == kGameTypeSinglePlayer) {
         
@@ -85,8 +96,18 @@
         NSLog(@"Number of retries before deck met requirements: %d", retries);
     }
     
-    // TODO: Random starter
-    _currentPlayersTurn = kPlayerGreen;
+    // Random color (green or red)
+    _currentGame.currentPlayersTurn = arc4random() % 2;;
+}
+
+- (PlayerColors)currentPlayersTurn {
+    
+    return _currentGame.currentPlayersTurn;
+}
+
+- (void)setCurrentPlayersTurn:(PlayerColors)currentPlayersTurn {
+    
+    _currentGame.currentPlayersTurn = currentPlayersTurn;
 }
 
 - (Card*)cardLocatedAtGridLocation:(GridLocation*)gridLocation {
@@ -145,7 +166,7 @@
     // Check if any units has remaining actions
     NSArray *unitsToCheck;
     
-    if (_currentPlayersTurn == _currentGame.myColor) {
+    if (_currentGame.currentPlayersTurn == _currentGame.myColor) {
         unitsToCheck = _currentGame.myDeck.cards;
     }
     else {
@@ -165,11 +186,11 @@
     return YES;
 }
 
-- (CombatOutcome)resolveCombatBetween:(Card*)attacker defender:(Card*)defender battleStrategy:(id<BattleStrategy>)battleStrategy {
+- (BattleResult*)resolveCombatBetween:(Card*)attacker defender:(Card*)defender battleStrategy:(id<BattleStrategy>)battleStrategy {
     
-    CombatOutcome outcome = [battleStrategy resolveCombatBetweenAttacker:attacker defender:defender gameManager:self];
+    BattleResult *battleResult = [battleStrategy resolveCombatBetweenAttacker:attacker defender:defender gameManager:self];
     
-    return outcome;
+    return battleResult;
 }
 
 - (void)endTurn {
@@ -192,10 +213,14 @@
         [_currentGame.enemyDeck resetMoveCounters];
     }
     
-    _currentPlayersTurn = !_currentPlayersTurn;
+    _currentGame.currentPlayersTurn = !_currentGame.currentPlayersTurn;
+    
+    if (_currentGame.gametype == kGameTypeMultiPlayer) {
+        [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[_currentGame serializeCurrentGame]];
+    }
     
     if ([_delegate respondsToSelector:@selector(turnChangedToPlayerWithColor:)]) {
-        [_delegate turnChangedToPlayerWithColor:_currentPlayersTurn];
+        [_delegate turnChangedToPlayerWithColor:_currentGame.currentPlayersTurn];
     }
 }
 
@@ -240,15 +265,14 @@
         
         Card *card = [_currentGame.unitLayout objectForKey:location];
         
-        if ([card isOwnedByPlayerWithColor:_currentGame.enemyColor] && location.row == 8) {
+        if ([card isOwnedByPlayerWithColor:_currentGame.enemyColor] && location.row == LOWER_BACKLINE) {
             return kGameResultDefeat;
         }
 
-        if ([card isOwnedByPlayerWithColor:_currentGame.myColor] && location.row == 1) {
+        if ([card isOwnedByPlayerWithColor:_currentGame.myColor] && location.row == UPPER_BACKLINE) {
             return kGameResultVictory;
         }
     }
-    
 
     _currentGame.gameOver = NO;
     

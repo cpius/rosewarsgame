@@ -143,4 +143,15 @@
     STAssertTrue([_manager shouldEndTurn], @"shouldEndTurn should return YES");
 }
 
+- (void)testFlipBackline {
+    
+    GridLocation *firstLocation = [[GridLocation gridLocationWithRow:3 column:3] flipBacklineFromCurrentBackline:UPPER_BACKLINE];
+    STAssertTrue(firstLocation.column == 3, @"Column stays the same after flip");
+    STAssertTrue(firstLocation.row == 6, @"Row should be 6 after flip");
+    
+    GridLocation *secondLocation = [[GridLocation gridLocationWithRow:8 column:1] flipBacklineFromCurrentBackline:LOWER_BACKLINE];
+    STAssertTrue(secondLocation.column == 1, @"Column stays the same after flip");
+    STAssertTrue(secondLocation.row == 1, @"Row should be 1 after flip");
+}
+
 @end

@@ -21,4 +21,9 @@
     return YES;
 }
 
+- (AbilityTypes)abilityType {
+    
+    return kAbilityImprovedWeapons;
+}
+
 @end

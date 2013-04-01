@@ -15,6 +15,7 @@
     NSMutableArray *_specialTypesCardPool;
 }
 
++ (Card *)createCardOfName:(UnitName)unitName;
 - (Card *)drawCardOfCardType:(CardType)cardType;
 
 @end

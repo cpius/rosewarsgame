@@ -32,4 +32,10 @@
     
     CCLOG(@"Card: %@ ended cooldown", self.card);
 }
+
+- (AbilityTypes)abilityType {
+    
+    return kAbilityCoolDown;
+}
+
 @end

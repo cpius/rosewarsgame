@@ -134,6 +134,11 @@
     return _finalRange;
 }
 
+- (NSUInteger)getTotalBonusValue {
+    
+    return [self getRawBonusValue] + [self getTimedBonusValue];
+}
+
 - (AttributeRange)finalValue {
 
     return [self calculateValue];

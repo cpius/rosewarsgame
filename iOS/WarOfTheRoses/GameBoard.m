@@ -44,14 +44,14 @@
 
     NSUInteger rowOffset = 0;
     
-    if (color == kPlayerGreen && colorOfBottomPlayer == kPlayerGreen) {
+/*    if (color == kPlayerGreen && colorOfBottomPlayer == kPlayerGreen) {
         rowOffset = 4;
     }
     
     if (color == kPlayerRed && colorOfBottomPlayer == kPlayerRed) {
         rowOffset = 4;
     }
-    
+  */  
     for (CardSprite *cardSprite in deck) {
         
         GameBoardNode *node = [self getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:cardSprite.model.cardLocation.row + rowOffset column:cardSprite.model.cardLocation.column]];

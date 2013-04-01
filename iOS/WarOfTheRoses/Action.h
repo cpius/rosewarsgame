@@ -10,6 +10,7 @@
 #import "Card.h"
 #import "GridLocation.h"
 
+@class BattleReport;
 @class Action;
 @class GameManager;
 @protocol ActionDelegate <NSObject>
@@ -39,6 +40,8 @@
 
 @property (nonatomic, readonly) ActionTypes actionType;
 @property (nonatomic, readonly) GridLocation *startLocation;
+
+@property (nonatomic, strong) BattleReport *battleReport;
 
 - (id)initWithPath:(NSArray*)path andCardInAction:(Card*)card enemyCard:(Card*)enemyCard;
 

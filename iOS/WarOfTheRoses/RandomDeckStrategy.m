@@ -56,7 +56,7 @@
 - (void)placeCardsInDeck:(Deck *)deck inGameBoardSide:(GameBoardSides)gameBoardSide {
     
     NSUInteger offset = 0;
-    
+        
     for (Card *card in deck.cards) {
         
         BOOL cardInValidPosition = NO;

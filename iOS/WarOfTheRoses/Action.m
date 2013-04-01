@@ -9,6 +9,7 @@
 #import "Action.h"
 #import "PathFinderStep.h"
 #import "GameManager.h"
+#import "BattleReport.h"
 
 @implementation Action
 

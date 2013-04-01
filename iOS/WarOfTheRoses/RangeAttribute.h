@@ -47,6 +47,8 @@ typedef enum {
 - (void)addTimedBonus:(TimedBonus*)timedBonus;
 - (NSUInteger)getTimedBonusValue;
 
+- (NSUInteger)getTotalBonusValue;
+
 - (void)removeRawBonus:(RawBonus*)rawBonus;
 - (void)removeTimedBonus:(TimedBonus*)timedBonus;
 

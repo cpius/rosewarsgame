@@ -27,8 +27,6 @@
         self.moveActionCost = self.attackActionCost = 1;
         self.hitpoints = 1;
         
-        hasSpecialAbility = YES;
-        
         self.attackSound = @"sword_sound.wav";
 
         self.frontImageSmall = @"pikeman_icon.png";

@@ -15,7 +15,9 @@
     return [[StandardBattleStrategy alloc] init];
 }
 
-- (CombatOutcome)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager {
+- (BattleResult*)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager {
+    
+    BattleResult *battleResult = [BattleResult battleResultWithAttacker:attacker defender:defender];
     
     [attacker combatStartingAgainstDefender:defender];
     [defender combatStartingAgainstAttacker:attacker];
@@ -30,6 +32,9 @@
     
     NSUInteger attackRoll = [self.attackerDiceStrategy rollDiceWithDie:6];
     NSUInteger defenceRoll = [self.defenderDiceStrategy rollDiceWithDie:6];
+    
+    battleResult.attackRoll = attackRoll;
+    battleResult.defenseRoll = defenceRoll;
     
     CCLOG(@"Attack roll: %d", attackRoll);
     CCLOG(@"Defence roll: %d", defenceRoll);
@@ -61,7 +66,9 @@
     [attacker combatFinishedAgainstDefender:defender withOutcome:outcome];
     [defender combatFinishedAgainstAttacker:attacker withOutcome:outcome];
     
-    return outcome;
+    battleResult.combatOutcome = outcome;
+    
+    return battleResult;
 }
 
 @end

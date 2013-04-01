@@ -15,6 +15,8 @@
 @synthesize delegate = _delegate;
 @synthesize friendlyAbility = _friendlyAbility;
 @synthesize card = _card;
+@synthesize abilityType = _abilityType;
+@synthesize abilityStartedInRound = _abilityStartedInRound;
 
 - (id)initOnCard:(Card *)card {
     

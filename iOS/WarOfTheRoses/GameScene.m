@@ -95,19 +95,20 @@
                 
         [self addChild:_gameboard];
         
-        _myCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.myDeck.cards.count];
-        _enemyCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.enemyDeck.cards.count];
-       
-        [self addDeckToScene:[GameManager sharedManager].currentGame.myDeck];
-        [self addDeckToScene:[GameManager sharedManager].currentGame.enemyDeck];
-
         [_gameboard layoutBoard];
-        [_gameboard layoutDeck:_myCards forPlayerWithColor:_gameManager.currentGame.myColor];
-        [_gameboard layoutDeck:_enemyCards forPlayerWithColor:_gameManager.currentGame.enemyColor];
-        
-        [self populateUnitLayout];
 
-        _originalPos = self.position;
+        _myCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.myDeck.cards.count];
+        [self addDeckToScene:[GameManager sharedManager].currentGame.myDeck];
+        [_gameboard layoutDeck:_myCards forPlayerWithColor:_gameManager.currentGame.myColor];
+
+        if (_gameManager.currentGame.state == kGameStateGameStarted) {
+            _enemyCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.enemyDeck.cards.count];
+            [self addDeckToScene:[GameManager sharedManager].currentGame.enemyDeck];
+            [_gameboard layoutDeck:_enemyCards forPlayerWithColor:_gameManager.currentGame.enemyColor];
+        }
+        
+        [_gameManager.currentGame populateUnitLayout];
+
         self.isTouchEnabled = YES;
         
         _battlePlan = [[BattlePlan alloc] init];
@@ -133,25 +134,12 @@
         
         [self addChild:cardSprite];
         
-        if ([card isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
+        if ([card isOwnedByMe]) {
             [_myCards addObject:cardSprite];
         }
         else {
             [_enemyCards addObject:cardSprite];
         }
-    }
-}
-
-- (void)populateUnitLayout {
-    
-    Game *currentGame = [GameManager sharedManager].currentGame;
-    
-    for (Card *card in currentGame.myDeck.cards) {
-        [currentGame.unitLayout setObject:card forKey:card.cardLocation];
-    }
-    
-    for (Card *card in currentGame.enemyDeck.cards) {
-        [currentGame.unitLayout setObject:card forKey:card.cardLocation];
     }
 }
 
@@ -161,6 +149,18 @@
 }
 
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [touches anyObject];
+
+    if (CGRectContainsPoint(_backButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
+        
+        [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
+        return;
+    }
+
+    if (_gameManager.currentGame.state != kGameStateGameStarted) {
+        return;
+    }
     
     if (_gameManager.currentGame.gameOver) {
         [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
@@ -174,15 +174,7 @@
     if (_gameboard.isMoving) {
         return;
     }
-            
-    UITouch *touch = [touches anyObject];
-    
-    if (CGRectContainsPoint(_backButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
-        
-        [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
-        return;
-    }
-    
+                    
     if (_showingDetailOfNode != nil) {
         return;
     }
@@ -322,7 +314,7 @@
     
     [self updateRemainingActions:_gameManager.currentGame.numberOfAvailableActions];
 
-    if (player == _gameManager.currentGame.enemyColor) {
+    if (_gameManager.currentGame.gametype == kGameTypeSinglePlayer && player == _gameManager.currentGame.enemyColor) {
         
         [self performSelector:@selector(doEnemyPlayerTurn) withObject:nil afterDelay:1.0];
     }

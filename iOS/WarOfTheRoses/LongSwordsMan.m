@@ -74,9 +74,9 @@
                 
                 MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
                 
-                CombatOutcome outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
+                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
 
-                [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome];
+                [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome.combatOutcome];
             }
         }
     }

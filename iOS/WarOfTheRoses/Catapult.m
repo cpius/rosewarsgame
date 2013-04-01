@@ -28,8 +28,6 @@
         self.moveActionCost = 1;
         self.hitpoints = 1;
         
-        hasSpecialAbility = NO;
-        
         self.attackSound = @"catapult_attacksound.wav";
         
         self.frontImageSmall = @"catapult_icon.png";

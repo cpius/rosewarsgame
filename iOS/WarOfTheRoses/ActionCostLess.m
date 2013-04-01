@@ -35,4 +35,9 @@
     return YES;
 }
 
+- (AbilityTypes)abilityType {
+    
+    return kAbilityActionCoseLess;
+}
+
 @end

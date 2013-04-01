@@ -27,4 +27,9 @@
     return YES;
 }
 
+- (AbilityTypes)abilityType {
+    
+    return kAbilityHighMorale;
+}
+
 @end

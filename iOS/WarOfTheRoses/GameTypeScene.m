@@ -10,6 +10,7 @@
 #import "ConstructDeckScene.h"
 #import "GCTurnBasedMatchHelper.h"
 #import "GameManager.h"
+#import "GameScene.h"
 
 @implementation GameTypeScene
 
@@ -53,8 +54,6 @@
 		}];
         
         CCMenuItem *multiplayerMenuItem = [CCMenuItemFont itemWithString:@"Multiplayer" block:^(id sender) {
-
-            [[GameManager sharedManager] startNewGameOfType:kGameTypeMultiPlayer];
             
             [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
             [[GCTurnBasedMatchHelper sharedInstance] findMatchWithMinPlayers:2 maxPlayers:2 presentingViewController:[CCDirector sharedDirector]];
@@ -118,16 +117,32 @@
     
     CCLOG(@"New game found - staring constructing deck");
     
+    [[GameManager sharedManager] startNewGameOfType:kGameTypeMultiPlayer];
     [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[ConstructDeckScene scene]]];
 }
 
 - (void)takeTurn:(GKTurnBasedMatch *)match {
     
     CCLOG(@"Take turn");
+    [[GameManager sharedManager] continueExistingGame];
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData];
+    
+    if ([GameManager sharedManager].currentGame.state == kGameStateInitialState ||
+        [GameManager sharedManager].currentGame.state == kGameStateFinishedPlacingCards) {
+        [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[ConstructDeckScene scene]]];
+    }
+    else if ([GameManager sharedManager].currentGame.state == kGameStateGameStarted) {
+        [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[GameScene scene]]];
+    }
 }
 
 - (void)layoutMatch:(GKTurnBasedMatch *)match {
     
     CCLOG(@"Other players turn");
+    
+    [[GameManager sharedManager] continueExistingGame];
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData];
+    [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[GameScene scene]]];
+
 }
 @end

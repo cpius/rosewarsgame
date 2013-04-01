@@ -14,6 +14,9 @@
 #define BOARDSIZE_ROWS 8
 #define BOARDSIZE_COLUMNS 5
 
+#define LOWER_BACKLINE 8
+#define UPPER_BACKLINE 1
+
 #define kEnemyActionDelayTime 1.0
 
 typedef enum {
@@ -115,10 +118,10 @@ typedef enum {
     kCrusader,
     kFlagBearer,
     kWarElephant,
-    kSaboteur,
-    kAssassin,
     kWeaponSmith,
     kDiplomat,
+    kSaboteur,
+    kAssassin,
     kUnitNameCount
 } UnitName;
 
@@ -131,6 +134,16 @@ typedef enum {
     kPlayerGreen = 0,
     kPlayerRed = 1
 } PlayerColors;
+
+NS_INLINE PlayerColors OppositeColorOf(PlayerColors playerColor) {
+    
+    if (playerColor == kPlayerGreen) {
+        return kPlayerRed;
+    }
+    else {
+        return kPlayerGreen;
+    }
+}
 
 typedef enum {
     kGameTypeSinglePlayer = 0,

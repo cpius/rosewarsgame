@@ -27,8 +27,6 @@
         self.moveActionCost = self.attackActionCost = 1;
         self.hitpoints = 1;
         
-        hasSpecialAbility = NO;
-        
         self.attackSound = @"bow_fired.wav";
 
         self.frontImageSmall = @"ballista_icon.png";

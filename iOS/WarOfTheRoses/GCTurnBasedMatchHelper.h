@@ -28,7 +28,9 @@
 @property (nonatomic, weak) id<GCTurnBasedMatchHelperDelegate> delegate;
 @property (nonatomic, readonly) BOOL gameCenterAvailable;
 @property (nonatomic, readonly) NSError *lastError;
+
 @property (nonatomic, readonly) GKTurnBasedMatch *currentMatch;
+@property (nonatomic, readonly) NSString *localUserId;
 
 + (GCTurnBasedMatchHelper*)sharedInstance;
 

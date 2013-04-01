@@ -21,11 +21,7 @@
 
 @class Action;
 @class BaseBattleStrategy;
-@interface Card : CCNode <TimedAbilityDelegate> {
-
-    BOOL hasSpecialAbility;
-}
-
+@interface Card : CCNode <TimedAbilityDelegate> 
 /*
  Angiver om der er tale om en basic unit eller en special unit
  */

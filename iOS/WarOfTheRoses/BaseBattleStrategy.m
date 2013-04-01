@@ -8,6 +8,7 @@
 
 #import "BaseBattleStrategy.h"
 #import "RandomDiceStrategy.h"
+#import "BattleResult.h"
 
 @implementation BaseBattleStrategy
 
@@ -27,7 +28,7 @@
     return self;
 }
 
-- (CombatOutcome)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager {
+- (BattleResult*)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager {
     
     @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call resolveCombatBetween:(Card *)attacker defender:(Card *)defender on baseclass" userInfo:nil];
 }

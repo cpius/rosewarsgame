@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "Card.h"
-
+#import "BattleResult.h"
 
 @protocol BattleStrategy <NSObject>
 
 @required
-- (CombatOutcome)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager;
+- (BattleResult*)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager;
 + (id)strategy;
 
 @end

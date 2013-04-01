@@ -147,7 +147,7 @@
     GKTurnBasedParticipant *participant;
     
     for (int i = 0; i < match.participants.count; i++) {
-        participant = [match.participants objectAtIndex:currentIndex + 1 + 1 % match.participants.count];
+        participant = [match.participants objectAtIndex:(currentIndex + 1 + i) % match.participants.count];
         
         if (participant.matchOutcome != GKTurnBasedMatchOutcomeQuit) {
             break;
@@ -171,6 +171,8 @@
     if ([GKLocalPlayer localPlayer].isAuthenticated && !_userAuthenticated) {
         NSLog(@"Authentication changed - user authenticared");
         _userAuthenticated = YES;
+        
+        _localUserId = [GKLocalPlayer localPlayer].playerID;
     }
     else if (![GKLocalPlayer localPlayer].isAuthenticated && _userAuthenticated) {
         NSLog(@"Authentication changed - user not authenticated");
@@ -280,6 +282,5 @@
 {
     [_presentingViewController dismissModalViewControllerAnimated: YES];
 }
-
 
 @end

@@ -231,6 +231,10 @@
     
     [_gameboard placeCard:card inGameBoardNode:node useHighLighting:YES onCompletion:^{
         
+        // TODO: Only laying out cards for the lower part of board
+        card.model.cardLocation = [GridLocation gridLocationWithRow:card.model.cardLocation.row + 4
+                                                             column:card.model.cardLocation.column];
+        
         [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventCardDropped];
         
         if (![_placedCards containsObject:card]) {
@@ -323,13 +327,34 @@
 }
 
 - (void)nextScenePressed:(id)sender {
-    
-    [GameManager sharedManager].currentGame.state = kGameStateFinishedPlacingCards;
-    
-  //  [self removeAllChildrenWithCleanup:YES];
-        
+                    
     [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
     [[SoundManager sharedManager] playSoundEffectWithName:FANFARE];
+    
+    if ([GameManager sharedManager].currentGame.gametype == kGameTypeMultiPlayer) {
+
+        // If the player who initiated the game already has placed his cards, set the game as started
+        if ([GameManager sharedManager].currentGame.state == kGameStateFinishedPlacingCards) {
+            [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
+        }
+        else {
+            [GameManager sharedManager].currentGame.state = kGameStateFinishedPlacingCards;
+        }
+
+        // If game is started and it's my turn
+        if ([GameManager sharedManager].currentGame.state == kGameStateGameStarted &&
+            [GameManager sharedManager].currentPlayersTurn == [GameManager sharedManager].currentGame.myColor) {
+
+            CCLOG(@"Take my first turn");
+        }
+        else {
+            
+            [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[[GameManager sharedManager].currentGame serializeCurrentGame]];
+        }
+    }
+    else {
+        [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
+    }
     
     [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[GameScene scene]]];
 }

@@ -11,6 +11,7 @@
 #import "AIPlayer.h"
 #import "DeckStrategy.h"
 #import "BattleStrategy.h"
+#import "BattleResult.h"
 
 @protocol GameManagerProtocol <NSObject>
 
@@ -34,11 +35,13 @@
 @property (nonatomic, strong) id<DeckStrategy> deckStrategy;
 
 - (Action*)getActionForEnemeyPlayer;
-- (CombatOutcome)resolveCombatBetween:(Card*)attacker defender:(Card*)defender battleStrategy:(id<BattleStrategy>)battleStrategy;
+- (BattleResult*)resolveCombatBetween:(Card*)attacker defender:(Card*)defender battleStrategy:(id<BattleStrategy>)battleStrategy;
 
 - (NSUInteger)actionUsed:(Action*)action;
 
 - (void)startNewGameOfType:(GameTypes)gameType;
+- (void)continueExistingGame;
+
 - (BOOL)shouldEndTurn;
 - (void)endTurn;
 

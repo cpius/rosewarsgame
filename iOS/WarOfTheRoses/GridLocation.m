@@ -153,4 +153,18 @@
     return nil;
 }
 
+- (GridLocation*)flipBacklineFromCurrentBackline:(NSUInteger)currentBackline {
+    
+    if (![self isInsideGameBoard]) return self;
+    
+    if (currentBackline == LOWER_BACKLINE) {
+        self.row = (LOWER_BACKLINE - self.row) + UPPER_BACKLINE;
+    }
+    else {
+        self.row = (UPPER_BACKLINE - self.row) + LOWER_BACKLINE;
+    }
+    
+    return self;
+}
+
 @end

@@ -14,6 +14,7 @@
 @synthesize actionType = _actionType;
 @synthesize startLocation = _startLocation;
 @synthesize availableAbilities = _availableAbilities;
+@synthesize battleReport = _battleReport;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card targetCard:(Card *)targetCard {
     
@@ -41,6 +42,8 @@
 
 - (void)performActionWithCompletion:(void (^)())completion {
     
+    _battleReport = [BattleReport battleReportWithAction:self];
+
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
@@ -51,6 +54,8 @@
     [[GameManager sharedManager] actionUsed:self];
     [self.cardInAction didPerformedAction:self];
     
+    [[GameManager sharedManager].currentGame setLatestBattleReport:_battleReport];
+
     [self.delegate afterPerformAction:self];
     
     if (completion != nil) {
