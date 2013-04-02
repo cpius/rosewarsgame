@@ -121,12 +121,10 @@ def get_units():
         basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
         
         try:
-            basic_units = select_basic_units(basic_units_bag, tiles_bag)
-            special_units = select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag)
+            units = select_basic_units(basic_units_bag, tiles_bag)
+            units = select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag, units)
         except IndexError:
             continue
-        
-        units = dict(basic_units.items() + special_units.items())
 
         if any(not requirement(units) for requirement in [test_coloumn_blocks, test_pikeman_coloumn]):
             continue
