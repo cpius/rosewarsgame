@@ -108,7 +108,7 @@ class View(object):
         pic = self.get_image(unit_pic, (int(236 * self.zoom), int(271 * self.zoom)))
         self.screen.blit(pic, self.interface.show_unit_coordinates)
 
-        x, y = self.interface.message_location
+        x, y = self.interface.show_unit_location
         i = 0
         if hasattr(unit, "descriptions"):
             for attribute, description in unit.descriptions.items():
