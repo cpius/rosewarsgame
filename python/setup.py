@@ -85,10 +85,12 @@ def get_units():
 
             units[position] = getattr(units_module, name.replace(" ", "_"))()
 
-            if len(units) == 1:
-                units[position].attack_counters = 1
-            if len(units) == 2:
-                units[position].defence_counters = 1
+        unitlist = [unit for unit in units.values()]
+
+        random.shuffle(unitlist)
+
+        unitlist[0].attack_counters = 1
+        unitlist[1].defence_counters = 1
 
         return units
 
