@@ -26,6 +26,9 @@ class Unit_bag(object):
     def has_units(self):
         return self.units
 
+    def remove_units(self, name_list):
+        self.units = [unit for unit in self.units if unit not in name_list]
+
 
 board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
