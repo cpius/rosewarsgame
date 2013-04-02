@@ -138,6 +138,12 @@ class View(object):
                     lines.append(description)
                 lines.append("")
 
+        lines = self.split_lines(lines)
+
+        for line in lines:
+            i += 1
+            line_y = y + i * self.message_line_distance
+            self.write(line, (x, line_y), self.font)
 
         pygame.display.flip()
 
