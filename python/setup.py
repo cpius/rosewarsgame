@@ -81,7 +81,7 @@ def get_units():
                 enforce_max_siege_weapons(units, basic_units_bag)
 
             name = basic_units_bag.pick()
-            position = tiles_bag.pick(settings.basic_units[name])
+            position = tiles_bag.pick(settings.basic_units[name][0])
 
             units[position] = getattr(units_module, name.replace(" ", "_"))()
 
@@ -120,7 +120,7 @@ def get_units():
 
     def fill_bags():
         
-        basic_units_bag = Unit_bag([name for name in settings.basic_units for _ in range(settings.unit_bag_size)])
+        basic_units_bag = Unit_bag([name for name in settings.basic_units for _ in range(settings.basic_units[name][1])])
         
         special_units_first_bag = Unit_bag(list(settings.use_special_units))
         
