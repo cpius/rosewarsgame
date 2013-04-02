@@ -29,6 +29,9 @@ class Unit_bag(object):
     def remove_units(self, name_list):
         self.units = [unit for unit in self.units if unit not in name_list]
 
+    def remove_one_unit(self, name):
+        self.units.remove(name)
+
 
 board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
@@ -74,7 +77,15 @@ def get_units():
     def select_basic_units(basic_units_bag, tiles_bag):
 
         units = {}
-        
+
+        if settings.at_least_one_siege_weapon:
+            name = random.choice(["Ballista", "Catapult"])
+            position = tiles_bag.pick(settings.basic_units[name][0])
+            units[position] = getattr(units_module, name.replace(" ", "_"))()
+            basic_units_bag.remove_one_unit("Ballista")
+            basic_units_bag.remove_one_unit("Catapult")
+
+
         while len(units) < settings.basic_unit_count:
 
             if settings.max_two_siege_weapons:

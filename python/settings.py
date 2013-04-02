@@ -46,3 +46,4 @@ unit_bag_size = 3
 special_unit_count = 3
 basic_unit_count = 6
 max_two_siege_weapons = True
+at_least_one_siege_weapon = True
