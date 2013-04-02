@@ -132,13 +132,12 @@ class View(object):
 
         if hasattr(unit, "descriptions"):
             for attribute, description in unit.descriptions.items():
-                string = attribute.replace("_", " ").title() + ": " + description
-                lines = textwrap.wrap(string, self.interface.message_line_length)
-                for line in lines:
-                    i += 1
-                    line_y = y + i * self.message_line_distance
-                    self.write_message(line, (x, line_y))
-                i += 1
+                if attribute in unit.abilities:
+                    lines.append(attribute.replace("_", " ").title() + ": " + description)
+                else:
+                    lines.append(description)
+                lines.append("")
+
 
         pygame.display.flip()
 
