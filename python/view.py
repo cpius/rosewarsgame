@@ -110,6 +110,26 @@ class View(object):
 
         x, y = self.interface.show_unit_location
         i = 0
+
+        lines = []
+
+        for attribute in ["attack", "defence", "range", "movement"]:
+            if getattr(unit, attribute):
+                value = getattr(unit, attribute)
+                if attribute == "attack":
+                    value += unit.attack_counters
+                elif attribute == "defence":
+                    value += unit.defence_counters
+
+                lines.append(attribute.title() + ": " + str(value))
+            else:
+                lines.append(attribute.title() + ": %")
+        lines.append("")
+
+        if unit.zoc:
+            lines.append("Zone of control against: " + ", ".join(type for type in unit.zoc))
+            lines.append("")
+
         if hasattr(unit, "descriptions"):
             for attribute, description in unit.descriptions.items():
                 string = attribute.replace("_", " ").title() + ": " + description
