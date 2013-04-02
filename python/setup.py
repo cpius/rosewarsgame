@@ -33,6 +33,8 @@ class Unit_bag(object):
 board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
 
+siege_weapons = ["Ballista", "Catapult", "Cannon"]
+
 
 def any(iterable):  # For compatibility with older python versions.
     for element in iterable:
@@ -57,6 +59,14 @@ def test_pikeman_coloumn(units):
     columns = [position[0] for position, unit in units.items() if unit.name == "Pikeman"]
     
     return not any(columns.count(column) > 1 for column in board_columns)
+
+
+def enforce_max_siege_weapons(units, unit_bag):
+
+    siege_count = sum(1 for unit in units.values() if unit.name in siege_weapons)
+
+    if siege_count >= 2:
+        unit_bag.remove_units(siege_weapons)
 
 
 def get_units():
