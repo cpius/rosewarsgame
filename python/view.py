@@ -92,6 +92,17 @@ class View(object):
 
         pygame.display.update()
 
+    def split_lines(self, lines):
+        newlines = []
+        for line in lines:
+            if line != "":
+                split_lines = textwrap.wrap(line, self.interface.message_line_length)
+            else:
+                split_lines = [""]
+            for split_line in split_lines:
+                newlines.append(split_line)
+        return newlines
+
     def show_unit_zoomed(self, unit):
         unit_pic = self.get_unit_pic(unit.name)
         pic = self.get_image(unit_pic, (int(236 * self.zoom), int(271 * self.zoom)))
