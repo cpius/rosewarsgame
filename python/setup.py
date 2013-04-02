@@ -76,8 +76,13 @@ def get_units():
         units = {}
         
         while len(units) < settings.basic_unit_count:
+
+            if settings.max_two_siege_weapons:
+                enforce_max_siege_weapons(units, basic_units_bag)
+
             name = basic_units_bag.pick()
             position = tiles_bag.pick(settings.basic_units[name])
+
             units[position] = getattr(units_module, name.replace(" ", "_"))()
 
             if len(units) == 1:
@@ -87,16 +92,24 @@ def get_units():
 
         return units
 
-    def select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag):
+    def select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag, units):
 
-        units = {}
+        total_unit_count = settings.basic_unit_count + settings.special_unit_count
 
-        while len(units) < settings.special_unit_count and special_units_first_bag.has_units():
+        while len(units) < total_unit_count and special_units_first_bag.has_units():
+
+            if settings.max_two_siege_weapons:
+                enforce_max_siege_weapons(units, special_units_first_bag)
+
             name = special_units_first_bag.pick()
             position = tiles_bag.pick(settings.special_units[name])
             units[position] = getattr(units_module, name.replace(" ", "_"))()
 
-        while len(units) < settings.special_unit_count:
+        while len(units) < total_unit_count:
+
+            if settings.max_two_siege_weapons:
+                enforce_max_siege_weapons(units, special_units_second_bag)
+
             name = special_units_second_bag.pick()
             position = tiles_bag.pick(settings.special_units[name])
             units[position] = getattr(units_module, name.replace(" ", "_"))()
