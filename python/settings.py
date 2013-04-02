@@ -44,3 +44,4 @@ special_units = {"Berserker": (2, 3),
 unit_bag_size = 3
 special_unit_count = 3
 basic_unit_count = 6
+max_two_siege_weapons = True
