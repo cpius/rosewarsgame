@@ -129,7 +129,8 @@ class Controller(object):
         if not self.start_position:
             self.show_unit(position)
         else:
-            pass  # Show attack stuff
+            if position in self.gamestate.opponent_units():
+                self.show_attack(position)
 
     def clear_move(self):
         self.start_position = self.end_position = self.selected_unit = None
@@ -304,6 +305,14 @@ class Controller(object):
 
         if self.gamestate.current_player().ai_name != "Human":
             self.trigger_artificial_intelligence()
+
+    def show_attack(self, attack_position):
+        action = Action(self.start_position, attack_position=attack_position)
+        player_unit = self.gamestate.player_units()[self.start_position]
+        opponent_unit = self.gamestate.opponent_units()[attack_position]
+        self.view.show_attack(action, player_unit, opponent_unit)
+
+        return
 
     def show_unit(self, position):
 
