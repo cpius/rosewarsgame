@@ -69,6 +69,8 @@ class Rectangles(Interface):
         self.show_unit_coordinates = (450 * zoom, 20 * zoom)
         self.right_side_rectangle = (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom)
 
+        self.lower_right_rectangle = (391 * self.zoom, 391 * self.zoom, 391 * self.zoom, 391 * self.zoom)
+
         self.move_shading = pygame.Color(0, 0, 0, 160)
         self.attack_shading = pygame.Color(130, 0, 0, 150)
         self.ability_shading = pygame.Color(0, 0, 150, 130)

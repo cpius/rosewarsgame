@@ -585,6 +585,8 @@ class View(object):
 
     def show_attack(self, action, player_unit, opponent_unit):
 
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.lower_right_rectangle)
+
         base = self.interface.message_location
 
         attack = battle.get_attack_rating(player_unit, opponent_unit, action)
