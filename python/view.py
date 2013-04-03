@@ -28,7 +28,7 @@ class View(object):
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
 
-        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
+        self.clear_right()
 
         self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, bold=True)
         self.font_messages = pygame.font.SysFont(self.interface.normal_font_name,
@@ -47,6 +47,12 @@ class View(object):
 
         self.message_line_distance = 30 * self.zoom
         self.counter_size = self.interface.counter_size
+
+    def clear_right(self):
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
+
+    def clear_lower_right(self):
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.lower_right_rectangle)
 
     def get_position_from_mouse_click(self, coordinates):
         x = int((coordinates[0] - self.interface.x_border) /
@@ -583,7 +589,7 @@ class View(object):
 
     def show_attack(self, action, player_unit, opponent_unit):
 
-        pygame.draw.rect(self.screen, colors.light_grey, self.interface.lower_right_rectangle)
+        self.clear_lower_right()
 
         base = self.interface.message_location
 
