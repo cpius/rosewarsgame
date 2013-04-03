@@ -511,13 +511,11 @@ class View(object):
         unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
 
-
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
                                            int(self.interface.unit_height * resize)))
 
         self.screen.blit(pic, location)
         self.draw_unit_box(location, color, resize)
-
 
     def draw_line(self, start_position, end_position):
         start_coordinates = self.center_coordinates.get(start_position)
@@ -597,10 +595,10 @@ class View(object):
 
         defence = min(defence, 6)
 
-        lines = ["Attack: " + str(attack), "Defence: " + str(defence)]
-
-        lines.append("Chance of win = " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
-                     str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%")
+        lines = ["Attack: " + str(attack),
+                 "Defence: " + str(defence),
+                 "Chance of win = " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                 str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
 
         self.show_lines(lines, *base)
 
