@@ -121,6 +121,9 @@ class View(object):
             self.write(line, (x, line_y), self.font)
 
     def show_unit_zoomed(self, unit):
+
+        self.clear_right()
+
         unit_pic = self.get_unit_pic(unit.name)
         pic = self.get_image(unit_pic, (int(236 * self.zoom), int(271 * self.zoom)))
         self.screen.blit(pic, self.interface.show_unit_coordinates)
