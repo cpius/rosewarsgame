@@ -103,13 +103,22 @@ class View(object):
                 newlines.append(split_line)
         return newlines
 
+    def show_lines(self, lines, x, y):
+
+        lines = self.split_lines(lines)
+
+        i = 0
+        for line in lines:
+            i += 1
+            line_y = y + i * self.message_line_distance
+            self.write(line, (x, line_y), self.font)
+
     def show_unit_zoomed(self, unit):
         unit_pic = self.get_unit_pic(unit.name)
         pic = self.get_image(unit_pic, (int(236 * self.zoom), int(271 * self.zoom)))
         self.screen.blit(pic, self.interface.show_unit_coordinates)
 
-        x, y = self.interface.show_unit_location
-        i = 0
+        base = self.interface.show_unit_location
 
         lines = []
 
@@ -138,12 +147,7 @@ class View(object):
                     lines.append(description)
                 lines.append("")
 
-        lines = self.split_lines(lines)
-
-        for line in lines:
-            i += 1
-            line_y = y + i * self.message_line_distance
-            self.write(line, (x, line_y), self.font)
+        self.show_lines(lines, *base)
 
         pygame.display.flip()
 
