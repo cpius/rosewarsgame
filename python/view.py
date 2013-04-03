@@ -583,6 +583,27 @@ class View(object):
         outer_corners = scale_rectangle(base_corners, thickness)
         pygame.draw.lines(self.screen, colors.black, True, outer_corners)
 
+    def show_attack(self, action, player_unit, opponent_unit):
+
+        base = self.interface.message_location
+
+        attack = battle.get_attack_rating(player_unit, opponent_unit, action)
+
+        defence = battle.get_defence_rating(player_unit, opponent_unit, attack)
+
+        attack = min(attack, 6)
+
+        defence = min(defence, 6)
+
+        lines = ["Attack: " + str(attack), "Defence: " + str(defence)]
+
+        lines.append("Chance of win = " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                     str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%")
+
+        self.show_lines(lines, *base)
+
+        pygame.display.flip()
+
 
 def get_outcome(attacking_unit, defending_unit, action):
 
