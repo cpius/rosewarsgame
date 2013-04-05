@@ -1,17 +1,19 @@
 package com.wotr.strategy.battle;
 
+import com.wotr.model.unit.Unit;
+
 public interface BattleListener {
 
-	void attackStarted();
+	void attackStarted(Unit attacker, Unit defender);
 
-	void attackSuccessful(int attackRoll);
+	void attackSuccessful(Unit attacker, Unit defender, int attackRoll);
 
-	void attackFailed(int attackRoll);
+	void attackFailed(Unit attacker, Unit defender, int attackRoll);
 
-	void defenceStarted();
+	void defenceStarted(Unit attacker, Unit defender);
 
-	void defenceSuccessful(int attackRoll);
+	void defenceSuccessful(Unit attacker, Unit defender, int defenceRoll);
 
-	void defenceFailed(int attackRoll);
+	void defenceFailed(Unit attacker, Unit defender, int defenceRoll);
 
 }

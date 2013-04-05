@@ -12,7 +12,7 @@ import com.wotr.model.unit.Unit;
 import com.wotr.strategy.factory.ActionResolverFactory;
 import com.wotr.strategy.game.TurnStrategy;
 
-public class MeleeActionResolverStrategy extends AbstractActionResolverStrategy {
+public class MeleeActionResolverStrategy extends AbstractUnitActionResolverStrategy {
 
 	@Override
 	public boolean isMoveable(Unit unit, Position pos, Direction direction, boolean movable, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress, TurnStrategy turnStrategy) {

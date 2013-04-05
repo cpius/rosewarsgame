@@ -3,7 +3,7 @@ package com.wotr.model.unit;
 import com.wotr.GameManager;
 import com.wotr.model.Position;
 import com.wotr.model.UnitType;
-import com.wotr.strategy.action.ActionResolverStrategy;
+import com.wotr.strategy.action.UnitActionResolverStrategy;
 import com.wotr.strategy.battle.AttackStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
 
@@ -38,7 +38,7 @@ public abstract class Unit implements Cloneable {
 
 	public abstract int getRange();
 
-	public abstract ActionResolverStrategy getActionResolverStrategy();
+	public abstract UnitActionResolverStrategy getActionResolverStrategy();
 
 	public abstract boolean isRanged();
 
@@ -71,5 +71,17 @@ public abstract class Unit implements Cloneable {
 	
 	public int getActionsUsedForAttack() {
 		return 1;
+	}
+	
+	public String getKilledSound() {
+		return "sounds/pain.mp3";
+	}
+	
+	public String getAttackSound() {
+		return "sounds/sword_sound.wav";
+	}
+	
+	public String getDefenceSound() {
+		return null;
 	}
 }

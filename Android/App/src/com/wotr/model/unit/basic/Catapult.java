@@ -1,6 +1,7 @@
-package com.wotr.model.unit;
+package com.wotr.model.unit.basic;
 
 import com.wotr.model.UnitType;
+import com.wotr.model.unit.RangedUnit;
 
 public class Catapult extends RangedUnit {
 
@@ -36,4 +37,8 @@ public class Catapult extends RangedUnit {
 	public int getActionsUsedForAttack() {
 		return 2;
 	}
+	
+	public String getAttackSound() {
+		return "sounds/catapult_attack.wav";
+	} 
 }

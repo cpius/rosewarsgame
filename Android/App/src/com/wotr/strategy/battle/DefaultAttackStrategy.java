@@ -7,15 +7,15 @@ public class DefaultAttackStrategy implements AttackStrategy {
 
 	@Override
 	public boolean attack(BattleListener listener, DiceStrategy dice, Unit attackingUnit, Unit defendingUnit) {
-		listener.attackStarted();
+		listener.attackStarted(attackingUnit, defendingUnit);
 
 		int attackRoll = dice.roll();
 
 		boolean attackSuccess = performAttack(attackRoll, attackingUnit, defendingUnit);
 		if (attackSuccess) {
-			listener.attackSuccessful(attackRoll);
+			listener.attackSuccessful(attackingUnit, defendingUnit, attackRoll);
 		} else {
-			listener.attackFailed(attackRoll);
+			listener.attackFailed(attackingUnit, defendingUnit, attackRoll);
 		}
 		return attackSuccess;
 	}

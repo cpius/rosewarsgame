@@ -24,7 +24,7 @@ public class CardTouchHandler {
 		this.startX = x;
 		this.startY = y;
 
-		Log.v("Touch", "TouchStarted = " + x + ":" + y);
+		Log.i("Touch", "TouchStarted = " + x + ":" + y);
 
 		if (!touching) {
 			timer = System.currentTimeMillis();

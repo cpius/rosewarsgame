@@ -3,7 +3,7 @@ package com.wotr.cocos;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -38,8 +38,6 @@ public abstract class AbstractGameLayer extends CCLayer {
 	protected Collection<CCSprite> cardBackgroundList = new ArrayList<CCSprite>();
 
 	protected abstract Collection<CCSprite> getCardSprites();
-	
-	
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -101,7 +99,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 	protected void dropCardToPosition() {
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
 		CCScaleTo scaleAction = CCScaleTo.action(0.3f, sizeScale);
-		CCCallFunc sparks = CCCallFunc.action(this, "spark");
+		CCCallFuncN sparks = CCCallFuncN.action(this, "spark");
 		CCSequence seq = CCSequence.actions(scaleAction, sparks);
 		selectedCard.runAction(seq);
 	}

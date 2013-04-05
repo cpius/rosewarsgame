@@ -1,6 +1,7 @@
 package com.wotr.strategy.game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.wotr.model.unit.Unit;
 
@@ -9,6 +10,11 @@ public class DefaultTurnStrategy implements TurnStrategy {
 	private int remainingActions = 1;
 	private ArrayList<Unit> hasMoved = new ArrayList<Unit>();
 	private ArrayList<Unit> hasAttacked = new ArrayList<Unit>();
+	private final Game game;
+
+	public DefaultTurnStrategy(Game game) {
+		this.game = game;
+	}
 
 	@Override
 	public int getRemainingActions() {
@@ -28,13 +34,25 @@ public class DefaultTurnStrategy implements TurnStrategy {
 	@Override
 	public void attack(Unit attackingUnit) {
 		hasAttacked.add(attackingUnit);
-		remainingActions -= attackingUnit.getActionsUsedForAttack();
+
+		Collection<Unit> units = game.getAttackingPlayer().getUnitMap().values();
+		if (units.size() == 1 && units.contains(attackingUnit)) {
+			remainingActions = 0;
+		} else {
+			remainingActions -= attackingUnit.getActionsUsedForAttack();
+		}
 	}
 
 	@Override
 	public void move(Unit movingUnit) {
 		hasMoved.add(movingUnit);
-		remainingActions--;
+		
+		Collection<Unit> units = game.getAttackingPlayer().getUnitMap().values();
+		if (units.size() == 1 && units.contains(movingUnit)) {
+			remainingActions = 0;
+		} else {
+			remainingActions--;
+		}
 	}
 
 	@Override

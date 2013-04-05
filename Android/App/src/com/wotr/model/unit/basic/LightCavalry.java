@@ -1,6 +1,7 @@
-package com.wotr.model.unit;
+package com.wotr.model.unit.basic;
 
 import com.wotr.model.UnitType;
+import com.wotr.model.unit.MeleeUnit;
 
 public class LightCavalry extends MeleeUnit {
 
@@ -31,5 +32,9 @@ public class LightCavalry extends MeleeUnit {
 	@Override
 	public UnitType getType() {
 		return UnitType.CAVALRY;
+	}
+	
+	public String getAttackSound() {
+		return "sounds/swords.mp3";
 	}
 }

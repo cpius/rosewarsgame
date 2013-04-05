@@ -1,6 +1,6 @@
 package com.wotr.strategy.factory;
 
-import com.wotr.strategy.action.ActionResolverStrategy;
+import com.wotr.strategy.action.UnitActionResolverStrategy;
 import com.wotr.strategy.action.MeleeActionResolverStrategy;
 import com.wotr.strategy.action.RangedActionResolverStrategy;
 import com.wotr.strategy.action.UnitTypeZocBlockStrategy;
@@ -14,11 +14,11 @@ public class ActionResolverFactory {
 		ZocBlockStrategy = zocBlockStrategy;
 	}
 
-	public static ActionResolverStrategy getMeleeActionResolverStrategy() {
+	public static UnitActionResolverStrategy getMeleeActionResolverStrategy() {
 		return new MeleeActionResolverStrategy();
 	}
 
-	public static ActionResolverStrategy getRangedActionResolverStrategy() {
+	public static UnitActionResolverStrategy getRangedActionResolverStrategy() {
 		return new RangedActionResolverStrategy();
 	}
 

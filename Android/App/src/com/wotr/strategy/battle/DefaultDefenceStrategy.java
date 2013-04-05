@@ -7,16 +7,16 @@ public class DefaultDefenceStrategy implements DefenceStrategy {
 
 	@Override
 	public boolean defend(BattleListener listener, DiceStrategy dice, Unit attackingUnit, Unit defendingUnit) {
-		listener.defenceStarted();
+		listener.defenceStarted(attackingUnit, defendingUnit);
 
 		int defenceRoll = dice.roll();
 
 		boolean defenceSuccess = defenceRoll <= defendingUnit.getDefense();
 
 		if (defenceSuccess) {
-			listener.defenceSuccessful(defenceRoll);
+			listener.defenceSuccessful(attackingUnit, defendingUnit, defenceRoll);
 		} else {
-			listener.defenceFailed(defenceRoll);
+			listener.defenceFailed(attackingUnit, defendingUnit, defenceRoll);
 		}
 		return defenceSuccess;
 	}

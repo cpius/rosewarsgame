@@ -1,13 +1,14 @@
-package com.wotr.model.unit;
+package com.wotr.model.unit.basic;
 
 import com.wotr.GameManager;
 import com.wotr.model.UnitType;
+import com.wotr.model.unit.MeleeUnit;
 import com.wotr.strategy.battle.AttackStrategy;
 
-public class Archer extends RangedUnit {
+public class Pikeman extends MeleeUnit {
 
-	public Archer() {
-		super("archer", false);
+	public Pikeman() {
+		super("pikeman", false);
 	}
 
 	@Override
@@ -27,7 +28,7 @@ public class Archer extends RangedUnit {
 
 	@Override
 	public int getRange() {
-		return 4;
+		return 1;
 	}
 
 	@Override
@@ -35,8 +36,13 @@ public class Archer extends RangedUnit {
 		return UnitType.INFANTRY;
 	}
 
+	public UnitType[] getZoc() {
+		UnitType[] zoc = { UnitType.CAVALRY };
+		return zoc;
+	}
+	
 	@Override
 	public AttackStrategy getAttackStrategy() {
-		return GameManager.getFactory().getArcherAttackStrategy();
+		return GameManager.getFactory().getPikemanAttackStrategy();
 	}
 }

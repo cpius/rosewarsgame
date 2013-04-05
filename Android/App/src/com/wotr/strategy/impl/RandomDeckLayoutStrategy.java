@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Random;
 
 import com.wotr.model.Position;
-import com.wotr.model.unit.Archer;
-import com.wotr.model.unit.Ballista;
-import com.wotr.model.unit.Catapult;
-import com.wotr.model.unit.LightCavalry;
-import com.wotr.model.unit.Pikeman;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
+import com.wotr.model.unit.basic.Archer;
+import com.wotr.model.unit.basic.Ballista;
+import com.wotr.model.unit.basic.Catapult;
+import com.wotr.model.unit.basic.LightCavalry;
+import com.wotr.model.unit.basic.Pikeman;
 import com.wotr.strategy.DeckLayoutStrategy;
 
 public class RandomDeckLayoutStrategy implements DeckLayoutStrategy {

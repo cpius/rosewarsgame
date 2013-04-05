@@ -2,7 +2,14 @@ package com.wotr.cocos;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
+import org.cocos2d.actions.ease.CCEaseSineIn;
+import org.cocos2d.actions.instant.CCCallback;
+import org.cocos2d.actions.interval.CCDelayTime;
+import org.cocos2d.actions.interval.CCFadeIn;
+import org.cocos2d.actions.interval.CCFadeOut;
+import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.actions.interval.CCTintTo;
@@ -17,18 +24,25 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
+
 import com.wotr.GameManager;
 import com.wotr.R;
+import com.wotr.cocos.action.RemoveNodeCalBackAction;
 import com.wotr.model.Action;
 import com.wotr.model.MoveAction;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
+import com.wotr.strategy.action.ActionsResolver;
+import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.battle.BattleListener;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
 import com.wotr.strategy.game.MultiplayerGame;
-import com.wotr.strategy.impl.ActionResolver;
+import com.wotr.strategy.game.exceptions.InvalidAttackException;
+import com.wotr.strategy.game.exceptions.InvalidMoveException;
 import com.wotr.strategy.player.HumanPlayer;
 import com.wotr.strategy.player.Player;
 import com.wotr.touch.CardTouchHandler;
@@ -42,7 +56,8 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private Collection<Action> actions;
 	private CCLabel nameLabel;
 	private CCLabel turnLabel;
-	private HumanPlayer playerOne;
+	private Player playerOne;
+	private ActionsResolverStrategy actionsResolver;
 
 	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
 		CCScene scene = CCScene.node();
@@ -53,15 +68,15 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	protected PlayGameLayer(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
 
-		playerOne = new HumanPlayer(playerOneMap, "Player 1");
-		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2");
+		xCount = 5;
+		yCount = 8;
+		
+		playerOne = new HumanPlayer(playerOneMap, "Player 1", 0 );
+		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2", yCount - 1);
 
 		setIsTouchEnabled(true);
 
 		winSize = CCDirector.sharedDirector().displaySize();
-
-		xCount = 5;
-		yCount = 8;
 
 		CCSprite back = CCSprite.sprite("woddenbackground.png");
 
@@ -103,11 +118,13 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		GameManager.setGame(game);
 		GameManager.getFactory().getBattleStrategy().addBattleListener(this);
 
+		actionsResolver = new ActionsResolver(xCount, yCount, game);
+		game.setActionsResolver(actionsResolver);
+
 		game.startGame();
 	}
 
 	protected void dropCardToPosition() {
-		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
 		CCScaleTo scaleAction = CCScaleTo.action(0.3f, sizeScale);
 		CCSequence seq = CCSequence.actions(scaleAction);
 		selectedCard.runAction(seq);
@@ -141,29 +158,36 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 			dropCardToPosition();
 
+			Unit attackingUnit = (Unit) selectedCard.getUserData();
+
 			// If player has card at position
-			if (GameManager.getGame().getAttackingPlayer().getUnitMap().containsKey(pInP)) {
+			if (GameManager.getGame().getAttackingPlayer().hasUnitAtPosition(pInP)) {
 				moveCardToOriginalPosition();
 			} else {
 
-				Unit attackingUnit = (Unit) selectedCard.getUserData();
+				Unit defendingUnit = GameManager.getGame().getDefendingPlayer().getUnitAtPosition(pInP);
 
-				Unit defendingUnit = GameManager.getGame().getDefendingPlayer().getUnitMap().get(pInP);
+				try {
+					if (defendingUnit != null) {
+						boolean succes = GameManager.getGame().attack(attackingUnit, defendingUnit);
+						if (succes) {
+							removeCCSprite(defendingUnit);
 
-				if (defendingUnit != null) {
-					boolean succes = GameManager.getGame().attack(attackingUnit, defendingUnit);
-					if (succes) {
-						removeCCSprite(defendingUnit);
-						
-						if(attackingUnit.isRanged()) {
+							if (attackingUnit.isRanged()) {
+								moveCardToOriginalPosition();
+							}
+						} else {
 							moveCardToOriginalPosition();
 						}
-					} else {
-						moveCardToOriginalPosition();
-					}
 
-				} else {
-					GameManager.getGame().move(attackingUnit.getPosistion(), pInP);
+					} else {
+						GameManager.getGame().move(attackingUnit, pInP);
+						SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
+					}
+				} catch (InvalidAttackException e) {
+					moveCardToOriginalPosition();
+				} catch (InvalidMoveException e) {
+					moveCardToOriginalPosition();
 				}
 			}
 		}
@@ -173,7 +197,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	private void resetActionSelection() {
-		
+
 		for (Action action : actions) {
 			for (CCNode ccNode : unitList) {
 
@@ -198,10 +222,8 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		super.selectCardForMove(selectedCard);
 
 		Unit unit = (Unit) selectedCard.getUserData();
-		ActionResolver ar = new ActionResolver(xCount, yCount);
-		Game game = GameManager.getGame();
 
-		actions = ar.getActions(unit, game.getAttackingPlayer().getUnitMap(), game.getDefendingPlayer().getUnitMap());
+		actions = actionsResolver.getActions(unit);
 
 		for (Action action : actions) {
 			for (CCNode ccNode : unitList) {
@@ -260,8 +282,6 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	@Override
 	public void gameStarted() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -285,45 +305,146 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	@Override
 	protected boolean isTurn(Unit unit) {
-		return GameManager.getGame().getAttackingPlayer().getUnitMap().containsValue(unit);
+		return GameManager.getGame().getAttackingPlayer().hasUnit(unit);
 	}
 
 	private void removeCCSprite(Unit defendingUnit) {
-		for (CCSprite unitSpite : unitList) {
+
+		for (Iterator<CCSprite> i = unitList.iterator(); i.hasNext();) {
+			CCSprite unitSpite = i.next();
 			Unit unit = (Unit) unitSpite.getUserData();
-			if(unit.equals(defendingUnit)) {
+			if (unit.equals(defendingUnit)) {
+				i.remove();
 				removeChild(unitSpite, true);
-			}			
+				return;
+			}
 		}
 	}
 
 	@Override
-	public void attackStarted() {
+	public void attackStarted(Unit attacker, Unit defender) {
+
+		MediaPlayer mp = new MediaPlayer();
+		try {
+			AssetFileDescriptor afd = CCDirector.sharedDirector().getActivity().getAssets().openFd(attacker.getAttackSound());
+			mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			mp.prepare();
+			mp.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void attackSuccessful(Unit attacker, Unit defender, int attackRoll) {
+
+		CCLabel actionLabel = CCLabel.makeLabel("Attack succesful (" + attackRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+
+		addChild(actionLabel);
+
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(moveAction, fadeAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
 
 	}
 
 	@Override
-	public void attackSuccessful(int attackRoll) {
+	public void attackFailed(Unit attacker, Unit defender, int attackRoll) {
+
+		// CCNode node = CCNode.node();
+		// node.setPosition(winSize.width / 2, winSize.height - winSize.height /
+		// 3f);
+
+		// CCSprite dice = CCSprite.sprite("dice/1.png");
+		// dice.setPosition(100f, 10f);
+		// node.addChild(dice);
+
+		CCLabel actionLabel = CCLabel.makeLabel("Missed (" + attackRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+		// node.addChild(actionLabel);
+
+		addChild(actionLabel);
+
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(moveAction, fadeAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
+	}
+
+	@Override
+	public void defenceStarted(Unit attacker, Unit defender) {
 
 	}
 
 	@Override
-	public void attackFailed(int attackRoll) {
+	public void defenceSuccessful(Unit attacker, Unit defender, int defenceRoll) {
+		CCLabel actionLabel = CCLabel.makeLabel("Defence succesful (" + defenceRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+		actionLabel.setOpacity(0);
 
+		addChild(actionLabel);
+
+		CCDelayTime delayAction = CCDelayTime.action(0.1f);
+		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(delayAction, fadeInAction, moveAction, fadeAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
 	}
 
 	@Override
-	public void defenceStarted() {
+	public void defenceFailed(Unit attacker, Unit defender, int defenceRoll) {
 
+		MediaPlayer mp = new MediaPlayer();
+		try {
+			AssetFileDescriptor afd = CCDirector.sharedDirector().getActivity().getAssets().openFd(defender.getKilledSound());
+			mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			mp.prepare();
+			mp.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		CCLabel actionLabel = CCLabel.makeLabel("Defence failed (" + defenceRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+		actionLabel.setOpacity(0);
+
+		addChild(actionLabel);
+
+		CCDelayTime delayAction = CCDelayTime.action(0.1f);
+		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeOutAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(delayAction, fadeInAction, moveAction, fadeOutAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
 	}
 
 	@Override
-	public void defenceSuccessful(int attackRoll) {
+	public void gameEnded(Player winner) {
 
-	}
+		CCLabel winnerLabel = CCLabel.makeLabel("Winner: " + winner.getName(), "Arial", 40f);
+		winnerLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);		
+		addChild(winnerLabel);
 
-	@Override
-	public void defenceFailed(int attackRoll) {
+		MediaPlayer mp = new MediaPlayer();
+		try {
+			AssetFileDescriptor afd = CCDirector.sharedDirector().getActivity().getAssets().openFd("sounds/fanfare.mp3");
+			mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			mp.prepare();
+			mp.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

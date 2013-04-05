@@ -8,7 +8,7 @@ import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.strategy.game.TurnStrategy;
 
-public interface ActionResolverStrategy {
+public interface UnitActionResolverStrategy {
 
 	boolean isMoveable(Unit unit, Position pos, Direction direction, boolean moveable, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress, TurnStrategy turnStrategy);
 

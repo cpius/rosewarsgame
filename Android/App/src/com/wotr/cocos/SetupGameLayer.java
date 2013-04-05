@@ -30,7 +30,7 @@ import com.wotr.touch.CardTouchListener;
 
 public class SetupGameLayer extends AbstractGameLayer implements CardTouchListener {
 
-	private CCSprite sparkCard;
+	//private CCSprite sparkCard;
 
 	private List<CCSprite> cardList = new ArrayList<CCSprite>();
 	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
@@ -127,10 +127,11 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		CCDirector.sharedDirector().runWithScene(scene);
 	}
 
-	public void spark() {
+	public void spark(Object source) {
 		try {
+			CCSprite sprite = (CCSprite) source;
 			CCParticleSystem particle = new CCQuadParticleSystem("particle/exploding_ring.plist");
-			particle.setPosition(sparkCard.getPosition());
+			particle.setPosition(sprite.getPosition());
 			// particle.setScale(sizeScale);
 			addChild(particle);
 
@@ -151,7 +152,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			Unit abstractCard = modelMap.get(selectedCard);
 			abstractCard.setPosistion(pInP);
 		}
-		sparkCard = selectedCard;
+		//sparkCard = selectedCard;
 
 		reorderChild(selectedCard, 0);
 		selectedCard = null;

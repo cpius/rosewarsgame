@@ -1,6 +1,7 @@
-package com.wotr.model.unit;
+package com.wotr.model.unit.basic;
 
 import com.wotr.model.UnitType;
+import com.wotr.model.unit.RangedUnit;
 
 public class Ballista extends RangedUnit {
 
@@ -31,5 +32,5 @@ public class Ballista extends RangedUnit {
 	@Override
 	public UnitType getType() {
 		return UnitType.SIEGE_WEAPON;
-	}
+	}		
 }

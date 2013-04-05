@@ -11,4 +11,12 @@ public interface Player {
 
 	Map<Position, Unit> getUnitMap();
 
+	boolean hasUnitAtPosition(Position pInP);
+
+	Unit getUnitAtPosition(Position pInP);
+
+	boolean hasUnit(Unit unit);
+
+	int getStartLine();
+
 }

@@ -16,7 +16,7 @@ public class GameManager {
 
 	public static GameFactory getFactory() {
 		if (factory == null) {
-			factory = new DefaultGameFactory();
+			factory = new DefaultGameFactory(game);
 		}
 		return factory;
 	}

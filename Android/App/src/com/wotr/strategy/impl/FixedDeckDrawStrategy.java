@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.wotr.model.unit.Unit;
-import com.wotr.model.unit.Archer;
-import com.wotr.model.unit.Ballista;
-import com.wotr.model.unit.Catapult;
-import com.wotr.model.unit.HeavyCavalry;
-import com.wotr.model.unit.LightCavalry;
-import com.wotr.model.unit.Pikeman;
+import com.wotr.model.unit.basic.Archer;
+import com.wotr.model.unit.basic.Ballista;
+import com.wotr.model.unit.basic.Catapult;
+import com.wotr.model.unit.basic.HeavyCavalry;
+import com.wotr.model.unit.basic.LightCavalry;
+import com.wotr.model.unit.basic.Pikeman;
 import com.wotr.strategy.DeckDrawStrategy;
 
 public class FixedDeckDrawStrategy implements DeckDrawStrategy {

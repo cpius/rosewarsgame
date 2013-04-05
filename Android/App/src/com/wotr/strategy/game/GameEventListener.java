@@ -5,6 +5,8 @@ import com.wotr.strategy.player.Player;
 public interface GameEventListener {
 
 	public void gameStarted();
+	
+	public void gameEnded(Player winner);
 
 	public void startTurn(Player player, int remainingActions);
 

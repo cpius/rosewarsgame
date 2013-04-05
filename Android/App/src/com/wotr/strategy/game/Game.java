@@ -2,19 +2,25 @@ package com.wotr.strategy.game;
 
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
+import com.wotr.strategy.action.ActionsResolverStrategy;
+import com.wotr.strategy.game.exceptions.InvalidAttackException;
+import com.wotr.strategy.game.exceptions.InvalidMoveException;
 import com.wotr.strategy.player.Player;
 
 public interface Game {
 
 	void startGame();
-	
+
 	Player getAttackingPlayer();
-	
+
 	Player getDefendingPlayer();
-	
+
 	void addGameEventListener(GameEventListener listener);
-	
-	boolean attack(Unit attackingUnit, Unit defendingUnit);
-	
-	void move(Position oldPosition, Position newPosition);
+
+	boolean attack(Unit attackingUnit, Unit defendingUnit) throws InvalidAttackException;
+
+	void move(Unit movingUnit, Position newPosition) throws InvalidMoveException;
+
+	void setActionsResolver(ActionsResolverStrategy actionsResolver);
+
 }
