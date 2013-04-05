@@ -84,7 +84,9 @@ class Catapult(Unit):
     dbonus = {}
     type = "Siege Weapon"
         
-    double_attack_cost = True  # Attack takes two actions.
+    double_attack_cost = True
+
+    descriptions = {"double_attack_cost": "Attack takes two actions."}
 
 
 class Royal_Guard(Unit):
@@ -99,8 +101,11 @@ class Royal_Guard(Unit):
     type = "Infantry"
     
     zoc = ["Cavalry", "Infantry", "Siege Weapon"]
-    defence_maneuverability = True  # Can move two tiles if one of them is sideways.
-    shield = True  # +1D v melee units.
+    defence_maneuverability = True
+    shield = True
+
+    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.",
+                    "shield": "+1D v melee units."}
 
 
 class Scout(Unit):
@@ -115,7 +120,9 @@ class Scout(Unit):
     zoc = []
     type = "Cavalry"
         
-    scouting = True  # Can move past all units.
+    scouting = True
+
+    descriptions = {"scouting": "Can move past all units."}
 
 
 class Viking(Unit):
@@ -133,7 +140,9 @@ class Viking(Unit):
     zoc = []
     type = "Infantry"
 
-    rage = True  # Can make an attack after it's move. (But not a second move)
+    rage = True  #
+
+    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)"}
 
 
 class Cannon(Unit):
@@ -148,8 +157,10 @@ class Cannon(Unit):
     zoc = []
     type = "Siege Weapon"
         
-    attack_cooldown = 3  # Can only attack every third turn.
-    
+    attack_cooldown = 3
+
+    descriptions = {"attack_cooldown": "Can only attack every third turn."}
+
 
 class Lancer(Unit):
     
@@ -164,7 +175,9 @@ class Lancer(Unit):
     zoc = []
     type = "Cavalry"
         
-    lancing = True  # If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A
+    lancing = True
+
+    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
 
 
 class Flag_Bearer(Unit):
@@ -179,7 +192,9 @@ class Flag_Bearer(Unit):
     zoc = []
     type = "Cavalry"
         
-    flag_bearing = True  # Friendly melee units receive +2A while adjacent to Flag Bearer
+    flag_bearing = True  #
+
+    descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
 
 
 class Longswordsman(Unit):
@@ -194,7 +209,9 @@ class Longswordsman(Unit):
     zoc = []
     type = "Infantry"
         
-    longsword = True  # Also hits the 4 nearby tiles in the attack direction
+    longsword = True
+
+    descriptions = {"longsword": "Also hits the 4 nearby tiles in the attack direction."}
 
 
 class Crusader(Unit):
@@ -209,7 +226,10 @@ class Crusader(Unit):
     zoc = []
     type = "Cavalry"
         
-    crusading = True  # Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.
+    crusading = True
+
+    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+                                 "Crusader get +1A."}
 
 
 class Berserker(Unit):
@@ -224,7 +244,9 @@ class Berserker(Unit):
     zoc = []
     type = "Infantry"
         
-    berserking = True  # Can move 4 tiles if movement ends with an attack.
+    berserking = True
+
+    descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack."}
 
 
 class Chariot(Unit):
@@ -239,7 +261,9 @@ class Chariot(Unit):
     zoc = []
     type = "Cavalry"
         
-    charioting = True  # Can use remaining moves after attacking
+    charioting = True
+
+    descriptions = {"charioting": "Can use remaining moves after attacking."}
 
 
 class War_Elephant(Unit):
@@ -254,10 +278,14 @@ class War_Elephant(Unit):
     zoc = []
     type = "Cavalry"
         
-    double_attack_cost = True  # Attack takes two actions
-    triple_attack = True  # Also hits the two diagonally nearby tiles in the attack direction.
-    push = True  # If attack and defence rolls both succeed, it can still move forward.
-                 # If not on back line, opponents units must retreat directly backwards or die.
+    double_attack_cost = True
+    triple_attack = True
+    push = True
+
+    descriptions = {"double_attack_cost": "Attack takes two actions.",
+                    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
+                    "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
+                            "opponents units must retreat directly backwards or die."}
 
 
 class Samurai(Unit):
@@ -272,8 +300,10 @@ class Samurai(Unit):
     zoc = []
     type = "Infantry"
         
-    samuraiing = True  # Can make an attack after its first action. (But not a second move)
-    
+    samuraiing = True
+
+    descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)"}
+
 
 class Saboteur(Unit):
     
@@ -286,8 +316,9 @@ class Saboteur(Unit):
     dbonus = {}
     type = "Infantry"
     
-    abilities = ["sabotage",  # Reduces a units defence to 0 for 1 turn.
-                 "poison"]  # Freezes a unit for 2 turns.
+    abilities = ["sabotage", "poison"]
+
+    descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
 
 
 class Diplomat(Unit):
@@ -301,8 +332,10 @@ class Diplomat(Unit):
     dbonus = {}
     type = "Infantry"
         
-    abilities = ["bribe"]  # You can use an opponent's unit this turn. Your opponent can't use it on his next turn.
-                           # You can't bribe the same unit on your next turn. The unit gets +1A until end of turn.
+    abilities = ["bribe"]
+
+    descriptions = {"bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. "
+                             "You can't bribe the same unit on your next turn. The unit gets +1A until end of turn."}
 
 
 class Weaponsmith(Unit):
@@ -316,4 +349,6 @@ class Weaponsmith(Unit):
     dbonus = {}
     type = "Infantry"
     
-    abilities = ["improve_weapons"]  # Improve weapons: Give melee unit +3 attack, +1 defence until your next turn
+    abilities = ["improve_weapons"]
+
+    descriptions = {"improve_weapons": "Improve weapons: Give melee unit +3 attack, +1 defence until your next turn"}

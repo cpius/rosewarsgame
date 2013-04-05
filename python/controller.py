@@ -40,9 +40,6 @@ class Controller(object):
         self.clear_move()
 
     def trigger_artificial_intelligence(self):
-        print "turn", self.gamestate.turn
-        print "action", 3 - self.gamestate.get_actions_remaining()
-        print
 
         action = self.gamestate.current_player().ai.select_action(self.gamestate)
 
@@ -66,12 +63,9 @@ class Controller(object):
             self.start_position = position
             self.selected_unit = self.gamestate.player_units()[self.start_position]
 
-            illustrate_actions = []
-            for action in self.gamestate.available_actions:
-                if action.start_position == position:
-                    illustrate_actions.append(action)
+            illustrate_actions = (action for action in self.gamestate.get_actions() if action.start_position == position)
 
-            self.view.draw_game(self.gamestate, illustrate_actions)
+            self.view.draw_game(self.gamestate, position, illustrate_actions)
 
         elif self.start_position \
             and not self.end_position \
@@ -96,7 +90,8 @@ class Controller(object):
                                 self.selected_unit.abilities[0])
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units() and self.selected_unit.range > 1:
+        elif self.start_position and not self.end_position and position in self.gamestate.opponent_units() \
+                and self.selected_unit.range > 1:
             action = Action(self.start_position, self.start_position, position, True, False)
             self.perform_action(action)
 
@@ -111,11 +106,16 @@ class Controller(object):
 
             for possible_action in all_actions:
                 if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == position:
+                        and possible_action.attack_position == position and possible_action.move_with_attack:
                     if possible_action.end_position == self.start_position:
                         action = possible_action
                         break
                     action = possible_action
+
+            if not action:
+                for possible_action in all_actions:
+                    if possible_action.start_position == self.start_position and possible_action.attack_position == pos:
+                        action = possible_action
 
             if not action:
                 self.view.draw_message("Action not possible")
@@ -164,10 +164,7 @@ class Controller(object):
                         break
                     action = possible_action
 
-            if not action:
-                print "Action not possible"
-                self.clear_move()
-            else:
+            if action:
                 self.perform_action(action)
 
         elif self.start_position and self.end_position and position in self.gamestate.opponent_units():
@@ -195,10 +192,6 @@ class Controller(object):
                         self.left_click(position)
                     elif event.button == 3:
                         self.right_click(position)
-
-                if event.type == KEYDOWN and event.key == K_p:
-                    print "paused"
-                    self.pause()
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     self.clear_move()
@@ -284,10 +277,7 @@ class Controller(object):
             self.view.draw_message("Action not allowed")
             return
 
-        elif matching_actions > 1:
-            print "Action ambiguous"
-            self.clear_move()
-            return
+        assert matching_actions <= 1
 
         self.gamestate.do_action(action)
 
@@ -324,11 +314,6 @@ class Controller(object):
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            print self.gamestate.current_player().color, "extra action"
-        else:
-            print self.gamestate.current_player().color
-
         self.clear_move()
 
         if self.gamestate.current_player().ai_name != "Human":
@@ -345,22 +330,10 @@ class Controller(object):
             color = self.gamestate.players[1].color
 
         if unit:
-            print
-            print unit
-            for attribute, value in unit.__dict__.items():
-                if attribute not in ["name", "yellow_counters", "blue_counters", "pic",
-                                     "color", "range", "movement"]:
-                    if value:
-                        print attribute, value
-
             self.view.show_unit_zoomed(unit.name, color)
-
-            while True:
-                for event in pygame.event.get():
-                    if event.type == pygame.MOUSEBUTTONDOWN or event.type == KEYDOWN:
-                        self.gamestate.recalculate_special_counters()
-                        self.view.draw_game(self.gamestate)
-                        return
+            self.pause()
+            self.view.draw_game(self.gamestate)
+            return
 
     def save_game(self):
         name = str(self.action_index) + ". " \
