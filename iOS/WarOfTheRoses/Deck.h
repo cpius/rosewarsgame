@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "Card.h"
-#import "BaseDeckStrategy.h"
 
 @interface Deck : NSObject {
 }

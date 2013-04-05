@@ -24,11 +24,10 @@
         
         _row = @(card.cardLocation.row);
         _column = @(card.cardLocation.column);
-        _cardType = @(card.cardType);
-        _unitType = @(card.unitType);
         _unitName = @(card.unitName);
-        _unitAttackType = @(card.unitAttackType);
         _cardColor = @(card.cardColor);
+        _hitpoints = @(card.hitpoints);
+        _experience = @(card.experience);
         
         _attackBonus = @([card.attack getRawBonusValue]);
         _defenseBonus = @([card.defence getRawBonusValue]);
@@ -36,6 +35,8 @@
         for (TimedAbility *ability in card.currentlyAffectedByAbilities) {
             [_affectedByAbilities addObject:[[[TimedAbilityForSerialization alloc] initWithTimedAbility:ability] asDictionary]];
         }
+        
+        _cardSpecificStats = [NSDictionary dictionaryWithDictionary:[card asDictionary]];
     }
     
     return self;
@@ -49,9 +50,12 @@
             _cardColor, @"cardcolor",
             _attackBonus, @"attackbonus",
             _defenseBonus, @"defensebonus",
+            _hitpoints, @"hitpoints",
+            _experience, @"experience",
             nil];
     
     [gamedata setValue:_affectedByAbilities forKey:@"abilities"];
+    [gamedata setValue:_cardSpecificStats forKey:@"card_specific_stats"];
     
     return gamedata;
 }

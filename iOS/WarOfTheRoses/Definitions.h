@@ -15,15 +15,21 @@
 #define BOARDSIZE_COLUMNS 5
 
 #define LOWER_BACKLINE 8
+#define LOWER_FRONTLINE 5
 #define UPPER_BACKLINE 1
+#define UPPER_FRONTLINE 4
 
 #define kEnemyActionDelayTime 1.0
+
+#define NUMBER_OF_BASICUNITS 6
+#define NUMBER_OF_SPECIALUNITS 3
 
 typedef enum {
     kActionTypeMove = 0,
     kActionTypeMelee,
     kActionTypeRanged,
-    kActionTypeAbility
+    kActionTypeAbility,
+    kActionTypePush
 } ActionTypes;
 
 typedef enum {
@@ -41,6 +47,26 @@ typedef enum {
     kGameBoardUpper = 0,
     kGameBoardLower
 } GameBoardSides;
+
+NS_INLINE NSUInteger GetFrontlineForGameBoardSide(GameBoardSides side) {
+
+    if (side == kGameBoardUpper) {
+        return UPPER_FRONTLINE;
+    }
+    else {
+        return LOWER_FRONTLINE;
+    }
+}
+
+NS_INLINE NSUInteger GetBacklineForGameBoardSide(GameBoardSides side) {
+    
+    if (side == kGameBoardUpper) {
+        return UPPER_BACKLINE;
+    }
+    else {
+        return LOWER_BACKLINE;
+    }
+}
 
 typedef enum {
     kGameStateInitialState = 0,
@@ -134,6 +160,16 @@ typedef enum {
     kPlayerGreen = 0,
     kPlayerRed = 1
 } PlayerColors;
+
+NS_INLINE CardColors OppositeColorOfCardColor(CardColors cardColor) {
+    
+    if (cardColor == kCardColorGreen) {
+        return kCardColorRed;
+    }
+    else {
+        return kCardColorGreen;
+    }
+}
 
 NS_INLINE PlayerColors OppositeColorOf(PlayerColors playerColor) {
     

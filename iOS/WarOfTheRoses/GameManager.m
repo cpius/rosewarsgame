@@ -8,7 +8,7 @@
 
 #import "GameManager.h"
 #import "RandomDiceStrategy.h"
-#import "RandomDeckStrategy.h"
+#import "MinimumRequirementDeckStrategy.h"
 #import "MinimumRequirementDeckStrategy.h"
 
 #import "AIStrategyAdvancer.h"
@@ -28,7 +28,7 @@
         
         _currentGame = [[Game alloc] init];
                 
-        self.deckStrategy = [RandomDeckStrategy strategy];
+        self.deckStrategy = [MinimumRequirementDeckStrategy strategy];
     }
     
     return self;
@@ -64,11 +64,11 @@
     
     // Only 1 action in first round
     _currentGame.numberOfAvailableActions = 1;
-    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:_currentGame.myColor];
+    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:NUMBER_OF_BASICUNITS andSpecialType:NUMBER_OF_SPECIALUNITS cardColor:_currentGame.myColor];
     
     if (gameType == kGameTypeMultiPlayer) {
         
-        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:_currentGame.enemyColor];
+        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:NUMBER_OF_BASICUNITS andSpecialType:NUMBER_OF_SPECIALUNITS cardColor:_currentGame.enemyColor];
     }
     
     if (gameType == kGameTypeSinglePlayer) {
@@ -76,24 +76,8 @@
         _enemyPlayer = [[AIPlayer alloc] initWithStrategy:[[AIStrategyAdvancer alloc] init]];
         _enemyPlayer.deckStrategy = [MinimumRequirementDeckStrategy strategy];
         
-        BOOL setupComplete = NO;
-        NSUInteger retries = 0;
-        
-        while (!setupComplete) {
-            
-            retries++;
-            _currentGame.enemyDeck = [_enemyPlayer.deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:_currentGame.enemyColor];
-            [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
-        
-            if ([_enemyPlayer.deckStrategy respondsToSelector:@selector(deckSetupMatchesRequirements)]) {
-                setupComplete = [_enemyPlayer.deckStrategy deckSetupMatchesRequirements];
-            }
-            else {
-                setupComplete = YES;
-            }
-        }
-        
-        NSLog(@"Number of retries before deck met requirements: %d", retries);
+        _currentGame.enemyDeck = [_enemyPlayer.deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:_currentGame.enemyColor];
+        [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
     }
     
     // Random color (green or red)
@@ -147,12 +131,7 @@
 
 - (NSUInteger)actionUsed:(Action*)action {
     
-    if (action.isAttack) {
-        _currentGame.numberOfAvailableActions -= action.cardInAction.attackActionCost;
-    }
-    else {
-        _currentGame.numberOfAvailableActions -= action.cardInAction.moveActionCost;
-    }
+    _currentGame.numberOfAvailableActions -= action.cost;
     
     return _currentGame.numberOfAvailableActions;
 }
@@ -224,6 +203,13 @@
     }
 }
 
+- (void)endGameWithGameResult:(GameResults)gameResult {
+    
+    if (_currentGame.gametype == kGameTypeMultiPlayer) {
+        [[GCTurnBasedMatchHelper sharedInstance] endMatchWithData:[_currentGame serializeCurrentGame] gameResult:gameResult];
+    }
+}
+
 - (Action *)getActionForEnemeyPlayer {
     
     [_enemyPlayer createBattlePlansForUnits:_currentGame.enemyDeck.cards sgainstEnemyUnits:_currentGame.myDeck.cards fromUnitLayout:_currentGame.unitLayout];
@@ -265,11 +251,16 @@
         
         Card *card = [_currentGame.unitLayout objectForKey:location];
         
-        if ([card isOwnedByPlayerWithColor:_currentGame.enemyColor] && location.row == LOWER_BACKLINE) {
+        if ([card isOwnedByPlayerWithColor:_currentGame.enemyColor] &&
+            location.row == LOWER_BACKLINE &&
+            ![card isAffectedByAbility:kAbilityBribe]) {
+            
             return kGameResultDefeat;
         }
 
-        if ([card isOwnedByPlayerWithColor:_currentGame.myColor] && location.row == UPPER_BACKLINE) {
+        if ([card isOwnedByPlayerWithColor:_currentGame.myColor] &&
+            location.row == UPPER_BACKLINE &&
+            ![card isAffectedByAbility:kAbilityBribe]) {
             return kGameResultVictory;
         }
     }

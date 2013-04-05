@@ -18,7 +18,7 @@
     [super startTimedAbility];
     
     // Bribe makes card change color
-    self.card.cardColor = !self.card.cardColor;
+    self.card.cardColor = OppositeColorOfCardColor(self.card.cardColor);
     
     // And adds a +1 attack bonus
     [self.card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfRounds:1]];
@@ -27,7 +27,10 @@
 }
 
 - (void)stopTimedAbility {
-    
+
+    // Reset card color
+    self.card.cardColor = OppositeColorOfCardColor(self.card.cardColor);
+
     // After bribe card has 1 cooldown round
     [AbilityFactory addAbilityOfType:kAbilityCoolDown onCard:self.card];
 }

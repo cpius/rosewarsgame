@@ -8,8 +8,6 @@
 
 #import "Deck.h"
 #import "CardPool.h"
-#import "RandomDeckStrategy.h"
-#import "FixedDeckStrategy.h"
 
 @interface Deck()
 

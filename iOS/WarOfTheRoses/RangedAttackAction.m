@@ -37,6 +37,11 @@
     return kActionTypeRanged;
 }
 
+- (NSUInteger)cost {
+    
+    return self.cardInAction.attackActionCost;
+}
+
 - (void)performActionWithCompletion:(void (^)())completion {
     
     _battleReport = [BattleReport battleReportWithAction:self];

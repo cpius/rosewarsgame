@@ -29,6 +29,7 @@
         self.hitpoints = 1;
         
         self.attackSound = @"catapult_attacksound.wav";
+        self.defeatSound = BOOM_SOUND;
         
         self.frontImageSmall = @"catapult_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"catapult_%d.png", self.cardColor];

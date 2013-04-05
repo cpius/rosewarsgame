@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CardForSerialization : NSObject
+@interface CardForSerialization : NSObject {
+    
+    NSDictionary *_cardSpecificStats;
+}
 
 @property (nonatomic, readonly) NSNumber *row;
 @property (nonatomic, readonly) NSNumber *column;
@@ -18,6 +21,8 @@
 @property (nonatomic, readonly) NSNumber *unitName;
 @property (nonatomic, readonly) NSNumber *unitAttackType;
 @property (nonatomic, readonly) NSNumber *cardColor;
+@property (nonatomic, readonly) NSNumber *hitpoints;
+@property (nonatomic, readonly) NSNumber *experience;
 
 @property (nonatomic, readonly) NSNumber *attackBonus;
 @property (nonatomic, readonly) NSNumber *defenseBonus;

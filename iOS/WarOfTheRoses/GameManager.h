@@ -44,6 +44,7 @@
 
 - (BOOL)shouldEndTurn;
 - (void)endTurn;
+- (void)endGameWithGameResult:(GameResults)gameResult;
 
 - (void)card:(Card*)card movedToGridLocation:(GridLocation*)location;
 - (void)attackSuccessfulAgainstCard:(Card*)card;

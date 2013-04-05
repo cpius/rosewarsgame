@@ -19,7 +19,4 @@
 - (void)placeCardsInDeck:(Deck*)deck inGameBoardSide:(GameBoardSides)gameBoardSide;
 - (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor;
 
-@optional
-- (BOOL)deckSetupMatchesRequirements;
-
 @end

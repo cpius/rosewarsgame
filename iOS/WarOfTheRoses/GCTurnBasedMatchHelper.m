@@ -121,6 +121,37 @@
     }
 }
 
+- (void)endMatchWithData:(NSData*)data gameResult:(GameResults)gameResult {
+    
+    NSUInteger currentIndex = [_currentMatch.participants
+                               indexOfObject:_currentMatch.currentParticipant];
+    
+    GKTurnBasedParticipant *nextParticipant = [_currentMatch.participants objectAtIndex:
+                                               ((currentIndex + 1) % [_currentMatch.participants count ])];
+    
+    if (gameResult != kGameResultInProgress) {
+        if (gameResult == kGameResultVictory) {
+            _currentMatch.currentParticipant.matchOutcome = GKTurnBasedMatchOutcomeWon;
+            nextParticipant.matchOutcome = GKTurnBasedMatchOutcomeLost;
+            
+            _currentMatch.message = [NSString stringWithFormat:@"You lost the game against %@", [GKLocalPlayer localPlayer].alias];
+        }
+        else if (gameResult == kGameResultDefeat) {
+            _currentMatch.currentParticipant.matchOutcome = GKTurnBasedMatchOutcomeLost;
+            nextParticipant.matchOutcome = GKTurnBasedMatchOutcomeWon;
+            
+            _currentMatch.message = [NSString stringWithFormat:@"You won the game against %@", [GKLocalPlayer localPlayer].alias];
+        }
+        
+        [_currentMatch endMatchInTurnWithMatchData:data completionHandler:^(NSError *error) {
+            
+            if (error) {
+                NSLog(@"%@", error);
+            }
+        }];
+    }
+}
+
 - (void)endTurnWithData:(NSData *)data {
     
     NSUInteger currentIndex = [_currentMatch.participants
@@ -130,14 +161,16 @@
                                                ((currentIndex + 1) % [_currentMatch.participants count ])];
     
     NSLog(@"Send Turn, %@, %@", data, nextParticipant);
-
+    
+    _currentMatch.message = [NSString stringWithFormat:@"It's your turn against %@", [GKLocalPlayer localPlayer].alias];
+    
     [_currentMatch endTurnWithNextParticipant:nextParticipant
-                                   matchData:data completionHandler:^(NSError *error) {
-                                       
-                                       if (error) {
-                                           NSLog(@"%@", error);
-                                       }
-                                   }];
+                                    matchData:data completionHandler:^(NSError *error) {
+                                        
+                                        if (error) {
+                                            NSLog(@"%@", error);
+                                        }
+                                    }];
 }
 
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController playerQuitForMatch:(GKTurnBasedMatch *)match {
@@ -192,19 +225,6 @@
         [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error) {
             
             [GKTurnBasedEventHandler sharedTurnBasedEventHandler].delegate = self;
-            
-            // Delete all old matches - uncomment before release!
-            [GKTurnBasedMatch loadMatchesWithCompletionHandler:^(NSArray *matches, NSError *error) {
-
-                for (GKTurnBasedMatch *match in matches) {
-                    [match removeWithCompletionHandler:^(NSError *error) {
-                        
-                        if (error) {
-                            CCLOG(@"Error removing game: %@", error.localizedDescription);
-                        }
-                    }];
-                }
-            }];
         }];
     }
     else {

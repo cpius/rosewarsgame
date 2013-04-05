@@ -28,6 +28,7 @@
         self.hitpoints = 1;
         
         self.attackSound = @"sword_sound.wav";
+        self.defeatSound = @"infantry_defeated_sound.mp3";
 
         self.frontImageSmall = @"pikeman_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"pikeman_%d.png", self.cardColor];

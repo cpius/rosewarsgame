@@ -17,6 +17,7 @@
 #import "StandardBattleStrategy.h"
 #import "GameManager.h"
 #import "BattleResult.h"
+#import "Berserker.h"
 
 @implementation CombatTest
 
@@ -162,6 +163,80 @@
     [_manager endTurn];
 
     STAssertTrue([attacker.attack calculateValue].lowerValue == 5, @"Attack lower value should be 5");
+}
+
+- (void)testAttackDirections {
+    
+    LightCavalry *attacker = [LightCavalry card];
+    Pikeman *defender1 = [Pikeman card];
+    
+    attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    defender1.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:attacker]
+                                    player2Units:[NSArray arrayWithObjects:defender1, nil]];
+    
+    BattlePlan *battlePlan = [[BattlePlan alloc] init];
+    
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsForCard:attacker whenAttackingEnemyCard:defender1 withUnitLayout:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(attackDirections.count == 3, @"Should be 3 attackdirections");
+
+    STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:2]], @"Should be an attackdirection");
+    STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:4 column:3]], @"Should be an attackdirection");
+    STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:4]], @"Should be an attackdirection");
+}
+
+- (void)testAttackDirectionsWithEnemyCardsObstructing {
+    
+    LightCavalry *attacker = [LightCavalry card];
+    Pikeman *defender1 = [Pikeman card];
+    Pikeman *defender2 = [Pikeman card];
+    Pikeman *defender3 = [Pikeman card];
+    
+    attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    defender1.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    defender2.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    defender3.cardLocation = [GridLocation gridLocationWithRow:5 column:2];
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:attacker]
+                                    player2Units:[NSArray arrayWithObjects:defender1, defender2, defender3, nil]];
+    
+    BattlePlan *battlePlan = [[BattlePlan alloc] init];
+    
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsForCard:attacker whenAttackingEnemyCard:defender1 withUnitLayout:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(attackDirections.count == 1, @"Should be 1 attackdirections");
+    
+    STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:4]], @"Should be an attackdirection");
+}
+
+- (void)testAttackDirectionsWithBerserker {
+    
+    Berserker *attacker = [Berserker card];
+    Pikeman *defender1 = [Pikeman card];
+    
+    attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    attacker.cardColor = kCardColorGreen;
+    
+    defender1.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    defender1.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:attacker]
+                                    player2Units:[NSArray arrayWithObjects:defender1, nil]];
+    
+    BattlePlan *battlePlan = [[BattlePlan alloc] init];
+    
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsForCard:attacker whenAttackingEnemyCard:defender1 withUnitLayout:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(attackDirections.count == 3, @"Should be 3 attackdirections");
+    
+    STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:4]], @"Should be an attackdirection");
+    STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:2]], @"Should be an attackdirection");
+    STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:4 column:3]], @"Should be an attackdirection");
 }
 
 @end

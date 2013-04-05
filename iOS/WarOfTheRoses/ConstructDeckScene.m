@@ -14,7 +14,7 @@
 #import "ParticleHelper.h"
 #import "GameManager.h"
 #import "CardSprite.h"
-#import "RandomDeckStrategy.h"
+#import "MinimumRequirementDeckStrategy.h"
 
 @interface ConstructDeckScene()
 
@@ -84,7 +84,7 @@
         }
     }
     
-    [GameManager sharedManager].currentGame.myDeck = [[RandomDeckStrategy strategy] generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:[GameManager sharedManager].currentGame.myColor];
+    [GameManager sharedManager].currentGame.myDeck = [[GameManager sharedManager].deckStrategy generateNewDeckWithNumberOfBasicType:NUMBER_OF_BASICUNITS andSpecialType:NUMBER_OF_SPECIALUNITS cardColor:[GameManager sharedManager].currentGame.myColor];
     
     [self presentCards];
 }

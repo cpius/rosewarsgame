@@ -10,6 +10,6 @@
 
 @interface RangedAttackAction : Action
 
-@property (nonatomic, assign) BattleResult *battleResult;
+@property (nonatomic, strong) BattleResult *battleResult;
 
 @end

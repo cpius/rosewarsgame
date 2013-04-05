@@ -13,6 +13,7 @@
 #import "StandardBattleStrategy.h"
 #import "WarElephantBattleStrategy.h"
 #import "MoveAction.h"
+#import "PushAction.h"
 
 @implementation WarElephant
 
@@ -40,6 +41,8 @@
         self.hitpoints = 1;
         
         self.attackSound = @"Elephant.mp3";
+        self.defeatSound = @"Elephant.mp3";
+
         self.frontImageSmall = @"warelephant_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"warelephant_%d.png", self.cardColor];
         
@@ -105,7 +108,7 @@
                 [[GameManager sharedManager] attackSuccessfulAgainstCard:action.enemyCard];
             }
             else {
-                MoveAction *pushAction = [[MoveAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard enemyCard:nil];
+                PushAction *pushAction = [[PushAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard];
                 
                 pushAction.delegate = action.delegate;
                 [pushAction performActionWithCompletion:^{

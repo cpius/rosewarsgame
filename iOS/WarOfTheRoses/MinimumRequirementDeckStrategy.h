@@ -13,6 +13,8 @@
     
     NSArray *_nonFrontLineUnits;
     NSArray *_nonBackLineUnits;
+    
+    GameBoardSides _placeCardsInSide;
 }
 
 @end

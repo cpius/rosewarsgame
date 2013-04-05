@@ -17,6 +17,9 @@
 #import "TestHelper.h"
 #import "MeleeAttackAction.h"
 #import "PathFinderStep.h"
+#import "Diplomat.h"
+#import "AbilityAction.h"
+#import "GameBoardMockup.h"
 
 @class GameManager;
 @implementation WarOfTheRosesTest
@@ -27,6 +30,9 @@
     
     _manager = [GameManager sharedManager];
     
+    _manager.currentGame.myColor = kPlayerGreen;
+    _manager.currentGame.enemyColor = kPlayerRed;
+
     _attackerFixedStrategy = [FixedDiceStrategy strategy];
     _defenderFixedStrategy = [FixedDiceStrategy strategy];
 }
@@ -152,6 +158,88 @@
     GridLocation *secondLocation = [[GridLocation gridLocationWithRow:8 column:1] flipBacklineFromCurrentBackline:LOWER_BACKLINE];
     STAssertTrue(secondLocation.column == 1, @"Column stays the same after flip");
     STAssertTrue(secondLocation.row == 1, @"Row should be 1 after flip");
+}
+
+- (void)testVictoryWhenUnitOnEnemyBackline {
+    
+    Diplomat *attacker = [Diplomat card];
+    Pikeman *defender1 = [Pikeman card];
+    
+    attacker.cardLocation = [GridLocation gridLocationWithRow:UPPER_BACKLINE + 1 column:3];
+    attacker.cardColor = kCardColorGreen;
+    defender1.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
+    defender1.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:attacker]
+                                    player2Units:[NSArray arrayWithObject:defender1]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    GameResults result = [_manager checkForEndGame];
+    STAssertTrue(result == kGameResultInProgress, @"Game should be in progress");
+    
+    [_manager card:attacker movedToGridLocation:[GridLocation gridLocationWithRow:UPPER_BACKLINE column:3]];
+
+    result = [_manager checkForEndGame];
+    STAssertTrue(result == kGameResultVictory, @"Should result in victory");
+}
+
+- (void)testDefeatWhenUnitOnMyBackline {
+    
+    Diplomat *attacker = [Diplomat card];
+    Pikeman *defender1 = [Pikeman card];
+    
+    attacker.cardColor = kCardColorGreen;
+    attacker.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
+    defender1.cardColor = kCardColorRed;
+    defender1.cardLocation = [GridLocation gridLocationWithRow:LOWER_BACKLINE - 1 column:3];
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:attacker]
+                                    player2Units:[NSArray arrayWithObject:defender1]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    GameResults result = [_manager checkForEndGame];
+    STAssertTrue(result == kGameResultInProgress, @"Game should be in progress");
+    
+    [_manager card:defender1 movedToGridLocation:[GridLocation gridLocationWithRow:LOWER_BACKLINE column:3]];
+    
+    result = [_manager checkForEndGame];
+    STAssertTrue(result == kGameResultDefeat, @"Should result in victory");
+}
+
+- (void)testNoVictoryWhenUnitBribedOnEnemyBackline {
+    
+    Diplomat *attacker = [Diplomat card];
+    Pikeman *defender1 = [Pikeman card];
+    
+    attacker.cardColor = kCardColorGreen;
+    attacker.cardLocation = [GridLocation gridLocationWithRow:UPPER_BACKLINE + 1 column:3];
+    
+    defender1.cardColor = kCardColorRed;
+    defender1.cardLocation = [GridLocation gridLocationWithRow:UPPER_BACKLINE  column:3];
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:attacker]
+                                    player2Units:[NSArray arrayWithObject:defender1]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    GameResults result = [_manager checkForEndGame];
+    STAssertTrue(result == kGameResultInProgress, @"Game should be in progress");
+    
+    AbilityAction *action = [[AbilityAction alloc] initWithPath:@[[GridLocation gridLocationWithRow:UPPER_BACKLINE column:3]] andCardInAction:attacker targetCard:defender1];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    action.delegate = mock;
+    
+    [action performActionWithCompletion:^{
+        
+        GameResults result = [_manager checkForEndGame];
+        STAssertTrue(result == kGameResultInProgress, @"Game should still be in progress");
+    }];
 }
 
 @end

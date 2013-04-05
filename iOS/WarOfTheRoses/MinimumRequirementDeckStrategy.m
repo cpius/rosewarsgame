@@ -14,6 +14,9 @@
 
 - (Card*)unitAtGridLocation:(GridLocation*)gridLocation;
 
+- (BOOL)deckContainsRequiredUnits;
+- (BOOL)deckPlacedAccordingToRequirements;
+
 @end
 
 @implementation MinimumRequirementDeckStrategy
@@ -58,38 +61,73 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
 
 - (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
     
-    _cards = [[NSMutableArray alloc] init];
-    
+    NSUInteger retries = 0;
     CardPool *cardPool = [[CardPool alloc] init];
-    
-    NSInteger numberOfBasicTypes = 0;
-    NSInteger numberOfSpecialTypes = 0;
-    
-    while (numberOfBasicTypes < basicType) {
+
+    do {
+        _cards = [[NSMutableArray alloc] init];
         
-        Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeBasicUnit];
+        NSInteger numberOfBasicTypes = 0;
+        NSInteger numberOfSpecialTypes = 0;
         
-        drawnCard.cardColor = cardColor;
-        
-        if ([self cardIsAllowedInDeck:drawnCard]) {
-            [_cards addObject:drawnCard];
-            numberOfBasicTypes++;
+        while (numberOfBasicTypes < basicType) {
+            
+            Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeBasicUnit];
+            
+            drawnCard.cardColor = cardColor;
+            
+            if ([self cardIsAllowedInDeck:drawnCard]) {
+                [_cards addObject:drawnCard];
+                numberOfBasicTypes++;
+            }
         }
-    }
-    
-    while (numberOfSpecialTypes < specialType) {
         
-        Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeSpecialUnit];
-        
-        drawnCard.cardColor = cardColor;
-        
-        if ([self cardIsAllowedInDeck:drawnCard]) {
-            [_cards addObject:drawnCard];
-            numberOfSpecialTypes++;
+        while (numberOfSpecialTypes < specialType) {
+            
+            Card *drawnCard = [cardPool drawCardOfCardType:kCardTypeSpecialUnit];
+            
+            drawnCard.cardColor = cardColor;
+            
+            if ([self cardIsAllowedInDeck:drawnCard]) {
+                [_cards addObject:drawnCard];
+                numberOfSpecialTypes++;
+            }
         }
-    }
+        
+        retries++;
+        
+    } while (![self deckContainsRequiredUnits]);
+    
+    CCLOG(@"%d retries before deck contained required units", retries);
     
     return [[Deck alloc] initWithCards:_cards];
+}
+
+- (BOOL)deckContainsRequiredUnits {
+
+    return [self deckContainsAtLeastOnePikeman] &&
+            [self deckContainsMaxTwoSiegeWeapons];
+}
+
+- (BOOL)deckPlacedAccordingToRequirements {
+    
+    return [self deckContainsNoNonFrontLineUnitInFrontLine] &&
+    [self deckContainsNoBackLineUnitsInBackLine] &&
+    [self deckContainsMoreThanOneUnitOnBackLine] &&
+    [self deckContainsMaxOnePikemanPerColumn];
+}
+
+- (BOOL)deckContainsMaxTwoSiegeWeapons {
+    
+    NSUInteger numberOfSiegeWeapons = 0;
+    
+    for (Card *card in _cards) {
+        if (card.unitType == kSiege) {
+            numberOfSiegeWeapons++;
+        }
+    }
+    
+    return numberOfSiegeWeapons <= 2;
 }
 
 - (BOOL)deckContainsAtLeastOnePikeman {
@@ -106,7 +144,7 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
 - (BOOL)deckContainsNoNonFrontLineUnitInFrontLine {
     
     for (Card *card in _cards) {
-        if (card.cardLocation.row == 4 && [_nonFrontLineUnits containsObject:@(card.unitName)]) {
+        if (card.cardLocation.row == GetFrontlineForGameBoardSide(_placeCardsInSide) && [_nonFrontLineUnits containsObject:@(card.unitName)]) {
             return NO;
         }
     }
@@ -116,8 +154,10 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
 
 - (BOOL)deckContainsNoBackLineUnitsInBackLine {
     
+    NSUInteger backline = GetBacklineForGameBoardSide(_placeCardsInSide);
+    
     for (Card *card in _cards) {
-        if (card.cardLocation.row == 1 && [_nonBackLineUnits containsObject:@(card.unitName)]) {
+        if (card.cardLocation.row == backline  && [_nonBackLineUnits containsObject:@(card.unitName)]) {
             return NO;
         }
     }
@@ -130,7 +170,7 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
     NSUInteger unitsOnBackLine = 0;
 
     for (Card *card in _cards) {
-        if (card.cardLocation.row == 1) {
+        if (card.cardLocation.row == GetBacklineForGameBoardSide(_placeCardsInSide)) {
             unitsOnBackLine++;
         }
     }
@@ -142,8 +182,11 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
     
     NSUInteger pikemen = 0;
     
+    NSUInteger rowStart = _placeCardsInSide == kGameBoardLower ? GetFrontlineForGameBoardSide(_placeCardsInSide) : GetBacklineForGameBoardSide(_placeCardsInSide);
+    NSUInteger rowEnd = _placeCardsInSide == kGameBoardLower ?  GetBacklineForGameBoardSide(_placeCardsInSide) : GetFrontlineForGameBoardSide(_placeCardsInSide);
+    
     for (int column = 1; column <= 5; column++) {
-        for (int row = 1; row <= 4; row++) {
+        for (int row = rowStart; row <= rowEnd; row++) {
             
             Card *card = [self unitAtGridLocation:[GridLocation gridLocationWithRow:row column:column]];
             if (card != nil && card.unitName == kPikeman) {
@@ -161,38 +204,42 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
     return YES;
 }
 
-- (BOOL)deckSetupMatchesRequirements {
-
-    if ([self deckContainsAtLeastOnePikeman] &&
-        [self deckContainsNoNonFrontLineUnitInFrontLine] &&
-        [self deckContainsNoBackLineUnitsInBackLine] &&
-        [self deckContainsMoreThanOneUnitOnBackLine] &&
-        [self deckContainsMaxOnePikemanPerColumn]) {
-        
-        return YES;
-    }
-    
-    return NO;
-}
 
 - (void)placeCardsInDeck:(Deck *)deck inGameBoardSide:(GameBoardSides)gameBoardSide {
     
-    NSUInteger offset = 0;
+    NSUInteger retries = 0;
     
-    for (Card *card in deck.cards) {
-        
-        BOOL cardInValidPosition = NO;
-        
-        while (!cardInValidPosition) {
+    _placeCardsInSide = gameBoardSide;
+    _cards = deck.cards.mutableCopy;
+    
+    do {
+        for (Card *card in _cards) {
             
-            GridLocation *location = [GridLocation gridLocationWithRow:(arc4random() % 4) + 1 + offset column:(arc4random() % 5) + 1];
+            BOOL cardInValidPosition = NO;
             
-            if (![self deck:deck containsCardInLocation:location]) {
+            while (!cardInValidPosition) {
                 
-                card.cardLocation = location;
-                cardInValidPosition = YES;
+                GridLocation *location;
+                
+                if (GetFrontlineForGameBoardSide(_placeCardsInSide) == UPPER_FRONTLINE) {
+                    location = [GridLocation gridLocationWithRow:(arc4random() % 4) + 1 column:(arc4random() % 5) + 1];
+                }
+                else {
+                    location = [GridLocation gridLocationWithRow:(arc4random() % 4) + 5 column:(arc4random() % 5) + 1];
+                }
+                
+                if (![self deck:deck containsCardInLocation:location]) {
+                    
+                    card.cardLocation = location;
+                    cardInValidPosition = YES;
+                }
             }
         }
-    }
+        
+        retries++;
+        
+    } while (![self deckPlacedAccordingToRequirements]);
+    
+    CCLOG(@"%d retries before deck was placed according to requirements", retries);
 }
 @end

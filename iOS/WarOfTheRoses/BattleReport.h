@@ -17,7 +17,7 @@
 @property (nonatomic, readonly) Card* enemyCard;
 @property (nonatomic, readonly) ActionTypes actionType;
 
-@property (nonatomic, assign) BattleResult *primaryBattleResult;
+@property (nonatomic, strong) BattleResult *primaryBattleResult;
 @property (nonatomic, assign) NSMutableArray *secondaryBattleResults;
 
 - (id)initWithAction:(Action*)action;

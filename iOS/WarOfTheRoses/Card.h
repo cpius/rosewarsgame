@@ -10,6 +10,7 @@
 #import "RangeAttribute.h"
 #import "GridLocation.h"
 #import "TimedAbility.h"
+#import "Serializable.h"
 
 @class Card;
 @protocol CardDelegate <NSObject>
@@ -21,7 +22,7 @@
 
 @class Action;
 @class BaseBattleStrategy;
-@interface Card : CCNode <TimedAbilityDelegate> 
+@interface Card : CCNode <TimedAbilityDelegate, Serializable>
 /*
  Angiver om der er tale om en basic unit eller en special unit
  */
@@ -40,7 +41,7 @@
 @property (nonatomic, readonly) NSInteger movesRemaining;
 
 @property (nonatomic, copy) NSString *attackSound;
-@property (nonatomic, copy) NSString *defenceSound;
+@property (nonatomic, copy) NSString *defeatSound;
 @property (nonatomic, copy) NSString *moveSound;
 
 @property (nonatomic, strong) BaseBattleStrategy *battleStrategy;
@@ -131,6 +132,7 @@
 - (void)combatFinishedAgainstAttacker:(Card*)attacker withOutcome:(CombatOutcome)combatOutcome;
 
 - (void)addTimedAbility:(TimedAbility*)timedAbility;
+- (BOOL)isAffectedByAbility:(AbilityTypes)abilityType;
 
 - (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action;
 

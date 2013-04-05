@@ -10,7 +10,7 @@
 #import "ParticleHelper.h"
 #import "Card.h"
 #import "EndTurnLayer.h"
-#import "MainMenuScene.h"
+#import "GameTypeScene.h"
 #import "BattlePlan.h"
 #import "AbilityAction.h"
 
@@ -35,6 +35,11 @@
 - (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType;
 
 - (void)displayCombatOutcome:(CombatOutcome)combatOutcome;
+
+- (BOOL)isAttackDirection:(GameBoardNode*)node;
+
+- (void)clearDecks;
+- (void)layoutDecks;
 
 @end
 
@@ -96,18 +101,7 @@
         [self addChild:_gameboard];
         
         [_gameboard layoutBoard];
-
-        _myCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.myDeck.cards.count];
-        [self addDeckToScene:[GameManager sharedManager].currentGame.myDeck];
-        [_gameboard layoutDeck:_myCards forPlayerWithColor:_gameManager.currentGame.myColor];
-
-        if (_gameManager.currentGame.state == kGameStateGameStarted) {
-            _enemyCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.enemyDeck.cards.count];
-            [self addDeckToScene:[GameManager sharedManager].currentGame.enemyDeck];
-            [_gameboard layoutDeck:_enemyCards forPlayerWithColor:_gameManager.currentGame.enemyColor];
-        }
-        
-        [_gameManager.currentGame populateUnitLayout];
+        [self layoutDecks];
 
         self.isTouchEnabled = YES;
         
@@ -116,13 +110,46 @@
         [[CCDirector sharedDirector].touchDispatcher addTargetedDelegate:self priority:0 swallowsTouches:YES];
         
         [self turnChangedToPlayerWithColor:_gameManager.currentPlayersTurn];
+        
+        if (_gameManager.currentGame.gameOver) {
+            GameResults result = [_gameManager checkForEndGame];
+            [self showGameResult:result];
+        }
     }
     
     return self;
 }
 
-- (void)addDeckToScene:(Deck *)deck {
+- (void)clearDecks {
+
+    for (CCNode *node in self.children) {
+        
+        if ([node isKindOfClass:[CardSprite class]]) {
+            [node removeFromParentAndCleanup:YES];
+        }
+    }
     
+    [_myCards removeAllObjects];
+    [_enemyCards removeAllObjects];
+}
+
+- (void)layoutDecks {
+    
+    _myCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.myDeck.cards.count];
+    [self addDeckToScene:[GameManager sharedManager].currentGame.myDeck];
+    [_gameboard layoutDeck:_myCards forPlayerWithColor:_gameManager.currentGame.myColor];
+    
+    if (_gameManager.currentGame.state == kGameStateGameStarted) {
+        _enemyCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.enemyDeck.cards.count];
+        [self addDeckToScene:[GameManager sharedManager].currentGame.enemyDeck];
+        [_gameboard layoutDeck:_enemyCards forPlayerWithColor:_gameManager.currentGame.enemyColor];
+    }
+    
+    [_gameManager.currentGame populateUnitLayout];
+}
+
+- (void)addDeckToScene:(Deck *)deck {
+        
     CGSize screenSize = [CCDirector sharedDirector].winSize;
 
     for (Card *card in deck.cards) {
@@ -131,6 +158,7 @@
         
         cardSprite.position = ccp(screenSize.width / 2, screenSize.height + 50);
         cardSprite.scale = 0.40;
+        cardSprite.tag = CARD_TAG;
         
         [self addChild:cardSprite];
         
@@ -148,13 +176,18 @@
     return NO;
 }
 
+- (BOOL)isAttackDirection:(GameBoardNode *)node {
+    
+    return [_attackDirections objectForKey:node.locationInGrid] != nil;
+}
+
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch = [touches anyObject];
 
     if (CGRectContainsPoint(_backButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
         
-        [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
+        [[CCDirector sharedDirector] replaceScene:[GameTypeScene scene]];
         return;
     }
 
@@ -163,7 +196,7 @@
     }
     
     if (_gameManager.currentGame.gameOver) {
-        [[CCDirector sharedDirector] replaceScene:[MainMenuScene scene]];
+        [[CCDirector sharedDirector] replaceScene:[GameTypeScene scene]];
         return;
     }
 
@@ -186,12 +219,14 @@
         if ([_gameboard nodeIsActive]) {
             
             Action *action = [_battlePlan getActionToGridLocation:targetNode.locationInGrid];
-            
-            if (action == nil || ![action isWithinRange]) {
-                
-                [self resetUserInterface];
-                [self resetAttackDirection];
-                return;
+
+            if (![self isAttackDirection:targetNode]) {
+                if (action == nil || ![action isWithinRange]) {
+                    
+                    [self resetUserInterface];
+                    [self resetAttackDirection];
+                    return;
+                }
             }
             
             if (_actionInQueue != nil) {
@@ -386,6 +421,7 @@
     _actionInQueue = nil;
     _pathInQueue = nil;
     _selectedAttackDirection = nil;
+    _attackDirections = nil;
 }
 
 - (void)resetUserInterface {
@@ -406,7 +442,7 @@
 
 - (void)cardHasBeenDefeatedInCombat:(Card *)card {
     
-    [[SoundManager sharedManager] playSoundEffectWithName:BOOM_SOUND];
+    [[SoundManager sharedManager] playSoundEffectWithName:card.defeatSound];
     
     GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:card.cardLocation];
     
@@ -415,6 +451,23 @@
     if (card.dead) {
         [_gameboard removeCardAtGameBoardNode:node];
     }
+}
+
+- (void)showGameResult:(GameResults)result {
+    CCLabelTTF *gameoverStatus;
+    
+    if (result == kGameResultVictory) {
+        gameoverStatus = [CCLabelTTF labelWithString:@"Victory!" fontName:APP_FONT fontSize:48];
+        [gameoverStatus setColor:ccc3(0, 255.0, 0)];
+        [[SoundManager sharedManager] playSoundEffectWithName:FANFARE];
+    }
+    else {
+        gameoverStatus = [CCLabelTTF labelWithString:@"Defeat!" fontName:APP_FONT fontSize:48];
+        [gameoverStatus setColor:ccc3(255.0, 0, 0)];
+    }
+    
+    gameoverStatus.position = ccp(_winSize.width / 2, _winSize.height - (_winSize.height / 4));
+    [self addChild:gameoverStatus z:5000];
 }
 
 - (void)checkForEndTurn {
@@ -428,20 +481,9 @@
     }
     else {
         
-        CCLabelTTF *gameoverStatus;
+        [self showGameResult:result];
         
-        if (result == kGameResultVictory) {
-            gameoverStatus = [CCLabelTTF labelWithString:@"Victory!" fontName:APP_FONT fontSize:48];
-            [gameoverStatus setColor:ccc3(0, 255.0, 0)];
-            [[SoundManager sharedManager] playSoundEffectWithName:FANFARE];
-        }
-        else {
-            gameoverStatus = [CCLabelTTF labelWithString:@"Defeat!" fontName:APP_FONT fontSize:48];
-            [gameoverStatus setColor:ccc3(255.0, 0, 0)];
-        }
-        
-        gameoverStatus.position = ccp(_winSize.width / 2, _winSize.height - (_winSize.height / 4));
-        [self addChild:gameoverStatus z:5000];
+        [_gameManager endGameWithGameResult:result];
     }
 }
 

@@ -61,6 +61,8 @@
 		6D5E5A48167FB599007429BD /* lightcavalry_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E5A47167FB597007429BD /* lightcavalry_0.png */; };
 		6D5E5A4A167FB758007429BD /* pikeman_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E5A49167FB757007429BD /* pikeman_icon.png */; };
 		6D5E5A4D167FB93E007429BD /* PlaceCardsScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E5A4C167FB93D007429BD /* PlaceCardsScene.m */; };
+		6D60A0E8170F3DDB00B6E2B5 /* PushAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D60A0E7170F3DDB00B6E2B5 /* PushAction.m */; };
+		6D60A0EA170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6D60A0E9170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 */; };
 		6D61515D16A7F0E8007A104E /* BonusSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D61515C16A7F0E8007A104E /* BonusSprite.m */; };
 		6D61516016A7F5C4007A104E /* GameTypeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D61515F16A7F5C4007A104E /* GameTypeScene.m */; };
 		6D61516916A82059007A104E /* GCTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D61516816A82059007A104E /* GCTurnBasedMatchHelper.m */; };
@@ -469,6 +471,9 @@
 		6D5E5A49167FB757007429BD /* pikeman_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pikeman_icon.png; path = Resources/Images/pikeman_icon.png; sourceTree = "<group>"; };
 		6D5E5A4B167FB93D007429BD /* PlaceCardsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceCardsScene.h; sourceTree = "<group>"; };
 		6D5E5A4C167FB93D007429BD /* PlaceCardsScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceCardsScene.m; sourceTree = "<group>"; };
+		6D60A0E6170F3DDB00B6E2B5 /* PushAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushAction.h; sourceTree = "<group>"; };
+		6D60A0E7170F3DDB00B6E2B5 /* PushAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushAction.m; sourceTree = "<group>"; };
+		6D60A0E9170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = infantry_defeated_sound.mp3; path = Resources/Sounds/infantry_defeated_sound.mp3; sourceTree = "<group>"; };
 		6D61515B16A7F0E8007A104E /* BonusSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonusSprite.h; sourceTree = "<group>"; };
 		6D61515C16A7F0E8007A104E /* BonusSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonusSprite.m; sourceTree = "<group>"; };
 		6D61515E16A7F5C3007A104E /* GameTypeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTypeScene.h; sourceTree = "<group>"; };
@@ -984,6 +989,7 @@
 		6DF2FD67165D68D600F08664 /* Deck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deck.m; sourceTree = "<group>"; };
 		6DF2FD6B165D767F00F08664 /* deckgreencard-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deckgreencard-hd.png"; sourceTree = "<group>"; };
 		6DF2FD6C165D767F00F08664 /* deckgreencard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deckgreencard.png; sourceTree = "<group>"; };
+		6DF3F1B9170B1EAF00F91A7A /* Serializable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serializable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1071,6 +1077,8 @@
 				6DB204CB170385A80004FFCB /* BattleReport.m */,
 				6DB204CD170386BF0004FFCB /* BattleResult.h */,
 				6DB204CE170386C10004FFCB /* BattleResult.m */,
+				6D60A0E6170F3DDB00B6E2B5 /* PushAction.h */,
+				6D60A0E7170F3DDB00B6E2B5 /* PushAction.m */,
 			);
 			name = Action;
 			sourceTree = "<group>";
@@ -1290,6 +1298,7 @@
 		6D6900E41695A13B0071EC22 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				6D60A0E9170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 */,
 				6DB204AC16F9FCBA0004FFCB /* fanfare.mp3 */,
 				6DB204AA16F9F7B70004FFCB /* Elephant.mp3 */,
 				6DC7F44216D902A200CD5071 /* catapult_attacksound.wav */,
@@ -1874,6 +1883,7 @@
 				6D0CBEBD16CC112900D241A7 /* GridLocation.m */,
 				6D0CBF0B16D209B400D241A7 /* BattlePlan.h */,
 				6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */,
+				6DF3F1B9170B1EAF00F91A7A /* Serializable.h */,
 			);
 			name = Domain;
 			sourceTree = "<group>";
@@ -2171,6 +2181,7 @@
 				6DB204BA16FA61980004FFCB /* diplomat_0.png in Resources */,
 				6DB204BB16FA61980004FFCB /* diplomat_icon-hd.png in Resources */,
 				6DB204BC16FA61980004FFCB /* diplomat_icon.png in Resources */,
+				6D60A0EA170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2396,6 +2407,7 @@
 				6DB204C61700479D0004FFCB /* TimedAbilityForSerialization.m in Sources */,
 				6DB204CC170385AA0004FFCB /* BattleReport.m in Sources */,
 				6DB204CF170386C30004FFCB /* BattleResult.m in Sources */,
+				6D60A0E8170F3DDB00B6E2B5 /* PushAction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

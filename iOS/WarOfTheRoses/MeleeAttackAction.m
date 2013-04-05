@@ -41,6 +41,10 @@
     return kActionTypeMelee;
 }
 
+- (NSUInteger)cost {
+    
+    return self.cardInAction.attackActionCost;
+}
 
 - (void)performActionWithCompletion:(void (^)())completion {
     

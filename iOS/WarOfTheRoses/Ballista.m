@@ -28,7 +28,8 @@
         self.hitpoints = 1;
         
         self.attackSound = @"bow_fired.wav";
-
+        self.defeatSound = BOOM_SOUND;
+        
         self.frontImageSmall = @"ballista_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"ballista_%d.png", self.cardColor];
 

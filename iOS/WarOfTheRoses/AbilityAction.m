@@ -35,6 +35,11 @@
     return NO;
 }
 
+- (NSUInteger)cost {
+    
+    return 1;
+}
+
 - (ActionTypes)actionType {
     
     return kActionTypeAbility;

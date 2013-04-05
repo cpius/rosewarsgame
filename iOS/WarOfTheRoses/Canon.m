@@ -36,6 +36,8 @@
         _lastAttackInRound = 0;
         
         self.attackSound = @"sword_sound.wav";
+        self.defeatSound = BOOM_SOUND;
+        
         self.frontImageSmall = @"cannon_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"cannon_%d.png", self.cardColor];
         
@@ -76,13 +78,15 @@
     return canPerformAction;
 }
 
--(BOOL)specialAbilityTriggersVersus:(Card *)opponent {
+- (NSDictionary *)asDictionary {
     
-    return NO;
+    return [NSDictionary dictionaryWithObjectsAndKeys:@(_isQuarantined), @"is_quarantined", @(_lastAttackInRound), @"last_attack_in_round", nil];
 }
 
-- (void)addSpecialAbilityVersusOpponent:(Card *)opponent {
+- (void)fromDictionary:(NSDictionary*)dictionary {
     
+    _isQuarantined = [[dictionary valueForKey:@"is_quarantined"] boolValue];
+    _lastAttackInRound = [[dictionary valueForKey:@"last_attack_in_round"] integerValue];
 }
 
 @end

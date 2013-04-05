@@ -31,6 +31,8 @@
         self.hitpoints = 2;
         
         self.attackSound = @"sword_sound.wav";
+        self.defeatSound = @"infantry_defeated_sound.mp3";
+
         self.frontImageSmall = @"viking_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"viking_%d.png", self.cardColor];
         

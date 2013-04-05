@@ -36,7 +36,7 @@
 @synthesize hasReceivedExperiencePointsThisRound;
 @synthesize numberOfLevelsIncreased;
 @synthesize delegate = _delegate;
-@synthesize attackSound = _attackSound, defenceSound = _defenceSound, moveSound = _moveSound;
+@synthesize attackSound = _attackSound, defeatSound = _defenceSound, moveSound = _moveSound;
 @synthesize currentlyAffectedByAbilities = _currentlyAffectedByAbilities;
 @synthesize hitpoints;
 @synthesize battleStrategy = _battleStrategy;
@@ -343,6 +343,25 @@
     
     return (self.cardColor == kCardColorGreen && playerColor == kPlayerGreen) ||
     (self.cardColor == kCardColorRed && playerColor == kPlayerRed);
+}
+
+- (BOOL)isAffectedByAbility:(AbilityTypes)abilityType {
+    
+    for (TimedAbility *ability in _currentlyAffectedByAbilities) {
+        if (ability.abilityType == abilityType) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (NSDictionary *)asDictionary {
+    
+    return [NSDictionary dictionary];
+}
+
+- (void)fromDictionary:(NSDictionary*)dictionary {
+    
 }
 
 @end

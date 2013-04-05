@@ -37,6 +37,7 @@
 @property (nonatomic, assign) NSUInteger score;
 @property (nonatomic, readonly) BOOL isAttack;
 @property (nonatomic, readonly) BOOL isMove;
+@property (nonatomic, readonly) NSUInteger cost;
 
 @property (nonatomic, readonly) ActionTypes actionType;
 @property (nonatomic, readonly) GridLocation *startLocation;

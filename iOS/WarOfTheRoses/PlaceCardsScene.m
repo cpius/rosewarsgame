@@ -11,7 +11,7 @@
 #import "GameManager.h"
 #import "GameScene.h"
 #import "ParticleHelper.h"
-#import "RandomDeckStrategy.h"
+#import "MinimumRequirementDeckStrategy.h"
 
 @interface PlaceCardsScene()
 
@@ -69,7 +69,7 @@
         _gridLayoutManager.numberOfColumns = 5;
         _gridLayoutManager.gridSize = CGSizeMake(screenSize.width, 140);
         _gridLayoutManager.rowPadding = 0;
-        _gridLayoutManager.columnPadding = 7;
+        _gridLayoutManager.columnPadding = 2;
         _gridLayoutManager.yOffset = 150;
         _gridLayoutManager.xOffset = 17;
         
@@ -143,12 +143,13 @@
     CCMenuItem *menu = sender;
     [menu removeFromParentAndCleanup:YES];
     
-    RandomDeckStrategy *deckStrategy = [[RandomDeckStrategy alloc] init];
-    [deckStrategy placeCardsInDeck:[GameManager sharedManager].currentGame.myDeck inGameBoardSide:kGameBoardLower];
+    [[GameManager sharedManager].deckStrategy placeCardsInDeck:[GameManager sharedManager].currentGame.myDeck inGameBoardSide:kGameBoardLower];
     
     for (CardSprite *card in _cardSprites) {
         
-        GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:card.model.cardLocation];
+        GridLocation *boardLocation = [GridLocation gridLocationWithRow:card.model.cardLocation.row - 4 column:card.model.cardLocation.column];
+        
+        GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:boardLocation];
         
         [self placeCard:card inGameBoardNode:node];
     }

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
+#import "Definitions.h"
 
 @protocol GCTurnBasedMatchHelperDelegate <NSObject>
 
@@ -36,7 +37,9 @@
 
 - (void)authenticateLocalUser;
 - (void)findMatchWithMinPlayers:(NSUInteger)minPlayers maxPlayers:(NSUInteger)maxPlayers presentingViewController:(UIViewController*) viewController;
+
 - (void)endTurnWithData:(NSData*)data;
+- (void)endMatchWithData:(NSData*)data gameResult:(GameResults)gameResult;
 
 - (void)showLeaderboardWithPresentingViewController:(UIViewController *)viewController;
 

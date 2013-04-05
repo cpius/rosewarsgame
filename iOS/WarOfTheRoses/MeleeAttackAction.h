@@ -11,6 +11,6 @@
 @interface MeleeAttackAction : Action
 
 @property (nonatomic, assign) MeleeAttackTypes meleeAttackType;
-@property (nonatomic, assign) BattleResult *battleResult;
+@property (nonatomic, strong) BattleResult *battleResult;
 
 @end

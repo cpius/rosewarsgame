@@ -9,6 +9,7 @@
 #import "BattlePlan.h"
 #import "PathFinder.h"
 #import "GameManager.h"
+#import "PathFinderStrategyFactory.h"
 
 @implementation BattlePlan
 
@@ -38,12 +39,31 @@
 - (NSDictionary *)getAttackDirectionsForCard:(Card *)card whenAttackingEnemyCard:(Card*)enemyCard withUnitLayout:(NSDictionary*)unitLayout {
     
     NSMutableDictionary *attackDirections = [NSMutableDictionary dictionary];
+    PathFinder *pathFinder = [[PathFinder alloc] init];
     
     NSArray *surroundingLocations = [enemyCard.cardLocation surroundingGridLocations];
     
-    for (Action *moveAction in _moveActions) {
+    for (GridLocation *location in surroundingLocations) {
         
-        GridLocation *attackDirection = [moveAction getLastLocationInPath];
+        Card *cardInLocation = [unitLayout objectForKey:location];
+        
+        if (cardInLocation == nil) {
+
+            NSArray *path = [pathFinder getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:location usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:[GameManager sharedManager].currentGame.unitLayout];
+            
+            if (path != nil) {
+                NSMutableArray *newPath = [NSMutableArray arrayWithArray:path];
+                // And add last step from enemy unit
+                [newPath addObject:[[PathFinderStep alloc] initWithLocation:enemyCard.cardLocation]];
+                
+                if ([card allowPath:newPath forActionType:kActionTypeMelee allLocations:unitLayout]) {
+                    [attackDirections setObject:newPath forKey:location];
+                }
+            }
+        }
+        
+        
+ /*       GridLocation *attackDirection = [meleeAction getLastLocationInPath];
         
         if ([surroundingLocations containsObject:attackDirection]) {
             Card *cardInLocation = [unitLayout objectForKey:attackDirection];
@@ -56,7 +76,7 @@
             if (cardInLocation == nil && [card allowPath:newPath forActionType:kActionTypeMelee allLocations:unitLayout]) {
                 [attackDirections setObject:newPath forKey:attackDirection];
             }
-        }
+        }*/
     }
     
     return attackDirections;

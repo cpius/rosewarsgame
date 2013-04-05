@@ -10,10 +10,13 @@
 #import "GameManager.h"
 #import "GameBoard.h"
 #import "LeftPanel.h"
+#import "GCTurnBasedMatchHelper.h"
 
 #define kZoomFactor 2.0
 
-@interface GameScene : CCLayer <GameBoardActionProtocol, GameManagerProtocol, ActionDelegate, LeftPanelProtocol> {
+#define CARD_TAG 666
+
+@interface GameScene : CCLayer <GameBoardActionProtocol, GameManagerProtocol, ActionDelegate, LeftPanelProtocol, GCTurnBasedMatchHelperDelegate> {
     
     CGSize _winSize;
     

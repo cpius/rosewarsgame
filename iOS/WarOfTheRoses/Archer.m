@@ -30,6 +30,7 @@
         self.hitpoints = 1;
         
         self.attackSound = @"bow_fired.wav";
+        self.defeatSound = @"infantry_defeated_sound.mp3";
         self.frontImageSmall = @"archer_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"archer_%d.png", self.cardColor];
         

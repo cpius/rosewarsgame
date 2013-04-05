@@ -178,8 +178,13 @@
             card.cardLocation = [GridLocation gridLocationWithRow:[[carddata objectForKey:@"row"] integerValue]
                                                            column:[[carddata objectForKey:@"column"] integerValue]];
             card.cardColor = [[carddata objectForKey:@"cardcolor"] integerValue];
+            card.hitpoints = [[carddata objectForKey:@"hitpoints"] integerValue];
+            card.experience = [[carddata objectForKey:@"experience"] integerValue];
+            
             [card.attack addRawBonus:[[RawBonus alloc] initWithValue:[[carddata objectForKey:@"attackbonus"] integerValue]]];
             [card.defence addRawBonus:[[RawBonus alloc] initWithValue:[[carddata objectForKey:@"defensebonus"] integerValue]]];
+            
+            [card fromDictionary:[carddata objectForKey:@"card_specific_stats"]];
             
             if ([card isOwnedByMe]) {
                 if (creator == _enemyColor) {

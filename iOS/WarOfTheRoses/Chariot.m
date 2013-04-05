@@ -32,6 +32,8 @@
         self.hitpoints = 1;
         
         self.attackSound = @"sword_sound.wav";
+        self.defeatSound = BOOM_SOUND;
+        
         self.frontImageSmall = @"chariot_icon.png";
         self.frontImageLarge = [NSString stringWithFormat:@"chariot_%d.png", self.cardColor];
         

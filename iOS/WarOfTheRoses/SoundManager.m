@@ -33,8 +33,8 @@
             [[SimpleAudioEngine sharedEngine] preloadEffect:card.attackSound];
         }
         
-        if (card.defenceSound != nil) {
-            [[SimpleAudioEngine sharedEngine] preloadEffect:card.defenceSound];
+        if (card.defeatSound != nil) {
+            [[SimpleAudioEngine sharedEngine] preloadEffect:card.defeatSound];
         }
 
         if (card.moveSound != nil) {

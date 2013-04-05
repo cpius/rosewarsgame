@@ -52,6 +52,11 @@
     return self;
 }
 
+- (void)dealloc {
+    
+    [_model removeObserver:self forKeyPath:@"cardColor"];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     CCLOG(@"Card: %@ changed color to %d", self, _model.cardColor);
