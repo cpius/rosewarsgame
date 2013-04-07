@@ -9,11 +9,12 @@ import ai_methods
 
 class Gamestate:
     
-    def __init__(self, player1, player1_units, player2, player2_units, turn=1, actions_remaining=2):
+    def __init__(self, player1, player1_units, player2, player2_units, turn=1, actions_remaining=2, has_extra_action=False):
         self.turn = turn
         self.units = [player1_units, player2_units]
         self.players = [player1, player2]
         self.actions_remaining = actions_remaining
+        self.has_extra_action = has_extra_action
 
     def do_action(self, action, controller=None):
         action_doer.do_action(self, action, controller)
