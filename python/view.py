@@ -530,13 +530,13 @@ class View(object):
         end_coordinates = self.center_coordinates.get(end_position)
         pygame.draw.line(self.screen, colors.black, start_coordinates, end_coordinates, 5)
 
-    def write_message(self, message, pos):
+    def write_message(self, message, location):
         label = self.font_messages.render(message, _anti_alias, colors.black)
-        self.screen.blit(label, pos)
+        self.screen.blit(label,location)
 
-    def write(self, message, pos, font, color=colors.black):
+    def write(self, message, location, font, color=colors.black):
         label = font.render(message, _anti_alias, color)
-        self.screen.blit(label, pos)
+        self.screen.blit(label, location)
 
     def draw_message(self, message):
         self.write_message(message, self.message_location)
