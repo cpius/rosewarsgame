@@ -18,12 +18,13 @@ dont_use_special_units = ["Chariot", "Samurai", "Diplomat"]  # Special units tha
 
 
 # Rows that the units can start on, in the pseudo-random computer-generated start position
-basic_units = {"Archer": (2, 3),
-               "Ballista": (2, 3),
-               "Catapult": (2, 3),
-               "Heavy Cavalry": (2, 3, 4),
-               "Light Cavalry": (2, 3),
-               "Pikeman": (2, 3, 4)}
+
+basic_units = {"Archer": [(1, 2, 3), 3],
+               "Ballista": [(1, 2, 3), 2],
+               "Catapult": [(1, 2, 3), 2],
+               "Heavy Cavalry": [(2, 3, 4), 3],
+               "Light Cavalry": [(2, 3), 3],
+               "Pikeman": [(2, 3, 4), 3]}
 
 special_units = {"Berserker": (2, 3),
                  "Cannon": (2, ),
@@ -44,3 +45,5 @@ special_units = {"Berserker": (2, 3),
 unit_bag_size = 3
 special_unit_count = 3
 basic_unit_count = 6
+max_two_siege_weapons = True
+at_least_one_siege_weapon = True
