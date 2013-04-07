@@ -351,4 +351,4 @@ class Weaponsmith(Unit):
     
     abilities = ["improve_weapons"]
 
-    descriptions = {"improve_weapons": "Improve weapons: Give melee unit +3 attack, +1 defence until your next turn"}
+    descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}

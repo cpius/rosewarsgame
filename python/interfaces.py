@@ -1,4 +1,5 @@
 import colors
+import pygame
 
 
 class Interface(object):
@@ -38,8 +39,8 @@ class Rectangles(Interface):
         counter_base_x = 45 * zoom
         counter_base_y = 0 * zoom
 
-        self.cow_coordinates = (self.unit_width / 4, 0)
-        self.cow_sub_coordinates = (self.unit_width / 4, 0)
+        self.percentage_coordinates = (self.unit_width / 4, 0)
+        self.percentage_sub_coordinates = (self.unit_width / 4, 0)
         self.center_coordinates = (self.unit_width / 2, self.unit_height / 2)
         self.symbol_coordinates = (self.unit_width / 2 - 15 * zoom, self.unit_height / 2 - 15 * zoom)
 
@@ -62,6 +63,21 @@ class Rectangles(Interface):
         self.big_font_size = int(self.big_font_size * zoom)
         self.bigger_font_size = int(self.bigger_font_size * zoom)
 
-        self.message_coordinates = (460 * zoom, 460 * zoom)
-        self.show_unit_coordinates = (400 * zoom, 20 * zoom)
+        self.message_location = (410 * zoom, 420 * zoom)
+        self.message_font_size = int(23 * zoom)
+
+        self.show_unit_coordinates = (450 * zoom, 20 * zoom)
         self.right_side_rectangle = (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom)
+
+        self.lower_right_rectangle = (391 * self.zoom, 391 * self.zoom, 391 * self.zoom, 391 * self.zoom)
+
+        self.move_shading = pygame.Color(0, 0, 0, 160)
+        self.attack_shading = pygame.Color(130, 0, 0, 150)
+        self.ability_shading = pygame.Color(0, 0, 150, 130)
+        self.selected_shading = pygame.Color(0, 0, 0, 160)
+
+        self.counter_size = int(7 * zoom)
+
+        self.message_line_length = 40 * zoom
+
+        self.show_unit_location = (410 * zoom, 300 * zoom)

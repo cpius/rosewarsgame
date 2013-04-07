@@ -1,10 +1,12 @@
+from __future__ import division
 import pygame
 import settings
 from coordinates import Coordinates
 import battle
 import colors
+import textwrap
 
-
+_anti_alias = 1
 _image_library = {}
 
 
@@ -22,23 +24,35 @@ class View(object):
 
         self.interface = settings.interface
         self.zoom = self.interface.zoom
-        self.message_coordinates = self.interface.message_coordinates
+        self.message_location = self.interface.message_location
 
         self.screen = pygame.display.set_mode(self.interface.board_size)
 
-        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
+        self.clear_right()
 
-        self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, True, False)
-        self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, True, False)
-        self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, self.interface.bigger_font_size, True,
-                                               False)
+        self.font = pygame.font.SysFont(self.interface.normal_font_name, self.interface.normal_font_size, bold=True)
+        self.font_messages = pygame.font.SysFont(self.interface.normal_font_name,
+                                                 self.interface.message_font_size, bold=True)
+        self.font_big = pygame.font.SysFont(self.interface.normal_font_name, self.interface.big_font_size, bold=True)
+        self.font_bigger = pygame.font.SysFont(self.interface.normal_font_name, 
+                                               self.interface.bigger_font_size, bold=True)
         self.base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
-        self.cow_coordinates = Coordinates(self.interface.cow_coordinates, self.interface)
-        self.cow_sub_coordinates = Coordinates(self.interface.cow_sub_coordinates, self.interface)
+        self.percentage_coordinates = Coordinates(self.interface.percentage_coordinates, self.interface)
+        self.percentage_sub_coordinates = Coordinates(self.interface.percentage_sub_coordinates, self.interface)
         self.center_coordinates = Coordinates(self.interface.center_coordinates, self.interface)
         self.symbol_coordinates = Coordinates(self.interface.symbol_coordinates, self.interface)
 
         self.logbook = []
+        self.maximum_number_of_logs = 5
+
+        self.message_line_distance = 30 * self.zoom
+        self.counter_size = self.interface.counter_size
+
+    def clear_right(self):
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
+
+    def clear_lower_right(self):
+        pygame.draw.rect(self.screen, colors.light_grey, self.interface.lower_right_rectangle)
 
     def get_position_from_mouse_click(self, coordinates):
         x = int((coordinates[0] - self.interface.x_border) /
@@ -52,53 +66,120 @@ class View(object):
         return x, y
 
     def draw_ask_about_counter(self, unit_name):
-        xpos = self.message_coordinates[0]
-        ypos = self.message_coordinates[1]
-        label = self.font_big.render("Select counter for", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos))
-        label = self.font_big.render(unit_name, 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 25 * self.zoom))
-        label = self.font_big.render("'a' for attack", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 50 * self.zoom))
-        label = self.font_big.render("'d' for defence", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 75 * self.zoom))
+        x = self.message_location[0]
+        y = self.message_location[1]
+        lines = ["Select counter for", unit_name, "'a' for attack", "'d' for defence"]
+        for i, line in enumerate(lines):
+            line_y = y + i * self.message_line_distance
+            self.write_message(line, (x, line_y))
         pygame.display.update()
 
-    def draw_ask_about_ability(self, ability1, ability2):
-        xpos = self.message_coordinates[0]
-        ypos = self.message_coordinates[1]
-        label = self.font_big.render("Select ability:", 1, colors.black)
-        self.screen.blit(label, (xpos, ypos))
-        label = self.font_big.render("1 for " + ability1, 1, colors.black)
-        self.screen.blit(label, (xpos, ypos + 25 * self.zoom))
-        label = self.font_big.render("2 for " + ability2, 1, colors.black)
-        self.screen.blit(label, (xpos,  ypos + 50 * self.zoom))
+    def draw_ask_about_move_with_attack(self, position):
+
+        base = self.base_coordinates.get(position)
+
+        dimensions = (self.interface.unit_width, self.interface.unit_height)
+        self.draw_rectangle(dimensions, base, self.interface.selected_shading)
+
+        self.write_message("Click the tile you want to stand on.", self.message_location)
         pygame.display.update()
 
-    def show_unit_zoomed(self, unit_name, color):
-        unit_pic = self.get_unit_pic(unit_name, color, True)
-        pic = self.get_image(unit_pic)
+        return True
+
+    def draw_ask_about_ability(self, unit):
+        x, y = self.message_location
+        lines = ["Select ability:"]
+        for i, ability in enumerate(unit.abilities):
+            string = str(i + 1) + ". " + ability.title() + ": " + unit.descriptions[ability]
+            lines += textwrap.wrap(string, self.interface.message_line_length)
+
+        for i, line in enumerate(lines):
+            line_y = y + i * self.message_line_distance
+            self.write_message(line, (x, line_y))
+
+        pygame.display.update()
+
+    def split_lines(self, lines):
+        newlines = []
+        for line in lines:
+            if line != "":
+                split_lines = textwrap.wrap(line, self.interface.message_line_length)
+            else:
+                split_lines = [""]
+            for split_line in split_lines:
+                newlines.append(split_line)
+        return newlines
+
+    def show_lines(self, lines, x, y):
+
+        lines = self.split_lines(lines)
+
+        i = 0
+        for line in lines:
+            i += 1
+            line_y = y + i * self.message_line_distance
+            self.write(line, (x, line_y), self.font)
+
+    def show_unit_zoomed(self, unit):
+
+        self.clear_right()
+
+        unit_pic = self.get_unit_pic(unit.name)
+        pic = self.get_image(unit_pic, (int(236 * self.zoom), int(271 * self.zoom)))
         self.screen.blit(pic, self.interface.show_unit_coordinates)
+
+        base = self.interface.show_unit_location
+
+        lines = []
+
+        for attribute in ["attack", "defence", "range", "movement"]:
+            if getattr(unit, attribute):
+                value = getattr(unit, attribute)
+                if attribute == "attack":
+                    value += unit.attack_counters
+                elif attribute == "defence":
+                    value += unit.defence_counters
+
+                lines.append(attribute.title() + ": " + str(value))
+            else:
+                lines.append(attribute.title() + ": %")
+        lines.append("")
+
+        if unit.zoc:
+            lines.append("Zone of control against: " + ", ".join(type for type in unit.zoc))
+            lines.append("")
+
+        if hasattr(unit, "descriptions"):
+            for attribute, description in unit.descriptions.items():
+                if attribute in unit.abilities:
+                    lines.append(attribute.replace("_", " ").title() + ": " + description)
+                else:
+                    lines.append(description)
+                lines.append("")
+
+        self.show_lines(lines, *base)
+
         pygame.display.flip()
 
     def save_screenshot(self, name):
         pygame.image.save(self.screen, "./replay/" + name + ".jpeg")
 
     def draw_game_end(self, color):
-        font = pygame.font.SysFont("monospace", 55, bold=True)
-        label = font.render(color + " Wins", 1, colors.black)
-        self.screen.blit(label, self.message_coordinates)
+        self.write(color + " Wins", self.message_location, self.font_big)
         pygame.display.update()
 
     def get_image(self, path, dimensions=None):
         global _image_library
+
+        if dimensions:
+            image = pygame.image.load(path).convert()
+            return pygame.transform.scale(image, dimensions)
+
         image = _image_library.get(path)
         if not image:
             image = pygame.image.load(path).convert()
-            if dimensions:
-                image = pygame.transform.scale(image, dimensions)
-            else:
-                image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom), int(image.get_size()[1] * self.zoom)))
+            image = pygame.transform.scale(image, (int(image.get_size()[0] * self.zoom),
+                                                   int(image.get_size()[1] * self.zoom)))
             _image_library[path] = image
         return image
 
@@ -141,11 +222,9 @@ class View(object):
         }[counters_drawn]
 
     def draw_attack_counters(self, unit, position, counter_coordinates, font_coordinates):
-        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-        pygame.draw.circle(self.screen, colors.brown, counter_coordinates.get(position), 8, 0)
+        self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.brown)
         if unit.attack_counters != 1:
-            label = self.font.render(str(unit.attack_counters), 1, colors.black)
-            self.screen.blit(label, font_coordinates.get(position))
+            self.write(str(unit.attack_counters), font_coordinates.get(position), self.font)
 
     def draw_defence_counters(self, unit, position, counter_coordinates, font_coordinates):
         if hasattr(unit, "sabotaged"):
@@ -153,32 +232,28 @@ class View(object):
         else:
             defence_counters = unit.defence_counters
 
-        pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-        pygame.draw.circle(self.screen, colors.light_grey, counter_coordinates.get(position), 8, 0)
+        self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.light_grey)
 
-        counter_text = None
         if defence_counters > 1:
             counter_text = str(defence_counters)
         elif defence_counters < 0:
             counter_text = "x"
+        else:
+            counter_text = None
 
         if counter_text:
-            label = self.font.render(counter_text, 1, colors.black)
-            self.screen.blit(label, font_coordinates.get(position))
+            self.write(counter_text, font_coordinates.get(position), self.font)
 
     def draw_yellow_counters(self, unit, position, counter_coordinates):
         if unit.yellow_counters:
-            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, colors.yellow, counter_coordinates.get(position), 8, 0)
+            self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.yellow)
 
     def draw_blue_counters(self, unit, position, counter_coordinates, font_coordinates):
         if unit.blue_counters:
-            pygame.draw.circle(self.screen, self.interface.counter_circle_color, counter_coordinates.get(position), 10, 0)
-            pygame.draw.circle(self.screen, colors.blue, counter_coordinates.get(position), 8, 0)
+            self.draw_bordered_circle(counter_coordinates.get(position), self.counter_size, colors.blue)
 
             if unit.blue_counters > 1:
-                label = self.font.render(str(unit.blue_counters), 1, colors.black)
-                self.screen.blit(label, font_coordinates.get(position))
+                self.write(str(unit.blue_counters), font_coordinates.get(position), self.font)
 
     def draw_symbols(self, unit, position):
         coordinates = Coordinates(self.interface.first_symbol_coordinates, self.interface)
@@ -203,43 +278,19 @@ class View(object):
         pic = self.get_image(self.interface.crusading_icon)
         self.screen.blit(pic, coordinates.get(position))
 
-    def draw_message(self, string):
-        label = self.font_big.render(string, 1, colors.black)
-        self.screen.blit(label, self.message_coordinates)
-
     def draw_unit(self, unit, position, color, selected=False):
-        unit_pic = self.get_unit_pic(unit.name, color)
+        unit_pic = self.get_unit_pic(unit.name)
         dimensions = (int(self.interface.unit_width), int(self.interface.unit_height))
         pic = self.get_image(unit_pic, dimensions)
 
-        self.screen.blit(pic, self.base_coordinates.get(position))
-
         base = self.base_coordinates.get(position)
+        self.screen.blit(pic, base)
 
         if selected:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 0, 160))
-            self.screen.blit(rect, base)
+            dimensions = (self.interface.unit_width, self.interface.unit_height)
+            self.draw_rectangle(dimensions, base, self.interface.selected_shading)
 
-        if color == "Red":
-            border_color = self.interface.red_player_color
-        else:
-            border_color = self.interface.green_player_color
-
-        base_corners = [(base[0], base[1]), (base[0] + self.interface.unit_width, base[1]),
-                        (base[0] + self.interface.unit_width, base[1] + self.interface.unit_height),
-                        (base[0], base[1] + self.interface.unit_height)]
-
-        pygame.draw.lines(self.screen, colors.black, True, base_corners)
-
-        line_count = int(5 * self.zoom)
-
-        for i in range(1, line_count):
-            middle_corners = increase_corners(base_corners, i)
-            pygame.draw.lines(self.screen, border_color, True, middle_corners)
-
-        outer_corners = increase_corners(base_corners, line_count)
-        pygame.draw.lines(self.screen, colors.black, True, outer_corners)
+        self.draw_unit_box(base, color)
 
         self.draw_counters(unit, position)
         self.draw_symbols(unit, position)
@@ -251,7 +302,7 @@ class View(object):
 
         for position, unit in gamestate.units[0].items():
             if actions and position == start_position:
-                self.draw_unit(unit, position, gamestate.current_player().color, True)
+                self.draw_unit(unit, position, gamestate.current_player().color, selected=True)
             else:
                 self.draw_unit(unit, position, gamestate.current_player().color)
 
@@ -269,43 +320,61 @@ class View(object):
             else:
                 moves.append(action)
 
+        unit_dimensions = (self.interface.unit_width, self.interface.unit_height)
+
+        move_locations, attack_locations, ability_locations, sub_attack_locations = set(), set(), set(), set()
+
         for action in moves:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 0, 160))
-            self.screen.blit(rect, coordinates.get(action.end_position))
+            location = coordinates.get(action.end_position)
+            if location not in move_locations:
+                move_locations.add(location)
+                self.draw_rectangle(unit_dimensions, location, self.interface.move_shading)
 
         for action in attacks:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((130, 0, 0, 110))
-            self.screen.blit(rect, coordinates.get(action.attack_position))
-            label = self.font.render(str(int(round(action.chance_of_win * 100))) + "%", 1, colors.dodger_blue)
-            self.screen.blit(label, self.cow_coordinates.get(action.attack_position))
+            location = coordinates.get(action.attack_position)
+            if location not in attack_locations:
+                attack_locations.add(location)
+
+                self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
+                string = str(int(round(action.chance_of_win * 100))) + "%"
+                location = self.percentage_coordinates.get(action.attack_position)
+                self.write(string, location, self.font, colors.dodger_blue)
 
         for action in abilities:
-            rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-            rect.fill((0, 0, 150, 130))
-            self.screen.blit(rect, coordinates.get(action.attack_position))
+            location = coordinates.get(action.ability_position)
+            if location not in ability_locations:
+                ability_locations.add(location)
+
+                location = coordinates.get(action.ability_position)
+                self.draw_rectangle(unit_dimensions, location, self.interface.ability_shading)
 
         for attack in attacks:
             for sub_attack in attack.sub_actions:
-                if not any(check_attack.attack_position == sub_attack.attack_position for check_attack in attacks):
-                    rect = pygame.Surface((self.interface.unit_width, self.interface.unit_height), pygame.SRCALPHA, 32)
-                    rect.fill((130, 0, 0, 110))
-                    self.screen.blit(rect, coordinates.get(sub_attack.attack_position))
-                    label = self.font.render(str(int(round(sub_attack.chance_of_win * 100))) + "%", 1, colors.yellow)
-                    self.screen.blit(label, self.cow_sub_coordinates.get(sub_attack.attack_position))
+                location = coordinates.get(sub_attack.attack_position)
+                if location not in sub_attack_locations and location not in attack_locations:
+                    sub_attack_locations.add(location)
+                    self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
+                    string = str(int(round(sub_attack.chance_of_win * 100))) + "%"
+                    location = self.percentage_sub_coordinates.get(sub_attack.attack_position)
+                    self.write(string, location, self.font, colors.yellow)
 
         self.draw_right()
 
         pygame.display.update()
 
+    def shade_positions(self, positions):
+        for position in positions:
+            base = self.base_coordinates.get(position)
+
+            dimensions = (self.interface.unit_width, self.interface.unit_height)
+            self.draw_rectangle(dimensions, base, self.interface.selected_shading)
+            self.draw_message("Click a tile to attack from")
+
+        pygame.display.update()
+
     def draw_action(self, action, gamestate):
 
-        log = Log(action, gamestate.turn, gamestate.get_actions_remaining(), gamestate.current_player().color)
-        self.logbook.append(log)
-
-        if len(self.logbook) > 5:
-            self.logbook.pop(0)
+        self.draw_log(action, gamestate)
 
         pygame.draw.circle(self.screen, colors.black, self.center_coordinates.get(action.start_position), 10)
         self.draw_line(action.start_position, action.end_position)
@@ -326,9 +395,9 @@ class View(object):
             self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
         elif action.is_ability:
-            self.draw_line(action.end_position, action.attack_position)
+            self.draw_line(action.end_position, action.ability_position)
             pic = self.get_image(self.interface.ability_icon)
-            self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
+            self.screen.blit(pic, self.symbol_coordinates.get(action.ability_position))
 
         else:
             pic = self.get_image(self.interface.move_icon)
@@ -338,48 +407,44 @@ class View(object):
 
         pygame.display.update()
 
-    def get_unit_pic(self, name, color=None, zoomed=False):
-        if zoomed:
-            return "./zoomed/" + name.replace(" ", "-") + ",-" + color + ".jpg"
-        else:
-            return "./" + self.interface.unit_folder + "/" + name.replace(" ", "-") + ".jpg"
+    def get_unit_pic(self, name):
+        return "./" + self.interface.unit_folder + "/" + name.replace(" ", "_") + ".jpg"
 
     def refresh(self):
         pygame.display.flip()
 
-    def draw_log(self):
+    def draw_log(self, action=None, gamestate=None):
+
+        if action:
+            log = Log(action, gamestate.turn, gamestate.get_actions_remaining(), gamestate.current_player().color)
+            self.logbook.append(log)
+
+        if len(self.logbook) > self.maximum_number_of_logs:
+            self.logbook.pop(0)
+
+        zoom = self.zoom
+        log_heights = 64 * zoom
 
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
 
         for index, log in enumerate(self.logbook):
 
             action = log.action
-            vpos = index * 64
-            hpos = 391
+            base_x = int(391 * zoom)
+            base_y = int(index * log_heights)
+            base = (base_x, base_y)
 
-            self.draw_turn_box(log, hpos, vpos)
+            self.draw_turn_box(log, *base)
 
-            startpos = (int(hpos * self.zoom), int((vpos + 62) * self.zoom))
-            endpos = (int(self.interface.board_size[1] * self.zoom), int((vpos + 62) * self.zoom))
-            pygame.draw.line(self.screen, colors.black, startpos, endpos, 4)
+            line_thickness = int(3 * zoom)
+            line_start = (base_x, base_y + log_heights - line_thickness / 2)
+            line_end = (int(self.interface.board_size[1] * self.zoom), base_y + log_heights - line_thickness / 2)
+            pygame.draw.line(self.screen, colors.black, line_start, line_end, line_thickness)
+
+            symbol_location = (base_x + 118 * zoom, base_y + 12 * zoom)
 
             if action.is_attack:
-                attacking_unit = action.unit_reference
-                defending_unit = action.target_reference
-                outcome = get_outcome(attacking_unit, defending_unit, action)
-
-                self.draw_outcome(outcome, hpos, vpos)
-
-                pic = self.get_image(self.interface.attack_icon)
-                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
-
-                if log.player_color == "Green":
-                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, hpos, vpos)
-
-                if log.player_color == "Red":
-                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, hpos, vpos)
+                self.draw_attack(action, base, symbol_location, log)
 
             elif action.is_ability:
 
@@ -387,38 +452,54 @@ class View(object):
                 defending_unit = action.target_reference
 
                 pic = self.get_image(self.interface.ability_icon)
-                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
+                self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(attacking_unit.name, "Green", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Red", 1, 0.7, hpos, vpos)
-
-                if log.player_color == "Red":
-                    self.draw_unit_right(attacking_unit.name, "Red", 0, 0.7, hpos, vpos)
-                    self.draw_unit_right(defending_unit.name, "Green", 1, 0.7, hpos, vpos)
+                    self.draw_unit_right(attacking_unit.name, "Green", 0, *base)
+                    self.draw_unit_right(defending_unit.name, "Red", 1, *base)
+                elif log.player_color == "Red":
+                    self.draw_unit_right(attacking_unit.name, "Red", 0, *base)
+                    self.draw_unit_right(defending_unit.name, "Green", 1, *base)
 
             else:
                 moving_unit = action.unit_reference
 
                 pic = self.get_image(self.interface.move_icon)
-                self.screen.blit(pic, ((hpos + 118) * self.zoom, (vpos + 12) * self.zoom))
+                self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(moving_unit.name, "Green", 0, 0.7, hpos, vpos)
+                    self.draw_unit_right(moving_unit.name, "Green", 0, *base)
+                elif log.player_color == "Red":
+                    self.draw_unit_right(moving_unit.name, "Red", 0, *base)
 
-                if log.player_color == "Red":
-                    self.draw_unit_right(moving_unit.name, "Red", 0, 0.7, hpos, vpos)
+    def draw_attack(self, action, base, symbol_location, log):
+        attacking_unit = action.unit_reference
+        defending_unit = action.target_reference
+        outcome = get_outcome(attacking_unit, defending_unit, action)
+
+        self.draw_outcome(outcome, *base)
+
+        pic = self.get_image(self.interface.attack_icon)
+        self.screen.blit(pic, symbol_location)
+
+        if log.player_color == "Green":
+            self.draw_unit_right(attacking_unit.name, "Green", 0, *base)
+            self.draw_unit_right(defending_unit.name, "Red", 1, *base)
+        elif log.player_color == "Red":
+            self.draw_unit_right(attacking_unit.name,  "Red", 0, *base)
+            self.draw_unit_right(defending_unit.name, "Green", 1, *base)
 
     def draw_right(self):
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
         self.draw_log()
 
-    def draw_outcome(self, outcome, hpos, vpos):
-        label = self.font_bigger.render(str(outcome), 1, colors.black)
-        self.screen.blit(label, ((hpos + 230) * self.zoom, (vpos + 5) * self.zoom))
+    def draw_outcome(self, outcome, base_x, base_y):
+        location = (base_x + 230 * self.zoom, base_y + 5 * self.zoom)
+        self.write(outcome, location, self.font_bigger)
 
-    def draw_turn_box(self, log, hpos, vpos):
-        position_and_size = (hpos * self.zoom, vpos * self.zoom, 40 * self.zoom, 62 * self.zoom)
+    def draw_turn_box(self, log, base_x, base_y):
+        box_width, box_height = 40 * self.zoom, 62 * self.zoom
+        position_and_size = (base_x, base_y, box_width, box_height)
 
         if log.player_color == "Green":
             border_color = self.interface.green_player_color
@@ -427,41 +508,110 @@ class View(object):
 
         pygame.draw.rect(self.screen, border_color, position_and_size)
 
-        label = self.font_bigger.render(str(2 - log.action_number), 1, colors.black)
-        self.screen.blit(label, ((hpos + 7) * self.zoom, vpos * self.zoom))
+        current_action = 2 - log.action_number
+        string = str(current_action)
+        location = (base_x + 7 * self.zoom, base_y)
+        self.write(string, location, self.font_bigger)
 
-    def draw_unit_right(self, unit_name, unit_color, index, resize, hpos, vpos):
+    def draw_unit_right(self, unit_name, color, index, base_x, base_y):
 
-        vpos = (vpos + 4) * self.zoom
-        hpos = (hpos + 65 + index * 100) * self.zoom
-        unit_pic = self.get_unit_pic(unit_name, unit_color)
+        resize = 0.5 * self.zoom
+        location = (base_x + (65 + index * 100) * self.zoom, base_y + 8 * self.zoom)
+        unit_pic = self.get_unit_pic(unit_name)
         pic = self.get_image(unit_pic)
-        pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize), int(self.interface.unit_height * resize)))
-        self.screen.blit(pic, (hpos, vpos))
 
-        position_and_size_fill = (hpos - 2, vpos - 2, self.interface.unit_width * resize + 4, self.interface.unit_height * resize + 4)
+        pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
+                                           int(self.interface.unit_height * resize)))
 
-        if unit_color == "Green":
-            rect_color = self.interface.green_player_color
-        else:
-            rect_color = self.interface.red_player_color
-
-        pygame.draw.rect(self.screen, rect_color, position_and_size_fill, 3)
+        self.screen.blit(pic, location)
+        self.draw_unit_box(location, color, resize)
 
     def draw_line(self, start_position, end_position):
         start_coordinates = self.center_coordinates.get(start_position)
         end_coordinates = self.center_coordinates.get(end_position)
         pygame.draw.line(self.screen, colors.black, start_coordinates, end_coordinates, 5)
 
+    def write_message(self, string, pos):
+        label = self.font_messages.render(string, _anti_alias, colors.black)
+        self.screen.blit(label, pos)
 
-def increase_corners(corners, inc):
+    def write(self, string, pos, font, color=colors.black):
+        label = font.render(string, _anti_alias, color)
+        self.screen.blit(label, pos)
 
-    corner1 = (corners[0][0] - inc, corners[0][1] - inc)
-    corner2 = (corners[1][0] + inc, corners[1][1] - inc)
-    corner3 = (corners[2][0] + inc, corners[2][1] + inc)
-    corner4 = (corners[3][0] - inc, corners[3][1] + inc)
+    def draw_message(self, string):
+        self.write_message(string, self.message_location)
 
-    return [corner1, corner2, corner3, corner4]
+    def draw_rectangle(self, dimensions, location, color):
+        rectangle = pygame.Surface(dimensions, pygame.SRCALPHA, 32)
+        rectangle.fill(color)
+        self.screen.blit(rectangle, location)
+
+    def draw_bordered_circle(self, position, size, color):
+        pygame.draw.circle(self.screen, colors.black, position, size + 2)
+        pygame.draw.circle(self.screen, color, position, size)
+
+    def draw_unit_box(self, base, color, resize=1):
+
+        def scale_rectangle(corners, pixels):
+
+            corner1 = (corners[0][0] - pixels, corners[0][1] - pixels)
+            corner2 = (corners[1][0] + pixels, corners[1][1] - pixels)
+            corner3 = (corners[2][0] + pixels, corners[2][1] + pixels)
+            corner4 = (corners[3][0] - pixels, corners[3][1] + pixels)
+
+            return [corner1, corner2, corner3, corner4]
+
+        height = self.interface.unit_height * resize
+        width = self.interface.unit_width * resize
+
+        if color == "Red":
+            border_color = self.interface.red_player_color
+        else:
+            border_color = self.interface.green_player_color
+
+        corner1 = (base[0], base[1])
+        corner2 = (base[0] + width, base[1])
+        corner3 = (base[0] + width, base[1] + height)
+        corner4 = (base[0], base[1] + height)
+
+        base_corners = [corner1, corner2, corner3, corner4]
+
+        inner_corners = scale_rectangle(base_corners, -1)
+
+        pygame.draw.lines(self.screen, colors.black, True, inner_corners)
+
+        thickness = int(5 * self.zoom * resize)
+
+        for i in range(thickness):
+            middle_corners = scale_rectangle(base_corners, i)
+            pygame.draw.lines(self.screen, border_color, True, middle_corners)
+
+        outer_corners = scale_rectangle(base_corners, thickness)
+        pygame.draw.lines(self.screen, colors.black, True, outer_corners)
+
+    def show_attack(self, action, player_unit, opponent_unit):
+
+        self.clear_lower_right()
+
+        base = self.interface.message_location
+
+        attack = battle.get_attack_rating(player_unit, opponent_unit, action)
+
+        defence = battle.get_defence_rating(player_unit, opponent_unit, attack)
+
+        attack = min(attack, 6)
+
+        defence = min(defence, 6)
+
+        lines = ["Attack: " + str(attack),
+                 "Defence: " + str(defence),
+                 "Chance of win = " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                 str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
+
+        self.show_lines(lines, *base)
+
+        pygame.display.flip()
 
 
 def get_outcome(attacking_unit, defending_unit, action):
