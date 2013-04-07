@@ -509,9 +509,8 @@ class View(object):
         pygame.draw.rect(self.screen, border_color, position_and_size)
 
         current_action = 2 - log.action_number
-        string = str(current_action)
         location = (base_x + 7 * self.zoom, base_y)
-        self.write(string, location, self.font_bigger)
+        self.write(str(current_action), location, self.font_bigger)
 
     def draw_unit_right(self, unit_name, color, index, base_x, base_y):
 
