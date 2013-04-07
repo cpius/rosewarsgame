@@ -100,15 +100,15 @@ class View(object):
         pygame.display.update()
 
     def split_lines(self, lines):
-        newlines = []
+        new_lines = []
         for line in lines:
             if line != "":
                 split_lines = textwrap.wrap(line, self.interface.message_line_length)
             else:
                 split_lines = [""]
             for split_line in split_lines:
-                newlines.append(split_line)
-        return newlines
+                new_lines.append(split_line)
+        return new_lines
 
     def show_lines(self, lines, x, y):
 
