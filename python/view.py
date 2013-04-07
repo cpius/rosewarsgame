@@ -90,8 +90,8 @@ class View(object):
         x, y = self.message_location
         lines = ["Select ability:"]
         for i, ability in enumerate(unit.abilities):
-            string = str(i + 1) + ". " + ability.title() + ": " + unit.descriptions[ability]
-            lines += textwrap.wrap(string, self.interface.message_line_length)
+            description_string = str(i + 1) + ". " + ability.title() + ": " + unit.descriptions[ability]
+            lines += textwrap.wrap(description_string, self.interface.message_line_length)
 
         for i, line in enumerate(lines):
             line_y = y + i * self.message_line_distance
@@ -336,9 +336,9 @@ class View(object):
                 attack_locations.add(location)
 
                 self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
-                string = str(int(round(action.chance_of_win * 100))) + "%"
+                chance_of_win_string = str(int(round(action.chance_of_win * 100))) + "%"
                 location = self.percentage_coordinates.get(action.attack_position)
-                self.write(string, location, self.font, colors.dodger_blue)
+                self.write(chance_of_win_string, location, self.font, colors.dodger_blue)
 
         for action in abilities:
             location = coordinates.get(action.ability_position)
@@ -354,9 +354,9 @@ class View(object):
                 if location not in sub_attack_locations and location not in attack_locations:
                     sub_attack_locations.add(location)
                     self.draw_rectangle(unit_dimensions, location, self.interface.attack_shading)
-                    string = str(int(round(sub_attack.chance_of_win * 100))) + "%"
+                    chance_of_win_string = str(int(round(sub_attack.chance_of_win * 100))) + "%"
                     location = self.percentage_sub_coordinates.get(sub_attack.attack_position)
-                    self.write(string, location, self.font, colors.yellow)
+                    self.write(chance_of_win_string, location, self.font, colors.yellow)
 
         self.draw_right()
 
@@ -530,16 +530,16 @@ class View(object):
         end_coordinates = self.center_coordinates.get(end_position)
         pygame.draw.line(self.screen, colors.black, start_coordinates, end_coordinates, 5)
 
-    def write_message(self, string, pos):
-        label = self.font_messages.render(string, _anti_alias, colors.black)
+    def write_message(self, message, pos):
+        label = self.font_messages.render(message, _anti_alias, colors.black)
         self.screen.blit(label, pos)
 
-    def write(self, string, pos, font, color=colors.black):
-        label = font.render(string, _anti_alias, color)
+    def write(self, message, pos, font, color=colors.black):
+        label = font.render(message, _anti_alias, color)
         self.screen.blit(label, pos)
 
-    def draw_message(self, string):
-        self.write_message(string, self.message_location)
+    def draw_message(self, message):
+        self.write_message(message, self.message_location)
 
     def draw_rectangle(self, dimensions, location, color):
         rectangle = pygame.Surface(dimensions, pygame.SRCALPHA, 32)
