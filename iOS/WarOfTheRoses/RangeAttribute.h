@@ -38,6 +38,7 @@ typedef enum {
 @property (nonatomic, weak) id<RangeAttributeDelegate> delegate;
 @property (nonatomic, readonly) AttributeRange finalRange;
 @property (nonatomic, assign) RangedAttributeValues valueAffectedByBonuses;
+@property (nonatomic, assign) NSUInteger valueLimit;
 
 - (id)initWithStartingRange:(AttributeRange)startingRange;
 

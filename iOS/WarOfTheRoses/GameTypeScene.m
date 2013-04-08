@@ -118,6 +118,10 @@
     CCLOG(@"New game found - staring constructing deck");
     
     [[GameManager sharedManager] startNewGameOfType:kGameTypeMultiPlayer];
+    
+    [GameManager sharedManager].currentGame.localUserId = [GCTurnBasedMatchHelper sharedInstance].localUserId;
+    [GameManager sharedManager].currentGame.matchId = match.matchID;
+    
     [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[ConstructDeckScene scene]]];
 }
 
@@ -125,6 +129,10 @@
     
     CCLOG(@"Take turn");
     [[GameManager sharedManager] continueExistingGame];
+
+    [GameManager sharedManager].currentGame.localUserId = [GCTurnBasedMatchHelper sharedInstance].localUserId;
+    [GameManager sharedManager].currentGame.matchId = match.matchID;
+    
     [[GameManager sharedManager].currentGame deserializeGameData:match.matchData];
     
     if ([GameManager sharedManager].currentGame.state == kGameStateInitialState ||

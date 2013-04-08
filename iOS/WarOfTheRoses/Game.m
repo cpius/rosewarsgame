@@ -11,6 +11,7 @@
 #import "GCTurnBasedMatchHelper.h"
 #import "CardPool.h"
 #import "PathFinderStep.h"
+#import "AbilityFactory.h"
 
 #import "MoveAction.h"
 
@@ -71,9 +72,10 @@
     NSMutableDictionary *mutableGameData = [NSMutableDictionary dictionary];
     
     [mutableGameData setValue:@(_state) forKey:@"gamestate"];
-    [mutableGameData setValue:@(_myColor) forKey:[GCTurnBasedMatchHelper sharedInstance].localUserId];
+    [mutableGameData setValue:@(_myColor) forKey:_localUserId];
     [mutableGameData setValue:@(_numberOfAvailableActions) forKey:@"numberofactions"];
     [mutableGameData setValue:@(_currentRound) forKey:@"currentround"];
+    [mutableGameData setValue:@(_turnCounter) forKey:@"turncounter"];
     [mutableGameData setValue:@(_gameOver) forKey:@"gameover"];
     [mutableGameData setValue:@(_currentPlayersTurn) forKey:@"currentplayersturn"];
     [mutableGameData setValue:@(_myColor) forKey:@"gamedata_created_by"];
@@ -140,6 +142,7 @@
     _state = [[data objectForKey:@"gamestate"] integerValue];
     _numberOfAvailableActions = [[data objectForKey:@"numberofactions"] integerValue];
     _currentRound = [[data objectForKey:@"currentround"] integerValue];
+    _turnCounter = [[data objectForKey:@"turncounter"] integerValue];
     _gameOver = [[data objectForKey:@"gameover"] boolValue];
     _currentPlayersTurn = [[data objectForKey:@"currentplayersturn"] integerValue];
     PlayerColors creator = [[data objectForKey:@"gamedata_created_by"] integerValue];
@@ -184,6 +187,12 @@
             [card.attack addRawBonus:[[RawBonus alloc] initWithValue:[[carddata objectForKey:@"attackbonus"] integerValue]]];
             [card.defence addRawBonus:[[RawBonus alloc] initWithValue:[[carddata objectForKey:@"defensebonus"] integerValue]]];
             
+            NSArray *abilities = [carddata objectForKey:@"abilities"];
+            
+            for (NSDictionary *ability in abilities) {
+                [AbilityFactory reapplyExistingAbilityOfType:[[ability objectForKey:@"abilitytype"] integerValue] onCard:card withAbilityData:ability];
+            }
+                        
             [card fromDictionary:[carddata objectForKey:@"card_specific_stats"]];
             
             if ([card isOwnedByMe]) {

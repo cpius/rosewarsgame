@@ -11,9 +11,7 @@
 
 @implementation ActionCostLess
 
-- (void)startTimedAbility {
-    
-    [super startTimedAbility];
+- (void)applyEffect {
     
     _originalAttackActionCost = self.card.attackActionCost;
     _originalMoveActionCost = self.card.moveActionCost;
@@ -22,12 +20,24 @@
     self.card.attackActionCost = 0;
 }
 
-- (void)stopTimedAbility {
+- (void)reactivateTimedAbility {
     
-    [super stopTimedAbility];
+    [super reactivateTimedAbility];
+    [self applyEffect];
+}
+
+- (void)startTimedAbility {
+    
+    [super startTimedAbility];
+    [self applyEffect];
+}
+
+- (void)stopTimedAbility {
     
     self.card.moveActionCost = _originalMoveActionCost;
     self.card.attackActionCost = _originalAttackActionCost;
+
+    [super stopTimedAbility];
 }
 
 - (BOOL)friendlyAbility {

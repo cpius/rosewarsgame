@@ -8,6 +8,9 @@
 
 #import "TimedAbility.h"
 
-@interface Bribe : TimedAbility
+@interface Bribe : TimedAbility {
+    
+    CardColors _originalColorOfBribedUnit;
+}
 
 @end

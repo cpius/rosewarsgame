@@ -53,7 +53,7 @@
     if (action.isAttack) {
         self.hasPerformedAttackThisRound = YES;
         
-        [self addTimedAbility:[[ActionCostLess alloc] initForNumberOfRounds:1 onCard:self]];
+        [self addTimedAbility:[[ActionCostLess alloc] initForNumberOfTurns:1 onCard:self]];
         
         CCLOG(@"Chariot has attacked but moves are not consumed");
     }

@@ -10,6 +10,7 @@
 #import "Definitions.h"
 #import "GridLocation.h"
 #import "Archer.h"
+#import "PathFinder.h"
 #import "Pikeman.h"
 #import "LightCavalry.h"
 #import "TestHelper.h"
@@ -18,6 +19,8 @@
 #import "GameManager.h"
 #import "BattleResult.h"
 #import "Berserker.h"
+#import "LongSwordsMan.h"
+#import "RoyalGuard.h"
 
 @implementation CombatTest
 
@@ -237,6 +240,43 @@
     STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:4]], @"Should be an attackdirection");
     STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:2]], @"Should be an attackdirection");
     STAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:4 column:3]], @"Should be an attackdirection");
+}
+
+- (void)testDefenseCannotExceedFour {
+    
+    Berserker *attacker = [Berserker card];
+    
+    attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    attacker.cardColor = kCardColorGreen;
+    
+    [attacker.defence addRawBonus:[[RawBonus alloc] initWithValue:4]];
+    
+    STAssertTrue([attacker.defence calculateValue].upperValue == 4, @"Defense upper value should be 4");
+}
+
+- (void)testLongswordsManCanAttackEnemyUnitWhenStandingNextToRoyalGuardButNotConquer {
+    
+    LongSwordsMan *longswordsman = [LongSwordsMan card];
+    RoyalGuard *royalguard = [RoyalGuard card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    longswordsman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    longswordsman.cardColor = kCardColorGreen;
+    
+    royalguard.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
+    royalguard.cardColor = kCardColorRed;
+
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:longswordsman]
+                                    player2Units:[NSArray arrayWithObjects:royalguard, pikeman, nil]];
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    NSArray *meleeActions = [pathFinder getMeleeAttackActionsFromLocation:longswordsman.cardLocation forCard:longswordsman enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(meleeActions.count == 2, @"Longswordsman should be able to attack royalguard and pikeman");
 }
 
 @end

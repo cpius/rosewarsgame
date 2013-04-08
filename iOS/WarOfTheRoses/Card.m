@@ -63,6 +63,7 @@
     
     self.defence.attributeAbbreviation = @"D";
     self.defence.valueAffectedByBonuses = kRangedAttributeUpperValue;
+    self.defence.valueLimit = 4;
     
     self.numberOfLevelsIncreased = 0;
     self.experience = 0;
@@ -107,10 +108,9 @@
 
 - (NSString *)description {
     
-    NSString *description = [NSString stringWithFormat:@"CardType: %d - UnitType: %d - UnitName: %d - Boardlocation: row %d column %d",
-                             self.cardType,
-                             self.unitType,
-                             self.unitName,
+    NSString *description = [NSString stringWithFormat:@"Unit: %@ - with color: %@ boardlocation: row %d column %d",
+                             UnitNameAsString(self.unitName),
+                             CardColorAsString(self.cardColor),
                              self.cardLocation.row,
                              self.cardLocation.column];
     
@@ -179,7 +179,7 @@
                 self.hasReceivedExperiencePointsThisRound = YES;
                 
                 // Unit can only increase in level twice
-                if (self.numberOfLevelsIncreased < 2 && (self.experience % 2) == 0) {
+                if ((self.experience % 2) == 0) {
                     [self levelIncreased];
                 }
             }
@@ -305,7 +305,12 @@
             else {
                 return (self.attackActionCost <= remainingActionCount) && self.abilities.count > 0;
             }
+            
+        case kActionTypePush:
+            break;
     }
+    
+    return NO;
 }
 
 - (void)consumeAllMoves {

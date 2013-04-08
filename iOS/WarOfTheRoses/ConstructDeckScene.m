@@ -55,14 +55,16 @@
         _deckOfCards.position = ccp(20, [_deckOfCards contentSize].height + 20);
         [self addChild:_deckOfCards];
         
-        CCMenuItem *refreshButton = [CCMenuItemImage itemWithNormalImage:@"refreshbutton.png" selectedImage:@"refreshbutton.png" target:self selector:@selector(refreshButtonPressed:)];
-        
-        refreshButton.anchorPoint = ccp(1, 0);
-        refreshButton.position = ccp(_screenSize.width - 20, 60);
-        
-        CCMenu *menu = [CCMenu menuWithItems:refreshButton, nil];
-        menu.position = CGPointZero;
-        [self addChild:menu];
+        if ([GameManager sharedManager].currentGame.gametype != kGameTypeMultiPlayer) {
+            CCMenuItem *refreshButton = [CCMenuItemImage itemWithNormalImage:@"refreshbutton.png" selectedImage:@"refreshbutton.png" target:self selector:@selector(refreshButtonPressed:)];
+            
+            refreshButton.anchorPoint = ccp(1, 0);
+            refreshButton.position = ccp(_screenSize.width - 20, 60);
+            
+            CCMenu *menu = [CCMenu menuWithItems:refreshButton, nil];
+            menu.position = CGPointZero;
+            [self addChild:menu];
+        }
         
         CardSprite *tempSprite = [[CardSprite alloc] initWithCard:[[GameManager sharedManager].currentGame.myDeck.cards objectAtIndex:0]];
         _cardSize = CGSizeMake(tempSprite.contentSize.width * 0.5, tempSprite.contentSize.height * 0.5);

@@ -19,6 +19,7 @@
 @synthesize finalRange = _finalRange;
 @synthesize delegate = _delegate;
 @synthesize valueAffectedByBonuses = _valueAffectedByBonuses;
+@synthesize valueLimit = _valueLimit;
 
 - (id)initWithStartingRange:(AttributeRange)startingRange {
     
@@ -110,10 +111,24 @@
     AttributeRange calculatedFinalRange;
     
     if (_valueAffectedByBonuses == kRangedAttributeLowerValue) {
-        calculatedFinalRange = MakeAttributeRange(finalRange.lowerValue - bonus, finalRange.upperValue);
+        
+        NSUInteger lowerValue = finalRange.lowerValue - bonus;
+        
+        if (_valueLimit != 0) {
+            lowerValue = MAX(_valueLimit, lowerValue);
+        }
+
+        calculatedFinalRange = MakeAttributeRange(lowerValue, finalRange.upperValue);
     }
     else if (_valueAffectedByBonuses == kRangedAttributeUpperValue) {
-        calculatedFinalRange = MakeAttributeRange(finalRange.lowerValue, finalRange.upperValue + bonus);
+        
+        NSUInteger upperValue = finalRange.upperValue + bonus;
+        
+        if (_valueLimit != 0) {
+            upperValue = MIN(_valueLimit, upperValue);
+        }
+        
+        calculatedFinalRange = MakeAttributeRange(finalRange.lowerValue, upperValue);
     }
     
     return calculatedFinalRange;

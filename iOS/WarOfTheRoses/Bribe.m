@@ -13,12 +13,10 @@
 
 @implementation Bribe
 
-- (void)startTimedAbility {
-    
-    [super startTimedAbility];
+- (void)applyEffect {
     
     // Bribe makes card change color
-    self.card.cardColor = OppositeColorOfCardColor(self.card.cardColor);
+    self.card.cardColor = OppositeColorOfCardColor(_originalColorOfBribedUnit);
     
     // And adds a +1 attack bonus
     [self.card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfRounds:1]];
@@ -26,13 +24,32 @@
     CCLOG(@"Card: %@ has been bribed", self.card);
 }
 
+- (void)startTimedAbility {
+    
+    [super startTimedAbility];
+    
+    _originalColorOfBribedUnit = self.card.cardColor;
+    
+    [self applyEffect];
+}
+
+- (void)reactivateTimedAbility {
+    
+    [super reactivateTimedAbility];
+    [self applyEffect];
+}
+
 - (void)stopTimedAbility {
 
     // Reset card color
-    self.card.cardColor = OppositeColorOfCardColor(self.card.cardColor);
+    self.card.cardColor = _originalColorOfBribedUnit;
 
     // After bribe card has 1 cooldown round
     [AbilityFactory addAbilityOfType:kAbilityCoolDown onCard:self.card];
+    
+    [super stopTimedAbility];
+    
+    CCLOG(@"Card: %@ in no longe bribed", self.card);
 }
 
 - (BOOL)friendlyAbility {
@@ -43,6 +60,16 @@
 - (AbilityTypes)abilityType {
     
     return kAbilityBribe;
+}
+
+- (NSDictionary*)asDictionary {
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:@(_originalColorOfBribedUnit), @"original_color_of_bribed_unit", nil];
+}
+
+- (void)fromDictionary:(NSDictionary*)dictionary {
+    
+    _originalColorOfBribedUnit = [[dictionary valueForKey:@"original_color_of_bribed_unit"] integerValue];
 }
 
 @end

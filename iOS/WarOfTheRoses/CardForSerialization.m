@@ -33,7 +33,7 @@
         _defenseBonus = @([card.defence getRawBonusValue]);
         
         for (TimedAbility *ability in card.currentlyAffectedByAbilities) {
-            [_affectedByAbilities addObject:[[[TimedAbilityForSerialization alloc] initWithTimedAbility:ability] asDictionary]];
+            [_affectedByAbilities addObject:[[[TimedAbilityForSerialization alloc] initWithTimedAbility:ability currentTurn:[GameManager sharedManager].currentGame.turnCounter] asDictionary]];
         }
         
         _cardSpecificStats = [NSDictionary dictionaryWithDictionary:[card asDictionary]];

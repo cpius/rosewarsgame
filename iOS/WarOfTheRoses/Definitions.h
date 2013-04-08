@@ -22,7 +22,7 @@
 #define kEnemyActionDelayTime 1.0
 
 #define NUMBER_OF_BASICUNITS 6
-#define NUMBER_OF_SPECIALUNITS 3
+#define NUMBER_OF_SPECIALUNITS 1
 
 typedef enum {
     kActionTypeMove = 0,
@@ -102,7 +102,6 @@ typedef enum {
     
     kAbilityImprovedWeapons = 0,
     kAbilityBribe,
-    kAbilityHighMorale,
     kAbilityActionCoseLess,
     kAbilityCoolDown
 } AbilityTypes;
@@ -151,10 +150,78 @@ typedef enum {
     kUnitNameCount
 } UnitName;
 
+NS_INLINE NSString* UnitNameAsString(UnitName unitName) {
+    
+    switch (unitName) {
+        case kArcher:
+            return @"Archer";
+        case kBallista:
+            return @"Ballista";
+        case kCatapult:
+            return @"Catapult";
+        case kPikeman:
+            return @"Pikeman";
+        case kLightCavalry:
+            return @"LightCavalry";
+        case kHeavyCalavry:
+            return @"HeavyCavalry";
+        case kChariot:
+            return @"Chariot";
+        case kCannon:
+            return @"Cannon";
+        case kBerserker:
+            return @"Berserker";
+        case kScout:
+            return @"Scout";
+        case kLancer:
+            return @"Lancer";
+        case kRoyalGuard:
+            return @"RoyalGuard";
+        case kViking:
+            return @"Viking";
+        case kSamurai:
+            return @"Samurai";
+        case kLongSwordsMan:
+            return @"LongswordsMan";
+        case kCrusader:
+            return @"Crusader";
+        case kFlagBearer:
+            return @"Flagbearer";
+        case kWarElephant:
+            return @"WarElephant";
+        case kWeaponSmith:
+            return @"WeaponSmith";
+        case kDiplomat:
+            return @"Diplomat";
+        case kSaboteur:
+            return @"Saboteur";
+        case kAssassin:
+            return @"Assassin";
+        default:
+            break;
+    }
+    
+    return nil;
+}
+
 typedef enum {
     kCardColorGreen = 0,
     kCardColorRed = 1
 } CardColors;
+
+NS_INLINE NSString* CardColorAsString(CardColors cardColor) {
+    
+    switch (cardColor) {
+        case kCardColorGreen:
+            return @"Green";
+        case kCardColorRed:
+            return @"Red";
+        default:
+            break;
+    }
+    
+    return nil;
+}
 
 typedef enum {
     kPlayerGreen = 0,

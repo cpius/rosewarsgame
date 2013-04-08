@@ -26,18 +26,25 @@
     
 }
 
-@property (nonatomic, readonly) NSUInteger numberOfRounds;
+@property (nonatomic, readonly) NSUInteger numberOfTurns;
 @property (nonatomic, readonly) BOOL friendlyAbility;
 @property (nonatomic, weak) id<TimedAbilityDelegate> delegate;
 @property (nonatomic, readonly) AbilityTypes abilityType;
 @property (nonatomic, strong) Card *card;
-@property (nonatomic, readonly) NSUInteger abilityStartedInRound;
+@property (nonatomic, readonly) NSUInteger abilityStartedInTurn;
 
 
 - (id)initOnCard:(Card*)card;
-- (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card;
+- (id)initForNumberOfTurns:(NSUInteger)numberOfTurns onCard:(Card*)card;
+- (id)initExistingAbilityWithAbilityData:(NSDictionary*)abilityData onCard:(Card*)card;
+
+- (void)applyEffect;
 
 - (void)startTimedAbility;
+- (void)reactivateTimedAbility;
 - (void)stopTimedAbility;
+
+- (NSDictionary *)asDictionary;
+- (void)fromDictionary:(NSDictionary*)dictionary;
 
 @end

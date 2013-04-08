@@ -9,13 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "TimedAbility.h"
 
-@interface TimedAbilityForSerialization : NSObject
+@interface TimedAbilityForSerialization : NSObject {
+    
+    TimedAbility *_timedAbility;
+}
 
 @property (nonatomic, strong) NSNumber *abilityType;
-@property (nonatomic, strong) NSNumber *startedInRound;
-@property (nonatomic, strong) NSNumber *numberOfRounds;
+@property (nonatomic, strong) NSNumber *numberOfTurns;
+@property (nonatomic, strong) NSNumber *startedInTurn;
 
-- (id)initWithTimedAbility:(TimedAbility*)timedAbility;
+- (id)initWithTimedAbility:(TimedAbility*)timedAbility currentTurn:(NSUInteger)currentTurn;
 
 - (NSDictionary *)asDictionary;
 

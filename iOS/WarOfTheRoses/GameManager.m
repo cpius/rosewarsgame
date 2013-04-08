@@ -60,7 +60,7 @@
     _currentGame.gametype = gameType;
     _currentGame.state = kGameStateInitialState;
     _currentGame.currentRound = 1;
-    _turnCounter = 0;
+    _currentGame.turnCounter = 0;
     
     // Only 1 action in first round
     _currentGame.numberOfAvailableActions = 1;
@@ -174,9 +174,9 @@
 
 - (void)endTurn {
     
-    _turnCounter++;
+    _currentGame.turnCounter++;
     
-    if ((_turnCounter % 2) == 0) {
+    if ((_currentGame.turnCounter % 2) == 0) {
         _currentGame.currentRound++;
         
         CCLOG(@"Round increased to %d", _currentGame.currentRound);

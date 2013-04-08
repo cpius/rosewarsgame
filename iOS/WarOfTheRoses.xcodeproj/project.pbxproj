@@ -63,6 +63,7 @@
 		6D5E5A4D167FB93E007429BD /* PlaceCardsScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E5A4C167FB93D007429BD /* PlaceCardsScene.m */; };
 		6D60A0E8170F3DDB00B6E2B5 /* PushAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D60A0E7170F3DDB00B6E2B5 /* PushAction.m */; };
 		6D60A0EA170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6D60A0E9170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 */; };
+		6D60A0ED1712CAED00B6E2B5 /* GameSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D60A0EC1712CAED00B6E2B5 /* GameSerializer.m */; };
 		6D61515D16A7F0E8007A104E /* BonusSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D61515C16A7F0E8007A104E /* BonusSprite.m */; };
 		6D61516016A7F5C4007A104E /* GameTypeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D61515F16A7F5C4007A104E /* GameTypeScene.m */; };
 		6D61516916A82059007A104E /* GCTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D61516816A82059007A104E /* GCTurnBasedMatchHelper.m */; };
@@ -227,7 +228,6 @@
 		6DD5888916E6896D00466DDB /* flagbearer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888516E6896C00466DDB /* flagbearer_0.png */; };
 		6DD5888A16E6896D00466DDB /* flagbearer_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888616E6896D00466DDB /* flagbearer_icon-hd.png */; };
 		6DD5888B16E6896D00466DDB /* flagbearer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888716E6896D00466DDB /* flagbearer_icon.png */; };
-		6DD5888E16E68B5600466DDB /* HighMorale.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5888D16E68B5600466DDB /* HighMorale.m */; };
 		6DD5889116E7CE2A00466DDB /* attack_direction-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5888F16E7CE2A00466DDB /* attack_direction-hd.png */; };
 		6DD5889216E7CE2A00466DDB /* attack_direction.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DD5889016E7CE2A00466DDB /* attack_direction.png */; };
 		6DD5889516E7E1CA00466DDB /* ActionCostLess.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5889416E7E1CA00466DDB /* ActionCostLess.m */; };
@@ -474,6 +474,8 @@
 		6D60A0E6170F3DDB00B6E2B5 /* PushAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushAction.h; sourceTree = "<group>"; };
 		6D60A0E7170F3DDB00B6E2B5 /* PushAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushAction.m; sourceTree = "<group>"; };
 		6D60A0E9170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = infantry_defeated_sound.mp3; path = Resources/Sounds/infantry_defeated_sound.mp3; sourceTree = "<group>"; };
+		6D60A0EB1712CAED00B6E2B5 /* GameSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameSerializer.h; sourceTree = "<group>"; };
+		6D60A0EC1712CAED00B6E2B5 /* GameSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameSerializer.m; sourceTree = "<group>"; };
 		6D61515B16A7F0E8007A104E /* BonusSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonusSprite.h; sourceTree = "<group>"; };
 		6D61515C16A7F0E8007A104E /* BonusSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonusSprite.m; sourceTree = "<group>"; };
 		6D61515E16A7F5C3007A104E /* GameTypeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTypeScene.h; sourceTree = "<group>"; };
@@ -690,8 +692,6 @@
 		6DD5888516E6896C00466DDB /* flagbearer_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flagbearer_0.png; path = Resources/Images/flagbearer_0.png; sourceTree = "<group>"; };
 		6DD5888616E6896D00466DDB /* flagbearer_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "flagbearer_icon-hd.png"; path = "Resources/Images/flagbearer_icon-hd.png"; sourceTree = "<group>"; };
 		6DD5888716E6896D00466DDB /* flagbearer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flagbearer_icon.png; path = Resources/Images/flagbearer_icon.png; sourceTree = "<group>"; };
-		6DD5888C16E68B5500466DDB /* HighMorale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighMorale.h; sourceTree = "<group>"; };
-		6DD5888D16E68B5600466DDB /* HighMorale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HighMorale.m; sourceTree = "<group>"; };
 		6DD5888F16E7CE2A00466DDB /* attack_direction-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "attack_direction-hd.png"; path = "Resources/Images/attack_direction-hd.png"; sourceTree = "<group>"; };
 		6DD5889016E7CE2A00466DDB /* attack_direction.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = attack_direction.png; path = Resources/Images/attack_direction.png; sourceTree = "<group>"; };
 		6DD5889316E7E1CA00466DDB /* ActionCostLess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionCostLess.h; sourceTree = "<group>"; };
@@ -1362,6 +1362,8 @@
 				6DB204C216FED24F0004FFCB /* CardForSerialization.m */,
 				6DB204C41700479C0004FFCB /* TimedAbilityForSerialization.h */,
 				6DB204C51700479D0004FFCB /* TimedAbilityForSerialization.m */,
+				6D60A0EB1712CAED00B6E2B5 /* GameSerializer.h */,
+				6D60A0EC1712CAED00B6E2B5 /* GameSerializer.m */,
 			);
 			name = Serialization;
 			sourceTree = "<group>";
@@ -1385,8 +1387,6 @@
 				6DD5886616E53B3000466DDB /* TimedAbility.m */,
 				6DD5886816E53C4B00466DDB /* Bribe.h */,
 				6DD5886916E53C4B00466DDB /* Bribe.m */,
-				6DD5888C16E68B5500466DDB /* HighMorale.h */,
-				6DD5888D16E68B5600466DDB /* HighMorale.m */,
 				6DD5889316E7E1CA00466DDB /* ActionCostLess.h */,
 				6DD5889416E7E1CA00466DDB /* ActionCostLess.m */,
 				6DB204A216F8F9EA0004FFCB /* ImproveWeapons.h */,
@@ -2385,7 +2385,6 @@
 				6DD5886D16E540E200466DDB /* Scout.m in Sources */,
 				6DD5887C16E676F700466DDB /* MinimumRequirementDeckStrategy.m in Sources */,
 				6DD5888316E6884800466DDB /* FlagBearer.m in Sources */,
-				6DD5888E16E68B5600466DDB /* HighMorale.m in Sources */,
 				6DD5889516E7E1CA00466DDB /* ActionCostLess.m in Sources */,
 				6DD5889816EA62A300466DDB /* Lancer.m in Sources */,
 				6DB2044616ECACD00004FFCB /* RoyalGuard.m in Sources */,
@@ -2408,6 +2407,7 @@
 				6DB204CC170385AA0004FFCB /* BattleReport.m in Sources */,
 				6DB204CF170386C30004FFCB /* BattleResult.m in Sources */,
 				6D60A0E8170F3DDB00B6E2B5 /* PushAction.m in Sources */,
+				6D60A0ED1712CAED00B6E2B5 /* GameSerializer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

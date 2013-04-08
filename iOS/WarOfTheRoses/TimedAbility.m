@@ -16,22 +16,22 @@
 @synthesize friendlyAbility = _friendlyAbility;
 @synthesize card = _card;
 @synthesize abilityType = _abilityType;
-@synthesize abilityStartedInRound = _abilityStartedInRound;
+@synthesize abilityStartedInTurn = _abilityStartedInTurn;
 
 - (id)initOnCard:(Card *)card {
     
-    return [self initForNumberOfRounds:1 onCard:card];
+    return [self initForNumberOfTurns:1 onCard:card];
 }
 
-- (id)initForNumberOfRounds:(NSUInteger)numberOfRounds onCard:(Card*)card {
+- (id)initForNumberOfTurns:(NSUInteger)numberOfTurns onCard:(Card*)card {
     
     self = [super init];
     
     if (self) {
-        _numberOfRounds = numberOfRounds;
+        _numberOfTurns = numberOfTurns;
         _card = card;
         
-        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"currentRound" options:NSKeyValueObservingOptionNew context:nil];
+        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
         
         if ([_delegate respondsToSelector:@selector(timedAbilityWillStart:)]) {
             [_delegate timedAbilityWillStart:self];
@@ -47,11 +47,43 @@
     return self;
 }
 
+- (id)initExistingAbilityWithAbilityData:(NSDictionary*)abilityData onCard:(Card*)card {
+    
+    self = [super init];
+    
+    if (self) {
+        _numberOfTurns = [[abilityData objectForKey:@"numberofturns"] integerValue];
+        _abilityStartedInTurn = [[abilityData objectForKey:@"started_in_turn"] integerValue];
+        _card = card;
+        
+        [self fromDictionary:abilityData];
+        
+        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
+        
+        if (_numberOfTurns > 0) {
+
+            if ([_delegate respondsToSelector:@selector(timedAbilityWillStart:)]) {
+                [_delegate timedAbilityWillStart:self];
+            }
+            [self reactivateTimedAbility];
+            
+            if ([_delegate respondsToSelector:@selector(timedAbilityDidStart:)]) {
+                [_delegate timedAbilityDidStart:self];
+            }
+        }
+        else {
+            [self stopTimedAbility];
+        }
+    }
+    
+    return self;
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
-    if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"currentRound"]) {
+    if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"turnCounter"]) {
         
-        if ([GameManager sharedManager].currentGame.currentRound == _abilityStartedInRound + _numberOfRounds) {
+        if ([GameManager sharedManager].currentGame.turnCounter == _abilityStartedInTurn + _numberOfTurns) {
             
             if ([_delegate respondsToSelector:@selector(timedAbilityWillStop:)]) {
                 [_delegate timedAbilityWillStop:self];
@@ -62,19 +94,39 @@
             if ([_delegate respondsToSelector:@selector(timedAbilityDidStop:)]) {
                 [_delegate timedAbilityDidStop:self];
             }
-
-            [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"currentRound"];
         }
     }
 }
 
+- (void)reactivateTimedAbility {
+    
+}
+
 - (void)startTimedAbility {
     
-    _abilityStartedInRound = [GameManager sharedManager].currentGame.currentRound;
+    _abilityStartedInTurn = [GameManager sharedManager].currentGame.turnCounter;
 }
 
 - (void)stopTimedAbility {
     
+}
+
+- (void)applyEffect {
+    
+}
+
+- (NSDictionary *)asDictionary {
+    
+    return [NSDictionary dictionary];
+}
+
+- (void)fromDictionary:(NSDictionary*)dictionary {
+    
+}
+
+- (void)dealloc {
+    
+    [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"turnCounter"];
 }
 
 @end

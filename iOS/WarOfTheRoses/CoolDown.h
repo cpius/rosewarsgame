@@ -10,8 +10,6 @@
 
 @interface CoolDown : TimedAbility {
     
-    NSInteger _originalMoveActionCost;
-    NSInteger _originalAttackActionCost;
 }
 
 @end

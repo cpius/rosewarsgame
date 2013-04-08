@@ -10,15 +10,18 @@
 
 @implementation TimedAbilityForSerialization
 
-- (id)initWithTimedAbility:(TimedAbility *)timedAbility {
+- (id)initWithTimedAbility:(TimedAbility *)timedAbility currentTurn:(NSUInteger)currentTurn {
     
     self = [super init];
     
     if (self) {
         
+        _timedAbility = timedAbility;
+        
         _abilityType = @(timedAbility.abilityType);
-        _startedInRound = @(timedAbility.abilityStartedInRound);
-        _numberOfRounds = @(timedAbility.numberOfRounds);
+        _startedInTurn = @(timedAbility.abilityStartedInTurn);
+        
+        _numberOfTurns = @(_timedAbility.numberOfTurns - 1);
     }
     
     return self;
@@ -27,10 +30,11 @@
 - (NSDictionary *)asDictionary {
     
     NSMutableDictionary *abilities = [NSMutableDictionary dictionaryWithObjectsAndKeys:_abilityType, @"abilitytype",
-                                     _startedInRound, @"startedinround",
-                                     _numberOfRounds, @"numberofrounds",
+                                     _numberOfTurns, @"numberofturns",
+                                     _startedInTurn, @"started_in_turn",
                                      nil];
     
+    [abilities addEntriesFromDictionary:[_timedAbility asDictionary]];
     
     return abilities;
 }
