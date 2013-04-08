@@ -390,19 +390,20 @@ class View(object):
         self.draw_line(action.start_position, action.end_position)
 
         if action.is_attack:
+
             self.draw_line(action.end_position, action.attack_position)
 
-            if action.move_with_attack:
-                pic = self.get_image(self.interface.move_attack_icon)
-            else:
-                pic = self.get_image(self.interface.attack_icon)
+            attack_dice = self.get_image(self.interface.dice[action.rolls[0]])
+            self.screen.blit(attack_dice, self.symbol_coordinates.get(action.start_position))
+
+            if battle.attack_successful(action):
+                defence_dice = self.get_image(self.interface.dice[action.rolls[1]])
+                self.screen.blit(defence_dice, self.symbol_coordinates.get(action.attack_position))
 
             if hasattr(action, "high_morale"):
                 pic = self.get_image(self.interface.high_morale_icon)
                 coordinates = Coordinates(self.interface.first_symbol_coordinates, self.interface)
                 self.screen.blit(pic, coordinates.get(action.end_position))
-
-            self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
         elif action.is_ability:
             self.draw_line(action.end_position, action.ability_position)
