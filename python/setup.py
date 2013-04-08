@@ -174,6 +174,12 @@ def get_units():
             position = tiles_bag.pick_from_row(allowed_rows)
             units[position] = unit
 
+        for unit in protected_units:
+            position = tiles_bag.pick_protected_tile(units_info[unit.name].allowed_rows)
+            units[position] = unit
+
+        return units
+
     while True:
         
         basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
