@@ -62,3 +62,19 @@ def get_attack_rating(attacking_unit, defending_unit, action):
         attack += attacking_unit.abonus[defending_unit.type]
     
     return attack
+
+
+def get_outcome(action):
+    attacking_unit = action.unit_reference
+    defending_unit = action.target_reference
+
+    attack = get_attack_rating(attacking_unit, defending_unit, action)
+    defence = get_defence_rating(attacking_unit, defending_unit, attack)
+
+    if action.rolls[0] <= attack:
+        if action.rolls[1] <= defence:
+            return "Defend"
+        else:
+            return" Win"
+    else:
+        return " Miss"

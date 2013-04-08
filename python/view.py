@@ -494,9 +494,8 @@ class View(object):
         self.draw_turn_box(color, action_number - 1, *base)
 
     def draw_attack(self, action, base, symbol_location, log):
-        attacking_unit = action.unit_reference
-        defending_unit = action.target_reference
-        outcome = get_outcome(attacking_unit, defending_unit, action)
+
+        outcome = battle.get_outcome(action)
 
         self.draw_outcome(outcome, *base)
 
@@ -632,17 +631,3 @@ class View(object):
         self.show_lines(lines, *base)
 
         pygame.display.flip()
-
-
-def get_outcome(attacking_unit, defending_unit, action):
-
-    attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
-    defence = battle.get_defence_rating(attacking_unit, defending_unit, attack)
-
-    if action.rolls[0] <= attack:
-        if action.rolls[1] <= defence:
-            return "Defend"
-        else:
-            return" Win"
-    else:
-        return " Miss"
