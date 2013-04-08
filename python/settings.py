@@ -13,8 +13,10 @@ player2_ai = "Evaluator"
 
 document_ai_actions = True
 
-use_special_units = []  # Special units that must be present in the game
-dont_use_special_units = ["Chariot", "Samurai", "Diplomat"]  # Special units that must not be present in the game
+required_special_units = []
+allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
+                         "Scout", "Viking", "War Elephant", "Weaponsmith"]
+basic_units = ["Archer", "Ballista", "Catapult", "Heavy Cavalry", "Light Cavalry", "Pikeman"]
 
 
 # Rows that the units can start on, in the pseudo-random computer-generated start position
