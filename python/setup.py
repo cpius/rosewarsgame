@@ -2,6 +2,7 @@ from __future__ import division
 import random
 import units as units_module
 import settings
+from collections import namedtuple
 
 
 class Tiles_bag(object):
@@ -38,6 +39,29 @@ board_columns = [1, 2, 3, 4, 5]
 
 siege_weapons = ["Ballista", "Catapult", "Cannon"]
 
+Info = namedtuple("Info", ["allowed_rows", "copies_in_bag", "protection_required"])
+
+units_info = {"Archer": Info({2, 3}, 3, False),
+              "Ballista": Info({2, 3}, 2, True),
+              "Catapult": Info({2, 3}, 2, False),
+              "Heavy Cavalry": Info({4}, 3, False),
+              "Light Cavalry": Info({2, 3}, 3, False),
+              "Pikeman": Info({2, 3, 4}, 3, False),
+              "Berserker": Info({2, 3}, 1, False),
+              "Cannon": Info({2}, 1, True),
+              "Chariot": Info({3, 4}, 1, False),
+              "Crusader": Info({3, 4}, 1, False),
+              "Diplomat": Info({2, 3}, 1, False),
+              "Flag Bearer": Info({3, 4}, 1, False),
+              "Lancer": Info({3, 4}, 1, False),
+              "Longswordsman": Info({4}, 1, False),
+              "Royal Guard": Info({2, 3}, 1, False),
+              "Saboteur": Info({2, 3}, 1, True),
+              "Samurai": Info({4}, 1, False),
+              "Scout": Info({2, 3}, 1, False),
+              "Viking": Info({4}, 1, False),
+              "War Elephant": Info({4}, 1, False),
+              "Weaponsmith": Info({2, 3}, 1, True)}
 
 
 def test_coloumn_blocks(units):
