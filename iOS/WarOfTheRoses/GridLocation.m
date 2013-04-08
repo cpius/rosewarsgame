@@ -39,6 +39,11 @@
     return copyLocation;
 }
 
+- (NSUInteger)dictanceToGridLocation:(GridLocation*)gridLocation {
+    
+    return abs(gridLocation.column - self.column) + abs(gridLocation.row - self.row);
+}
+
 - (NSString *)description {
     
     return [NSString stringWithFormat:@"%d-%d", self.row, self.column];

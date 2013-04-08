@@ -12,6 +12,11 @@
 
 @interface MeleeAttackPathFinderStrategy : BasePathFinderStrategy
 
+@property (nonatomic, readonly) MeleeAttackTypes meleeAttackType;
+
 + (id)strategy;
++ (id)strategyWithMeleeAttackType:(MeleeAttackTypes)attackType;
+
+- (id)initWithMeleeAttackType:(MeleeAttackTypes)meleeAttackType;
 
 @end

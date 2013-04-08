@@ -100,6 +100,8 @@
                 
         [self addChild:_gameboard];
         
+   //     [GCTurnBasedMatchHelper sharedInstance].delegate = self;
+        
         [_gameboard layoutBoard];
         [self layoutDecks];
 
@@ -251,7 +253,7 @@
                 if (_battlePlan.meleeActions.count > 0) {
                     _leftPanel.selectedAction = action;
                     
-                    _attackDirections = [_battlePlan getAttackDirectionsForCard:action.cardInAction whenAttackingEnemyCard:action.enemyCard withUnitLayout:_gameManager.currentGame.unitLayout];
+                    _attackDirections = [_battlePlan getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:_gameManager.currentGame.unitLayout];
                     
                     [_gameboard highlightNodesForAttackDirectionAtLocations:_attackDirections.allKeys];
                 }
@@ -547,8 +549,6 @@
     if (_actionInQueue != nil) {
         MeleeAttackAction *action = (MeleeAttackAction*)_actionInQueue;
         
-        action.meleeAttackType = attackType;
-        
         if (_pathInQueue != nil) {
             action.path = _pathInQueue;
         }
@@ -606,5 +606,22 @@
     
     [label runAction:[CCSequence actions:[CCEaseSineIn actionWithAction:[CCSpawn actions:moveAction, fadeAction, nil]], removeLabel, nil]];
 }
+
+/*- (void)takeTurn:(GKTurnBasedMatch *)match {
+    
+    CCLOG(@"Take turn");
+    [[GameManager sharedManager] continueExistingGame];
+    
+    [GameManager sharedManager].currentGame.localUserId = [GCTurnBasedMatchHelper sharedInstance].localUserId;
+    [GameManager sharedManager].currentGame.matchId = match.matchID;
+    
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData includeCardData:NO];
+    
+    if ([GameManager sharedManager].currentGame.actionForPlayback != nil) {
+        [[GameManager sharedManager].currentGame.actionForPlayback performActionWithCompletion:^{
+            
+        }];
+    }
+}*/
 
 @end

@@ -170,8 +170,10 @@
             GridLocation *toLocation = [GridLocation gridLocationWithRow:row column:column];
             NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:allLocations];
             
-            if ([card allowPath:path forActionType:kActionTypeMove allLocations:allLocations]) {
-                [moveActions addObject:[[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil]];
+            Action *action = [[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil];
+            
+            if ([card allowAction:action allLocations:allLocations]) {
+                [moveActions addObject:action];
             }
         }
     }
@@ -189,10 +191,26 @@
 
         GridLocation *enemyLocation = enemyCard.cardLocation;
         
-        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:allLocations];
+        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackWithConquerStrategy] allLocations:allLocations];
+                
+        MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard meleeAttackType:kMeleeAttackTypeConquer];
         
-        if ([card allowPath:path forActionType:kActionTypeMelee allLocations:allLocations]) {
-            [attackActions addObject:[[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
+        if ([card allowAction:meleeAction allLocations:allLocations]) {
+            [attackActions addObject:meleeAction];
+        }
+        else {
+            
+            NSUInteger meleeRange = [fromLocation dictanceToGridLocation:enemyLocation];
+            
+            if (meleeRange <= card.meleeRange) {
+                path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:allLocations];
+                
+                MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard meleeAttackType:kMeleeAttackTypeNormal];
+                
+                if ([card allowAction:meleeAction allLocations:allLocations]) {
+                    [attackActions addObject:meleeAction];
+                }
+            }
         }
     }
     
@@ -211,8 +229,10 @@
         
         NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
         
-        if ([card allowPath:path forActionType:kActionTypeRanged allLocations:allLocations]) {
-            [attackActions addObject:[[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard]];
+        Action *action = [[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard];
+        
+        if ([card allowAction:action allLocations:allLocations]) {
+            [attackActions addObject:action];
         }
     }
     
@@ -232,8 +252,10 @@
         
         NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:targetLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
         
-        if ([card allowPath:path forActionType:kActionTypeAbility allLocations:allLocations] && [card isValidTarget:targetCard]) {
-            [abilityActions addObject:[[AbilityAction alloc] initWithPath:path andCardInAction:card targetCard:targetCard]];
+        Action *action = [[AbilityAction alloc] initWithPath:path andCardInAction:card targetCard:targetCard];
+        
+        if ([card allowAction:action allLocations:allLocations] && [card isValidTarget:targetCard]) {
+            [abilityActions addObject:action];
         }
     }
     

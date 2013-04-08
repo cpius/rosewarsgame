@@ -51,14 +51,6 @@
     return nil;
 }
 
-/*def test_coloumn_blocks(player):
-""" Tests whether there on each coloumn are at least two 'blocks'. A block is either a unit, or a Pikeman zoc tile other than the back line. """
-
-cols = [pos[0] + x for x in [-1, +1] for pos, unit in player.units.items() if unit.name == "Pikeman"] + [pos[0] for pos in player.units]
-
-return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
-*/
-
 - (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
     
     NSUInteger retries = 0;
@@ -114,7 +106,8 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
     return [self deckContainsNoNonFrontLineUnitInFrontLine] &&
     [self deckContainsNoBackLineUnitsInBackLine] &&
     [self deckContainsMoreThanOneUnitOnBackLine] &&
-    [self deckContainsMaxOnePikemanPerColumn];
+    [self deckContainsMaxOnePikemanPerColumn]/* &&
+    [self deckContainsAtLeastTwoBlocksInEachColumn]*/;
 }
 
 - (BOOL)deckContainsMaxTwoSiegeWeapons {
@@ -140,6 +133,43 @@ return not any(cols.count(col) < 2 for col in [1,2,3,4,5] )
     
     return NO;
 }
+
+
+- (BOOL)deckContainsAtLeastTwoBlocksInEachColumn {
+    
+    NSUInteger rowStart = _placeCardsInSide == kGameBoardLower ? GetFrontlineForGameBoardSide(_placeCardsInSide) : GetBacklineForGameBoardSide(_placeCardsInSide);
+    NSUInteger rowEnd = _placeCardsInSide == kGameBoardLower ?  GetBacklineForGameBoardSide(_placeCardsInSide) : GetFrontlineForGameBoardSide(_placeCardsInSide);
+
+    NSUInteger unitsInColumn;
+    
+    for (int column = 1; column <= 5; column++) {
+        unitsInColumn = 0;
+        for (int row = rowStart; row <= rowEnd; row++) {
+
+            Card *unit = [self unitAtGridLocation:[GridLocation gridLocationWithRow:row column:column]];
+            
+            Card *cardToTheLeft = [self unitAtGridLocation:[[GridLocation gridLocationWithRow:row column:column] locationToTheLeft]];
+            Card *cardToTheRight = [self unitAtGridLocation:[[GridLocation gridLocationWithRow:row column:column] locationToTheRight]];
+            
+            if (unit != nil || cardToTheLeft.unitName == kPikeman ||
+                cardToTheRight.unitName == kPikeman) {
+                
+                unitsInColumn++;
+            }
+        }
+        
+        if (unitsInColumn < 2) {
+            
+            CCLOG(@"NOT 2 or more blocking units in column %d", column);
+            return NO;
+        }
+    }
+    
+    CCLOG(@"2 or more blocking units in each column");
+    
+    return YES;
+}
+
 
 - (BOOL)deckContainsNoNonFrontLineUnitInFrontLine {
     

@@ -88,43 +88,6 @@
     fromNode.card = nil;
 }
 
-- (Action*)getActionsToGameBoardNode:(GameBoardNode *)toNode allLocations:(NSMutableDictionary*)allLocations {
-    
-    return [self getActionsfromGameBoardNode:_activeNode toGameBoardNode:toNode allLocations:allLocations];
-}
-
-- (Action*)getActionsfromGameBoardNode:(GameBoardNode *)fromNode toGameBoardNode:(GameBoardNode *)toNode allLocations:(NSMutableDictionary*)allLocations {
-        
-    GridLocation *fromLocation = fromNode.locationInGrid;
-    GridLocation *toLocation = toNode.locationInGrid;
-    
-    if ([fromLocation isEqual:toLocation]) {
-        CCLOG(@"Can't move to current location");
-        return nil;
-    }
-    
-    PathFinder *pathFinder = [[PathFinder alloc] init];
-    
-    Action *action = nil;
-    id<PathFinderStrategy> strategy = [PathFinderStrategyFactory getStrategyFromCard:fromNode.card.model toCard:toNode.card.model myColor:colorOfBottomPlayer];
-    
-    NSArray *path = [pathFinder getPathForCard:fromNode.card.model fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:strategy allLocations:allLocations];
-    
-    if (toNode.hasCard && [toNode.card.model isOwnedByPlayerWithColor:colorOfTopPlayer]) {
-        if (fromNode.card.model.isRanged) {
-            action = [[RangedAttackAction alloc] initWithPath:path andCardInAction:fromNode.card.model enemyCard:toNode.card.model];
-        }
-        else {
-            action = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:fromNode.card.model enemyCard:toNode.card.model];
-        }
-    }
-    else {
-        action = [[MoveAction alloc] initWithPath:path andCardInAction:fromNode.card.model enemyCard:nil];
-    }
-        
-    return action;
-}
-
 - (void)moveCardAtLocation:(GridLocation *)location followingPath:(NSArray *)path onCompletion:(void (^)())completion {
 
     GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];

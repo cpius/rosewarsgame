@@ -10,6 +10,7 @@
 #import "PathFinder.h"
 #import "GameManager.h"
 #import "PathFinderStrategyFactory.h"
+#import "MeleeAttackAction.h"
 
 @implementation BattlePlan
 
@@ -36,47 +37,33 @@
     return NO;
 }
 
-- (NSDictionary *)getAttackDirectionsForCard:(Card *)card whenAttackingEnemyCard:(Card*)enemyCard withUnitLayout:(NSDictionary*)unitLayout {
+- (NSDictionary *)getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:(NSDictionary*)unitLayout {
     
     NSMutableDictionary *attackDirections = [NSMutableDictionary dictionary];
     PathFinder *pathFinder = [[PathFinder alloc] init];
     
-    NSArray *surroundingLocations = [enemyCard.cardLocation surroundingGridLocations];
+    NSArray *surroundingLocations = [action.enemyCard.cardLocation surroundingGridLocations];
     
     for (GridLocation *location in surroundingLocations) {
         
         Card *cardInLocation = [unitLayout objectForKey:location];
         
-        if (cardInLocation == nil) {
+        if (cardInLocation == nil && [location isInsideGameBoard]) {
 
-            NSArray *path = [pathFinder getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:location usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:[GameManager sharedManager].currentGame.unitLayout];
+            NSArray *path = [pathFinder getPathForCard:action.cardInAction fromGridLocation:action.cardInAction.cardLocation toGridLocation:location usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategyWithMeleeAttackType:action.meleeAttackType] allLocations:[GameManager sharedManager].currentGame.unitLayout];
             
             if (path != nil) {
                 NSMutableArray *newPath = [NSMutableArray arrayWithArray:path];
                 // And add last step from enemy unit
-                [newPath addObject:[[PathFinderStep alloc] initWithLocation:enemyCard.cardLocation]];
+                [newPath addObject:[[PathFinderStep alloc] initWithLocation:action.enemyCard.cardLocation]];
                 
-                if ([card allowPath:newPath forActionType:kActionTypeMelee allLocations:unitLayout]) {
+                MeleeAttackAction *tempAction = [[MeleeAttackAction alloc] initWithPath:newPath andCardInAction:action.cardInAction enemyCard:action.enemyCard meleeAttackType:action.meleeAttackType];
+                
+                if ([action.cardInAction allowAction:tempAction allLocations:unitLayout]) {
                     [attackDirections setObject:newPath forKey:location];
                 }
             }
         }
-        
-        
- /*       GridLocation *attackDirection = [meleeAction getLastLocationInPath];
-        
-        if ([surroundingLocations containsObject:attackDirection]) {
-            Card *cardInLocation = [unitLayout objectForKey:attackDirection];
-            
-            // Use path from moveaction
-            NSMutableArray *newPath = [NSMutableArray arrayWithArray:moveAction.path];
-            // And add last step from enemy unit
-            [newPath addObject:[[PathFinderStep alloc] initWithLocation:enemyCard.cardLocation]];
-            
-            if (cardInLocation == nil && [card allowPath:newPath forActionType:kActionTypeMelee allLocations:unitLayout]) {
-                [attackDirections setObject:newPath forKey:attackDirection];
-            }
-        }*/
     }
     
     return attackDirections;

@@ -73,7 +73,7 @@
     _attackerFixedStrategy.fixedDieValue = 5;
     _defenderFixedStrategy.fixedDieValue = 5;
     
-    MeleeAttackAction *meleeAttack = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:archer.cardLocation]] andCardInAction:chariot enemyCard:archer];
+    MeleeAttackAction *meleeAttack = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:archer.cardLocation]] andCardInAction:chariot enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
     
     meleeAttack.delegate = mock;
     
@@ -532,7 +532,7 @@
     _manager.currentPlayersTurn = kPlayerGreen;
     
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:pikeman enemyCard:archer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -565,7 +565,7 @@
     _manager.currentPlayersTurn = kPlayerGreen;
     
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:7 column:4]]] andCardInAction:pikeman enemyCard:archer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:7 column:4]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -863,6 +863,33 @@
         STAssertTrue(viking.cardLocation.row == 4, @"Viking should be pushed");
         STAssertTrue(viking.cardLocation.column == 3, @"Viking should be pushed");
     }];
+}
+
+- (void)testVikingShouldBeAbleToPerformMeleeActionWithoutConquerAgainstUnitsInRangeTwo {
+    
+    WarElephant *warelephant = [WarElephant card];
+    Viking *viking = [Viking card];
+    
+    viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    viking.cardColor = kCardColorGreen;
+
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    warelephant.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:viking]
+                                    player2Units:[NSArray arrayWithObject:warelephant]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    
+    NSArray *meleeAactions = [pathFinder getMeleeAttackActionsFromLocation:viking.cardLocation forCard:viking enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(meleeAactions.count == 1, @"Viking should be able to attack warelephant in range 2");
+
+    MeleeAttackAction *action = meleeAactions[0];
+    STAssertTrue(action.meleeAttackType == kMeleeAttackTypeNormal, @"Viking shouldn't be able to conquer warelephant");
 }
 
 @end

@@ -34,4 +34,6 @@
 
 - (GridLocation*)flipBacklineFromCurrentBackline:(NSUInteger)currentBackline;
 
+- (NSUInteger)dictanceToGridLocation:(GridLocation*)gridLocation;
+
 @end

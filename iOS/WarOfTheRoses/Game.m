@@ -192,7 +192,7 @@
             for (NSDictionary *ability in abilities) {
                 [AbilityFactory reapplyExistingAbilityOfType:[[ability objectForKey:@"abilitytype"] integerValue] onCard:card withAbilityData:ability];
             }
-                        
+            
             [card fromDictionary:[carddata objectForKey:@"card_specific_stats"]];
             
             if ([card isOwnedByMe]) {
@@ -206,7 +206,7 @@
                 if (creator == _enemyColor) {
                     [card.cardLocation flipBacklineFromCurrentBackline:LOWER_BACKLINE];
                 }
-
+                
                 [enemyCards addObject:card];
             }
         }
@@ -247,9 +247,12 @@
                 // Get enemy card from my deck
                 Card *enemyCard = [self getCardFromDeck:self.myDeck locatedAt:[enemyCardLocation flipBacklineFromCurrentBackline:UPPER_BACKLINE]];
                 
-                MoveAction *moveAction = [[MoveAction alloc] initWithPath:pathTaken andCardInAction:cardInAction
+                _actionForPlayback = [[MoveAction alloc] initWithPath:pathTaken andCardInAction:cardInAction
                                                                 enemyCard:enemyCard];
             }
+        }
+        else {
+            _actionForPlayback = nil;
         }
     }
 }

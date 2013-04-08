@@ -8,6 +8,7 @@
 
 #import "Viking.h"
 #import "Action.h"
+#import "MeleeAttackAction.h"
 
 @implementation Viking
 
@@ -47,6 +48,11 @@
     return [[Viking alloc] init];
 }
 
+- (NSUInteger)meleeRange {
+    
+    return 2;
+}
+
 - (void)resetAfterNewRound {
     
     [super resetAfterNewRound];
@@ -74,17 +80,20 @@
     }
 }
 
-- (BOOL)allowPath:(NSArray *)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary *)allLocations {
+- (BOOL)allowAction:(Action *)action allLocations:(NSDictionary*)allLocations {
     
-    BOOL allowPath = [super allowPath:path forActionType:actionType allLocations:allLocations];
-    
-    if (actionType == kActionTypeMelee) {
-        if ((path != nil && path.count <= 2)) {
-            allowPath = YES;
+    BOOL allowAction = [super allowAction:action allLocations:allLocations];
+
+    if (action.actionType == kActionTypeMelee) {
+        
+        MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
+        
+        if ((meleeAction.path != nil && meleeAction.path.count <= 2 && meleeAction.meleeAttackType == kMeleeAttackTypeNormal)) {
+            allowAction = YES;
         }
     }
     
-    return allowPath;
+    return allowAction;
 }
 
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount {

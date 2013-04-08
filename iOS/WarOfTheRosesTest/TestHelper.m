@@ -40,6 +40,7 @@
     game.enemyDeck = [defenderFixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0];
     
     game.currentRound = 1;
+    game.numberOfAvailableActions = 1;
     
     // During unittests myColor is always green
     game.myColor = kPlayerGreen;

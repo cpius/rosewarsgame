@@ -106,6 +106,11 @@
     return self.unitAttackType == kUnitAttackTypeRanged;
 }
 
+- (NSUInteger)meleeRange {
+    
+    return 1;
+}
+
 - (NSString *)description {
     
     NSString *description = [NSString stringWithFormat:@"Unit: %@ - with color: %@ boardlocation: row %d column %d",
@@ -237,6 +242,11 @@
 - (BOOL)isValidTarget:(Card*)targetCard {
     
     return YES;
+}
+
+- (BOOL)allowAction:(Action *)action allLocations:(NSDictionary*)allLocations {
+    
+    return [self allowPath:action.path forActionType:action.actionType allLocations:allLocations];
 }
 
 - (BOOL)allowPath:(NSArray *)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary *)allLocations {

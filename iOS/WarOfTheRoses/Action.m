@@ -43,7 +43,7 @@
 
 - (BOOL)isWithinRange {
     
-    return [self.cardInAction allowPath:self.path forActionType:self.actionType allLocations:[GameManager sharedManager].currentGame.unitLayout];
+    return [self.cardInAction allowAction:self allLocations:[GameManager sharedManager].currentGame.unitLayout];
 }
 
 - (void)performActionWithCompletion:(void (^)())completion {

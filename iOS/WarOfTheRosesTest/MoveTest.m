@@ -82,7 +82,7 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] init];
     
-    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:_manager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackWithConquerStrategy] allLocations:_manager.currentGame.unitLayout];
     
     STAssertNil(path, @"Shouldn't be able to move to pikeman because of ZOC");
     

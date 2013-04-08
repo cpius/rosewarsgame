@@ -21,6 +21,9 @@
 #import "Berserker.h"
 #import "LongSwordsMan.h"
 #import "RoyalGuard.h"
+#import "MeleeAttackAction.h"
+#import "PathFinderStrategyFactory.h"
+#import "FlagBearer.h"
 
 @implementation CombatTest
 
@@ -181,8 +184,13 @@
                                     player2Units:[NSArray arrayWithObjects:defender1, nil]];
     
     BattlePlan *battlePlan = [[BattlePlan alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc ] init];
     
-    NSDictionary *attackDirections = [battlePlan getAttackDirectionsForCard:attacker whenAttackingEnemyCard:defender1 withUnitLayout:_manager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender1.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:_manager.currentGame.unitLayout];
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path[0] andCardInAction:attacker enemyCard:defender1];
+    
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:_manager.currentGame.unitLayout];
     
     STAssertTrue(attackDirections.count == 3, @"Should be 3 attackdirections");
 
@@ -208,8 +216,13 @@
                                     player2Units:[NSArray arrayWithObjects:defender1, defender2, defender3, nil]];
     
     BattlePlan *battlePlan = [[BattlePlan alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc ] init];
     
-    NSDictionary *attackDirections = [battlePlan getAttackDirectionsForCard:attacker whenAttackingEnemyCard:defender1 withUnitLayout:_manager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender1.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:_manager.currentGame.unitLayout];
+        
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path[0] andCardInAction:attacker enemyCard:defender1];
+    
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:_manager.currentGame.unitLayout];
     
     STAssertTrue(attackDirections.count == 1, @"Should be 1 attackdirections");
     
@@ -232,8 +245,13 @@
                                     player2Units:[NSArray arrayWithObjects:defender1, nil]];
     
     BattlePlan *battlePlan = [[BattlePlan alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc ] init];
     
-    NSDictionary *attackDirections = [battlePlan getAttackDirectionsForCard:attacker whenAttackingEnemyCard:defender1 withUnitLayout:_manager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender1.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:_manager.currentGame.unitLayout];
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path[0] andCardInAction:attacker enemyCard:defender1];
+    
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:_manager.currentGame.unitLayout];
     
     STAssertTrue(attackDirections.count == 3, @"Should be 3 attackdirections");
     
@@ -277,6 +295,42 @@
     NSArray *meleeActions = [pathFinder getMeleeAttackActionsFromLocation:longswordsman.cardLocation forCard:longswordsman enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
     
     STAssertTrue(meleeActions.count == 2, @"Longswordsman should be able to attack royalguard and pikeman");
+    
+    for (MeleeAttackAction *action in meleeActions) {
+        if (action.enemyCard == pikeman) {
+            STAssertTrue(action.meleeAttackType == kMeleeAttackTypeNormal, @"Longswordsman shouldn't be able to conquer pikeman");
+        }
+        
+        if (action.enemyCard == royalguard) {
+            STAssertTrue(action.meleeAttackType == kMeleeAttackTypeConquer, @"Longswordsman should be able to conquer royalguard");
+        }
+    }
 }
+
+- (void)testUnitNotAffectedByZocWhenMakingNormalMeleeAttackWithoutConquer {
+    
+    Archer *archer = [Archer card];
+    FlagBearer *flagbearer = [FlagBearer card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    flagbearer.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    flagbearer.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
+    archer.cardColor = kCardColorRed;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:flagbearer]
+                                    player2Units:[NSArray arrayWithObjects:archer, pikeman, nil]];
+    
+    PathFinder *pathFinder = [[PathFinder alloc] init];
+    NSArray *meleeActions = [pathFinder getMeleeAttackActionsFromLocation:flagbearer.cardLocation forCard:flagbearer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertTrue(meleeActions.count == 1, @"FlagBearer should only be able to attack pikeman");
+}
+
 
 @end

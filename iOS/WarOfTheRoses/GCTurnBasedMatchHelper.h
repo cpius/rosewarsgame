@@ -10,6 +10,8 @@
 #import <GameKit/GameKit.h>
 #import "Definitions.h"
 
+#define kLeaderBoardCategory @"wotr"
+
 @protocol GCTurnBasedMatchHelperDelegate <NSObject>
 
 @optional
@@ -42,6 +44,7 @@
 - (void)endTurnWithData:(NSData*)data;
 - (void)endMatchWithData:(NSData*)data gameResult:(GameResults)gameResult;
 
+- (void)submitScoreForPlayer:(GKTurnBasedParticipant*)player;
 - (void)showLeaderboardWithPresentingViewController:(UIViewController *)viewController;
 
 @end

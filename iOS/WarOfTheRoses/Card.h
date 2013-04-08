@@ -81,6 +81,7 @@
  Angiver rækkevidden på en units angreb, hver square tæller for 1 range, dvs en unit med range 1 kan angribe de  felter umiddelbart ved siden af sig.
  */
 @property(nonatomic, assign) NSUInteger range;
+@property(nonatomic, assign) NSUInteger meleeRange;
 
 @property(nonatomic, readonly) BOOL isRanged;
 @property(nonatomic, readonly) BOOL isMelee;
@@ -114,6 +115,7 @@
 - (void)didPerformedAction:(Action*)action;
 
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount;
+- (BOOL)allowAction:(Action*)action allLocations:(NSDictionary*)allLocations;
 - (BOOL)allowPath:(NSArray*)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary*)allLocations;
 - (BOOL)isValidTarget:(Card*)targetCard;
 

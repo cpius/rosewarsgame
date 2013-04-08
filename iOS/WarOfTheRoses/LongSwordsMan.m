@@ -74,7 +74,7 @@
             
             if (cardInLocation != nil && cardInLocation.cardColor != meleeAttackAction.cardInAction.cardColor) {
                 
-                MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
+                MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation meleeAttackType:kMeleeAttackTypeNormal];
                 
                 BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
 

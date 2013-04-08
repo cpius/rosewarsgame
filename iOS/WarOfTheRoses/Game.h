@@ -10,6 +10,8 @@
 #import "Deck.h"
 #import "BattleReport.h"
 
+@class Action;
+@class Card;
 @interface Game : NSObject
 
 @property (nonatomic, assign) GameTypes gametype;
@@ -30,11 +32,14 @@
 @property (nonatomic, assign) PlayerColors currentPlayersTurn;
 @property (nonatomic, strong) BattleReport *latestBattleReport;
 
+@property (nonatomic, strong) Action *actionForPlayback;
+
 @property (nonatomic, strong) NSMutableDictionary *unitLayout;
 
 - (void)deserializeGameData:(NSData*)gameData;
 - (NSData*)serializeCurrentGame;
 
 - (void)populateUnitLayout;
+- (Card*)getCardFromDeck:(Deck*)deck locatedAt:(GridLocation*)locatedAt;
 
 @end

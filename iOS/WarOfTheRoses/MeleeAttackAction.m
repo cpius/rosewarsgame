@@ -14,17 +14,23 @@
 
 @implementation MeleeAttackAction
 
-@synthesize meleeAttackType;
+@synthesize meleeAttackType = _meleeAttackType;
 @synthesize actionType = _actionType;
 @synthesize startLocation = _startLocation;
 @synthesize battleReport = _battleReport;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
+    return [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard meleeAttackType:kMeleeAttackTypeConquer];
+}
+
+- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard meleeAttackType:(MeleeAttackTypes)meleeAttackType {
+    
     self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
     
     if (self) {
-        _actionType = kActionTypeMelee;        
+        _actionType = kActionTypeMelee;
+        _meleeAttackType = meleeAttackType;
         _startLocation = card.cardLocation;
     }
     
@@ -87,7 +93,7 @@
         }
         else {
             
-            if (meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) {
+            if (_meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) {
                 
                 [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
                 [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:_startLocation];

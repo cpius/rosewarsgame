@@ -34,9 +34,26 @@
     return [MovePathFinderStrategy strategy];
 }
 
++ (id<PathFinderStrategy>)getMeleeAttackStrategyWithMeleeAttackType:(MeleeAttackTypes)meleeAttackType {
+    
+    if (meleeAttackType == kMeleeAttackTypeConquer) {
+        return [PathFinderStrategyFactory getMeleeAttackWithConquerStrategy];
+    }
+    else if (meleeAttackType == kMeleeAttackTypeNormal) {
+        return [PathFinderStrategyFactory getMeleeAttackStrategy];
+    }
+    
+    return nil;
+}
+
++ (id<PathFinderStrategy>)getMeleeAttackWithConquerStrategy {
+    
+    return [MeleeAttackPathFinderStrategy strategyWithMeleeAttackType:kMeleeAttackTypeConquer];
+}
+
 + (id<PathFinderStrategy>)getMeleeAttackStrategy {
     
-    return [MeleeAttackPathFinderStrategy strategy];
+    return [MeleeAttackPathFinderStrategy strategyWithMeleeAttackType:kMeleeAttackTypeNormal];
 }
 
 + (id<PathFinderStrategy>)getRangedAttackStrategy {

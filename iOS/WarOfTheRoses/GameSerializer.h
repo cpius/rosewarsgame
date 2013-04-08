@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "Game.h"
 
 @interface GameSerializer : NSObject
+
+- (NSData*)serializeGame:(Game*)game;
+- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game;
 
 @end

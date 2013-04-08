@@ -134,6 +134,8 @@
             _currentMatch.currentParticipant.matchOutcome = GKTurnBasedMatchOutcomeWon;
             nextParticipant.matchOutcome = GKTurnBasedMatchOutcomeLost;
             
+            [self submitScoreForPlayer:_currentMatch.currentParticipant];
+            
             _currentMatch.message = [NSString stringWithFormat:@"You lost the game against %@", [GKLocalPlayer localPlayer].alias];
         }
         else if (gameResult == kGameResultDefeat) {
@@ -171,6 +173,18 @@
                                             NSLog(@"%@", error);
                                         }
                                     }];
+}
+
+- (void)submitScoreForPlayer:(GKTurnBasedParticipant*)player {
+    
+    GKScore *scoreReporter = [[GKScore alloc] initWithCategory:kLeaderBoardCategory];
+    
+    scoreReporter.value = 1;
+    
+    [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
+        
+        CCLOG(@"Error reporting score");
+    }];
 }
 
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController playerQuitForMatch:(GKTurnBasedMatch *)match {

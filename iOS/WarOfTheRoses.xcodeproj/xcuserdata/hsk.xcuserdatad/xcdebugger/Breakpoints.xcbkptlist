@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "385249048.389959"
+         timestampString = "387116817.119552"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "231"
-         endingLineNumber = "231"
+         startingLineNumber = "194"
+         endingLineNumber = "194"
          landmarkName = "-layoutBoard"
          landmarkType = "5">
       </FileBreakpoint>
@@ -40,19 +40,6 @@
          startingLineNumber = "167"
          endingLineNumber = "167"
          landmarkName = "-selectSpriteForTouch:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/GameBoard.m"
-         timestampString = "384374117.236341"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "98"
-         endingLineNumber = "98"
-         landmarkName = "-getActionsfromGameBoardNode:toGameBoardNode:allLocations:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -86,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GridLocation.m"
-         timestampString = "382743285.251196"
+         timestampString = "387142969.877527"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "58"
-         endingLineNumber = "58"
+         startingLineNumber = "63"
+         endingLineNumber = "63"
          landmarkName = "-isEqual:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/Card.m"
-         timestampString = "387099822.428542"
+         timestampString = "387143345.660426"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "276"
-         endingLineNumber = "276"
+         startingLineNumber = "286"
+         endingLineNumber = "286"
          landmarkName = "-canPerformActionOfType:withRemainingActionCount:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -124,79 +111,14 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/GCTurnBasedMatchHelper.m"
-         timestampString = "385930266.858565"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "90"
-         endingLineNumber = "90"
-         landmarkName = "-handleMatchEnded:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/Game.m"
-         timestampString = "387101754.463965"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "213"
-         endingLineNumber = "213"
-         landmarkName = "-deserializeGameData:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/Game.m"
-         timestampString = "387101754.463965"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "85"
-         endingLineNumber = "85"
-         landmarkName = "-serializeCurrentGame"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/Game.m"
-         timestampString = "387101754.463965"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "175"
-         endingLineNumber = "175"
-         landmarkName = "-deserializeGameData:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "WarOfTheRosesTest/GameCenterTest.m"
          timestampString = "387054886.324573"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "67"
          endingLineNumber = "67"
-         landmarkName = "-testTimedAbilityPersistsThroughEndTurn"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/Game.m"
-         timestampString = "387101754.463965"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "193"
-         endingLineNumber = "193"
-         landmarkName = "-deserializeGameData:"
-         landmarkType = "5">
+         landmarkName = "@implementation GameCenterTest"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -264,16 +186,146 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/MinimumRequirementDeckStrategy.m"
+         timestampString = "387125415.727367"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "140"
+         endingLineNumber = "140"
+         landmarkName = "-deckContainsAtLeastTwoBlocksInEachColumn"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/MinimumRequirementDeckStrategy.m"
+         timestampString = "387126436.229481"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "145"
+         endingLineNumber = "145"
+         landmarkName = "-deckContainsAtLeastTwoBlocksInEachColumn"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "WarOfTheRosesTest/CombatTest.m"
-         timestampString = "387111048.974146"
+         filePath = "WarOfTheRoses/MinimumRequirementDeckStrategy.m"
+         timestampString = "387127260.83792"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "276"
-         endingLineNumber = "276"
-         landmarkName = "-testLongswordsManCanAttackEnemyUnitWhenStandingNextToRoyalGuardButNotConquer"
+         startingLineNumber = "163"
+         endingLineNumber = "163"
+         landmarkName = "-deckContainsAtLeastTwoBlocksInEachColumn"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GCTurnBasedMatchHelper.m"
+         timestampString = "387135204.949955"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "137"
+         endingLineNumber = "137"
+         landmarkName = "-endMatchWithData:gameResult:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GCTurnBasedMatchHelper.m"
+         timestampString = "387135354.645118"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "180"
+         endingLineNumber = "180"
+         landmarkName = "-submitScoreForPlayer:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameScene.m"
+         timestampString = "387136690.139815"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "612"
+         endingLineNumber = "612"
+         landmarkName = "@implementation GameScene"
+         landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GCTurnBasedMatchHelper.m"
+         timestampString = "387136919.130307"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "66"
+         endingLineNumber = "66"
+         landmarkName = "-handleTurnEventForMatch:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameSerializer.m"
+         timestampString = "387138993.021421"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "65"
+         endingLineNumber = "65"
+         landmarkName = "-serializeGame:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameSerializer.m"
+         timestampString = "387139003.976508"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "133"
+         endingLineNumber = "133"
+         landmarkName = "-deserializeGameData:toGame:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameSerializer.m"
+         timestampString = "387139648.600981"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "140"
+         endingLineNumber = "140"
+         landmarkName = "-deserializeGameData:toGame:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRosesTest/CombatTest.m"
+         timestampString = "387143362.72219"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "330"
+         endingLineNumber = "330"
+         landmarkName = "-testUnitNotAffectedByZocWhenMakingNormalMeleeAttackWithoutConquer"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

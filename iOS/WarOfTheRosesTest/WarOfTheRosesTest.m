@@ -102,7 +102,7 @@
     
     _manager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:pikeman enemyCard:archer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
     
     GridLocation *entryLocation = [meleeAction getEntryLocationInPath];
     

@@ -11,9 +11,25 @@
 
 @implementation MeleeAttackPathFinderStrategy
 
+- (id)initWithMeleeAttackType:(MeleeAttackTypes)meleeAttackType {
+    
+    self = [super init];
+    
+    if (self) {
+        _meleeAttackType = meleeAttackType;
+    }
+    
+    return self;
+}
+
 + (id)strategy {
     
-    return [[MeleeAttackPathFinderStrategy alloc] init];
+    return [[MeleeAttackPathFinderStrategy alloc] initWithMeleeAttackType:kMeleeAttackTypeConquer];
+}
+
++ (id)strategyWithMeleeAttackType:(MeleeAttackTypes)attackType {
+    
+    return [[MeleeAttackPathFinderStrategy alloc] initWithMeleeAttackType:attackType];
 }
 
 - (NSArray*)getReachableLocationsForCard:(Card*)card fromLocation:(GridLocation*)fromLocation targetLocation:(GridLocation*)targetLocation allLocations:(NSDictionary *)allLocations {
@@ -29,10 +45,17 @@
             Card *cardAtToLocation = [allLocations objectForKey:gridLocation];
             
             if (cardAtToLocation == nil || cardAtToLocation == targetCard) {
-                if (![self card:card blockedByZoneOfControlUnitWhenMovingFromLocation:fromLocation toLocation:gridLocation allLocations:allLocations]) {
+                
+                // Only melee attacks with conquer check for ZOC
+                if (_meleeAttackType == kMeleeAttackTypeConquer) {
+                    if (![self card:card blockedByZoneOfControlUnitWhenMovingFromLocation:fromLocation toLocation:gridLocation allLocations:allLocations]) {
+                        [adjacentLocations addObject:gridLocation];
+                    }
+                }
+                else {
                     [adjacentLocations addObject:gridLocation];
                 }
-            } 
+            }
         }
     }
 

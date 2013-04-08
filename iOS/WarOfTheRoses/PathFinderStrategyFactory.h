@@ -15,7 +15,9 @@
 + (id<PathFinderStrategy>)getStrategyFromCard:(Card *)fromCard toCard:(Card*)toCard myColor:(PlayerColors)myColor;
 
 + (id<PathFinderStrategy>)getMoveStrategy;
++ (id<PathFinderStrategy>)getMeleeAttackWithConquerStrategy;
 + (id<PathFinderStrategy>)getMeleeAttackStrategy;
++ (id<PathFinderStrategy>)getMeleeAttackStrategyWithMeleeAttackType:(MeleeAttackTypes)meleeAttackType;
 + (id<PathFinderStrategy>)getRangedAttackStrategy;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "LeftPanel.h"
 #import "SoundManager.h"
+#import "MeleeAttackAction.h"
 
 @implementation LeftPanel
 
@@ -50,8 +51,13 @@
     else {
         [_attackButton runAction:[CCFadeIn actionWithDuration:0.2]];
         
-        if (_selectedAction.cardInAction.movesRemaining > 0) {
-            [_moveAttackButton runAction:[CCFadeIn actionWithDuration:0.2]];
+        if (_selectedAction.actionType == kActionTypeMelee) {
+            
+            MeleeAttackAction *meleeAction = (MeleeAttackAction*)_selectedAction;
+            
+            if (meleeAction.meleeAttackType == kMeleeAttackTypeConquer) {
+                [_moveAttackButton runAction:[CCFadeIn actionWithDuration:0.2]];
+            }
         }
     }
 }

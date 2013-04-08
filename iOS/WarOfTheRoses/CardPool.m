@@ -123,7 +123,7 @@
         drawnCard = [CardPool createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = kDiplomat;//(arc4random() % 14) + 6;
+        UnitName unitName = (arc4random() % 14) + 6;
         drawnCard = [CardPool createCardOfName:unitName];
     }
     

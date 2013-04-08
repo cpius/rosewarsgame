@@ -52,9 +52,6 @@
 
 - (void)placeCard:(CardSprite *)cardSprite inGameBoardNode:(GameBoardNode *)node useHighLighting:(BOOL)highlighting onCompletion:(void (^)())completion;
 
-- (Action*)getActionsToGameBoardNode:(GameBoardNode*)toNode allLocations:(NSMutableDictionary*)allLocations;
-- (Action*)getActionsfromGameBoardNode:(GameBoardNode *)fromNode toGameBoardNode:(GameBoardNode *)toNode allLocations:(NSMutableDictionary*)allLocations;
-
 - (void)moveCardAtLocation:(GridLocation*)location followingPath:(NSArray*)path onCompletion:(void (^)())completion;
 - (void)moveActiveGameBoardNodeFollowingPath:(NSArray *)path onCompletion:(void (^)())completion;
 
