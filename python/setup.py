@@ -84,7 +84,7 @@ def test_pikeman_coloumn(units):
 
 def enforce_max_siege_weapons(units, unit_bag):
 
-    siege_count = sum(1 for unit in units.values() if unit.name in siege_weapons)
+    siege_count = sum(1 for unit in units if unit.name in siege_weapons)
 
     if siege_count >= 2:
         unit_bag.remove_units(siege_weapons)
