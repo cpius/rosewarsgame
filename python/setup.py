@@ -9,7 +9,7 @@ class Tiles_bag(object):
         self.tiles = [(column, row) for column in board_columns for row in board_rows]
         
     def pick_from_row(self, rows):
-        pick = random.choice([item for item in self.tiles if item[1] in rows])
+        pick = random.choice([tile for tile in self.tiles if tile[1] in rows])
         self.tiles.remove(pick)
         return pick
    
