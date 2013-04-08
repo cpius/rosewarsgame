@@ -13,8 +13,16 @@ class Tiles_bag(object):
         pick = random.choice([tile for tile in self.tiles if tile[1] in rows])
         self.tiles.remove(pick)
         return pick
-   
-        
+
+    def pick_protected_tile(self, rows):
+        possible_tiles = [(coloumn, row) for coloumn in board_columns for
+                          row in [2, 3] if (coloumn, row) in self.tiles and (coloumn, row + 1) not in self.tiles]
+
+        pick = random.choice([tile for tile in possible_tiles if tile[1] in rows])
+        self.tiles.remove(pick)
+        return pick
+
+
 class Unit_bag(object):
     def __init__(self, units):
         self.units = units
