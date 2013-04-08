@@ -541,10 +541,11 @@ class View(object):
         unit_pic = self.get_unit_pic(unit)
         unit_image = self.get_image(unit_pic)
 
-        pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
+        unit_image = pygame.transform.scale(unit_image, (int(self.interface.unit_width * resize),
                                            int(self.interface.unit_height * resize)))
 
-        self.screen.blit(pic, location)
+        self.screen.blit(unit_image, location)
+
         self.draw_unit_box(location, color, resize)
 
     def draw_line(self, start_position, end_position):
