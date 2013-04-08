@@ -13,34 +13,10 @@ player2_ai = "Evaluator"
 
 document_ai_actions = True
 
-use_special_units = []  # Special units that must be present in the game
-dont_use_special_units = ["Chariot", "Samurai", "Diplomat"]  # Special units that must not be present in the game
-
-
-# Rows that the units can start on, in the pseudo-random computer-generated start position
-
-basic_units = {"Archer": [(1, 2, 3), 3],
-               "Ballista": [(1, 2, 3), 2],
-               "Catapult": [(1, 2, 3), 2],
-               "Heavy Cavalry": [(2, 3, 4), 3],
-               "Light Cavalry": [(2, 3), 3],
-               "Pikeman": [(2, 3, 4), 3]}
-
-special_units = {"Berserker": (2, 3),
-                 "Cannon": (2, ),
-                 "Chariot": (3, 4),
-                 "Crusader": (3, 4),
-                 "Diplomat": (2, 3),
-                 "Flag Bearer": (3, 4),
-                 "Lancer": (3, 4),
-                 "Longswordsman": (4,),
-                 "Royal Guard": (2, 3),
-                 "Saboteur": (2, 3),
-                 "Samurai": (4,),
-                 "Scout": (2, 3),
-                 "Viking": (4,),
-                 "War Elephant": (4,),
-                 "Weaponsmith": (2, 3)}
+required_special_units = []
+allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
+                         "Scout", "Viking", "War Elephant", "Weaponsmith"]
+basic_units = ["Archer", "Ballista", "Catapult", "Heavy Cavalry", "Light Cavalry", "Pikeman"]
 
 unit_bag_size = 3
 special_unit_count = 3
