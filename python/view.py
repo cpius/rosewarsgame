@@ -17,6 +17,16 @@ class Log():
         self.action_number = action_number
         self.player_color = player_color
 
+    def get_next(self):
+        if self.action_number == 1:
+            return self.player_color, 1
+        else:
+            if self.player_color == "Red":
+                player_color = "Green"
+            else:
+                player_color = "Red"
+            return player_color, 2
+
 
 class View(object):
     def __init__(self):
@@ -380,19 +390,20 @@ class View(object):
         self.draw_line(action.start_position, action.end_position)
 
         if action.is_attack:
+
             self.draw_line(action.end_position, action.attack_position)
 
-            if action.move_with_attack:
-                pic = self.get_image(self.interface.move_attack_icon)
-            else:
-                pic = self.get_image(self.interface.attack_icon)
+            attack_dice = self.get_image(self.interface.dice[action.rolls[0]])
+            self.screen.blit(attack_dice, self.symbol_coordinates.get(action.start_position))
+
+            if battle.attack_successful(action):
+                defence_dice = self.get_image(self.interface.dice[action.rolls[1]])
+                self.screen.blit(defence_dice, self.symbol_coordinates.get(action.attack_position))
 
             if hasattr(action, "high_morale"):
                 pic = self.get_image(self.interface.high_morale_icon)
                 coordinates = Coordinates(self.interface.first_symbol_coordinates, self.interface)
                 self.screen.blit(pic, coordinates.get(action.end_position))
-
-            self.screen.blit(pic, self.symbol_coordinates.get(action.attack_position))
 
         elif action.is_ability:
             self.draw_line(action.end_position, action.ability_position)
@@ -434,7 +445,7 @@ class View(object):
             base_y = int(index * log_heights)
             base = (base_x, base_y)
 
-            self.draw_turn_box(log, *base)
+            self.draw_turn_box(log.player_color, log.action_number, *base)
 
             line_thickness = int(3 * zoom)
             line_start = (base_x, base_y + log_heights - line_thickness / 2)
@@ -472,10 +483,19 @@ class View(object):
                 elif log.player_color == "Red":
                     self.draw_unit_right(moving_unit.name, "Red", 0, *base)
 
+        base_x = int(391 * zoom)
+        base_y = int(len(self.logbook) * log_heights)
+        base = (base_x, base_y)
+
+        if self.logbook:
+            color, action_number = self.logbook[-1].get_next()
+        else:
+            color, action_number = "Green", 1
+        self.draw_turn_box(color, action_number - 1, *base)
+
     def draw_attack(self, action, base, symbol_location, log):
-        attacking_unit = action.unit_reference
-        defending_unit = action.target_reference
-        outcome = get_outcome(attacking_unit, defending_unit, action)
+
+        outcome = battle.get_outcome(action)
 
         self.draw_outcome(outcome, *base)
 
@@ -497,18 +517,18 @@ class View(object):
         location = (base_x + 230 * self.zoom, base_y + 5 * self.zoom)
         self.write(outcome, location, self.font_bigger)
 
-    def draw_turn_box(self, log, base_x, base_y):
+    def draw_turn_box(self, color, action_number, base_x, base_y):
         box_width, box_height = 40 * self.zoom, 62 * self.zoom
         position_and_size = (base_x, base_y, box_width, box_height)
 
-        if log.player_color == "Green":
+        if color == "Green":
             border_color = self.interface.green_player_color
         else:
             border_color = self.interface.red_player_color
 
         pygame.draw.rect(self.screen, border_color, position_and_size)
 
-        current_action = 2 - log.action_number
+        current_action = 2 - action_number
         location = (base_x + 7 * self.zoom, base_y)
         self.write(str(current_action), location, self.font_bigger)
 
@@ -611,17 +631,3 @@ class View(object):
         self.show_lines(lines, *base)
 
         pygame.display.flip()
-
-
-def get_outcome(attacking_unit, defending_unit, action):
-
-    attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
-    defence = battle.get_defence_rating(attacking_unit, defending_unit, attack)
-
-    if action.rolls[0] <= attack:
-        if action.rolls[1] <= defence:
-            return "Defend"
-        else:
-            return" Win"
-    else:
-        return " Miss"
