@@ -141,12 +141,13 @@ def get_units():
 
     def fill_bags():
         
-        basic_units_bag = Unit_bag([name for name in settings.basic_units for _ in range(settings.basic_units[name][1])])
+        basic_units_bag = Unit_bag([name for name in settings.basic_units for _ in
+                                    range(units_info[name].copies_in_bag)])
         
-        special_units_first_bag = Unit_bag(list(settings.use_special_units))
+        special_units_first_bag = Unit_bag(list(settings.required_special_units))
         
-        special_units_second_bag = Unit_bag(list(set(settings.special_units) - set(settings.dont_use_special_units)
-                                                 - set(settings.use_special_units)))
+        special_units_second_bag = Unit_bag(list(set(settings.allowed_special_units) -
+                                                 set(settings.required_special_units)))
 
         tiles_bag = Tiles_bag()
         
