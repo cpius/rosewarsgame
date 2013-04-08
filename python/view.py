@@ -538,8 +538,8 @@ class View(object):
 
         resize = 0.5 * self.zoom
         location = (base_x + (65 + index * 100) * self.zoom, base_y + 8 * self.zoom)
-        unit_pic = self.get_unit_pic(unit_name)
-        pic = self.get_image(unit_pic)
+        unit_pic = self.get_unit_pic(unit)
+        unit_image = self.get_image(unit_pic)
 
         pic = pygame.transform.scale(pic, (int(self.interface.unit_width * resize),
                                            int(self.interface.unit_height * resize)))
