@@ -39,12 +39,6 @@ board_columns = [1, 2, 3, 4, 5]
 siege_weapons = ["Ballista", "Catapult", "Cannon"]
 
 
-def any(iterable):  # For compatibility with older python versions.
-    for element in iterable:
-        if element:
-            return True
-    return False
-
 
 def test_coloumn_blocks(units):
     """ Tests whether there on each coloumn are at least two 'blocks'.
