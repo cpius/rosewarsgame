@@ -18,6 +18,10 @@ class Interface(object):
     crusading_icon = "./other/flag.gif"
     high_morale_icon = "./other/flag_black.gif"
     move_icon = "./other/move.gif"
+    dice = [""]
+    for i in range(1, 7):
+        dice.append("./other/dice_" + str(i) + ".png")
+
 
 
 class Rectangles(Interface):
