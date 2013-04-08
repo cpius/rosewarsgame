@@ -459,29 +459,24 @@ class View(object):
 
             elif action.is_ability:
 
-                attacking_unit = action.unit_reference
-                defending_unit = action.target_reference
-
                 pic = self.get_image(self.interface.ability_icon)
                 self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(attacking_unit.name, "Green", 0, *base)
-                    self.draw_unit_right(defending_unit.name, "Red", 1, *base)
+                    self.draw_unit_right(action, "Green", 0, *base)
+                    self.draw_unit_right(action, "Red", 1, *base)
                 elif log.player_color == "Red":
-                    self.draw_unit_right(attacking_unit.name, "Red", 0, *base)
-                    self.draw_unit_right(defending_unit.name, "Green", 1, *base)
+                    self.draw_unit_right(action, "Red", 0, *base)
+                    self.draw_unit_right(action, "Green", 1, *base)
 
             else:
-                moving_unit = action.unit_reference
-
                 pic = self.get_image(self.interface.move_icon)
                 self.screen.blit(pic, symbol_location)
 
                 if log.player_color == "Green":
-                    self.draw_unit_right(moving_unit.name, "Green", 0, *base)
+                    self.draw_unit_right(action, "Green", 0, *base)
                 elif log.player_color == "Red":
-                    self.draw_unit_right(moving_unit.name, "Red", 0, *base)
+                    self.draw_unit_right(action, "Red", 0, *base)
 
         base_x = int(391 * zoom)
         base_y = int(len(self.logbook) * log_heights)
@@ -503,11 +498,11 @@ class View(object):
         self.screen.blit(pic, symbol_location)
 
         if log.player_color == "Green":
-            self.draw_unit_right(attacking_unit.name, "Green", 0, *base)
-            self.draw_unit_right(defending_unit.name, "Red", 1, *base)
+            self.draw_unit_right(action, "Green", 0, *base)
+            self.draw_unit_right(action, "Red", 1, *base)
         elif log.player_color == "Red":
-            self.draw_unit_right(attacking_unit.name,  "Red", 0, *base)
-            self.draw_unit_right(defending_unit.name, "Green", 1, *base)
+            self.draw_unit_right(action,  "Red", 0, *base)
+            self.draw_unit_right(action, "Green", 1, *base)
 
     def draw_right(self):
         pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
@@ -532,7 +527,14 @@ class View(object):
         location = (base_x + 7 * self.zoom, base_y)
         self.write(str(current_action), location, self.font_bigger)
 
-    def draw_unit_right(self, unit_name, color, index, base_x, base_y):
+    def draw_unit_right(self, action, color, index, base_x, base_y):
+
+        if not action.is_attack:
+            unit = action.unit_reference.name
+        elif index == 0:
+            unit = action.unit_reference.name
+        else:
+            unit = action.target_reference.name
 
         resize = 0.5 * self.zoom
         location = (base_x + (65 + index * 100) * self.zoom, base_y + 8 * self.zoom)
