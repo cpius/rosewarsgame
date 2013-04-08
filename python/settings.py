@@ -19,15 +19,15 @@ dont_use_special_units = ["Chariot", "Samurai", "Diplomat"]  # Special units tha
 
 # Rows that the units can start on, in the pseudo-random computer-generated start position
 
-basic_units = {"Archer": [(1, 2, 3), 3],
-               "Ballista": [(1, 2, 3), 2],
-               "Catapult": [(1, 2, 3), 2],
-               "Heavy Cavalry": [(2, 3, 4), 3],
+basic_units = {"Archer": [(2, 3), 3],
+               "Ballista": [(2, 3), 2],
+               "Catapult": [(2, 3), 2],
+               "Heavy Cavalry": [(4,), 3],
                "Light Cavalry": [(2, 3), 3],
                "Pikeman": [(2, 3, 4), 3]}
 
 special_units = {"Berserker": (2, 3),
-                 "Cannon": (2, ),
+                 "Cannon": (2,),
                  "Chariot": (3, 4),
                  "Crusader": (3, 4),
                  "Diplomat": (2, 3),
