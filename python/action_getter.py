@@ -232,7 +232,7 @@ def get_unit_actions(unit, position, units, enemy_units, player_units):
 
     unit.zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
-    if unit.name not in settings.special_units:
+    if unit.name not in settings.allowed_special_units:
         if unit.range == 1:
             moves, attacks = melee_actions(unit, position, units, enemy_units)
             return moves, attacks, []
