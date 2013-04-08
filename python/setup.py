@@ -160,7 +160,13 @@ def get_units():
         tiles_bag = Tiles_bag()
         
         return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
-        
+
+    def place_units_on_board(unitslist, tiles_bag):
+
+        units = {}
+        unprotected_units = [unit for unit in unitslist if not units_info[unit.name].protection_required]
+        protected_units = [unit for unit in unitslist if units_info[unit.name].protection_required]
+
     while True:
         
         basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
