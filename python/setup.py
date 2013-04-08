@@ -92,14 +92,13 @@ def enforce_max_siege_weapons(units, unit_bag):
 
 def get_units():
     
-    def select_basic_units(basic_units_bag, tiles_bag):
+    def select_basic_units(basic_units_bag):
 
-        units = {}
+        units = []
 
         if settings.at_least_one_siege_weapon:
-            name = random.choice(["Ballista", "Catapult"])
-            position = tiles_bag.pick(settings.basic_units[name][0])
-            units[position] = getattr(units_module, name.replace(" ", "_"))()
+            unit_name = random.choice(["Ballista", "Catapult"])
+            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
             basic_units_bag.remove_one_unit("Ballista")
             basic_units_bag.remove_one_unit("Catapult")
 
@@ -109,21 +108,16 @@ def get_units():
             if settings.max_two_siege_weapons:
                 enforce_max_siege_weapons(units, basic_units_bag)
 
-            name = basic_units_bag.pick()
-            position = tiles_bag.pick(settings.basic_units[name][0])
+            unit_name = basic_units_bag.pick()
+            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
 
-            units[position] = getattr(units_module, name.replace(" ", "_"))()
-
-        unitlist = [unit for unit in units.values()]
-
-        random.shuffle(unitlist)
-
-        unitlist[0].attack_counters = 1
-        unitlist[1].defence_counters = 1
+        random.shuffle(units)
+        units[0].attack_counters = 1
+        units[1].defence_counters = 1
 
         return units
 
-    def select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag, units):
+    def select_special_units(special_units_first_bag, special_units_second_bag, units):
 
         total_unit_count = settings.basic_unit_count + settings.special_unit_count
 
@@ -132,18 +126,16 @@ def get_units():
             if settings.max_two_siege_weapons:
                 enforce_max_siege_weapons(units, special_units_first_bag)
 
-            name = special_units_first_bag.pick()
-            position = tiles_bag.pick(settings.special_units[name])
-            units[position] = getattr(units_module, name.replace(" ", "_"))()
+            unit_name = special_units_first_bag.pick()
+            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
 
         while len(units) < total_unit_count:
 
             if settings.max_two_siege_weapons:
                 enforce_max_siege_weapons(units, special_units_second_bag)
 
-            name = special_units_second_bag.pick()
-            position = tiles_bag.pick(settings.special_units[name])
-            units[position] = getattr(units_module, name.replace(" ", "_"))()
+            unit_name = special_units_second_bag.pick()
+            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
 
         return units
 
@@ -165,8 +157,11 @@ def get_units():
         basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
         
         try:
-            units = select_basic_units(basic_units_bag, tiles_bag)
-            units = select_special_units(special_units_first_bag, special_units_second_bag, tiles_bag, units)
+            unitslist = select_basic_units(basic_units_bag)
+            unitslist = select_special_units(special_units_first_bag, special_units_second_bag, unitslist)
+
+            units = place_units_on_board(unitslist, tiles_bag)
+
         except IndexError:
             continue
 
