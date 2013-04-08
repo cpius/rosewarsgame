@@ -167,6 +167,13 @@ def get_units():
         unprotected_units = [unit for unit in unitslist if not units_info[unit.name].protection_required]
         protected_units = [unit for unit in unitslist if units_info[unit.name].protection_required]
 
+        for unit in unprotected_units:
+            allowed_rows = units_info[unit.name].allowed_rows.copy()
+            if unit.defence_counters > 0 and not units_info[unit.name].protection_required:
+                allowed_rows.add(4)
+            position = tiles_bag.pick_from_row(allowed_rows)
+            units[position] = unit
+
     while True:
         
         basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
