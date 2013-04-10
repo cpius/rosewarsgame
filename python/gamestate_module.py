@@ -132,6 +132,12 @@ class Gamestate:
         if hasattr(unit, "just_bribed"):
             unit.blue_counters = 1
 
+    def shift_turn_if_done(self, all_actions=None):
+        if all_actions is None:
+            all_actions = self.get_actions()
+        if (self.actions_remaining < 1 or len(all_actions) == 1) and not hasattr(self.players[0], "extra_action"):
+            self.turn_shift()
+
 
 def save_gamestate(gamestate):
     return saver.save_gamestate(gamestate)
