@@ -13,32 +13,11 @@ from pprint import PrettyPrinter
 
 class TestAI(unittest.TestCase):
     def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
-        now = datetime.utcnow()
-        document = {
-            "player1_intelligence": "Human",
-            "player2_intelligence": "Human",
-            "turn": 1,
-            "actions_remaining": 1,
-            "extra_action": False,
-            "player1_units":
-            {
-                "D6":
-                {
-                    "name": "Heavy Cavalry",
-                    "attack_counters": 1,
-                    "experience": 1
-                }
-            },
-            "player2_units":
-            {
-                "C7": "Royal Guard",
-                "E7": "Archer"
-            },
-            "created_at": now
-        }
+        document = self.get_test_gamestate_document()
         converter = DocumentConverter()
         gamestate = converter.document_to_gamestate(document)
         same_document = converter.gamestate_to_document(gamestate)
+
         pretty_printer = PrettyPrinter()
         pretty_documents = pretty_printer.pformat(same_document) + "\n\n" + pretty_printer.pformat(document)
         self.assertEqual(document, same_document, "The document was mangled.\n\n" + pretty_documents)
@@ -135,6 +114,31 @@ class TestAI(unittest.TestCase):
 
         return player, units
 
+    def get_test_gamestate_document(self):
+        now = datetime.utcnow()
+
+        return {
+            "player1_intelligence": "Human",
+            "player2_intelligence": "Human",
+            "turn": 1,
+            "actions_remaining": 1,
+            "extra_action": False,
+            "player1_units":
+            {
+                "D6":
+                {
+                    "name": "Heavy Cavalry",
+                    "attack_counters": 1,
+                    "experience": 1
+                }
+            },
+            "player2_units":
+            {
+                "C7": "Royal Guard",
+                "E7": "Archer"
+            },
+            "created_at": now
+        }
 
 if __name__ == "__main__":
     unittest.main()
