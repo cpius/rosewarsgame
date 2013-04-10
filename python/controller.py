@@ -123,8 +123,6 @@ class Controller(object):
                 elif event.type == QUIT:
                     self.exit_game()
 
-
-
     def right_click(self, position):
         if not self.start_position:
             self.show_unit(position)
