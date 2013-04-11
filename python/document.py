@@ -1,5 +1,6 @@
 from player import Player
 from gamestate_module import Gamestate
+from action import Action
 import units as units_module
 import ai_module
 
@@ -37,6 +38,51 @@ class DocumentConverter:
             "actions_remaining": gamestate.actions_remaining,
             "created_at": gamestate.start_time
         }
+
+    def action_to_document(self, action):
+        return {
+            "start_position": action.start_position,
+            "end_position": action.end_position,
+            "attack_position": action.attack_position,
+            "ability_position": action.ability_position,
+            "move_with_attack": action.move_with_attack,
+            "ability": action.ability
+        }
+
+    def document_to_action(self, document):
+        start_position = self.get_position(document["start_position"])
+
+        if "end_position" in document:
+            end_position = self.get_position(document["end_position"])
+        else:
+            end_position = None
+
+        if "attack_position" in document:
+            attack_position = self.get_position(document["attack_position"])
+        else:
+            attack_position = None
+
+        if "ability_position" in document:
+            ability_position = self.get_position(document["ability_position"])
+        else:
+            ability_position = None
+
+        if "move_with_attack" in document:
+            move_with_attack = document["move_with_attack"].lower() == "True"
+        else:
+            move_with_attack = False
+
+        if "ability" in document:
+            ability = document["ability"]
+        else:
+            ability = ""
+
+        return Action(start_position,
+                      end_position,
+                      attack_position,
+                      ability_position,
+                      move_with_attack,
+                      ability)
 
     def get_ai_from_name(self, name):
         if name == "Human":
