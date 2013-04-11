@@ -344,7 +344,7 @@ class Weaponsmith(Unit):
     attack = False   
     defence = 2
     movement = 1
-    range= 3
+    range = 3
     abonus = {}
     dbonus = {}
     type = "Infantry"
