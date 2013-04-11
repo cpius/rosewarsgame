@@ -17,10 +17,7 @@ class TestAI(unittest.TestCase):
         converter = DocumentConverter()
         gamestate = converter.document_to_gamestate(document)
         same_document = converter.gamestate_to_document(gamestate)
-
-        pretty_printer = PrettyPrinter()
-        pretty_documents = pretty_printer.pformat(same_document) + "\n\n" + pretty_printer.pformat(document)
-        self.assertEqual(document, same_document, "The document was mangled.\n\n" + pretty_documents)
+        self.assert_equal_documents(document, same_document)
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
         client = MongoClient()
@@ -49,6 +46,12 @@ class TestAI(unittest.TestCase):
         gamestate.do_action(action)
 
         self.assertEquals(0, gamestate.get_actions_remaining(), "There are too many actions left")
+
+    def assert_equal_documents(self, expected, actual):
+        pretty_printer = PrettyPrinter()
+        pretty_documents = "Expected:\n" + pretty_printer.pformat(expected) \
+                           + "\nActual:\n" + pretty_printer.pformat(actual)
+        self.assertEqual(expected, actual, "The document was mangled.\n\n" + pretty_documents)
 
     def parse_test_case(self, test_file):
 
