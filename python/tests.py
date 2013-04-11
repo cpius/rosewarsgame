@@ -37,6 +37,7 @@ class TestAI(unittest.TestCase):
         converter = DocumentConverter()
         gamestate = converter.document_to_gamestate(document)
         same_document = converter.gamestate_to_document(gamestate)
+
         self.assert_equal_documents(document, same_document)
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
