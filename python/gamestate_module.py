@@ -6,6 +6,8 @@ import saver
 import ai_module
 import ai_methods
 from datetime import datetime
+import units as units_module
+from player import Player
 
 
 class Gamestate:
@@ -137,6 +139,58 @@ class Gamestate:
             all_actions = self.get_actions()
         if (self.actions_remaining < 1 or len(all_actions) == 1) and not hasattr(self.players[0], "extra_action"):
             self.turn_shift()
+
+    @classmethod
+    def from_document(cls, document):
+        player1 = Player("Green")
+        player1.ai_name = document["player1_intelligence"]
+        player1.ai = cls.get_ai_from_name(player1.ai_name)
+
+        player2 = Player("Red")
+        player2.ai_name = document["player2_intelligence"]
+        player2.ai = cls.get_ai_from_name(player2.ai_name)
+
+        return cls(player1,
+                   cls.units_from_document(document["player1_units"]),
+                   player2,
+                   cls.units_from_document(document["player2_units"]),
+                   document["turn"],
+                   document["actions_remaining"],
+                   document["extra_action"],
+                   document["created_at"])
+
+    @classmethod
+    def units_from_document(cls, document):
+        units = {}
+        for position_string in document.keys():
+            position = units_module.get_position(position_string)
+            unit_document = document[position_string]
+            if type(unit_document) is str:
+                name = unit_document
+            else:
+                name = document[position_string]["name"]
+
+            unit = getattr(units_module, name.replace(" ", "_"))()
+
+            if type(unit_document) is dict:
+                for attribute in unit_document.keys():
+                    if attribute == "experience":
+                        unit.xp = int(unit_document[attribute])
+                    if attribute == "attack_counters":
+                        unit.attack_counters = int(unit_document[attribute])
+                    if attribute == "defence_counters":
+                        unit.defence_counters = int(unit_document[attribute])
+
+            units[position] = unit
+
+        return units
+
+    @classmethod
+    def get_ai_from_name(cls, name):
+        if name == "Human":
+            return name
+        else:
+            return ai_module.AI(name)
 
 
 def save_gamestate(gamestate):

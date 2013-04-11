@@ -15,7 +15,7 @@ class TestAI(unittest.TestCase):
     def test_GamestateDocument_WhenAnActionIsTaken_ItShouldBeReflected(self):
         converter = DocumentConverter()
         gamestate_document = self.get_test_gamestate_document()
-        gamestate = converter.document_to_gamestate(gamestate_document)
+        gamestate = Gamestate.from_document(gamestate_document)
         action = converter.document_to_action({"start_position": "D6", "end_position": "D7"})
 
         gamestate.do_action(action)
@@ -35,7 +35,7 @@ class TestAI(unittest.TestCase):
     def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
         document = self.get_test_gamestate_document()
         converter = DocumentConverter()
-        gamestate = converter.document_to_gamestate(document)
+        gamestate = Gamestate.from_document(document)
         same_document = converter.gamestate_to_document(gamestate)
 
         self.assert_equal_documents(document, same_document)

@@ -1,29 +1,7 @@
-from player import Player
-from gamestate_module import Gamestate
 from action import Action
-import units as units_module
-import ai_module
 
 
 class DocumentConverter:
-    def document_to_gamestate(self, document):
-        player1 = Player("Green")
-        player1.ai_name = document["player1_intelligence"]
-        player1.ai = self.get_ai_from_name(player1.ai_name)
-
-        player2 = Player("Red")
-        player2.ai_name = document["player2_intelligence"]
-        player2.ai = self.get_ai_from_name(player2.ai_name)
-
-        return Gamestate(player1,
-                         self.get_units(document["player1_units"]),
-                         player2,
-                         self.get_units(document["player2_units"]),
-                         document["turn"],
-                         document["actions_remaining"],
-                         document["extra_action"],
-                         document["created_at"])
-
     def gamestate_to_document(self, gamestate):
         player1_units = self.get_units_dict(gamestate.player_units())
         player2_units = self.get_units_dict(gamestate.opponent_units())
@@ -83,37 +61,6 @@ class DocumentConverter:
                       ability_position,
                       move_with_attack,
                       ability)
-
-    def get_ai_from_name(self, name):
-        if name == "Human":
-            return name
-        else:
-            return ai_module.AI(name)
-
-    def get_units(self, document):
-        units = {}
-        for position_string in document.keys():
-            position = self.get_position(position_string)
-            unit_document = document[position_string]
-            if type(unit_document) is str:
-                name = unit_document
-            else:
-                name = document[position_string]["name"]
-
-            unit = getattr(units_module, name.replace(" ", "_"))()
-
-            if type(unit_document) is dict:
-                for attribute in unit_document.keys():
-                    if attribute == "experience":
-                        unit.xp = int(unit_document[attribute])
-                    if attribute == "attack_counters":
-                        unit.attack_counters = int(unit_document[attribute])
-                    if attribute == "defence_counters":
-                        unit.defence_counters = int(unit_document[attribute])
-
-            units[position] = unit
-
-        return units
 
     def get_units_dict(self, units):
         units_dict = dict()
