@@ -8,6 +8,8 @@ import java.util.Set;
 
 import com.wotr.GameManager;
 import com.wotr.model.Action;
+import com.wotr.model.ActionPath;
+import com.wotr.model.ActionPathLink;
 import com.wotr.model.AttackAction;
 import com.wotr.model.Direction;
 import com.wotr.model.MoveAction;
@@ -51,27 +53,28 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 		return actions;
 	}
 
-	private Set<Action> getActions(Unit originalunit, Position pos, Direction lastDirection, boolean moveable, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, UnitActionResolverStrategy ars, TurnStrategy turnStrategy) {
+	private Set<Action> getActions(Unit originalUnit, Position pos, ActionPath path, boolean moveable, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, UnitActionResolverStrategy ars, TurnStrategy turnStrategy) {
 
 		Set<Action> moves = new HashSet<Action>();
 
-		int pathLength = ars.getPathLength(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress);
+		int pathLength = ars.getPathLength(originalUnit, pos, path, aUnits, dUnits, pathProgress);
 		if (pathProgress < pathLength + 1) {
 
-			if (!originalunit.getPosition().equals(pos)) {
+			if (!originalUnit.getPosition().equals(pos)) {
 
-				if (ars.isAttackable(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress, turnStrategy)) {
-					moves.add(new AttackAction(pos));
-				} else if (moveable = ars.isMoveable(originalunit, pos, lastDirection, moveable, aUnits, dUnits, pathProgress, turnStrategy)) {
-					moves.add(new MoveAction(pos));
+				if (ars.isAttackable(originalUnit, pos, path, aUnits, dUnits, pathProgress, turnStrategy)) {
+					moves.add(new AttackAction(originalUnit, pos, path));
+				} else if (moveable = ars.isMoveable(originalUnit, pos, path, moveable, aUnits, dUnits, pathProgress, turnStrategy)) {
+					moves.add(new MoveAction(originalUnit, pos, path));
 				}
 			}
 
-			Collection<Direction> directions = ars.getDirections(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress);
+			Collection<Direction> directions = ars.getDirections(originalUnit, pos, path, aUnits, dUnits, pathProgress);
 			for (Direction direction : directions) {
 				Position movePosition = pos.move(direction);
-				if (isInBoard(movePosition)) {
-					moves.addAll(getActions(originalunit, movePosition, direction, moveable, aUnits, dUnits, pathProgress + 1, ars, turnStrategy));
+				if (isInBoard(movePosition)) {					
+					ActionPath link = new ActionPathLink(movePosition, path);
+					moves.addAll(getActions(originalUnit, movePosition, link, moveable, aUnits, dUnits, pathProgress + 1, ars, turnStrategy));
 				}
 			}
 		}
