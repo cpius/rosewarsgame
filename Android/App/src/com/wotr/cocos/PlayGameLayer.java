@@ -133,7 +133,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private void addCards(UnitMap<Position, Unit> playerCards) {
 
 		for (Unit card : playerCards.values()) {
-			Position pos = card.getPosistion();
+			Position pos = card.getPosition();
 			CGPoint point = bordframe.getPosition(pos.getX(), pos.getY());
 			CCSprite cardSprite = CCSprite.sprite(card.getImage());
 			cardSprite.setPosition(point);
@@ -202,7 +202,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			for (CCNode ccNode : unitList) {
 
 				Unit unit = (Unit) ccNode.getUserData();
-				if (action.getPosition().equals(unit.getPosistion())) {
+				if (action.getPosition().equals(unit.getPosition())) {
 					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
 					ccNode.runAction(tin);
 				}
@@ -228,7 +228,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		for (Action action : actions) {
 			for (CCNode ccNode : unitList) {
 				Unit u = (Unit) ccNode.getUserData();
-				if (action.getPosition().equals(u.getPosistion())) {
+				if (action.getPosition().equals(u.getPosition())) {
 					markeNodeForAction(action, ccNode);
 				}
 			}

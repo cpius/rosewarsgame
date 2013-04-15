@@ -1,7 +1,7 @@
 package com.wotr.strategy.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.basic.Archer;
@@ -15,8 +15,8 @@ import com.wotr.strategy.DeckDrawStrategy;
 public class FixedDeckDrawStrategy implements DeckDrawStrategy {
 
 	@Override
-	public Collection<Unit> drawDeck() {
-		Collection<Unit> result = new ArrayList<Unit>();
+	public List<Unit> drawDeck() {
+		List<Unit> result = new ArrayList<Unit>();
 
 		result.add(new Archer());
 		result.add(new Archer());

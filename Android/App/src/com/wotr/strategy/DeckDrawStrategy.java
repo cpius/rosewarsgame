@@ -1,11 +1,11 @@
 package com.wotr.strategy;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.wotr.model.unit.Unit;
 
 public interface DeckDrawStrategy {
 	
-	public Collection<Unit> drawDeck();
+	public List<Unit> drawDeck();
 
 }

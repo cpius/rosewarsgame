@@ -18,11 +18,13 @@ import org.cocos2d.particlesystem.CCQuadParticleSystem;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import com.wotr.GameManager;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.DeckDrawStrategy;
 import com.wotr.strategy.DeckLayoutStrategy;
+import com.wotr.strategy.battle.BonusStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
 import com.wotr.strategy.impl.RandomDeckLayoutStrategy;
 import com.wotr.touch.CardTouchHandler;
@@ -30,7 +32,7 @@ import com.wotr.touch.CardTouchListener;
 
 public class SetupGameLayer extends AbstractGameLayer implements CardTouchListener {
 
-	//private CCSprite sparkCard;
+	// private CCSprite sparkCard;
 
 	private List<CCSprite> cardList = new ArrayList<CCSprite>();
 	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
@@ -91,19 +93,22 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	private void addCards() {
 		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
-		Collection<Unit> deck = deckStrategy.drawDeck();
+		List<Unit> deck = deckStrategy.drawDeck();
+
+		BonusStrategy bonusStrategy = GameManager.getFactory().getBonusStrategy();
+		bonusStrategy.initializeDeck(deck);
 
 		DeckLayoutStrategy layoutStrategy = new RandomDeckLayoutStrategy(xCount, yCount);
 		UnitMap<Position, Unit> layoutDeck = layoutStrategy.layoutDeck(deck);
 
-		//CGPoint position = CGPoint.ccp(100, 100);
+		// CGPoint position = CGPoint.ccp(100, 100);
 
 		for (Unit unit : layoutDeck.values()) {
 
 			CCSprite player = CCSprite.sprite(unit.getImage());
 			// player.setPosition(position);
 
-			CGPoint point = bordframe.getPosition(unit.getPosistion());
+			CGPoint point = bordframe.getPosition(unit.getPosition());
 			player.setPosition(point);
 
 			player.setScale(sizeScale);
@@ -118,7 +123,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		UnitMap<Position, Unit> playerOnemap = new UnitMap<Position, Unit>();
 		for (Unit unit : modelMap.values()) {
-			playerOnemap.put(unit.getPosistion(), unit);
+			playerOnemap.put(unit.getPosition(), unit);
 		}
 
 		UnitMap<Position, Unit> playerTwoMap = playerOnemap.getMirrored(xCount, yCount * 2);
@@ -150,9 +155,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		} else {
 			dropCardToPosition();
 			Unit abstractCard = modelMap.get(selectedCard);
-			abstractCard.setPosistion(pInP);
+			abstractCard.setPosition(pInP);
 		}
-		//sparkCard = selectedCard;
+		// sparkCard = selectedCard;
 
 		reorderChild(selectedCard, 0);
 		selectedCard = null;
@@ -172,7 +177,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	private Unit getCardInPosition(Position pInP) {
 		Collection<Unit> values = modelMap.values();
 		for (Unit card : values) {
-			if (pInP.equals(card.getPosistion())) {
+			if (pInP.equals(card.getPosition())) {
 				return card;
 			}
 		}

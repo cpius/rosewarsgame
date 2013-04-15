@@ -45,7 +45,7 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 			Map<Position, Unit> dUnits = game.getDefendingPlayer().getUnitMap();
 
 			UnitActionResolverStrategy actionResolverStrategy = originalunit.getActionResolverStrategy();
-			actions = getActions(originalunit, originalunit.getPosistion(), null, true, aUnits, dUnits, 0, actionResolverStrategy, turnStrategy);
+			actions = getActions(originalunit, originalunit.getPosition(), null, true, aUnits, dUnits, 0, actionResolverStrategy, turnStrategy);
 			actionCache.put(originalunit, actions);
 		}
 		return actions;
@@ -58,7 +58,7 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 		int pathLength = ars.getPathLength(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress);
 		if (pathProgress < pathLength + 1) {
 
-			if (!originalunit.getPosistion().equals(pos)) {
+			if (!originalunit.getPosition().equals(pos)) {
 
 				if (ars.isAttackable(originalunit, pos, lastDirection, aUnits, dUnits, pathProgress, turnStrategy)) {
 					moves.add(new AttackAction(pos));

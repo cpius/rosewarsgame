@@ -80,7 +80,7 @@ public class RandomDeckLayoutStrategy implements DeckLayoutStrategy {
 	private boolean deckContainsNoNonFrontLineUnitInFrontLine(UnitMap<Position, Unit> placedDeck) {
 
 		for (Unit unit : placedDeck.values()) {
-			if (unit.getPosistion().getY() == yCount - 1 && nonFrontLineUnits.contains(unit.getClass())) {
+			if (unit.getPosition().getY() == yCount - 1 && nonFrontLineUnits.contains(unit.getClass())) {
 				return false;
 			}
 		}
@@ -91,7 +91,7 @@ public class RandomDeckLayoutStrategy implements DeckLayoutStrategy {
 	private boolean deckContainsNoBackLineUnitsInBackLine(UnitMap<Position, Unit> placedDeck) {
 
 		for (Unit unit : placedDeck.values()) {
-			if (unit.getPosistion().getY() == 0 && nonBackLineUnits.contains(unit.getClass())) {
+			if (unit.getPosition().getY() == 0 && nonBackLineUnits.contains(unit.getClass())) {
 				return false;
 			}
 		}
@@ -104,7 +104,7 @@ public class RandomDeckLayoutStrategy implements DeckLayoutStrategy {
 		int unitsOnBackLine = 0;
 
 		for (Unit unit : placedDeck.values()) {
-			if (unit.getPosistion().getY() == 0) {
+			if (unit.getPosition().getY() == 0) {
 				unitsOnBackLine++;
 			}
 		}

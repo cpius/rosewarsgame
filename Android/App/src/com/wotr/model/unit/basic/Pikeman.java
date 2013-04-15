@@ -12,12 +12,12 @@ public class Pikeman extends MeleeUnit {
 	}
 
 	@Override
-	public int getAttack() {
+	protected int getAttack() {
 		return 5;
 	}
 
 	@Override
-	public int getDefense() {
+	protected int getDefense() {
 		return 2;
 	}
 

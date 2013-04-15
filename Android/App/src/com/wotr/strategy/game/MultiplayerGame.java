@@ -71,11 +71,11 @@ public class MultiplayerGame implements Game {
 		BattleStrategy bs = GameManager.getFactory().getBattleStrategy();
 		boolean succes = bs.battle(attackingUnit, defendingUnit);
 		if (succes) {
-			Position defendingPosition = defendingUnit.getPosistion();
+			Position defendingPosition = defendingUnit.getPosition();
 			getDefendingPlayer().getUnitMap().remove(defendingPosition);
 
 			if (!attackingUnit.isRanged()) {
-				getAttackingPlayer().getUnitMap().remove(attackingUnit.getPosistion());
+				getAttackingPlayer().getUnitMap().remove(attackingUnit.getPosition());
 				getAttackingPlayer().getUnitMap().put(defendingPosition, attackingUnit);
 			}
 		}
@@ -87,7 +87,7 @@ public class MultiplayerGame implements Game {
 	public void move(Unit movingUnit, Position newPosition) throws InvalidMoveException {
 		validateMove(movingUnit, newPosition);
 
-		Unit movedUnit = getAttackingPlayer().getUnitMap().remove(movingUnit.getPosistion());
+		Unit movedUnit = getAttackingPlayer().getUnitMap().remove(movingUnit.getPosition());
 		if (movedUnit != null) {
 			getAttackingPlayer().getUnitMap().put(newPosition, movedUnit);
 		}
@@ -111,7 +111,7 @@ public class MultiplayerGame implements Game {
 	private void validateAttack(Unit attackingUnit, Unit defendingUnit) throws InvalidAttackException {
 		Collection<Action> actions = actionsResolver.getActions(attackingUnit);
 		for (Action action : actions) {
-			if (action.getPosition().equals(defendingUnit.getPosistion())) {
+			if (action.getPosition().equals(defendingUnit.getPosition())) {
 				return;
 			}
 		}

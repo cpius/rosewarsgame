@@ -5,13 +5,18 @@ import com.wotr.model.Position;
 import com.wotr.model.UnitType;
 import com.wotr.strategy.action.UnitActionResolverStrategy;
 import com.wotr.strategy.battle.AttackStrategy;
+import com.wotr.strategy.battle.BonusStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
 
 public abstract class Unit implements Cloneable {
 
 	private final String image;
-	private Position posistion;
+	private Position position;
 	private boolean enemy;
+
+	private int experiencePoints = 0;
+	private int attackBonus = 0;
+	private int defenceBonus = 0;
 
 	public String getImage() {
 		return "unit/" + image + (enemy ? "red" : "green") + ".jpg";
@@ -22,17 +27,9 @@ public abstract class Unit implements Cloneable {
 		this.enemy = enemy;
 	}
 
-	public Position getPosistion() {
-		return posistion;
-	}
+	protected abstract int getAttack();
 
-	public void setPosistion(Position posistion) {
-		this.posistion = posistion;
-	}
-
-	public abstract int getAttack();
-
-	public abstract int getDefense();
+	protected abstract int getDefense();
 
 	public abstract int getMovement();
 
@@ -43,6 +40,14 @@ public abstract class Unit implements Cloneable {
 	public abstract boolean isRanged();
 
 	public abstract UnitType getType();
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
 	
 	public UnitType[] getZoc() {
 		return new UnitType[0];
@@ -69,19 +74,53 @@ public abstract class Unit implements Cloneable {
 		return GameManager.getFactory().getDefenceStrategy();
 	}
 	
+	public BonusStrategy getBonusStrategy() {
+		return GameManager.getFactory().getBonusStrategy();
+	}
+
 	public int getActionsUsedForAttack() {
 		return 1;
 	}
-	
+
 	public String getKilledSound() {
 		return "sounds/pain.mp3";
 	}
-	
+
 	public String getAttackSound() {
 		return "sounds/sword_sound.wav";
 	}
-	
+
 	public String getDefenceSound() {
 		return null;
+	}
+
+	public int getAttackWithUnitBonus() {
+		return getAttack() - getAttackBonus();
+	}
+
+	public int getDefenseWithUnitBonus() {
+		return getDefense() + getDefenceBonus();
+	}
+
+	public void addAttackBonus() {
+		attackBonus++;
+		experiencePoints = 0;
+	}
+
+	public void addDefenceBonus() {
+		defenceBonus++;
+		experiencePoints = 0;
+	}
+
+	public int getExperiencePoints() {
+		return experiencePoints;
+	}
+
+	public int getAttackBonus() {
+		return attackBonus;
+	}
+
+	public int getDefenceBonus() {
+		return defenceBonus;
 	}
 }

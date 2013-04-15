@@ -3,8 +3,10 @@ package com.wotr.strategy.factory;
 import com.wotr.strategy.DiceStrategy;
 import com.wotr.strategy.battle.AttackStrategy;
 import com.wotr.strategy.battle.BattleStrategy;
+import com.wotr.strategy.battle.BonusStrategy;
 import com.wotr.strategy.battle.DefaultAttackStrategy;
 import com.wotr.strategy.battle.DefaultBattleStrategy;
+import com.wotr.strategy.battle.DefaultBonusStrategy;
 import com.wotr.strategy.battle.DefaultDefenceStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
 import com.wotr.strategy.battle.unit.ArcherAttackStrategy;
@@ -24,6 +26,7 @@ public class DefaultGameFactory implements GameFactory {
 		this.game = game;
 	}
 
+	@Override
 	public BattleStrategy getBattleStrategy() {
 
 		if (battleStrategy == null) {
@@ -32,16 +35,24 @@ public class DefaultGameFactory implements GameFactory {
 		return battleStrategy;
 	}
 
+	@Override
 	public DiceStrategy getDiceStrategy() {
 		return new Random6DiceStrategy();
 	}
 
+	@Override
 	public AttackStrategy getAttackStrategy() {
 		return new DefaultAttackStrategy();
 	}
 
+	@Override
 	public DefenceStrategy getDefenceStrategy() {
 		return new DefaultDefenceStrategy();
+	}
+
+	@Override
+	public BonusStrategy getBonusStrategy() {
+		return new DefaultBonusStrategy();
 	}
 
 	public AttackStrategy getArcherAttackStrategy() {

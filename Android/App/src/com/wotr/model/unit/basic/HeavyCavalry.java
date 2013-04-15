@@ -10,12 +10,12 @@ public class HeavyCavalry extends MeleeUnit {
 	}
 
 	@Override
-	public int getAttack() {
+	protected int getAttack() {
 		return 4;
 	}
 
 	@Override
-	public int getDefense() {
+	protected int getDefense() {
 		return 3;
 	}
 

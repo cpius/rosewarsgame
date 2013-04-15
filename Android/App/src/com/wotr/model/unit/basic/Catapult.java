@@ -10,12 +10,12 @@ public class Catapult extends RangedUnit {
 	}
 
 	@Override
-	public int getAttack() {
+	protected int getAttack() {
 		return 1;
 	}
 
 	@Override
-	public int getDefense() {
+	protected int getDefense() {
 		return 2;
 	}
 

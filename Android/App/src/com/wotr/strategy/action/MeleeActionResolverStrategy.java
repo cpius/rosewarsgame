@@ -28,7 +28,7 @@ public class MeleeActionResolverStrategy extends AbstractUnitActionResolverStrat
 	public Collection<Direction> getDirections(Unit unit, Position pos, Direction direction, Map<Position, Unit> attackingUnits, Map<Position, Unit> defendingUnits, int pathProgress) {
 
 		// If pos has any unit, Melee units will not be able to move or attack any further
-		if (!unit.getPosistion().equals(pos) && (attackingUnits.containsKey(pos) || defendingUnits.containsKey(pos))) {
+		if (!unit.getPosition().equals(pos) && (attackingUnits.containsKey(pos) || defendingUnits.containsKey(pos))) {
 			return Collections.emptyList();
 		} else {
 			return getZocDirections(unit, pos, direction, attackingUnits, defendingUnits, pathProgress);

@@ -10,7 +10,7 @@ public class UnitMap<K extends Position, V extends Unit> extends HashMap<K, V> {
 
 	@Override
 	public V put(K key, V value) {
-		value.setPosistion(key);
+		value.setPosition(key);
 		return super.put(key, value);
 	}
 
@@ -18,7 +18,7 @@ public class UnitMap<K extends Position, V extends Unit> extends HashMap<K, V> {
 	public V remove(Object key) {
 		V result = super.remove(key);
 		if(result != null) {
-			result.setPosistion(null);
+			result.setPosition(null);
 		}
 		return result;
 	}
@@ -32,7 +32,7 @@ public class UnitMap<K extends Position, V extends Unit> extends HashMap<K, V> {
 				Unit newUnit = (Unit) unit.clone();
 				newUnit.setEnemy(!unit.isEnemy());
 
-				Position pos = mirror(xRange, yRange, unit.getPosistion());
+				Position pos = mirror(xRange, yRange, unit.getPosition());
 				result.put(pos, newUnit);
 
 			} catch (CloneNotSupportedException e) {
