@@ -10,8 +10,9 @@
 
 @interface MeleeAttackAction : Action
 
-@property (nonatomic, readonly) MeleeAttackTypes meleeAttackType;
+@property (nonatomic, assign) MeleeAttackTypes meleeAttackType;
 @property (nonatomic, strong) BattleResult *battleResult;
+@property (nonatomic, strong) NSMutableDictionary *secondaryActionsForPlayback;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard;
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard meleeAttackType:(MeleeAttackTypes)meleeAttackType;

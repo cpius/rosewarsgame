@@ -44,6 +44,8 @@
 
 @property (nonatomic, strong) BattleReport *battleReport;
 
+@property (nonatomic, assign) BOOL playback;
+
 - (id)initWithPath:(NSArray*)path andCardInAction:(Card*)card enemyCard:(Card*)enemyCard;
 
 - (BOOL)isWithinRange;

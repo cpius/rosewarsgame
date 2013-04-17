@@ -129,9 +129,15 @@
     }
 }
 
+- (void)willUseAction:(Action*)action {
+    
+}
+
 - (NSUInteger)actionUsed:(Action*)action {
     
-    _currentGame.numberOfAvailableActions -= action.cost;
+    if (!action.playback) {
+        _currentGame.numberOfAvailableActions -= action.cost;
+    }
     
     return _currentGame.numberOfAvailableActions;
 }
@@ -173,7 +179,7 @@
 }
 
 - (void)endTurn {
-    
+
     _currentGame.turnCounter++;
     
     if ((_currentGame.turnCounter % 2) == 0) {
@@ -198,9 +204,9 @@
         [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[_currentGame serializeCurrentGame]];
     }
     
-    if ([_delegate respondsToSelector:@selector(turnChangedToPlayerWithColor:)]) {
+/*    if ([_delegate respondsToSelector:@selector(turnChangedToPlayerWithColor:)]) {
         [_delegate turnChangedToPlayerWithColor:_currentGame.currentPlayersTurn];
-    }
+    }*/
 }
 
 - (void)endGameWithGameResult:(GameResults)gameResult {

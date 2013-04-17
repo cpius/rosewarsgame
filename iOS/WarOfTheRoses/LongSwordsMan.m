@@ -76,8 +76,27 @@
                 
                 MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation meleeAttackType:kMeleeAttackTypeNormal];
                 
-                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
+                BattleReport *battleReport = [BattleReport battleReportWithAction:meleeAction];
+                id<BattleStrategy> battleStrategyForBattle = action.cardInAction.battleStrategy;
+                
+                if (action.playback) {
+                    
+                    BaseBattleStrategy *battleStrategy = [meleeAttackAction.secondaryActionsForPlayback objectForKey:gridLocation];
+                    
+                    if (battleStrategy != nil) {
+                        battleStrategyForBattle = battleStrategy;
+                    }
+                }
 
+                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:battleStrategyForBattle];
+                
+                outcome.meleeAttackType = meleeAction.meleeAttackType;
+                battleReport.primaryBattleResult = outcome;
+                
+                if (!action.playback) {
+                    [action.battleReport.secondaryBattleReports addObject:battleReport];
+                }
+                
                 [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome.combatOutcome];
             }
         }

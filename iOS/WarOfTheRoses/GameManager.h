@@ -36,6 +36,7 @@
 - (Action*)getActionForEnemeyPlayer;
 - (BattleResult*)resolveCombatBetween:(Card*)attacker defender:(Card*)defender battleStrategy:(id<BattleStrategy>)battleStrategy;
 
+- (void)willUseAction:(Action*)action;
 - (NSUInteger)actionUsed:(Action*)action;
 
 - (void)startNewGameOfType:(GameTypes)gameType;

@@ -32,7 +32,7 @@
         
         self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 2)];
         
-        self.range = 1;
+        self.range = 3;
         self.move = 1;
         self.moveActionCost = self.attackActionCost = 1;
         self.hitpoints = 1;

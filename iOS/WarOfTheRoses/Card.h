@@ -138,4 +138,6 @@
 
 - (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action;
 
+- (BaseBattleStrategy*)newBattleStrategy;
+
 @end

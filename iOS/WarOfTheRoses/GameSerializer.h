@@ -9,9 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "Game.h"
 
-@interface GameSerializer : NSObject
+@interface GameSerializer : NSObject {
+    
+    NSArray *_cardsBeforeAction;
+    NSArray *_cardsAfterAction;
+}
 
+- (void)takeCardSnapshot:(Game *)game state:(CardSnapshotStates)state;
 - (NSData*)serializeGame:(Game*)game;
-- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game;
+- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game onlyActions:(BOOL)onlyActions;
 
 @end

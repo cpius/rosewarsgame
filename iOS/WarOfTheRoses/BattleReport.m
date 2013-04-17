@@ -7,6 +7,7 @@
 //
 
 #import "BattleReport.h"
+#import "GridLocation.h"
 
 @implementation BattleReport
 
@@ -16,9 +17,11 @@
     
     if (self) {
         _pathTaken = action.path;
-        _cardInAction = action.cardInAction;
-        _enemyCard = action.enemyCard;
+        _locationOfCardInAction = [GridLocation gridLocationWithRow:action.cardInAction.cardLocation.row column:action.cardInAction.cardLocation.column];
+        _locationOfEnemyCard = [GridLocation gridLocationWithRow:action.enemyCard.cardLocation.row column:action.enemyCard.cardLocation.column];
         _actionType = action.actionType;
+        
+        _secondaryBattleReports = [NSMutableArray array];
     }
     
     return self;

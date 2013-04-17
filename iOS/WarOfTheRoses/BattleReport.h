@@ -10,15 +10,17 @@
 #import "BattleResult.h"
 #import "Action.h"
 
+@class GridLocation;
 @interface BattleReport : NSObject
 
 @property (nonatomic, readonly) NSArray *pathTaken;
-@property (nonatomic, readonly) Card* cardInAction;
-@property (nonatomic, readonly) Card* enemyCard;
+@property (nonatomic, readonly) GridLocation* locationOfCardInAction;
+@property (nonatomic, readonly) GridLocation* locationOfEnemyCard;
 @property (nonatomic, readonly) ActionTypes actionType;
 
 @property (nonatomic, strong) BattleResult *primaryBattleResult;
-@property (nonatomic, assign) NSMutableArray *secondaryBattleResults;
+
+@property (nonatomic, strong) NSMutableArray *secondaryBattleReports;
 
 - (id)initWithAction:(Action*)action;
 + (id)battleReportWithAction:(Action*)action;

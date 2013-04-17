@@ -22,4 +22,6 @@
 
 - (NSDictionary *)getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:(NSDictionary*)unitLayout;
 
+- (BOOL)hasActions;
+
 @end

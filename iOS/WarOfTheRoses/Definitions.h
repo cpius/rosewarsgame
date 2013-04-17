@@ -25,6 +25,11 @@
 #define NUMBER_OF_SPECIALUNITS 3
 
 typedef enum {
+    kCardSnapshotStateBeforeAction = 0,
+    kCardSnapshotStateAfterAction
+} CardSnapshotStates;
+
+typedef enum {
     kActionTypeMove = 0,
     kActionTypeMelee,
     kActionTypeRanged,

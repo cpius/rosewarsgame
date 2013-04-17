@@ -51,6 +51,7 @@
     
     _battleReport = [BattleReport battleReportWithAction:self];
 
+    [[GameManager sharedManager] willUseAction:self];
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
@@ -68,11 +69,12 @@
         [[GameManager sharedManager] actionUsed:self];
         [self.cardInAction didPerformedAction:self];
 
-        [[GameManager sharedManager].currentGame setLatestBattleReport:_battleReport];
+        if (!self.playback) {
+            [[GameManager sharedManager].currentGame addBattleReport:_battleReport];
+        }
 
         [self.delegate afterPerformAction:self];
 
-        
         if (completion != nil) {
             completion();
         }

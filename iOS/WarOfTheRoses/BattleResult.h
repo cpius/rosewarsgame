@@ -18,10 +18,12 @@
 @property (nonatomic, strong) Card *defendingUnit;
 
 @property (nonatomic, assign) CombatOutcome combatOutcome;
+@property (nonatomic, assign) MeleeAttackTypes meleeAttackType;
 
 - (id)initWithAttacker:(Card*)attacker defender:(Card*)defender;
 + (id)battleResultWithAttacker:(Card*)attacker defender:(Card*)defender;
 
 - (NSDictionary*)asDictionary;
+- (void)fromDictionary:(NSDictionary*)dictionary;
 
 @end

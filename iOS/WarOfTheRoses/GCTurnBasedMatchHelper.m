@@ -76,6 +76,14 @@
     else {
         if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
             
+            for (GKTurnBasedParticipant *participant in match.participants) {
+                
+                if (participant.matchOutcome == GKTurnBasedMatchOutcomeQuit) {
+                    [_delegate sendNotice:[NSString stringWithFormat:@"%@ has quit your match", participant.playerID] forMatch:match];
+                    return;
+                }
+            }
+            
             // It's not the current match and it's our turn now
             [_delegate sendNotice:@"It's your turn for another match" forMatch:match];
         }
@@ -177,14 +185,26 @@
 
 - (void)submitScoreForPlayer:(GKTurnBasedParticipant*)player {
     
-    GKScore *scoreReporter = [[GKScore alloc] initWithCategory:kLeaderBoardCategory];
-    
-    scoreReporter.value = 1;
-    
-    [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
+    [GKLeaderboard loadLeaderboardsWithCompletionHandler:^(NSArray *leaderboards, NSError *error) {
         
-        CCLOG(@"Error reporting score");
+        // We only have one leaderboard
+        GKLeaderboard *defaultLeaderBoard = leaderboards[0];
+        
+        [defaultLeaderBoard loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
+            
+            GKScore *scoreReporter = [[GKScore alloc] initWithCategory:kLeaderBoardCategory];
+            
+            scoreReporter.value = defaultLeaderBoard.localPlayerScore.value + 1;
+            
+            [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
+                
+                if (error) {
+                    CCLOG(@"Error reporting score: %@", error);
+                }
+            }];
+        }];
     }];
+    
 }
 
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController playerQuitForMatch:(GKTurnBasedMatch *)match {
@@ -239,6 +259,7 @@
         [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error) {
             
             [GKTurnBasedEventHandler sharedTurnBasedEventHandler].delegate = self;
+            
         }];
     }
     else {

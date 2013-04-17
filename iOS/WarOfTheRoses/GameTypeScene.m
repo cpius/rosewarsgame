@@ -105,7 +105,9 @@
 
 - (void)sendNotice:(NSString *)notice forMatch:(GKTurnBasedMatch *)match {
     
-    CCLOG(@"Send notice: %@ for match: %@", notice, match);
+    [GKNotificationBanner showBannerWithTitle:@"Notice" message:notice completionHandler:^{
+        
+    }];
 }
 
 - (void)recieveEndGame:(GKTurnBasedMatch *)match {
@@ -133,7 +135,7 @@
     [GameManager sharedManager].currentGame.localUserId = [GCTurnBasedMatchHelper sharedInstance].localUserId;
     [GameManager sharedManager].currentGame.matchId = match.matchID;
     
-    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData];
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:NO];
     
     if ([GameManager sharedManager].currentGame.state == kGameStateInitialState ||
         [GameManager sharedManager].currentGame.state == kGameStateFinishedPlacingCards) {
@@ -149,7 +151,7 @@
     CCLOG(@"Other players turn");
     
     [[GameManager sharedManager] continueExistingGame];
-    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData];
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:NO];
     [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[GameScene scene]]];
 
 }

@@ -38,8 +38,11 @@
 
 - (BOOL)isAttackDirection:(GameBoardNode*)node;
 
-- (void)clearDecks;
 - (void)layoutDecks;
+
+- (void)handleTouchEndedWithTouch:(UITouch*)touch;
+
+- (void)createBattlePlanForNode:(GameBoardNode *)node;
 
 @end
 
@@ -97,10 +100,10 @@
         _backButton.position = ccp(10, _winSize.height - _backButton.contentSize.height - 10);
         _backButton.anchorPoint = ccp(0, 0);
         [self addChild:_backButton];
-                
-        [self addChild:_gameboard];
         
-   //     [GCTurnBasedMatchHelper sharedInstance].delegate = self;
+        [self addChild:_gameboard];
+
+        [GCTurnBasedMatchHelper sharedInstance].delegate = self;
         
         [_gameboard layoutBoard];
         [self layoutDecks];
@@ -112,27 +115,19 @@
         [[CCDirector sharedDirector].touchDispatcher addTargetedDelegate:self priority:0 swallowsTouches:YES];
         
         [self turnChangedToPlayerWithColor:_gameManager.currentPlayersTurn];
+        [_gameManager.currentGame addObserver:self forKeyPath:@"currentPlayersTurn" options:NSKeyValueObservingOptionNew context:nil];
         
         if (_gameManager.currentGame.gameOver) {
             GameResults result = [_gameManager checkForEndGame];
             [self showGameResult:result];
         }
-    }
-    
-    return self;
-}
-
-- (void)clearDecks {
-
-    for (CCNode *node in self.children) {
-        
-        if ([node isKindOfClass:[CardSprite class]]) {
-            [node removeFromParentAndCleanup:YES];
+                
+        if (_gameManager.currentPlayersTurn == _gameManager.currentGame.myColor) {
+            [self performSelector:@selector(playbackLastAction) withObject:nil afterDelay:1.0];
         }
     }
     
-    [_myCards removeAllObjects];
-    [_enemyCards removeAllObjects];
+    return self;
 }
 
 - (void)layoutDecks {
@@ -178,21 +173,31 @@
     return NO;
 }
 
+- (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [touches anyObject];
+    
+    [self handleTouchEndedWithTouch:touch];
+}
+
 - (BOOL)isAttackDirection:(GameBoardNode *)node {
     
     return [_attackDirections objectForKey:node.locationInGrid] != nil;
 }
 
-- (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)handleTouchEndedWithTouch:(UITouch *)touch {
     
-    UITouch *touch = [touches anyObject];
-
     if (CGRectContainsPoint(_backButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
         
+        [_gameManager.currentGame removeObserver:self forKeyPath:@"currentPlayersTurn"];
         [[CCDirector sharedDirector] replaceScene:[GameTypeScene scene]];
         return;
     }
-
+    
+    if (_playback) {
+        return;
+    }
+    
     if (_gameManager.currentGame.state != kGameStateGameStarted) {
         return;
     }
@@ -201,7 +206,7 @@
         [[CCDirector sharedDirector] replaceScene:[GameTypeScene scene]];
         return;
     }
-
+    
     if (_gameManager.currentPlayersTurn != _gameManager.currentGame.myColor) {
         return;
     }
@@ -209,7 +214,7 @@
     if (_gameboard.isMoving) {
         return;
     }
-                    
+    
     if (_showingDetailOfNode != nil) {
         return;
     }
@@ -221,12 +226,28 @@
         if ([_gameboard nodeIsActive]) {
             
             Action *action = [_battlePlan getActionToGridLocation:targetNode.locationInGrid];
-
+                        
             if (![self isAttackDirection:targetNode]) {
                 if (action == nil || ![action isWithinRange]) {
                     
+                    BOOL clickedOnSameNode = targetNode == _gameboard.activeNode;
+                    
                     [self resetUserInterface];
                     [self resetAttackDirection];
+                    
+                    if ([targetNode.card.model isOwnedByMe] && !clickedOnSameNode) {
+                        [self createBattlePlanForNode:targetNode];
+                        if (_battlePlan.hasActions) {
+                            [self showToolsPanel];
+                        }
+                        else {
+                            [self hideToolsPanel];
+                        }
+                    }
+                    else {
+                        [self hideToolsPanel];
+                    }
+                    
                     return;
                 }
             }
@@ -257,7 +278,7 @@
                     
                     [_gameboard highlightNodesForAttackDirectionAtLocations:_attackDirections.allKeys];
                 }
-
+                
                 _actionInQueue = action;
             }
             else {
@@ -266,33 +287,44 @@
             }
         }
         else {
-            if (targetNode.hasCard && [targetNode.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
-                [_gameboard selectCardInGameBoardNode:targetNode useHighlighting:NO];
-
-                _battlePlan = [[BattlePlan alloc] init];
-                [_battlePlan createBattlePlanForCard:targetNode.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
-                
-                for (Action *moveAction in _battlePlan.moveActions) {
-                    [_gameboard highlightNodeAtLocation:[moveAction getLastLocationInPath] withColor:ccc3(0, 235, 0)];
-                }
-
-                for (Action *meleeAction in _battlePlan.meleeActions) {
-                    [_gameboard highlightCardAtLocation:[meleeAction getLastLocationInPath] withColor:ccc3(235, 0, 0)];
-                }
-
-                for (Action *rangeAction in _battlePlan.rangeActions) {
-                    [_gameboard highlightCardAtLocation:[rangeAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
-                }
-
-                for (Action *abilityAction in _battlePlan.abilityActions) {
-                    [_gameboard highlightCardAtLocation:[abilityAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
-                }
-                
+            [self createBattlePlanForNode:targetNode];
+            
+            if ([_battlePlan hasActions]) {
                 [self showToolsPanel];
             }
         }
     }
 }
+
+- (void)createBattlePlanForNode:(GameBoardNode *)node {
+    
+    if (node.hasCard && [node.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
+        [_gameboard selectCardInGameBoardNode:node useHighlighting:NO];
+
+        _battlePlan = [[BattlePlan alloc] init];
+        [_battlePlan createBattlePlanForCard:node.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
+        
+        for (Action *moveAction in _battlePlan.moveActions) {
+            [_gameboard highlightNodeAtLocation:[moveAction getLastLocationInPath] withColor:ccc3(0, 235, 0)];
+        }
+        
+        for (Action *meleeAction in _battlePlan.meleeActions) {
+            [_gameboard highlightCardAtLocation:[meleeAction getLastLocationInPath] withColor:ccc3(235, 0, 0)];
+        }
+        
+        for (Action *rangeAction in _battlePlan.rangeActions) {
+            [_gameboard highlightCardAtLocation:[rangeAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
+        }
+        
+        for (Action *abilityAction in _battlePlan.abilityActions) {
+            [_gameboard highlightCardAtLocation:[abilityAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
+        }
+    }
+    else {
+        _battlePlan = nil;
+    }
+}
+
 
 - (void)action:(Action *)action wantsToReplaceCardAtLocation:(GridLocation *)replaceLocation withCardAtLocation:(GridLocation *)withLocation {
     
@@ -336,7 +368,16 @@
     NSUInteger remainingActions = _gameManager.currentGame.numberOfAvailableActions;
     [self updateRemainingActions:remainingActions];
     [self resetUserInterface];
+    [self hideToolsPanel];
     [self checkForEndTurn];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if ([keyPath isEqualToString:@"currentPlayersTurn"]) {
+        
+        [self turnChangedToPlayerWithColor:_gameManager.currentPlayersTurn];
+    }
 }
 
 - (void)turnChangedToPlayerWithColor:(PlayerColors)player {
@@ -385,37 +426,16 @@
     CCLOG(@"Enemy performing action: %@ - from node: %@ to node: %@", nextAction, fromNode, toNode);
     
     [_gameboard selectCardInGameBoardNode:fromNode useHighlighting:NO];
-
-    if ([nextAction isKindOfClass:[MeleeAttackAction class]]) {
-        
-        [_gameboard highlightCardAtLocation:toNode.locationInGrid withColor:ccc3(235, 0, 0) actionType:kActionTypeMelee];
-
-        [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
-            [nextAction performActionWithCompletion:^{
-                [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
-            }];
-        }],nil]];
-    }
     
-    else if ([nextAction isKindOfClass:[RangedAttackAction class]]) {
-        
-        [_gameboard highlightCardAtLocation:toNode.locationInGrid withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
+    if (nextAction.isAttack) {
+        [_gameboard highlightCardAtLocation:toNode.locationInGrid withColor:ccc3(235, 0, 0) actionType:nextAction.actionType];
+    }
 
-        [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
-            [nextAction performActionWithCompletion:^{
-                [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
-            }];
-        }], nil]];
-    }
-    
-    else if ([nextAction isKindOfClass:[MoveAction class]]){
-        
-        [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
-            [nextAction performActionWithCompletion:^{
-                [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
-            }];
-        }], nil]];
-    }
+    [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
+        [nextAction performActionWithCompletion:^{
+            [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(doEnemyPlayerTurn)], nil]];
+        }];
+    }],nil]];
 }
 
 - (void)resetAttackDirection {
@@ -430,7 +450,6 @@
     
     [_gameboard deselectActiveNode];
     [_gameboard deHighlightAllNodes];
-    [self hideToolsPanel];
 }
 
 - (void)card:(CardSprite *)card movedToNode:(GameBoardNode *)node {
@@ -553,6 +572,8 @@
             action.path = _pathInQueue;
         }
         
+        action.meleeAttackType = attackType;
+
         [_actionInQueue performActionWithCompletion:^{
             [self resetAttackDirection];
         }];
@@ -607,21 +628,50 @@
     [label runAction:[CCSequence actions:[CCEaseSineIn actionWithAction:[CCSpawn actions:moveAction, fadeAction, nil]], removeLabel, nil]];
 }
 
-/*- (void)takeTurn:(GKTurnBasedMatch *)match {
+- (void)sendNotice:(NSString *)notice forMatch:(GKTurnBasedMatch *)match {
     
-    CCLOG(@"Take turn");
-    [[GameManager sharedManager] continueExistingGame];
+    [GKNotificationBanner showBannerWithTitle:@"Notice" message:notice completionHandler:^{
+        
+    }];
+}
+
+- (void)takeTurn:(GKTurnBasedMatch *)match {
+        
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:YES];
     
-    [GameManager sharedManager].currentGame.localUserId = [GCTurnBasedMatchHelper sharedInstance].localUserId;
-    [GameManager sharedManager].currentGame.matchId = match.matchID;
+    [self performSelector:@selector(playbackLastAction) withObject:nil afterDelay:1.0];
+}
+
+- (void)playbackLastAction {
     
-    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData includeCardData:NO];
-    
-    if ([GameManager sharedManager].currentGame.actionForPlayback != nil) {
-        [[GameManager sharedManager].currentGame.actionForPlayback performActionWithCompletion:^{
-            
-        }];
+    if ([GameManager sharedManager].currentGame.actionsForPlayback.count > 0) {
+        
+        _playback = YES;
+        
+        Action *action = [GameManager sharedManager].currentGame.actionsForPlayback[0];
+        
+        action.delegate = self;
+        action.playback = YES;
+        
+        [_gameboard selectCardInGameBoardNode:[_gameboard getGameBoardNodeForGridLocation:action.cardInAction.cardLocation] useHighlighting:NO];
+        
+        if (action.isAttack) {
+            [_gameboard highlightCardAtLocation:action.enemyCard.cardLocation withColor:ccc3(235, 0, 0) actionType:action.actionType];
+        }
+
+        [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
+            [action performActionWithCompletion:^{
+                [[GameManager sharedManager].currentGame.actionsForPlayback removeObject:action];
+                [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(playbackLastAction)], nil]];
+            }];
+        }],nil]];
     }
-}*/
+    else {
+        _playback = NO;
+        
+        // Take a snapshot of the current cardstate
+        [_gameManager.currentGame takeCardSnapshot:kCardSnapshotStateBeforeAction];
+    }
+}
 
 @end

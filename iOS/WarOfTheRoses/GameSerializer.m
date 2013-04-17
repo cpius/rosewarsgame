@@ -16,16 +16,31 @@
 #import "CardPool.h"
 #import "AbilityFactory.h"
 #import "MoveAction.h"
+#import "AbilityAction.h"
+#import "MeleeAttackAction.h"
+#import "RangedAttackAction.h"
+#import "FixedDiceStrategy.h"
+#import "StandardBattleStrategy.h"
 
 @interface GameSerializer()
 
-- (NSMutableArray*)serializeCardData:(Game*)game;
+- (NSArray*)serializeCardData:(Game*)game;
+
+- (NSMutableDictionary*)serializeBattleReport:(BattleReport*)battleReport;
+
+- (NSArray*)deserializePathFromDictionary:(NSDictionary*)dictionary;
+- (Action*)deserializeActionForGame:(Game*)game fromDictionary:(NSDictionary*)dictionary;
+
+- (id<BattleStrategy>)battleStrategyForCard:(Card*)card fromBattleResult:(BattleResult*)battleResult;
+
+- (Card*)getCardInActionFromBattleReportDictionary:(NSDictionary*)dictionary forGame:(Game*)game;
+- (Card*)getEnemyCardFromBattleReportDictionary:(NSDictionary*)dictionary forGame:(Game*)game;
 
 @end
 
 @implementation GameSerializer
 
-- (NSMutableArray *)serializeCardData:(Game *)game {
+- (NSArray *)serializeCardData:(Game *)game {
     
     NSMutableArray *cards = [NSMutableArray array];
 
@@ -43,15 +58,59 @@
         }
     }
     
-    return cards;
+    return [NSArray arrayWithArray:cards];
 }
 
-/*- (NSData *)serializeGame:(Game *)game {
+- (void)takeCardSnapshot:(Game *)game state:(CardSnapshotStates)state {
+
+    if (state == kCardSnapshotStateBeforeAction) {
+        _cardsBeforeAction = [self serializeCardData:game];
+    }
+    else {
+        _cardsAfterAction = [self serializeCardData:game];
+    }
+}
+
+- (NSMutableDictionary *)serializeBattleReport:(BattleReport *)battleReport {
+    
+    NSMutableDictionary *action = [NSMutableDictionary dictionary];
+    NSMutableArray *path = [NSMutableArray arrayWithCapacity:battleReport.pathTaken.count];
+    
+    [action setValue:@(battleReport.actionType) forKey:@"actiontype"];
+    
+    for (PathFinderStep *step in battleReport.pathTaken) {
+        [path addObject:[NSDictionary dictionaryWithObjectsAndKeys:@(step.location.row), @"row", @(step.location.column), @"column", nil]];
+    }
+    
+    [action setValue:[NSArray arrayWithArray:path] forKey:@"path"];
+    [action setValue:@(battleReport.locationOfCardInAction.row) forKey:@"cardinaction_row"];
+    [action setValue:@(battleReport.locationOfCardInAction.column) forKey:@"cardinaction_column"];
+    [action setValue:@(battleReport.locationOfEnemyCard.row) forKey:@"enemycard_row"];
+    [action setValue:@(battleReport.locationOfEnemyCard.column) forKey:@"enemycard_column"];
+    
+    if (battleReport.primaryBattleResult != nil) {
+        [action setObject:[battleReport.primaryBattleResult asDictionary] forKey:@"primarybattle"];
+    }
+    
+    if (battleReport.secondaryBattleReports.count > 0) {
+        NSMutableArray *secondaryBattleResults = [NSMutableArray array];
+        
+        for (BattleReport *secondaryBattleReport in battleReport.secondaryBattleReports) {
+            [secondaryBattleResults addObject:[self serializeBattleReport:secondaryBattleReport]];
+        }
+        
+        [action setObject:secondaryBattleResults forKey:@"secondarybattles"];
+    }
+    
+    return action;
+}
+
+- (NSData *)serializeGame:(Game *)game {
     
     NSMutableDictionary *mutableGameData = [NSMutableDictionary dictionary];
     
     [mutableGameData setValue:@(game.state) forKey:@"gamestate"];
-    [mutableGameData setValue:@(game.myColor) forKey:game.localUserId];
+    [mutableGameData setValue:@(game.myColor) forKey:[GKLocalPlayer localPlayer].playerID];
     [mutableGameData setValue:@(game.numberOfAvailableActions) forKey:@"numberofactions"];
     [mutableGameData setValue:@(game.currentRound) forKey:@"currentround"];
     [mutableGameData setValue:@(game.turnCounter) forKey:@"turncounter"];
@@ -62,32 +121,21 @@
     if (game.state == kGameStateFinishedPlacingCards ||
         game.state == kGameStateGameStarted) {
         
-        NSMutableArray *cards = [self serializeCardData:game];
-        [mutableGameData setValue:[NSArray arrayWithArray:cards] forKey:@"cards"];
+        [mutableGameData setValue:[self serializeCardData:game] forKey:@"cards"];
+        [mutableGameData setValue:_cardsBeforeAction forKey:@"cards_before_action"];
+        [mutableGameData setValue:_cardsAfterAction forKey:@"cards_after_action"];
     }
     
-    if (game.state == kGameStateGameStarted && game.latestBattleReport != nil) {
+    if (game.state == kGameStateGameStarted && game.latestBattleReports.count > 0) {
         
-        NSMutableDictionary *action = [NSMutableDictionary dictionary];
-        NSMutableArray *path = [NSMutableArray arrayWithCapacity:game.latestBattleReport.pathTaken.count];
+        NSMutableArray *actions = [NSMutableArray array];
         
-        [action setValue:@(game.latestBattleReport.actionType) forKey:@"actiontype"];
-        
-        for (PathFinderStep *step in game.latestBattleReport.pathTaken) {
-            [path addObject:[NSDictionary dictionaryWithObjectsAndKeys:@(step.location.row), @"row", @(step.location.column), @"column", nil]];
+        for (BattleReport *report in game.latestBattleReports) {
+            NSMutableDictionary *action = [self serializeBattleReport:report];
+            [actions addObject:action];
         }
         
-        [action setValue:[NSArray arrayWithArray:path] forKey:@"path"];
-        [action setValue:@(game.latestBattleReport.cardInAction.cardLocation.row) forKey:@"cardinaction_row"];
-        [action setValue:@(game.latestBattleReport.cardInAction.cardLocation.column) forKey:@"cardinaction_column"];
-        [action setValue:@(game.latestBattleReport.enemyCard.cardLocation.row) forKey:@"enemycard_row"];
-        [action setValue:@(game.latestBattleReport.enemyCard.cardLocation.column) forKey:@"enemycard_column"];
-        
-        if (game.latestBattleReport.primaryBattleResult != nil) {
-            [action setObject:[game.latestBattleReport.primaryBattleResult asDictionary] forKey:@"primarybattle"];
-        }
-        
-        [mutableGameData setObject:action forKey:@"action"];
+        [mutableGameData setObject:actions forKey:@"actions"];
     }
     
     NSDictionary *gameData = [NSDictionary dictionaryWithDictionary:mutableGameData];
@@ -98,7 +146,7 @@
     return jsonData;
 }
 
-- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game {
+- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game onlyActions:(BOOL)onlyActions {
     
     NSError *error = nil;
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:gameData options:NSJSONReadingMutableContainers error:&error];
@@ -117,27 +165,38 @@
         
         if (color != nil) {
             
-            if ([participant.playerID isEqualToString:[GCTurnBasedMatchHelper sharedInstance].localUserId]) {
-                game.myColor = [color integerValue];
+            if ([participant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
+                game.myColor = (PlayerColors)[color integerValue];
                 game.enemyColor = OppositeColorOf(game.myColor);
             }
             else {
-                game.enemyColor = [color integerValue];
-                game.myColor = OppositeColorOf(game.enemyColor);
+                PlayerColors playerColor = (PlayerColors)[color integerValue];
+                game.enemyColor = playerColor;
+                game.myColor = OppositeColorOf(playerColor);
             }
             
             break;
         }
     }
     
-    if (includeCardData) {
+    if (!onlyActions) {
         NSMutableArray *myCards = [NSMutableArray array];
         NSMutableArray *enemyCards = [NSMutableArray array];
         
         if (game.state == kGameStateFinishedPlacingCards ||
             game.state == kGameStateGameStarted) {
             
-            NSArray *cards = [data objectForKey:@"cards"];
+            NSArray *cards;
+            if (game.currentPlayersTurn == game.myColor) {
+                cards = [data objectForKey:@"cards_before_action"];;
+            }
+            else {
+                cards = [data objectForKey:@"cards_after_action"];
+            }
+            
+            if (cards == nil) {
+                cards = [data objectForKey:@"cards"];
+            }
             
             for (NSDictionary *carddata in cards) {
                 
@@ -159,6 +218,8 @@
                 }
                 
                 [card fromDictionary:[carddata objectForKey:@"card_specific_stats"]];
+                
+                [card resetAfterNewRound];
                 
                 if ([card isOwnedByMe]) {
                     if (creator == game.enemyColor) {
@@ -183,44 +244,141 @@
     
     if (game.state == kGameStateGameStarted) {
         
-        NSMutableDictionary *action = [data objectForKey:@"action"];
+        NSArray *actions = [data objectForKey:@"actions"];
         
-        if (action != nil) {
-            NSArray *path = [action objectForKey:@"path"];
-            NSMutableArray *pathTaken = [NSMutableArray array];
+        [game.actionsForPlayback removeAllObjects];
+        [game.latestBattleReports removeAllObjects];
+
+        if (actions != nil) {
             
-            for (NSDictionary *pathStep in path) {
-                
-                GridLocation *location = [GridLocation gridLocationWithRow:[[pathStep valueForKey:@"row"] integerValue]
-                                                                    column:[[pathStep valueForKey:@"column"] integerValue]];
-                
-                [pathTaken addObject:[[PathFinderStep alloc] initWithLocation:[location flipBacklineFromCurrentBackline:LOWER_BACKLINE]]];
+            for (NSDictionary *action in actions) {
+                [game.actionsForPlayback addObject:[self deserializeActionForGame:game fromDictionary:action]];
             }
-            
-            ActionTypes actionType = [[action valueForKey:@"actiontype"] integerValue];
-            
-            GridLocation *cardInActionLocation = [GridLocation gridLocationWithRow:[[action valueForKey:@"cardinaction_row"] integerValue]
-                                                                            column:[[action valueForKey:@"cardinaction_column"] integerValue]];
-            
-            GridLocation *enemyCardLocation = [GridLocation gridLocationWithRow:[[action valueForKey:@"enemycard_row"] integerValue]
-                                                                         column:[[action valueForKey:@"enemycard_column"] integerValue]];
-            
-            if (actionType == kActionTypeMove) {
-                
-                // Get card in action from enemy deck
-                Card *cardInAction = [game getCardFromDeck:game.enemyDeck locatedAt:[cardInActionLocation flipBacklineFromCurrentBackline:LOWER_BACKLINE]];
-                
-                // Get enemy card from my deck
-                Card *enemyCard = [game getCardFromDeck:game.myDeck locatedAt:[enemyCardLocation flipBacklineFromCurrentBackline:UPPER_BACKLINE]];
-                
-                game.actionForPlayback = [[MoveAction alloc] initWithPath:pathTaken andCardInAction:cardInAction
-                                                            enemyCard:enemyCard];
-            }
-        }
-        else {
-            game.actionForPlayback = nil;
         }
     }
 }
-*/
+
+- (Action *)deserializeActionForGame:(Game *)game fromDictionary:(NSDictionary *)dictionary {
+    
+    Action *action;
+    
+    ActionTypes actionType = [[dictionary valueForKey:@"actiontype"] integerValue];
+    NSArray *pathTaken = [self deserializePathFromDictionary:[dictionary objectForKey:@"path"]];
+        
+    // Get card in action from enemy deck
+    Card *cardInAction = [self getCardInActionFromBattleReportDictionary:dictionary forGame:game];
+    Card *enemyCard = [self getEnemyCardFromBattleReportDictionary:dictionary forGame:game];
+    
+    if (actionType == kActionTypeMove) {
+        
+        action = [[MoveAction alloc] initWithPath:pathTaken andCardInAction:cardInAction
+                                                                  enemyCard:enemyCard];
+    }
+    
+    if (actionType == kActionTypeRanged) {
+        
+        BattleResult *battleresult = [[BattleResult alloc] initWithAttacker:cardInAction defender:enemyCard];
+        [battleresult fromDictionary:[dictionary objectForKey:@"primarybattle"]];
+        
+        cardInAction.battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:battleresult];
+        
+        action = [[RangedAttackAction alloc ] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
+    }
+    
+    if (actionType == kActionTypeAbility) {
+                
+        action = [[AbilityAction alloc] initWithPath:pathTaken andCardInAction:cardInAction targetCard:enemyCard];
+    }
+    
+    if (actionType == kActionTypeMelee) {
+        
+        BattleResult *battleresult = [[BattleResult alloc] initWithAttacker:cardInAction defender:enemyCard];
+        [battleresult fromDictionary:[dictionary objectForKey:@"primarybattle"]];
+        
+        cardInAction.battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:battleresult];
+        
+        MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc ] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
+        meleeAction.meleeAttackType = battleresult.meleeAttackType;
+        
+        NSArray *secondaryBattles = [dictionary objectForKey:@"secondarybattles"];
+        
+        for (NSDictionary *secondaryBattleDictionary in secondaryBattles) {
+            
+            Card *secondaryEnemy = [self getEnemyCardFromBattleReportDictionary:secondaryBattleDictionary forGame:game];
+           
+            BattleResult *secondaryBattle = [[BattleResult alloc ]initWithAttacker:cardInAction defender:secondaryEnemy];
+            [secondaryBattle fromDictionary:[secondaryBattleDictionary objectForKey:@"primarybattle"]];
+            
+            BaseBattleStrategy *battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:secondaryBattle];
+                        
+            [meleeAction.secondaryActionsForPlayback setObject:battleStrategy forKey:secondaryEnemy.cardLocation];
+        }
+        
+        action = meleeAction;
+    }
+    
+    return action;
+}
+
+- (Card *)getCardInActionFromBattleReportDictionary:(NSDictionary *)dictionary forGame:(Game *)game {
+    
+    GridLocation *cardInActionLocation = [GridLocation gridLocationWithRow:[[dictionary valueForKey:@"cardinaction_row"] integerValue]
+                                                                    column:[[dictionary valueForKey:@"cardinaction_column"] integerValue]];
+    
+    // Get card in action from enemy deck
+    Card *cardInAction = [game getCardFromDeck:game.enemyDeck locatedAt:[cardInActionLocation flipBacklineFromCurrentBackline:LOWER_BACKLINE]];
+    
+    // If cardInAction is nil, it's probably an enemy ability
+    if (cardInAction == nil) {
+        cardInAction = [game getCardFromDeck:game.myDeck locatedAt:[cardInActionLocation flipBacklineFromCurrentBackline:LOWER_BACKLINE]];
+    }
+    
+    return cardInAction;
+}
+
+- (Card *)getEnemyCardFromBattleReportDictionary:(NSDictionary *)dictionary forGame:(Game *)game {
+    
+    GridLocation *enemyCardLocation = [GridLocation gridLocationWithRow:[[dictionary valueForKey:@"enemycard_row"] integerValue]
+                                                                 column:[[dictionary valueForKey:@"enemycard_column"] integerValue]];
+    // Get enemy card from my deck
+    Card *enemyCard = [game getCardFromDeck:game.myDeck locatedAt:[enemyCardLocation flipBacklineFromCurrentBackline:UPPER_BACKLINE]];
+    
+    // If enemycard is nil, it's probably a friendly ability
+    if (enemyCard == nil) {
+        enemyCard = [game getCardFromDeck:game.enemyDeck locatedAt:[enemyCardLocation flipBacklineFromCurrentBackline:LOWER_BACKLINE]];
+    }
+
+    return enemyCard;
+}
+
+- (NSArray *)deserializePathFromDictionary:(NSDictionary *)dictionary {
+    
+    NSMutableArray *pathTaken = [NSMutableArray array];
+    
+    for (NSDictionary *pathStep in dictionary) {
+        
+        GridLocation *location = [GridLocation gridLocationWithRow:[[pathStep valueForKey:@"row"] integerValue]
+                                                            column:[[pathStep valueForKey:@"column"] integerValue]];
+        
+        [pathTaken addObject:[[PathFinderStep alloc] initWithLocation:[location flipBacklineFromCurrentBackline:LOWER_BACKLINE]]];
+    }
+    
+    return pathTaken;
+}
+
+- (id<BattleStrategy>)battleStrategyForCard:(Card*)card fromBattleResult:(BattleResult *)battleResult {
+    
+    BaseBattleStrategy *battleStrategy = [card newBattleStrategy];
+    FixedDiceStrategy *fixedAttackRoll = [FixedDiceStrategy strategy];
+    FixedDiceStrategy *fixedDesenseRoll = [FixedDiceStrategy strategy];
+    
+    fixedAttackRoll.fixedDieValue = battleResult.attackRoll;
+    fixedDesenseRoll.fixedDieValue = battleResult.defenseRoll;
+    
+    battleStrategy.attackerDiceStrategy = fixedAttackRoll;
+    battleStrategy.defenderDiceStrategy = fixedDesenseRoll;
+    
+    return battleStrategy;
+}
+
 @end

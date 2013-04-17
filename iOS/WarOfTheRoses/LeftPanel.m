@@ -45,8 +45,8 @@
     _selectedAction = selectedAction;
     
     if (_selectedAction == nil || _selectedAction.cardInAction.isRanged) {
-        [_attackButton runAction:[CCFadeOut actionWithDuration:0.2]];
-        [_moveAttackButton runAction:[CCFadeOut actionWithDuration:0.2]];
+        _attackButton.opacity = 0.0;
+        _moveAttackButton.opacity = 0.0;
     }
     else {
         [_attackButton runAction:[CCFadeIn actionWithDuration:0.2]];
@@ -68,14 +68,12 @@
         
         CCTexture2D* tex = [[CCTextureCache sharedTextureCache] addImage:@"attackbutton_selected.png"];
         [_attackButton setTexture:tex];
-   //     [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
     }
     
     if (CGRectContainsPoint(_moveAttackButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
         
         CCTexture2D* tex = [[CCTextureCache sharedTextureCache] addImage:@"moveattackbutton_selected.png"];
         [_moveAttackButton setTexture:tex];
-   //     [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
     }
     
     if (CGRectContainsPoint(_infoButton.boundingBox, [self convertTouchToNodeSpace:touch])) {
@@ -90,7 +88,6 @@
         }
         
         _infoButtonSwitch = !_infoButtonSwitch;
-    //    [[SoundManager sharedManager] playSoundEffectForGameEvent:kGameEventButtonClick];
     }
     
     return YES;

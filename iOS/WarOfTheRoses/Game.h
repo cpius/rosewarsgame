@@ -12,7 +12,11 @@
 
 @class Action;
 @class Card;
-@interface Game : NSObject
+@class GameSerializer;
+@interface Game : NSObject {
+    
+    GameSerializer *_gameSerializer;
+}
 
 @property (nonatomic, assign) GameTypes gametype;
 
@@ -30,14 +34,16 @@
 @property (nonatomic, copy) NSString *matchId;
 
 @property (nonatomic, assign) PlayerColors currentPlayersTurn;
-@property (nonatomic, strong) BattleReport *latestBattleReport;
+@property (nonatomic, strong) NSMutableArray *latestBattleReports;
 
-@property (nonatomic, strong) Action *actionForPlayback;
+@property (nonatomic, strong) NSMutableArray *actionsForPlayback;
 
 @property (nonatomic, strong) NSMutableDictionary *unitLayout;
 
-- (void)deserializeGameData:(NSData*)gameData;
+- (void)addBattleReport:(BattleReport*)battlereport;
+- (void)deserializeGameData:(NSData*)gameData onlyActions:(BOOL)onlyActions;
 - (NSData*)serializeCurrentGame;
+- (void)takeCardSnapshot:(CardSnapshotStates)state;
 
 - (void)populateUnitLayout;
 - (Card*)getCardFromDeck:(Deck*)deck locatedAt:(GridLocation*)locatedAt;

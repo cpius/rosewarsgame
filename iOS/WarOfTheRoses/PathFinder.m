@@ -181,36 +181,47 @@
     return [NSArray arrayWithArray:moveActions];
 }
 
+- (MeleeAttackAction *)getMeleeAttackActionForCard:(Card *)card againstEnemyUnit:(Card *)enemyUnit allLocations:(NSDictionary *)allLocations {
+    
+    if (enemyUnit.dead) return nil;
+    
+    GridLocation *enemyLocation = enemyUnit.cardLocation;
+    
+    NSArray *path = [self getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackWithConquerStrategy] allLocations:allLocations];
+    
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyUnit meleeAttackType:kMeleeAttackTypeConquer];
+    
+    if ([card allowAction:meleeAction allLocations:allLocations]) {
+        return meleeAction;
+    }
+    else {
+        
+        NSUInteger meleeRange = [card.cardLocation dictanceToGridLocation:enemyLocation];
+        
+        if (meleeRange <= card.meleeRange) {
+            path = [self getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:allLocations];
+            
+            meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyUnit meleeAttackType:kMeleeAttackTypeNormal];
+            
+            if ([card allowAction:meleeAction allLocations:allLocations]) {
+                return meleeAction;
+            }
+        }
+    }
+    
+    return nil;
+}
+
 - (NSArray*)getMeleeAttackActionsFromLocation:(GridLocation*)fromLocation forCard:(Card*)card enemyUnits:(NSArray*)enemyUnits allLocations:(NSDictionary*)allLocations {
     
     NSMutableArray *attackActions = [NSMutableArray array];
     
     for (Card *enemyCard in enemyUnits) {
         
-        if (enemyCard.dead) continue;
-
-        GridLocation *enemyLocation = enemyCard.cardLocation;
+        MeleeAttackAction *action = [self getMeleeAttackActionForCard:card againstEnemyUnit:enemyCard allLocations:allLocations];
         
-        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackWithConquerStrategy] allLocations:allLocations];
-                
-        MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard meleeAttackType:kMeleeAttackTypeConquer];
-        
-        if ([card allowAction:meleeAction allLocations:allLocations]) {
-            [attackActions addObject:meleeAction];
-        }
-        else {
-            
-            NSUInteger meleeRange = [fromLocation dictanceToGridLocation:enemyLocation];
-            
-            if (meleeRange <= card.meleeRange) {
-                path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:allLocations];
-                
-                MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard meleeAttackType:kMeleeAttackTypeNormal];
-                
-                if ([card allowAction:meleeAction allLocations:allLocations]) {
-                    [attackActions addObject:meleeAction];
-                }
-            }
+        if (action != nil) {
+            [attackActions addObject:action];
         }
     }
     

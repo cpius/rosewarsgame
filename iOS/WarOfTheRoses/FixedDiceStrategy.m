@@ -22,4 +22,9 @@
     return fixedDieValue;
 }
 
+- (NSString *)description {
+    
+    return [NSString stringWithFormat:@"Fixed dice: %d", fixedDieValue];
+}
+
 @end

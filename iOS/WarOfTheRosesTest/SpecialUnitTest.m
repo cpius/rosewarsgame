@@ -33,6 +33,8 @@
 #import "StandardBattleStrategy.h"
 #import "WarElephant.h"
 #import "WarElephantBattleStrategy.h"
+#import "Diplomat.h"
+#import "AbilityAction.h"
 
 @implementation SpecialUnitTest
 
@@ -890,6 +892,101 @@
 
     MeleeAttackAction *action = meleeAactions[0];
     STAssertTrue(action.meleeAttackType == kMeleeAttackTypeNormal, @"Viking shouldn't be able to conquer warelephant");
+}
+
+- (void)testLongswordsmanCannotMoveAfterAttack {
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+
+    Samurai *samurai = [Samurai card];
+    Pikeman *pikeman = [Pikeman card];
+    Archer *archer = [Archer card];
+    
+    samurai.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
+    samurai.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
+    pikeman.cardColor = kCardColorRed;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:samurai]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, archer, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    _attackerFixedStrategy.fixedDieValue = 5;
+    _defenderFixedStrategy.fixedDieValue = 5;
+
+    PathFinder *pathfinder = [[PathFinder alloc ]init];
+    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:pikeman allLocations:_manager.currentGame.unitLayout];
+    action.delegate = mock;
+    
+    samurai.battleStrategy = _battleStrategy;
+
+    STAssertTrue(action.meleeAttackType == kMeleeAttackTypeConquer, @"Samurai should be able to attack&conquer pikeman");
+    
+    [action performActionWithCompletion:^{
+        
+        MeleeAttackAction *secondaryAttack = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:archer allLocations:_manager.currentGame.unitLayout];
+        
+        STAssertNotNil(secondaryAttack, @"Samurai should be able to make a secondary attack");
+        STAssertTrue(secondaryAttack.meleeAttackType == kMeleeAttackTypeNormal, @"Samurai shouldn't be able to attack&conquer archer");
+    }];
+}
+
+- (void)testDiplomatSpecialAbility {
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+
+    Diplomat *diplomat = [Diplomat card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    diplomat.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
+    diplomat.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
+    pikeman.cardColor = kCardColorRed;
+        
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:diplomat]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    PathFinder *pathfinder = [[PathFinder alloc ] init];
+    NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation
+                                                         forCard:diplomat
+                                                   friendlyUnits:_manager.currentGame.myDeck.cards
+                                                      enemyUnits:_manager.currentGame.enemyDeck.cards
+                                                    allLocations:_manager.currentGame.unitLayout];
+    
+    STAssertNotNil(actions, @"Diplomat should be able to bribe pikeman");
+    
+    AbilityAction *action = actions[0];
+    action.delegate = mock;
+    
+    [action performActionWithCompletion:^{
+        
+        STAssertTrue(pikeman.cardColor == diplomat.cardColor, @"Pikeman should now be green");
+        STAssertTrue([pikeman.attack calculateValue].lowerValue == 4, @"Pikeman should have +1A when bribed");
+        
+        [_manager endTurn];
+        
+        STAssertTrue(pikeman.cardColor == kCardColorRed, @"Pikeman should be red again");
+        STAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikemans attackbonus from bribe should be gone");
+        STAssertTrue([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman is affected by cooldown");
+        
+        [_manager endTurn];
+        
+        STAssertTrue([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman should no longer be affected by cooldown");
+        
+        [_manager endTurn];
+
+        STAssertFalse([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman should no longer be affected by cooldown");
+}];
 }
 
 @end

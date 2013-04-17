@@ -59,10 +59,15 @@
     return [[WarElephant alloc] init];
 }
 
+- (BaseBattleStrategy*)newBattleStrategy {
+    
+    return [WarElephantBattleStrategy strategy];
+}
+
 - (id<BattleStrategy>)battleStrategy {
     
     if (_battleStrategy == nil) {
-        _battleStrategy = [WarElephantBattleStrategy strategy];
+        _battleStrategy = [self newBattleStrategy];
     }
     
     return _battleStrategy;
@@ -91,7 +96,26 @@
                 
                 MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
                 
-                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:_aoeBattleStrategy];
+                BattleReport *battleReport = [BattleReport battleReportWithAction:meleeAction];
+                id<BattleStrategy> battleStrategyForBattle = _aoeBattleStrategy;
+                
+                if (action.playback) {
+                    
+                    BaseBattleStrategy *battleStrategy = [meleeAttackAction.secondaryActionsForPlayback objectForKey:gridLocation];
+                    
+                    if (battleStrategy != nil) {
+                        battleStrategyForBattle = battleStrategy;
+                    }
+                }
+
+                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:battleStrategyForBattle];
+                
+                outcome.meleeAttackType = kMeleeAttackTypeNormal;
+                battleReport.primaryBattleResult = outcome;
+                
+                if (!action.playback) {
+                    [action.battleReport.secondaryBattleReports addObject:battleReport];
+                }
                 
                 [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome.combatOutcome];
             }

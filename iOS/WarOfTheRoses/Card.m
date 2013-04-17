@@ -69,10 +69,15 @@
     self.experience = 0;
 }
 
+- (BaseBattleStrategy*)newBattleStrategy {
+    
+    return [StandardBattleStrategy strategy];
+}
+
 - (id<BattleStrategy>)battleStrategy {
     
     if (_battleStrategy == nil) {
-        _battleStrategy = [StandardBattleStrategy strategy];
+        _battleStrategy = [self newBattleStrategy];
     }
     
     return _battleStrategy;

@@ -129,4 +129,12 @@
     return [[[_moveActions arrayByAddingObjectsFromArray:_meleeActions] arrayByAddingObjectsFromArray:_rangeActions] arrayByAddingObjectsFromArray:_abilityActions];
 }
 
+- (BOOL)hasActions {
+    
+    return _moveActions.count > 0 ||
+    _meleeActions.count > 0 ||
+    _rangeActions.count > 0 ||
+    _abilityActions.count > 0;
+}
+
 @end

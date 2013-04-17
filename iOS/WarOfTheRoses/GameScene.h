@@ -48,6 +48,7 @@
     BattlePlan *_battlePlan;
     
     CCSprite *_turnIndicator;
+    BOOL _playback;
 
 }
 
