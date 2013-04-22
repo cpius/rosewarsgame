@@ -16,9 +16,7 @@ def defence_successful(action):
 def get_defence_rating(attacking_unit, defending_unit, attack_rating):
     
     defence_rating = defending_unit.defence
-    
-    defence_rating += defending_unit.defence_counters
-    
+
     if attacking_unit.type in defending_unit.dbonus:
         defence_rating += defending_unit.dbonus[attacking_unit.type]
 
@@ -40,9 +38,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating):
 def get_attack_rating(attacking_unit, defending_unit, action):
     
     attack = attacking_unit.attack
-    
-    attack += attacking_unit.attack_counters
-    
+
     if hasattr(attacking_unit, "is_crusading"):
         attack += 1
     

@@ -15,7 +15,6 @@ class AI(object):
 
         ai_type = imp.load_source(name, "ai_" + name.lower() + ".py")
         self.get_action = ai_type.get_action
-        self.put_counter = ai_type.put_counter
         self.name = name
 
     def select_action(self, gamestate):
@@ -35,10 +34,6 @@ class AI(object):
             return transform_action(action)
         else:
             return None
-
-    def add_counters(self, gamestate):
-
-        self.put_counter(gamestate)
 
 
 class Direction:

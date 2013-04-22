@@ -133,8 +133,6 @@ def perform_action(action, gamestate):
 
     gamestate.do_action(action)
 
-    put_counter(gamestate)
-
 
 def get_values_and_score(gamestate, original_gamestate):
 
@@ -316,27 +314,7 @@ def get_action(actions, gamestate):
     if settings.document_ai_actions:
         document_actions(actions, gamestate_copy)
 
-    return actions[0]    
-
-
-def put_counter(gamestate):
-
-    def decide_counter(unit):
-        if unit.name in ["Pikeman", "Heavy Cavalry", "Royal Guard", "Viking"]:
-            unit.defence_counters += 1
-        else:
-            unit.attack_counters += 1
-
-    for unit in gamestate.units[0].values():
-        if unit.xp == 2:
-            if unit.defence + unit.defence_counters == 4:
-                unit.attack_counters += 1
-            else:
-                if not unit.attack:
-                    unit.defence_counters += 1
-                else:
-                    decide_counter(unit)
-            unit.xp = 0
+    return actions[0]
 
 
 def evaluate_action_values(values):
@@ -459,9 +437,6 @@ def get_action_values(gamestate, original_gamestate):
         if hasattr(unit, "improved_weapons"):
             values["improved_weapons"] = 0.5
 
-        if unit.attack_counters or unit.defence_counters:
-            values["counter"] = 1
-
         return values
 
     def get_values_unit_opponent(unit, position, gamestate):
@@ -548,9 +523,6 @@ def get_action_values(gamestate, original_gamestate):
             values["Special unit"] = 8
         else:
             values["Basic unit"] = 4
-
-        if unit.attack_counters or unit.defence_counters:
-            values["counter"] = 1
 
         return values
 

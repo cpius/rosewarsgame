@@ -225,15 +225,6 @@ class Controller(object):
                 elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                     return
 
-    def add_counters(self, units):
-        for unit in units.values():
-            if unit.xp == 2:
-                if unit.defence + unit.defence_counters == 4:
-                    unit.attack_counters += 1
-                else:
-                    self.get_input_counter(unit)
-
-                unit.xp = 0
 
     def perform_action(self, action):
 

@@ -120,8 +120,6 @@ def get_units():
             units.append(getattr(units_module, unit_name.replace(" ", "_"))())
 
         random.shuffle(units)
-        units[0].attack_counters = 1
-        units[1].defence_counters = 1
 
         return units
 
@@ -169,8 +167,6 @@ def get_units():
 
         for unit in unprotected_units:
             allowed_rows = units_info[unit.name].allowed_rows.copy()
-            if unit.defence_counters > 0 and not units_info[unit.name].protection_required:
-                allowed_rows.add(4)
             position = tiles_bag.pick_from_row(allowed_rows)
             units[position] = unit
 
