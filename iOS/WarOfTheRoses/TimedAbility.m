@@ -10,6 +10,12 @@
 #import "Card.h"
 #import "GameManager.h"
 
+@interface TimedAbility()
+
+- (void)notifyAndStopTimedAbility;
+
+@end
+
 @implementation TimedAbility
 
 @synthesize delegate = _delegate;
@@ -84,17 +90,30 @@
     if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"turnCounter"]) {
         
         if ([GameManager sharedManager].currentGame.turnCounter == _abilityStartedInTurn + _numberOfTurns) {
-            
-            if ([_delegate respondsToSelector:@selector(timedAbilityWillStop:)]) {
-                [_delegate timedAbilityWillStop:self];
-            }
-
-            [self stopTimedAbility];
-            
-            if ([_delegate respondsToSelector:@selector(timedAbilityDidStop:)]) {
-                [_delegate timedAbilityDidStop:self];
-            }
+            [self notifyAndStopTimedAbility];
         }
+    }
+}
+
+- (void)notifyAndStopTimedAbility {
+    
+    if ([_delegate respondsToSelector:@selector(timedAbilityWillStop:)]) {
+        [_delegate timedAbilityWillStop:self];
+    }
+    
+    [self stopTimedAbility];
+    
+    if ([_delegate respondsToSelector:@selector(timedAbilityDidStop:)]) {
+        [_delegate timedAbilityDidStop:self];
+    }
+}
+
+- (void)forceTurnChanged {
+    
+    _abilityStartedInTurn--;
+    
+    if ([GameManager sharedManager].currentGame.turnCounter == _abilityStartedInTurn + _numberOfTurns) {
+        [self notifyAndStopTimedAbility];
     }
 }
 

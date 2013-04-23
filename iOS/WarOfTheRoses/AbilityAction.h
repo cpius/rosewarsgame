@@ -11,6 +11,7 @@
 @interface AbilityAction : Action
 
 @property (nonatomic, readonly) NSArray *availableAbilities;
+@property (nonatomic, readonly) TimedAbility *abilityUsed;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card targetCard:(Card *)targetCard;
 

@@ -45,6 +45,8 @@
 - (void)performActionWithCompletion:(void (^)())completion {
     
     _battleReport = [BattleReport battleReportWithAction:self];
+    
+    self.cardInAction.delegate = self;
 
     [[GameManager sharedManager] willUseAction:self];
     [self.cardInAction willPerformAction:self];
@@ -55,19 +57,26 @@
     _battleReport.primaryBattleResult = result;
     
     self.battleResult = result;
-    [self.delegate action:self hasResolvedCombatWithOutcome:result.combatOutcome];
+    [self.delegate action:self hasResolvedCombatWithResult:result];
         
     [[GameManager sharedManager] actionUsed:self];
     [self.cardInAction didPerformedAction:self];
     
-    if (!self.playback) {
-        [[GameManager sharedManager].currentGame addBattleReport:_battleReport];
-    }
+    [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
 
     [self.delegate afterPerformAction:self];
-
+    self.cardInAction.delegate = nil;
+    
     if (completion != nil) {
         completion();
+    }
+}
+
+- (void)cardIncreasedInLevel:(Card *)card withAbilityIncreased:(LevelIncreaseAbilities)ability {
+    
+    if (!self.playback) {
+        _battleReport.levelIncreased = YES;
+        _battleReport.abilityIncreased = ability;
     }
 }
 

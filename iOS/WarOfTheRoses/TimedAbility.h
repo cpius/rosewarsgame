@@ -44,6 +44,8 @@
 - (void)reactivateTimedAbility;
 - (void)stopTimedAbility;
 
+- (void)forceTurnChanged;
+
 - (NSDictionary *)asDictionary;
 - (void)fromDictionary:(NSDictionary*)dictionary;
 

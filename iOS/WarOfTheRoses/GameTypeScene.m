@@ -135,7 +135,7 @@
     [GameManager sharedManager].currentGame.localUserId = [GCTurnBasedMatchHelper sharedInstance].localUserId;
     [GameManager sharedManager].currentGame.matchId = match.matchID;
     
-    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:NO];
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:NO onlyEnemyUnits:NO];
     
     if ([GameManager sharedManager].currentGame.state == kGameStateInitialState ||
         [GameManager sharedManager].currentGame.state == kGameStateFinishedPlacingCards) {
@@ -151,7 +151,7 @@
     CCLOG(@"Other players turn");
     
     [[GameManager sharedManager] continueExistingGame];
-    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:NO];
+    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:NO onlyEnemyUnits:NO];
     [[CCDirector sharedDirector] replaceScene:[CCTransitionCrossFade transitionWithDuration:0.2 scene:[GameScene scene]]];
 
 }

@@ -34,11 +34,12 @@
 
 - (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType;
 
-- (void)displayCombatOutcome:(CombatOutcome)combatOutcome;
+- (void)displayCombatOutcome:(BattleResult*)result;
 
 - (BOOL)isAttackDirection:(GameBoardNode*)node;
 
-- (void)layoutDecks;
+- (void)layoutMyDeck;
+- (void)layoutEnemyDeck;
 
 - (void)handleTouchEndedWithTouch:(UITouch*)touch;
 
@@ -91,6 +92,10 @@
         _leftPanel.position = ccp(-_leftPanel.contentSize.width, _winSize.height / 2);
         [self addChild:_leftPanel];
         
+        _playerIndicator = [[PlayerIndicator alloc] init];
+        _playerIndicator.position = ccp(_winSize.width / 2, _winSize.height + _playerIndicator.contentSize.height);
+        [self addChild:_playerIndicator z:10];
+
         _actionCountLabel = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%d", _gameManager.currentGame.numberOfAvailableActions] fontName:APP_FONT fontSize:32];
         _actionCountLabel.position = ccp(_winSize.width - 40, _winSize.height - 50);
         _actionCountLabel.anchorPoint = ccp(0, 0);
@@ -106,7 +111,13 @@
         [GCTurnBasedMatchHelper sharedInstance].delegate = self;
         
         [_gameboard layoutBoard];
-        [self layoutDecks];
+        [self layoutMyDeck];
+        
+        if (_gameManager.currentGame.state == kGameStateGameStarted) {
+            [self layoutEnemyDeck];
+        }
+
+        [_gameManager.currentGame populateUnitLayout];
 
         self.isTouchEnabled = YES;
         
@@ -123,6 +134,8 @@
         }
                 
         if (_gameManager.currentPlayersTurn == _gameManager.currentGame.myColor) {
+            _cardsInvolvedInPlayback = [NSMutableArray array];
+            _abilitiesInvolvedInPlayback = [NSMutableArray array];
             [self performSelector:@selector(playbackLastAction) withObject:nil afterDelay:1.0];
         }
     }
@@ -130,19 +143,16 @@
     return self;
 }
 
-- (void)layoutDecks {
-    
+- (void)layoutMyDeck {
     _myCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.myDeck.cards.count];
     [self addDeckToScene:[GameManager sharedManager].currentGame.myDeck];
     [_gameboard layoutDeck:_myCards forPlayerWithColor:_gameManager.currentGame.myColor];
-    
-    if (_gameManager.currentGame.state == kGameStateGameStarted) {
-        _enemyCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.enemyDeck.cards.count];
-        [self addDeckToScene:[GameManager sharedManager].currentGame.enemyDeck];
-        [_gameboard layoutDeck:_enemyCards forPlayerWithColor:_gameManager.currentGame.enemyColor];
-    }
-    
-    [_gameManager.currentGame populateUnitLayout];
+}
+
+- (void)layoutEnemyDeck {
+    _enemyCards = [[NSMutableArray alloc] initWithCapacity:_gameManager.currentGame.enemyDeck.cards.count];
+    [self addDeckToScene:[GameManager sharedManager].currentGame.enemyDeck];
+    [_gameboard layoutDeck:_enemyCards forPlayerWithColor:_gameManager.currentGame.enemyColor];
 }
 
 - (void)addDeckToScene:(Deck *)deck {
@@ -347,11 +357,11 @@
     }];
 }
 
-- (void)action:(Action *)action hasResolvedCombatWithOutcome:(CombatOutcome)combatOutcome {
+- (void)action:(Action *)action hasResolvedCombatWithResult:(BattleResult*)result {
     
-    [self displayCombatOutcome:combatOutcome];
+    [self displayCombatOutcome:result];
     
-    if (IsAttackSuccessful(combatOutcome)) {
+    if (IsAttackSuccessful(result.combatOutcome)) {
         
         [self cardHasBeenDefeatedInCombat:action.enemyCard];
     }
@@ -590,26 +600,26 @@
     [self performQueuedMeleeActionWithAttackType:kMeleeAttackTypeConquer];
 }
 
-- (void)displayCombatOutcome:(CombatOutcome)combatOutcome {
+- (void)displayCombatOutcome:(BattleResult*)result {
     
     CCLabelTTF *label;
     
-    if (IsDefenseSuccessful(combatOutcome)) {
+    if (IsDefenseSuccessful(result.combatOutcome)) {
         
-        if (combatOutcome == kCombatOutcomeDefendSuccessfulMissed) {
-            label = [CCLabelTTF labelWithString:@"Misssed!" fontName:APP_FONT fontSize:24];
+        if (result.combatOutcome == kCombatOutcomeDefendSuccessfulMissed) {
+            label = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Missed! (%d)", result.attackRoll] fontName:APP_FONT fontSize:24];
         }
         else {
-            label = [CCLabelTTF labelWithString:@"Unit defended" fontName:APP_FONT fontSize:24];
+            label = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Unit defended (%d)", result.defenseRoll] fontName:APP_FONT fontSize:24];
         }
         
         [label setColor:ccc3(0, 0, 0)];
     }
-    else if (IsAttackSuccessful(combatOutcome)) {
-        label = [CCLabelTTF labelWithString:@"Attack successful" fontName:APP_FONT fontSize:24];
+    else if (IsAttackSuccessful(result.combatOutcome)) {
+        label = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Attack successful (%d)", result.attackRoll] fontName:APP_FONT fontSize:24];
         [label setColor:ccc3(0, 0, 0)];
     }
-    else if (IsPushSuccessful(combatOutcome)) {
+    else if (IsPushSuccessful(result.combatOutcome)) {
         label = [CCLabelTTF labelWithString:@"Pushed!" fontName:APP_FONT fontSize:24];
         [label setColor:ccc3(0, 0, 0)];
     }
@@ -636,8 +646,19 @@
 }
 
 - (void)takeTurn:(GKTurnBasedMatch *)match {
-        
-    [[GameManager sharedManager].currentGame deserializeGameData:match.matchData onlyActions:YES];
+    
+    GameStates oldGameState = _gameManager.currentGame.state;
+    
+    [_gameManager.currentGame deserializeGameData:match.matchData onlyActions:(oldGameState == kGameStateGameStarted)
+                                   onlyEnemyUnits:(oldGameState == kGameStateFinishedPlacingCards)];
+    
+    if (oldGameState == kGameStateFinishedPlacingCards && _gameManager.currentGame.state == kGameStateGameStarted) {
+        [self layoutEnemyDeck];
+        [_gameManager.currentGame populateUnitLayout];
+    }
+    
+    _cardsInvolvedInPlayback = [NSMutableArray array];
+    _abilitiesInvolvedInPlayback = [NSMutableArray array];
     
     [self performSelector:@selector(playbackLastAction) withObject:nil afterDelay:1.0];
 }
@@ -646,6 +667,9 @@
     
     if ([GameManager sharedManager].currentGame.actionsForPlayback.count > 0) {
         
+        if (!_playback) {
+            [_playerIndicator runAction:[CCMoveTo actionWithDuration:0.3 position:ccp(_winSize.width / 2, _winSize.height - _playerIndicator.contentSize.height / 2)]];
+        }
         _playback = YES;
         
         Action *action = [GameManager sharedManager].currentGame.actionsForPlayback[0];
@@ -655,20 +679,45 @@
         
         [_gameboard selectCardInGameBoardNode:[_gameboard getGameBoardNodeForGridLocation:action.cardInAction.cardLocation] useHighlighting:NO];
         
-        if (action.isAttack) {
+        if (!action.isMove) {
             [_gameboard highlightCardAtLocation:action.enemyCard.cardLocation withColor:ccc3(235, 0, 0) actionType:action.actionType];
         }
 
         [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallBlock actionWithBlock:^{
             [action performActionWithCompletion:^{
+                
+                if (![_cardsInvolvedInPlayback containsObject:action.cardInAction]) {
+                    [_cardsInvolvedInPlayback addObject:action.cardInAction];
+                }
+                
+                if (action.enemyCard != nil && ![_cardsInvolvedInPlayback containsObject:action.enemyCard]) {
+                    [_cardsInvolvedInPlayback addObject:action.enemyCard];
+                }
+                
+                if ([action isKindOfClass:[AbilityAction class]]) {
+                    AbilityAction *abilityAction = (AbilityAction*)action;
+                    [_abilitiesInvolvedInPlayback addObject:abilityAction.abilityUsed];
+                }
+                
                 [[GameManager sharedManager].currentGame.actionsForPlayback removeObject:action];
                 [self runAction:[CCSequence actions:[CCDelayTime actionWithDuration:kEnemyActionDelayTime], [CCCallFunc actionWithTarget:self selector:@selector(playbackLastAction)], nil]];
             }];
         }],nil]];
     }
     else {
-        _playback = NO;
         
+        [_playerIndicator runAction:[CCMoveTo actionWithDuration:0.3 position:ccp(_winSize.width / 2, _winSize.height + _playerIndicator.contentSize.height)]];
+        
+        for (Card *card in _cardsInvolvedInPlayback) {
+            [card resetAfterNewRound];
+        }
+        
+        for (TimedAbility *ability in _abilitiesInvolvedInPlayback) {
+            [ability forceTurnChanged];
+        }
+        
+        _playback = NO;
+
         // Take a snapshot of the current cardstate
         [_gameManager.currentGame takeCardSnapshot:kCardSnapshotStateBeforeAction];
     }

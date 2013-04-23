@@ -25,6 +25,11 @@
 #define NUMBER_OF_SPECIALUNITS 3
 
 typedef enum {
+    kLevelIncreaseAbilityAttack = 0,
+    kLevelIncreaseAbilityDefense
+} LevelIncreaseAbilities;
+
+typedef enum {
     kCardSnapshotStateBeforeAction = 0,
     kCardSnapshotStateAfterAction
 } CardSnapshotStates;

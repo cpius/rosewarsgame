@@ -81,16 +81,18 @@
     return [_gameSerializer serializeGame:self];
 }
 
-- (void)deserializeGameData:(NSData*)gameData onlyActions:(BOOL)onlyActions {
+- (void)deserializeGameData:(NSData*)gameData onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits {
     
     [_latestBattleReports removeAllObjects];
     
-    [_gameSerializer deserializeGameData:gameData toGame:self onlyActions:onlyActions];
+    [_gameSerializer deserializeGameData:gameData toGame:self onlyActions:onlyActions onlyEnemyUnits:onlyEnemyUnits];
 }
 
-- (void)addBattleReport:(BattleReport*)battlereport {
+- (void)addBattleReport:(BattleReport*)battlereport forAction:(Action*)action {
     
-    [_latestBattleReports addObject:battlereport];
+    if (!action.playback) {
+        [_latestBattleReports addObject:battlereport];
+    }
 }
 
 - (Card *)getCardFromDeck:(Deck *)deck locatedAt:(GridLocation *)locatedAt {

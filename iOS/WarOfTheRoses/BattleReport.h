@@ -22,6 +22,9 @@
 
 @property (nonatomic, strong) NSMutableArray *secondaryBattleReports;
 
+@property (nonatomic, assign) BOOL levelIncreased;
+@property (nonatomic, assign) LevelIncreaseAbilities abilityIncreased;
+
 - (id)initWithAction:(Action*)action;
 + (id)battleReportWithAction:(Action*)action;
 

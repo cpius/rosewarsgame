@@ -7,6 +7,7 @@
 //
 
 #import "CoolDown.h"
+#import "CardPool.h"
 
 @implementation CoolDown
 
@@ -32,8 +33,10 @@
 
 - (void)stopTimedAbility {
     
-    self.card.moveActionCost = self.card.moveActionCost;
-    self.card.attackActionCost = self.card.attackActionCost;
+    Card *originalCard = [CardPool createCardOfName:self.card.unitName];
+    
+    self.card.moveActionCost = originalCard.moveActionCost;
+    self.card.attackActionCost = originalCard.attackActionCost;
     
     CCLOG(@"Card: %@ ended cooldown", self.card);
     [super stopTimedAbility];

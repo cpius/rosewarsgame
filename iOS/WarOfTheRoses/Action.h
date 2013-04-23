@@ -10,6 +10,7 @@
 #import "Card.h"
 #import "GridLocation.h"
 
+@class BattleResult;
 @class BattleReport;
 @class Action;
 @class GameManager;
@@ -19,7 +20,7 @@
 
 - (void)action:(Action*)action wantsToMoveCard:(Card*)card fromLocation:(GridLocation*)fromLocation toLocation:(GridLocation*)toLocation;
 - (void)action:(Action*)action wantsToMoveFollowingPath:(NSArray*)path withCompletion:(void (^)(GridLocation*))completion;
-- (void)action:(Action*)action hasResolvedCombatWithOutcome:(CombatOutcome)combatOutcome;
+- (void)action:(Action*)action hasResolvedCombatWithResult:(BattleResult*)result;
 - (void)action:(Action*)action wantsToReplaceCardAtLocation:(GridLocation*)replaceLocation withCardAtLocation:(GridLocation*)withLocation;
 
 - (void)afterPerformAction:(Action*)action;
@@ -27,7 +28,7 @@
 @end
 
 @class Card;
-@interface Action : NSObject
+@interface Action : NSObject <CardDelegate>
 
 @property (nonatomic, weak) id<ActionDelegate> delegate;
 @property (nonatomic, strong) NSArray *path;

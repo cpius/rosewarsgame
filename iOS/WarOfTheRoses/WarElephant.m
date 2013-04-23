@@ -117,7 +117,7 @@
                     [action.battleReport.secondaryBattleReports addObject:battleReport];
                 }
                 
-                [action.delegate action:meleeAction hasResolvedCombatWithOutcome:outcome.combatOutcome];
+                [action.delegate action:meleeAction hasResolvedCombatWithResult:outcome];
             }
         }
         

@@ -69,9 +69,7 @@
         [[GameManager sharedManager] actionUsed:self];
         [self.cardInAction didPerformedAction:self];
 
-        if (!self.playback) {
-            [[GameManager sharedManager].currentGame addBattleReport:_battleReport];
-        }
+        [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
 
         [self.delegate afterPerformAction:self];
 

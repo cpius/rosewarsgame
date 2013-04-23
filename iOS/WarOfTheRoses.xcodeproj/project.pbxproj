@@ -166,6 +166,11 @@
 		6DB9A28416D2B18400B4F546 /* FixedDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28316D2B18400B4F546 /* FixedDeckStrategy.m */; };
 		6DB9A28716D2B37D00B4F546 /* BaseDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */; };
 		6DB9A28A16D3F68400B4F546 /* AIStrategyCatapulter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */; };
+		6DBDA4641720743A0078287B /* PlayerIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DBDA463172074390078287B /* PlayerIndicator.m */; };
+		6DBDA467172075170078287B /* topbar-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DBDA465172075170078287B /* topbar-hd.png */; };
+		6DBDA468172075170078287B /* topbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DBDA466172075170078287B /* topbar.png */; };
+		6DBDA46D1725B52E0078287B /* RandomLevelIncreaseStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DBDA46C1725B52E0078287B /* RandomLevelIncreaseStrategy.m */; };
+		6DBDA4701725B7440078287B /* FixedLevelIncreaseStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DBDA46F1725B7440078287B /* FixedLevelIncreaseStrategy.m */; };
 		6DC7F43E16D7F17700CD5071 /* crosshair-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F43C16D7F17700CD5071 /* crosshair-hd.png */; };
 		6DC7F43F16D7F17700CD5071 /* crosshair.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F43D16D7F17700CD5071 /* crosshair.png */; };
 		6DC7F44116D8FA6D00CD5071 /* bow_fired.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6DC7F44016D8FA6D00CD5071 /* bow_fired.wav */; };
@@ -614,6 +619,15 @@
 		6DB9A28616D2B37D00B4F546 /* BaseDeckStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseDeckStrategy.m; sourceTree = "<group>"; };
 		6DB9A28816D3F68400B4F546 /* AIStrategyCatapulter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIStrategyCatapulter.h; sourceTree = "<group>"; };
 		6DB9A28916D3F68400B4F546 /* AIStrategyCatapulter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIStrategyCatapulter.m; sourceTree = "<group>"; };
+		6DBDA462172074390078287B /* PlayerIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerIndicator.h; sourceTree = "<group>"; };
+		6DBDA463172074390078287B /* PlayerIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerIndicator.m; sourceTree = "<group>"; };
+		6DBDA465172075170078287B /* topbar-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "topbar-hd.png"; path = "Resources/Images/topbar-hd.png"; sourceTree = "<group>"; };
+		6DBDA466172075170078287B /* topbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = topbar.png; path = Resources/Images/topbar.png; sourceTree = "<group>"; };
+		6DBDA46A1725B4520078287B /* LevelIncreaseStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelIncreaseStrategy.h; sourceTree = "<group>"; };
+		6DBDA46B1725B52E0078287B /* RandomLevelIncreaseStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomLevelIncreaseStrategy.h; sourceTree = "<group>"; };
+		6DBDA46C1725B52E0078287B /* RandomLevelIncreaseStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomLevelIncreaseStrategy.m; sourceTree = "<group>"; };
+		6DBDA46E1725B7440078287B /* FixedLevelIncreaseStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedLevelIncreaseStrategy.h; sourceTree = "<group>"; };
+		6DBDA46F1725B7440078287B /* FixedLevelIncreaseStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedLevelIncreaseStrategy.m; sourceTree = "<group>"; };
 		6DC7F43C16D7F17700CD5071 /* crosshair-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "crosshair-hd.png"; path = "Resources/Images/crosshair-hd.png"; sourceTree = "<group>"; };
 		6DC7F43D16D7F17700CD5071 /* crosshair.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = crosshair.png; path = Resources/Images/crosshair.png; sourceTree = "<group>"; };
 		6DC7F44016D8FA6D00CD5071 /* bow_fired.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bow_fired.wav; path = Resources/Sounds/bow_fired.wav; sourceTree = "<group>"; };
@@ -1139,6 +1153,8 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6DBDA465172075170078287B /* topbar-hd.png */,
+				6DBDA466172075170078287B /* topbar.png */,
 				6D61517A16A88391007A104E /* archer_0-hd.png */,
 				6D5E595E166D4426007429BD /* archer_0.png */,
 				6D61516A16A88272007A104E /* archer_icon-hd.png */,
@@ -1340,6 +1356,8 @@
 				6D0CBEAC16C81F0600D241A7 /* CardSprite.m */,
 				6DC7F45B16DA9CFD00CD5071 /* LeftPanel.h */,
 				6DC7F45C16DA9CFD00CD5071 /* LeftPanel.m */,
+				6DBDA462172074390078287B /* PlayerIndicator.h */,
+				6DBDA463172074390078287B /* PlayerIndicator.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1369,6 +1387,18 @@
 				6D60A0EC1712CAED00B6E2B5 /* GameSerializer.m */,
 			);
 			name = Serialization;
+			sourceTree = "<group>";
+		};
+		6DBDA4691725B42F0078287B /* LevelIncreaseStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				6DBDA46A1725B4520078287B /* LevelIncreaseStrategy.h */,
+				6DBDA46B1725B52E0078287B /* RandomLevelIncreaseStrategy.h */,
+				6DBDA46C1725B52E0078287B /* RandomLevelIncreaseStrategy.m */,
+				6DBDA46E1725B7440078287B /* FixedLevelIncreaseStrategy.h */,
+				6DBDA46F1725B7440078287B /* FixedLevelIncreaseStrategy.m */,
+			);
+			name = LevelIncreaseStrategy;
 			sourceTree = "<group>";
 		};
 		6DC7F48116DCECD500CD5071 /* DiceStrategy */ = {
@@ -1856,6 +1886,7 @@
 		6DF2FD1F165C21CD00F08664 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				6DBDA4691725B42F0078287B /* LevelIncreaseStrategy */,
 				6DB204C016FED21D0004FFCB /* Serialization */,
 				6DB2048116F353080004FFCB /* BattleStrategy */,
 				6DD5886416E53B1C00466DDB /* Abilities */,
@@ -2187,6 +2218,8 @@
 				6DB204BB16FA61980004FFCB /* diplomat_icon-hd.png in Resources */,
 				6DB204BC16FA61980004FFCB /* diplomat_icon.png in Resources */,
 				6D60A0EA170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 in Resources */,
+				6DBDA467172075170078287B /* topbar-hd.png in Resources */,
+				6DBDA468172075170078287B /* topbar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2414,6 +2447,9 @@
 				6D60A0E8170F3DDB00B6E2B5 /* PushAction.m in Sources */,
 				6D60A0ED1712CAED00B6E2B5 /* GameSerializer.m in Sources */,
 				6D60A0F01715CD2800B6E2B5 /* EloRating.m in Sources */,
+				6DBDA4641720743A0078287B /* PlayerIndicator.m in Sources */,
+				6DBDA46D1725B52E0078287B /* RandomLevelIncreaseStrategy.m in Sources */,
+				6DBDA4701725B7440078287B /* FixedLevelIncreaseStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

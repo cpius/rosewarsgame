@@ -15,7 +15,7 @@
     
 }
 
-- (void)action:(Action *)action hasResolvedCombatWithOutcome:(CombatOutcome)combatOutcome {
+- (void)action:(Action *)action hasResolvedCombatWithResult:(BattleResult*)result {
     
 }
 

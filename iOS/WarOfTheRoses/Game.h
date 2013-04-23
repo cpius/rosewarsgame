@@ -40,8 +40,8 @@
 
 @property (nonatomic, strong) NSMutableDictionary *unitLayout;
 
-- (void)addBattleReport:(BattleReport*)battlereport;
-- (void)deserializeGameData:(NSData*)gameData onlyActions:(BOOL)onlyActions;
+- (void)addBattleReport:(BattleReport*)battlereport forAction:(Action*)action;
+- (void)deserializeGameData:(NSData*)gameData onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits;
 - (NSData*)serializeCurrentGame;
 - (void)takeCardSnapshot:(CardSnapshotStates)state;
 

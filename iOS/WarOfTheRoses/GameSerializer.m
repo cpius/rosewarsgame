@@ -21,6 +21,7 @@
 #import "RangedAttackAction.h"
 #import "FixedDiceStrategy.h"
 #import "StandardBattleStrategy.h"
+#import "FixedLevelIncreaseStrategy.h"
 
 @interface GameSerializer()
 
@@ -87,6 +88,8 @@
     [action setValue:@(battleReport.locationOfCardInAction.column) forKey:@"cardinaction_column"];
     [action setValue:@(battleReport.locationOfEnemyCard.row) forKey:@"enemycard_row"];
     [action setValue:@(battleReport.locationOfEnemyCard.column) forKey:@"enemycard_column"];
+    [action setValue:@(battleReport.levelIncreased) forKey:@"level_increased"];
+    [action setValue:@(battleReport.abilityIncreased) forKey:@"ability_increased"];
     
     if (battleReport.primaryBattleResult != nil) {
         [action setObject:[battleReport.primaryBattleResult asDictionary] forKey:@"primarybattle"];
@@ -146,7 +149,7 @@
     return jsonData;
 }
 
-- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game onlyActions:(BOOL)onlyActions {
+- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits {
     
     NSError *error = nil;
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:gameData options:NSJSONReadingMutableContainers error:&error];
@@ -237,7 +240,10 @@
                 }
             }
             
-            game.myDeck = [[Deck alloc] initWithCards:myCards];
+            if (!onlyEnemyUnits) {
+                game.myDeck = [[Deck alloc] initWithCards:myCards];
+            }
+
             game.enemyDeck = [[Deck alloc] initWithCards:enemyCards];
         }
     }
@@ -268,6 +274,17 @@
     // Get card in action from enemy deck
     Card *cardInAction = [self getCardInActionFromBattleReportDictionary:dictionary forGame:game];
     Card *enemyCard = [self getEnemyCardFromBattleReportDictionary:dictionary forGame:game];
+    
+    BOOL levelIncreased = [[dictionary valueForKey:@"level_increased"] boolValue];
+    
+    if (levelIncreased) {
+        LevelIncreaseAbilities abilityIncreased = [[dictionary valueForKey:@"ability_increased"] integerValue];
+        
+        FixedLevelIncreaseStrategy *levelIncreaseStrategy = [[FixedLevelIncreaseStrategy alloc] init];
+        levelIncreaseStrategy.levelIncreaseAbility = abilityIncreased;
+        
+        cardInAction.levelIncreaseStrategy = levelIncreaseStrategy;
+    }
     
     if (actionType == kActionTypeMove) {
         
@@ -330,7 +347,7 @@
     
     // If cardInAction is nil, it's probably an enemy ability
     if (cardInAction == nil) {
-        cardInAction = [game getCardFromDeck:game.myDeck locatedAt:[cardInActionLocation flipBacklineFromCurrentBackline:LOWER_BACKLINE]];
+        cardInAction = [game getCardFromDeck:game.myDeck locatedAt:cardInActionLocation];
     }
     
     return cardInAction;
@@ -345,7 +362,7 @@
     
     // If enemycard is nil, it's probably a friendly ability
     if (enemyCard == nil) {
-        enemyCard = [game getCardFromDeck:game.enemyDeck locatedAt:[enemyCardLocation flipBacklineFromCurrentBackline:LOWER_BACKLINE]];
+        enemyCard = [game getCardFromDeck:game.enemyDeck locatedAt:enemyCardLocation];
     }
 
     return enemyCard;

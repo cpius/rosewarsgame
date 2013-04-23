@@ -57,6 +57,8 @@
 - (void)performActionWithCompletion:(void (^)())completion {
     
     _battleReport = [BattleReport battleReportWithAction:self];
+    
+    self.cardInAction.delegate = self;
 
     [[GameManager sharedManager] willUseAction:self];
     [self.cardInAction willPerformAction:self];
@@ -73,12 +75,11 @@
         result.meleeAttackType = self.meleeAttackType;
         
         self.battleResult = result;
-        [self.delegate action:self hasResolvedCombatWithOutcome:result.combatOutcome];
+        [self.delegate action:self hasResolvedCombatWithResult:result];
         
         _battleReport.primaryBattleResult = result;
-        if (!self.playback) {
-            [[GameManager sharedManager].currentGame addBattleReport:_battleReport];
-        }
+
+        [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
 
         if (IsDefenseSuccessful(result.combatOutcome)) {
             
@@ -91,11 +92,7 @@
                     [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
                 }
                 
-                [[GameManager sharedManager] actionUsed:self];
-               [self.cardInAction didPerformedAction:self];
-                
-                [self.delegate afterPerformAction:self];
-                
+                [self afterPerformAction];
                 if (completion != nil) {
                     completion();
                 }
@@ -108,11 +105,7 @@
                 [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
                 [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:_startLocation];
                 
-                [[GameManager sharedManager] actionUsed:self];
-                [self.cardInAction didPerformedAction:self];
-                
-                [self.delegate afterPerformAction:self];
-                
+                [self afterPerformAction];
                 if (completion != nil) {
                     completion();
                 }
@@ -126,11 +119,7 @@
                         [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
                     }
                     
-                    [[GameManager sharedManager] actionUsed:self];
-                    [self.cardInAction didPerformedAction:self];
-                    
-                    [self.delegate afterPerformAction:self];
-                    
+                    [self afterPerformAction];
                     if (completion != nil) {
                         completion();
                     }
@@ -138,6 +127,25 @@
             }
         }
     }];
+}
+
+- (void)cardIncreasedInLevel:(Card *)card withAbilityIncreased:(LevelIncreaseAbilities)ability {
+    
+    if (!self.playback) {
+        _battleReport.levelIncreased = YES;
+        _battleReport.abilityIncreased = ability;
+    }
+}
+
+- (void)afterPerformAction {
+    
+    self.cardInAction.delegate = nil;
+    
+    [[GameManager sharedManager] actionUsed:self];
+    [self.cardInAction didPerformedAction:self];
+    
+    [self.delegate afterPerformAction:self];
+    
 }
 
 @end

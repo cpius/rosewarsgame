@@ -19,7 +19,7 @@
         
         self.cardType = kCardTypeSpecialUnit;
         self.unitType = kSpecialUnit;
-        self.unitName = kCannon;
+        self.unitName = kBerserker;
         self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(2, 6)];

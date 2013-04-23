@@ -11,12 +11,13 @@
 #import "GridLocation.h"
 #import "TimedAbility.h"
 #import "Serializable.h"
+#import "LevelIncreaseStrategy.h"
 
 @class Card;
 @protocol CardDelegate <NSObject>
 
 @optional
-- (void)cardIncreasedInLevel:(Card*)card;
+- (void)cardIncreasedInLevel:(Card*)card withAbilityIncreased:(LevelIncreaseAbilities)ability;
 
 @end
 
@@ -39,6 +40,7 @@
 @property (nonatomic, assign) BOOL isShowingDetail;
 @property (nonatomic, assign) NSUInteger movesConsumed;
 @property (nonatomic, readonly) NSInteger movesRemaining;
+@property (nonatomic, strong) id<LevelIncreaseStrategy> levelIncreaseStrategy;
 
 @property (nonatomic, copy) NSString *attackSound;
 @property (nonatomic, copy) NSString *defeatSound;

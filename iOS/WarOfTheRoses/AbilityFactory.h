@@ -12,6 +12,6 @@
 @interface AbilityFactory : NSObject
 
 + (void)reapplyExistingAbilityOfType:(AbilityTypes)abilityType onCard:(Card *)card withAbilityData:(NSDictionary*)abilityData;
-+ (void)addAbilityOfType:(AbilityTypes)abilityType onCard:(Card*)card;
++ (TimedAbility*)addAbilityOfType:(AbilityTypes)abilityType onCard:(Card*)card;
 
 @end

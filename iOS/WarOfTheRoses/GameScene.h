@@ -11,6 +11,7 @@
 #import "GameBoard.h"
 #import "LeftPanel.h"
 #import "GCTurnBasedMatchHelper.h"
+#import "PlayerIndicator.h"
 
 #define kZoomFactor 2.0
 
@@ -31,6 +32,7 @@
     CGPoint _zoomPosition;
     
     LeftPanel *_leftPanel;
+    PlayerIndicator *_playerIndicator;
     
     CCLabelTTF *_actionCountLabel;
     CCSprite *_backButton;
@@ -49,6 +51,9 @@
     
     CCSprite *_turnIndicator;
     BOOL _playback;
+    
+    NSMutableArray *_cardsInvolvedInPlayback;
+    NSMutableArray *_abilitiesInvolvedInPlayback;
 
 }
 

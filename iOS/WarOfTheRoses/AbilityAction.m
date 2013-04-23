@@ -54,16 +54,14 @@
     [self.delegate beforePerformAction:self];
     
     if (_availableAbilities.count == 1) {
-        [AbilityFactory addAbilityOfType:(AbilityTypes)[_availableAbilities[0] integerValue] onCard:self.enemyCard];
+        _abilityUsed = [AbilityFactory addAbilityOfType:(AbilityTypes)[_availableAbilities[0] integerValue] onCard:self.enemyCard];
     }
         
     [[GameManager sharedManager] actionUsed:self];
     [self.cardInAction didPerformedAction:self];
     
-    if (!self.playback) {
-        [[GameManager sharedManager].currentGame addBattleReport:_battleReport];
-    }
-
+    [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
+    
     [self.delegate afterPerformAction:self];
     
     if (completion != nil) {

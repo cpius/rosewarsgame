@@ -10,6 +10,7 @@
 #import "Action.h"
 #import "GameManager.h"
 #import "StandardBattleStrategy.h"
+#import "RandomLevelIncreaseStrategy.h"
 
 @interface Card()
 
@@ -51,6 +52,7 @@
         self.isShowingDetail = NO;
         
         _currentlyAffectedByAbilities = [NSMutableArray array];
+        _levelIncreaseStrategy = [[RandomLevelIncreaseStrategy alloc] init];
     }
     
     return self;
@@ -203,17 +205,10 @@
     
     self.numberOfLevelsIncreased++;
     
-    BOOL attributeSwitch = arc4random() % 2;
+    LevelIncreaseAbilities abilityIncreased = [_levelIncreaseStrategy cardIncreasedInLevel:self];
     
-    if (attributeSwitch) {
-        [self.attack addRawBonus:[[RawBonus alloc] initWithValue:1]];
-    }
-    else {
-        [self.defence addRawBonus:[[RawBonus alloc] initWithValue:1]];
-    }
-    
-    if ([_delegate respondsToSelector:@selector(cardIncreasedInLevel:)]) {
-        [_delegate cardIncreasedInLevel:self];
+    if ([_delegate respondsToSelector:@selector(cardIncreasedInLevel:withAbilityIncreased:)]) {
+        [_delegate cardIncreasedInLevel:self withAbilityIncreased:abilityIncreased];
     }
 }
 

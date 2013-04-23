@@ -45,29 +45,30 @@
     }
 }
 
-+ (void)addAbilityOfType:(AbilityTypes)abilityType onCard:(Card *)card {
++ (TimedAbility*)addAbilityOfType:(AbilityTypes)abilityType onCard:(Card *)card {
+    
+    TimedAbility *timedAbility;
     
     switch (abilityType) {
         case kAbilityImprovedWeapons:
-            [card addTimedAbility:[[ImproveWeapons alloc] initForNumberOfTurns:2 onCard:card]];
+            timedAbility = [[ImproveWeapons alloc] initForNumberOfTurns:2 onCard:card];
             break;
             
         case kAbilityCoolDown:
-            [card addTimedAbility:[[CoolDown alloc] initForNumberOfTurns:2 onCard:card]];
+            timedAbility = [[CoolDown alloc] initForNumberOfTurns:2 onCard:card];
             break;
             
         case kAbilityBribe:
-            [card addTimedAbility:[[Bribe alloc] initForNumberOfTurns:1 onCard:card]];
+            timedAbility = [[Bribe alloc] initForNumberOfTurns:1 onCard:card];
             break;
             
         default:
             break;
     }
+    
+    [card addTimedAbility:timedAbility];
+    
+    return timedAbility;
 }
 
-/*+ (void)addAbilityOfType:(AbilityTypes)abilityType onCard:(Card *)card {
-
-    [self addAbilityOfType:abilityType onCard:card forNumberOfTurns:1];
-}
-*/
 @end
