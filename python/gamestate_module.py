@@ -4,6 +4,7 @@ import initializer
 import action_getter
 import saver
 import ai_module
+import ai_methods
 
 
 class Gamestate:
@@ -14,8 +15,8 @@ class Gamestate:
         self.players = [player1, player2]
         self.actions_remaining = actions_remaining
 
-    def do_action(self, action):
-        action_doer.do_action(self, action)
+    def do_action(self, action, controller=None):
+        action_doer.do_action(self, action, controller)
 
         if self.actions_remaining > 0:
             self.available_actions = action_getter.get_actions(self)
@@ -30,11 +31,21 @@ class Gamestate:
 
     def get_actions(self):
         if hasattr(self.players[0], "extra_action"):
-            return action_getter.get_extra_actions(self)
-        if self.actions_remaining == 1 and hasattr(self, "available_actions"):
-            return self.available_actions
+            actions = action_getter.get_extra_actions(self)
+        elif self.actions_remaining == 1 and hasattr(self, "available_actions"):
+            actions = self.available_actions
         else:
-            return action_getter.get_actions(self)
+            actions = action_getter.get_actions(self)
+
+        for action in actions:
+            if action.is_attack:
+                action.chance_of_win = ai_methods.chance_of_win(action.unit_reference, action.target_reference, action)
+                for sub_action in action.sub_actions:
+                    sub_action.chance_of_win = ai_methods.chance_of_win(sub_action.unit_reference,
+                                                                        sub_action.target_reference, sub_action)
+
+
+        return actions
 
     def copy(self):
         saved_gamestate = save_gamestate(self)
@@ -54,6 +65,9 @@ class Gamestate:
         else:
             self.players[1].ai = "Human"
 
+    def set_available_actions(self):
+        self.available_actions = self.get_actions()
+
     def turn_shift(self):
         if self.players[0].color == "Green":
             self.turn += 1
@@ -61,6 +75,7 @@ class Gamestate:
         self.players = [self.players[1], self.players[0]]
         self.initialize_turn()
         self.initialize_action()
+        self.set_available_actions()
 
     def current_player(self):
         return self.players[0]

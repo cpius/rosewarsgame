@@ -11,7 +11,7 @@ public class ArcherAttackStrategy extends DefaultAttackStrategy {
 
 		// if defending is of type infantry
 		if (defendingUnit.getType().equals(UnitType.INFANTRY)) {
-			return attackRoll >= attackingUnit.getAttack() - 1;
+			return attackRoll >= getAttackWithBonus(attackingUnit, defendingUnit) - 1;
 		}
 		return super.performAttack(attackRoll, attackingUnit, defendingUnit);
 	}

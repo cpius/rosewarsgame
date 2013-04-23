@@ -1,7 +1,7 @@
 package com.wotr.model.unit;
 
-import com.wotr.strategy.action.ActionResolverStrategy;
-import com.wotr.strategy.facade.ActionResolverFactory;
+import com.wotr.strategy.action.UnitActionResolverStrategy;
+import com.wotr.strategy.factory.ActionResolverFactory;
 
 public abstract class MeleeUnit extends Unit {
 
@@ -14,7 +14,7 @@ public abstract class MeleeUnit extends Unit {
 	}
 	
 	@Override
-	public ActionResolverStrategy getActionResolverStrategy() {
+	public UnitActionResolverStrategy getActionResolverStrategy() {
 		return ActionResolverFactory.getMeleeActionResolverStrategy();
 	}
 }

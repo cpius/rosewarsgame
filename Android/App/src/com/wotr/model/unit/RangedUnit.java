@@ -1,7 +1,7 @@
 package com.wotr.model.unit;
 
-import com.wotr.strategy.action.ActionResolverStrategy;
-import com.wotr.strategy.facade.ActionResolverFactory;
+import com.wotr.strategy.action.UnitActionResolverStrategy;
+import com.wotr.strategy.factory.ActionResolverFactory;
 
 public abstract class RangedUnit extends Unit {
 
@@ -14,7 +14,11 @@ public abstract class RangedUnit extends Unit {
 	}
 
 	@Override
-	public ActionResolverStrategy getActionResolverStrategy() {
+	public UnitActionResolverStrategy getActionResolverStrategy() {
 		return ActionResolverFactory.getRangedActionResolverStrategy();
+	}
+	
+	public String getAttackSound() {
+		return "sounds/bow_attack.wav";
 	}
 }

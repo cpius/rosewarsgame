@@ -11,7 +11,7 @@ public class PikemanAttackStrategy extends DefaultAttackStrategy {
 
 		// if defending is of type cavalry
 		if (defendingUnit.getType().equals(UnitType.CAVALRY)) {
-			return attackRoll >= attackingUnit.getAttack() - 1;
+			return attackRoll >= getAttackWithBonus(attackingUnit, defendingUnit) - 1;
 		}
 		return super.performAttack(attackRoll, attackingUnit, defendingUnit);
 	}

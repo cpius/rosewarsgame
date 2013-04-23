@@ -7,7 +7,6 @@ from gamestate_module import Gamestate
 import os
 import settings
 import shutil
-import ai_methods
 from player import Player
 from action import Action
 
@@ -41,9 +40,6 @@ class Controller(object):
         self.clear_move()
 
     def trigger_artificial_intelligence(self):
-        print "turn", self.gamestate.turn
-        print "action", 3 - self.gamestate.get_actions_remaining()
-        print
 
         action = self.gamestate.current_player().ai.select_action(self.gamestate)
 
@@ -58,138 +54,83 @@ class Controller(object):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
             self.perform_action(extra_action)
 
-    def left_click(self, x, y):
-        if not self.start_position and (x, y) in self.gamestate.units[0]:
-            print "Start at", (x, y)
-            self.start_position = (x, y)
-            self.selected_unit = self.gamestate.units[0][self.start_position]
+    def left_click(self, position):
+        if self.deselecting_active_unit(position):
+            self.clear_move()
+            self.view.draw_game(self.gamestate)
 
-        elif self.start_position \
-            and not self.end_position \
-            and ((x, y) in self.gamestate.units[1]
-                 or (x, y) in self.gamestate.units[0]) and self.selected_unit.abilities:
-            print "Ability", (x, y)
+        elif self.selecting_active_unit(position):
+            self.start_position = position
+            self.selected_unit = self.gamestate.player_units()[self.start_position]
+            illustrate_actions = (action for action in self.gamestate.get_actions() if action.start_position == position)
+            self.view.draw_game(self.gamestate, position, illustrate_actions)
+
+        elif self.selecting_ability_target(position):
             if len(self.selected_unit.abilities) > 1:
                 index = self.get_input_abilities(self.selected_unit)
-                action = Action(self.start_position,
-                                self.start_position,
-                                (x, y),
-                                False,
-                                False,
-                                True,
-                                self.selected_unit.abilities[index])
+
+                ability = self.selected_unit.abilities[index]
             else:
-                action = Action(self.start_position,
-                                self.start_position,
-                                (x, y),
-                                False,
-                                False,
-                                True,
-                                self.selected_unit.abilities[0])
+                ability = self.selected_unit.abilities[0]
+
+            action = Action(self.start_position, ability_position=position, ability=ability)
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1] and self.selected_unit.range > 1:
-            print "Attack", (x, y)
-            action = Action(self.start_position, self.start_position, (x, y), True, False)
+        elif self.selecting_ranged_target(position):
+            action = Action(self.start_position, attack_position=position)
             self.perform_action(action)
 
-        elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1]:
-            print "Attack-Move", (x, y)
+        elif self.selecting_melee_target(position):
 
-            if hasattr(self.gamestate.current_player(), "extra_action"):
-                all_actions = self.gamestate.get_actions()
-            else:
-                all_actions = self.gamestate.get_actions()
+            possible_actions = [action for action in self.gamestate.get_actions() if
+                                action.start_position == self.start_position and action.attack_position == position and
+                                not action.move_with_attack]
 
-            action = None
-
-            for possible_action in all_actions:
-                if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == (x, y) \
-                        and possible_action.move_with_attack:
-                    if possible_action.end_position == self.start_position:
-                        action = possible_action
-                        break
-                    action = possible_action
-
-            if not action:
-                print "Action not possible"
+            if not possible_actions:
+                self.view.draw_message("Action not possible")
                 self.clear_move()
+                self.view.draw_game(self.gamestate)
+                return
+
+            if len(possible_actions) == 1:
+                action = possible_actions[0]
             else:
-                self.perform_action(action)
+                self.view.draw_game(self.gamestate)
+                action = self.pick_action_end_position(possible_actions)
 
-        elif self.start_position and not self.end_position:
-            print "Stop at", (x, y)
-            self.end_position = (x, y)
-
-        elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
-            print "Attack-Move", (x, y)
-            action = Action(self.start_position, self.end_position, (x, y), True, False)
             self.perform_action(action)
 
-        elif self.start_position and self.end_position and (x, y) not in self.gamestate.units[1]:
-            print "Move to", (x, y)
-            action = Action(self.start_position, (x, y), None, False, False)
+        elif self.selecting_move(position):
+            action = Action(self.start_position, end_position=position)
             self.perform_action(action)
 
-    def right_click(self, x, y):
-        if self.start_position and (x, y) not in self.gamestate.units[1]:
-            print "Move to", (x, y)
-            action = Action(self.start_position, (x, y), None, False, False)
-            self.perform_action(action)
-        if self.start_position and (x, y) in self.gamestate.units[1]:
-            action = Action(self.start_position, (x, y), (x, y), True, False)
-            chance_of_win = ai_methods.chance_of_win(self.selected_unit, self.gamestate.units[1][(x, y)], action)
-            print "Chance of win", round(chance_of_win * 100), "%"
-            self.start_position = None
+    def pick_action_end_position(self, possible_actions):
 
-    def middle_click(self, x, y):
+        end_positions = [action.end_position for action in possible_actions]
+
+        self.view.shade_positions(end_positions)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    position = self.view.get_position_from_mouse_click(event.pos)
+
+                    if event.button == 1:
+                        for action in possible_actions:
+                            if position == action.end_position:
+                                return action
+
+                elif event.type == QUIT:
+                    self.exit_game()
+
+
+
+    def right_click(self, position):
         if not self.start_position:
-            self.show_unit((x, y))
-
-        elif self.start_position and not self.end_position and (x, y) in self.gamestate.units[1]:
-            print "Attack", (x, y)
-
-            if hasattr(self.gamestate.current_player(), "extra_action"):
-                all_actions = self.gamestate.get_actions()
-            else:
-                all_actions = self.gamestate.get_actions()
-
-            action = None
-
-            for possible_action in all_actions:
-                if possible_action.start_position == self.start_position \
-                        and possible_action.attack_position == (x, y) \
-                        and not possible_action.move_with_attack:
-
-                    if possible_action.end_position == self.start_position:
-                        action = possible_action
-                        break
-                    action = possible_action
-
-            if not action:
-                print "Action not possible"
-                self.clear_move()
-            else:
-                self.perform_action(action)
-
-        elif self.start_position and self.end_position and (x, y) in self.gamestate.units[1]:
-            print "Attack", (x, y)
-            action = Action(self.start_position, self.end_position, (x, y), True, False)
-            self.perform_action(action)
-
-    def list_actions(self):
-        print
-        print "Possible actions:"
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            actions = self.gamestate.get_actions()
-            for action in actions:
-                print action
+            self.show_unit(position)
         else:
-            actions = self.gamestate.get_actions()
-            for action in actions:
-                print action
-        print
+            if position in self.gamestate.opponent_units():
+                self.show_attack(position)
 
     def clear_move(self):
         self.start_position = self.end_position = self.selected_unit = None
@@ -197,6 +138,7 @@ class Controller(object):
     def run_game(self):
 
         self.gamestate.set_ais()
+        self.gamestate.set_available_actions()
 
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
@@ -205,25 +147,16 @@ class Controller(object):
             for event in pygame.event.get():
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y = self.view.get_position_from_mouse_click(event.pos)
+                    position = self.view.get_position_from_mouse_click(event.pos)
 
                     if event.button == 1:
-                        self.left_click(x, y)
-                    elif event.button == 2:
-                        self.right_click(x, y)
+                        self.left_click(position)
                     elif event.button == 3:
-                        self.middle_click(x, y)
-
-                if event.type == KEYDOWN and event.key == K_p:
-                    print "paused"
-                    self.pause()
-
-                if event.type == KEYDOWN and event.key == K_a:
-                    self.list_actions()
+                        self.right_click(position)
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     self.clear_move()
-                    print "move cleared"
+                    self.view.draw_game(self.gamestate)
 
                 elif event.type == KEYDOWN and self.command_q_down(event.key):
                     self.exit_game()
@@ -249,8 +182,11 @@ class Controller(object):
                     unit.defence_counters += 1
                     return
 
+                elif event.type == QUIT:
+                    self.exit_game()
+
     def get_input_abilities(self, unit):
-        self.view.draw_ask_about_ability(unit.abilities[0], unit.abilities[1])
+        self.view.draw_ask_about_ability(unit)
 
         while True:
             for event in pygame.event.get():
@@ -259,6 +195,27 @@ class Controller(object):
 
                 if event.type == KEYDOWN and event.key == K_2:
                     return 1
+
+                elif event.type == QUIT:
+                    self.exit_game()
+
+    def ask_about_move_with_attack(self, action):
+
+        self.view.draw_ask_about_move_with_attack(action.attack_position)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    position = self.view.get_position_from_mouse_click(event.pos)
+
+                    if event.button == 1:
+                        if position == action.attack_position:
+                            return True
+                        if position == action.end_position:
+                            return False
+
+                elif event.type == QUIT:
+                    self.exit_game()
 
     def pause(self):
         while True:
@@ -280,6 +237,10 @@ class Controller(object):
 
     def perform_action(self, action):
 
+        self.draw_action = True
+
+        self.view.draw_game(self.gamestate)
+
         if hasattr(self.gamestate.current_player(), "extra_action"):
             all_actions = self.gamestate.get_actions()
         else:
@@ -292,27 +253,32 @@ class Controller(object):
                 action = possible_action
 
         if matching_actions == 0:
-            print "Action not allowed"
             self.clear_move()
+            self.view.draw_game(self.gamestate)
+            self.view.draw_message("Action not allowed")
             return
 
-        elif matching_actions > 1:
-            print "Action ambiguous"
-            self.clear_move()
-            return
+        assert matching_actions <= 1
 
-        self.view.draw_action(action)
-        pygame.time.delay(settings.pause_for_animation)
+        if self.gamestate.current_player().ai == "Human":
+            self.gamestate.do_action(action, self)
+        else:
+            self.gamestate.do_action(action)
 
-        self.gamestate.do_action(action)
+        if self.draw_action:
+            self.view.draw_action(action, self.gamestate)
+        else:
+            self.view.draw_log(action, self.gamestate)
 
         self.save_game()
 
-        if settings.show_full_battle_result:
-            print action.full_string()
+        if action.is_attack:
+            if settings.pause_for_attack_until_click:
+                self.pause()
+            else:
+                pygame.time.delay(settings.pause_for_animation_attack)
         else:
-            print action.string_with_outcome()
-        print
+            pygame.time.delay(settings.pause_for_animation)
 
         if hasattr(self.gamestate.current_player(), "won"):
             self.game_end(self.gamestate.current_player())
@@ -335,43 +301,32 @@ class Controller(object):
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            print self.gamestate.current_player().color, "extra action"
-        else:
-            print self.gamestate.current_player().color
-
         self.clear_move()
 
         if self.gamestate.current_player().ai_name != "Human":
             self.trigger_artificial_intelligence()
 
+    def show_attack(self, attack_position):
+        action = Action(self.start_position, attack_position=attack_position)
+        player_unit = self.gamestate.player_units()[self.start_position]
+        opponent_unit = self.gamestate.opponent_units()[attack_position]
+        self.view.show_attack(action, player_unit, opponent_unit)
+
+        return
+
     def show_unit(self, position):
 
-        unit = color = None
+        unit = None
         if position in self.gamestate.units[0]:
             unit = self.gamestate.units[0][position]
-            color = self.gamestate.current_player().color
         if position in self.gamestate.units[1]:
             unit = self.gamestate.units[1][position]
-            color = self.gamestate.players[1].color
 
         if unit:
-            print
-            print unit
-            for attribute, value in unit.__dict__.items():
-                if attribute not in ["name", "yellow_counters", "blue_counters", "pic",
-                                     "color", "range", "movement"]:
-                    if value:
-                        print attribute, value
-
-            self.view.show_unit_zoomed(unit.name, color)
-
-            while True:
-                for event in pygame.event.get():
-                    if event.type == pygame.MOUSEBUTTONDOWN or event.type == KEYDOWN:
-                        self.gamestate.recalculate_special_counters()
-                        self.view.draw_game(self.gamestate)
-                        return
+            self.view.show_unit_zoomed(unit)
+            self.pause()
+            self.view.draw_game(self.gamestate)
+            return
 
     def save_game(self):
         name = str(self.action_index) + ". " \
@@ -391,3 +346,30 @@ class Controller(object):
         self.view.draw_game_end(player.color)
         self.pause()
         self.exit_game()
+
+    def selecting_active_unit(self, position):
+        return not self.start_position and position in self.gamestate.player_units()
+
+    def selecting_ability_target(self, position):
+        return self.start_position and (position in self.gamestate.opponent_units() or position in self.gamestate.player_units()) and self.selected_unit.abilities
+
+    def selecting_attack_target_unit(self, position):
+        pass
+
+    def selecting_attack_ranged_target(self, position):
+        return self.start_position and position in self.gamestate.opponent_units() and \
+            self.selected_unit.range > 1
+
+    def deselecting_active_unit(self, position):
+        return self.start_position and self.start_position == position
+
+    def selecting_ranged_target(self, position):
+        return self.start_position and position in self.gamestate.opponent_units() and \
+            self.selected_unit.range > 1
+
+    def selecting_melee_target(self, position):
+        return self.start_position and position in self.gamestate.opponent_units() and \
+            self.selected_unit.range == 1
+
+    def selecting_move(self, position):
+        return self.start_position and position not in self.gamestate.opponent_units()

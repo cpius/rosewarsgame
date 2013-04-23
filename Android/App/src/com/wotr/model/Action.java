@@ -1,16 +1,22 @@
 package com.wotr.model;
 
+import com.wotr.model.unit.Unit;
+
 public class Action {
 
 	private final Position pos;
+	private final ActionPath path;
+	private final Unit unit;
 
 	public Position getPosition() {
 		return pos;
 	}
 
-	public Action(Position pos) {
+	public Action(Unit unit, Position pos, ActionPath path) {
+		this.unit = unit;
 		this.pos = pos;
-	}
+		this.path = path;
+	}	
 
 	@Override
 	public int hashCode() {
@@ -41,4 +47,7 @@ public class Action {
 		return getClass().getSimpleName() + " at " + pos;
 	}
 
+	public ActionPath getPath() {
+		return path;
+	}
 }

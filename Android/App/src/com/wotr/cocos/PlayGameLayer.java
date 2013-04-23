@@ -1,16 +1,22 @@
 package com.wotr.cocos;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
 
+import org.cocos2d.actions.ease.CCEaseSineIn;
+import org.cocos2d.actions.instant.CCCallback;
+import org.cocos2d.actions.interval.CCDelayTime;
+import org.cocos2d.actions.interval.CCFadeIn;
+import org.cocos2d.actions.interval.CCFadeOut;
+import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.actions.interval.CCTintTo;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
@@ -18,24 +24,40 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
+
+import com.wotr.GameManager;
 import com.wotr.R;
+import com.wotr.cocos.action.RemoveNodeCalBackAction;
 import com.wotr.model.Action;
 import com.wotr.model.MoveAction;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
-import com.wotr.strategy.impl.ActionResolver;
+import com.wotr.strategy.action.ActionsResolver;
+import com.wotr.strategy.action.ActionsResolverStrategy;
+import com.wotr.strategy.battle.BattleListener;
+import com.wotr.strategy.game.Game;
+import com.wotr.strategy.game.GameEventListener;
+import com.wotr.strategy.game.MultiplayerGame;
+import com.wotr.strategy.game.exceptions.InvalidAttackException;
+import com.wotr.strategy.game.exceptions.InvalidMoveException;
+import com.wotr.strategy.player.HumanPlayer;
+import com.wotr.strategy.player.Player;
 import com.wotr.touch.CardTouchHandler;
 import com.wotr.touch.CardTouchListener;
 
-public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener {
+public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener {
 
-	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
+	private Collection<CCSprite> unitList = new ArrayList<CCSprite>();
 	private int xCount;
 	private int yCount;
-	private final UnitMap<Position, Unit> playerOneMap;
-	private final UnitMap<Position, Unit> playerTwoMap;
 	private Collection<Action> actions;
+	private CCLabel nameLabel;
+	private CCLabel turnLabel;
+	private Player playerOne;
+	private ActionsResolverStrategy actionsResolver;
 
 	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
 		CCScene scene = CCScene.node();
@@ -46,16 +68,15 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	protected PlayGameLayer(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
 
-		this.playerOneMap = playerOneMap;
-		this.playerTwoMap = playerTwoMap;
+		xCount = 5;
+		yCount = 8;
+		
+		playerOne = new HumanPlayer(playerOneMap, "Player 1", 0 );
+		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2", yCount - 1);
 
-		// this.cards = cards;
 		setIsTouchEnabled(true);
 
 		winSize = CCDirector.sharedDirector().displaySize();
-
-		xCount = 5;
-		yCount = 8;
 
 		CCSprite back = CCSprite.sprite("woddenbackground.png");
 
@@ -77,10 +98,33 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		addBackGroundCards(xCount, yCount, true);
 		addCards(playerOneMap);
 		addCards(playerTwoMap);
+
+		nameLabel = CCLabel.makeLabel("    ", "Arial", 60f);
+		nameLabel.setPosition(10f, winSize.getHeight() - 80f);
+		nameLabel.setAnchorPoint(0, 0);
+		nameLabel.setColor(ccColor3B.ccWHITE);
+		nameLabel.setOpacity(200);
+		addChild(nameLabel, 10);
+
+		turnLabel = CCLabel.makeLabel("    ", "Arial", 60f);
+		turnLabel.setPosition(winSize.getWidth() - 50f, winSize.getHeight() - 80f);
+		turnLabel.setAnchorPoint(0, 0);
+		turnLabel.setColor(ccColor3B.ccWHITE);
+		turnLabel.setOpacity(200);
+		addChild(turnLabel, 10);
+
+		Game game = new MultiplayerGame(playerOne, playerTwo);
+		game.addGameEventListener(this);
+		GameManager.setGame(game);
+		GameManager.getFactory().getBattleStrategy().addBattleListener(this);
+
+		actionsResolver = new ActionsResolver(xCount, yCount, game);
+		game.setActionsResolver(actionsResolver);
+
+		game.startGame();
 	}
 
-	protected void moveCardToPosition() {
-		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
+	protected void dropCardToPosition() {
 		CCScaleTo scaleAction = CCScaleTo.action(0.3f, sizeScale);
 		CCSequence seq = CCSequence.actions(scaleAction);
 		selectedCard.runAction(seq);
@@ -89,15 +133,15 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private void addCards(UnitMap<Position, Unit> playerCards) {
 
 		for (Unit card : playerCards.values()) {
-			Position pos = card.getPosistion();
+			Position pos = card.getPosition();
 			CGPoint point = bordframe.getPosition(pos.getX(), pos.getY());
 			CCSprite cardSprite = CCSprite.sprite(card.getImage());
 			cardSprite.setPosition(point);
 			cardSprite.setScale(sizeScale);
-			cardSprite.setUserData(pos);
+			cardSprite.setUserData(card);
 			addChild(cardSprite);
 
-			modelMap.put(cardSprite, card);
+			unitList.add(cardSprite);
 		}
 	}
 
@@ -111,19 +155,41 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		if (pInP == null) {
 			moveCardToOriginalPosition();
 		} else {
-			moveCardToPosition();
-			
-			Unit remove = playerOneMap.remove(selectedCard.getUserData());
-			if (remove != null) {
-				playerOneMap.put(pInP, remove);
-			}
 
-			remove = playerTwoMap.remove(selectedCard.getUserData());
-			if (remove != null) {
-				playerTwoMap.put(pInP, remove);
+			dropCardToPosition();
+
+			Unit attackingUnit = (Unit) selectedCard.getUserData();
+
+			// If player has card at position
+			if (GameManager.getGame().getAttackingPlayer().hasUnitAtPosition(pInP)) {
+				moveCardToOriginalPosition();
+			} else {
+
+				Unit defendingUnit = GameManager.getGame().getDefendingPlayer().getUnitAtPosition(pInP);
+
+				try {
+					if (defendingUnit != null) {
+						boolean succes = GameManager.getGame().attack(attackingUnit, defendingUnit);
+						if (succes) {
+							removeCCSprite(defendingUnit);
+
+							if (attackingUnit.isRanged()) {
+								moveCardToOriginalPosition();
+							}
+						} else {
+							moveCardToOriginalPosition();
+						}
+
+					} else {
+						GameManager.getGame().move(attackingUnit, pInP);
+						SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
+					}
+				} catch (InvalidAttackException e) {
+					moveCardToOriginalPosition();
+				} catch (InvalidMoveException e) {
+					moveCardToOriginalPosition();
+				}
 			}
-			
-			selectedCard.setUserData(pInP);
 		}
 
 		reorderChild(selectedCard, 0);
@@ -131,11 +197,20 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	private void resetActionSelection() {
-		List<CCNode> children = getChildren();
+
 		for (Action action : actions) {
-			for (CCNode ccNode : children) {
-				boolean contains = action.getPosition().equals(ccNode.getUserData());
-				if (contains) {
+			for (CCNode ccNode : unitList) {
+
+				Unit unit = (Unit) ccNode.getUserData();
+				if (action.getPosition().equals(unit.getPosition())) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
+					ccNode.runAction(tin);
+				}
+			}
+
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (action.getPosition().equals(pos)) {
 					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
 					ccNode.runAction(tin);
 				}
@@ -146,21 +221,21 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	protected void selectCardForMove(CCSprite selectedCard) {
 		super.selectCardForMove(selectedCard);
 
-		Unit unit = modelMap.get(selectedCard);
+		Unit unit = (Unit) selectedCard.getUserData();
 
-		ActionResolver ar = new ActionResolver(xCount, yCount);
+		actions = actionsResolver.getActions(unit);
 
-		if (!unit.isEnemy()) {
-			actions = ar.getActions(unit, playerOneMap, playerTwoMap);
-		} else {
-			actions = ar.getActions(unit, playerTwoMap, playerOneMap);
-		}
-
-		List<CCNode> children = getChildren();
 		for (Action action : actions) {
-			for (CCNode ccNode : children) {
-				boolean contains = action.getPosition().equals(ccNode.getUserData());
-				if (contains) {
+			for (CCNode ccNode : unitList) {
+				Unit u = (Unit) ccNode.getUserData();
+				if (action.getPosition().equals(u.getPosition())) {
+					markeNodeForAction(action, ccNode);
+				}
+			}
+
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (action.getPosition().equals(pos)) {
 					markeNodeForAction(action, ccNode);
 				}
 			}
@@ -196,12 +271,181 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	@Override
 	public void cardDeSelected(float x, float y) {
 		moveCardToOriginalPosition();
-		
+
 		resetActionSelection();
 	}
 
 	@Override
 	protected Collection<CCSprite> getCardSprites() {
-		return modelMap.keySet();
+		return unitList;
 	}
+
+	@Override
+	public void gameStarted() {
+	}
+
+	@Override
+	public void startTurn(Player player, int actionsLeft) {
+		turnLabel.setString("" + actionsLeft);
+		nameLabel.setString(player.getName());
+
+		if (player.equals(playerOne)) {
+			turnLabel.setColor(ccColor3B.ccGREEN);
+			nameLabel.setColor(ccColor3B.ccGREEN);
+		} else {
+			turnLabel.setColor(ccColor3B.ccRED);
+			nameLabel.setColor(ccColor3B.ccRED);
+		}
+	}
+
+	@Override
+	public void actionPerformed(Player player, int remainingActions) {
+		startTurn(player, remainingActions);
+	}
+
+	@Override
+	protected boolean isTurn(Unit unit) {
+		return GameManager.getGame().getAttackingPlayer().hasUnit(unit);
+	}
+
+	private void removeCCSprite(Unit defendingUnit) {
+
+		for (Iterator<CCSprite> i = unitList.iterator(); i.hasNext();) {
+			CCSprite unitSpite = i.next();
+			Unit unit = (Unit) unitSpite.getUserData();
+			if (unit.equals(defendingUnit)) {
+				i.remove();
+				removeChild(unitSpite, true);
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void attackStarted(Unit attacker, Unit defender) {
+
+		MediaPlayer mp = new MediaPlayer();
+		try {
+			AssetFileDescriptor afd = CCDirector.sharedDirector().getActivity().getAssets().openFd(attacker.getAttackSound());
+			mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			mp.prepare();
+			mp.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void attackSuccessful(Unit attacker, Unit defender, int attackRoll) {
+
+		CCLabel actionLabel = CCLabel.makeLabel("Attack succesful (" + attackRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+
+		addChild(actionLabel);
+
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(moveAction, fadeAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
+
+	}
+
+	@Override
+	public void attackFailed(Unit attacker, Unit defender, int attackRoll) {
+
+		// CCNode node = CCNode.node();
+		// node.setPosition(winSize.width / 2, winSize.height - winSize.height /
+		// 3f);
+
+		// CCSprite dice = CCSprite.sprite("dice/1.png");
+		// dice.setPosition(100f, 10f);
+		// node.addChild(dice);
+
+		CCLabel actionLabel = CCLabel.makeLabel("Missed (" + attackRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+		// node.addChild(actionLabel);
+
+		addChild(actionLabel);
+
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(moveAction, fadeAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
+	}
+
+	@Override
+	public void defenceStarted(Unit attacker, Unit defender) {
+
+	}
+
+	@Override
+	public void defenceSuccessful(Unit attacker, Unit defender, int defenceRoll) {
+		CCLabel actionLabel = CCLabel.makeLabel("Defence succesful (" + defenceRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+		actionLabel.setOpacity(0);
+
+		addChild(actionLabel);
+
+		CCDelayTime delayAction = CCDelayTime.action(0.1f);
+		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(delayAction, fadeInAction, moveAction, fadeAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
+	}
+
+	@Override
+	public void defenceFailed(Unit attacker, Unit defender, int defenceRoll) {
+
+		MediaPlayer mp = new MediaPlayer();
+		try {
+			AssetFileDescriptor afd = CCDirector.sharedDirector().getActivity().getAssets().openFd(defender.getKilledSound());
+			mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			mp.prepare();
+			mp.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		CCLabel actionLabel = CCLabel.makeLabel("Defence failed (" + defenceRoll + ")", "Arial", 40f);
+		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
+		actionLabel.setOpacity(0);
+
+		addChild(actionLabel);
+
+		CCDelayTime delayAction = CCDelayTime.action(0.1f);
+		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);
+		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
+		CCFadeOut fadeOutAction = CCFadeOut.action(3.0f);
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+
+		CCSequence seq = CCSequence.actions(delayAction, fadeInAction, moveAction, fadeOutAction, cleanupAction);
+		actionLabel.runAction(CCEaseSineIn.action(seq));
+	}
+
+	@Override
+	public void gameEnded(Player winner) {
+
+		CCLabel winnerLabel = CCLabel.makeLabel("Winner: " + winner.getName(), "Arial", 40f);
+		winnerLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);		
+		addChild(winnerLabel);
+
+		MediaPlayer mp = new MediaPlayer();
+		try {
+			AssetFileDescriptor afd = CCDirector.sharedDirector().getActivity().getAssets().openFd("sounds/fanfare.mp3");
+			mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			mp.prepare();
+			mp.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }

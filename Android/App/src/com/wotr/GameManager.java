@@ -1,11 +1,13 @@
 package com.wotr;
 
-import com.wotr.strategy.facade.DefaultGameFactory;
-import com.wotr.strategy.facade.GameFactory;
+import com.wotr.strategy.factory.DefaultGameFactory;
+import com.wotr.strategy.factory.GameFactory;
+import com.wotr.strategy.game.Game;
 
 public class GameManager {
 
 	private static GameFactory factory = null;
+	private static Game game;
 
 	public static GameFactory setFactory(GameFactory factory) {
 		GameManager.factory = factory;
@@ -14,8 +16,17 @@ public class GameManager {
 
 	public static GameFactory getFactory() {
 		if (factory == null) {
-			factory = new DefaultGameFactory();
+			factory = new DefaultGameFactory(game);
 		}
 		return factory;
 	}
+
+	public static void setGame(Game game) {
+		GameManager.game = game;
+	}
+
+	public static Game getGame() {
+		return game;
+	}
+
 }
