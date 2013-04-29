@@ -18,13 +18,13 @@ import org.cocos2d.particlesystem.CCQuadParticleSystem;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
-import com.wotr.GameManager;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.DeckDrawStrategy;
 import com.wotr.strategy.DeckLayoutStrategy;
 import com.wotr.strategy.battle.BonusStrategy;
+import com.wotr.strategy.battle.DefaultBonusStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
 import com.wotr.strategy.impl.RandomDeckLayoutStrategy;
 import com.wotr.touch.CardTouchHandler;
@@ -95,7 +95,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
 		List<Unit> deck = deckStrategy.drawDeck();
 
-		BonusStrategy bonusStrategy = GameManager.getFactory().getBonusStrategy();
+		BonusStrategy bonusStrategy = new DefaultBonusStrategy();
 		bonusStrategy.initializeDeck(deck);
 
 		DeckLayoutStrategy layoutStrategy = new RandomDeckLayoutStrategy(xCount, yCount);
@@ -160,6 +160,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		// sparkCard = selectedCard;
 
 		reorderChild(selectedCard, 0);
+		selectedCard.setOpacity(255);
 		selectedCard = null;
 	}
 

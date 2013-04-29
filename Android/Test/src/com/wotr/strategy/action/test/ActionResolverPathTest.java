@@ -28,6 +28,7 @@ import com.wotr.model.unit.basic.Archer;
 import com.wotr.model.unit.basic.Ballista;
 import com.wotr.model.unit.basic.LightCavalry;
 import com.wotr.model.unit.basic.Pikeman;
+import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolver;
 import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.action.ZocBlockStrategy;
@@ -58,6 +59,7 @@ public class ActionResolverPathTest {
 	@Mock
 	ZocBlockStrategy zbStrategy;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception {
 		
@@ -98,9 +100,10 @@ public class ActionResolverPathTest {
 			Unit aUnit = aUnits.get(new Position(0, 2));
 
 			ActionsResolverStrategy ac = new ActionsResolver(5, 8, game);
-			Collection<Action> actions = ac.getActions(aUnit);
+			ActionCollection<Action> actionCollection = ac.getActions(aUnit);
+			Collection<Action> actions = actionCollection.getActions();
 			
-			Assert.assertEquals(3, actions.size());
+			Assert.assertEquals(19, actions.size());
 			
 			List<Action> list = new ArrayList<Action>();
 			list.addAll(actions);

@@ -26,6 +26,7 @@ import com.wotr.model.unit.basic.Ballista;
 import com.wotr.model.unit.basic.Catapult;
 import com.wotr.model.unit.basic.LightCavalry;
 import com.wotr.model.unit.basic.Pikeman;
+import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolver;
 import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.action.ZocBlockStrategy;
@@ -90,11 +91,16 @@ public class ActionResolverTest {
 			Unit aUnit = aUnits.get(new Position(1, 6));
 
 			ActionsResolverStrategy ac = new ActionsResolver(5, 8, game);
-			Collection<Action> actions = ac.getActions(aUnit);
+			ActionCollection<Action> actionCollection = ac.getActions(aUnit);
+			Collection<Action> actions = actionCollection.getActions();
+			
+			Collection<Position> attackPositions = actionCollection.getAttackPositions();
+			Collection<Position> movePositions = actionCollection.getMovePositions();
+			
+			Assert.assertEquals(113, actions.size());
+			Assert.assertEquals(20, attackPositions.size()  + movePositions.size());
 
-			Assert.assertEquals(20, actions.size());
-
-			Assert.assertTrue(actions.contains(new MoveAction(new Position(0, 3))));
+			Assert.assertTrue(movePositions.contains(new Position(0, 3)));
 			Assert.assertTrue(actions.contains(new MoveAction(new Position(0, 5))));
 			Assert.assertTrue(actions.contains(new MoveAction(new Position(0, 6))));
 			Assert.assertTrue(actions.contains(new MoveAction(new Position(0, 7))));
@@ -135,7 +141,8 @@ public class ActionResolverTest {
 			Unit aUnit = aUnits.get(new Position(0, 0));
 
 			ActionsResolverStrategy ac = new ActionsResolver(5, 8, game);
-			Collection<Action> actions = ac.getActions(aUnit);
+			ActionCollection<Action> actionCollection = ac.getActions(aUnit);
+			Collection<Action> actions = actionCollection.getActions();
 
 			Assert.assertEquals(0, actions.size());
 		} catch (Exception e) {
@@ -150,9 +157,10 @@ public class ActionResolverTest {
 		Unit aUnit = aUnits.get(new Position(2, 7));
 
 		ActionsResolverStrategy ac = new ActionsResolver(5, 8, game);
-		Collection<Action> actions = ac.getActions(aUnit);
+		ActionCollection<Action> actionCollection = ac.getActions(aUnit);
+		Collection<Action> actions = actionCollection.getActions();
 
-		Assert.assertEquals(5, actions.size());
+		Assert.assertEquals(25, actions.size());
 
 		Assert.assertTrue(actions.contains(new MoveAction(new Position(3, 7))));
 		Assert.assertTrue(actions.contains(new MoveAction(new Position(1, 7))));

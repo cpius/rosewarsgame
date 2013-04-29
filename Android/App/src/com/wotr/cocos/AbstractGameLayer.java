@@ -70,8 +70,10 @@ public abstract class AbstractGameLayer extends CCLayer {
 	}
 
 	protected void selectCardForMove(CCSprite selectedCard) {
-		CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 2f);
+		CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 1.5f);
 		selectedCard.runAction(action);
+		
+		selectedCard.setOpacity(130);
 	}
 
 	@Override
@@ -87,6 +89,8 @@ public abstract class AbstractGameLayer extends CCLayer {
 	}
 
 	protected void moveCardToCenterAndEnlarge() {
+		
+		selectedCard.setOpacity(255);
 
 		CGPoint center = CGPoint.ccp(winSize.width / 2, winSize.height / 2);
 

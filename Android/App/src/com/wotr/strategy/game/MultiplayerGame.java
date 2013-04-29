@@ -7,6 +7,7 @@ import com.wotr.GameManager;
 import com.wotr.model.Action;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
+import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.battle.BattleStrategy;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
@@ -109,7 +110,8 @@ public class MultiplayerGame implements Game {
 	}
 
 	private void validateAttack(Unit attackingUnit, Unit defendingUnit) throws InvalidAttackException {
-		Collection<Action> actions = actionsResolver.getActions(attackingUnit);
+		ActionCollection<Action> actionCollection = actionsResolver.getActions(attackingUnit);
+		Collection<Action> actions = actionCollection.getActions();
 		for (Action action : actions) {
 			if (action.getPosition().equals(defendingUnit.getPosition())) {
 				return;
@@ -120,7 +122,8 @@ public class MultiplayerGame implements Game {
 	}
 
 	private void validateMove(Unit movingUnit, Position newPosition) throws InvalidMoveException {
-		Collection<Action> actions = actionsResolver.getActions(movingUnit);
+		ActionCollection<Action> actionCollection = actionsResolver.getActions(movingUnit);
+		Collection<Action> actions = actionCollection.getActions();
 		for (Action action : actions) {
 			if (action.getPosition().equals(newPosition)) {
 				return;

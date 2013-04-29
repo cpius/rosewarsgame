@@ -2,7 +2,7 @@ package com.wotr.model;
 
 import java.util.List;
 
-public interface ActionPath {	
+public interface ActionPath extends Comparable<ActionPath> {	
 	
 	public ActionPath getPreviousPath();
 	
