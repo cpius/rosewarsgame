@@ -44,10 +44,14 @@ public class Action {
 	}
 
 	public String toString() {
-		return getClass().getSimpleName() + " at " + pos;
+		return getClass().getSimpleName() + " at " + pos + ". Path = " + path;
 	}
 
 	public ActionPath getPath() {
 		return path;
+	}
+
+	public Unit getUnit() {
+		return unit;
 	}
 }

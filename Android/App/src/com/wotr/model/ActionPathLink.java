@@ -36,4 +36,14 @@ public class ActionPathLink implements ActionPath {
 	public Position getPosition() {
 		return position;
 	}
+
+	@Override
+	public String toString() {
+		return position.toString() + (pathToPosition != null ? pathToPosition : "");
+	}
+
+	@Override
+	public int compareTo(ActionPath another) {
+		return Integer.valueOf(getPath().size()).compareTo(Integer.valueOf(another.getPath().size()));
+	}
 }

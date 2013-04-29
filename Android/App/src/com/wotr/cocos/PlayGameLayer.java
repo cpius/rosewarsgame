@@ -31,12 +31,14 @@ import com.wotr.GameManager;
 import com.wotr.R;
 import com.wotr.cocos.action.RemoveNodeCalBackAction;
 import com.wotr.model.Action;
-import com.wotr.model.MoveAction;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
+import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolver;
 import com.wotr.strategy.action.ActionsResolverStrategy;
+import com.wotr.strategy.action.ShortestPathFinderStrategy;
+import com.wotr.strategy.action.PathFinderStrategy;
 import com.wotr.strategy.battle.BattleListener;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
@@ -53,11 +55,14 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private Collection<CCSprite> unitList = new ArrayList<CCSprite>();
 	private int xCount;
 	private int yCount;
-	private Collection<Action> actions;
+	private ActionCollection<Action> actionCollection;
 	private CCLabel nameLabel;
 	private CCLabel turnLabel;
 	private Player playerOne;
 	private ActionsResolverStrategy actionsResolver;
+
+	private PathFinderStrategy pathFinderStrategy;
+	private ActionPathSprite actionPathSprite;
 
 	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
 		CCScene scene = CCScene.node();
@@ -70,8 +75,8 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		xCount = 5;
 		yCount = 8;
-		
-		playerOne = new HumanPlayer(playerOneMap, "Player 1", 0 );
+
+		playerOne = new HumanPlayer(playerOneMap, "Player 1", 0);
 		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2", yCount - 1);
 
 		setIsTouchEnabled(true);
@@ -198,24 +203,32 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	private void resetActionSelection() {
 
-		for (Action action : actions) {
+		removePathSprite();
+		
+		Collection<Position> attackPositions = actionCollection.getAttackPositions();
+		for (Position position : attackPositions) {
 			for (CCNode ccNode : unitList) {
 
 				Unit unit = (Unit) ccNode.getUserData();
-				if (action.getPosition().equals(unit.getPosition())) {
-					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
-					ccNode.runAction(tin);
-				}
-			}
-
-			for (CCNode ccNode : cardBackgroundList) {
-				Position pos = (Position) ccNode.getUserData();
-				if (action.getPosition().equals(pos)) {
+				if (position.equals(unit.getPosition())) {
 					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
 					ccNode.runAction(tin);
 				}
 			}
 		}
+
+		Collection<Position> movePositions = actionCollection.getMovePositions();
+		for (Position position : movePositions) {
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (position.equals(pos)) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
+					ccNode.runAction(tin);
+				}
+			}
+		}
+
+		selectedCard.setOpacity(255);
 	}
 
 	protected void selectCardForMove(CCSprite selectedCard) {
@@ -223,32 +236,27 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		Unit unit = (Unit) selectedCard.getUserData();
 
-		actions = actionsResolver.getActions(unit);
+		actionCollection = actionsResolver.getActions(unit);
+		pathFinderStrategy = new ShortestPathFinderStrategy(actionCollection);
 
-		for (Action action : actions) {
+		for (Position position : actionCollection.getAttackPositions()) {
 			for (CCNode ccNode : unitList) {
 				Unit u = (Unit) ccNode.getUserData();
-				if (action.getPosition().equals(u.getPosition())) {
-					markeNodeForAction(action, ccNode);
-				}
-			}
-
-			for (CCNode ccNode : cardBackgroundList) {
-				Position pos = (Position) ccNode.getUserData();
-				if (action.getPosition().equals(pos)) {
-					markeNodeForAction(action, ccNode);
+				if (position.equals(u.getPosition())) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccRED);
+					ccNode.runAction(tin);
 				}
 			}
 		}
-	}
 
-	private void markeNodeForAction(Action action, CCNode ccNode) {
-		if (action instanceof MoveAction) {
-			CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccGREEN);
-			ccNode.runAction(tin);
-		} else {
-			CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccRED);
-			ccNode.runAction(tin);
+		for (Position position : actionCollection.getMovePositions()) {
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (position.equals(pos)) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccGREEN);
+					ccNode.runAction(tin);
+				}
+			}
 		}
 	}
 
@@ -259,8 +267,26 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			selectedCard.setPosition(x, y);
 		} else {
 			CGPoint position = bordframe.getPosition(pInP.getX(), pInP.getY());
-			selectedCard.setPosition(position);
+
+			if (!CGPoint.equalToPoint(selectedCard.getPosition(), position)) {
+				selectedCard.setPosition(position);
+				pathFinderStrategy.touch(pInP);
+				Action action = pathFinderStrategy.getActionForPosition(pInP);
+				
+				removePathSprite();
+
+				if (action != null) {	
+					actionPathSprite = new ActionPathSprite(action, bordframe);
+					addChild(actionPathSprite);
+				}
+			}
 		}
+	}
+
+	private void removePathSprite() {
+		if(actionPathSprite != null) {
+			removeChild(actionPathSprite, true);
+		}		
 	}
 
 	@Override
@@ -270,9 +296,8 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	@Override
 	public void cardDeSelected(float x, float y) {
-		moveCardToOriginalPosition();
-
 		resetActionSelection();
+		moveCardToOriginalPosition();
 	}
 
 	@Override
@@ -433,7 +458,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	public void gameEnded(Player winner) {
 
 		CCLabel winnerLabel = CCLabel.makeLabel("Winner: " + winner.getName(), "Arial", 40f);
-		winnerLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);		
+		winnerLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
 		addChild(winnerLabel);
 
 		MediaPlayer mp = new MediaPlayer();
