@@ -1,15 +1,14 @@
 package com.wotr.strategy.player;
 
-import java.util.Map;
-
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
+import com.wotr.model.unit.UnitMap;
 
 public interface Player {
 
 	String getName();
 
-	Map<Position, Unit> getUnitMap();
+	UnitMap<Position, Unit> getUnitMap();
 
 	boolean hasUnitAtPosition(Position pInP);
 

@@ -116,6 +116,14 @@ public abstract class AbstractGameLayer extends CCLayer {
 		CCScaleTo scaleAction = CCScaleTo.action(0.4f, sizeScale);
 		selectedCard.runAction(scaleAction);
 	}
+	
+	protected void moveCardToPosition(Position position) {
+		CCMoveTo moveAction = CCMoveTo.action(0.4f, bordframe.getPosition(position));
+		selectedCard.runAction(moveAction);
+
+		CCScaleTo scaleAction = CCScaleTo.action(0.4f, sizeScale);
+		selectedCard.runAction(scaleAction);
+	}
 
 	protected void addBackGroundCards(int xCount, int yCount, boolean playBoard) {
 

@@ -3,6 +3,7 @@ package com.wotr.cocos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.cocos2d.actions.ease.CCEaseSineIn;
 import org.cocos2d.actions.instant.CCCallback;
@@ -31,19 +32,21 @@ import com.wotr.GameManager;
 import com.wotr.R;
 import com.wotr.cocos.action.RemoveNodeCalBackAction;
 import com.wotr.model.Action;
+import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolver;
 import com.wotr.strategy.action.ActionsResolverStrategy;
-import com.wotr.strategy.action.ShortestPathFinderStrategy;
 import com.wotr.strategy.action.PathFinderStrategy;
+import com.wotr.strategy.action.ShortestPathFinderStrategy;
 import com.wotr.strategy.battle.BattleListener;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
 import com.wotr.strategy.game.MultiplayerGame;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
+import com.wotr.strategy.game.exceptions.InvalidEndPosition;
 import com.wotr.strategy.game.exceptions.InvalidMoveException;
 import com.wotr.strategy.player.HumanPlayer;
 import com.wotr.strategy.player.Player;
@@ -171,18 +174,27 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			} else {
 
 				Unit defendingUnit = GameManager.getGame().getDefendingPlayer().getUnitAtPosition(pInP);
+				pathFinderStrategy.getActionForPosition(pInP);
 
 				try {
 					if (defendingUnit != null) {
-						boolean succes = GameManager.getGame().attack(attackingUnit, defendingUnit);
-						if (succes) {
+						Action action = pathFinderStrategy.getActionForPosition(pInP);
+						AttackResult attackResult = GameManager.getGame().attack(action, defendingUnit);
+						if (attackResult.isSuccesfull()) {
 							removeCCSprite(defendingUnit);
+						}
 
-							if (attackingUnit.isRanged()) {
-								moveCardToOriginalPosition();
-							}
+						List<Position> endPositions = attackResult.getEndPositions();
+						if (endPositions.size() == 1) {
+							moveCardToPosition(endPositions.get(0));
 						} else {
-							moveCardToOriginalPosition();
+							
+							//TODO Move this to GUI
+							for (Position endPosition : endPositions) {
+								attackResult.endAttackAt(endPosition);
+								moveCardToPosition(endPosition);
+								return;
+							}
 						}
 
 					} else {
@@ -192,6 +204,10 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 				} catch (InvalidAttackException e) {
 					moveCardToOriginalPosition();
 				} catch (InvalidMoveException e) {
+					moveCardToOriginalPosition();
+				} catch (InvalidEndPosition e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 					moveCardToOriginalPosition();
 				}
 			}
@@ -204,7 +220,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private void resetActionSelection() {
 
 		removePathSprite();
-		
+
 		Collection<Position> attackPositions = actionCollection.getAttackPositions();
 		for (Position position : attackPositions) {
 			for (CCNode ccNode : unitList) {
@@ -272,10 +288,10 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 				selectedCard.setPosition(position);
 				pathFinderStrategy.touch(pInP);
 				Action action = pathFinderStrategy.getActionForPosition(pInP);
-				
+
 				removePathSprite();
 
-				if (action != null) {	
+				if (action != null) {
 					actionPathSprite = new ActionPathSprite(action, bordframe);
 					addChild(actionPathSprite);
 				}
@@ -284,9 +300,9 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	private void removePathSprite() {
-		if(actionPathSprite != null) {
+		if (actionPathSprite != null) {
 			removeChild(actionPathSprite, true);
-		}		
+		}
 	}
 
 	@Override

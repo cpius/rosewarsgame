@@ -1,5 +1,7 @@
 package com.wotr.strategy.game;
 
+import com.wotr.model.Action;
+import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.strategy.action.ActionsResolverStrategy;
@@ -32,9 +34,9 @@ public class SinglePlayerGame implements Game {
 	}
 
 	@Override
-	public boolean attack(Unit attackingUnit, Unit defendingUnit) {
+	public AttackResult attack(Action action, Unit defendingUnit) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override

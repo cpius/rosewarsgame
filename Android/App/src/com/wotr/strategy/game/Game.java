@@ -1,5 +1,7 @@
 package com.wotr.strategy.game;
 
+import com.wotr.model.Action;
+import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.strategy.action.ActionsResolverStrategy;
@@ -17,9 +19,9 @@ public interface Game {
 
 	void addGameEventListener(GameEventListener listener);
 
-	boolean attack(Unit attackingUnit, Unit defendingUnit) throws InvalidAttackException;
+	AttackResult attack(Action action, Unit defendingUnit) throws InvalidAttackException;
 
-	void move(Unit movingUnit, Position newPosition) throws InvalidMoveException;
+	void move(Unit unit, Position newPosition) throws InvalidMoveException;
 
 	void setActionsResolver(ActionsResolverStrategy actionsResolver);
 
