@@ -31,6 +31,8 @@ import android.media.MediaPlayer;
 import com.wotr.GameManager;
 import com.wotr.R;
 import com.wotr.cocos.action.RemoveNodeCalBackAction;
+import com.wotr.cocos.nodes.ActionPathSprite;
+import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Action;
 import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
@@ -86,12 +88,12 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		winSize = CCDirector.sharedDirector().displaySize();
 
-		CCSprite back = CCSprite.sprite("woddenbackground.png");
+		CCSprite back = new CCSprite("woddenbackground.png");
 
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("unit/archergreen.jpg");
+		CCSprite prototype = new CCSprite("unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -143,7 +145,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		for (Unit card : playerCards.values()) {
 			Position pos = card.getPosition();
 			CGPoint point = bordframe.getPosition(pos.getX(), pos.getY());
-			CCSprite cardSprite = CCSprite.sprite(card.getImage());
+			CCSprite cardSprite = new CardSprite(card.getImage());
 			cardSprite.setPosition(point);
 			cardSprite.setScale(sizeScale);
 			cardSprite.setUserData(card);
@@ -164,8 +166,6 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			moveCardToOriginalPosition();
 		} else {
 
-			dropCardToPosition();
-
 			Unit attackingUnit = (Unit) selectedCard.getUserData();
 
 			// If player has card at position
@@ -177,37 +177,17 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 				pathFinderStrategy.getActionForPosition(pInP);
 
 				try {
+					// if defending unit found on position, perform attack
 					if (defendingUnit != null) {
-						Action action = pathFinderStrategy.getActionForPosition(pInP);
-						AttackResult attackResult = GameManager.getGame().attack(action, defendingUnit);
-						if (attackResult.isSuccesfull()) {
-							removeCCSprite(defendingUnit);
-						}
-
-						List<Position> endPositions = attackResult.getEndPositions();
-						if (endPositions.size() == 1) {
-							moveCardToPosition(endPositions.get(0));
-						} else {
-							
-							//TODO Move this to GUI
-							for (Position endPosition : endPositions) {
-								attackResult.endAttackAt(endPosition);
-								moveCardToPosition(endPosition);
-								return;
-							}
-						}
-
+						cardDragedEndedOnDefendingUnit(attackingUnit, defendingUnit, pInP);
 					} else {
-						GameManager.getGame().move(attackingUnit, pInP);
-						SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
+						cardDragedEndedOnEmptyPosition(attackingUnit, pInP);
 					}
 				} catch (InvalidAttackException e) {
 					moveCardToOriginalPosition();
 				} catch (InvalidMoveException e) {
 					moveCardToOriginalPosition();
 				} catch (InvalidEndPosition e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 					moveCardToOriginalPosition();
 				}
 			}
@@ -215,6 +195,38 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		reorderChild(selectedCard, 0);
 		selectedCard = null;
+	}
+
+	private void cardDragedEndedOnEmptyPosition(Unit attackingUnit, Position pInP) throws InvalidMoveException {
+
+		dropCardToPosition();
+
+		GameManager.getGame().move(attackingUnit, pInP);
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
+	}
+
+	private void cardDragedEndedOnDefendingUnit(Unit attackingUnit, Unit defendingUnit, Position pInP) throws InvalidEndPosition, InvalidAttackException {
+
+		Action action = pathFinderStrategy.getActionForPosition(pInP);
+		AttackResult attackResult = GameManager.getGame().attack(action, defendingUnit);
+		if (attackResult.isSuccesfull()) {
+			removeCCSprite(defendingUnit);
+		}
+
+		List<Position> endPositions = attackResult.getEndPositions();
+		if (endPositions.size() == 1) {
+			moveCardToPosition(endPositions.get(0));
+		} else {
+
+			dropCardToPosition();
+
+			// TODO Move this to GUI
+			for (Position endPosition : endPositions) {
+				attackResult.endAttackAt(endPosition);
+				moveCardToPosition(endPosition);
+				return;
+			}
+		}
 	}
 
 	private void resetActionSelection() {

@@ -18,6 +18,7 @@ import org.cocos2d.particlesystem.CCQuadParticleSystem;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
@@ -56,12 +57,12 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		xCount = 5;
 		yCount = 4;
 
-		CCSprite back = CCSprite.sprite("woddenbackground.png");
+		CCSprite back = new CCSprite("woddenbackground.png");
 
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("unit/archergreen.jpg");
+		CCSprite prototype = new CCSprite("unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -105,7 +106,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		for (Unit unit : layoutDeck.values()) {
 
-			CCSprite player = CCSprite.sprite(unit.getImage());
+			CCSprite player = new CardSprite(unit.getImage());
 			// player.setPosition(position);
 
 			CGPoint point = bordframe.getPosition(unit.getPosition());
