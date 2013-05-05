@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.wotr.model.unit.Unit;
 import com.wotr.strategy.game.AttackEnder;
-import com.wotr.strategy.game.exceptions.InvalidEndPosition;
+import com.wotr.strategy.game.exceptions.InvalidEndPositionException;
 
 public class AttackResult {
 
@@ -38,9 +38,9 @@ public class AttackResult {
 		return endPositions;
 	}
 
-	public void endAttackAt(Position endPosition) throws InvalidEndPosition {
+	public void endAttackAt(Position endPosition) throws InvalidEndPositionException {
 		if (!endPositions.contains(endPosition)) {
-			throw new InvalidEndPosition();
+			throw new InvalidEndPositionException();
 		}
 
 		attackEnder.endAttack(attackingUnit, endPosition);

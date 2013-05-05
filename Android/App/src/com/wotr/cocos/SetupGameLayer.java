@@ -158,7 +158,6 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			Unit abstractCard = modelMap.get(selectedCard);
 			abstractCard.setPosition(pInP);
 		}
-		// sparkCard = selectedCard;
 
 		reorderChild(selectedCard, 0);
 		selectedCard.setOpacity(255);

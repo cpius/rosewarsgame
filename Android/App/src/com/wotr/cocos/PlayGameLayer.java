@@ -50,7 +50,8 @@ import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
 import com.wotr.strategy.game.MultiplayerGame;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
-import com.wotr.strategy.game.exceptions.InvalidEndPosition;
+import com.wotr.strategy.game.exceptions.InvalidEndPositionException;
+import com.wotr.strategy.game.exceptions.InvalidActionException;
 import com.wotr.strategy.game.exceptions.InvalidMoveException;
 import com.wotr.strategy.player.HumanPlayer;
 import com.wotr.strategy.player.Player;
@@ -182,16 +183,11 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 						cardDragedEndedOnEmptyPosition(attackingUnit, pInP);
 						removeSelection();
 					}
-				} catch (InvalidAttackException e) {
-					moveCardToOriginalPosition();
-				} catch (InvalidMoveException e) {
-					moveCardToOriginalPosition();
-				} catch (InvalidEndPosition e) {
+				} catch (InvalidActionException e) {
 					moveCardToOriginalPosition();
 				}
 			}
 		}
-
 	}
 
 	private void removeSelection() {
@@ -207,7 +203,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
 	}
 
-	private void cardDragedEndedOnDefendingUnit(Unit attackingUnit, Unit defendingUnit, Position pInP) throws InvalidEndPosition, InvalidAttackException {
+	private void cardDragedEndedOnDefendingUnit(Unit attackingUnit, Unit defendingUnit, Position pInP) throws InvalidEndPositionException, InvalidAttackException {
 
 		Action action = pathFinderStrategy.getActionForPosition(pInP);
 		attackResult = GameManager.getGame().attack(action, defendingUnit);
@@ -529,7 +525,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 					Position position = go.getPositionUserData();
 					try {
 						attackResult.endAttackAt(position);
-					} catch (InvalidEndPosition e) {
+					} catch (InvalidEndPositionException e) {
 						e.printStackTrace();
 					}
 					moveCardToPosition(position);
