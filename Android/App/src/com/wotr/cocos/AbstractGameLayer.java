@@ -9,7 +9,6 @@ import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCDirector;
-import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
@@ -19,6 +18,7 @@ import android.view.MotionEvent;
 
 import com.wotr.R;
 import com.wotr.cocos.nodes.CardBackgroundSprite;
+import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.touch.CardTouchHandler;
@@ -39,7 +39,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 
 	protected Collection<CCSprite> cardBackgroundList = new ArrayList<CCSprite>();
 
-	protected abstract Collection<CCSprite> getCardSprites();
+	protected abstract Collection<CardSprite> getCardSprites();
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -131,21 +131,13 @@ public abstract class AbstractGameLayer extends CCLayer {
 		// Add the bordcards
 		for (int x = 0; x < xCount; x++) {
 			for (int y = 0; y < yCount; y++) {
-				CGPoint position = bordframe.getPosition(x, y);
 
 				Position pos = new Position(x, y);
 
 				String imageName = playBoard && y >= yCount / 2 ? "redback.png" : "greenback.png";
-				CCSprite cardBackground = new CardBackgroundSprite(imageName);
-				cardBackground.setPosition(position);
-				cardBackground.setScale(sizeScale * 0.95f);
-				cardBackground.setUserData(pos);
+				CCSprite cardBackground = new CardBackgroundSprite(imageName, pos, sizeScale, bordframe);
 				addChild(cardBackground);
 				cardBackgroundList.add(cardBackground);
-
-				CCLabel posLabel = CCLabel.makeLabel(pos.toString(), "Arial", 20f);
-				posLabel.setPosition(position);
-				addChild(posLabel);
 			}
 		}
 	}

@@ -35,8 +35,8 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	// private CCSprite sparkCard;
 
-	private List<CCSprite> cardList = new ArrayList<CCSprite>();
-	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
+	private List<CardSprite> cardList = new ArrayList<CardSprite>();
+	private Map<CardSprite, Unit> modelMap = new HashMap<CardSprite, Unit>();
 
 	private int xCount;
 	private int yCount;
@@ -106,7 +106,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		for (Unit unit : layoutDeck.values()) {
 
-			CCSprite player = new CardSprite(unit.getImage());
+			CardSprite player = new CardSprite(unit, sizeScale, bordframe);
 			// player.setPosition(position);
 
 			CGPoint point = bordframe.getPosition(unit.getPosition());
@@ -197,7 +197,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	}
 
 	@Override
-	protected Collection<CCSprite> getCardSprites() {
+	protected Collection<CardSprite> getCardSprites() {
 		return cardList;
 	}
 }
