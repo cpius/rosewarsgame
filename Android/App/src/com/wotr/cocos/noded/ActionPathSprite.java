@@ -1,4 +1,4 @@
-package com.wotr.cocos;
+package com.wotr.cocos.noded;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.opengl.CCDrawingPrimitives;
 import org.cocos2d.types.CGPoint;
 
+import com.wotr.cocos.Boardframe;
 import com.wotr.model.Action;
 import com.wotr.model.ActionPath;
 import com.wotr.model.Position;
