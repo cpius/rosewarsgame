@@ -41,8 +41,8 @@
 @property (nonatomic, strong) NSMutableDictionary *unitLayout;
 
 - (void)addBattleReport:(BattleReport*)battlereport forAction:(Action*)action;
-- (void)deserializeGameData:(NSData*)gameData onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits;
-- (NSData*)serializeCurrentGame;
+- (void)deserializeGameData:(NSData *)gameData forPlayerWithId:(NSString*)playerId allPlayers:(NSArray*)allPlayers onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits;
+- (NSData*)serializeCurrentGameForPlayerWithId:(NSString*)playerId;
 - (void)takeCardSnapshot:(CardSnapshotStates)state;
 
 - (void)populateUnitLayout;

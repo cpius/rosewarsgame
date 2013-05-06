@@ -216,7 +216,7 @@
     
     NSArray *cards;
     
-    if ([GameManager sharedManager].currentPlayersTurn == [GameManager sharedManager].currentGame.myColor) {
+    if ([action.cardInAction isOwnedByMe]) {
         cards = [GameManager sharedManager].currentGame.myDeck.cards;
     }
     else {

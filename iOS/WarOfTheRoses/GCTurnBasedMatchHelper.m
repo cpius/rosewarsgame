@@ -61,13 +61,24 @@
     [_presentingViewController presentModalViewController:viewController animated:YES];
 }
 
+- (NSArray *)currentPlayerIds {
+    
+    NSMutableArray *participants = [NSMutableArray array];
+    
+    for (GKTurnBasedParticipant *participant in [GCTurnBasedMatchHelper sharedInstance].currentMatch.participants) {
+        [participants addObject:participant.playerID];
+    }
+    
+    return [NSArray arrayWithArray:participants];
+}
+
 - (void)handleTurnEventForMatch:(GKTurnBasedMatch *)match {
     
     CCLOG(@"Turn has happened in match: %@", match);
     
     if ([match.matchID isEqualToString:_currentMatch.matchID]) {
         if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
-            
+                        
             // It's the current match, and it's our turn now
             _currentMatch = match;
             [_delegate takeTurn:match];
@@ -96,6 +107,7 @@
 - (void)handleMatchEnded:(GKTurnBasedMatch *)match {
     
     CCLOG(@"Game has ended: %@", match);
+    [_delegate takeTurn:match];
 }
 
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController didFailWithError:(NSError *)error {
@@ -178,7 +190,9 @@
                                     matchData:data completionHandler:^(NSError *error) {
                                         
                                         if (error) {
-                                            NSLog(@"%@", error);
+                                            [GKNotificationBanner showBannerWithTitle:@"Notice!" message:@"Couldn't end turn. Maybe your opponent has quit the match" completionHandler:^{
+                                                
+                                            }];
                                         }
                                     }];
 }
@@ -208,7 +222,7 @@
 }
 
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController playerQuitForMatch:(GKTurnBasedMatch *)match {
-    
+        
     NSUInteger currentIndex = [match.participants indexOfObject:match.currentParticipant];
     
     GKTurnBasedParticipant *participant;

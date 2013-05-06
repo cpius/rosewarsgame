@@ -350,7 +350,7 @@
         }
         else {
             
-            [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[[GameManager sharedManager].currentGame serializeCurrentGame]];
+            [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[[GameManager sharedManager].currentGame serializeCurrentGameForPlayerWithId:[GKLocalPlayer localPlayer].playerID]];
         }
     }
     else {

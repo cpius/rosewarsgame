@@ -7,10 +7,10 @@
 //
 
 #import "TestHelper.h"
-#import "Definitions.h"
 #import "Card.h"
 #import "FixedDeckStrategy.h"
 #import "Game.h"
+#import "GridLocation.h"
 
 @implementation TestHelper
 
@@ -46,6 +46,17 @@
     game.myColor = kPlayerGreen;
     
     return game;
+}
+
++ (void)swapBoardInGame:(Game *)game myCurrentGameBoardSide:(GameBoardSides)gameBoardSide {
+    
+    for (Card *card in game.myDeck.cards) {
+        [card.cardLocation flipBacklineFromCurrentBackline:GetBacklineForGameBoardSide(gameBoardSide)];
+    }
+    
+    for (Card *card in game.enemyDeck.cards) {
+        [card.cardLocation flipBacklineFromCurrentBackline:!GetBacklineForGameBoardSide(OppositeGameBoardSideOf(gameBoardSide))];
+    }
 }
 
 @end

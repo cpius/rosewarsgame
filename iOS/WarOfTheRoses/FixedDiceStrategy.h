@@ -12,6 +12,7 @@
 @interface FixedDiceStrategy : NSObject <DiceStrategy>
 
 - (NSUInteger)rollDiceWithDie:(NSUInteger)die;
++ (id)strategyWithFixedValue:(NSUInteger)fixedValue;
 
 @property (nonatomic, assign) NSUInteger fixedDieValue;
 
