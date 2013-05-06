@@ -1,10 +1,10 @@
 package com.wotr.strategy.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.wotr.GameManager;
 import com.wotr.model.Action;
@@ -26,7 +26,7 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 	private final int xRange;
 	private final Game game;
 
-	private Map<Unit, Collection<Action>> actionCache = new HashMap<Unit, Collection<Action>>();
+	private Map<Unit, ActionCollection<Action>> actionCache = new HashMap<Unit, ActionCollection<Action>>();
 
 	public ActionsResolver(int xRange, int yRange, Game game) {
 		this.yRange = yRange;
@@ -38,24 +38,25 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 		game.addGameEventListener(this);
 	}
 
-	public Collection<Action> getActions(Unit originalunit) {
+	public ActionCollection<Action> getActions(Unit originalunit) {
 
-		Collection<Action> actions = actionCache.get(originalunit);
-		if (actions == null) {
+		ActionCollection<Action> actionCollection = actionCache.get(originalunit);
+		if (actionCollection == null) {
 			TurnStrategy turnStrategy = GameManager.getFactory().getTurnStrategy();
 			Map<Position, Unit> aUnits = game.getAttackingPlayer().getUnitMap();
 			Map<Position, Unit> dUnits = game.getDefendingPlayer().getUnitMap();
 
 			UnitActionResolverStrategy actionResolverStrategy = originalunit.getActionResolverStrategy();
-			actions = getActions(originalunit, originalunit.getPosition(), null, true, aUnits, dUnits, 0, actionResolverStrategy, turnStrategy);
-			actionCache.put(originalunit, actions);
+			Collection<Action> actions = getActions(originalunit, originalunit.getPosition(), null, true, aUnits, dUnits, 0, actionResolverStrategy, turnStrategy);
+			actionCollection = new ActionCollection<Action>(actions);
+			actionCache.put(originalunit, actionCollection);
 		}
-		return actions;
+		return actionCollection;
 	}
 
-	private Set<Action> getActions(Unit originalUnit, Position pos, ActionPath path, boolean moveable, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, UnitActionResolverStrategy ars, TurnStrategy turnStrategy) {
+	private Collection<Action> getActions(Unit originalUnit, Position pos, ActionPath path, boolean moveable, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, UnitActionResolverStrategy ars, TurnStrategy turnStrategy) {
 
-		Set<Action> moves = new HashSet<Action>();
+		List<Action> moves = new ArrayList<Action>();
 
 		int pathLength = ars.getPathLength(originalUnit, pos, path, aUnits, dUnits, pathProgress);
 		if (pathProgress < pathLength + 1) {

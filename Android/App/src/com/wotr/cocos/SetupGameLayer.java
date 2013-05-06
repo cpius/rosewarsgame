@@ -18,13 +18,14 @@ import org.cocos2d.particlesystem.CCQuadParticleSystem;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
-import com.wotr.GameManager;
+import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.DeckDrawStrategy;
 import com.wotr.strategy.DeckLayoutStrategy;
 import com.wotr.strategy.battle.BonusStrategy;
+import com.wotr.strategy.battle.DefaultBonusStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
 import com.wotr.strategy.impl.RandomDeckLayoutStrategy;
 import com.wotr.touch.CardTouchHandler;
@@ -34,8 +35,8 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	// private CCSprite sparkCard;
 
-	private List<CCSprite> cardList = new ArrayList<CCSprite>();
-	private Map<CCSprite, Unit> modelMap = new HashMap<CCSprite, Unit>();
+	private List<CardSprite> cardList = new ArrayList<CardSprite>();
+	private Map<CardSprite, Unit> modelMap = new HashMap<CardSprite, Unit>();
 
 	private int xCount;
 	private int yCount;
@@ -56,12 +57,12 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		xCount = 5;
 		yCount = 4;
 
-		CCSprite back = CCSprite.sprite("woddenbackground.png");
+		CCSprite back = new CCSprite("woddenbackground.png");
 
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("unit/archergreen.jpg");
+		CCSprite prototype = new CCSprite("unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -95,7 +96,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
 		List<Unit> deck = deckStrategy.drawDeck();
 
-		BonusStrategy bonusStrategy = GameManager.getFactory().getBonusStrategy();
+		BonusStrategy bonusStrategy = new DefaultBonusStrategy();
 		bonusStrategy.initializeDeck(deck);
 
 		DeckLayoutStrategy layoutStrategy = new RandomDeckLayoutStrategy(xCount, yCount);
@@ -105,13 +106,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		for (Unit unit : layoutDeck.values()) {
 
-			CCSprite player = CCSprite.sprite(unit.getImage());
-			// player.setPosition(position);
-
-			CGPoint point = bordframe.getPosition(unit.getPosition());
-			player.setPosition(point);
-
-			player.setScale(sizeScale);
+			CardSprite player = new CardSprite(unit, sizeScale, bordframe);
 			addChild(player);
 
 			cardList.add(player);
@@ -157,9 +152,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			Unit abstractCard = modelMap.get(selectedCard);
 			abstractCard.setPosition(pInP);
 		}
-		// sparkCard = selectedCard;
 
 		reorderChild(selectedCard, 0);
+		selectedCard.setOpacity(255);
 		selectedCard = null;
 	}
 
@@ -195,7 +190,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	}
 
 	@Override
-	protected Collection<CCSprite> getCardSprites() {
+	protected Collection<CardSprite> getCardSprites() {
 		return cardList;
 	}
 }

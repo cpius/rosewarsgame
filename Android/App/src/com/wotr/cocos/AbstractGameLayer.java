@@ -18,6 +18,8 @@ import org.cocos2d.types.CGSize;
 import android.view.MotionEvent;
 
 import com.wotr.R;
+import com.wotr.cocos.nodes.CardBackgroundSprite;
+import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.touch.CardTouchHandler;
@@ -35,10 +37,10 @@ public abstract class AbstractGameLayer extends CCLayer {
 	protected CGPoint originalPosition;
 
 	protected CardTouchHandler tch;
-	
+
 	protected Collection<CCSprite> cardBackgroundList = new ArrayList<CCSprite>();
 
-	protected abstract Collection<CCSprite> getCardSprites();
+	protected abstract Collection<CardSprite> getCardSprites();
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -70,8 +72,10 @@ public abstract class AbstractGameLayer extends CCLayer {
 	}
 
 	protected void selectCardForMove(CCSprite selectedCard) {
-		CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 2f);
+		CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 1.5f);
 		selectedCard.runAction(action);
+
+		selectedCard.setOpacity(130);
 	}
 
 	@Override
@@ -87,6 +91,8 @@ public abstract class AbstractGameLayer extends CCLayer {
 	}
 
 	protected void moveCardToCenterAndEnlarge() {
+
+		selectedCard.setOpacity(255);
 
 		CGPoint center = CGPoint.ccp(winSize.width / 2, winSize.height / 2);
 
@@ -113,26 +119,27 @@ public abstract class AbstractGameLayer extends CCLayer {
 		selectedCard.runAction(scaleAction);
 	}
 
+	protected void moveCardToPosition(Position position) {
+		CCMoveTo moveAction = CCMoveTo.action(0.4f, bordframe.getPosition(position));
+		selectedCard.runAction(moveAction);
+
+		CCScaleTo scaleAction = CCScaleTo.action(0.4f, sizeScale);
+		selectedCard.runAction(scaleAction);
+	}
+
 	protected void addBackGroundCards(int xCount, int yCount, boolean playBoard) {
 
 		// Add the bordcards
 		for (int x = 0; x < xCount; x++) {
 			for (int y = 0; y < yCount; y++) {
-				CGPoint position = bordframe.getPosition(x, y);
 
 				Position pos = new Position(x, y);
-				
+
 				String imageName = playBoard && y >= yCount / 2 ? "redback.png" : "greenback.png";
-				CCSprite cardBackground = CCSprite.sprite(imageName);
-				cardBackground.setPosition(position);
-				cardBackground.setScale(sizeScale * 0.95f);
-				cardBackground.setUserData(pos);
-				addChild(cardBackground);				
+
+				CCSprite cardBackground = new CardBackgroundSprite(imageName, pos, sizeScale, bordframe);
+				addChild(cardBackground);
 				cardBackgroundList.add(cardBackground);
-				
-				CCLabel posLabel = CCLabel.makeLabel(pos.toString(), "Arial", 20f);
-				posLabel.setPosition(position);
-				addChild(posLabel);
 			}
 		}
 	}

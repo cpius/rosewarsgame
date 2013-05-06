@@ -1,12 +1,16 @@
 package com.wotr.strategy.game;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import com.wotr.GameManager;
 import com.wotr.model.Action;
+import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
+import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.battle.BattleStrategy;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
@@ -20,7 +24,7 @@ import com.wotr.strategy.player.Player;
  * @author hansenp
  * 
  */
-public class MultiplayerGame implements Game {
+public class MultiplayerGame implements Game, AttackEnder {
 
 	private final Player playerOne;
 	private final Player playerTwo;
@@ -64,23 +68,61 @@ public class MultiplayerGame implements Game {
 	}
 
 	@Override
-	public boolean attack(Unit attackingUnit, Unit defendingUnit) throws InvalidAttackException {
+	public AttackResult attack(Action action, Unit defendingUnit) throws InvalidAttackException {
+		Unit attackingUnit = action.getUnit();
 		validateAttack(attackingUnit, defendingUnit);
 
 		turnStrategy.attack(attackingUnit);
 		BattleStrategy bs = GameManager.getFactory().getBattleStrategy();
 		boolean succes = bs.battle(attackingUnit, defendingUnit);
+
+		Position defendingPosition = defendingUnit.getPosition();
+
 		if (succes) {
-			Position defendingPosition = defendingUnit.getPosition();
+
+			// Remove defeated unit from defending player
 			getDefendingPlayer().getUnitMap().remove(defendingPosition);
 
-			if (!attackingUnit.isRanged()) {
-				getAttackingPlayer().getUnitMap().remove(attackingUnit.getPosition());
-				getAttackingPlayer().getUnitMap().put(defendingPosition, attackingUnit);
+			if (attackingUnit.isRanged()) {
+				// If successful attacking unit is ranged, keep position
+				notifyGameActionListener();
+				return new AttackResult(this, attackingUnit, succes, attackingUnit.getPosition());
+			} else {
+				// If successful attacking unit is melee, suggest end positions
+				List<Position> pos = new ArrayList<Position>();
+				pos.add(action.getPath().getPosition());
+				pos.add(attackingUnit.getPosition());
+				return new AttackResult(this, attackingUnit, succes, pos);
+
+			}
+		} else {
+			if (attackingUnit.isRanged()) {
+				// If failed attacking unit is ranged, keep position
+				notifyGameActionListener();
+				return new AttackResult(this, attackingUnit, succes, attackingUnit.getPosition());
+			} else {
+				// If failed attacking unit is melee, go back to attacking
+				// position				
+				Position position = null;				
+				if (action.getPath().getPreviousPath() != null) {
+					position = action.getPath().getPreviousPath().getPosition();
+					endAttack(attackingUnit, position);
+				} else {
+					position = action.getUnit().getPosition();
+					notifyGameActionListener();
+				}
+				
+				
+				return new AttackResult(this, attackingUnit, succes, position);
 			}
 		}
+	}
+
+	@Override
+	public void endAttack(Unit attackingUnit, Position endPosition) {
+		getAttackingPlayer().getUnitMap().remove(attackingUnit.getPosition());
+		getAttackingPlayer().getUnitMap().put(endPosition, attackingUnit);
 		notifyGameActionListener();
-		return succes;
 	}
 
 	@Override
@@ -96,7 +138,7 @@ public class MultiplayerGame implements Game {
 		notifyGameActionListener();
 	}
 
-	private void notifyGameActionListener() {
+	public void notifyGameActionListener() {
 
 		if (victorious()) {
 			listeners.gameEnded(currentPlayer);
@@ -109,7 +151,8 @@ public class MultiplayerGame implements Game {
 	}
 
 	private void validateAttack(Unit attackingUnit, Unit defendingUnit) throws InvalidAttackException {
-		Collection<Action> actions = actionsResolver.getActions(attackingUnit);
+		ActionCollection<Action> actionCollection = actionsResolver.getActions(attackingUnit);
+		Collection<Action> actions = actionCollection.getActions();
 		for (Action action : actions) {
 			if (action.getPosition().equals(defendingUnit.getPosition())) {
 				return;
@@ -120,7 +163,8 @@ public class MultiplayerGame implements Game {
 	}
 
 	private void validateMove(Unit movingUnit, Position newPosition) throws InvalidMoveException {
-		Collection<Action> actions = actionsResolver.getActions(movingUnit);
+		ActionCollection<Action> actionCollection = actionsResolver.getActions(movingUnit);
+		Collection<Action> actions = actionCollection.getActions();
 		for (Action action : actions) {
 			if (action.getPosition().equals(newPosition)) {
 				return;

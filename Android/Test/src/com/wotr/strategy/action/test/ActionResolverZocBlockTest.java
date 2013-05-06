@@ -21,6 +21,7 @@ import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.model.unit.basic.HeavyCavalry;
 import com.wotr.model.unit.basic.Pikeman;
+import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolver;
 import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.action.UnitTypeZocBlockStrategy;
@@ -77,12 +78,14 @@ public class ActionResolverZocBlockTest {
 
 		Unit aUnit = aUnits.get(new Position(1, 2));
 		ActionsResolverStrategy ac = new ActionsResolver(5, 4, game);
-		Collection<Action> actions1 = ac.getActions(aUnit);
+		ActionCollection<Action> actionCollection = ac.getActions(aUnit);
+		Collection<Action> actions1 = actionCollection.getActions();
 
 		aUnit = aUnits.get(new Position(3, 1));
-		Collection<Action> actions2 = ac.getActions(aUnit);
+		actionCollection = ac.getActions(aUnit);
+		Collection<Action> actions2 = actionCollection.getActions();
 
-		Assert.assertEquals(8, actions1.size());
+		Assert.assertEquals(12, actions1.size());
 
 		Assert.assertEquals(4, actions2.size());
 

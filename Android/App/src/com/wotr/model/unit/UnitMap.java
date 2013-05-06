@@ -50,4 +50,5 @@ public class UnitMap<K extends Position, V extends Unit> extends HashMap<K, V> {
 
 		return new Position(x, y);
 	}
+	
 }

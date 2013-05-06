@@ -3,6 +3,7 @@ package com.wotr.cocos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.cocos2d.actions.ease.CCEaseSineIn;
 import org.cocos2d.actions.instant.CCCallback;
@@ -26,22 +27,31 @@ import org.cocos2d.types.ccColor3B;
 
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.view.MotionEvent;
 
 import com.wotr.GameManager;
 import com.wotr.R;
 import com.wotr.cocos.action.RemoveNodeCalBackAction;
+import com.wotr.cocos.nodes.ActionPathSprite;
+import com.wotr.cocos.nodes.CardSprite;
+import com.wotr.cocos.nodes.GoSprite;
 import com.wotr.model.Action;
-import com.wotr.model.MoveAction;
+import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
+import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolver;
 import com.wotr.strategy.action.ActionsResolverStrategy;
+import com.wotr.strategy.action.PathFinderStrategy;
+import com.wotr.strategy.action.ShortestPathFinderStrategy;
 import com.wotr.strategy.battle.BattleListener;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
 import com.wotr.strategy.game.MultiplayerGame;
+import com.wotr.strategy.game.exceptions.InvalidActionException;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
+import com.wotr.strategy.game.exceptions.InvalidEndPositionException;
 import com.wotr.strategy.game.exceptions.InvalidMoveException;
 import com.wotr.strategy.player.HumanPlayer;
 import com.wotr.strategy.player.Player;
@@ -50,14 +60,18 @@ import com.wotr.touch.CardTouchListener;
 
 public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener {
 
-	private Collection<CCSprite> unitList = new ArrayList<CCSprite>();
+	private Collection<CardSprite> unitList = new ArrayList<CardSprite>();
 	private int xCount;
 	private int yCount;
-	private Collection<Action> actions;
+	private ActionCollection<Action> actionCollection;
 	private CCLabel nameLabel;
 	private CCLabel turnLabel;
 	private Player playerOne;
 	private ActionsResolverStrategy actionsResolver;
+
+	private PathFinderStrategy pathFinderStrategy;
+	private ActionPathSprite actionPathSprite;
+	private AttackResult attackResult;
 
 	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
 		CCScene scene = CCScene.node();
@@ -70,20 +84,20 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		xCount = 5;
 		yCount = 8;
-		
-		playerOne = new HumanPlayer(playerOneMap, "Player 1", 0 );
+
+		playerOne = new HumanPlayer(playerOneMap, "Player 1", 0);
 		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2", yCount - 1);
 
 		setIsTouchEnabled(true);
 
 		winSize = CCDirector.sharedDirector().displaySize();
 
-		CCSprite back = CCSprite.sprite("woddenbackground.png");
+		CCSprite back = new CCSprite("woddenbackground.png");
 
 		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
 		addChild(back);
 
-		CCSprite prototype = CCSprite.sprite("unit/archergreen.jpg");
+		CCSprite prototype = new CCSprite("unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -126,21 +140,14 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	protected void dropCardToPosition() {
 		CCScaleTo scaleAction = CCScaleTo.action(0.3f, sizeScale);
-		CCSequence seq = CCSequence.actions(scaleAction);
-		selectedCard.runAction(seq);
+		selectedCard.runAction(scaleAction);
 	}
 
 	private void addCards(UnitMap<Position, Unit> playerCards) {
 
 		for (Unit card : playerCards.values()) {
-			Position pos = card.getPosition();
-			CGPoint point = bordframe.getPosition(pos.getX(), pos.getY());
-			CCSprite cardSprite = CCSprite.sprite(card.getImage());
-			cardSprite.setPosition(point);
-			cardSprite.setScale(sizeScale);
-			cardSprite.setUserData(card);
+			CardSprite cardSprite = new CardSprite(card, sizeScale, bordframe);
 			addChild(cardSprite);
-
 			unitList.add(cardSprite);
 		}
 	}
@@ -154,68 +161,102 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		Position pInP = bordframe.getPositionInPerimeter(CGPoint.ccp(x, y));
 		if (pInP == null) {
 			moveCardToOriginalPosition();
+			removeSelection();
 		} else {
-
-			dropCardToPosition();
 
 			Unit attackingUnit = (Unit) selectedCard.getUserData();
 
 			// If player has card at position
 			if (GameManager.getGame().getAttackingPlayer().hasUnitAtPosition(pInP)) {
 				moveCardToOriginalPosition();
+				removeSelection();
 			} else {
 
 				Unit defendingUnit = GameManager.getGame().getDefendingPlayer().getUnitAtPosition(pInP);
+				pathFinderStrategy.getActionForPosition(pInP);
 
 				try {
+					// if defending unit found on position, perform attack
 					if (defendingUnit != null) {
-						boolean succes = GameManager.getGame().attack(attackingUnit, defendingUnit);
-						if (succes) {
-							removeCCSprite(defendingUnit);
-
-							if (attackingUnit.isRanged()) {
-								moveCardToOriginalPosition();
-							}
-						} else {
-							moveCardToOriginalPosition();
-						}
-
+						cardDragedEndedOnDefendingUnit(attackingUnit, defendingUnit, pInP);
 					} else {
-						GameManager.getGame().move(attackingUnit, pInP);
-						SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
+						cardDragedEndedOnEmptyPosition(attackingUnit, pInP);
+						removeSelection();
 					}
-				} catch (InvalidAttackException e) {
-					moveCardToOriginalPosition();
-				} catch (InvalidMoveException e) {
+				} catch (InvalidActionException e) {
 					moveCardToOriginalPosition();
 				}
 			}
 		}
+	}
 
-		reorderChild(selectedCard, 0);
+	private void removeSelection() {
+		reorderChild(selectedCard, 1);
 		selectedCard = null;
+	}
+
+	private void cardDragedEndedOnEmptyPosition(Unit attackingUnit, Position pInP) throws InvalidMoveException {
+
+		dropCardToPosition();
+
+		GameManager.getGame().move(attackingUnit, pInP);
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
+	}
+
+	private void cardDragedEndedOnDefendingUnit(Unit attackingUnit, Unit defendingUnit, Position pInP) throws InvalidEndPositionException, InvalidAttackException {
+
+		Action action = pathFinderStrategy.getActionForPosition(pInP);
+		attackResult = GameManager.getGame().attack(action, defendingUnit);
+
+		if (attackResult.isSuccesfull()) {
+			removeCCSprite(defendingUnit);
+		}
+
+		List<Position> endPositions = attackResult.getEndPositions();
+		if (endPositions.size() == 1) {
+			attackResult = null;
+			moveCardToPosition(endPositions.get(0));
+			removeSelection();
+		} else {
+
+			dropCardToPosition();
+
+			// Add images to selection en positions for
+			for (Position endPosition : endPositions) {
+				GoSprite goSprite = new GoSprite(endPosition, sizeScale, bordframe);
+				addChild(goSprite, 10);
+			}
+		}
 	}
 
 	private void resetActionSelection() {
 
-		for (Action action : actions) {
+		removePathSprite();
+
+		Collection<Position> attackPositions = actionCollection.getAttackPositions();
+		for (Position position : attackPositions) {
 			for (CCNode ccNode : unitList) {
 
 				Unit unit = (Unit) ccNode.getUserData();
-				if (action.getPosition().equals(unit.getPosition())) {
-					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
-					ccNode.runAction(tin);
-				}
-			}
-
-			for (CCNode ccNode : cardBackgroundList) {
-				Position pos = (Position) ccNode.getUserData();
-				if (action.getPosition().equals(pos)) {
+				if (position.equals(unit.getPosition())) {
 					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
 					ccNode.runAction(tin);
 				}
 			}
 		}
+
+		Collection<Position> movePositions = actionCollection.getMovePositions();
+		for (Position position : movePositions) {
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (position.equals(pos)) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccWHITE);
+					ccNode.runAction(tin);
+				}
+			}
+		}
+
+		selectedCard.setOpacity(255);
 	}
 
 	protected void selectCardForMove(CCSprite selectedCard) {
@@ -223,32 +264,27 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		Unit unit = (Unit) selectedCard.getUserData();
 
-		actions = actionsResolver.getActions(unit);
+		actionCollection = actionsResolver.getActions(unit);
+		pathFinderStrategy = new ShortestPathFinderStrategy(actionCollection);
 
-		for (Action action : actions) {
+		for (Position position : actionCollection.getAttackPositions()) {
 			for (CCNode ccNode : unitList) {
 				Unit u = (Unit) ccNode.getUserData();
-				if (action.getPosition().equals(u.getPosition())) {
-					markeNodeForAction(action, ccNode);
-				}
-			}
-
-			for (CCNode ccNode : cardBackgroundList) {
-				Position pos = (Position) ccNode.getUserData();
-				if (action.getPosition().equals(pos)) {
-					markeNodeForAction(action, ccNode);
+				if (position.equals(u.getPosition())) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccRED);
+					ccNode.runAction(tin);
 				}
 			}
 		}
-	}
 
-	private void markeNodeForAction(Action action, CCNode ccNode) {
-		if (action instanceof MoveAction) {
-			CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccGREEN);
-			ccNode.runAction(tin);
-		} else {
-			CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccRED);
-			ccNode.runAction(tin);
+		for (Position position : actionCollection.getMovePositions()) {
+			for (CCNode ccNode : cardBackgroundList) {
+				Position pos = (Position) ccNode.getUserData();
+				if (position.equals(pos)) {
+					CCTintTo tin = CCTintTo.action(0.2f, ccColor3B.ccGREEN);
+					ccNode.runAction(tin);
+				}
+			}
 		}
 	}
 
@@ -259,7 +295,25 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			selectedCard.setPosition(x, y);
 		} else {
 			CGPoint position = bordframe.getPosition(pInP.getX(), pInP.getY());
-			selectedCard.setPosition(position);
+
+			if (!CGPoint.equalToPoint(selectedCard.getPosition(), position)) {
+				selectedCard.setPosition(position);
+				pathFinderStrategy.touch(pInP);
+				Action action = pathFinderStrategy.getActionForPosition(pInP);
+
+				removePathSprite();
+
+				if (action != null) {
+					actionPathSprite = new ActionPathSprite(action, bordframe);
+					addChild(actionPathSprite);
+				}
+			}
+		}
+	}
+
+	private void removePathSprite() {
+		if (actionPathSprite != null) {
+			removeChild(actionPathSprite, true);
 		}
 	}
 
@@ -270,13 +324,12 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	@Override
 	public void cardDeSelected(float x, float y) {
-		moveCardToOriginalPosition();
-
 		resetActionSelection();
+		moveCardToOriginalPosition();
 	}
 
 	@Override
-	protected Collection<CCSprite> getCardSprites() {
+	protected Collection<CardSprite> getCardSprites() {
 		return unitList;
 	}
 
@@ -310,7 +363,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	private void removeCCSprite(Unit defendingUnit) {
 
-		for (Iterator<CCSprite> i = unitList.iterator(); i.hasNext();) {
+		for (Iterator<CardSprite> i = unitList.iterator(); i.hasNext();) {
 			CCSprite unitSpite = i.next();
 			Unit unit = (Unit) unitSpite.getUserData();
 			if (unit.equals(defendingUnit)) {
@@ -433,7 +486,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	public void gameEnded(Player winner) {
 
 		CCLabel winnerLabel = CCLabel.makeLabel("Winner: " + winner.getName(), "Arial", 40f);
-		winnerLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);		
+		winnerLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
 		addChild(winnerLabel);
 
 		MediaPlayer mp = new MediaPlayer();
@@ -445,7 +498,48 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
+	@Override
+	public boolean ccTouchesBegan(MotionEvent event) {
+
+		// if waiting for input about where to end successful attack
+		if (attackResult != null) {
+			return endAttack(event);
+
+		} else {
+			return super.ccTouchesBegan(event);
+		}
+	}
+
+	private boolean endAttack(MotionEvent event) {
+
+		Collection<GoSprite> goSprites = new ArrayList<GoSprite>();
+
+		List<CCNode> children = getChildren();
+		for (CCNode ccNode : children) {
+			if (ccNode instanceof GoSprite) {
+				GoSprite go = (GoSprite) ccNode;
+				goSprites.add(go);
+				if (ccNode.getBoundingBox().contains(event.getRawX(), winSize.height - event.getRawY())) {
+
+					Position position = go.getPositionUserData();
+					try {
+						attackResult.endAttackAt(position);
+					} catch (InvalidEndPositionException e) {
+						e.printStackTrace();
+					}
+					moveCardToPosition(position);
+				}
+			}
+		}
+
+		for (GoSprite goSprite : goSprites) {
+			removeChild(goSprite, true);
+		}
+
+		attackResult = null;
+		removeSelection();
+		return true;
+	}
 }
