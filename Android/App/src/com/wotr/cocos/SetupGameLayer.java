@@ -107,12 +107,6 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		for (Unit unit : layoutDeck.values()) {
 
 			CardSprite player = new CardSprite(unit, sizeScale, bordframe);
-			// player.setPosition(position);
-
-			CGPoint point = bordframe.getPosition(unit.getPosition());
-			player.setPosition(point);
-
-			player.setScale(sizeScale);
 			addChild(player);
 
 			cardList.add(player);

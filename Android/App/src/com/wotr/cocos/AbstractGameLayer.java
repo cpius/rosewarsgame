@@ -9,6 +9,7 @@ import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
@@ -135,6 +136,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 				Position pos = new Position(x, y);
 
 				String imageName = playBoard && y >= yCount / 2 ? "redback.png" : "greenback.png";
+
 				CCSprite cardBackground = new CardBackgroundSprite(imageName, pos, sizeScale, bordframe);
 				addChild(cardBackground);
 				cardBackgroundList.add(cardBackground);

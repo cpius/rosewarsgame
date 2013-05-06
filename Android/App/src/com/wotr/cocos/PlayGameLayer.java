@@ -49,9 +49,9 @@ import com.wotr.strategy.battle.BattleListener;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
 import com.wotr.strategy.game.MultiplayerGame;
+import com.wotr.strategy.game.exceptions.InvalidActionException;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
 import com.wotr.strategy.game.exceptions.InvalidEndPositionException;
-import com.wotr.strategy.game.exceptions.InvalidActionException;
 import com.wotr.strategy.game.exceptions.InvalidMoveException;
 import com.wotr.strategy.player.HumanPlayer;
 import com.wotr.strategy.player.Player;
@@ -207,6 +207,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		Action action = pathFinderStrategy.getActionForPosition(pInP);
 		attackResult = GameManager.getGame().attack(action, defendingUnit);
+
 		if (attackResult.isSuccesfull()) {
 			removeCCSprite(defendingUnit);
 		}
