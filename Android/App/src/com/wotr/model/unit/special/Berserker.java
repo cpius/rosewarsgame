@@ -2,6 +2,8 @@ package com.wotr.model.unit.special;
 
 import com.wotr.model.UnitType;
 import com.wotr.model.unit.MeleeUnit;
+import com.wotr.model.unit.attribute.AttackAttribute;
+import com.wotr.model.unit.attribute.DefenceAttribute;
 
 public class Berserker extends MeleeUnit {
 
@@ -10,13 +12,13 @@ public class Berserker extends MeleeUnit {
 	}
 
 	@Override
-	protected int getAttack() {
-		return 5;
+	public AttackAttribute getAttack() {
+		return new AttackAttribute(5);
 	}
 
 	@Override
-	protected int getDefense() {
-		return 2;
+	public DefenceAttribute getDefense() {
+		return new DefenceAttribute(2);
 	}
 
 	@Override

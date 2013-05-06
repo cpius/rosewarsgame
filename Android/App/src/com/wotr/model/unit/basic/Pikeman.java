@@ -3,6 +3,8 @@ package com.wotr.model.unit.basic;
 import com.wotr.GameManager;
 import com.wotr.model.UnitType;
 import com.wotr.model.unit.MeleeUnit;
+import com.wotr.model.unit.attribute.AttackAttribute;
+import com.wotr.model.unit.attribute.DefenceAttribute;
 import com.wotr.strategy.battle.AttackStrategy;
 
 public class Pikeman extends MeleeUnit {
@@ -12,13 +14,13 @@ public class Pikeman extends MeleeUnit {
 	}
 
 	@Override
-	protected int getAttack() {
-		return 5;
+	public AttackAttribute getAttack() {
+		return new AttackAttribute(5);
 	}
 
 	@Override
-	protected int getDefense() {
-		return 2;
+	public DefenceAttribute getDefense() {
+		return new DefenceAttribute(2);
 	}
 
 	@Override

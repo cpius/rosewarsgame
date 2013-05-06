@@ -21,11 +21,6 @@ public class DefaultAttackStrategy implements AttackStrategy {
 	}
 
 	protected boolean performAttack(int attackRoll, Unit attackingUnit, Unit defendingUnit) {
-		return attackRoll >= getAttackWithBonus(attackingUnit, defendingUnit);
-	}
-
-	protected int getAttackWithBonus(Unit attackingUnit, Unit defendingUnit) {
-		BonusStrategy bonusStrategy = attackingUnit.getBonusStrategy();
-		return bonusStrategy.getAttackWithBonus(attackingUnit, defendingUnit);		
+		return attackRoll >= attackingUnit.getAttack().calculateValue();
 	}
 }

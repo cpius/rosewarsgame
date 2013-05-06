@@ -17,7 +17,6 @@ import com.wotr.model.unit.basic.Pikeman;
 import com.wotr.strategy.battle.BattleStrategy;
 import com.wotr.strategy.battle.DefaultAttackStrategy;
 import com.wotr.strategy.battle.DefaultBattleStrategy;
-import com.wotr.strategy.battle.DefaultBonusStrategy;
 import com.wotr.strategy.battle.DefaultDefenceStrategy;
 import com.wotr.strategy.battle.unit.ArcherAttackStrategy;
 import com.wotr.strategy.battle.unit.PikemanAttackStrategy;
@@ -39,9 +38,6 @@ public class BasicUnitBattleTest {
 		when(gameFactory.getArcherAttackStrategy()).thenReturn(new ArcherAttackStrategy());
 		when(gameFactory.getAttackStrategy()).thenReturn(new DefaultAttackStrategy());
 		when(gameFactory.getDefenceStrategy()).thenReturn(new DefaultDefenceStrategy());
-		
-		when(gameFactory.getBonusStrategy()).thenReturn(new DefaultBonusStrategy());
-
 	}
 
 	@Test

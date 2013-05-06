@@ -11,7 +11,7 @@ public class DefaultDefenceStrategy implements DefenceStrategy {
 
 		int defenceRoll = dice.roll();
 
-		boolean defenceSuccess = defenceRoll <= getDefenceWithBonus(attackingUnit, defendingUnit);
+		boolean defenceSuccess = defenceRoll <= defendingUnit.getDefense().calculateValue();
 
 		if (defenceSuccess) {
 			listener.defenceSuccessful(attackingUnit, defendingUnit, defenceRoll);
@@ -19,10 +19,5 @@ public class DefaultDefenceStrategy implements DefenceStrategy {
 			listener.defenceFailed(attackingUnit, defendingUnit, defenceRoll);
 		}
 		return defenceSuccess;
-	}
-	
-	protected int getDefenceWithBonus(Unit attackingUnit, Unit defendingUnit) {
-		BonusStrategy bonusStrategy = attackingUnit.getBonusStrategy();
-		return bonusStrategy.getDefenceWithBonus(attackingUnit, defendingUnit);		
-	}
+	}	
 }

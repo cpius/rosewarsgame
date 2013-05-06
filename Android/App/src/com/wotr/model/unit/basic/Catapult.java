@@ -2,6 +2,8 @@ package com.wotr.model.unit.basic;
 
 import com.wotr.model.UnitType;
 import com.wotr.model.unit.RangedUnit;
+import com.wotr.model.unit.attribute.AttackAttribute;
+import com.wotr.model.unit.attribute.DefenceAttribute;
 
 public class Catapult extends RangedUnit {
 
@@ -10,13 +12,13 @@ public class Catapult extends RangedUnit {
 	}
 
 	@Override
-	protected int getAttack() {
-		return 1;
+	public AttackAttribute getAttack() {
+		return new AttackAttribute(1);
 	}
 
 	@Override
-	protected int getDefense() {
-		return 2;
+	public DefenceAttribute getDefense() {
+		return new DefenceAttribute(2);
 	}
 
 	@Override
@@ -37,8 +39,8 @@ public class Catapult extends RangedUnit {
 	public int getActionsUsedForAttack() {
 		return 2;
 	}
-	
+
 	public String getAttackSound() {
 		return "sounds/catapult_attack.wav";
-	} 
+	}
 }

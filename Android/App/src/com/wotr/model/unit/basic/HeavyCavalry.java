@@ -2,6 +2,8 @@ package com.wotr.model.unit.basic;
 
 import com.wotr.model.UnitType;
 import com.wotr.model.unit.MeleeUnit;
+import com.wotr.model.unit.attribute.AttackAttribute;
+import com.wotr.model.unit.attribute.DefenceAttribute;
 
 public class HeavyCavalry extends MeleeUnit {
 
@@ -10,13 +12,13 @@ public class HeavyCavalry extends MeleeUnit {
 	}
 
 	@Override
-	protected int getAttack() {
-		return 4;
+	public AttackAttribute getAttack() {
+		return new AttackAttribute(4);
 	}
 
 	@Override
-	protected int getDefense() {
-		return 3;
+	public DefenceAttribute getDefense() {
+		return new DefenceAttribute(3);
 	}
 
 	@Override
