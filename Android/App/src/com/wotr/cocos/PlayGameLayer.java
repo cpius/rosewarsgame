@@ -31,8 +31,9 @@ import android.view.MotionEvent;
 
 import com.wotr.GameManager;
 import com.wotr.R;
-import com.wotr.cocos.action.RemoveNodeCalBackAction;
+import com.wotr.cocos.action.RemoveNodeCallBackAction;
 import com.wotr.cocos.nodes.ActionPathSprite;
+import com.wotr.cocos.nodes.BonusChooserSprite;
 import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.cocos.nodes.GoSprite;
 import com.wotr.model.Action;
@@ -136,6 +137,11 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		game.setActionsResolver(actionsResolver);
 
 		game.startGame();
+		
+		
+		BonusChooserSprite bcs = new BonusChooserSprite();
+		bcs.setPosition(CGPoint.ccp(winSize.getWidth() / 2f, winSize.getHeight() / 2f));
+		addChild(bcs);
 	}
 
 	protected void dropCardToPosition() {
@@ -149,6 +155,8 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			CardSprite cardSprite = new CardSprite(card, sizeScale, bordframe);
 			addChild(cardSprite);
 			unitList.add(cardSprite);
+
+			cardSprite.drawBonus();
 		}
 	}
 
@@ -398,7 +406,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
 		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
-		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCallBackAction(this, actionLabel));
 
 		CCSequence seq = CCSequence.actions(moveAction, fadeAction, cleanupAction);
 		actionLabel.runAction(CCEaseSineIn.action(seq));
@@ -424,7 +432,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
 		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
-		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCallBackAction(this, actionLabel));
 
 		CCSequence seq = CCSequence.actions(moveAction, fadeAction, cleanupAction);
 		actionLabel.runAction(CCEaseSineIn.action(seq));
@@ -447,7 +455,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);
 		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
 		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
-		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCallBackAction(this, actionLabel));
 
 		CCSequence seq = CCSequence.actions(delayAction, fadeInAction, moveAction, fadeAction, cleanupAction);
 		actionLabel.runAction(CCEaseSineIn.action(seq));
@@ -476,7 +484,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);
 		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
 		CCFadeOut fadeOutAction = CCFadeOut.action(3.0f);
-		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCalBackAction(this, actionLabel));
+		CCCallback cleanupAction = CCCallback.action(new RemoveNodeCallBackAction(this, actionLabel));
 
 		CCSequence seq = CCSequence.actions(delayAction, fadeInAction, moveAction, fadeOutAction, cleanupAction);
 		actionLabel.runAction(CCEaseSineIn.action(seq));
@@ -505,14 +513,19 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		// if waiting for input about where to end successful attack
 		if (attackResult != null) {
-			return endAttack(event);
+			endAttack(event);
+			
+			
+			attackResult = null;
+			removeSelection();
+			return true;
 
 		} else {
 			return super.ccTouchesBegan(event);
 		}
 	}
 
-	private boolean endAttack(MotionEvent event) {
+	private void endAttack(MotionEvent event) {
 
 		Collection<GoSprite> goSprites = new ArrayList<GoSprite>();
 
@@ -536,10 +549,6 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		for (GoSprite goSprite : goSprites) {
 			removeChild(goSprite, true);
-		}
-
-		attackResult = null;
-		removeSelection();
-		return true;
+		}		
 	}
 }

@@ -10,6 +10,9 @@ import com.wotr.model.Action;
 import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
+import com.wotr.model.unit.attribute.bonus.AttackBonusAward;
+import com.wotr.model.unit.attribute.bonus.BonusAward;
+import com.wotr.model.unit.attribute.bonus.DefenceBonusAward;
 import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.battle.BattleStrategy;
@@ -78,7 +81,12 @@ public class MultiplayerGame implements Game, AttackEnder {
 
 		Position defendingPosition = defendingUnit.getPosition();
 
+		Collection<BonusAward> awardProspects = new ArrayList<BonusAward>();
+
 		if (succes) {
+
+			// Rewrite this
+			awardProspects.addAll(getAwardProspects(attackingUnit));
 
 			// Remove defeated unit from defending player
 			getDefendingPlayer().getUnitMap().remove(defendingPosition);
@@ -86,24 +94,24 @@ public class MultiplayerGame implements Game, AttackEnder {
 			if (attackingUnit.isRanged()) {
 				// If successful attacking unit is ranged, keep position
 				notifyGameActionListener();
-				return new AttackResult(this, attackingUnit, succes, attackingUnit.getPosition());
+				return new AttackResult(this, attackingUnit, succes, attackingUnit.getPosition(), awardProspects);
 			} else {
 				// If successful attacking unit is melee, suggest end positions
 				List<Position> pos = new ArrayList<Position>();
 				pos.add(action.getPath().getPosition());
 				pos.add(attackingUnit.getPosition());
-				return new AttackResult(this, attackingUnit, succes, pos);
+				return new AttackResult(this, attackingUnit, succes, pos, awardProspects);
 
 			}
 		} else {
 			if (attackingUnit.isRanged()) {
 				// If failed attacking unit is ranged, keep position
 				notifyGameActionListener();
-				return new AttackResult(this, attackingUnit, succes, attackingUnit.getPosition());
+				return new AttackResult(this, attackingUnit, succes, attackingUnit.getPosition(), awardProspects);
 			} else {
 				// If failed attacking unit is melee, go back to attacking
-				// position				
-				Position position = null;				
+				// position
+				Position position = null;
 				if (action.getPath().getPreviousPath() != null) {
 					position = action.getPath().getPreviousPath().getPosition();
 					endAttack(attackingUnit, position);
@@ -111,11 +119,29 @@ public class MultiplayerGame implements Game, AttackEnder {
 					position = action.getUnit().getPosition();
 					notifyGameActionListener();
 				}
-				
-				
-				return new AttackResult(this, attackingUnit, succes, position);
+
+				return new AttackResult(this, attackingUnit, succes, position, awardProspects);
 			}
 		}
+	}
+
+	// Move this shit to a better location
+	private Collection<? extends BonusAward> getAwardProspects(Unit attackingUnit) {
+
+		Collection<BonusAward> result = new ArrayList<BonusAward>();
+
+		int xp = attackingUnit.getExperiencePoints();
+
+		// if award is to be given
+		if (xp >= 2) {
+			attackingUnit.resetExperience();
+			result.add(new AttackBonusAward(attackingUnit));
+			result.add(new DefenceBonusAward(attackingUnit));
+		} else {
+			attackingUnit.addExperience();
+		}
+
+		return result;
 	}
 
 	@Override

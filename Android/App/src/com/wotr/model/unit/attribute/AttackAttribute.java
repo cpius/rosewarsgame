@@ -1,14 +1,17 @@
 package com.wotr.model.unit.attribute;
 
-public class AttackAttribute extends BaseAttribute {
-
-	private final int baseValue;
+public class AttackAttribute extends Attribute {
 
 	public AttackAttribute(int baseValue) {
-		this.baseValue = baseValue;
+		super(baseValue);
 	}
 
 	public int calculateValue() {
-		return baseValue;
+		return getValue();
+	}
+
+	public void addBonus(RawBonus bonus) {
+		super.addBonus(bonus);
+		listener.attackBonusChanged(getBonusValue());
 	}
 }

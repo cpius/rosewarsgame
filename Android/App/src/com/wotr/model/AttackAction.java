@@ -4,11 +4,19 @@ import com.wotr.model.unit.Unit;
 
 public class AttackAction extends Action {
 
-	public AttackAction(Unit unit, Position pos, ActionPath path) {
-		super(unit, pos, path);
+	private Unit defendingUnit;
+
+	public AttackAction(Unit attackingUnit, Unit defendingUnit, ActionPath path) {
+		super(attackingUnit, defendingUnit.getPosition(), path);
+		this.defendingUnit = defendingUnit;
 	}
 	
-	public AttackAction(Position position) {
-		super(null, position, null);
+	public AttackAction(Position pos) {
+		super(null, pos, null);		
 	}
+	
+	public Unit getDefendingUnit() {
+		return defendingUnit;
+	}
+	
 }

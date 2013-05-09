@@ -17,6 +17,9 @@ public abstract class Unit implements Cloneable {
 
 	private int experiencePoints = 0;
 
+	private AttackAttribute attackAttribute;
+	private DefenceAttribute defenceAttribute;
+	
 	public String getImage() {
 		return "unit/" + image + (enemy ? "red" : "green") + ".jpg";
 	}
@@ -26,9 +29,9 @@ public abstract class Unit implements Cloneable {
 		this.enemy = enemy;
 	}
 
-	public abstract AttackAttribute getAttack();
+	public abstract int getDefence();
 
-	public abstract DefenceAttribute getDefense();
+	public abstract int getAttack();
 
 	public abstract int getMovement();
 
@@ -91,5 +94,27 @@ public abstract class Unit implements Cloneable {
 
 	public int getExperiencePoints() {
 		return experiencePoints;
+	}
+
+	public AttackAttribute getAttackAttribute() {
+		if (attackAttribute == null) {
+			attackAttribute = new AttackAttribute(getAttack());
+		}
+		return attackAttribute;
+	}
+
+	public DefenceAttribute getDefenceAttribute() {
+		if (defenceAttribute == null) {
+			defenceAttribute = new DefenceAttribute(getAttack());
+		}
+		return defenceAttribute;
+	}
+
+	public void addExperience() {
+		experiencePoints++;
+	}
+	
+	public void resetExperience() {
+		experiencePoints = 0;
 	}
 }

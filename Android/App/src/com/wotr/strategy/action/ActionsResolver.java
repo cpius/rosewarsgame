@@ -64,7 +64,8 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 			if (!originalUnit.getPosition().equals(pos)) {
 
 				if (ars.isAttackable(originalUnit, pos, path, aUnits, dUnits, pathProgress, turnStrategy)) {
-					moves.add(new AttackAction(originalUnit, pos, path));
+					Unit defendingUnit = dUnits.get(pos);
+					moves.add(new AttackAction(originalUnit, defendingUnit, path));
 				} else if (moveable = ars.isMoveable(originalUnit, pos, path, moveable, aUnits, dUnits, pathProgress, turnStrategy)) {
 					moves.add(new MoveAction(originalUnit, pos, path));
 				}

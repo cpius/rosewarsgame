@@ -31,28 +31,28 @@ public class ActionPathSprite extends CCNode {
 
 		gl.glDisable(GL10.GL_LINE_SMOOTH);
 		gl.glLineWidth(5.0f);
-		
-		ActionPath path = action.getPath();
-		
-		//CGPoint source = bordframe.getPosition(action.getPosition());
-		//CGPoint destination = bordframe.getPosition(path.getPosition());		
-		
-		List<Position> pathList = path.getPath();		
+
+		ActionPath path = getAction().getPath();
+
+		List<Position> pathList = path.getPath();
 		CGPoint source = bordframe.getPosition(path.getPosition());
 		for (Position position : pathList) {
 			CGPoint destination = bordframe.getPosition(position);
-			
+
 			CCDrawingPrimitives.ccDrawLine(gl, source, destination);
 			source = destination;
 		}
-		
-		Position position = action.getUnit().getPosition();
+
+		Position position = getAction().getUnit().getPosition();
 		CGPoint destination = bordframe.getPosition(position);
 		CCDrawingPrimitives.ccDrawLine(gl, source, destination);
-		
-		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-        gl.glEnable(GL10.GL_TEXTURE_2D);
 
-		
+		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+
+	}
+
+	public Action getAction() {
+		return action;
 	}
 }

@@ -22,6 +22,7 @@ import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
+import com.wotr.model.unit.attribute.RawBonus;
 import com.wotr.strategy.DeckDrawStrategy;
 import com.wotr.strategy.DeckLayoutStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
@@ -96,7 +97,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		// BonusStrategy bonusStrategy = new DefaultBonusStrategy();
 		// bonusStrategy.initializeDeck(deck);
-
+		
 		DeckLayoutStrategy layoutStrategy = new RandomDeckLayoutStrategy(xCount, yCount);
 		UnitMap<Position, Unit> layoutDeck = layoutStrategy.layoutDeck(deck);
 
@@ -110,6 +111,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			cardList.add(player);
 			modelMap.put(player, unit);
 		}
+		
+		deck.get(0).getAttackAttribute().addBonus(new RawBonus(1));
+		deck.get(1).getDefenceAttribute().addBonus(new RawBonus(1));
 	}
 
 	public void startBattle(Object obj) {
