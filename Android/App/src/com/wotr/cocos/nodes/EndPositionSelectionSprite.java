@@ -18,14 +18,14 @@ import android.view.MotionEvent;
 import com.wotr.cocos.Boardframe;
 import com.wotr.model.Position;
 
-public class GoSprite extends CCSprite implements CCTouchDelegateProtocol {
+public class EndPositionSelectionSprite extends CCSprite implements CCTouchDelegateProtocol {
 
 	private final CardSprite card;
-	private GoSpriteActionLisener listener;
+	private EndPositionSelectionActionListener listener;
 
-	private static List<GoSprite> all = new ArrayList<GoSprite>();
+	private static List<EndPositionSelectionSprite> all = new ArrayList<EndPositionSelectionSprite>();
 
-	public GoSprite(CardSprite card, Position position, float scale, Boardframe bordframe) {
+	public EndPositionSelectionSprite(CardSprite card, Position position, float scale, Boardframe bordframe) {
 		super("attack_direction-hd.png");
 		this.card = card;
 
@@ -65,11 +65,11 @@ public class GoSprite extends CCSprite implements CCTouchDelegateProtocol {
 	public boolean ccTouchesBegan(MotionEvent event) {
 		CGPoint touchPoint = convertTouchToNodeSpace(event);
 		if (CGRect.containsPoint(getTextureRect(), touchPoint)) {
-			listener.goSpriteSpressed(this, card, getPositionUserData());
+			listener.endPositionSelected(this, card, getPositionUserData());
 
 			CCNode parent = getParent();
 			
-			for (GoSprite sprite : all) {
+			for (EndPositionSelectionSprite sprite : all) {
 				parent.removeChild(sprite, true);
 			}
 			all.clear();
@@ -95,7 +95,7 @@ public class GoSprite extends CCSprite implements CCTouchDelegateProtocol {
 		return false;
 	}
 
-	public void addActionListener(GoSpriteActionLisener listener) {
+	public void addActionListener(EndPositionSelectionActionListener listener) {
 		this.listener = listener;
 	}
 

@@ -33,8 +33,8 @@ import com.wotr.R;
 import com.wotr.cocos.action.RemoveNodeCallBackAction;
 import com.wotr.cocos.nodes.ActionPathSprite;
 import com.wotr.cocos.nodes.CardSprite;
-import com.wotr.cocos.nodes.GoSprite;
-import com.wotr.cocos.nodes.GoSpriteActionLisener;
+import com.wotr.cocos.nodes.EndPositionSelectionSprite;
+import com.wotr.cocos.nodes.EndPositionSelectionActionListener;
 import com.wotr.model.Action;
 import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
@@ -58,7 +58,7 @@ import com.wotr.strategy.player.Player;
 import com.wotr.touch.CardTouchGridDecorator;
 import com.wotr.touch.CardTouchListener;
 
-public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener, GoSpriteActionLisener {
+public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener, EndPositionSelectionActionListener {
 
 	private Collection<CardSprite> unitList = new ArrayList<CardSprite>();
 	private int xCount;
@@ -250,7 +250,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 			// Add images to endposition selection positions for units
 			for (Position endPosition : endPositions) {
-				GoSprite goSprite = new GoSprite(card, endPosition, sizeScale, bordframe);
+				EndPositionSelectionSprite goSprite = new EndPositionSelectionSprite(card, endPosition, sizeScale, bordframe);
 				goSprite.addActionListener(this);
 				addChild(goSprite, 10);
 			}
@@ -524,7 +524,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	@Override
-	public void goSpriteSpressed(GoSprite goSprite, CardSprite card, Position position) {
+	public void endPositionSelected(EndPositionSelectionSprite goSprite, CardSprite card, Position position) {
 
 		try {
 			attackResult.endAttackAt(position);
