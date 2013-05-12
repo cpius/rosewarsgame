@@ -35,6 +35,7 @@
 
 @property (nonatomic, readonly) GKTurnBasedMatch *currentMatch;
 @property (nonatomic, readonly) NSString *localUserId;
+@property (nonatomic, readonly) NSArray *currentPlayerIds;
 
 + (GCTurnBasedMatchHelper*)sharedInstance;
 

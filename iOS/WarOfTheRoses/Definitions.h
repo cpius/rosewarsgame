@@ -21,8 +21,8 @@
 
 #define kEnemyActionDelayTime 1.0
 
-#define NUMBER_OF_BASICUNITS 6
-#define NUMBER_OF_SPECIALUNITS 3
+#define NUMBER_OF_BASICUNITS 1
+#define NUMBER_OF_SPECIALUNITS 1
 
 typedef enum {
     kLevelIncreaseAbilityAttack = 0,
@@ -55,8 +55,18 @@ typedef enum {
 
 typedef enum {
     kGameBoardUpper = 0,
-    kGameBoardLower
+    kGameBoardLower = 1
 } GameBoardSides;
+
+NS_INLINE GameBoardSides OppositeGameBoardSideOf(GameBoardSides side) {
+    
+    if (side == kGameBoardUpper) {
+        return kGameBoardLower;
+    }
+    else {
+        return kGameBoardUpper;
+    }
+}
 
 NS_INLINE NSUInteger GetFrontlineForGameBoardSide(GameBoardSides side) {
 

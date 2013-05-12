@@ -74,18 +74,18 @@
     [_gameSerializer takeCardSnapshot:self state:state];
 }
 
-- (NSData *)serializeCurrentGame {
+- (NSData*)serializeCurrentGameForPlayerWithId:(NSString*)playerId {
     
     [self takeCardSnapshot:kCardSnapshotStateAfterAction];
 
-    return [_gameSerializer serializeGame:self];
+    return [_gameSerializer serializeGame:self forPlayerWithId:playerId];
 }
 
-- (void)deserializeGameData:(NSData*)gameData onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits {
+- (void)deserializeGameData:(NSData *)gameData forPlayerWithId:(NSString*)playerId allPlayers:(NSArray*)allPlayers onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits {
     
     [_latestBattleReports removeAllObjects];
     
-    [_gameSerializer deserializeGameData:gameData toGame:self onlyActions:onlyActions onlyEnemyUnits:onlyEnemyUnits];
+    [_gameSerializer deserializeGameData:gameData forPlayerWithId:playerId allPlayers:allPlayers toGame:self onlyActions:onlyActions onlyEnemyUnits:onlyEnemyUnits];
 }
 
 - (void)addBattleReport:(BattleReport*)battlereport forAction:(Action*)action {

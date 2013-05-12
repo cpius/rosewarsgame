@@ -117,8 +117,6 @@
             else {
                 self.movesConsumed = 0;
             }
-            
-            CCLOG(@"Samurais first attack");
         }
     }
 }

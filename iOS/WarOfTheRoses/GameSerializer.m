@@ -22,6 +22,7 @@
 #import "FixedDiceStrategy.h"
 #import "StandardBattleStrategy.h"
 #import "FixedLevelIncreaseStrategy.h"
+#import "MeleeAttackPlaybackAction.h"
 
 @interface GameSerializer()
 
@@ -108,12 +109,12 @@
     return action;
 }
 
-- (NSData *)serializeGame:(Game *)game {
+- (NSData *)serializeGame:(Game *)game forPlayerWithId:(NSString *)playerId {
     
     NSMutableDictionary *mutableGameData = [NSMutableDictionary dictionary];
     
     [mutableGameData setValue:@(game.state) forKey:@"gamestate"];
-    [mutableGameData setValue:@(game.myColor) forKey:[GKLocalPlayer localPlayer].playerID];
+    [mutableGameData setValue:@(game.myColor) forKey:playerId];
     [mutableGameData setValue:@(game.numberOfAvailableActions) forKey:@"numberofactions"];
     [mutableGameData setValue:@(game.currentRound) forKey:@"currentround"];
     [mutableGameData setValue:@(game.turnCounter) forKey:@"turncounter"];
@@ -149,7 +150,7 @@
     return jsonData;
 }
 
-- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits {
+- (void)deserializeGameData:(NSData *)gameData forPlayerWithId:(NSString*)playerId allPlayers:(NSArray*)allPlayers toGame:(Game *)game onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits {
     
     NSError *error = nil;
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:gameData options:NSJSONReadingMutableContainers error:&error];
@@ -158,17 +159,17 @@
     game.numberOfAvailableActions = [[data objectForKey:@"numberofactions"] integerValue];
     game.currentRound = [[data objectForKey:@"currentround"] integerValue];
     game.turnCounter = [[data objectForKey:@"turncounter"] integerValue];
-    game.gameOver = [[data objectForKey:@"gameover"] boolValue];
+    BOOL gameover = [[data objectForKey:@"gameover"] boolValue];
     game.currentPlayersTurn = [[data objectForKey:@"currentplayersturn"] integerValue];
     PlayerColors creator = [[data objectForKey:@"gamedata_created_by"] integerValue];
     
-    for (GKTurnBasedParticipant *participant in [GCTurnBasedMatchHelper sharedInstance].currentMatch.participants) {
+    for (NSString *playerName in allPlayers) {
         
-        id color = [data valueForKey:participant.playerID];
+        id color = [data valueForKey:playerName];
         
         if (color != nil) {
             
-            if ([participant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
+            if ([playerName isEqualToString:playerId]) {
                 game.myColor = (PlayerColors)[color integerValue];
                 game.enemyColor = OppositeColorOf(game.myColor);
             }
@@ -190,11 +191,12 @@
             game.state == kGameStateGameStarted) {
             
             NSArray *cards;
-            if (game.currentPlayersTurn == game.myColor) {
+            if ((game.currentPlayersTurn == game.myColor)) {
                 cards = [data objectForKey:@"cards_before_action"];;
             }
-            else {
+            else if (gameover) {
                 cards = [data objectForKey:@"cards_after_action"];
+                game.gameOver = YES;
             }
             
             if (cards == nil) {
@@ -312,10 +314,10 @@
         BattleResult *battleresult = [[BattleResult alloc] initWithAttacker:cardInAction defender:enemyCard];
         [battleresult fromDictionary:[dictionary objectForKey:@"primarybattle"]];
         
-        cardInAction.battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:battleresult];
-        
-        MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc ] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
+        MeleeAttackPlaybackAction *meleeAction = [[MeleeAttackPlaybackAction alloc] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
+
         meleeAction.meleeAttackType = battleresult.meleeAttackType;
+        meleeAction.battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:battleresult];
         
         NSArray *secondaryBattles = [dictionary objectForKey:@"secondarybattles"];
         

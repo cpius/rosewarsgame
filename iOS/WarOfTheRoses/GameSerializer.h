@@ -16,7 +16,7 @@
 }
 
 - (void)takeCardSnapshot:(Game *)game state:(CardSnapshotStates)state;
-- (NSData*)serializeGame:(Game*)game;
-- (void)deserializeGameData:(NSData *)gameData toGame:(Game *)game onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits;
+- (NSData*)serializeGame:(Game*)game forPlayerWithId:(NSString*)playerId;
+- (void)deserializeGameData:(NSData *)gameData forPlayerWithId:(NSString*)playerId allPlayers:(NSArray*)allPlayers toGame:(Game *)game onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits;
 
 @end

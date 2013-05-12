@@ -213,6 +213,7 @@
     }
     
     if (_gameManager.currentGame.gameOver) {
+        [_gameManager.currentGame removeObserver:self forKeyPath:@"currentPlayersTurn"];
         [[CCDirector sharedDirector] replaceScene:[GameTypeScene scene]];
         return;
     }
@@ -649,7 +650,7 @@
     
     GameStates oldGameState = _gameManager.currentGame.state;
     
-    [_gameManager.currentGame deserializeGameData:match.matchData onlyActions:(oldGameState == kGameStateGameStarted)
+    [_gameManager.currentGame deserializeGameData:match.matchData forPlayerWithId:[GKLocalPlayer localPlayer].playerID allPlayers:[GCTurnBasedMatchHelper sharedInstance].currentPlayerIds onlyActions:(oldGameState == kGameStateGameStarted)
                                    onlyEnemyUnits:(oldGameState == kGameStateFinishedPlacingCards)];
     
     if (oldGameState == kGameStateFinishedPlacingCards && _gameManager.currentGame.state == kGameStateGameStarted) {

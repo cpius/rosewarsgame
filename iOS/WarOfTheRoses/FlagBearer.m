@@ -52,7 +52,7 @@
 - (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action {
     
     if (action.cardInAction == self) return;
-    if (![action.cardInAction isOwnedByPlayerWithColor:[GameManager sharedManager].currentPlayersTurn]) return;
+//    if (![action.cardInAction isOwnedByPlayerWithColor:[GameManager sharedManager].currentPlayersTurn]) return;
     
     BOOL aoeIsApplicable = NO;
     NSArray *surroundingLocations = [self.cardLocation surroundingEightGridLocations];

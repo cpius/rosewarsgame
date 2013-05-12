@@ -44,6 +44,7 @@
 		6D0CBF0016D0F70D00D241A7 /* RangedAttackPathFinderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBEFF16D0F70B00D241A7 /* RangedAttackPathFinderStrategy.m */; };
 		6D0CBF0A16D208CE00D241A7 /* AIStrategyAdvancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBF0916D208CD00D241A7 /* AIStrategyAdvancer.m */; };
 		6D0CBF0D16D209C100D241A7 /* BattlePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */; };
+		6D563BC0173832F4006F4C3A /* MeleeAttackPlaybackAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D563BBF173832F4006F4C3A /* MeleeAttackPlaybackAction.m */; };
 		6D5E04411662545C0085311B /* CardPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E04401662545C0085311B /* CardPool.m */; };
 		6D5E595D166D42C0007429BD /* archer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595C166D42C0007429BD /* archer_icon.png */; };
 		6D5E595F166D4426007429BD /* archer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595E166D4426007429BD /* archer_0.png */; };
@@ -457,6 +458,8 @@
 		6D0CBF0916D208CD00D241A7 /* AIStrategyAdvancer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIStrategyAdvancer.m; sourceTree = "<group>"; };
 		6D0CBF0B16D209B400D241A7 /* BattlePlan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattlePlan.h; sourceTree = "<group>"; };
 		6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BattlePlan.m; sourceTree = "<group>"; };
+		6D563BBE173832F4006F4C3A /* MeleeAttackPlaybackAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeleeAttackPlaybackAction.h; sourceTree = "<group>"; };
+		6D563BBF173832F4006F4C3A /* MeleeAttackPlaybackAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeleeAttackPlaybackAction.m; sourceTree = "<group>"; };
 		6D5E043F1662545C0085311B /* CardPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardPool.h; sourceTree = "<group>"; };
 		6D5E04401662545C0085311B /* CardPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardPool.m; sourceTree = "<group>"; };
 		6D5E595C166D42C0007429BD /* archer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = archer_icon.png; path = Resources/Images/archer_icon.png; sourceTree = "<group>"; };
@@ -1080,22 +1083,24 @@
 		6D0CBEC816CE766C00D241A7 /* Action */ = {
 			isa = PBXGroup;
 			children = (
-				6D0CBED016CF872300D241A7 /* Action.h */,
-				6D0CBED116CF872300D241A7 /* Action.m */,
-				6D0CBED316CF877C00D241A7 /* MoveAction.h */,
-				6D0CBED416CF877C00D241A7 /* MoveAction.m */,
-				6D0CBED616CF880E00D241A7 /* MeleeAttackAction.h */,
-				6D0CBED716CF880F00D241A7 /* MeleeAttackAction.m */,
-				6D0CBEFB16D0F67700D241A7 /* RangedAttackAction.h */,
-				6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */,
 				6DB2049716F8DEA30004FFCB /* AbilityAction.h */,
 				6DB2049816F8DEA40004FFCB /* AbilityAction.m */,
+				6D0CBED016CF872300D241A7 /* Action.h */,
+				6D0CBED116CF872300D241A7 /* Action.m */,
 				6DB204CA170385A60004FFCB /* BattleReport.h */,
 				6DB204CB170385A80004FFCB /* BattleReport.m */,
 				6DB204CD170386BF0004FFCB /* BattleResult.h */,
 				6DB204CE170386C10004FFCB /* BattleResult.m */,
+				6D0CBED616CF880E00D241A7 /* MeleeAttackAction.h */,
+				6D0CBED716CF880F00D241A7 /* MeleeAttackAction.m */,
+				6D563BBE173832F4006F4C3A /* MeleeAttackPlaybackAction.h */,
+				6D563BBF173832F4006F4C3A /* MeleeAttackPlaybackAction.m */,
+				6D0CBED316CF877C00D241A7 /* MoveAction.h */,
+				6D0CBED416CF877C00D241A7 /* MoveAction.m */,
 				6D60A0E6170F3DDB00B6E2B5 /* PushAction.h */,
 				6D60A0E7170F3DDB00B6E2B5 /* PushAction.m */,
+				6D0CBEFB16D0F67700D241A7 /* RangedAttackAction.h */,
+				6D0CBEFC16D0F67700D241A7 /* RangedAttackAction.m */,
 			);
 			name = Action;
 			sourceTree = "<group>";
@@ -2450,6 +2455,7 @@
 				6DBDA4641720743A0078287B /* PlayerIndicator.m in Sources */,
 				6DBDA46D1725B52E0078287B /* RandomLevelIncreaseStrategy.m in Sources */,
 				6DBDA4701725B7440078287B /* FixedLevelIncreaseStrategy.m in Sources */,
+				6D563BC0173832F4006F4C3A /* MeleeAttackPlaybackAction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

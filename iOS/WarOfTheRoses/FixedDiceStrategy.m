@@ -12,6 +12,14 @@
 
 @synthesize fixedDieValue;
 
++ (id)strategyWithFixedValue:(NSUInteger)fixedValue {
+    
+    FixedDiceStrategy *strategy = [[FixedDiceStrategy alloc] init];
+    strategy.fixedDieValue = fixedValue;
+    
+    return strategy;
+}
+
 + (id)strategy {
     
     return [[FixedDiceStrategy alloc] init];

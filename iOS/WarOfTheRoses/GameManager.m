@@ -201,7 +201,7 @@
     _currentGame.currentPlayersTurn = !_currentGame.currentPlayersTurn;
     
     if (_currentGame.gametype == kGameTypeMultiPlayer) {
-        [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[_currentGame serializeCurrentGame]];
+        [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[_currentGame serializeCurrentGameForPlayerWithId:[GKLocalPlayer localPlayer].playerID]];
     }
     
 /*    if ([_delegate respondsToSelector:@selector(turnChangedToPlayerWithColor:)]) {
@@ -211,8 +211,18 @@
 
 - (void)endGameWithGameResult:(GameResults)gameResult {
     
+    _currentGame.turnCounter++;
+    
+    if ((_currentGame.turnCounter % 2) == 0) {
+        _currentGame.currentRound++;
+        
+        CCLOG(@"Round increased to %d", _currentGame.currentRound);
+    }
+
+    _currentGame.currentPlayersTurn = !_currentGame.currentPlayersTurn;
+
     if (_currentGame.gametype == kGameTypeMultiPlayer) {
-        [[GCTurnBasedMatchHelper sharedInstance] endMatchWithData:[_currentGame serializeCurrentGame] gameResult:gameResult];
+        [[GCTurnBasedMatchHelper sharedInstance] endMatchWithData:[_currentGame serializeCurrentGameForPlayerWithId:[GKLocalPlayer localPlayer].playerID] gameResult:gameResult];
     }
 }
 
