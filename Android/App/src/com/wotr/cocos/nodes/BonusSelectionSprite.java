@@ -3,12 +3,12 @@ package com.wotr.cocos.nodes;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.types.CGPoint;
 
-public class BonusChooserSprite extends CCNode {
+public class BonusSelectionSprite extends CCNode {
 
-	public BonusChooserSprite() {
+	public BonusSelectionSprite() {
 		super();
-		AttackBonusChooserSprite attackBonusChooserSprite = new AttackBonusChooserSprite();
-		DefenceBonusChooserSprite defenceBonusChooserSprite = new DefenceBonusChooserSprite();
+		AttackBonusSelectionSprite attackBonusChooserSprite = new AttackBonusSelectionSprite();
+		DefenceBonusSelectionSprite defenceBonusChooserSprite = new DefenceBonusSelectionSprite();
 
 		setContentSize(attackBonusChooserSprite.getContentSize().width + defenceBonusChooserSprite.getContentSize().getWidth(), attackBonusChooserSprite.getContentSize().getHeight());
 

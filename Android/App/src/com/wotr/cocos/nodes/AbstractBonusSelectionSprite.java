@@ -5,9 +5,9 @@ import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.nodes.CCSprite;
 
-public abstract class AbstractBonusChooserSprite extends CCSprite {
+public abstract class AbstractBonusSelectionSprite extends CCSprite {
 
-	public AbstractBonusChooserSprite(String fileName) {
+	public AbstractBonusSelectionSprite(String fileName) {
 		super(fileName);
 
 		CCScaleTo scaleUpAction = CCScaleTo.action(0.5f, 1.2f);
