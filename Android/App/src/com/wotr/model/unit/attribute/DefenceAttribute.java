@@ -7,7 +7,7 @@ public class DefenceAttribute extends Attribute {
 	}
 
 	public int calculateValue() {
-		return getValue();
+		return super.getValue() + getBonusValue();
 	}
 
 	public void addBonus(RawBonus bonus) {

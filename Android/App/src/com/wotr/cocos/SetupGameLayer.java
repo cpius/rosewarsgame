@@ -1,7 +1,6 @@
 package com.wotr.cocos;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,7 @@ import com.wotr.strategy.DeckDrawStrategy;
 import com.wotr.strategy.DeckLayoutStrategy;
 import com.wotr.strategy.impl.FixedDeckDrawStrategy;
 import com.wotr.strategy.impl.RandomDeckLayoutStrategy;
-import com.wotr.touch.CardTouchHandler;
+import com.wotr.touch.CardTouchGridDecorator;
 import com.wotr.touch.CardTouchListener;
 
 public class SetupGameLayer extends AbstractGameLayer implements CardTouchListener {
@@ -68,9 +67,6 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		bordframe = new Boardframe(xCount, yCount, winSize.width, winSize.height, 0f, orientationScale, 0.7f);
 
-		tch = new CardTouchHandler();
-		tch.addListener(this);
-
 		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;
 
 		addBackGroundCards(xCount, yCount, false);
@@ -95,23 +91,22 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
 		List<Unit> deck = deckStrategy.drawDeck();
 
-		// BonusStrategy bonusStrategy = new DefaultBonusStrategy();
-		// bonusStrategy.initializeDeck(deck);
-		
 		DeckLayoutStrategy layoutStrategy = new RandomDeckLayoutStrategy(xCount, yCount);
 		UnitMap<Position, Unit> layoutDeck = layoutStrategy.layoutDeck(deck);
 
-		// CGPoint position = CGPoint.ccp(100, 100);
+		CardTouchGridDecorator gridDecorator = new CardTouchGridDecorator(bordframe);
+		gridDecorator.addCardTouchListener(this);
 
 		for (Unit unit : layoutDeck.values()) {
 
-			CardSprite player = new CardSprite(unit, sizeScale, bordframe);
-			addChild(player);
+			CardSprite card = new CardSprite(unit, sizeScale, bordframe);
+			card.addListener(gridDecorator);
+			addChild(card);
 
-			cardList.add(player);
-			modelMap.put(player, unit);
+			cardList.add(card);
+			modelMap.put(card, unit);
 		}
-		
+
 		deck.get(0).getAttackAttribute().addBonus(new RawBonus(1));
 		deck.get(1).getDefenceAttribute().addBonus(new RawBonus(1));
 	}
@@ -143,56 +138,51 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	}
 
 	@Override
-	public void cardDragedEnded(float x, float y) {
+	public boolean cardDragedStarted(CardSprite card) {
+		selectCardForMove(card);
+		return true;
+	}
+
+	@Override
+	public void cardDragedEnded(CardSprite card, float x, float y) {
 
 		// If moved to a invalid position move back to original position
 		Position pInP = bordframe.getPositionInPerimeter(CGPoint.ccp(x, y));
 		if (pInP == null || getCardInPosition(pInP) != null) {
-			moveCardToOriginalPosition();
+			moveCardToOriginalPosition(card);
 		} else {
-			dropCardToPosition();
-			Unit abstractCard = modelMap.get(selectedCard);
-			abstractCard.setPosition(pInP);
+			Unit unit = card.getUnit();
+			unit.setPosition(pInP);
+			dropCardToPosition(card);
 		}
 
-		reorderChild(selectedCard, 0);
-		selectedCard.setOpacity(255);
-		selectedCard = null;
+		reorderChild(card, 0);
+		card.setOpacity(255);
 	}
 
 	@Override
-	public void cardMoved(float x, float y) {
-		Position pInP = bordframe.getPositionInPerimeter(CGPoint.ccp(x, y));
-		if (pInP == null) {
-			selectedCard.setPosition(x, y);
-		} else {
-			CGPoint position = bordframe.getPosition(pInP.getX(), pInP.getY());
-			selectedCard.setPosition(position);
-		}
+	public void cardMoved(CardSprite card, float x, float y, boolean originalPosition) {
+		card.setPosition(x, y);
 	}
 
 	private Unit getCardInPosition(Position pInP) {
-		Collection<Unit> values = modelMap.values();
-		for (Unit card : values) {
-			if (pInP.equals(card.getPosition())) {
-				return card;
+
+		for (CardSprite card : cardList) {
+			Unit unit = card.getUnit();
+			if (pInP.equals(unit.getPosition())) {
+				return unit;
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public void cardSelected(float x, float y) {
-		moveCardToCenterAndEnlarge();
+	public void cardSelected(CardSprite card, float x, float y) {
+		moveCardToCenterAndEnlarge(card);
 	}
 
 	@Override
-	public void cardDeSelected(float x, float y) {
-		moveCardToOriginalPosition();
-	}
-
-	@Override
-	protected Collection<CardSprite> getCardSprites() {
-		return cardList;
+	public void cardDeSelected(CardSprite card, float x, float y) {
+		moveCardToOriginalPosition(card);
 	}
 }

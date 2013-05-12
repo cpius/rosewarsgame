@@ -1,23 +1,42 @@
 package com.wotr.cocos.nodes;
 
+import org.cocos2d.events.CCTouchDispatcher;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.protocols.CCTouchDelegateProtocol;
 import org.cocos2d.types.CGPoint;
+import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
+
+import android.view.MotionEvent;
 
 import com.wotr.cocos.Boardframe;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.attribute.BonusListener;
+import com.wotr.touch.CardTouchListener;
 
-public class CardSprite extends CCSprite implements BonusListener {
+public class CardSprite extends CCSprite implements BonusListener, CCTouchDelegateProtocol {
+
+	private static final long BUTTON_TIME = 500;
 
 	private BonusSprite attackBonus;
 	private BonusSprite defenceBonus;
-	private final Unit unit;
+	private CardTouchListener listener;
+
+	private static CardSprite activeCard;
+	private boolean detailed = false;
+
+	// Is only used to calculate if unit is moved
+	private float startTouchPointX;
+	private float startTouchPointY;
+
+	private CGPoint originalCardPosition;
+
+	private long startTime;
 
 	public CardSprite(Unit unit, float scale, Boardframe bordframe) {
 		super(unit.getImage());
-		this.unit = unit;
 
 		Position pos = unit.getPosition();
 		CGPoint point = bordframe.getPosition(pos.getX(), pos.getY());
@@ -38,7 +57,11 @@ public class CardSprite extends CCSprite implements BonusListener {
 		defenceBonus.setPosition(bonusSize.getWidth(), cardSize.getHeight() - bonusSize.getHeight() * 3);
 
 		addChild(attackBonus);
-		addChild(defenceBonus);	
+		addChild(defenceBonus);
+	}
+
+	public Unit getUnit() {
+		return (Unit) getUserData();
 	}
 
 	@Override
@@ -50,9 +73,126 @@ public class CardSprite extends CCSprite implements BonusListener {
 	public void defenceBonusChanged(int bonusValue) {
 		defenceBonus.setBonus(bonusValue);
 	}
-	
+
 	public void drawBonus() {
-		attackBonus.setBonus(unit.getAttackAttribute().getBonusValue());
-		defenceBonus.setBonus(unit.getDefenceAttribute().getBonusValue());
+		attackBonus.setBonus(getUnit().getAttackAttribute().getBonusValue());
+		defenceBonus.setBonus(getUnit().getDefenceAttribute().getBonusValue());
+	}
+
+	@Override
+	public void onEnter() {
+		CCTouchDispatcher.sharedDispatcher().addDelegate(this, 1);
+		super.onEnter();
+	}
+
+	@Override
+	public void onExit() {
+		CCTouchDispatcher.sharedDispatcher().removeDelegate(this);
+		super.onExit();
+	}
+
+	@Override
+	public boolean ccTouchesBegan(MotionEvent event) {
+
+		// There is already another active card
+		if (activeCard != null && !this.equals(activeCard)) {
+			return false;
+		}
+
+		CGPoint touchPoint = convertTouchToNodeSpace(event);
+		if (CGRect.containsPoint(getTextureRect(), touchPoint)) {
+
+			startTouchPointX = event.getRawX();
+			startTouchPointY = event.getRawY();
+
+			startTime = System.currentTimeMillis();
+
+			if (!detailed && listener.cardDragedStarted(this)) {
+				activeCard = this;
+				originalCardPosition = getPosition();
+			}
+
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ccTouchesEnded(MotionEvent event) {
+
+		// this card is not the active
+		if (!this.equals(activeCard)) {
+			return false;
+		}
+
+		CGPoint touchPoint = convertTouchToNodeSpace(event);
+		if (CGRect.containsPoint(getTextureRect(), touchPoint)) {
+
+			long duration = System.currentTimeMillis() - startTime;
+
+			boolean hasMoved = hasMoved(event.getRawX(), event.getRawY(), startTouchPointX, startTouchPointY);
+			boolean buttonPressTime = duration < BUTTON_TIME;
+
+			// Pressed like a button
+			if (buttonPressTime && !hasMoved) {
+
+				if (detailed) {
+					activeCard = null;
+					detailed = !detailed;
+					listener.cardDeSelected(this, originalCardPosition.x, originalCardPosition.y);
+				} else {
+					detailed = !detailed;
+					listener.cardSelected(this, originalCardPosition.x, originalCardPosition.y);
+				}
+
+			} else if (!detailed){
+				CCDirector sd = CCDirector.sharedDirector();
+				CGSize displaySize = sd.displaySize();
+				listener.cardDragedEnded(this, event.getX(), displaySize.getHeight() - event.getY());
+				activeCard = null;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean ccTouchesMoved(MotionEvent event) {
+
+		// this card is not the active
+		if (!this.equals(activeCard)) {
+			return false;
+		}
+
+		// If card is not showing details, move the card
+		if (!detailed) {
+			CCDirector sd = CCDirector.sharedDirector();
+			CGSize displaySize = sd.displaySize();
+			listener.cardMoved(this, event.getX(), displaySize.getHeight() - event.getY(), true);
+		}
+
+		return true;
+	}
+
+	public void addListener(CardTouchListener listener) {
+		this.listener = listener;
+	}
+
+	// If length between the two points is more thart 60 pixels
+	private boolean hasMoved(float touchX, float touchY, float startX, float startY) {
+		float move = Math.abs(touchX - startX) + Math.abs(touchY - startY);
+		boolean moved = move > 60;
+		return moved;
+	}
+
+	public CGPoint getOriginalPosition() {
+		return originalCardPosition;
+	}
+
+	@Override
+	public boolean ccTouchesCancelled(MotionEvent event) {
+		return this.equals(activeCard);
 	}
 }

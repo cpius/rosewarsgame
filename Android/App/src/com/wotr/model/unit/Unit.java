@@ -105,7 +105,7 @@ public abstract class Unit implements Cloneable {
 
 	public DefenceAttribute getDefenceAttribute() {
 		if (defenceAttribute == null) {
-			defenceAttribute = new DefenceAttribute(getAttack());
+			defenceAttribute = new DefenceAttribute(getDefence());
 		}
 		return defenceAttribute;
 	}

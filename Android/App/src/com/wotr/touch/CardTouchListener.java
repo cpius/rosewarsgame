@@ -1,12 +1,16 @@
 package com.wotr.touch;
 
+import com.wotr.cocos.nodes.CardSprite;
+
 public interface CardTouchListener {
 
-	void cardDragedEnded(float x, float y);
-
-	void cardMoved(float x, float y);
-
-	void cardSelected(float x, float y);
+	boolean cardDragedStarted(CardSprite card);
 	
-	void cardDeSelected(float x, float y);	
+	void cardDragedEnded(CardSprite card, float x, float y);
+
+	void cardMoved(CardSprite card, float x, float y, boolean originalPosition);
+
+	void cardSelected(CardSprite card, float x, float y);
+
+	void cardDeSelected(CardSprite card, float x, float y);
 }

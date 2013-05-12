@@ -17,11 +17,6 @@ public abstract class Attribute extends BaseAttribute {
 		bonus.setParent(this);
 	}
 
-	@Override
-	public int getValue() {
-		return super.getValue() + getBonusValue();
-	}
-
 	public int getBonusValue() {
 		int bonus = 0;
 		for (RawBonus rawBonus : bonusCollection) {

@@ -7,11 +7,11 @@ public class AttackAttribute extends Attribute {
 	}
 
 	public int calculateValue() {
-		return getValue();
+		return super.getValue() - getBonusValue();
 	}
 
 	public void addBonus(RawBonus bonus) {
 		super.addBonus(bonus);
 		listener.attackBonusChanged(getBonusValue());
-	}
+	}	
 }

@@ -14,18 +14,13 @@ import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
-import android.view.MotionEvent;
-
 import com.wotr.R;
 import com.wotr.cocos.nodes.CardBackgroundSprite;
 import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
-import com.wotr.touch.CardTouchHandler;
 
 public abstract class AbstractGameLayer extends CCLayer {
-
-	protected CCSprite selectedCard;
 
 	protected Boardframe bordframe;
 
@@ -33,38 +28,29 @@ public abstract class AbstractGameLayer extends CCLayer {
 
 	protected float sizeScale;
 
-	protected CGPoint originalPosition;
-
-	protected CardTouchHandler tch;
-
 	protected Collection<CCSprite> cardBackgroundList = new ArrayList<CCSprite>();
 
-	protected abstract Collection<CardSprite> getCardSprites();
+	// protected abstract Collection<CardSprite> getCardSprites();
 
-	@Override
-	public boolean ccTouchesBegan(MotionEvent event) {
-
-		for (CCSprite card : getCardSprites()) {
-
-			if (card.getBoundingBox().contains(event.getRawX(), winSize.height - event.getRawY())) {
-
-				boolean cardTouchStarted = isTurn((Unit) card.getUserData()) && tch.touchStarted(event.getRawX(), winSize.height - event.getRawY());
-				if (cardTouchStarted) {
-					selectedCard = card;
-
-					if (selectedCard.numberOfRunningActions() == 0) {
-						originalPosition = selectedCard.getPosition();
-					}
-					reorderChild(selectedCard, 1);
-
-					selectCardForMove(selectedCard);
-				}
-				break;
-			}
-		}
-
-		return super.ccTouchesBegan(event);
-	}
+	/*
+	 * @Override public boolean ccTouchesBegan(MotionEvent event) {
+	 * 
+	 * for (CardSprite card : getCardSprites()) {
+	 * 
+	 * if (card.getBoundingBox().contains(event.getRawX(), winSize.height -
+	 * event.getRawY())) {
+	 * 
+	 * boolean cardTouchStarted = isTurn((Unit) card.getUserData()) &&
+	 * tch.touchStarted(event.getRawX(), winSize.height - event.getRawY()); if
+	 * (cardTouchStarted) { selectedCard = card;
+	 * 
+	 * if (selectedCard.numberOfRunningActions() == 0) { originalPosition =
+	 * selectedCard.getPosition(); } reorderChild(selectedCard, 1);
+	 * 
+	 * selectCardForMove(selectedCard); } break; } }
+	 * 
+	 * return super.ccTouchesBegan(event); }
+	 */
 
 	protected boolean isTurn(Unit unit) {
 		return true;
@@ -77,58 +63,62 @@ public abstract class AbstractGameLayer extends CCLayer {
 		selectedCard.setOpacity(130);
 	}
 
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		tch.touchEnded(event.getRawX(), winSize.height - event.getRawY());
-		return super.ccTouchesEnded(event);
-	}
+	/*
+	 * @Override public boolean ccTouchesEnded(MotionEvent event) {
+	 * tch.touchEnded(event.getRawX(), winSize.height - event.getRawY()); return
+	 * super.ccTouchesEnded(event); }
+	 * 
+	 * @Override public boolean ccTouchesMoved(MotionEvent event) {
+	 * tch.touchMoved(event.getRawX(), winSize.height - event.getRawY()); return
+	 * super.ccTouchesMoved(event); }
+	 */
 
-	@Override
-	public boolean ccTouchesMoved(MotionEvent event) {
-		tch.touchMoved(event.getRawX(), winSize.height - event.getRawY());
-		return super.ccTouchesMoved(event);
-	}
+	protected void moveCardToCenterAndEnlarge(CardSprite unit) {
 
-	protected void moveCardToCenterAndEnlarge() {
-
-		selectedCard.setOpacity(255);
+		unit.setOpacity(255);
 
 		CGPoint center = CGPoint.ccp(winSize.width / 2, winSize.height / 2);
 
 		CCMoveTo moveAction = CCMoveTo.action(0.4f, center);
-		selectedCard.runAction(moveAction);
+		unit.runAction(moveAction);
 
 		CCScaleTo scaleAction = CCScaleTo.action(0.4f, sizeScale * 5f);
-		selectedCard.runAction(scaleAction);
+		unit.runAction(scaleAction);
 	}
 
-	protected void dropCardToPosition() {
+	protected void dropCardToPosition(CardSprite card) {
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
 		CCScaleTo scaleAction = CCScaleTo.action(0.3f, sizeScale);
 		CCCallFuncN sparks = CCCallFuncN.action(this, "spark");
 		CCSequence seq = CCSequence.actions(scaleAction, sparks);
-		selectedCard.runAction(seq);
+		card.runAction(seq);
 	}
 
-	protected void moveCardToOriginalPosition() {
-		CCMoveTo moveAction = CCMoveTo.action(0.4f, originalPosition);
-		selectedCard.runAction(moveAction);
+	protected void moveCardToOriginalPosition(CardSprite card) {
+		CCMoveTo moveAction = CCMoveTo.action(0.4f, card.getOriginalPosition());
+		card.runAction(moveAction);
 
 		CCScaleTo scaleAction = CCScaleTo.action(0.4f, sizeScale);
-		selectedCard.runAction(scaleAction);
+		card.runAction(scaleAction);
 	}
 
-	protected void moveCardToPosition(Position position) {
+	protected void moveCardToPosition(CardSprite card, Position position) {
 		CCMoveTo moveAction = CCMoveTo.action(0.4f, bordframe.getPosition(position));
-		selectedCard.runAction(moveAction);
+		card.runAction(moveAction);
 
 		CCScaleTo scaleAction = CCScaleTo.action(0.4f, sizeScale);
-		selectedCard.runAction(scaleAction);
+		card.runAction(scaleAction);
 	}
 
+	/**
+	 * Add the backgound board cards to the board
+	 * 
+	 * @param xCount
+	 * @param yCount
+	 * @param playBoard
+	 */
 	protected void addBackGroundCards(int xCount, int yCount, boolean playBoard) {
 
-		// Add the bordcards
 		for (int x = 0; x < xCount; x++) {
 			for (int y = 0; y < yCount; y++) {
 
