@@ -142,6 +142,7 @@
                 
                 [action performActionWithCompletion:^{
                     
+                    STAssertTrue(defender1.dead, @"Pikeman should be dead");
                 }];
             }
         }];

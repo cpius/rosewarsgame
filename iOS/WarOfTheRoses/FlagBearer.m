@@ -71,7 +71,7 @@
     }
 
     if (aoeIsApplicable) {
-        [action.cardInAction.attack addTimedBonus:[[TimedBonus alloc] initWithValue:2 forNumberOfRounds:1]];
+        [action.cardInAction.attack addTimedBonus:[[TimedBonus alloc] initWithValue:2 forNumberOfTurns:2]];
         
         NSLog(@"Card: %@ received FlagBearers AOE bonus", action.cardInAction);
 

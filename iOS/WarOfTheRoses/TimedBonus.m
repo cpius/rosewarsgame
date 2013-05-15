@@ -13,22 +13,22 @@
 @implementation TimedBonus
 
 @synthesize bonusValue = _bonusValue;
-@synthesize numberOfRounds = _numberOfRounds;
+@synthesize numberOfRounds = _numberOfTurns;
 
 - (id)initWithValue:(NSUInteger)bonusValue {
     
-    return [self initWithValue:bonusValue forNumberOfRounds:1];
+    return [self initWithValue:bonusValue forNumberOfTurns:2];
 }
 
-- (id)initWithValue:(NSUInteger)bonusValue forNumberOfRounds:(NSUInteger)numberOfRounds {
+- (id)initWithValue:(NSUInteger)bonusValue forNumberOfTurns:(NSUInteger)numberOfTurns {
     
     self = [super init];
     
     if (self) {
         _bonusValue = bonusValue;
-        _numberOfRounds = numberOfRounds;
+        _numberOfTurns = numberOfTurns;
         
-        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"currentRound" options:NSKeyValueObservingOptionNew context:nil];
+        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
     }
     
     return self;
@@ -36,11 +36,11 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
-    if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"currentRound"]) {
+    if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"turnCounter"]) {
         
-        if ([GameManager sharedManager].currentGame.currentRound == bonusValueStartedInRound + _numberOfRounds) {
+        if ([GameManager sharedManager].currentGame.turnCounter == bonusValueStartedInTurn + _numberOfTurns) {
             [self stopTimedBonus];
-            [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"currentRound"];
+            [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"turnCounter"];
         }
     }
 }
@@ -48,7 +48,7 @@
 - (void)startTimedBonus:(RangeAttribute*)parent {
     
     _parent = parent;
-    bonusValueStartedInRound = [GameManager sharedManager].currentGame.currentRound;
+    bonusValueStartedInTurn = [GameManager sharedManager].currentGame.turnCounter;
 }
 
 - (void)stopTimedBonus {
@@ -58,7 +58,7 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"Bonus value %d for %d rounds", _bonusValue, _numberOfRounds];
+    return [NSString stringWithFormat:@"Bonus value %d for %d turns", _bonusValue, _numberOfTurns];
 }
 
 @end

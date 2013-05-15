@@ -7,10 +7,12 @@
 //
 
 #import "TimedAbility.h"
+#import "TimedBonus.h"
 
 @interface Bribe : TimedAbility {
     
     CardColors _originalColorOfBribedUnit;
+    
 }
 
 @end

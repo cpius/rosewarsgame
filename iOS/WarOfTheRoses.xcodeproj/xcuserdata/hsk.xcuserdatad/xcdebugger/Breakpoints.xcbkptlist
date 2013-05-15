@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameScene.m"
-         timestampString = "388439190.295588"
+         timestampString = "390333766.229718"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "651"
-         endingLineNumber = "651"
+         startingLineNumber = "653"
+         endingLineNumber = "653"
          landmarkName = "-takeTurn:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -79,45 +79,6 @@
          startingLineNumber = "226"
          endingLineNumber = "226"
          landmarkName = "-turnBasedMatchmakerViewController:playerQuitForMatch:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRosesTest/GameCenterTest.m"
-         timestampString = "389440159.477392"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "129"
-         endingLineNumber = "129"
-         landmarkName = "-testReplayOfSamuraiSecondaryAttacks"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRosesTest/GameCenterTest.m"
-         timestampString = "389440159.477392"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "140"
-         endingLineNumber = "140"
-         landmarkName = "-testReplayOfSamuraiSecondaryAttacks"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRoses/GameSerializer.m"
-         timestampString = "389560332.552222"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "319"
-         endingLineNumber = "319"
-         landmarkName = "-deserializeActionForGame:fromDictionary:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

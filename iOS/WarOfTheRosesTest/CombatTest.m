@@ -155,16 +155,11 @@
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender1, nil]];
 
-    TimedBonus *timedBonus = [[TimedBonus alloc] initWithValue:2 forNumberOfRounds:2];
+    TimedBonus *timedBonus = [[TimedBonus alloc] initWithValue:2 forNumberOfTurns:2];
     [attacker.attack addTimedBonus:timedBonus];
     
     STAssertTrue([attacker.attack calculateValue].lowerValue == 3, @"Attack lower value should be 3");
     
-    [_manager endTurn];
-    [_manager endTurn];
-    
-    STAssertTrue([attacker.attack calculateValue].lowerValue == 3, @"Attack lower value should be 3");
-
     [_manager endTurn];
     [_manager endTurn];
 

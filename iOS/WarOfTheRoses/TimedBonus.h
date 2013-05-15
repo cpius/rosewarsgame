@@ -12,13 +12,13 @@
     
     RangeAttribute *_parent;
     
-    NSUInteger bonusValueStartedInRound;
+    NSUInteger bonusValueStartedInTurn;
 }
 
 @property (nonatomic, readonly) NSUInteger numberOfRounds;
 
 - (id)initWithValue:(NSUInteger)bonusValue;
-- (id)initWithValue:(NSUInteger)bonusValue forNumberOfRounds:(NSUInteger)numberOfRounds;
+- (id)initWithValue:(NSUInteger)bonusValue forNumberOfTurns:(NSUInteger)numberOfTurns;
 
 - (void)startTimedBonus:(RangeAttribute*)parent;
 

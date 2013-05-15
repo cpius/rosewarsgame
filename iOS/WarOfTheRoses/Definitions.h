@@ -21,8 +21,8 @@
 
 #define kEnemyActionDelayTime 1.0
 
-#define NUMBER_OF_BASICUNITS 1
-#define NUMBER_OF_SPECIALUNITS 1
+#define NUMBER_OF_BASICUNITS 6
+#define NUMBER_OF_SPECIALUNITS 3
 
 typedef enum {
     kLevelIncreaseAbilityAttack = 0,

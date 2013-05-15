@@ -13,6 +13,7 @@
 #import "GameTypeScene.h"
 #import "BattlePlan.h"
 #import "AbilityAction.h"
+#import "SelectAbilityLayer.h"
 
 @interface GameScene()
 
@@ -539,6 +540,7 @@
 }
 
 - (void)leftPanelInfoButtonPressed:(LeftPanel *)leftPanel {
+    
     
     if (_showingDetailOfNode != nil) {
         [self hideCardDetail];

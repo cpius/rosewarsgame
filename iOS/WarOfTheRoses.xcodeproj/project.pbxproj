@@ -45,6 +45,13 @@
 		6D0CBF0A16D208CE00D241A7 /* AIStrategyAdvancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBF0916D208CD00D241A7 /* AIStrategyAdvancer.m */; };
 		6D0CBF0D16D209C100D241A7 /* BattlePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */; };
 		6D563BC0173832F4006F4C3A /* MeleeAttackPlaybackAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D563BBF173832F4006F4C3A /* MeleeAttackPlaybackAction.m */; };
+		6D563BDD173CE118006F4C3A /* SelectAbilityLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D563BDC173CE118006F4C3A /* SelectAbilityLayer.m */; };
+		6D563BE2173CF0EF006F4C3A /* attack_menu_button-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BDE173CF0EE006F4C3A /* attack_menu_button-hd.png */; };
+		6D563BE3173CF0EF006F4C3A /* attack_menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BDF173CF0EE006F4C3A /* attack_menu_button.png */; };
+		6D563BE4173CF0EF006F4C3A /* defense_menu_button-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BE0173CF0EE006F4C3A /* defense_menu_button-hd.png */; };
+		6D563BE5173CF0EF006F4C3A /* defense_menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BE1173CF0EF006F4C3A /* defense_menu_button.png */; };
+		6D563BE7173D1601006F4C3A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BE6173D15FF006F4C3A /* Default.png */; };
+		6D563BE9173D160D006F4C3A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BE8173D160C006F4C3A /* Default@2x.png */; };
 		6D5E04411662545C0085311B /* CardPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E04401662545C0085311B /* CardPool.m */; };
 		6D5E595D166D42C0007429BD /* archer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595C166D42C0007429BD /* archer_icon.png */; };
 		6D5E595F166D4426007429BD /* archer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595E166D4426007429BD /* archer_0.png */; };
@@ -460,6 +467,14 @@
 		6D0CBF0C16D209BA00D241A7 /* BattlePlan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BattlePlan.m; sourceTree = "<group>"; };
 		6D563BBE173832F4006F4C3A /* MeleeAttackPlaybackAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeleeAttackPlaybackAction.h; sourceTree = "<group>"; };
 		6D563BBF173832F4006F4C3A /* MeleeAttackPlaybackAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeleeAttackPlaybackAction.m; sourceTree = "<group>"; };
+		6D563BDB173CE118006F4C3A /* SelectAbilityLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectAbilityLayer.h; sourceTree = "<group>"; };
+		6D563BDC173CE118006F4C3A /* SelectAbilityLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectAbilityLayer.m; sourceTree = "<group>"; };
+		6D563BDE173CF0EE006F4C3A /* attack_menu_button-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "attack_menu_button-hd.png"; path = "Resources/Images/attack_menu_button-hd.png"; sourceTree = "<group>"; };
+		6D563BDF173CF0EE006F4C3A /* attack_menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = attack_menu_button.png; path = Resources/Images/attack_menu_button.png; sourceTree = "<group>"; };
+		6D563BE0173CF0EE006F4C3A /* defense_menu_button-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "defense_menu_button-hd.png"; path = "Resources/Images/defense_menu_button-hd.png"; sourceTree = "<group>"; };
+		6D563BE1173CF0EF006F4C3A /* defense_menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defense_menu_button.png; path = Resources/Images/defense_menu_button.png; sourceTree = "<group>"; };
+		6D563BE6173D15FF006F4C3A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		6D563BE8173D160C006F4C3A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		6D5E043F1662545C0085311B /* CardPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardPool.h; sourceTree = "<group>"; };
 		6D5E04401662545C0085311B /* CardPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardPool.m; sourceTree = "<group>"; };
 		6D5E595C166D42C0007429BD /* archer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = archer_icon.png; path = Resources/Images/archer_icon.png; sourceTree = "<group>"; };
@@ -1158,6 +1173,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6D563BDE173CF0EE006F4C3A /* attack_menu_button-hd.png */,
+				6D563BDF173CF0EE006F4C3A /* attack_menu_button.png */,
+				6D563BE0173CF0EE006F4C3A /* defense_menu_button-hd.png */,
+				6D563BE1173CF0EF006F4C3A /* defense_menu_button.png */,
 				6DBDA465172075170078287B /* topbar-hd.png */,
 				6DBDA466172075170078287B /* topbar.png */,
 				6D61517A16A88391007A104E /* archer_0-hd.png */,
@@ -1363,6 +1382,8 @@
 				6DC7F45C16DA9CFD00CD5071 /* LeftPanel.m */,
 				6DBDA462172074390078287B /* PlayerIndicator.h */,
 				6DBDA463172074390078287B /* PlayerIndicator.m */,
+				6D563BDB173CE118006F4C3A /* SelectAbilityLayer.h */,
+				6D563BDC173CE118006F4C3A /* SelectAbilityLayer.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1457,6 +1478,8 @@
 		6DF2FB7016596C5C00F08664 = {
 			isa = PBXGroup;
 			children = (
+				6D563BE8173D160C006F4C3A /* Default@2x.png */,
+				6D563BE6173D15FF006F4C3A /* Default.png */,
 				6DF2FB9116596C5C00F08664 /* WarOfTheRoses */,
 				6D0CBEE616D00DE500D241A7 /* WarOfTheRosesTest */,
 				6DF2FB7E16596C5C00F08664 /* Frameworks */,
@@ -2225,6 +2248,12 @@
 				6D60A0EA170F47DB00B6E2B5 /* infantry_defeated_sound.mp3 in Resources */,
 				6DBDA467172075170078287B /* topbar-hd.png in Resources */,
 				6DBDA468172075170078287B /* topbar.png in Resources */,
+				6D563BE2173CF0EF006F4C3A /* attack_menu_button-hd.png in Resources */,
+				6D563BE3173CF0EF006F4C3A /* attack_menu_button.png in Resources */,
+				6D563BE4173CF0EF006F4C3A /* defense_menu_button-hd.png in Resources */,
+				6D563BE5173CF0EF006F4C3A /* defense_menu_button.png in Resources */,
+				6D563BE7173D1601006F4C3A /* Default.png in Resources */,
+				6D563BE9173D160D006F4C3A /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2456,6 +2485,7 @@
 				6DBDA46D1725B52E0078287B /* RandomLevelIncreaseStrategy.m in Sources */,
 				6DBDA4701725B7440078287B /* FixedLevelIncreaseStrategy.m in Sources */,
 				6D563BC0173832F4006F4C3A /* MeleeAttackPlaybackAction.m in Sources */,
+				6D563BDD173CE118006F4C3A /* SelectAbilityLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

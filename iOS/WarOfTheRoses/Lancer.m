@@ -66,7 +66,7 @@
                 
                 CCLOG(@"Lancer gets +2A because 2 empty tiles exist between lancer and enemy");
                 
-                [self.attack addTimedBonus:[[TimedBonus alloc] initWithValue:2 forNumberOfRounds:1]];
+                [self.attack addTimedBonus:[[TimedBonus alloc] initWithValue:2 forNumberOfTurns:2]];
             }
         }
         

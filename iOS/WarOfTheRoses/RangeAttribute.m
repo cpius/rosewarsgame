@@ -38,7 +38,7 @@
     return self;
 }
 
-- (void)addTimedBonus:(TimedBonus *)timedBonus {
+- (TimedBonus*)addTimedBonus:(TimedBonus *)timedBonus {
     
     [_timedBonuses addObject:timedBonus];
     
@@ -47,15 +47,19 @@
     if ([_delegate respondsToSelector:@selector(rangeAttribute:addedTimedBonus:)]) {
         [_delegate rangeAttribute:self addedTimedBonus:timedBonus];
     }
+    
+    return timedBonus;
 }
 
-- (void)addRawBonus:(RawBonus *)rawBonus {
+- (RawBonus*)addRawBonus:(RawBonus *)rawBonus {
     
     [_rawBonuses addObject:rawBonus];
     
     if ([_delegate respondsToSelector:@selector(rangeAttribute:addedRawBonus:)]) {
         [_delegate rangeAttribute:self addedRawBonus:rawBonus];
     }
+    
+    return rawBonus;
 }
 
 - (NSUInteger)getRawBonusValue {

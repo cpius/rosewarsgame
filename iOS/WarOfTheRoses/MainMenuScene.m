@@ -65,8 +65,10 @@
 		[menu alignItemsVerticallyWithPadding:20];
 		[menu setPosition:ccp(size.width/2, size.height/2 + 50)];
 		
-		// Add the menu to the layer
-		[self addChild:menu];
+        menu.opacity = 0;
+        [self addChild:menu];
+        
+        [menu runAction:[CCFadeIn actionWithDuration:0.5]];
         
         CCSprite *background = [CCSprite spriteWithFile:@"Background.png"];
         background.anchorPoint = CGPointMake(0, 0);

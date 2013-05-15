@@ -42,10 +42,10 @@ typedef enum {
 
 - (id)initWithStartingRange:(AttributeRange)startingRange;
 
-- (void)addRawBonus:(RawBonus*)rawBonus;
+- (RawBonus*)addRawBonus:(RawBonus*)rawBonus;
 - (NSUInteger)getRawBonusValue;
 
-- (void)addTimedBonus:(TimedBonus*)timedBonus;
+- (TimedBonus*)addTimedBonus:(TimedBonus*)timedBonus;
 - (NSUInteger)getTimedBonusValue;
 
 - (NSUInteger)getTotalBonusValue;
