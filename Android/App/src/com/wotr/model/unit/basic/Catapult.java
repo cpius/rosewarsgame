@@ -10,12 +10,12 @@ public class Catapult extends RangedUnit {
 	}
 
 	@Override
-	protected int getAttack() {
+	public int getAttack() {
 		return 1;
 	}
 
 	@Override
-	protected int getDefense() {
+	public int getDefence() {
 		return 2;
 	}
 
@@ -37,8 +37,8 @@ public class Catapult extends RangedUnit {
 	public int getActionsUsedForAttack() {
 		return 2;
 	}
-	
+
 	public String getAttackSound() {
 		return "sounds/catapult_attack.wav";
-	} 
+	}
 }

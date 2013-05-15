@@ -12,12 +12,12 @@ public class Pikeman extends MeleeUnit {
 	}
 
 	@Override
-	protected int getAttack() {
+	public int getAttack() {
 		return 5;
 	}
 
 	@Override
-	protected int getDefense() {
+	public int getDefence() {
 		return 2;
 	}
 
@@ -40,7 +40,7 @@ public class Pikeman extends MeleeUnit {
 		UnitType[] zoc = { UnitType.CAVALRY };
 		return zoc;
 	}
-	
+
 	@Override
 	public AttackStrategy getAttackStrategy() {
 		return GameManager.getFactory().getPikemanAttackStrategy();

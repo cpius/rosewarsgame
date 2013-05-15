@@ -3,9 +3,10 @@ package com.wotr.model.unit;
 import com.wotr.GameManager;
 import com.wotr.model.Position;
 import com.wotr.model.UnitType;
+import com.wotr.model.unit.attribute.AttackAttribute;
+import com.wotr.model.unit.attribute.DefenceAttribute;
 import com.wotr.strategy.action.UnitActionResolverStrategy;
 import com.wotr.strategy.battle.AttackStrategy;
-import com.wotr.strategy.battle.BonusStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
 
 public abstract class Unit implements Cloneable {
@@ -15,9 +16,10 @@ public abstract class Unit implements Cloneable {
 	private boolean enemy;
 
 	private int experiencePoints = 0;
-	private int attackBonus = 0;
-	private int defenceBonus = 0;
 
+	private AttackAttribute attackAttribute;
+	private DefenceAttribute defenceAttribute;
+	
 	public String getImage() {
 		return "unit/" + image + (enemy ? "red" : "green") + ".jpg";
 	}
@@ -27,9 +29,9 @@ public abstract class Unit implements Cloneable {
 		this.enemy = enemy;
 	}
 
-	protected abstract int getAttack();
+	public abstract int getDefence();
 
-	protected abstract int getDefense();
+	public abstract int getAttack();
 
 	public abstract int getMovement();
 
@@ -48,7 +50,7 @@ public abstract class Unit implements Cloneable {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	
+
 	public UnitType[] getZoc() {
 		return new UnitType[0];
 	}
@@ -73,10 +75,6 @@ public abstract class Unit implements Cloneable {
 	public DefenceStrategy getDefenceStrategy() {
 		return GameManager.getFactory().getDefenceStrategy();
 	}
-	
-	public BonusStrategy getBonusStrategy() {
-		return GameManager.getFactory().getBonusStrategy();
-	}
 
 	public int getActionsUsedForAttack() {
 		return 1;
@@ -94,33 +92,29 @@ public abstract class Unit implements Cloneable {
 		return null;
 	}
 
-	public int getAttackWithUnitBonus() {
-		return getAttack() - getAttackBonus();
-	}
-
-	public int getDefenseWithUnitBonus() {
-		return getDefense() + getDefenceBonus();
-	}
-
-	public void addAttackBonus() {
-		attackBonus++;
-		experiencePoints = 0;
-	}
-
-	public void addDefenceBonus() {
-		defenceBonus++;
-		experiencePoints = 0;
-	}
-
 	public int getExperiencePoints() {
 		return experiencePoints;
 	}
 
-	public int getAttackBonus() {
-		return attackBonus;
+	public AttackAttribute getAttackAttribute() {
+		if (attackAttribute == null) {
+			attackAttribute = new AttackAttribute(getAttack());
+		}
+		return attackAttribute;
 	}
 
-	public int getDefenceBonus() {
-		return defenceBonus;
+	public DefenceAttribute getDefenceAttribute() {
+		if (defenceAttribute == null) {
+			defenceAttribute = new DefenceAttribute(getDefence());
+		}
+		return defenceAttribute;
+	}
+
+	public void addExperience() {
+		experiencePoints++;
+	}
+	
+	public void resetExperience() {
+		experiencePoints = 0;
 	}
 }

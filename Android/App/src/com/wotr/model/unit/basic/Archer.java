@@ -9,15 +9,15 @@ public class Archer extends RangedUnit {
 
 	public Archer() {
 		super("archer", false);
-	}		
+	}
 
 	@Override
-	protected int getAttack() {
+	public int getAttack() {
 		return 5;
 	}
 
 	@Override
-	protected int getDefense() {
+	public int getDefence() {
 		return 2;
 	}
 

@@ -10,12 +10,12 @@ public class Ballista extends RangedUnit {
 	}
 
 	@Override
-	protected int getAttack() {
+	public int getAttack() {
 		return 3;
 	}
 
 	@Override
-	protected int getDefense() {
+	public int getDefence() {
 		return 1;
 	}
 
@@ -28,9 +28,9 @@ public class Ballista extends RangedUnit {
 	public int getRange() {
 		return 3;
 	}
-	
+
 	@Override
 	public UnitType getType() {
 		return UnitType.SIEGE_WEAPON;
-	}		
+	}
 }
