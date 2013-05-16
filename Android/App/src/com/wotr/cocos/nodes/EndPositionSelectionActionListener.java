@@ -1,9 +1,9 @@
 package com.wotr.cocos.nodes;
 
-import com.wotr.model.Position;
+import com.wotr.model.attack.AttackEndPosition;
 
 public interface EndPositionSelectionActionListener {
 
-	void endPositionSelected(EndPositionSelectionSprite goSprite, CardSprite card, Position endPosition);
+	void endPositionSelected(EndPositionSelectionSprite goSprite, CardSprite card, AttackEndPosition endPosition);
 
 }
