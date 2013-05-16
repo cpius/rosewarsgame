@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 
 import com.wotr.cocos.Boardframe;
 import com.wotr.model.Position;
+import com.wotr.model.attack.AttackEndPosition;
 
 public class EndPositionSelectionSprite extends CCSprite implements CCTouchDelegateProtocol {
 
@@ -25,13 +26,15 @@ public class EndPositionSelectionSprite extends CCSprite implements CCTouchDeleg
 
 	private static List<EndPositionSelectionSprite> all = new ArrayList<EndPositionSelectionSprite>();
 
-	public EndPositionSelectionSprite(CardSprite card, Position position, float scale, Boardframe bordframe) {
+	public EndPositionSelectionSprite(CardSprite card, AttackEndPosition endPosition, float scale, Boardframe bordframe) {
 		super("attack_direction-hd.png");
 		this.card = card;
 
+		Position position = endPosition.getPosition();
+
 		CGPoint pointPosition = bordframe.getPosition(position);
 		setPosition(pointPosition);
-		setUserData(position);
+		setUserData(endPosition);
 		setScale(scale * 2f);
 
 		CCScaleTo scaleUpAction = CCScaleTo.action(0.3f, scale * 1.7f);
@@ -45,8 +48,8 @@ public class EndPositionSelectionSprite extends CCSprite implements CCTouchDeleg
 		all.add(this);
 	}
 
-	public Position getPositionUserData() {
-		return (Position) getUserData();
+	public AttackEndPosition getAttackEndPositionUserData() {
+		return (AttackEndPosition) getUserData();
 	}
 
 	@Override
@@ -65,10 +68,10 @@ public class EndPositionSelectionSprite extends CCSprite implements CCTouchDeleg
 	public boolean ccTouchesBegan(MotionEvent event) {
 		CGPoint touchPoint = convertTouchToNodeSpace(event);
 		if (CGRect.containsPoint(getTextureRect(), touchPoint)) {
-			listener.endPositionSelected(this, card, getPositionUserData());
+			listener.endPositionSelected(this, card, getAttackEndPositionUserData());
 
 			CCNode parent = getParent();
-			
+
 			for (EndPositionSelectionSprite sprite : all) {
 				parent.removeChild(sprite, true);
 			}
