@@ -46,6 +46,8 @@
 @property (nonatomic, copy) NSString *defeatSound;
 @property (nonatomic, copy) NSString *moveSound;
 
+@property (nonatomic, copy) NSString *cardIdentifier;
+
 @property (nonatomic, strong) BaseBattleStrategy *battleStrategy;
 /*
  Samme mekanisme som range, man kan bevæge sig til siden og fremad eller bagud. Man kan ikke bevæge sig ind I et felt som er optaget af en anden unit. Man kan heller ikke gå igennem egne eller modstanderens units.

@@ -73,7 +73,7 @@
 
 - (BOOL)canBribeOpponent:(Card *)opponent {
     
-    if (opponent == _bribedOpponent && [GameManager sharedManager].currentGame.currentRound - _opponentBribedInRound < 2) {
+    if ([opponent.cardIdentifier isEqualToString:_bribedOpponentIdentifier] && [GameManager sharedManager].currentGame.currentRound - _opponentBribedInRound < 2) {
         return NO;
     }
     
@@ -82,7 +82,7 @@
 
 - (void)bribeOpponent:(Card *)opponent {
     
-    _bribedOpponent = opponent;
+    _bribedOpponentIdentifier = opponent.cardIdentifier;
     _opponentBribedInRound = [GameManager sharedManager].currentGame.currentRound;
 }
 
@@ -97,5 +97,18 @@
         
         [self bribeOpponent:action.enemyCard];
     }
+}
+
+- (NSDictionary *)asDictionary {
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            _bribedOpponentIdentifier, @"bribed_opponent_identifier",
+            @(_opponentBribedInRound), @"opponent_bribed_in_round", nil];
+}
+
+- (void)fromDictionary:(NSDictionary*)dictionary {
+    
+    _bribedOpponentIdentifier = [NSString stringWithFormat:@"%@", [dictionary valueForKey:@"bribed_opponent_identifier"]];
+    _opponentBribedInRound = [[dictionary valueForKey:@"opponent_bribed_in_round"] integerValue];
 }
 @end

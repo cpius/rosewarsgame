@@ -90,6 +90,7 @@
         [self addChild:menu];
         
         _placedCards = [[NSMutableArray alloc] init];
+        _homePositions = [[NSMutableDictionary alloc] init];
         
         [self presentCards];
         
@@ -116,6 +117,8 @@
         
         cardSprite.position = ccp(screenSize.width / 2, -200);
         cardSprite.model.cardLocation = [GridLocation gridLocationWithRow:row column:column];
+        
+        [_homePositions setObject:cardSprite.model.cardLocation forKey:card.cardIdentifier];
         
         [self addChild:cardSprite];
         [_cardSprites addObject:cardSprite];
@@ -147,7 +150,7 @@
     
     for (CardSprite *card in _cardSprites) {
         
-        GridLocation *boardLocation = [GridLocation gridLocationWithRow:card.model.cardLocation.row - 4 column:card.model.cardLocation.column];
+        GridLocation *boardLocation = [[GridLocation gridLocationWithRow:card.model.cardLocation.row column:card.model.cardLocation.column] flipBacklineFromCurrentBackline:LOWER_BACKLINE];
         
         GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:boardLocation];
         
@@ -362,7 +365,9 @@
 
 - (void)moveCardToHomePosition:(CardSprite *)card {
     
-    CGPoint position = [_gridLayoutManager getPositionForRowNumber:card.model.cardLocation.row columnNumber:card.model.cardLocation.column];
+    GridLocation *homeLocationForCard = [_homePositions objectForKey:card.model.cardIdentifier];
+    
+    CGPoint position = [_gridLayoutManager getPositionForRowNumber:homeLocationForCard.row columnNumber:homeLocationForCard.column];
     
     CCLOG(@"Card %@ moving to home position %@", card, NSStringFromCGPoint(position));
     

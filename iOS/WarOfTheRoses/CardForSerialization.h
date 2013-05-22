@@ -23,6 +23,7 @@
 @property (nonatomic, readonly) NSNumber *cardColor;
 @property (nonatomic, readonly) NSNumber *hitpoints;
 @property (nonatomic, readonly) NSNumber *experience;
+@property (nonatomic, readonly) NSString *identifier;
 
 @property (nonatomic, readonly) NSNumber *attackBonus;
 @property (nonatomic, readonly) NSNumber *defenseBonus;

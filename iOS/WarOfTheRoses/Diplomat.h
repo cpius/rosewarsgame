@@ -10,7 +10,7 @@
 
 @interface Diplomat : Card {
     
-    Card *_bribedOpponent;
+    NSString *_bribedOpponentIdentifier;
     NSUInteger _opponentBribedInRound;
 }
 

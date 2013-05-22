@@ -203,10 +203,6 @@
     if (_currentGame.gametype == kGameTypeMultiPlayer) {
         [[GCTurnBasedMatchHelper sharedInstance] endTurnWithData:[_currentGame serializeCurrentGameForPlayerWithId:[GKLocalPlayer localPlayer].playerID]];
     }
-    
-/*    if ([_delegate respondsToSelector:@selector(turnChangedToPlayerWithColor:)]) {
-        [_delegate turnChangedToPlayerWithColor:_currentGame.currentPlayersTurn];
-    }*/
 }
 
 - (void)endGameWithGameResult:(GameResults)gameResult {

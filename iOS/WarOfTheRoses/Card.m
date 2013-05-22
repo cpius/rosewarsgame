@@ -69,6 +69,17 @@
     
     self.numberOfLevelsIncreased = 0;
     self.experience = 0;
+    
+    _cardIdentifier = [self createCardIdentifier];
+}
+
+- (NSString*)createCardIdentifier {
+    
+    CFUUIDRef uuid = CFUUIDCreate(NULL);
+    NSString *uuidStr = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
+    CFRelease(uuid);
+    
+    return uuidStr;
 }
 
 - (BaseBattleStrategy*)newBattleStrategy {

@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameSerializer.m"
-         timestampString = "389560273.814334"
+         timestampString = "390946127.825579"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "219"
-         endingLineNumber = "219"
+         startingLineNumber = "220"
+         endingLineNumber = "220"
          landmarkName = "-deserializeGameData:forPlayerWithId:allPlayers:toGame:onlyActions:onlyEnemyUnits:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -79,6 +79,58 @@
          startingLineNumber = "226"
          endingLineNumber = "226"
          landmarkName = "-turnBasedMatchmakerViewController:playerQuitForMatch:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/PlaceCardsScene.m"
+         timestampString = "390421940.288554"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "149"
+         endingLineNumber = "149"
+         landmarkName = "-autoPressed:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GCTurnBasedMatchHelper.m"
+         timestampString = "390856339.76828"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "179"
+         endingLineNumber = "179"
+         landmarkName = "-endTurnWithData:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRoses/GameScene.m"
+         timestampString = "390856465.210482"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "508"
+         endingLineNumber = "508"
+         landmarkName = "-checkForEndTurnAfterAction:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "WarOfTheRosesTest/GameCenterTest.m"
+         timestampString = "390946229.241937"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "183"
+         endingLineNumber = "183"
+         landmarkName = "-testDiplomatCannotBribeTheSameUnitTwoRoundsInARowInMultiplayerGame"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

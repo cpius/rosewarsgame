@@ -29,6 +29,8 @@
     
     NSMutableArray *_placedCards;
     NSMutableArray *_cardSprites;
+    
+    NSMutableDictionary *_homePositions;
 }
 
 @property (nonatomic, strong) Deck *currentDeck;

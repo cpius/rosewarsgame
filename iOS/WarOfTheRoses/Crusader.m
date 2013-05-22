@@ -50,6 +50,8 @@
 
 - (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action {
     
+    // Can't apply AOE when dead
+    if (action.cardInAction.dead) return;
     // Can't apply AOE to self
     if (action.cardInAction == self) return;
     // Only apply when action is move or melee

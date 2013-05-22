@@ -28,6 +28,7 @@
         _cardColor = @(card.cardColor);
         _hitpoints = @(card.hitpoints);
         _experience = @(card.experience);
+        _identifier = card.cardIdentifier;
         
         _attackBonus = @([card.attack getRawBonusValue]);
         _defenseBonus = @([card.defence getRawBonusValue]);
@@ -52,6 +53,7 @@
             _defenseBonus, @"defensebonus",
             _hitpoints, @"hitpoints",
             _experience, @"experience",
+            _identifier, @"identifier",
             nil];
     
     [gamedata setValue:_affectedByAbilities forKey:@"abilities"];

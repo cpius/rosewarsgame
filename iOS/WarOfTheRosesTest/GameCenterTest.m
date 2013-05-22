@@ -22,6 +22,8 @@
 #import "MeleeAttackAction.h"
 #import "PathFinderStep.h"
 #import "GameBoardMockup.h"
+#import "Diplomat.h"
+#import "AbilityAction.h"
 
 @implementation GameCenterTest
 
@@ -146,6 +148,50 @@
                 }];
             }
         }];
+    }];
+}
+
+- (void)testDiplomatCannotBribeTheSameUnitTwoRoundsInARowInMultiplayerGame {
+    
+    Diplomat *diplomat = [Diplomat card];
+    Pikeman *defender1 = [Pikeman card];
+    
+    diplomat.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    diplomat.cardColor = kCardColorGreen;
+    
+    defender1.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    defender1.cardColor = kCardColorRed;
+    
+    [GameManager sharedManager].currentGame.myColor = kPlayerGreen;
+    [GameManager sharedManager].currentGame = [TestHelper setupGame:[GameManager sharedManager].currentGame
+                                                   withPlayer1Units:[NSArray arrayWithObject:diplomat]
+                                                       player2Units:[NSArray arrayWithObject:defender1]];
+    
+    [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
+    
+    STAssertTrue([diplomat isValidTarget:defender1], @"Diplomat should be able to bribe pikeman");
+    
+    PathFinderStep *step = [[PathFinderStep alloc] initWithLocation:defender1.cardLocation];
+    
+    AbilityAction *bribeAction = [[AbilityAction alloc] initWithPath:@[step] andCardInAction:diplomat targetCard:defender1];
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    bribeAction.delegate = mock;
+    
+    [bribeAction performActionWithCompletion:^{
+        
+        STAssertTrue([defender1 isAffectedByAbility:kAbilityBribe], @"Pikeman should be affected by bribe");
+
+        NSData *data = [[GameManager sharedManager].currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
+        [[GameManager sharedManager] endTurn];
+        
+        [TestHelper swapBoardInGame:[GameManager sharedManager].currentGame myCurrentGameBoardSide:kGameBoardLower];
+        
+        [[GameManager sharedManager].currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
+        
+        STAssertFalse([defender1 isAffectedByAbility:kAbilityBribe], @"Pikeman should no longer be affected by bribe");
+        STAssertTrue([defender1 isAffectedByAbility:kAbilityCoolDown], @"Pikeman should be affected by cooldown");
+        STAssertFalse([diplomat isValidTarget:defender1], @"Diplomat shouldn't be able to bribe pikeman");
     }];
 }
 

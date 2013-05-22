@@ -51,8 +51,11 @@
 
 - (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action {
     
+    // Can't apply AOE when dead
+    if (action.cardInAction.dead) return;
     if (action.cardInAction == self) return;
-//    if (![action.cardInAction isOwnedByPlayerWithColor:[GameManager sharedManager].currentPlayersTurn]) return;
+    // Only apply when action is move or melee
+    if (![action.cardInAction isOwnedByPlayerWithColor:[GameManager sharedManager].currentPlayersTurn]) return;
     
     BOOL aoeIsApplicable = NO;
     NSArray *surroundingLocations = [self.cardLocation surroundingEightGridLocations];

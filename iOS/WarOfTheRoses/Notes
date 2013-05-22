@@ -1,7 +1,6 @@
 Versionshistorie:
 
-Diplomat har nu range 3
-Change unit without deselecting current unit
+Bugfix ifm flagbearer og crusader
 
 - (void)zoomOut {
     

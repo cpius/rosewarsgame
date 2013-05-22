@@ -25,7 +25,7 @@
 - (void)resetUserInterface;
 - (void)resetAttackDirection;
 
-- (void)checkForEndTurn;
+- (void)checkForEndTurnAfterAction:(Action*)action;
 - (void)doEnemyPlayerTurn;
 
 - (void)updateRemainingActions:(NSUInteger)remainingActions;
@@ -381,7 +381,7 @@
     [self updateRemainingActions:remainingActions];
     [self resetUserInterface];
     [self hideToolsPanel];
-    [self checkForEndTurn];
+    [self checkForEndTurnAfterAction:action];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -423,7 +423,7 @@
     Action *nextAction = [_gameManager getActionForEnemeyPlayer];
     
     if (nextAction == nil) {
-        [self checkForEndTurn];
+        [self checkForEndTurnAfterAction:nextAction];
         return;
     }
     
@@ -503,12 +503,12 @@
     [self addChild:gameoverStatus z:5000];
 }
 
-- (void)checkForEndTurn {
+- (void)checkForEndTurnAfterAction:(Action *)action {
     
     GameResults result = [_gameManager checkForEndGame];
     
     if (result == kGameResultInProgress) {
-        if ([_gameManager shouldEndTurn]) {
+        if (!action.playback && [_gameManager shouldEndTurn]) {
             [_gameManager endTurn];
         }
     }

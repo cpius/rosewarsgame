@@ -212,6 +212,7 @@
                 card.cardColor = [[carddata objectForKey:@"cardcolor"] integerValue];
                 card.hitpoints = [[carddata objectForKey:@"hitpoints"] integerValue];
                 card.experience = [[carddata objectForKey:@"experience"] integerValue];
+                card.cardIdentifier = [NSString stringWithFormat:@"%@", [carddata objectForKey:@"identifier"]];
                 
                 [card.attack addRawBonus:[[RawBonus alloc] initWithValue:[[carddata objectForKey:@"attackbonus"] integerValue]]];
                 [card.defence addRawBonus:[[RawBonus alloc] initWithValue:[[carddata objectForKey:@"defensebonus"] integerValue]]];
