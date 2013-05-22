@@ -32,14 +32,18 @@ import com.wotr.GameManager;
 import com.wotr.R;
 import com.wotr.cocos.action.RemoveNodeCallBackAction;
 import com.wotr.cocos.nodes.ActionPathSprite;
+import com.wotr.cocos.nodes.BonusSelectionActionListener;
+import com.wotr.cocos.nodes.BonusSelectionSprite;
 import com.wotr.cocos.nodes.CardSprite;
-import com.wotr.cocos.nodes.EndPositionSelectionSprite;
 import com.wotr.cocos.nodes.EndPositionSelectionActionListener;
+import com.wotr.cocos.nodes.EndPositionSelectionSprite;
 import com.wotr.model.Action;
 import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
+import com.wotr.model.attack.AttackEndPosition;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
+import com.wotr.model.unit.attribute.bonus.BonusAward;
 import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolver;
 import com.wotr.strategy.action.ActionsResolverStrategy;
@@ -51,14 +55,13 @@ import com.wotr.strategy.game.GameEventListener;
 import com.wotr.strategy.game.MultiplayerGame;
 import com.wotr.strategy.game.exceptions.InvalidActionException;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
-import com.wotr.strategy.game.exceptions.InvalidEndPositionException;
 import com.wotr.strategy.game.exceptions.InvalidMoveException;
 import com.wotr.strategy.player.HumanPlayer;
 import com.wotr.strategy.player.Player;
 import com.wotr.touch.CardTouchGridDecorator;
 import com.wotr.touch.CardTouchListener;
 
-public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener, EndPositionSelectionActionListener {
+public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener, EndPositionSelectionActionListener, BonusSelectionActionListener {
 
 	private Collection<CardSprite> unitList = new ArrayList<CardSprite>();
 	private int xCount;
@@ -71,7 +74,6 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	private PathFinderStrategy pathFinderStrategy;
 	private ActionPathSprite actionPathSprite;
-	private AttackResult attackResult;
 
 	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
 		CCScene scene = CCScene.node();
@@ -133,12 +135,6 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		game.setActionsResolver(actionsResolver);
 
 		game.startGame();
-
-		/*
-		 * BonusChooserSprite bcs = new BonusChooserSprite();
-		 * bcs.setPosition(CGPoint.ccp(winSize.getWidth() / 2f,
-		 * winSize.getHeight() / 2f)); addChild(bcs);
-		 */
 	}
 
 	protected void dropCardToPosition(CardSprite card) {
@@ -228,10 +224,10 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.pageflip);
 	}
 
-	private void cardDragedEndedOnDefendingUnit(CardSprite card, Unit attackingUnit, Unit defendingUnit, Position pInP) throws InvalidEndPositionException, InvalidAttackException {
+	private void cardDragedEndedOnDefendingUnit(CardSprite card, Unit attackingUnit, Unit defendingUnit, Position pInP) throws InvalidAttackException {
 
 		Action action = pathFinderStrategy.getActionForPosition(pInP);
-		attackResult = GameManager.getGame().attack(action, defendingUnit);
+		AttackResult attackResult = GameManager.getGame().attack(action, defendingUnit);
 
 		if (attackResult.isSuccesfull()) {
 			removeCCSprite(defendingUnit);
@@ -239,22 +235,43 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		// If there is only one possible endposition after attack, automatically
 		// use it, otherwise ask the user
-		List<Position> endPositions = attackResult.getEndPositions();
+		List<AttackEndPosition> endPositions = attackResult.getEndPositionProspects();
 		if (endPositions.size() == 1) {
-			attackResult = null;
-			moveCardToPosition(card, endPositions.get(0));
+			AttackEndPosition endPosition = endPositions.get(0);
+			endPosition.endAttack();
+			moveCardToPosition(card, endPosition.getPosition());
 			removeSelection(card);
+			awardBonus(attackResult);
 		} else {
 
 			dropCardToPosition(card);
 
 			// Add images to endposition selection positions for units
-			for (Position endPosition : endPositions) {
+			for (AttackEndPosition endPosition : endPositions) {
 				EndPositionSelectionSprite goSprite = new EndPositionSelectionSprite(card, endPosition, sizeScale, bordframe);
 				goSprite.addActionListener(this);
 				addChild(goSprite, 10);
 			}
 		}
+	}
+
+	private void awardBonus(AttackResult attackResult) {
+
+		Collection<BonusAward> awardProspects = attackResult.getAwardProspects();
+		if (!awardProspects.isEmpty()) {
+
+			BonusSelectionSprite bss = new BonusSelectionSprite(awardProspects);
+			bss.setPosition(CGPoint.ccp(winSize.getWidth() / 2f, winSize.getHeight() / 2f));
+			bss.addActionListener(this);
+			addChild(bss);
+		} else {
+			// Attack has ended
+		}
+	}
+
+	@Override
+	public void bonusSelected(BonusAward award) {
+		award.claim();
 	}
 
 	private void resetActionSelection(CardSprite card) {
@@ -524,15 +541,10 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	@Override
-	public void endPositionSelected(EndPositionSelectionSprite goSprite, CardSprite card, Position position) {
-
-		try {
-			attackResult.endAttackAt(position);
-			attackResult = null;
-		} catch (InvalidEndPositionException e) {
-
-		}
-
-		moveCardToPosition(card, position);		
+	public void endPositionSelected(EndPositionSelectionSprite goSprite, CardSprite card, AttackEndPosition endPosition) {
+		Position position = endPosition.getPosition();
+		endPosition.endAttack();
+		moveCardToPosition(card, position);
+		awardBonus(endPosition.getAttackResult());
 	}
 }
