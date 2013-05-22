@@ -2,14 +2,12 @@ package com.wotr.strategy.game;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
 
 import com.wotr.GameManager;
 import com.wotr.model.Action;
 import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
-import com.wotr.model.attack.AttackEndPosition;
 import com.wotr.model.attack.FailedMeleeAttackEndpoint;
 import com.wotr.model.attack.FailedRangedAttackEndpoint;
 import com.wotr.model.attack.SuccessfulMeleeAttackEndpoint;
@@ -98,20 +96,22 @@ public class MultiplayerGame implements Game, AttackEnder {
 
 			if (attackingUnit.isRanged()) {
 				// If successful attacking unit is ranged, keep position
-				AttackEndPosition endPosition = new SuccessfulRangedAttackEndpoint(this, attackingUnit, attackingUnit.getPosition());
-				return new AttackResult(succes, endPosition, awardProspects);
+				AttackResult result = new AttackResult(succes, awardProspects);
+				result.addEndposition(new SuccessfulRangedAttackEndpoint(this, attackingUnit, attackingUnit.getPosition()));
+				return result;
 			} else {
 				// If successful attacking unit is melee, suggest end positions
-				List<AttackEndPosition> endPositions = new ArrayList<AttackEndPosition>();
-				endPositions.add(new SuccessfulMeleeAttackEndpoint(this, attackingUnit, action.getPath().getPosition()));
-				endPositions.add(new SuccessfulMeleeAttackEndpoint(this, attackingUnit, attackingUnit.getPosition()));
-				return new AttackResult(succes, endPositions, awardProspects);
+				AttackResult result = new AttackResult(succes, awardProspects);
+				result.addEndposition(new SuccessfulMeleeAttackEndpoint(this, attackingUnit, action.getPath().getPosition()));
+				result.addEndposition(new SuccessfulMeleeAttackEndpoint(this, attackingUnit, attackingUnit.getPosition()));
+				return result;
 			}
 		} else {
 			if (attackingUnit.isRanged()) {
 				// If failed attacking unit is ranged, keep position
-				AttackEndPosition endPosition = new FailedRangedAttackEndpoint(this, attackingUnit, attackingUnit.getPosition());
-				return new AttackResult(succes, endPosition, awardProspects);
+				AttackResult result = new AttackResult(succes, awardProspects);
+				result.addEndposition(new FailedRangedAttackEndpoint(this, attackingUnit, attackingUnit.getPosition()));
+				return result;
 			} else {
 				// If failed attacking unit is melee, go back to attacking
 				// position
@@ -122,8 +122,9 @@ public class MultiplayerGame implements Game, AttackEnder {
 					position = action.getUnit().getPosition();
 				}
 
-				AttackEndPosition endPosition = new FailedMeleeAttackEndpoint(this, attackingUnit, position);
-				return new AttackResult(succes, endPosition, awardProspects);
+				AttackResult result = new AttackResult(succes, awardProspects);
+				result.addEndposition(new FailedMeleeAttackEndpoint(this, attackingUnit, position));
+				return result;
 			}
 		}
 	}
@@ -132,17 +133,15 @@ public class MultiplayerGame implements Game, AttackEnder {
 	private Collection<? extends BonusAward> getAwardProspects(Unit attackingUnit) {
 
 		Collection<BonusAward> result = new ArrayList<BonusAward>();
-
-		int xp = attackingUnit.getExperiencePoints();
+		
+		int xp = attackingUnit.addExperience();
 
 		// if award is to be given
 		if (xp >= 2) {
 			attackingUnit.resetExperience();
 			result.add(new AttackBonusAward(attackingUnit));
 			result.add(new DefenceBonusAward(attackingUnit));
-		} else {
-			attackingUnit.addExperience();
-		}
+		} 
 
 		return result;
 	}

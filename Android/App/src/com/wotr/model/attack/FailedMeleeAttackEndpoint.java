@@ -17,4 +17,5 @@ public class FailedMeleeAttackEndpoint extends AbstractAttackEndPosition impleme
 	public void endAttack() {
 		ender.endAttack(attackingUnit, getPosition(), !attackingUnit.getPosition().equals(getPosition()));
 	}
+	
 }

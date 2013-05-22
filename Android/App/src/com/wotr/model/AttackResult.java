@@ -10,20 +10,11 @@ import com.wotr.model.unit.attribute.bonus.BonusAward;
 public class AttackResult {
 
 	private final boolean succes;
-	private final List<AttackEndPosition> endPositions;
+	private final List<AttackEndPosition> endPositions = new ArrayList<AttackEndPosition>();
 	private final Collection<BonusAward> awardProspects;
 
-	public AttackResult(boolean succes, AttackEndPosition position, Collection<BonusAward> awardProspects) {
+	public AttackResult(boolean succes, Collection<BonusAward> awardProspects) {
 		this.succes = succes;
-		this.awardProspects = awardProspects;
-
-		endPositions = new ArrayList<AttackEndPosition>(1);
-		endPositions.add(position);
-	}
-
-	public AttackResult(boolean succes, List<AttackEndPosition> endPositions, Collection<BonusAward> awardProspects) {
-		this.succes = succes;
-		this.endPositions = endPositions;
 		this.awardProspects = awardProspects;
 	}
 
@@ -31,12 +22,16 @@ public class AttackResult {
 		return succes;
 	}
 
-	// TODO: Change return type
 	public List<AttackEndPosition> getEndPositionProspects() {
 		return endPositions;
 	}
 
 	public Collection<BonusAward> getAwardProspects() {
 		return awardProspects;
+	}
+
+	public void addEndposition(AttackEndPosition attackEndPosition) {
+		endPositions.add(attackEndPosition);
+		attackEndPosition.setAttackResult(this);
 	}
 }

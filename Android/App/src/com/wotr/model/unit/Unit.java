@@ -110,8 +110,8 @@ public abstract class Unit implements Cloneable {
 		return defenceAttribute;
 	}
 
-	public void addExperience() {
-		experiencePoints++;
+	public int addExperience() {
+		return ++experiencePoints;
 	}
 	
 	public void resetExperience() {
