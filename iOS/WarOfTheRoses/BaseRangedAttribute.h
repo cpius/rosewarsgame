@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 
 typedef struct _AttributeRange {
-    NSUInteger lowerValue;
-    NSUInteger upperValue;
+    NSInteger lowerValue;
+    NSInteger upperValue;
 } AttributeRange;
 
-NS_INLINE AttributeRange MakeAttributeRange(NSUInteger lower, NSUInteger upper) {
+NS_INLINE AttributeRange MakeAttributeRange(NSInteger lower, NSInteger upper) {
     AttributeRange r;
     r.lowerValue = lower;
     r.upperValue = upper;

@@ -30,7 +30,34 @@
 
 - (BattleResult*)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager {
     
-    @throw [NSException exceptionWithName:@"Error" reason:@"Musn't call resolveCombatBetween:(Card *)attacker defender:(Card *)defender on baseclass" userInfo:nil];
+    BattleResult *battleResult = [BattleResult battleResultWithAttacker:attacker defender:defender];
+    
+    [attacker combatStartingAgainstDefender:defender];
+    [defender combatStartingAgainstAttacker:attacker];
+    
+    [manager.delegate combatHasStartedBetweenAttacker:attacker andDefender:defender];
+    
+    _attackValue = [attacker.attack calculateValue];
+    _defendValue = [defender.defence calculateValue];
+    
+    // Adjust defense if attack is greater than 1-6
+    if (_attackValue.lowerValue < 1) {
+        _defendValue.upperValue--;
+    }
+    
+    CCLOG(@"Attack value: %@", AttributeRangeToNSString(_attackValue));
+    CCLOG(@"Defend value: %@", AttributeRangeToNSString(_defendValue));
+    
+    _attackRoll = [self.attackerDiceStrategy rollDiceWithDie:6];
+    _defenseRoll = [self.defenderDiceStrategy rollDiceWithDie:6];
+    
+    battleResult.attackRoll = _attackRoll;
+    battleResult.defenseRoll = _defenseRoll;
+    
+    CCLOG(@"Attack roll: %d", _attackRoll);
+    CCLOG(@"Defence roll: %d", _defenseRoll);
+    
+    return battleResult;
 }
 
 + (id)strategy {

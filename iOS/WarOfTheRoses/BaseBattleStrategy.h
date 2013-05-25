@@ -10,7 +10,14 @@
 #import "BattleStrategy.h"
 #import "DiceStrategy.h"
 
-@interface BaseBattleStrategy : NSObject <BattleStrategy>
+@interface BaseBattleStrategy : NSObject <BattleStrategy> {
+    
+    NSInteger _attackRoll;
+    NSInteger _defenseRoll;
+    
+    AttributeRange _attackValue;
+    AttributeRange _defendValue;
+}
 
 @property (nonatomic, strong) id<DiceStrategy> attackerDiceStrategy;
 @property (nonatomic, strong) id<DiceStrategy> defenderDiceStrategy;

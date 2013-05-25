@@ -52,6 +52,9 @@
 		6D563BE5173CF0EF006F4C3A /* defense_menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BE1173CF0EF006F4C3A /* defense_menu_button.png */; };
 		6D563BE7173D1601006F4C3A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BE6173D15FF006F4C3A /* Default.png */; };
 		6D563BE9173D160D006F4C3A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563BE8173D160C006F4C3A /* Default@2x.png */; };
+		6D563C29174E4C75006F4C3A /* ironplate-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C27174E4C73006F4C3A /* ironplate-hd.png */; };
+		6D563C2A174E4C75006F4C3A /* ironplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C28174E4C74006F4C3A /* ironplate.png */; };
+		6D563C2C174E7218006F4C3A /* bloodspatter.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C2B174E7218006F4C3A /* bloodspatter.plist */; };
 		6D5E04411662545C0085311B /* CardPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E04401662545C0085311B /* CardPool.m */; };
 		6D5E595D166D42C0007429BD /* archer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595C166D42C0007429BD /* archer_icon.png */; };
 		6D5E595F166D4426007429BD /* archer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595E166D4426007429BD /* archer_0.png */; };
@@ -475,6 +478,9 @@
 		6D563BE1173CF0EF006F4C3A /* defense_menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defense_menu_button.png; path = Resources/Images/defense_menu_button.png; sourceTree = "<group>"; };
 		6D563BE6173D15FF006F4C3A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		6D563BE8173D160C006F4C3A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		6D563C27174E4C73006F4C3A /* ironplate-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ironplate-hd.png"; path = "Resources/Images/ironplate-hd.png"; sourceTree = "<group>"; };
+		6D563C28174E4C74006F4C3A /* ironplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ironplate.png; path = Resources/Images/ironplate.png; sourceTree = "<group>"; };
+		6D563C2B174E7218006F4C3A /* bloodspatter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = bloodspatter.plist; path = Resources/Particles/bloodspatter.plist; sourceTree = "<group>"; };
 		6D5E043F1662545C0085311B /* CardPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardPool.h; sourceTree = "<group>"; };
 		6D5E04401662545C0085311B /* CardPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardPool.m; sourceTree = "<group>"; };
 		6D5E595C166D42C0007429BD /* archer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = archer_icon.png; path = Resources/Images/archer_icon.png; sourceTree = "<group>"; };
@@ -1173,6 +1179,8 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6D563C27174E4C73006F4C3A /* ironplate-hd.png */,
+				6D563C28174E4C74006F4C3A /* ironplate.png */,
 				6D563BDE173CF0EE006F4C3A /* attack_menu_button-hd.png */,
 				6D563BDF173CF0EE006F4C3A /* attack_menu_button.png */,
 				6D563BE0173CF0EE006F4C3A /* defense_menu_button-hd.png */,
@@ -1331,6 +1339,7 @@
 		6D61518616A8866A007A104E /* Particles */ = {
 			isa = PBXGroup;
 			children = (
+				6D563C2B174E7218006F4C3A /* bloodspatter.plist */,
 				6D0CBE9716C1968600D241A7 /* flame.plist */,
 				6D6151AB16AFE3E1007A104E /* sparks.plist */,
 				6D61518716A8867B007A104E /* exploding_ring.plist */,
@@ -2254,6 +2263,9 @@
 				6D563BE5173CF0EF006F4C3A /* defense_menu_button.png in Resources */,
 				6D563BE7173D1601006F4C3A /* Default.png in Resources */,
 				6D563BE9173D160D006F4C3A /* Default@2x.png in Resources */,
+				6D563C29174E4C75006F4C3A /* ironplate-hd.png in Resources */,
+				6D563C2A174E4C75006F4C3A /* ironplate.png in Resources */,
+				6D563C2C174E7218006F4C3A /* bloodspatter.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

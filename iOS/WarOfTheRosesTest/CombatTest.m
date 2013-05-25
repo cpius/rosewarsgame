@@ -12,6 +12,7 @@
 #import "Archer.h"
 #import "PathFinder.h"
 #import "Pikeman.h"
+#import "GameBoardMockup.h"
 #import "LightCavalry.h"
 #import "TestHelper.h"
 #import "TimedBonus.h"
@@ -24,6 +25,9 @@
 #import "MeleeAttackAction.h"
 #import "PathFinderStrategyFactory.h"
 #import "FlagBearer.h"
+#import "Catapult.h"
+#import "RawBonus.h"
+#import "RangeAttribute.h"
 
 @implementation CombatTest
 
@@ -327,6 +331,115 @@
     STAssertTrue(meleeActions.count == 1, @"FlagBearer should only be able to attack pikeman");
 }
 
+- (void)testStandardBattleStrategyWhenAffectedByFlagBearer {
+    
+    Pikeman *pikeman = [Pikeman card];
+    FlagBearer *flagbearer = [FlagBearer card];
+    Pikeman *defender = [Pikeman card];
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
+    pikeman.cardColor = kCardColorGreen;
+    
+    flagbearer.cardLocation = [GridLocation gridLocationWithRow:5 column:4];
+    flagbearer.cardColor = kCardColorGreen;
+    
+    defender.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    defender.cardColor = kCardColorRed;
 
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObjects:flagbearer, pikeman, nil]
+                                    player2Units:[NSArray arrayWithObject:defender]];
+    
+    _attackerFixedStrategy.fixedDieValue = 4;
+    _defenderFixedStrategy.fixedDieValue = 5;
+    
+    pikeman.battleStrategy = _battleStrategy;
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
+    PathFinderStep *step = [[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]];
+    MeleeAttackAction *attackAction = [[MeleeAttackAction alloc] initWithPath:@[step] andCardInAction:pikeman enemyCard:defender];
+    
+    attackAction.delegate = mock;
+    
+    [attackAction performActionWithCompletion:^{
+       
+        STAssertTrue(defender.dead, @"Defender should be dead");
+        STAssertTrue(attackAction.battleResult.combatOutcome == kCombatOutcomeAttackSuccessful, @"Attack should be succesful");
+    }];
+}
+
+- (void)testUnitIsntAffectedByAoeEffectFromDeadFlagBearer {
+    
+    FlagBearer *flagbearer = [FlagBearer card];
+    Pikeman *pikeman = [Pikeman card];
+    Pikeman *defender = [Pikeman card];
+    
+    flagbearer.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
+    flagbearer.cardColor = kCardColorGreen;
+    flagbearer.dead = YES;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    pikeman.cardColor = kCardColorGreen;
+    
+    defender.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
+    defender.cardColor = kCardColorRed;
+
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObjects:flagbearer, pikeman, nil]
+                                    player2Units:[NSArray arrayWithObject:defender]];
+    
+    PathFinderStep *step = [[PathFinderStep alloc] initWithLocation:defender.cardLocation];
+    
+    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[step] andCardInAction:pikeman enemyCard:defender];
+    
+    _attackerFixedStrategy.fixedDieValue = 4;
+    _defenderFixedStrategy.fixedDieValue = 5;
+    
+    pikeman.battleStrategy = _battleStrategy;
+    defender.battleStrategy = _battleStrategy;
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    action.delegate = mock;
+
+    [action performActionWithCompletion:^{
+        
+        STAssertFalse(defender.dead, @"Defender shouldn't be dead");
+        STAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman shouldn't receive bonus from dead flagbearer");
+    }];
+}
+
+- (void)testUnitWithNoDefenseIsAlwaysKilledWhenAttackRollIsSuccesfull {
+    
+    // TODO
+}
+
+- (void)testUnitWithAttackLowerThanOneSubtractsOneFromDefendingUnitsDefense {
+    
+    Catapult *catapult = [Catapult card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    catapult.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    catapult.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:catapult]
+                                    player2Units:[NSArray arrayWithObject:pikeman]];
+    
+    [catapult.attack addRawBonus:[[RawBonus alloc] initWithValue:1]];
+
+    _attackerFixedStrategy.fixedDieValue = 3;
+    
+    // Even though Pikeman defense is succesfull, because of the catapult +1A, pikemans defense is lowered by 1
+    _defenderFixedStrategy.fixedDieValue = 3;
+    
+    BattleResult *result = [_manager resolveCombatBetween:catapult defender:pikeman battleStrategy:_battleStrategy];
+    
+    STAssertTrue(result.combatOutcome == kCombatOutcomeAttackSuccessful, @"Catapul attack should be succesfull");
+    STAssertTrue(pikeman.dead, @"Pikeman should be dead");
+}
 
 @end

@@ -8,6 +8,9 @@
 
 #import "EloRating.h"
 
+@implementation EloRating
+
+@end
 /*
  
  public class EloRating
@@ -75,6 +78,3 @@ Point2 = FinalResult2 - CurrentRating2;
 }
 */
 
-@implementation EloRating
-
-@end

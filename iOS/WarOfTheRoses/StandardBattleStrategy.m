@@ -17,34 +17,14 @@
 
 - (BattleResult*)resolveCombatBetweenAttacker:(Card *)attacker defender:(Card *)defender gameManager:(GameManager*)manager {
     
-    BattleResult *battleResult = [BattleResult battleResultWithAttacker:attacker defender:defender];
-    
-    [attacker combatStartingAgainstDefender:defender];
-    [defender combatStartingAgainstAttacker:attacker];
-    
-    [manager.delegate combatHasStartedBetweenAttacker:attacker andDefender:defender];
-        
-    AttributeRange attackValue = [attacker.attack calculateValue];
-    AttributeRange defendValue = [defender.defence calculateValue];
-    
-    CCLOG(@"Attack value: %@", AttributeRangeToNSString(attackValue));
-    CCLOG(@"Defend value: %@", AttributeRangeToNSString(defendValue));
-    
-    NSUInteger attackRoll = [self.attackerDiceStrategy rollDiceWithDie:6];
-    NSUInteger defenceRoll = [self.defenderDiceStrategy rollDiceWithDie:6];
-    
-    battleResult.attackRoll = attackRoll;
-    battleResult.defenseRoll = defenceRoll;
-    
-    CCLOG(@"Attack roll: %d", attackRoll);
-    CCLOG(@"Defence roll: %d", defenceRoll);
+    BattleResult *battleResult = [super resolveCombatBetweenAttacker:attacker defender:defender gameManager:manager];
     
     CombatOutcome outcome;
     
     // Check attackroll
-    if (attackRoll >= attackValue.lowerValue && attackRoll <= attackValue.upperValue) {
+    if (_attackRoll >= _attackValue.lowerValue && _attackRoll <= _attackValue.upperValue) {
         // Check defenceroll
-        if (defenceRoll >= defendValue.lowerValue && defenceRoll <= defendValue.upperValue) {
+        if (_defenseRoll >= _defendValue.lowerValue && _defenseRoll <= _defendValue.upperValue) {
             outcome = kCombatOutcomeDefendSuccessful;
         }
         else {

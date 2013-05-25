@@ -51,19 +51,19 @@
 - (void)applyAoeEffectIfApplicableWhilePerformingAction:(Action *)action {
     
     // Can't apply AOE when dead
-    if (action.cardInAction.dead) return;
+    if (self.dead) return;
     // Can't apply AOE to self
     if (action.cardInAction == self) return;
     // Only apply when action is move or melee
     if (action.actionType != kActionTypeMelee && action.actionType != kActionTypeMove) return;
+    // Only affects melee units
+    if (!action.cardInAction.isMelee) return;
+    // Only affect cards of same color
+    if (action.cardInAction.cardColor != self.cardColor) return;
 
-    // Aoe effect affects melee units of the same color
-    if (!action.cardInAction.isRanged && [action.cardInAction isOwnedByPlayerWithColor:[GameManager sharedManager].currentPlayersTurn]) {
-        
-        // When they start movement in one of the 8 nodes surrounding Crusader
-        if ([[self.cardLocation surroundingEightGridLocations] containsObject:action.cardInAction.cardLocation]) {
-            [action.cardInAction.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfTurns:2]];
-        }
+    // When they start movement in one of the 8 nodes surrounding Crusader
+    if ([[self.cardLocation surroundingEightGridLocations] containsObject:action.cardInAction.cardLocation]) {
+        [action.cardInAction.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfTurns:2]];
     }
 }
 

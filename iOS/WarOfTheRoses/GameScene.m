@@ -13,7 +13,6 @@
 #import "GameTypeScene.h"
 #import "BattlePlan.h"
 #import "AbilityAction.h"
-#import "SelectAbilityLayer.h"
 
 @interface GameScene()
 
@@ -337,6 +336,12 @@
     }
 }
 
+- (void)action:(Action *)action increasedCard:(Card *)card toLevel:(NSInteger)level {
+    
+/*    SelectAbilityLayer *selectAbility = [[SelectAbilityLayer alloc] init];
+    selectAbility.delegate = self;
+    [self addChild:selectAbility z:50000];*/
+}
 
 - (void)action:(Action *)action wantsToReplaceCardAtLocation:(GridLocation *)replaceLocation withCardAtLocation:(GridLocation *)withLocation {
     
@@ -540,7 +545,6 @@
 }
 
 - (void)leftPanelInfoButtonPressed:(LeftPanel *)leftPanel {
-    
     
     if (_showingDetailOfNode != nil) {
         [self hideCardDetail];

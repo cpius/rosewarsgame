@@ -12,12 +12,13 @@
 #import "LeftPanel.h"
 #import "GCTurnBasedMatchHelper.h"
 #import "PlayerIndicator.h"
+#import "SelectAbilityLayer.h"
 
 #define kZoomFactor 2.0
 
 #define CARD_TAG 666
 
-@interface GameScene : CCLayer <GameBoardActionProtocol, GameManagerProtocol, ActionDelegate, LeftPanelProtocol, GCTurnBasedMatchHelperDelegate> {
+@interface GameScene : CCLayer <GameBoardActionProtocol, GameManagerProtocol, ActionDelegate, LeftPanelProtocol, GCTurnBasedMatchHelperDelegate, SelectAbilityProtocol> {
     
     CGSize _winSize;
     

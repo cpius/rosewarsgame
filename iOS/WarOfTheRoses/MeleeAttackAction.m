@@ -134,6 +134,8 @@
     if (!self.playback) {
         _battleReport.levelIncreased = YES;
         _battleReport.abilityIncreased = ability;
+        
+//        self.delegate action:self increasedCard:card toLevel:card.
     }
 }
 
