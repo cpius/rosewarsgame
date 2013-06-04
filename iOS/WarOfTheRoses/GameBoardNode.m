@@ -56,20 +56,11 @@
         }
     }
 
-    if (_highlightedAs == kHighlightTypeRangedTarget) {
-        CCSprite *crosshair = (CCSprite*)[self.card getChildByTag:RANGED_ATTACK_TAG];
-        if (crosshair) {
-            [crosshair removeFromParentAndCleanup:YES];
-        }
+    CCSprite *highlight = (CCSprite*)[self.card getChildByTag:HIGHLIGHT_TAG];
+    if (highlight) {
+        [highlight removeFromParentAndCleanup:YES];
     }
-    
-    if (_highlightedAs == kHighlightTypeMeleeTarget) {
-        CCSprite *swordClash = (CCSprite*)[self.card getChildByTag:MELEE_ATTACK_TAG];
-        if (swordClash) {
-            [swordClash removeFromParentAndCleanup:YES];
-        }
-    }
-    
+        
     _highlightedAs = kHighlightTypeNone;
 }
 
@@ -102,7 +93,7 @@
         crosshair.scale = self.card.scaleX;
         crosshair.anchorPoint = ccp(0.5, 0.5);
         crosshair.position = ccp(self.card.contentSize.width / 2, self.card.contentSize.height / 2);
-        [self.card addChild:crosshair z:10 tag:RANGED_ATTACK_TAG];
+        [self.card addChild:crosshair z:10 tag:HIGHLIGHT_TAG];
         [crosshair runAction:[CCRepeatForever actionWithAction:
                               [CCSequence actions:[CCScaleTo actionWithDuration:0.2 scale:1.2],
                                [CCScaleTo actionWithDuration:0.2 scale:1.0],
@@ -114,7 +105,7 @@
         swordClash.scale = self.card.scaleX;
         swordClash.anchorPoint = ccp(0.5, 0.5);
         swordClash.position = ccp(self.card.contentSize.width / 2, self.card.contentSize.height / 2);
-        [self.card addChild:swordClash z:10 tag:MELEE_ATTACK_TAG];
+        [self.card addChild:swordClash z:10 tag:HIGHLIGHT_TAG];
         [swordClash runAction:[CCRepeatForever actionWithAction:
                                [CCSequence actions:[CCScaleTo actionWithDuration:0.2 scale:1.2],
                                 [CCScaleTo actionWithDuration:0.2 scale:1.0],

@@ -13,6 +13,7 @@
 #import "GameTypeScene.h"
 #import "BattlePlan.h"
 #import "AbilityAction.h"
+#import "FixedLevelIncreaseStrategy.h"
 
 @interface GameScene()
 
@@ -43,7 +44,7 @@
 
 - (void)handleTouchEndedWithTouch:(UITouch*)touch;
 
-- (void)createBattlePlanForNode:(GameBoardNode *)node;
+- (BattlePlan*)createBattlePlanForNode:(GameBoardNode *)node;
 
 @end
 
@@ -124,6 +125,8 @@
         _battlePlan = [[BattlePlan alloc] init];
         
         [[CCDirector sharedDirector].touchDispatcher addTargetedDelegate:self priority:0 swallowsTouches:YES];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardIncreasedInLevel:) name:GAMEEVENT_LEVEL_INCREASED object:nil];
         
         [self turnChangedToPlayerWithColor:_gameManager.currentPlayersTurn];
         [_gameManager.currentGame addObserver:self forKeyPath:@"currentPlayersTurn" options:NSKeyValueObservingOptionNew context:nil];
@@ -298,7 +301,7 @@
             }
         }
         else {
-            [self createBattlePlanForNode:targetNode];
+            _battlePlan = [self createBattlePlanForNode:targetNode];
             
             if ([_battlePlan hasActions]) {
                 [self showToolsPanel];
@@ -307,40 +310,55 @@
     }
 }
 
-- (void)createBattlePlanForNode:(GameBoardNode *)node {
+- (BattlePlan*)createBattlePlanForNode:(GameBoardNode *)node {
     
+    BattlePlan *battleplan = [[BattlePlan alloc] init];
+
     if (node.hasCard && [node.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
         [_gameboard selectCardInGameBoardNode:node useHighlighting:NO];
 
-        _battlePlan = [[BattlePlan alloc] init];
-        [_battlePlan createBattlePlanForCard:node.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
+        [battleplan createBattlePlanForCard:node.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
         
-        for (Action *moveAction in _battlePlan.moveActions) {
+        for (Action *moveAction in battleplan.moveActions) {
             [_gameboard highlightNodeAtLocation:[moveAction getLastLocationInPath] withColor:ccc3(0, 235, 0)];
         }
         
-        for (Action *meleeAction in _battlePlan.meleeActions) {
+        for (Action *meleeAction in battleplan.meleeActions) {
             [_gameboard highlightCardAtLocation:[meleeAction getLastLocationInPath] withColor:ccc3(235, 0, 0)];
         }
         
-        for (Action *rangeAction in _battlePlan.rangeActions) {
+        for (Action *rangeAction in battleplan.rangeActions) {
             [_gameboard highlightCardAtLocation:[rangeAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
         }
         
-        for (Action *abilityAction in _battlePlan.abilityActions) {
+        for (Action *abilityAction in battleplan.abilityActions) {
             [_gameboard highlightCardAtLocation:[abilityAction getLastLocationInPath] withColor:ccc3(235, 0, 0) actionType:kActionTypeRanged];
         }
     }
     else {
-        _battlePlan = nil;
+        battleplan = nil;
     }
+    
+    return battleplan;
 }
 
-- (void)action:(Action *)action increasedCard:(Card *)card toLevel:(NSInteger)level {
+- (void)cardIncreasedInLevel:(NSNotification*)notification {
     
-/*    SelectAbilityLayer *selectAbility = [[SelectAbilityLayer alloc] init];
+    SelectAbilityLayer *selectAbility = [[SelectAbilityLayer alloc] init];
     selectAbility.delegate = self;
-    [self addChild:selectAbility z:50000];*/
+    selectAbility.card = (Card*)notification.object;
+    [self addChild:selectAbility z:50000];
+}
+
+
+- (void)layer:(SelectAbilityLayer *)layer selectedAbilityRaiseType:(AbilityRaiseTypes)type forCard:(Card *)card {
+    
+    [layer removeFromParentAndCleanup:YES];
+    
+    FixedLevelIncreaseStrategy *levelIncreaseStrategy = [[FixedLevelIncreaseStrategy alloc] init];
+    
+    levelIncreaseStrategy.levelIncreaseAbility = type;
+    [levelIncreaseStrategy cardIncreasedInLevel:card];
 }
 
 - (void)action:(Action *)action wantsToReplaceCardAtLocation:(GridLocation *)replaceLocation withCardAtLocation:(GridLocation *)withLocation {

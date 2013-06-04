@@ -12,4 +12,6 @@
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card;
 
++ (void)performPushFromAction:(Action*)action withCompletion:(void (^)())completion;
+
 @end

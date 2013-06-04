@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class Action;
 @class TimedAbility;
 @protocol TimedAbilityDelegate <NSObject>
 
@@ -45,6 +46,8 @@
 - (void)stopTimedAbility;
 
 - (void)forceTurnChanged;
+
+- (BOOL)allowPerformAction:(Action*)action;
 
 - (NSDictionary *)asDictionary;
 - (void)fromDictionary:(NSDictionary*)dictionary;

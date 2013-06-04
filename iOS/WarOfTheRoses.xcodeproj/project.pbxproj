@@ -55,6 +55,13 @@
 		6D563C29174E4C75006F4C3A /* ironplate-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C27174E4C73006F4C3A /* ironplate-hd.png */; };
 		6D563C2A174E4C75006F4C3A /* ironplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C28174E4C74006F4C3A /* ironplate.png */; };
 		6D563C2C174E7218006F4C3A /* bloodspatter.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C2B174E7218006F4C3A /* bloodspatter.plist */; };
+		6D563C2F17528A4C006F4C3A /* Juggernaut.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D563C2E17528A4A006F4C3A /* Juggernaut.m */; };
+		6D563C3417528C21006F4C3A /* juggernaut_0-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C3017528C1F006F4C3A /* juggernaut_0-hd.png */; };
+		6D563C3517528C21006F4C3A /* juggernaut_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C3117528C20006F4C3A /* juggernaut_0.png */; };
+		6D563C3617528C21006F4C3A /* juggernaut_icon-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C3217528C20006F4C3A /* juggernaut_icon-hd.png */; };
+		6D563C3717528C21006F4C3A /* juggernaut_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D563C3317528C21006F4C3A /* juggernaut_icon.png */; };
+		6D563C3A1753DF4C006F4C3A /* JuggernautBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D563C391753DF4B006F4C3A /* JuggernautBattleStrategy.m */; };
+		6D563C3D175B3569006F4C3A /* PromptLevelIncreaseStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D563C3C175B3569006F4C3A /* PromptLevelIncreaseStrategy.m */; };
 		6D5E04411662545C0085311B /* CardPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E04401662545C0085311B /* CardPool.m */; };
 		6D5E595D166D42C0007429BD /* archer_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595C166D42C0007429BD /* archer_icon.png */; };
 		6D5E595F166D4426007429BD /* archer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E595E166D4426007429BD /* archer_0.png */; };
@@ -481,6 +488,16 @@
 		6D563C27174E4C73006F4C3A /* ironplate-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ironplate-hd.png"; path = "Resources/Images/ironplate-hd.png"; sourceTree = "<group>"; };
 		6D563C28174E4C74006F4C3A /* ironplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ironplate.png; path = Resources/Images/ironplate.png; sourceTree = "<group>"; };
 		6D563C2B174E7218006F4C3A /* bloodspatter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = bloodspatter.plist; path = Resources/Particles/bloodspatter.plist; sourceTree = "<group>"; };
+		6D563C2D17528A49006F4C3A /* Juggernaut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Juggernaut.h; sourceTree = "<group>"; };
+		6D563C2E17528A4A006F4C3A /* Juggernaut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Juggernaut.m; sourceTree = "<group>"; };
+		6D563C3017528C1F006F4C3A /* juggernaut_0-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "juggernaut_0-hd.png"; path = "Resources/Images/juggernaut_0-hd.png"; sourceTree = "<group>"; };
+		6D563C3117528C20006F4C3A /* juggernaut_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = juggernaut_0.png; path = Resources/Images/juggernaut_0.png; sourceTree = "<group>"; };
+		6D563C3217528C20006F4C3A /* juggernaut_icon-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "juggernaut_icon-hd.png"; path = "Resources/Images/juggernaut_icon-hd.png"; sourceTree = "<group>"; };
+		6D563C3317528C21006F4C3A /* juggernaut_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = juggernaut_icon.png; path = Resources/Images/juggernaut_icon.png; sourceTree = "<group>"; };
+		6D563C381753DF4A006F4C3A /* JuggernautBattleStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuggernautBattleStrategy.h; sourceTree = "<group>"; };
+		6D563C391753DF4B006F4C3A /* JuggernautBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuggernautBattleStrategy.m; sourceTree = "<group>"; };
+		6D563C3B175B3569006F4C3A /* PromptLevelIncreaseStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PromptLevelIncreaseStrategy.h; sourceTree = "<group>"; };
+		6D563C3C175B3569006F4C3A /* PromptLevelIncreaseStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PromptLevelIncreaseStrategy.m; sourceTree = "<group>"; };
 		6D5E043F1662545C0085311B /* CardPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardPool.h; sourceTree = "<group>"; };
 		6D5E04401662545C0085311B /* CardPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardPool.m; sourceTree = "<group>"; };
 		6D5E595C166D42C0007429BD /* archer_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = archer_icon.png; path = Resources/Images/archer_icon.png; sourceTree = "<group>"; };
@@ -1179,6 +1196,10 @@
 		6D5E595A166D42B2007429BD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6D563C3017528C1F006F4C3A /* juggernaut_0-hd.png */,
+				6D563C3117528C20006F4C3A /* juggernaut_0.png */,
+				6D563C3217528C20006F4C3A /* juggernaut_icon-hd.png */,
+				6D563C3317528C21006F4C3A /* juggernaut_icon.png */,
 				6D563C27174E4C73006F4C3A /* ironplate-hd.png */,
 				6D563C28174E4C74006F4C3A /* ironplate.png */,
 				6D563BDE173CF0EE006F4C3A /* attack_menu_button-hd.png */,
@@ -1407,6 +1428,8 @@
 				6DB2048716F356070004FFCB /* BaseBattleStrategy.m */,
 				6DB2048916F3B6D70004FFCB /* WarElephantBattleStrategy.h */,
 				6DB2048A16F3B6D70004FFCB /* WarElephantBattleStrategy.m */,
+				6D563C381753DF4A006F4C3A /* JuggernautBattleStrategy.h */,
+				6D563C391753DF4B006F4C3A /* JuggernautBattleStrategy.m */,
 			);
 			name = BattleStrategy;
 			sourceTree = "<group>";
@@ -1432,6 +1455,8 @@
 				6DBDA46C1725B52E0078287B /* RandomLevelIncreaseStrategy.m */,
 				6DBDA46E1725B7440078287B /* FixedLevelIncreaseStrategy.h */,
 				6DBDA46F1725B7440078287B /* FixedLevelIncreaseStrategy.m */,
+				6D563C3B175B3569006F4C3A /* PromptLevelIncreaseStrategy.h */,
+				6D563C3C175B3569006F4C3A /* PromptLevelIncreaseStrategy.m */,
 			);
 			name = LevelIncreaseStrategy;
 			sourceTree = "<group>";
@@ -2011,6 +2036,8 @@
 				6DB2049516F8DE140004FFCB /* WeaponSmith.m */,
 				6DB204B216FA5D7E0004FFCB /* Diplomat.h */,
 				6DB204B316FA5D820004FFCB /* Diplomat.m */,
+				6D563C2D17528A49006F4C3A /* Juggernaut.h */,
+				6D563C2E17528A4A006F4C3A /* Juggernaut.m */,
 			);
 			name = "Special Units";
 			sourceTree = "<group>";
@@ -2266,6 +2293,10 @@
 				6D563C29174E4C75006F4C3A /* ironplate-hd.png in Resources */,
 				6D563C2A174E4C75006F4C3A /* ironplate.png in Resources */,
 				6D563C2C174E7218006F4C3A /* bloodspatter.plist in Resources */,
+				6D563C3417528C21006F4C3A /* juggernaut_0-hd.png in Resources */,
+				6D563C3517528C21006F4C3A /* juggernaut_0.png in Resources */,
+				6D563C3617528C21006F4C3A /* juggernaut_icon-hd.png in Resources */,
+				6D563C3717528C21006F4C3A /* juggernaut_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2498,6 +2529,9 @@
 				6DBDA4701725B7440078287B /* FixedLevelIncreaseStrategy.m in Sources */,
 				6D563BC0173832F4006F4C3A /* MeleeAttackPlaybackAction.m in Sources */,
 				6D563BDD173CE118006F4C3A /* SelectAbilityLayer.m in Sources */,
+				6D563C2F17528A4C006F4C3A /* Juggernaut.m in Sources */,
+				6D563C3A1753DF4C006F4C3A /* JuggernautBattleStrategy.m in Sources */,
+				6D563C3D175B3569006F4C3A /* PromptLevelIncreaseStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

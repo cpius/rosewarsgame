@@ -138,6 +138,9 @@
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"diplomat_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"diplomat_0.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"diplomat_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"diplomat_icon.png"];
 
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"juggernaut_0.png" rect:CGRectMake(0, 0, 236, 362)] name:@"juggernaut_0.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFrame:[CCSpriteFrame frameWithTextureFilename:@"juggernaut_icon.png" rect:CGRectMake(0, 0, 112, 152)] name:@"juggernaut_icon.png"];
+
     [[SoundManager sharedManager] preloadSoundEffects];
     
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.

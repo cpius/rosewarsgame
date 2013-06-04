@@ -7,6 +7,7 @@
 //
 
 #import "PushAction.h"
+#import "PathFinderStep.h"
 
 @implementation PushAction
 
@@ -45,6 +46,27 @@
     
     // Push action cost no actionpoints
     return 0;
+}
+
++ (void)performPushFromAction:(Action*)action withCompletion:(void (^)())completion {
+    
+    GridLocation *pushLocation = [action.enemyCard.cardLocation getPushLocationForGridLocationWhenComingFromGridLocation:[action getEntryLocationInPath]];
+    
+    Card *cardAtPushLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:pushLocation];
+    
+    if (cardAtPushLocation != nil || ![pushLocation isInsideGameBoard]) {
+        
+        [[GameManager sharedManager] attackSuccessfulAgainstCard:action.enemyCard];
+        completion();
+    }
+    else {
+        PushAction *pushAction = [[PushAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard];
+        
+        pushAction.delegate = action.delegate;
+        [pushAction performActionWithCompletion:^{
+            completion();
+        }];
+    }
 }
 
 - (void)performActionWithCompletion:(void (^)())completion {

@@ -23,6 +23,7 @@
 @synthesize delegate = _delegate;
 @synthesize actionType = _actionType;
 @synthesize startLocation = _startLocation;
+@synthesize enemyInitialLocation = _enemyInitialLocation;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
@@ -83,6 +84,7 @@
     
     return nil;
 }
+
 
 - (ActionTypes)actionType {
     

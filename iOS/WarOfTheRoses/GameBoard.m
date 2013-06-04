@@ -340,7 +340,7 @@
 
 - (void)deHighlightAllNodes {
     
-    NSArray *nodes = [NSArray arrayWithArray:_highlightedNodes];
+    NSArray *nodes = [NSArray arrayWithArray:_boardNodes];
     
     for (GameBoardNode *node in nodes) {
         

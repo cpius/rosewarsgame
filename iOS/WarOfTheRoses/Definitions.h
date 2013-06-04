@@ -24,9 +24,12 @@
 #define NUMBER_OF_BASICUNITS 6
 #define NUMBER_OF_SPECIALUNITS 3
 
+#define GAMEEVENT_LEVEL_INCREASED   @"GameEventLevelIncreased"
+
 typedef enum {
     kLevelIncreaseAbilityAttack = 0,
-    kLevelIncreaseAbilityDefense
+    kLevelIncreaseAbilityDefense,
+    kLevelIncreaseAbilityIndeterminate
 } LevelIncreaseAbilities;
 
 typedef enum {
@@ -165,6 +168,7 @@ typedef enum {
     kWarElephant,
     kWeaponSmith,
     kDiplomat,
+    kJuggernaut,
     kSaboteur,
     kAssassin,
     kUnitNameCount
@@ -217,6 +221,8 @@ NS_INLINE NSString* UnitNameAsString(UnitName unitName) {
             return @"Saboteur";
         case kAssassin:
             return @"Assassin";
+        case kJuggernaut:
+            return @"Juggernaut";
         default:
             break;
     }

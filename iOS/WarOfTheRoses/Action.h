@@ -22,7 +22,6 @@
 - (void)action:(Action*)action wantsToMoveFollowingPath:(NSArray*)path withCompletion:(void (^)(GridLocation*))completion;
 - (void)action:(Action*)action hasResolvedCombatWithResult:(BattleResult*)result;
 - (void)action:(Action*)action wantsToReplaceCardAtLocation:(GridLocation*)replaceLocation withCardAtLocation:(GridLocation*)withLocation;
-- (void)action:(Action*)action increasedCard:(Card*)card toLevel:(NSInteger)level;
 
 - (void)afterPerformAction:(Action*)action;
 
@@ -43,6 +42,7 @@
 
 @property (nonatomic, readonly) ActionTypes actionType;
 @property (nonatomic, readonly) GridLocation *startLocation;
+@property (nonatomic, readonly) GridLocation *enemyInitialLocation;
 
 @property (nonatomic, strong) BattleReport *battleReport;
 

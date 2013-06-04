@@ -16,12 +16,13 @@ typedef enum {
 @class SelectAbilityLayer;
 @protocol SelectAbilityProtocol <NSObject>
 
-- (void)layer:(SelectAbilityLayer*)layer selectedAbilityRaiseType:(AbilityRaiseTypes)type;
+- (void)layer:(SelectAbilityLayer*)layer selectedAbilityRaiseType:(AbilityRaiseTypes)type forCard:(Card*)card;
 
 @end
 
 @interface SelectAbilityLayer : CCLayerColor
 
 @property (nonatomic, weak) id<SelectAbilityProtocol> delegate;
+@property (nonatomic, strong) Card* card;
 
 @end

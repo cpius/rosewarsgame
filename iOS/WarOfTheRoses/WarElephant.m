@@ -84,7 +84,7 @@
         GridLocation *startLocation = [meleeAttackAction getEntryLocationInPath];
         
         NSMutableSet *surroundingMyCard = [NSMutableSet setWithArray:[startLocation surroundingEightGridLocations]];
-        NSSet *surroundingEnemyCard = [NSSet setWithArray:[action.enemyCard.cardLocation surroundingGridLocations]];
+        NSSet *surroundingEnemyCard = [NSSet setWithArray:[action.enemyInitialLocation surroundingGridLocations]];
         
         [surroundingMyCard intersectSet:surroundingEnemyCard];
         
@@ -118,26 +118,6 @@
                 }
                 
                 [action.delegate action:meleeAction hasResolvedCombatWithResult:outcome];
-            }
-        }
-        
-        if (IsPushSuccessful(meleeAttackAction.battleResult.combatOutcome) && !action.enemyCard.dead) {
-            
-            GridLocation *pushLocation = [action.enemyCard.cardLocation getPushLocationForGridLocationWhenComingFromGridLocation:[meleeAttackAction getEntryLocationInPath]];
-            
-            Card *cardAtPushLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:pushLocation];
-            
-            if (cardAtPushLocation != nil || ![pushLocation isInsideGameBoard]) {
-
-                [[GameManager sharedManager] attackSuccessfulAgainstCard:action.enemyCard];
-            }
-            else {
-                PushAction *pushAction = [[PushAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard];
-                
-                pushAction.delegate = action.delegate;
-                [pushAction performActionWithCompletion:^{
-                    
-                }];
             }
         }
     }

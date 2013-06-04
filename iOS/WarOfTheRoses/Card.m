@@ -11,6 +11,7 @@
 #import "GameManager.h"
 #import "StandardBattleStrategy.h"
 #import "RandomLevelIncreaseStrategy.h"
+#import "PromptLevelIncreaseStrategy.h"
 
 @interface Card()
 
@@ -52,7 +53,6 @@
         self.isShowingDetail = NO;
         
         _currentlyAffectedByAbilities = [NSMutableArray array];
-        _levelIncreaseStrategy = [[RandomLevelIncreaseStrategy alloc] init];
     }
     
     return self;
@@ -71,6 +71,13 @@
     self.experience = 0;
     
     _cardIdentifier = [self createCardIdentifier];
+    
+    if ([self isOwnedByMe]) {
+        _levelIncreaseStrategy = [[PromptLevelIncreaseStrategy alloc] init];
+    }
+    else {
+        _levelIncreaseStrategy = [[RandomLevelIncreaseStrategy alloc] init];
+    }
 }
 
 - (NSString*)createCardIdentifier {
@@ -257,7 +264,17 @@
 
 - (BOOL)allowAction:(Action *)action allLocations:(NSDictionary*)allLocations {
     
-    return [self allowPath:action.path forActionType:action.actionType allLocations:allLocations];
+    BOOL allowAction = [self allowPath:action.path forActionType:action.actionType allLocations:allLocations];
+
+    // Check if card is affected by any abilities that doesn't allow this action
+    for (TimedAbility *ability in _currentlyAffectedByAbilities) {
+        
+        if (![ability allowPerformAction:action]) {
+            allowAction = NO;
+        }
+    }
+    
+    return allowAction;
 }
 
 - (BOOL)allowPath:(NSArray *)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary *)allLocations {

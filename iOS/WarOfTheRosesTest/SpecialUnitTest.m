@@ -35,6 +35,8 @@
 #import "WarElephantBattleStrategy.h"
 #import "Diplomat.h"
 #import "AbilityAction.h"
+#import "Juggernaut.h"
+#import "JuggernautBattleStrategy.h"
 
 @implementation SpecialUnitTest
 
@@ -986,7 +988,80 @@
         [_manager endTurn];
 
         STAssertFalse([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman should no longer be affected by cooldown");
-}];
+    }];
 }
+
+- (void)testJuggernautAlwaysPushedOnSuccessfulAttack {
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
+    Juggernaut *juggernaut = [Juggernaut card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    juggernaut.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
+    juggernaut.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:juggernaut]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeConquer];
+
+    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+
+    JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
+    battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
+    
+    action.delegate = mock;
+    
+    [action performActionWithCompletion:^{
+
+        STAssertFalse(pikeman.dead, @"Pikeman should be alive");
+        STAssertTrue([pikeman.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:4 column:3]], @"Pikeman should be pushed");
+        STAssertTrue([juggernaut.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:4 column:4]], @"Juggernaut should have conquered pikemans location");
+    }];
+}
+
+- (void)testJuggernautAlwaysPushedOnSuccessfulAttackKeepOriginalPositionWhenNotConquer {
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
+    Juggernaut *juggernaut = [Juggernaut card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    juggernaut.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
+    juggernaut.cardColor = kCardColorGreen;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+                                withPlayer1Units:[NSArray arrayWithObject:juggernaut]
+                                    player2Units:[NSArray arrayWithObjects:pikeman, nil]];
+    
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeNormal];
+    
+    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+    
+    JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
+    battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
+    
+    action.delegate = mock;
+    
+    [action performActionWithCompletion:^{
+        
+        STAssertFalse(pikeman.dead, @"Pikeman should be alive");
+        STAssertTrue([pikeman.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:4 column:3]], @"Pikeman should be pushed");
+        STAssertTrue([juggernaut.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:4 column:5]], @"Juggernaut should have conquered pikemans location");
+    }];
+}
+
 
 @end

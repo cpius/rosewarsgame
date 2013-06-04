@@ -10,6 +10,7 @@
 #import "cocos2d.h"
 #import "CardSprite.h"
 
+#define HIGHLIGHT_TAG         9
 #define RANGED_ATTACK_TAG    10
 #define ATTACK_DIRECTION_TAG 11
 #define MELEE_ATTACK_TAG     12

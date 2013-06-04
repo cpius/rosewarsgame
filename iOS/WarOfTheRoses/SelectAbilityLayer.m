@@ -30,12 +30,12 @@
 
         CCMenuItemImage *attackMenuItem = [CCMenuItemImage itemWithNormalImage:@"attack_menu_button.png" selectedImage:@"attack_menu_button.png" block:^(id sender) {
         
-            [_delegate layer:self selectedAbilityRaiseType:kAbilityRaiseTypeAttack];
+            [_delegate layer:self selectedAbilityRaiseType:kAbilityRaiseTypeAttack forCard:_card];
         }];
         
         CCMenuItemImage *defenseMenuItem = [CCMenuItemImage itemWithNormalImage:@"defense_menu_button.png" selectedImage:@"defense_menu_button.png" block:^(id sender) {
             
-            [_delegate layer:self selectedAbilityRaiseType:kAbilityRaiseTypeDefense];
+            [_delegate layer:self selectedAbilityRaiseType:kAbilityRaiseTypeDefense forCard:_card];
         }];
 
 		CCMenu *menu = [CCMenu menuWithItems:attackMenuItem, defenseMenuItem, nil];

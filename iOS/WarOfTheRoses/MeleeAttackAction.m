@@ -11,6 +11,7 @@
 #import "PathFinderStep.h"
 #import "GameManager.h"
 #import "StandardBattleStrategy.h"
+#import "PushAction.h"
 
 @implementation MeleeAttackAction
 
@@ -18,6 +19,7 @@
 @synthesize actionType = _actionType;
 @synthesize startLocation = _startLocation;
 @synthesize battleReport = _battleReport;
+@synthesize enemyInitialLocation = _enemyInitialLocation;
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
@@ -31,7 +33,9 @@
     if (self) {
         _actionType = kActionTypeMelee;
         _meleeAttackType = meleeAttackType;
+        
         _startLocation = card.cardLocation;
+        _enemyInitialLocation = enemyCard.cardLocation;
         
         _secondaryActionsForPlayback = [NSMutableDictionary dictionary];
     }
@@ -110,6 +114,36 @@
                     completion();
                 }
             }
+            else if (IsPushSuccessful(result.combatOutcome)) {
+                
+                [PushAction performPushFromAction:self withCompletion:^{
+                    
+                    if (_meleeAttackType == kMeleeAttackTypeConquer) {
+                        [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:_enemyInitialLocation];
+                        [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:_enemyInitialLocation];
+                    }
+                    else {
+                        [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:retreatLocation]] withCompletion:^(GridLocation *endLocation) {
+                            
+                            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
+                            
+                            if (![_startLocation isEqual:retreatLocation]) {
+                                [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
+                            }
+                            
+                            [self afterPerformAction];
+                            if (completion != nil) {
+                                completion();
+                            }
+                        }];
+                    }
+                    
+                    [self afterPerformAction];
+                    if (completion != nil) {
+                        completion();
+                    }
+                }];
+            }
             else {
                 [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:retreatLocation]] withCompletion:^(GridLocation *endLocation) {
                     
@@ -134,8 +168,6 @@
     if (!self.playback) {
         _battleReport.levelIncreased = YES;
         _battleReport.abilityIncreased = ability;
-        
-//        self.delegate action:self increasedCard:card toLevel:card.
     }
 }
 

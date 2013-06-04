@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "WarOfTheRoses/GameScene.m"
-         timestampString = "391163136.187349"
+         timestampString = "391982323.253275"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "657"
-         endingLineNumber = "657"
+         startingLineNumber = "675"
+         endingLineNumber = "675"
          landmarkName = "-takeTurn:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -92,19 +92,6 @@
          startingLineNumber = "179"
          endingLineNumber = "179"
          landmarkName = "-endTurnWithData:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "WarOfTheRosesTest/CombatTest.m"
-         timestampString = "391163198.057091"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "407"
-         endingLineNumber = "407"
-         landmarkName = "-testUnitIsntAffectedByAoeEffectFromDeadFlagBearer"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

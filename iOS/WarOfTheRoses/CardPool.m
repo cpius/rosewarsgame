@@ -28,6 +28,7 @@
 #import "WarElephant.h"
 #import "WeaponSmith.h"
 #import "Diplomat.h"
+#import "Juggernaut.h"
 
 @interface CardPool()
 
@@ -92,6 +93,8 @@
             return [WeaponSmith card];
         case kDiplomat:
             return [Diplomat card];
+        case kJuggernaut:
+            return [Juggernaut card];
         default:
             CCLOG(@"Unknown cardname: %d", unitName);
     }
@@ -99,7 +102,7 @@
     return nil;
 }
 
--(NSArray*)shuffle:(NSArray *)array {
+- (NSArray*)shuffle:(NSArray *)array {
     
     NSMutableArray *tempArray = [NSMutableArray arrayWithArray:array];
     
@@ -123,7 +126,7 @@
         drawnCard = [CardPool createCardOfName:unitName];
     }
     else if (cardType == kCardTypeSpecialUnit) {
-        UnitName unitName = (arc4random() % 14) + 6;
+        UnitName unitName = (arc4random() % 15) + 6;
         drawnCard = [CardPool createCardOfName:unitName];
     }
     

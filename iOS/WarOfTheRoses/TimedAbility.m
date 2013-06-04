@@ -9,6 +9,7 @@
 #import "TimedAbility.h"
 #import "Card.h"
 #import "GameManager.h"
+#import "Action.h"
 
 @interface TimedAbility()
 
@@ -132,6 +133,11 @@
 
 - (void)applyEffect {
     
+}
+
+- (BOOL)allowPerformAction:(Action*)action {
+    
+    return YES;
 }
 
 - (NSDictionary *)asDictionary {

@@ -12,10 +12,7 @@
 @implementation CoolDown
 
 - (void)applyEffect {
-    
-    self.card.moveActionCost = 10;
-    self.card.attackActionCost = 10;
-    
+        
     CCLOG(@"Card: %@ has cooldown", self.card);
 }
 
@@ -32,14 +29,15 @@
 }
 
 - (void)stopTimedAbility {
-    
-    Card *originalCard = [CardPool createCardOfName:self.card.unitName];
-    
-    self.card.moveActionCost = originalCard.moveActionCost;
-    self.card.attackActionCost = originalCard.attackActionCost;
-    
+        
     CCLOG(@"Card: %@ ended cooldown", self.card);
     [super stopTimedAbility];
+}
+
+- (BOOL)allowPerformAction:(Action *)action {
+    
+    // When affected by cooldown, no actions are allowed
+    return NO;
 }
 
 - (AbilityTypes)abilityType {
