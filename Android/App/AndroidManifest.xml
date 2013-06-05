@@ -13,25 +13,25 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" /> 
+            
         <activity
-            android:name="com.wotr.MainActivity"
-            android:label="@string/app_name" >
+            android:name="com.wotr.GameMenuActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.wotr.GameActivity"
-            android:label="@string/title_activity_setup_game" 
+        <activity android:name="SetupGameActivity"
+            android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
-        <activity
-            android:name="com.wotr.PlayGameActivity"
-            android:label="@string/title_activity_play_game"
-            android:screenOrientation="portrait">
-        </activity>
+        
     </application>
 
 </manifest>
