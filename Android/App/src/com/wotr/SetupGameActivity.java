@@ -30,7 +30,6 @@ public class SetupGameActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		CCDirector.sharedDirector().detach();
 		CCDirector.sharedDirector().attachInView(_glSurfaceView);
 		CCDirector.sharedDirector().setDisplayFPS(true);
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
