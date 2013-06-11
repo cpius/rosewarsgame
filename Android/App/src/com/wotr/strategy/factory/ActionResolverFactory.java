@@ -1,5 +1,6 @@
 package com.wotr.strategy.factory;
 
+import com.wotr.strategy.action.BerserkerActionResolverStrategy;
 import com.wotr.strategy.action.UnitActionResolverStrategy;
 import com.wotr.strategy.action.MeleeActionResolverStrategy;
 import com.wotr.strategy.action.RangedActionResolverStrategy;
@@ -21,6 +22,10 @@ public class ActionResolverFactory {
 	public static UnitActionResolverStrategy getRangedActionResolverStrategy() {
 		return new RangedActionResolverStrategy();
 	}
+	
+	public static UnitActionResolverStrategy getBerserkerActionResolverStrategy() {
+		return new BerserkerActionResolverStrategy();
+	}
 
 	public static ZocBlockStrategy getZocBlockStrategy() {
 		if (ZocBlockStrategy != null) {
@@ -28,5 +33,5 @@ public class ActionResolverFactory {
 		}
 		ZocBlockStrategy = new UnitTypeZocBlockStrategy();
 		return ZocBlockStrategy;
-	}
+	}	
 }
