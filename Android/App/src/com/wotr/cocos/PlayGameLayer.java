@@ -227,31 +227,37 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private void cardDragedEndedOnDefendingUnit(CardSprite card, Unit attackingUnit, Unit defendingUnit, Position pInP) throws InvalidAttackException {
 
 		Action action = pathFinderStrategy.getActionForPosition(pInP);
-		AttackResult attackResult = GameManager.getGame().attack(action, defendingUnit);
+		if (action != null) {
 
-		if (attackResult.isSuccesfull()) {
-			removeCCSprite(defendingUnit);
-		}
+			AttackResult attackResult = GameManager.getGame().attack(action, defendingUnit);
 
-		// If there is only one possible endposition after attack, automatically
-		// use it, otherwise ask the user
-		List<AttackEndPosition> endPositions = attackResult.getEndPositionProspects();
-		if (endPositions.size() == 1) {
-			AttackEndPosition endPosition = endPositions.get(0);
-			endPosition.endAttack();
-			moveCardToPosition(card, endPosition.getPosition());
-			removeSelection(card);
-			awardBonus(attackResult);
-		} else {
-
-			dropCardToPosition(card);
-
-			// Add images to endposition selection positions for units
-			for (AttackEndPosition endPosition : endPositions) {
-				EndPositionSelectionSprite goSprite = new EndPositionSelectionSprite(card, endPosition, sizeScale, bordframe);
-				goSprite.addActionListener(this);
-				addChild(goSprite, 10);
+			if (attackResult.isSuccesfull()) {
+				removeCCSprite(defendingUnit);
 			}
+
+			// If there is only one possible endposition after attack,
+			// automatically
+			// use it, otherwise ask the user
+			List<AttackEndPosition> endPositions = attackResult.getEndPositionProspects();
+			if (endPositions.size() == 1) {
+				AttackEndPosition endPosition = endPositions.get(0);
+				endPosition.endAttack();
+				moveCardToPosition(card, endPosition.getPosition());
+				removeSelection(card);
+				awardBonus(attackResult);
+			} else {
+
+				dropCardToPosition(card);
+
+				// Add images to endposition selection positions for units
+				for (AttackEndPosition endPosition : endPositions) {
+					EndPositionSelectionSprite goSprite = new EndPositionSelectionSprite(card, endPosition, sizeScale, bordframe);
+					goSprite.addActionListener(this);
+					addChild(goSprite, 10);
+				}
+			}
+		} else {
+			moveCardToOriginalPosition(card);
 		}
 	}
 
