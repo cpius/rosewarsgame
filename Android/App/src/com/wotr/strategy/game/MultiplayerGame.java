@@ -8,16 +8,14 @@ import com.wotr.GameManager;
 import com.wotr.model.Action;
 import com.wotr.model.AttackResult;
 import com.wotr.model.Position;
-import com.wotr.model.attack.FailedMeleeAttackEndpoint;
-import com.wotr.model.attack.FailedRangedAttackEndpoint;
-import com.wotr.model.attack.SuccessfulMeleeAttackEndpoint;
-import com.wotr.model.attack.SuccessfulRangedAttackEndpoint;
+import com.wotr.model.attack.AttackEndPosition;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.attribute.bonus.AttackBonusAward;
 import com.wotr.model.unit.attribute.bonus.BonusAward;
 import com.wotr.model.unit.attribute.bonus.DefenceBonusAward;
 import com.wotr.strategy.action.ActionCollection;
 import com.wotr.strategy.action.ActionsResolverStrategy;
+import com.wotr.strategy.battle.AttackEndpointResolverStrategy;
 import com.wotr.strategy.battle.BattleStrategy;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
 import com.wotr.strategy.game.exceptions.InvalidMoveException;
@@ -80,60 +78,32 @@ public class MultiplayerGame implements Game, AttackEnder {
 
 		turnStrategy.attack(attackingUnit);
 		BattleStrategy bs = GameManager.getFactory().getBattleStrategy();
-		boolean succes = bs.battle(attackingUnit, defendingUnit);
+		boolean success = bs.battle(attackingUnit, defendingUnit);
 
 		Position defendingPosition = defendingUnit.getPosition();
 
 		Collection<BonusAward> awardProspects = new ArrayList<BonusAward>();
 
-		if (succes) {
+		// Find out where attacking unit can go after attack
+		AttackEndpointResolverStrategy aers = attackingUnit.getAttackEndpointResolverStrategy();
+		Collection<AttackEndPosition> endPoints = aers.getAttackEndpointPositions(this, success, action.getPath());
 
+		if (success) {
 			// Rewrite this
 			awardProspects.addAll(getAwardProspects(attackingUnit));
 
 			// Remove defeated unit from defending player
 			getDefendingPlayer().getUnitMap().remove(defendingPosition);
-
-			if (attackingUnit.isRanged()) {
-				// If successful attacking unit is ranged, keep position
-				AttackResult result = new AttackResult(succes, awardProspects);
-				result.addEndposition(new SuccessfulRangedAttackEndpoint(this, attackingUnit, attackingUnit.getPosition()));
-				return result;
-			} else {
-				// If successful attacking unit is melee, suggest end positions
-				AttackResult result = new AttackResult(succes, awardProspects);
-				result.addEndposition(new SuccessfulMeleeAttackEndpoint(this, attackingUnit, action.getPath().getPosition()));
-				result.addEndposition(new SuccessfulMeleeAttackEndpoint(this, attackingUnit, attackingUnit.getPosition()));
-				return result;
-			}
-		} else {
-			if (attackingUnit.isRanged()) {
-				// If failed attacking unit is ranged, keep position
-				AttackResult result = new AttackResult(succes, awardProspects);
-				result.addEndposition(new FailedRangedAttackEndpoint(this, attackingUnit, attackingUnit.getPosition()));
-				return result;
-			} else {
-				// If failed attacking unit is melee, go back to attacking
-				// position
-				Position position = null;
-				if (action.getPath().getPreviousPath() != null) {
-					position = action.getPath().getPreviousPath().getPosition();
-				} else {
-					position = action.getUnit().getPosition();
-				}
-
-				AttackResult result = new AttackResult(succes, awardProspects);
-				result.addEndposition(new FailedMeleeAttackEndpoint(this, attackingUnit, position));
-				return result;
-			}
 		}
+
+		return new AttackResult(success, awardProspects, endPoints);
 	}
 
 	// Move this shit to a better location
 	private Collection<? extends BonusAward> getAwardProspects(Unit attackingUnit) {
 
 		Collection<BonusAward> result = new ArrayList<BonusAward>();
-		
+
 		int xp = attackingUnit.addExperience();
 
 		// if award is to be given
@@ -141,7 +111,7 @@ public class MultiplayerGame implements Game, AttackEnder {
 			attackingUnit.resetExperience();
 			result.add(new AttackBonusAward(attackingUnit));
 			result.add(new DefenceBonusAward(attackingUnit));
-		} 
+		}
 
 		return result;
 	}

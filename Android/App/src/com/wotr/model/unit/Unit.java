@@ -6,6 +6,7 @@ import com.wotr.model.UnitType;
 import com.wotr.model.unit.attribute.AttackAttribute;
 import com.wotr.model.unit.attribute.DefenceAttribute;
 import com.wotr.strategy.action.UnitActionResolverStrategy;
+import com.wotr.strategy.battle.AttackEndpointResolverStrategy;
 import com.wotr.strategy.battle.AttackStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
 
@@ -120,4 +121,6 @@ public abstract class Unit implements Cloneable {
 	public void resetExperience() {
 		experiencePoints = 0;
 	}
+
+	public abstract AttackEndpointResolverStrategy getAttackEndpointResolverStrategy();
 }
