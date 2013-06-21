@@ -17,6 +17,7 @@ import org.cocos2d.particlesystem.CCQuadParticleSystem;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import com.google.example.games.basegameutils.GameHelper;
 import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
@@ -38,16 +39,18 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	private int xCount;
 	private int yCount;
+	private GameHelper mHelper;
 
-	public static CCScene scene() {
+	public static CCScene scene(GameHelper mHelper) {
 		CCScene scene = CCScene.node();
-		CCLayer layer = new SetupGameLayer();
+		CCLayer layer = new SetupGameLayer(mHelper);
 		scene.addChild(layer);
 		return scene;
 	}
 
-	protected SetupGameLayer() {
+	protected SetupGameLayer(GameHelper mHelper) {
 
+		this.mHelper = mHelper;
 		setIsTouchEnabled(true);
 
 		winSize = CCDirector.sharedDirector().displaySize();
@@ -120,7 +123,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		UnitMap<Position, Unit> playerTwoMap = playerOnemap.getMirrored(xCount, yCount * 2);
 
-		CCScene scene = PlayGameLayer.scene(playerOnemap, playerTwoMap);
+		CCScene scene = PlayGameLayer.scene(playerOnemap, playerTwoMap, mHelper);
 		CCDirector.sharedDirector().runWithScene(scene);
 	}
 

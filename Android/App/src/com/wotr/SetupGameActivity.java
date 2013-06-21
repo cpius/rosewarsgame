@@ -34,7 +34,7 @@ public class SetupGameActivity extends Activity {
 		CCDirector.sharedDirector().setDisplayFPS(true);
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
-		CCScene scene = SetupGameLayer.scene();
+		CCScene scene = SetupGameLayer.scene(null);
 		CCDirector.sharedDirector().runWithScene(scene);
 	}
 

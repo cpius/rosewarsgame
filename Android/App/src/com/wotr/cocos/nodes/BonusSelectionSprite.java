@@ -25,7 +25,7 @@ public class BonusSelectionSprite extends CCNode implements CCTouchDelegateProto
 		attackBonusChooserSprite = new AttackBonusSelectionSprite();
 		defenceBonusChooserSprite = new DefenceBonusSelectionSprite();
 
-		setContentSize(attackBonusChooserSprite.getContentSize().width + defenceBonusChooserSprite.getContentSize().getWidth(), attackBonusChooserSprite.getContentSize().getHeight());
+		setContentSize(attackBonusChooserSprite.getContentSize().getWidth() + defenceBonusChooserSprite.getContentSize().getWidth(), attackBonusChooserSprite.getContentSize().getHeight());
 
 		attackBonusChooserSprite.setPosition(CGPoint.ccp(attackBonusChooserSprite.getContentSize().getWidth() / 2f, attackBonusChooserSprite.getContentSize().getHeight() / 2f));
 		defenceBonusChooserSprite.setPosition(CGPoint.ccp(attackBonusChooserSprite.getContentSize().getWidth() + defenceBonusChooserSprite.getContentSize().getWidth() / 2f, defenceBonusChooserSprite.getContentSize().getHeight() / 2f));
@@ -38,7 +38,6 @@ public class BonusSelectionSprite extends CCNode implements CCTouchDelegateProto
 			} else if (bonusAward instanceof DefenceBonusAward) {
 				defenceBonusChooserSprite.setBonusAward(bonusAward);
 			}
-
 		}
 
 		addChild(attackBonusChooserSprite);
@@ -61,9 +60,9 @@ public class BonusSelectionSprite extends CCNode implements CCTouchDelegateProto
 	public boolean ccTouchesBegan(MotionEvent event) {
 
 		CGPoint touchPoint = convertTouchToNodeSpace(event);
-		if (CGRect.containsPoint(attackBonusChooserSprite.getTextureRect(), touchPoint)) {
+		if (CGRect.containsPoint(attackBonusChooserSprite.getBoundingBox(), touchPoint)) {
 			touch(attackBonusChooserSprite);
-		} else if (CGRect.containsPoint(defenceBonusChooserSprite.getTextureRect(), touchPoint)) {
+		} else if (CGRect.containsPoint(defenceBonusChooserSprite.getBoundingBox(), touchPoint)) {
 			touch(defenceBonusChooserSprite);
 		}
 

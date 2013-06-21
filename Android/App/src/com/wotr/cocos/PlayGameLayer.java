@@ -28,6 +28,7 @@ import org.cocos2d.types.ccColor3B;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 
+import com.google.example.games.basegameutils.GameHelper;
 import com.wotr.GameManager;
 import com.wotr.R;
 import com.wotr.cocos.action.RemoveNodeCallBackAction;
@@ -74,20 +75,30 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	private PathFinderStrategy pathFinderStrategy;
 	private ActionPathSprite actionPathSprite;
-
-	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
+	
+	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap, GameHelper mHelper) {
 		CCScene scene = CCScene.node();
-		CCLayer layer = new PlayGameLayer(playerOneMap, playerTwoMap);
+		CCLayer layer = new PlayGameLayer(playerOneMap, playerTwoMap, mHelper);
 		scene.addChild(layer);
 		return scene;
 	}
 
-	protected PlayGameLayer(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap) {
+	protected PlayGameLayer(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap, GameHelper mHelper) {
 
 		xCount = 5;
 		yCount = 8;
 
-		playerOne = new HumanPlayer(playerOneMap, "Player 1", 0);
+		String playerOneName = "Player 1";
+		
+		if(mHelper.isSignedIn()) {
+			com.google.android.gms.games.Player p = mHelper.getGamesClient().getCurrentPlayer();
+	        
+	        if (p != null) {       
+	        	playerOneName = p.getDisplayName();
+	        }
+		}
+		
+		playerOne = new HumanPlayer(playerOneMap, playerOneName, 0);
 		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2", yCount - 1);
 
 		setIsTouchEnabled(true);
@@ -112,18 +123,17 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		addCards(playerOneMap);
 		addCards(playerTwoMap);
 
-		nameLabel = CCLabel.makeLabel("    ", "Arial", 60f);
-		nameLabel.setPosition(10f, winSize.getHeight() - 80f);
-		nameLabel.setAnchorPoint(0, 0);
-		nameLabel.setColor(ccColor3B.ccWHITE);
-		nameLabel.setOpacity(200);
+		nameLabel = CCLabel.makeLabel("    ", "Arial", 50f);
+		nameLabel.setPosition(winSize.getWidth() - 30f, winSize.getHeight() - 100f);
+		nameLabel.setAnchorPoint(0f, 0.5f);
+		nameLabel.setRotation(90f);
+		//nameLabel.setOpacity(150);
 		addChild(nameLabel, 10);
 
 		turnLabel = CCLabel.makeLabel("    ", "Arial", 60f);
-		turnLabel.setPosition(winSize.getWidth() - 50f, winSize.getHeight() - 80f);
-		turnLabel.setAnchorPoint(0, 0);
-		turnLabel.setColor(ccColor3B.ccWHITE);
-		turnLabel.setOpacity(200);
+		turnLabel.setPosition(winSize.getWidth() - 30f, winSize.getHeight() - 80f);
+		turnLabel.setAnchorPoint(0.5f, 0f);
+		//turnLabel.setOpacity(150);
 		addChild(turnLabel, 10);
 
 		Game game = new MultiplayerGame(playerOne, playerTwo);
@@ -269,7 +279,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			BonusSelectionSprite bss = new BonusSelectionSprite(awardProspects);
 			bss.setPosition(CGPoint.ccp(winSize.getWidth() / 2f, winSize.getHeight() / 2f));
 			bss.addActionListener(this);
-			addChild(bss);
+			addChild(bss, 100);
 		} else {
 			// Attack has ended
 		}
@@ -466,7 +476,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
 		// node.addChild(actionLabel);
 
-		addChild(actionLabel);
+		addChild(actionLabel, 100);
 
 		CCMoveTo moveAction = CCMoveTo.action(2.0f, CGPoint.ccp(winSize.width / 2, winSize.height + 50));
 		CCFadeOut fadeAction = CCFadeOut.action(3.0f);
@@ -487,7 +497,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
 		actionLabel.setOpacity(0);
 
-		addChild(actionLabel);
+		addChild(actionLabel, 100);
 
 		CCDelayTime delayAction = CCDelayTime.action(0.1f);
 		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);
@@ -516,7 +526,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		actionLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
 		actionLabel.setOpacity(0);
 
-		addChild(actionLabel);
+		addChild(actionLabel, 100);
 
 		CCDelayTime delayAction = CCDelayTime.action(0.1f);
 		CCFadeIn fadeInAction = CCFadeIn.action(0.3f);

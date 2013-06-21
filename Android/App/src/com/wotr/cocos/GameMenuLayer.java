@@ -11,6 +11,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import com.google.example.games.basegameutils.GameHelper;
 import com.wotr.GameMenuListener;
 
 public class GameMenuLayer extends CCLayer {
@@ -22,10 +23,12 @@ public class GameMenuLayer extends CCLayer {
 	private CCMenuItem multiPlayerOnlineMenuItem;
 	private CCMenuItem leaderBoardMenuItem;
 	private CCMenuItem achievementsMenuItem;
+	private GameHelper mHelper;
 
-	public GameMenuLayer(GameMenuListener listener) {
+	public GameMenuLayer(GameMenuListener listener, GameHelper mHelper) {
 
 		this.listener = listener;
+		this.mHelper = mHelper;
 		setIsTouchEnabled(true);
 
 		CGSize size = CCDirector.sharedDirector().displaySize();

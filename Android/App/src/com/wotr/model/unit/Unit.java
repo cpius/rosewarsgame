@@ -19,7 +19,7 @@ public abstract class Unit implements Cloneable {
 
 	private AttackAttribute attackAttribute;
 	private DefenceAttribute defenceAttribute;
-	
+
 	public String getImage() {
 		return "unit/" + image + (enemy ? "red" : "green") + ".jpg";
 	}
@@ -57,7 +57,10 @@ public abstract class Unit implements Cloneable {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
+		Unit unit = (Unit) super.clone();
+		unit.attackAttribute = null;
+		unit.defenceAttribute = null;
+		return unit;
 	}
 
 	public boolean isEnemy() {
@@ -113,7 +116,7 @@ public abstract class Unit implements Cloneable {
 	public int addExperience() {
 		return ++experiencePoints;
 	}
-	
+
 	public void resetExperience() {
 		experiencePoints = 0;
 	}

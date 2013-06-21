@@ -1,21 +1,29 @@
 package com.wotr;
 
+import java.util.ArrayList;
+
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.games.GamesClient;
+import com.google.android.gms.plus.PlusClient.OnPersonLoadedListener;
+import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.Person.Image;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
 import com.wotr.cocos.GameMenuLayer;
 import com.wotr.cocos.SetupGameLayer;
 
-public class GameMenuActivity extends Activity implements GameMenuListener, GameHelperListener {
+public class GameMenuActivity extends Activity implements GameMenuListener, GameHelperListener, OnPersonLoadedListener {
 
 	protected static final int REQUEST_ACHIEVEMENTS = 0;
 	protected static final int REQUEST_LEADERBOARD = 1;
@@ -36,7 +44,7 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 		setContentView(_glSurfaceView);
 
 		mHelper = new GameHelper(this);
-		mHelper.setup(this);
+		mHelper.setup(this, GameHelper.CLIENT_GAMES | GameHelper.CLIENT_PLUS);
 	}
 
 	@Override
@@ -46,7 +54,7 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 		CCDirector.sharedDirector().setDisplayFPS(true);
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
-		gameMenuLayer = new GameMenuLayer(this);
+		gameMenuLayer = new GameMenuLayer(this, mHelper);
 
 		CCScene scene = CCScene.node();
 		scene.addChild(gameMenuLayer);
@@ -78,6 +86,14 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 	protected void onActivityResult(int request, int response, Intent data) {
 		super.onActivityResult(request, response, data);
 		mHelper.onActivityResult(request, response, data);
+
+		if (request == REQUEST_SELECTPLAYERS && response == RESULT_OK) {
+
+			ArrayList<String> invitees = data.getStringArrayListExtra(GamesClient.EXTRA_PLAYERS);
+			for (String string : invitees) {
+				mHelper.getPlusClient().loadPerson(this, string);
+			}
+		}
 	}
 
 	@Override
@@ -133,7 +149,8 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 	public void onMultiplayerOnlineClicked() {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				startActivityForResult(mHelper.getGamesClient().getSelectPlayersIntent(1, 2), REQUEST_SELECTPLAYERS);
+				Intent selectPlayersIntent = mHelper.getGamesClient().getSelectPlayersIntent(1, 1);
+				startActivityForResult(selectPlayersIntent, REQUEST_SELECTPLAYERS);
 			}
 		});
 	}
@@ -141,17 +158,36 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 	@Override
 	public void onMultiplayerLocalClicked() {
 
+		final GameMenuActivity this_ = this;
+		
 		runOnUiThread(new Runnable() {
 			public void run() {
 
-				CCScene scene = SetupGameLayer.scene();
+				String id = mHelper.getGamesClient().getCurrentPlayer().getPlayerId();
+				
+				mHelper.getPlusClient().loadPerson(this_, id);
+				
+				CCScene scene = SetupGameLayer.scene(mHelper);
 				CCDirector.sharedDirector().runWithScene(scene);
 
-				 /*Intent myIntent = new Intent(getApplicationContext(),
-				 SetupGameActivity.class);
-				 startActivityForResult(myIntent, 0);*/
+				/*
+				 * Intent myIntent = new Intent(getApplicationContext(),
+				 * SetupGameActivity.class); startActivityForResult(myIntent,
+				 * 0);
+				 */
 			}
 		});
+
+	}
+
+	@Override
+	public void onPersonLoaded(ConnectionResult status, Person person) {
+
+		String name = person.getDisplayName();
+		System.out.println(name);
+
+		Image image = person.getImage();
+		String url = image.getUrl();
 
 	}
 }

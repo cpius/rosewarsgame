@@ -81,7 +81,7 @@ public class CardSprite extends CCSprite implements BonusListener, CCTouchDelega
 
 	@Override
 	public void onEnter() {
-		CCTouchDispatcher.sharedDispatcher().addDelegate(this, 1);
+		CCTouchDispatcher.sharedDispatcher().addDelegate(this, 100);
 		super.onEnter();
 	}
 
