@@ -21,7 +21,7 @@ class TestAI(unittest.TestCase):
         gamestate.do_action(action)
         gamestate.shift_turn_if_done()
 
-        actual = converter.gamestate_to_document(gamestate)
+        actual = gamestate.to_document()
         expected = gamestate_document
 
         player2_units = expected["player2_units"]
@@ -34,9 +34,8 @@ class TestAI(unittest.TestCase):
 
     def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
         document = self.get_test_gamestate_document()
-        converter = DocumentConverter()
         gamestate = Gamestate.from_document(document)
-        same_document = converter.gamestate_to_document(gamestate)
+        same_document = gamestate.to_document()
 
         self.assert_equal_documents(document, same_document)
 
@@ -45,7 +44,7 @@ class TestAI(unittest.TestCase):
         database = client.unnamed
         games = database.games
 
-        game = games.find_one({"_id": ObjectId("51521c97d288594d25090e5f")})
+        game = games.find_one({"_id": ObjectId("51e596a1d28859f209d31b49")})
         self.assertEqual(1, game["Turn"])
 
     def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):

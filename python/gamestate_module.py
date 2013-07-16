@@ -192,6 +192,47 @@ class Gamestate:
         else:
             return ai_module.AI(name)
 
+    def to_document(self):
+        player1_units = self.get_units_dict(self.units[0])
+        player2_units = self.get_units_dict(self.units[1])
+
+        return {
+            "player1_intelligence": self.players[0].ai_name,
+            "player1_units": player1_units,
+            "player2_intelligence": self.players[1].ai_name,
+            "player2_units": player2_units,
+            "turn": self.turn,
+            "extra_action": self.has_extra_action,
+            "actions_remaining": self.actions_remaining,
+            "created_at": self.start_time
+        }
+
+    def get_units_dict(self, units):
+        units_dict = dict()
+        for unit_position in units.keys():
+            unit = units[unit_position]
+
+            unit_dict = dict()
+            if unit.xp:
+                unit_dict["experience"] = unit.xp
+            if unit.attack_counters:
+                unit_dict["attack_counters"] = unit.attack_counters
+            if unit.defence_counters:
+                unit_dict["defence_counters"] = unit.defence_counters
+            if hasattr(unit, "blue_counters"):
+                unit_dict["blue_counters"] = unit.blue_counters
+            if hasattr(unit, "yellow_counters"):
+                unit_dict["yellow_counters"] = unit.yellow_counters
+
+            easy_position = units_module.get_position_string(unit_position)
+            if len(unit_dict) > 0:
+                unit_dict["name"] = unit.name
+                units_dict[easy_position] = unit_dict
+            else:
+                units_dict[easy_position] = unit.name
+
+        return units_dict
+
 
 def save_gamestate(gamestate):
     return saver.save_gamestate(gamestate)
