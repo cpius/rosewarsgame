@@ -5,16 +5,26 @@ import action_getter
 import saver
 import ai_module
 import ai_methods
+from datetime import datetime
 
 
 class Gamestate:
     
-    def __init__(self, player1, player1_units, player2, player2_units, turn=1, actions_remaining=2, has_extra_action=False):
+    def __init__(self,
+                 player1,
+                 player1_units,
+                 player2,
+                 player2_units,
+                 turn=1,
+                 actions_remaining=2,
+                 has_extra_action=False,
+                 start_time=datetime.utcnow()):
         self.turn = turn
         self.units = [player1_units, player2_units]
         self.players = [player1, player2]
         self.actions_remaining = actions_remaining
         self.has_extra_action = has_extra_action
+        self.start_time = start_time
 
     def do_action(self, action, controller=None):
         action_doer.do_action(self, action, controller)
@@ -44,7 +54,6 @@ class Gamestate:
                 for sub_action in action.sub_actions:
                     sub_action.chance_of_win = ai_methods.chance_of_win(sub_action.unit_reference,
                                                                         sub_action.target_reference, sub_action)
-
 
         return actions
 

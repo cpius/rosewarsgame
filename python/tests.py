@@ -1,6 +1,6 @@
 import unittest
 import re
-import datetime
+from datetime import datetime
 import units as units_module
 import ai_module
 from player import Player
@@ -8,17 +8,15 @@ from gamestate_module import Gamestate
 from document import DocumentConverter
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from pprint import PrettyPrinter
 
 
 class TestAI(unittest.TestCase):
     def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
-        now = datetime.datetime.utcnow()
+        now = datetime.utcnow()
         document = {
-            "player1": "Mads",
             "player1_intelligence": "Human",
-            "player2": "Jonatan",
             "player2_intelligence": "Human",
-            "active_player": 1,
             "turn": 1,
             "actions_remaining": 1,
             "extra_action": False,
@@ -26,14 +24,14 @@ class TestAI(unittest.TestCase):
             {
                 "D6":
                 {
-                    "name": "Heavy_Cavalry",
+                    "name": "Heavy Cavalry",
                     "attack_counters": 1,
-                    "experience:": 1
+                    "experience": 1
                 }
             },
             "player2_units":
             {
-                "C7": "Royal_Guard",
+                "C7": "Royal Guard",
                 "E7": "Archer"
             },
             "created_at": now
@@ -41,7 +39,9 @@ class TestAI(unittest.TestCase):
         converter = DocumentConverter()
         gamestate = converter.document_to_gamestate(document)
         same_document = converter.gamestate_to_document(gamestate)
-        self.assertEqual(document, same_document, "The document was mangled. Output document: " + str(same_document))
+        pretty_printer = PrettyPrinter()
+        pretty_documents = pretty_printer.pformat(same_document) + "\n\n" + pretty_printer.pformat(document)
+        self.assertEqual(document, same_document, "The document was mangled.\n\n" + pretty_documents)
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
         client = MongoClient()
