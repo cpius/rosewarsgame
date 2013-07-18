@@ -137,3 +137,7 @@ def write_gamestate(gamestate, path):
 
 def read_gamestate(path):
     pass
+
+
+def load_json(json):
+    pass

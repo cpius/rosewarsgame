@@ -2,14 +2,27 @@ from bottle import get, run
 from pymongo import MongoClient
 import time
 import datetime
+import gamestate_module
+from action import Action
 
 
-# @get('/games/<game>/move/<move>')
-# def move(game, move):
-#     client = MongoClient()
-#     db = client.unnamed
-#     games = db.games
-#     pass
+@get('/games/<game_id>/do_action/<action_json>')
+def do_action(game_id, action_json):
+    client = MongoClient()
+    database = client.unnamed
+    games = database.games
+
+    game = games.find({"_id": game_id})
+    if not game:
+        return {"Status": "Error", "Message": "Could not find game with id " + game}
+
+    print action_json
+    gamestate = gamestate_module.load_json(game)
+    action = Action((1, 1), (1, 2), None, False, False, False)
+    gamestate.do_action(action)
+    game = gamestate.to_json()
+    games.update({"_id", game})
+    return {"Status": "OK", "Message": "Action recorded"}
 
 
 @get('/games/new')
@@ -44,6 +57,7 @@ def new_game():
     }
     game_id = games.insert(game)
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time()}
+
 
 @get('/hello/<name>')
 def hello(name='World'):
