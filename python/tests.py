@@ -40,11 +40,11 @@ class TestAI(unittest.TestCase):
         self.assert_equal_documents(document, same_document)
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
-        client = MongoClient()
+        client = MongoClient(host="server.rosewarsgame.com")
         database = client.unnamed
         games = database.games
 
-        game = games.find_one({"_id": ObjectId("51e596a1d28859f209d31b49")})
+        game = games.find_one({"_id": ObjectId("51e86e5fea5a8f135cbc0326")})
         self.assertEqual(1, game["Turn"])
 
     def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
