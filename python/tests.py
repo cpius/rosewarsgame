@@ -1,14 +1,48 @@
 import unittest
 import re
+import datetime
 import units as units_module
 import ai_module
 from player import Player
 from gamestate_module import Gamestate
+from document import DocumentConverter
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 
 class TestAI(unittest.TestCase):
+    def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
+        now = datetime.datetime.utcnow()
+        document = {
+            "player1": "Mads",
+            "player1_intelligence": "Human",
+            "player2": "Jonatan",
+            "player2_intelligence": "Human",
+            "active_player": 1,
+            "turn": 1,
+            "actions_remaining": 1,
+            "extra_action": False,
+            "player1_units":
+            {
+                "D6":
+                {
+                    "name": "Heavy_Cavalry",
+                    "attack_counters": 1,
+                    "experience:": 1
+                }
+            },
+            "player2_units":
+            {
+                "C7": "Royal_Guard",
+                "E7": "Archer"
+            },
+            "created_at": now
+        }
+        converter = DocumentConverter()
+        gamestate = converter.document_to_gamestate(document)
+        same_document = converter.gamestate_to_document(gamestate)
+        self.assertEqual(document, same_document, "The document was mangled. Output document: " + str(same_document))
+
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
         client = MongoClient()
         database = client.unnamed
