@@ -29,29 +29,29 @@ def do_action(game_id, action_json):
 def new_game():
     games = get_games_db()
     game = {
-        "Player1": "Mads",
-        "Player1Intelligence": "Human",
-        "Player2": "Jonatan",
-        "Player2Intelligence": "Human",
-        "ActivePlayer": 1,
-        "Turn": 1,
-        "Actions": 1,
-        "ExtraAction": False,
-        "Player1Units":
+        "player1": "Mads",
+        "player1_intelligence": "Human",
+        "player2": "Jonatan",
+        "player2_intelligence": "Human",
+        "active_player": 1,
+        "turn": 1,
+        "actions_remaining": 1,
+        "extra_action": False,
+        "player1_units":
         {
             "D6":
             {
-                "Name": "Heavy_Cavalry",
-                "AttackCounters": 1,
-                "Experience:": 1
+                "name": "Heavy Cavalry",
+                "attack_counters": 1,
+                "experience:": 1
             }
         },
-        "Player2Units":
+        "player2_units":
         {
-            "C7": "Royal_Guard",
+            "C7": "Royal Guard",
             "E7": "Archer"
         },
-        "Created": datetime.datetime.utcnow()
+        "created_at": datetime.datetime.utcnow()
     }
     game_id = games.insert(game)
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time()}
