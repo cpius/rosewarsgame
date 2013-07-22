@@ -29,3 +29,9 @@ special_unit_count = 3
 basic_unit_count = 6
 max_two_siege_weapons = True
 at_least_one_siege_weapon = True
+
+if os.path.exists("settings_user.py"):
+    import settings_user
+    zoom = settings_user.zoom
+    interface = interfaces.Rectangles(zoom)
+
