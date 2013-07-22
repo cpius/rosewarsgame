@@ -63,4 +63,13 @@ def new_game():
 def hello(name='World'):
     return "Hello ", name, "!"
 
+
+class CustomJsonEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return JSONEncoder.default(self, obj)
+
 run(host='localhost', port=8080, debug=True)
