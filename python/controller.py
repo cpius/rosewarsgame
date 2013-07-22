@@ -10,6 +10,7 @@ import shutil
 from player import Player
 from action import Action
 import units as units_module
+from pprint import PrettyPrinter
 
 
 class Controller(object):
@@ -357,6 +358,11 @@ class Controller(object):
             + "." \
             + str(2 - self.gamestate.get_actions_remaining())
         self.view.save_screenshot(name)
+
+        pretty_printer = PrettyPrinter()
+        file = open("./replay/" + name + ".json", 'w')
+        file.write(pretty_printer.pformat(self.gamestate.to_document()))
+        file.close()
 
         self.action_index += 1
 
