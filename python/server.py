@@ -59,9 +59,6 @@ def new_game():
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time()}
 
 
-@get('/hello/<name>')
-def hello(name='World'):
-    return "Hello ", name, "!"
 
 
 class CustomJsonEncoder(JSONEncoder):
