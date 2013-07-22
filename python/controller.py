@@ -257,16 +257,24 @@ class Controller(object):
             return
 
         assert matching_actions <= 1
+        move_with_attack = False
 
         if self.gamestate.current_player().ai == "Human":
-            self.gamestate.do_action(action, self)
+            post_movement_possible = self.gamestate.do_action(action)
+            self.view.draw_game(self.gamestate)
+            self.view.draw_action(action, self.gamestate)
+
+            if post_movement_possible:
+                move_with_attack = self.ask_about_move_with_attack(action)
+
+                if move_with_attack:
+                    self.gamestate.update_final_position(action)
         else:
             self.gamestate.do_action(action)
-
-        if self.draw_action:
             self.view.draw_action(action, self.gamestate)
-        else:
-            self.view.draw_log(action, self.gamestate)
+
+        if move_with_attack:
+            self.view.draw_post_movement(action, self.gamestate)
 
         self.save_game()
 
