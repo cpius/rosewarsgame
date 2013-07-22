@@ -1,27 +1,44 @@
-from bottle import get, run
+from bottle import run, get, post, install, JSONPlugin, request
 from pymongo import MongoClient
+from bson import ObjectId
+from json import dumps, JSONEncoder
 import time
 import datetime
-import gamestate_module
-from action import Action
+from gamestate_module import Gamestate
+from action_getter import get_action
+import socket
 
 
-@get('/games/<game_id>/do_action/<action_json>')
-def do_action(game_id, action_json):
-    client = MongoClient()
-    database = client.unnamed
-    games = database.games
-
-    game = games.find({"_id": game_id})
+@get('/games/view/<game_id>')
+def view(game_id):
+    games = get_games_db()
+    game = games.find_one({"_id": ObjectId(game_id)})
     if not game:
-        return {"Status": "Error", "Message": "Could not find game with id " + game}
+        return {"Status": "Error", "Message": "Could not find game with id " + game_id}
 
-    print action_json
-    gamestate = gamestate_module.load_json(game)
-    action = Action((1, 1), (1, 2), None, False, False, False)
+    return game
+
+
+@post('/games/<game_id>/do_action')
+def do_action_post(game_id):
+    games = get_games_db()
+    game = games.find_one({"_id": ObjectId(game_id)})
+    if not game:
+        return {"Status": "Error", "Message": "Could not find game with id " + game_id}
+
+    gamestate = Gamestate.from_document(game)
+    action = get_action(gamestate, request.json)
+
+    available_actions = gamestate.get_actions()
+    if not action:
+        return invalid_action(available_actions, request.json)
+
+    if not action in available_actions:
+        invalid_action(available_actions, str(action))
+
     gamestate.do_action(action)
-    game = gamestate.to_json()
-    games.update({"_id", game})
+    game = gamestate.to_document()
+    games.update({"_id": ObjectId(game_id)}, game)
     return {"Status": "OK", "Message": "Action recorded"}
 
 
