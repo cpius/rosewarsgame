@@ -64,6 +64,8 @@ def do_action(gamestate, action, controller=None, unit=None):
 
     unit.used = True
 
+    gain_xp(unit)
+
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
 
@@ -134,7 +136,6 @@ def settle_attack_push(action, enemy_units, player_units):
                 action.outcome = "Push"
                 update_final_position(action)
                 if push_position in player_units or push_position in enemy_units or out_of_board_horizontal(push_position):
-                    gain_xp(action.unit)
                     del enemy_units[action.attack_position]
 
                 else:
@@ -155,8 +156,6 @@ def settle_attack(action, enemy_units, controller):
     if battle.attack_successful(action) and not battle.defence_successful(action):
 
         action.outcome = "Success"
-
-        gain_xp(action.unit)
 
         if hasattr(action.target_unit, "extra_life"):
             del action.target_unit.extra_life
@@ -219,7 +218,7 @@ def update_final_position(action, controller=None):
 
 
 def gain_xp(unit):
-    if not unit.xp_gained_this_round:
+    if not unit.xp_gained_this_round and unit.upgrades:
         unit.xp += 1
         unit.xp_gained_this_round = True
 

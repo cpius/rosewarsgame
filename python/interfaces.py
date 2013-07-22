@@ -1,15 +1,33 @@
 import colors
 import pygame
+from coordinates import Coordinates
+from collections import namedtuple
 
 
 class Interface(object):
 
-    base_coordinates = (0, 0)
+    def __init__(self, zoom):
 
-    normal_font_name = "arial"
-    normal_font_size = 18
-    big_font_size = 28
-    bigger_font_size = 38
+        font_name = "arial"
+        self.fonts = {"message": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
+                      "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "xp": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)
+                      }
+
+        self.line_distances = {"small": 15 * zoom}
+
+        self.coordinates = {"base": Coordinates(self.base_coordinates, self),
+                            "center": Coordinates(self.center_coordinates, self),
+                            "battle": Coordinates(self.battle_coordinates, self),
+                            "flag": Coordinates(self.first_symbol_coordinates, self),
+                            "percentage": Coordinates(self.percentage_coordinates, self),
+                            "percentage_sub": Coordinates(self.percentage_sub_coordinates, self)
+                            }
+
+
+class Rectangles(Interface):
 
     move_attack_icon = "./other/attack.gif"
     attack_icon = "./other/attack.gif"
@@ -21,11 +39,10 @@ class Interface(object):
     dice = [""]
     for i in range(1, 7):
         dice.append("./other/dice_" + str(i) + ".png")
+    base_coordinates = (0, 0)
 
-
-
-class Rectangles(Interface):
     def __init__(self, zoom):
+
         self.zoom = zoom
 
         self.board_image = "./rectangles/board.gif"
@@ -39,14 +56,13 @@ class Rectangles(Interface):
         self.x_border = 30 * zoom
         self.y_border_top = 26 * zoom
         self.y_border_bottom = 26 * zoom
-
         counter_base_x = 45 * zoom
         counter_base_y = 0 * zoom
 
         self.percentage_coordinates = (self.unit_width / 4, 0)
         self.percentage_sub_coordinates = (self.unit_width / 4, 0)
         self.center_coordinates = (self.unit_width / 2, self.unit_height / 2)
-        self.symbol_coordinates = (self.unit_width / 2 - 15 * zoom, self.unit_height / 2 - 15 * zoom)
+        self.battle_coordinates = (self.unit_width / 2 - 15 * zoom, self.unit_height / 2 - 15 * zoom)
 
         self.first_symbol_coordinates = (2 * zoom, counter_base_y + 58 * zoom)
         self.second_symbol_coordinates = (18 * zoom, counter_base_y + 58 * zoom)
@@ -62,10 +78,6 @@ class Rectangles(Interface):
         self.green_player_color = colors.gold
         self.red_player_color = colors.dull_red
         self.counter_circle_color = colors.black
-
-        self.normal_font_size = int(self.normal_font_size * zoom)
-        self.big_font_size = int(self.big_font_size * zoom)
-        self.bigger_font_size = int(self.bigger_font_size * zoom)
 
         self.message_location = (410 * zoom, 420 * zoom)
         self.message_font_size = int(23 * zoom)
@@ -84,4 +96,18 @@ class Rectangles(Interface):
 
         self.message_line_length = 40 * zoom
 
-        self.show_unit_location = (410 * zoom, 300 * zoom)
+        self.show_unit_location = (410 * zoom, 40 * zoom)
+
+        self.upgrade_locations = [(410 * zoom, 370 * zoom), (600 * zoom, 370 * zoom)]
+
+        self.upgrade_text_locations = [(410 * zoom, 510 * zoom), (600 * zoom, 510 * zoom)]
+
+        self.small_line_distance = 15 * zoom
+
+        pygame.init()
+
+        super(Rectangles, self).__init__(zoom)
+
+        Point = namedtuple('Point', ['x', 'y'])
+        self.upgrade_1_area = [Point(410 * zoom, 370 * zoom), Point((410 + 118) * zoom, (370 + 165.5) * zoom)]
+        self.upgrade_2_area = [Point(600 * zoom, 370 * zoom), Point((600 + 118) * zoom, (370 + 165.5) * zoom)]

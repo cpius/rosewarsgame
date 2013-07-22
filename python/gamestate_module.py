@@ -175,10 +175,6 @@ class Gamestate:
             for attribute in unit_document.keys():
                 if attribute == "experience":
                     unit.xp = int(unit_document[attribute])
-                if attribute == "attack_counters":
-                    unit.attack_counters = int(unit_document[attribute])
-                if attribute == "defence_counters":
-                    unit.defence_counters = int(unit_document[attribute])
 
             units[position] = unit
 
@@ -214,10 +210,6 @@ class Gamestate:
             unit_dict = dict()
             if unit.xp:
                 unit_dict["experience"] = unit.xp
-            if unit.attack_counters:
-                unit_dict["attack_counters"] = unit.attack_counters
-            if unit.defence_counters:
-                unit_dict["defence_counters"] = unit.defence_counters
             if hasattr(unit, "blue_counters"):
                 unit_dict["blue_counters"] = unit.blue_counters
             if hasattr(unit, "yellow_counters"):
