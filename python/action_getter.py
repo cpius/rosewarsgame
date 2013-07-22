@@ -161,12 +161,16 @@ def get_actions(gamestate):
                 actions += moves + abilities
 
     for action in actions:
-        action.unit_reference = gamestate.player_units()[action.start_position]
-        add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
-        for sub_action in action.sub_actions:
-            sub_action.unit_reference = gamestate.player_units()[action.start_position]
+        add_unit_references(gamestate, action)
 
     return actions
+
+
+def add_unit_references(gamestate, action):
+    action.unit_reference = gamestate.player_units()[action.start_position]
+    add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
+    for sub_action in action.sub_actions:
+        sub_action.unit_reference = gamestate.player_units()[action.start_position]
 
 
 def get_extra_actions(gamestate):
