@@ -6,7 +6,7 @@ class Unit(object):
     abilities = []
     used = False
     xp_gained_this_round = False
-    xp_to_upgrade = 2
+    xp_to_upgrade = 4
     upgrades = []
     abonus = {}
     dbonus = {}
@@ -118,6 +118,7 @@ class Pikeman(Unit):
     type = "Infantry"   
     zoc = ["Cavalry"]
     upgrades = ["Halberdier", "Royal Guard"]
+    xp_to_upgrade = 3
 
 
 class Halberdier(Unit):
@@ -178,6 +179,7 @@ class Light_Cavalry(Unit):
     type = "Cavalry"
 
     upgrades = ["Dragoon", "Cavalry Lieutenant"]
+    xp_to_upgrade = 3
 
 
 class Dragoon(Unit):
@@ -341,6 +343,7 @@ class Catapult(Unit):
     type = "Siege Weapon"
         
     double_attack_cost = True
+    xp_to_upgrade = 2
 
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
@@ -358,6 +361,7 @@ class Catapult_II_A(Unit):
     type = "Siege Weapon"
 
     double_attack_cost = True
+    xp_to_upgrade = 3
 
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
@@ -377,6 +381,7 @@ class Catapult_II_B(Unit):
     type = "Siege Weapon"
 
     double_attack_cost = True
+    xp_to_upgrade = 3
 
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
@@ -449,6 +454,7 @@ class Royal_Guard(Unit):
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
     defence_maneuverability = True
     shield = True
+    xp_to_upgrade = 3
 
     descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.",
                     "shield": "+1D v melee units."}
@@ -510,6 +516,7 @@ class Scout(Unit):
     type = "Cavalry"
         
     scouting = True
+    xp_to_upgrade = 2
 
     descriptions = {"scouting": "Can move past all units."}
 
@@ -631,6 +638,7 @@ class Cannon(Unit):
     type = "Siege Weapon"
         
     attack_cooldown = 3
+    xp_to_upgrade = 3
 
     descriptions = {"attack_cooldown": "Can only attack every third turn."}
 
@@ -1028,6 +1036,7 @@ class War_Elephant(Unit):
     double_attack_cost = True
     triple_attack = True
     push = True
+    xp_to_upgrade = 3
 
     descriptions = {"double_attack_cost": "Attack takes two actions.",
                     "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
@@ -1299,7 +1308,6 @@ class Weaponsmith_II_B(Unit):
     abilities = ["improve_weapons"]
 
     descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}
-
 
 
 def get_position(position_string):
