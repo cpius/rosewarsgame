@@ -25,6 +25,14 @@ def do_action(game_id, action_json):
     return {"Status": "OK", "Message": "Action recorded"}
 
 
+def invalid_action(available_actions, requested_action):
+    return {
+        "Status": "Error",
+        "Message": "Invalid action",
+        "Action": requested_action,
+        "Available actions": ", ".join(str(action) for action in available_actions)}
+
+
 @get('/games/new')
 def new_game():
     games = get_games_db()
