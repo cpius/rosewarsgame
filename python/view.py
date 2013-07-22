@@ -100,6 +100,6 @@ class View(object):
         pass
 
     def draw_message(self, message):
-        pass
+        m.write_message(self.screen, self.interface, message)
 
 
