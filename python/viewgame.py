@@ -64,7 +64,7 @@ def draw_game(screen, interface, gamestate, start_position=None, actions=()):
 
     for attack in attacks:
         for sub_attack in attack.sub_actions:
-            location = coordinates.get(sub_attack.attack_position)
+            location = coordinates["base"].get(sub_attack.attack_position)
             if location not in sub_attack_locations and location not in attack_locations:
                 sub_attack_locations.add(location)
                 m.draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
