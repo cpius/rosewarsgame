@@ -165,21 +165,20 @@ class Gamestate:
         for position_string in document.keys():
             position = units_module.get_position(position_string)
             unit_document = document[position_string]
-            if type(unit_document) is str:
-                name = unit_document
-            else:
-                name = document[position_string]["name"]
 
+            if not type(unit_document) is dict:
+                units[position] = getattr(units_module, unit_document.replace(" ", "_"))()
+                continue
+
+            name = document[position_string]["name"]
             unit = getattr(units_module, name.replace(" ", "_"))()
-
-            if type(unit_document) is dict:
-                for attribute in unit_document.keys():
-                    if attribute == "experience":
-                        unit.xp = int(unit_document[attribute])
-                    if attribute == "attack_counters":
-                        unit.attack_counters = int(unit_document[attribute])
-                    if attribute == "defence_counters":
-                        unit.defence_counters = int(unit_document[attribute])
+            for attribute in unit_document.keys():
+                if attribute == "experience":
+                    unit.xp = int(unit_document[attribute])
+                if attribute == "attack_counters":
+                    unit.attack_counters = int(unit_document[attribute])
+                if attribute == "defence_counters":
+                    unit.defence_counters = int(unit_document[attribute])
 
             units[position] = unit
 
@@ -240,15 +239,3 @@ def save_gamestate(gamestate):
 
 def load_gamestate(saved_gamestate):
     return saver.load_gamestate(saved_gamestate)
-
-
-def write_gamestate(gamestate, path):
-    pass
-
-
-def read_gamestate(path):
-    pass
-
-
-def load_json(json):
-    pass

@@ -13,7 +13,7 @@ class Action(object):
         if not end_position:
             self.end_position = start_position
         else:
-            self.end_position = end_position  # If the action is a movement, the tile the unit ends it movement on.
+            self.end_position = end_position  # If the action is a movement, the tile the unit ends its movement on.
                                           # If the action is an attack, tile the unit stops at while attacking
                                           # an adjacent tile.
         self.attack_position = attack_position  # The tile a unit attacks
