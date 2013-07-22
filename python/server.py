@@ -72,4 +72,8 @@ class CustomJsonEncoder(JSONEncoder):
             return str(obj)
         return JSONEncoder.default(self, obj)
 
+host_address = "10.224.105.151"
+if socket.gethostname() == "MD-rMBP.local":
+    host_address = "localhost"
+
 run(host='localhost', port=8080, debug=True)
