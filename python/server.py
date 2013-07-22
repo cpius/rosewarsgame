@@ -27,9 +27,7 @@ def do_action(game_id, action_json):
 
 @get('/games/new')
 def new_game():
-    client = MongoClient()
-    db = client.unnamed
-    games = db.games
+    games = get_games_db()
     game = {
         "Player1": "Mads",
         "Player1Intelligence": "Human",
@@ -59,6 +57,10 @@ def new_game():
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time()}
 
 
+def get_games_db():
+    client = MongoClient()
+    database = client.unnamed
+    return database.games
 
 
 class CustomJsonEncoder(JSONEncoder):
