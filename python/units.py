@@ -37,15 +37,15 @@ class Longbowman(Unit):
     movement = 1
     range = 4
     type = "Infantry"
-    upgrades = ["Longbowman IIA", "Longbowman IIB"]
+    upgrades = ["Longbowman II_A", "Longbowman II_B"]
 
     sharpshooting = True
 
     descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 
-class Longbowman_IIA(Unit):
-    name = "Longbowman IIA"
+class Longbowman_II_A(Unit):
+    name = "Longbowman II_A"
     image = "Archer"
     attack = 4
     defence = 2
@@ -56,8 +56,8 @@ class Longbowman_IIA(Unit):
     type = "Infantry"
 
 
-class Longbowman_IIB(Unit):
-    name = "Longbowman IIB"
+class Longbowman_II_B(Unit):
+    name = "Longbowman II_B"
     image = "Archer"
     attack = 3
     defence = 3
@@ -78,11 +78,11 @@ class Crossbow_Archer(Unit):
     abonus = {"Infantry": 1}
     dbonus = {}
     type = "Infantry"
-    upgrades = ["Crossbow Archer IIA", "Crossbow Archer IIB"]
+    upgrades = ["Crossbow Archer II_A", "Crossbow Archer II_B"]
 
 
 class Crossbow_Archer_II_A(Unit):
-    name = "Crossbow Archer IIA"
+    name = "Crossbow Archer II_A"
     image = "Archer"
     attack = 3
     defence = 3
@@ -94,7 +94,7 @@ class Crossbow_Archer_II_A(Unit):
 
 
 class Crossbow_Archer_II_B(Unit):
-    name = "Crossbow Archer IIB"
+    name = "Crossbow Archer II_B"
     image = "Archer"
     attack = 2
     defence = 4
@@ -135,7 +135,7 @@ class Halberdier(Unit):
                             "opponents units must retreat directly backwards or die."}
 
 
-class Halberdier_IIA(Unit):
+class Halberdier_II_A(Unit):
     name = "Halberdier"
     image = "Pikeman"
     attack = 5
@@ -150,7 +150,7 @@ class Halberdier_IIA(Unit):
                             "opponents units must retreat directly backwards or die."}
 
 
-class Halberdier_IIB(Unit):
+class Halberdier_II_B(Unit):
     name = "Halberdier"
     image = "Pikeman"
     attack = 4
@@ -191,12 +191,12 @@ class Dragoon(Unit):
     abonus = {}
     dbonus = {}
     type = "Cavalry"
-    upgrades = ["Dragoon IIA", "Dragoon IIB"]
+    upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
 
-class Dragoon_IIA(Unit):
+class Dragoon_II_A(Unit):
 
-    name = "Dragoon IIA"
+    name = "Dragoon II_A"
     image = "Light Cavalry"
     attack = 4
     defence = 2
@@ -207,9 +207,9 @@ class Dragoon_IIA(Unit):
     type = "Cavalry"
 
 
-class Dragoon_IIB(Unit):
+class Dragoon_II_B(Unit):
 
-    name = "Dragoon IIB"
+    name = "Dragoon II_B"
     image = "Light Cavalry"
     attack = 3
     defence = 3
@@ -231,12 +231,12 @@ class Cavalry_Lieutenant(Unit):
     abonus = {}
     dbonus = {}
     type = "Cavalry"
-    upgrades = ["Cavalry_Luitenant_IIA", "Cavalry_Luitenant_IIB"]
+    upgrades = ["Cavalry_Luitenant_II_A", "Cavalry_Luitenant_II_B"]
 
 
-class Cavalry_Luitenant_IIA(Unit):
+class Cavalry_Luitenant_II_A(Unit):
 
-    name = "Cavalry Liuetenant IIA"
+    name = "Cavalry Liuetenant II_A"
     image = "Light Cavalry"
     attack = 3
     defence = 3
@@ -247,9 +247,9 @@ class Cavalry_Luitenant_IIA(Unit):
     type = "Cavalry"
 
 
-class Cavalry_Luitenant_IIB(Unit):
+class Cavalry_Luitenant_II_B(Unit):
 
-    name = "Cavalry Liuetenant IIB"
+    name = "Cavalry Liuetenant II_B"
     image = "Light Cavalry"
     attack = 2
     defence = 4
@@ -299,12 +299,12 @@ class Trebuchet(Unit):
     abonus = {}
     dbonus = {}
     type = "Siege Weapon"
-    upgrades = ["Trebuchet IIA", "Trebuchet IIA"]
+    upgrades = ["Trebuchet II_A", "Trebuchet II_A"]
 
 
-class Trebuchet_IIA(Unit):
+class Trebuchet_II_A(Unit):
 
-    name = "Trebuchet IIA"
+    name = "Trebuchet II_A"
     image = "Ballista"
     attack = 6
     defence = 1
@@ -315,9 +315,9 @@ class Trebuchet_IIA(Unit):
     type = "Siege Weapon"
 
 
-class Trebuchet_IIB(Unit):
+class Trebuchet_II_B(Unit):
 
-    name = "Trebuchet IIB"
+    name = "Trebuchet II_B"
     image = "Ballista"
     attack = 5
     defence = 2
@@ -345,9 +345,9 @@ class Catapult(Unit):
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
 
-class Catapult_IIA(Unit):
+class Catapult_II_A(Unit):
 
-    name = "Catapult IIA"
+    name = "Catapult II_A"
     image = "Catapult"
     attack = 6
     defence = 2
@@ -361,12 +361,12 @@ class Catapult_IIA(Unit):
 
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
-    upgrades = ["Catapult IIIA", "Catapult IIIB"]
+    upgrades = ["Catapult III_A", "Catapult III_B"]
 
 
-class Catapult_IIB(Unit):
+class Catapult_II_B(Unit):
 
-    name = "Catapult IIB"
+    name = "Catapult II_B"
     image = "Catapult"
     attack = 6
     defence = 2
@@ -380,12 +380,12 @@ class Catapult_IIB(Unit):
 
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
-    upgrades = ["Catapult IIIB", "Catapult IIIC"]
+    upgrades = ["Catapult III_B", "Catapult IIIC"]
 
 
-class Catapult_IIIA(Unit):
+class Catapult_III_A(Unit):
 
-    name = "Catapult IIIA"
+    name = "Catapult III_A"
     image = "Catapult"
     attack = 8
     defence = 2
@@ -400,9 +400,9 @@ class Catapult_IIIA(Unit):
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
 
-class Catapult_IIIA(Unit):
+class Catapult_III_B(Unit):
 
-    name = "Catapult IIIB"
+    name = "Catapult III_B"
     image = "Catapult"
     attack = 7
     defence = 2
@@ -417,9 +417,9 @@ class Catapult_IIIA(Unit):
     descriptions = {"double_attack_cost": "Attack takes two actions."}
 
 
-class Catapult_IIIA(Unit):
+class Catapult_III_C(Unit):
 
-    name = "Catapult IIIC"
+    name = "Catapult III_C"
     image = "Catapult"
     attack = 7
     defence = 2
@@ -453,12 +453,12 @@ class Royal_Guard(Unit):
     descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.",
                     "shield": "+1D v melee units."}
 
-    upgrades = ["Royal Guard IIA", "Royal Guard IIB"]
+    upgrades = ["Royal Guard II_A", "Royal Guard II_B"]
 
 
-class Royal_Guard_IIA(Unit):
+class Royal_Guard_II_A(Unit):
 
-    name = "Royal Guard IIA"
+    name = "Royal Guard II_A"
     image = "Royal Guard"
     attack = 4
     defence = 3
@@ -476,9 +476,9 @@ class Royal_Guard_IIA(Unit):
                     "shield": "+1D v melee units."}
 
 
-class Royal_Guard_IIB(Unit):
+class Royal_Guard_II_B(Unit):
 
-    name = "Royal Guard IIB"
+    name = "Royal Guard II_B"
     image = "Royal Guard"
     attack = 3
     defence = 4
@@ -513,12 +513,12 @@ class Scout(Unit):
 
     descriptions = {"scouting": "Can move past all units."}
 
-    upgrades = ["Scout IIA", "Scout IIB"]
+    upgrades = ["Scout II_A", "Scout II_B"]
 
 
-class Scout_IIA(Unit):
+class Scout_II_A(Unit):
 
-    name = "Scout IIA"
+    name = "Scout II_A"
     image = "Scout"
     attack = False
     defence = 3
@@ -534,9 +534,9 @@ class Scout_IIA(Unit):
     descriptions = {"scouting": "Can move past all units."}
 
 
-class Scout_IIB(Unit):
+class Scout_II_B(Unit):
 
-    name = "Scout IIB"
+    name = "Scout II_B"
     image = "Scout"
     attack = False
     defence = 2
@@ -572,15 +572,15 @@ class Viking(Unit):
 
     descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)"}
 
-    upgrades = ["Viking IIA", "Viking IIB"]
+    upgrades = ["Viking II_A", "Viking II_B"]
 
 
-class Viking_IIA(Unit):
+class Viking_II_A(Unit):
 
     def __init__(self):
         self.extra_life = True  # It takes two hits to kill viking
 
-    name = "Viking IIA"
+    name = "Viking II_A"
     image = "Viking"
     attack = 4
     defence = 2
@@ -596,12 +596,12 @@ class Viking_IIA(Unit):
     descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)"}
 
 
-class Viking_IIB(Unit):
+class Viking_II_B(Unit):
 
     def __init__(self):
         self.extra_life = True  # It takes two hits to kill viking
 
-    name = "Viking IIB"
+    name = "Viking II_B"
     image = "Viking"
     attack = 3
     defence = 3
@@ -634,12 +634,12 @@ class Cannon(Unit):
 
     descriptions = {"attack_cooldown": "Can only attack every third turn."}
 
-    upgrades = ["Cannon IIA", "Cannon IIB"]
+    upgrades = ["Cannon II_A", "Cannon II_B"]
 
 
-class Cannon_IIA(Unit):
+class Cannon_II_A(Unit):
 
-    name = "Cannon IIA"
+    name = "Cannon II_A"
     image = "Cannon"
     attack = 5
     defence = 1
@@ -655,9 +655,9 @@ class Cannon_IIA(Unit):
     descriptions = {"attack_cooldown": "Can only attack every third turn."}
 
 
-class Cannon_IIB(Unit):
+class Cannon_II_B(Unit):
 
-    name = "Cannon IIB"
+    name = "Cannon II_B"
     image = "Cannon"
     attack = 5
     defence = 1
@@ -690,12 +690,12 @@ class Lancer(Unit):
 
     descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
 
-    upgrades = ["Lancer IIA", "Lancer IIB"]
+    upgrades = ["Lancer II_A", "Lancer II_B"]
 
 
-class Lancer_IIA(Unit):
+class Lancer_II_A(Unit):
 
-    name = "Lancer IIA"
+    name = "Lancer II_A"
     image = "Lancer"
     attack = 2
     defence = 3
@@ -711,9 +711,9 @@ class Lancer_IIA(Unit):
     descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
 
 
-class Lancer_IIB(Unit):
+class Lancer_II_B(Unit):
 
-    name = "Lancer IIB"
+    name = "Lancer II_B"
     image = "Lancer"
     attack = 2
     defence = 3
@@ -746,12 +746,12 @@ class Flag_Bearer(Unit):
 
     descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
 
-    upgrades = ["Flag Bearer IIA", "Flag Bearer IIB"]
+    upgrades = ["Flag Bearer II_A", "Flag Bearer II_B"]
 
 
-class Flag_Bearer_IIA(Unit):
+class Flag_Bearer_II_A(Unit):
 
-    name = "Flag Bearer IIA"
+    name = "Flag Bearer II_A"
     image = "Flag Bearer"
     attack = 2
     defence = 3
@@ -767,9 +767,9 @@ class Flag_Bearer_IIA(Unit):
     descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
 
 
-class Flag_Bearer_IIB(Unit):
+class Flag_Bearer_II_B(Unit):
 
-    name = "Flag Bearer IIB"
+    name = "Flag Bearer II_B"
     image = "Flag Bearer"
     attack = 2
     defence = 3
@@ -802,12 +802,12 @@ class Longswordsman(Unit):
 
     descriptions = {"longsword": "Also hits the 4 nearby tiles in the attack direction."}
 
-    upgrades = ["Longswordsman IIA", "Longswordsman IIB"]
+    upgrades = ["Longswordsman II_A", "Longswordsman II_B"]
 
 
-class Longswordsman_IIA(Unit):
+class Longswordsman_II_A(Unit):
 
-    name = "Longswordsman IIA"
+    name = "Longswordsman II_A"
     image = "Longswordsman"
     attack = 3
     defence = 3
@@ -823,9 +823,9 @@ class Longswordsman_IIA(Unit):
     descriptions = {"longsword": "Also hits the 4 nearby tiles in the attack direction."}
 
 
-class Longswordsman_IIB(Unit):
+class Longswordsman_II_B(Unit):
 
-    name = "Longswordsman IIB"
+    name = "Longswordsman II_B"
     image = "Longswordsman"
     attack = 3
     defence = 3
@@ -859,12 +859,12 @@ class Crusader(Unit):
     descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
                                  "Crusader get +1A."}
 
-    upgrades = ["Crusader IIA", "Crusader IIB"]
+    upgrades = ["Crusader II_A", "Crusader II_B"]
 
 
-class Crusader_IIA(Unit):
+class Crusader_II_A(Unit):
 
-    name = "Crusader IIA"
+    name = "Crusader II_A"
     image = "Crusader"
     attack = 3
     defence = 3
@@ -881,9 +881,9 @@ class Crusader_IIA(Unit):
                                  "Crusader get +1A."}
 
 
-class Crusader_IIB(Unit):
+class Crusader_II_B(Unit):
 
-    name = "Crusader IIB"
+    name = "Crusader II_B"
     image = "Crusader"
     attack = 3
     defence = 3
@@ -917,12 +917,12 @@ class Berserker(Unit):
 
     descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack."}
 
-    upgrades = ["Berserker IIA", "Berserker IIB"]
+    upgrades = ["Berserker II_A", "Berserker II_B"]
 
 
-class Berserker_IIA(Unit):
+class Berserker_II_A(Unit):
 
-    name = "Berserker IIA"
+    name = "Berserker II_A"
     image = "Berserker"
     attack = 5
     defence = 1
@@ -938,9 +938,9 @@ class Berserker_IIA(Unit):
     descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack."}
 
 
-class Berserker_IIB(Unit):
+class Berserker_II_B(Unit):
 
-    name = "Berserker IIB"
+    name = "Berserker II_B"
     image = "Berserker"
     attack = 5
     defence = 1
@@ -973,12 +973,12 @@ class Chariot(Unit):
 
     descriptions = {"charioting": "Can use remaining moves after attacking."}
 
-    upgrades = ["Chariot IIA", "Chariot IIB"]
+    upgrades = ["Chariot II_A", "Chariot II_B"]
 
 
-class Chariot_IIA(Unit):
+class Chariot_II_A(Unit):
 
-    name = "Chariot IIA"
+    name = "Chariot II_A"
     image = "Chariot"
     attack = 4
     defence = 3
@@ -994,9 +994,9 @@ class Chariot_IIA(Unit):
     descriptions = {"charioting": "Can use remaining moves after attacking."}
 
 
-class Chariot_IIB(Unit):
+class Chariot_II_B(Unit):
 
-    name = "Chariot IIB"
+    name = "Chariot II_B"
     image = "Chariot"
     attack = 4
     defence = 3
@@ -1034,13 +1034,12 @@ class War_Elephant(Unit):
                     "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
                             "opponents units must retreat directly backwards or die."}
 
-    upgrades = ["War Elephant IIA", "War Elephant IIB"]
+    upgrades = ["War Elephant II_A", "War Elephant II_B"]
 
 
+class War_Elephant_II_A(Unit):
 
-class War_Elephant_IIA(Unit):
-
-    name = "War Elephant IIA"
+    name = "War Elephant II_A"
     image = "War Elephant"
     attack = 3
     defence = 3
@@ -1061,10 +1060,9 @@ class War_Elephant_IIA(Unit):
                             "opponents units must retreat directly backwards or die."}
 
 
+class War_Elephant_II_B(Unit):
 
-class War_Elephant_IIB(Unit):
-
-    name = "War Elephant IIB"
+    name = "War Elephant II_B"
     image = "War Elephant"
     attack = 3
     defence = 3
@@ -1102,12 +1100,12 @@ class Samurai(Unit):
 
     descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)"}
 
-    upgrades = ["Samurai IIA", "Samurai IIB"]
+    upgrades = ["Samurai II_A", "Samurai II_B"]
 
 
-class Samurai_IIA(Unit):
+class Samurai_II_A(Unit):
 
-    name = "Samurai IIA"
+    name = "Samurai II_A"
     image = "Samurai"
     attack = 6
     defence = 3
@@ -1123,9 +1121,9 @@ class Samurai_IIA(Unit):
     descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)"}
 
 
-class Samurai_IIB(Unit):
+class Samurai_II_B(Unit):
 
-    name = "Samurai IIB"
+    name = "Samurai II_B"
     image = "Samurai"
     attack = 6
     defence = 3
@@ -1157,12 +1155,12 @@ class Saboteur(Unit):
 
     descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
 
-    upgrades = ["Saboteur IIA", "Saboteur IIB"]
+    upgrades = ["Saboteur II_A", "Saboteur II_B"]
 
 
-class Saboteur_IIA(Unit):
+class Saboteur_II_A(Unit):
 
-    name = "Saboteur IIA"
+    name = "Saboteur II_A"
     image = "Saboteur"
     attack = False
     defence = 2
@@ -1177,9 +1175,9 @@ class Saboteur_IIA(Unit):
     descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
 
 
-class Saboteur_IIB(Unit):
+class Saboteur_II_B(Unit):
 
-    name = "Saboteur IIB"
+    name = "Saboteur II_B"
     image = "Saboteur"
     attack = False
     defence = 2
@@ -1211,12 +1209,12 @@ class Diplomat(Unit):
     descriptions = {"bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. "
                              "You can't bribe the same unit on your next turn. The unit gets +1A until end of turn."}
 
-    upgrades = ["Diplomat IIA", "Diplomat IIB"]
+    upgrades = ["Diplomat II_A", "Diplomat II_B"]
 
 
-class Diplomat_IIA(Unit):
+class Diplomat_II_A(Unit):
 
-    name = "Diplomat IIA"
+    name = "Diplomat II_A"
     image = "Diplomat"
     attack = False
     defence = 2
@@ -1232,9 +1230,9 @@ class Diplomat_IIA(Unit):
                              "You can't bribe the same unit on your next turn. The unit gets +1A until end of turn."}
 
 
-class Diplomat_IIB(Unit):
+class Diplomat_II_B(Unit):
 
-    name = "Diplomat IIB"
+    name = "Diplomat II_B"
     image = "Diplomat"
     attack = False
     defence = 2
@@ -1266,12 +1264,12 @@ class Weaponsmith(Unit):
 
     descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}
 
-    upgrades = ["Weaponsmith IIA", "Weaponsmith IIB"]
+    upgrades = ["Weaponsmith II_A", "Weaponsmith II_B"]
 
 
-class Weaponsmith_IIA(Unit):
+class Weaponsmith_II_A(Unit):
 
-    name = "Weaponsmith IIA"
+    name = "Weaponsmith II_A"
     image = "Weaponsmith"
     attack = False
     defence = 2
@@ -1286,9 +1284,9 @@ class Weaponsmith_IIA(Unit):
     descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}
 
 
-class Weaponsmith_IIB(Unit):
+class Weaponsmith_II_B(Unit):
 
-    name = "Weaponsmith IIB"
+    name = "Weaponsmith II_B"
     image = "Weaponsmith"
     attack = False
     defence = 2
