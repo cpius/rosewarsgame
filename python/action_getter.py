@@ -3,6 +3,7 @@ import settings
 from action import Action
 import collections
 import functools
+from units import get_position
 
 
 class memoized(object):
@@ -161,12 +162,34 @@ def get_actions(gamestate):
                 actions += moves + abilities
 
     for action in actions:
-        action.unit_reference = gamestate.player_units()[action.start_position]
-        add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
-        for sub_action in action.sub_actions:
-            sub_action.unit_reference = gamestate.player_units()[action.start_position]
+        add_unit_references(gamestate, action)
 
     return actions
+
+
+def get_action(gamestate, action_document):
+    start_position = get_position(action_document["start_position"])
+    print "start_position: " + str(start_position)
+    if not start_position in gamestate.player_units():
+        return None
+
+    action = Action(
+        start_position,
+        get_position(action_document["end_position"]),
+        get_position(action_document["attack_position"]),
+        get_position(action_document["ability_position"]),
+        action_document["move_with_attack"],
+        action_document["ability"])
+    add_unit_references(gamestate, action)
+
+    return action
+
+
+def add_unit_references(gamestate, action):
+    action.unit_reference = gamestate.player_units()[action.start_position]
+    add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
+    for sub_action in action.sub_actions:
+        sub_action.unit_reference = gamestate.player_units()[action.start_position]
 
 
 def get_extra_actions(gamestate):
@@ -413,7 +436,6 @@ def ranged_actions(unit, position, units, enemy_units):
 
 def ability_actions(start_position, abilityset, ability):
     return [Action(start_position, ability_position=position, ability=ability) for position in abilityset]
-
 
 
 def get_special_unit_actions(unit, position, units, enemy_units, player_units):
