@@ -207,13 +207,7 @@ class Gamestate:
         for unit_position in units.keys():
             unit = units[unit_position]
 
-            unit_dict = dict()
-            if unit.xp:
-                unit_dict["experience"] = unit.xp
-            if hasattr(unit, "blue_counters"):
-                unit_dict["blue_counters"] = unit.blue_counters
-            if hasattr(unit, "yellow_counters"):
-                unit_dict["yellow_counters"] = unit.yellow_counters
+            unit_dict = {attribute: getattr(unit, attribute) for attribute in ["xp", "blue_counters", "yellow_counters"] if getattr(unit, attribute)}
 
             easy_position = units_module.get_position_string(unit_position)
             if len(unit_dict) > 0:
