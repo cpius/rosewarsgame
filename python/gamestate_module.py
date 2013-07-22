@@ -240,15 +240,3 @@ def save_gamestate(gamestate):
 
 def load_gamestate(saved_gamestate):
     return saver.load_gamestate(saved_gamestate)
-
-
-def write_gamestate(gamestate, path):
-    pass
-
-
-def read_gamestate(path):
-    pass
-
-
-def load_json(json):
-    pass
