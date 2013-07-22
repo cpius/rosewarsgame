@@ -5,15 +5,28 @@ import action_getter
 import saver
 import ai_module
 import ai_methods
+from datetime import datetime
+import units as units_module
+from player import Player
 
 
 class Gamestate:
     
-    def __init__(self, player1, player1_units, player2, player2_units, turn=1, actions_remaining=2):
+    def __init__(self,
+                 player1,
+                 player1_units,
+                 player2,
+                 player2_units,
+                 turn=1,
+                 actions_remaining=2,
+                 has_extra_action=False,
+                 start_time=datetime.utcnow()):
         self.turn = turn
         self.units = [player1_units, player2_units]
         self.players = [player1, player2]
         self.actions_remaining = actions_remaining
+        self.has_extra_action = has_extra_action
+        self.start_time = start_time
 
     def do_action(self, action, controller=None):
         action_doer.do_action(self, action, controller)
@@ -43,7 +56,6 @@ class Gamestate:
                 for sub_action in action.sub_actions:
                     sub_action.chance_of_win = ai_methods.chance_of_win(sub_action.unit_reference,
                                                                         sub_action.target_reference, sub_action)
-
 
         return actions
 
@@ -122,6 +134,105 @@ class Gamestate:
         if hasattr(unit, "just_bribed"):
             unit.blue_counters = 1
 
+    def shift_turn_if_done(self, all_actions=None):
+        if all_actions is None:
+            all_actions = self.get_actions()
+        if (self.actions_remaining < 1 or len(all_actions) == 1) and not hasattr(self.players[0], "extra_action"):
+            self.turn_shift()
+
+    @classmethod
+    def from_document(cls, document):
+        player1 = Player("Green")
+        player1.ai_name = document["player1_intelligence"]
+        player1.ai = cls.get_ai_from_name(player1.ai_name)
+
+        player2 = Player("Red")
+        player2.ai_name = document["player2_intelligence"]
+        player2.ai = cls.get_ai_from_name(player2.ai_name)
+
+        return cls(player1,
+                   cls.units_from_document(document["player1_units"]),
+                   player2,
+                   cls.units_from_document(document["player2_units"]),
+                   document["turn"],
+                   document["actions_remaining"],
+                   document["extra_action"],
+                   document["created_at"])
+
+    @classmethod
+    def units_from_document(cls, document):
+        units = {}
+        for position_string in document.keys():
+            position = units_module.get_position(position_string)
+            unit_document = document[position_string]
+            if type(unit_document) is str:
+                name = unit_document
+            else:
+                name = document[position_string]["name"]
+
+            unit = getattr(units_module, name.replace(" ", "_"))()
+
+            if type(unit_document) is dict:
+                for attribute in unit_document.keys():
+                    if attribute == "experience":
+                        unit.xp = int(unit_document[attribute])
+                    if attribute == "attack_counters":
+                        unit.attack_counters = int(unit_document[attribute])
+                    if attribute == "defence_counters":
+                        unit.defence_counters = int(unit_document[attribute])
+
+            units[position] = unit
+
+        return units
+
+    @classmethod
+    def get_ai_from_name(cls, name):
+        if name == "Human":
+            return name
+        else:
+            return ai_module.AI(name)
+
+    def to_document(self):
+        player1_units = self.get_units_dict(self.units[0])
+        player2_units = self.get_units_dict(self.units[1])
+
+        return {
+            "player1_intelligence": self.players[0].ai_name,
+            "player1_units": player1_units,
+            "player2_intelligence": self.players[1].ai_name,
+            "player2_units": player2_units,
+            "turn": self.turn,
+            "extra_action": self.has_extra_action,
+            "actions_remaining": self.actions_remaining,
+            "created_at": self.start_time
+        }
+
+    def get_units_dict(self, units):
+        units_dict = dict()
+        for unit_position in units.keys():
+            unit = units[unit_position]
+
+            unit_dict = dict()
+            if unit.xp:
+                unit_dict["experience"] = unit.xp
+            if unit.attack_counters:
+                unit_dict["attack_counters"] = unit.attack_counters
+            if unit.defence_counters:
+                unit_dict["defence_counters"] = unit.defence_counters
+            if hasattr(unit, "blue_counters"):
+                unit_dict["blue_counters"] = unit.blue_counters
+            if hasattr(unit, "yellow_counters"):
+                unit_dict["yellow_counters"] = unit.yellow_counters
+
+            easy_position = units_module.get_position_string(unit_position)
+            if len(unit_dict) > 0:
+                unit_dict["name"] = unit.name
+                units_dict[easy_position] = unit_dict
+            else:
+                units_dict[easy_position] = unit.name
+
+        return units_dict
+
 
 def save_gamestate(gamestate):
     return saver.save_gamestate(gamestate)
@@ -136,4 +247,8 @@ def write_gamestate(gamestate, path):
 
 
 def read_gamestate(path):
+    pass
+
+
+def load_json(json):
     pass

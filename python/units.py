@@ -344,7 +344,7 @@ class Weaponsmith(Unit):
     attack = False   
     defence = 2
     movement = 1
-    range= 3
+    range = 3
     abonus = {}
     dbonus = {}
     type = "Infantry"
@@ -352,3 +352,14 @@ class Weaponsmith(Unit):
     abilities = ["improve_weapons"]
 
     descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}
+
+
+def get_position(position_string):
+    column = ord(position_string[0]) - 64  # In ASCII A, B, C, D, E is 65, 66, 67, 68, 69
+    row = int(position_string[1])
+    return column, row
+
+
+def get_position_string(position):
+    columns = list(" ABCDE")
+    return columns[position[0]] + str(position[1])

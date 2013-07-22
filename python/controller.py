@@ -123,8 +123,6 @@ class Controller(object):
                 elif event.type == QUIT:
                     self.exit_game()
 
-
-
     def right_click(self, position):
         if not self.start_position:
             self.show_unit(position)
@@ -293,11 +291,7 @@ class Controller(object):
         self.view.draw_game(self.gamestate)
 
         self.gamestate.initialize_action()
-
-        if (self.gamestate.get_actions_remaining() < 1 or len(all_actions) == 1) \
-                and not hasattr(self.gamestate.current_player(), "extra_action"):
-            self.gamestate.turn_shift()
-
+        self.gamestate.shift_turn_if_done(all_actions)
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
