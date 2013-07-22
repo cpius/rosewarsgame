@@ -68,9 +68,6 @@ def draw_game(screen, interface, gamestate, start_position=None, actions=()):
             if location not in sub_attack_locations and location not in attack_locations:
                 sub_attack_locations.add(location)
                 m.draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
-                chance_of_win_string = str(int(round(sub_attack.chance_of_win * 100))) + "%"
-                location = coordinates["percentage_sub"].get(sub_attack.attack_position)
-                m.write(chance_of_win_string, location, fonts["small"], colors.yellow)
 
 
 def show_attack(self, action, player_unit, opponent_unit):
