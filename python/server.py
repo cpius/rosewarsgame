@@ -76,4 +76,5 @@ host_address = "10.224.105.151"
 if socket.gethostname() == "MD-rMBP.local":
     host_address = "localhost"
 
-run(host='localhost', port=8080, debug=True)
+install(JSONPlugin(json_dumps=lambda s: dumps(s, cls=CustomJsonEncoder)))
+run(host=host_address, port=8080, debug=True)
