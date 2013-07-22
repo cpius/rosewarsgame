@@ -183,6 +183,27 @@ class Controller(object):
                 elif event.type == QUIT:
                     self.exit_game()
 
+    def get_input_upgrade(self, unit):
+        self.view.draw_upgrade_options(unit)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == KEYDOWN and event.key == K_1:
+                    return 0
+                if event.type == KEYDOWN and event.key == K_2:
+                    return 1
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+
+                    if event.button == 1:
+                        if within(event.pos, self.view.interface.upgrade_1_area):
+                            return 0
+                        elif within(event.pos, self.view.interface.upgrade_2_area):
+                            return 1
+
+                elif event.type == QUIT:
+                    self.exit_game()
+
     def get_input_abilities(self, unit):
         self.view.draw_ask_about_ability(unit)
 
@@ -223,15 +244,11 @@ class Controller(object):
                 elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                     return
 
-    def add_counters(self, units):
-        for unit in units.values():
-            if unit.xp == 2:
-                if unit.defence + unit.defence_counters == 4:
-                    unit.attack_counters += 1
-                else:
-                    self.get_input_counter(unit)
-
-                unit.xp = 0
+    def upgrade_units(self, units):
+        for pos, unit in units.items():
+            if unit.xp == unit.xp_to_upgrade:
+                choice = self.get_input_upgrade(unit)
+                units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
 
     def perform_action(self, action):
 
@@ -291,9 +308,10 @@ class Controller(object):
             return
 
         if self.gamestate.current_player().ai_name == "Human":
-            self.add_counters(self.gamestate.units[0])
+            self.view.draw_game(self.gamestate)
+            self.upgrade_units(self.gamestate.units[0])
         else:
-            self.gamestate.current_player().ai.add_counters(self.gamestate)
+            pass
 
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
@@ -375,3 +393,7 @@ class Controller(object):
 
     def selecting_move(self, position):
         return self.start_position and position not in self.gamestate.opponent_units()
+
+
+def within(point, area):
+    return area[0].y <= point[1] <= area[1].y and area[0].x <= point[0] <= area[1].x
