@@ -49,9 +49,10 @@ def draw_game(screen, interface, gamestate, start_position=None, actions=()):
             attack_locations.add(location)
 
             m.draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
-            chance_of_win_string = str(int(round(action.chance_of_win * 100))) + "%"
-            location = coordinates["percentage"].get(action.attack_position)
-            m.write(screen, chance_of_win_string, location, fonts["small"], colors.dodger_blue)
+            if settings.show_chance_of_win:
+                chance_of_win_string = str(int(round(action.chance_of_win * 100))) + "%"
+                location = coordinates["percentage"].get(action.attack_position)
+                m.write(screen, chance_of_win_string, location, fonts["small"], colors.dodger_blue)
 
     for action in abilities:
         location = coordinates["base"].get(action.ability_position)
