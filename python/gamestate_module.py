@@ -198,6 +198,7 @@ class Gamestate:
             "player2_units": player2_units,
             "turn": self.turn,
             "extra_action": self.has_extra_action,
+
             "actions_remaining": self.actions_remaining,
             "created_at": self.start_time
         }
@@ -207,13 +208,8 @@ class Gamestate:
         for unit_position in units.keys():
             unit = units[unit_position]
 
-            unit_dict = dict()
-            if unit.xp:
-                unit_dict["experience"] = unit.xp
-            if hasattr(unit, "blue_counters"):
-                unit_dict["blue_counters"] = unit.blue_counters
-            if hasattr(unit, "yellow_counters"):
-                unit_dict["yellow_counters"] = unit.yellow_counters
+            unit_dict = {attribute: getattr(unit, attribute) for attribute in units_module.variable_attributes
+                         if getattr(unit, attribute)}
 
             easy_position = units_module.get_position_string(unit_position)
             if len(unit_dict) > 0:

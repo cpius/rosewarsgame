@@ -61,9 +61,7 @@ class View(object):
     def draw_game(self, gamestate, start_position=None, actions=()):
 
         viewgame.draw_game(self.screen, self.interface, gamestate, start_position, actions)
-
         self.draw_right()
-
         pygame.display.update()
 
     def show_unit_zoomed(self, unit):
@@ -90,7 +88,6 @@ class View(object):
     def draw_action(self, action, gamestate):
 
         viewlog.draw_log(self.logbook, self.screen, self.interface, action, gamestate)
-
         viewgame.draw_action(self.screen, self.interface, action)
 
     def draw_post_movement(self, action, gamestate):
@@ -101,5 +98,8 @@ class View(object):
 
     def show_attack(self, action, player_unit, opponent_unit):
         pass
+
+    def draw_message(self, message):
+        m.write_message(self.screen, self.interface, message)
 
 

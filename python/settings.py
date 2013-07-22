@@ -6,11 +6,12 @@ pause_for_animation = 200
 
 show_dice_game = False
 show_dice_log = False
+show_chance_of_win = False
 
 pause_for_attack_until_click = False
 
 
-zoom = 1
+zoom = 1.3
 interface = interfaces.Rectangles(zoom)
 
 player1_ai = "Human"
@@ -28,3 +29,9 @@ special_unit_count = 3
 basic_unit_count = 6
 max_two_siege_weapons = True
 at_least_one_siege_weapon = True
+
+if os.path.exists("settings_user.py"):
+    import settings_user
+    zoom = settings_user.zoom
+    interface = interfaces.Rectangles(zoom)
+

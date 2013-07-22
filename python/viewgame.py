@@ -49,9 +49,10 @@ def draw_game(screen, interface, gamestate, start_position=None, actions=()):
             attack_locations.add(location)
 
             m.draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
-            chance_of_win_string = str(int(round(action.chance_of_win * 100))) + "%"
-            location = coordinates["percentage"].get(action.attack_position)
-            m.write(screen, chance_of_win_string, location, fonts["small"], colors.dodger_blue)
+            if settings.show_chance_of_win:
+                chance_of_win_string = str(int(round(action.chance_of_win * 100))) + "%"
+                location = coordinates["percentage"].get(action.attack_position)
+                m.write(screen, chance_of_win_string, location, fonts["small"], colors.dodger_blue)
 
     for action in abilities:
         location = coordinates["base"].get(action.ability_position)
@@ -63,13 +64,10 @@ def draw_game(screen, interface, gamestate, start_position=None, actions=()):
 
     for attack in attacks:
         for sub_attack in attack.sub_actions:
-            location = coordinates.get(sub_attack.attack_position)
+            location = coordinates["base"].get(sub_attack.attack_position)
             if location not in sub_attack_locations and location not in attack_locations:
                 sub_attack_locations.add(location)
                 m.draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
-                chance_of_win_string = str(int(round(sub_attack.chance_of_win * 100))) + "%"
-                location = coordinates["percentage_sub"].get(sub_attack.attack_position)
-                m.write(chance_of_win_string, location, fonts["small"], colors.yellow)
 
 
 def show_attack(self, action, player_unit, opponent_unit):
