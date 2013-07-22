@@ -9,6 +9,7 @@ import settings
 import shutil
 from player import Player
 from action import Action
+import units as units_module
 
 
 class Controller(object):
