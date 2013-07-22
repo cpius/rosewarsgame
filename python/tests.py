@@ -26,6 +26,7 @@ class TestAI(unittest.TestCase):
 
         player2_units = expected["player2_units"]
         expected["player2_units"] = {"D7": expected["player1_units"]["D6"]}
+        expected["player2_units"]["D7"]["experience"] = 2
         expected["player1_units"] = player2_units
         expected["turn"] += 1
         expected["actions_remaining"] = 2
@@ -151,7 +152,6 @@ class TestAI(unittest.TestCase):
                 "D6":
                 {
                     "name": "Heavy Cavalry",
-                    "attack_counters": 1,
                     "experience": 1
                 }
             },
