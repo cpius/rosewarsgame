@@ -208,7 +208,7 @@ class Gamestate:
         for unit_position in units.keys():
             unit = units[unit_position]
 
-            unit_dict = {attribute: getattr(unit, attribute) for attribute in ["xp", "blue_counters", "yellow_counters"]
+            unit_dict = {attribute: getattr(unit, attribute) for attribute in units_module.variable_attributes
                          if getattr(unit, attribute)}
 
             easy_position = units_module.get_position_string(unit_position)

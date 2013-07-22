@@ -15,6 +15,9 @@ class Unit(object):
         return self.name
 
 
+variable_attributes = ["xp", "used", "xp_gained_this_round", "blue_counters", "yellow_counters"]
+
+
 class Archer(Unit):
 
     name = "Archer"
