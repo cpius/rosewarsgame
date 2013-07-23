@@ -7,6 +7,9 @@ import datetime
 from gamestate_module import Gamestate
 from action_getter import get_action
 import socket
+from player import Player
+import setup
+from pprint import PrettyPrinter
 
 
 @get('/games/view/<game_id>')
@@ -16,7 +19,24 @@ def view(game_id):
     if not game:
         return {"Status": "Error", "Message": "Could not find game with id " + game_id}
 
-    return game
+    gamestate = get_current_gamestate(game)
+
+    return gamestate.to_document()
+
+
+@get("/actions/view/<game_id>")
+def view_actions(game_id):
+    actions = get_actions_db()
+    action_documents = list(actions.find({"game": ObjectId(game_id)}))
+    actions_document = dict()
+    if action_documents.__len__() > 0:
+        actions_document["last_action"] = action_documents[-1]["action_number"]
+        actions_document["last_updated_at"] = action_documents[-1]["created_at"]
+
+    for action in action_documents:
+        actions_document[action["action_number"]] = action
+
+    return actions_document
 
 
 @post('/games/<game_id>/do_action')
@@ -26,20 +46,37 @@ def do_action_post(game_id):
     if not game:
         return {"Status": "Error", "Message": "Could not find game with id " + game_id}
 
-    gamestate = Gamestate.from_document(game)
-    action = get_action(gamestate, request.json)
+    actions = list(get_actions_db().find({"game": ObjectId(game_id)}).sort("action_number"))
+
+    last_action = actions[-1]
+    gamestate = get_current_gamestate(game, actions)
+
+    action_document = request.json
+
+    action = get_action(gamestate, action_document)
 
     available_actions = gamestate.get_actions()
     if not action:
         return invalid_action(available_actions, request.json)
 
     if not action in available_actions:
-        invalid_action(available_actions, str(action))
+        return invalid_action(available_actions, str(action))
+
+    action_number = action_document["action_number"]
+    expected_action_number = 1
+    if last_action:
+        expected_action_number += last_action["action_number"]
+    if action_number != expected_action_number:
+        return {"Status": "Error", "Message": "The next action must be numbered " + str(expected_action_number)}
 
     gamestate.do_action(action)
-    game = gamestate.to_document()
-    games.update({"_id": ObjectId(game_id)}, game)
-    return {"Status": "OK", "Message": "Action recorded"}
+    gamestate.shift_turn_if_done()
+    actions = get_actions_db()
+    action_document["game"] = ObjectId(game_id)
+    action_document["outcome"] = action.outcome == "Success"
+    actions.insert(action_document)
+
+    return {"Status": "OK", "Message": "Action recorded", "Action outcome": action.outcome}
 
 
 def invalid_action(available_actions, requested_action):
@@ -50,42 +87,49 @@ def invalid_action(available_actions, requested_action):
         "Available actions": ", ".join(str(action) for action in available_actions)}
 
 
-@get('/games/new')
-def new_game():
+@get('/games/new/<player1>/vs/<player2>')
+def new_game(player1, player2):
     games = get_games_db()
-    game = {
-        "player1": "Mads",
-        "player1_intelligence": "Human",
-        "player2": "Jonatan",
-        "player2_intelligence": "Human",
-        "active_player": 1,
-        "turn": 1,
-        "actions_remaining": 1,
-        "extra_action": False,
-        "player1_units":
-        {
-            "D6":
-            {
-                "name": "Heavy Cavalry",
-                "attack_counters": 1,
-                "experience:": 1
-            }
-        },
-        "player2_units":
-        {
-            "C7": "Royal Guard",
-            "E7": "Archer"
-        },
-        "created_at": datetime.datetime.utcnow()
-    }
-    game_id = games.insert(game)
+    player1 = Player("Green", player1)
+    player2 = Player("Red", player2)
+
+    player1.ai_name = "Human"
+    player2.ai_name = "Human"
+
+    player1_units, player2_units = setup.get_start_units()
+
+    gamestate = Gamestate(player1, player1_units, player2, player2_units)
+
+    game_id = games.insert(gamestate.to_document())
+
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time()}
+
+
+def get_current_gamestate(game_document, actions=None):
+    gamestate = Gamestate.from_document(game_document)
+
+    if not actions:
+        actions = get_actions_db().find({"game": ObjectId(game_document["_id"])}).sort("action_number")
+
+    for action_document in actions:
+        action_with_references = get_action(gamestate, action_document)
+        action_with_references.ensure_outcome(action_document["outcome"])
+        gamestate.do_action(action_with_references)
+        gamestate.shift_turn_if_done()
+
+    return gamestate
 
 
 def get_games_db():
     client = MongoClient()
     database = client.unnamed
     return database.games
+
+
+def get_actions_db():
+    client = MongoClient()
+    database = client.unnamed
+    return database.actions
 
 
 class CustomJsonEncoder(JSONEncoder):

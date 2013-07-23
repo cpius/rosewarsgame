@@ -27,6 +27,7 @@ class Gamestate:
         self.actions_remaining = actions_remaining
         self.has_extra_action = has_extra_action
         self.start_time = start_time
+        self.action_number = 0
 
     def do_action(self, action, controller=None):
         action_doer.do_action(self, action, controller)
@@ -67,15 +68,18 @@ class Gamestate:
         pass
 
     def set_ais(self):
-        if self.players[0].ai_name != "Human":
-            self.players[0].ai = ai_module.AI(self.players[0].ai_name)
-        else:
-            self.players[0].ai = "Human"
+        for player in range(2):
+            ai_name = self.players[player].ai_name
+            if ai_name in ["Human", "Network"]:
+                self.players[player].ai = ai_name
+            else:
+                self.players[player].ai = ai_module.AI(ai_name)
 
-        if self.players[1].ai_name != "Human":
-            self.players[1].ai = ai_module.AI(self.players[1].ai_name)
-        else:
-            self.players[1].ai = "Human"
+    def set_network_player(self, local_player):
+        for player in range(2):
+            if self.players[player].player_id != local_player:
+                self.players[player].ai_name = "Network"
+                self.players[player].ai = "Network"
 
     def set_available_actions(self):
         self.available_actions = self.get_actions()
@@ -142,22 +146,25 @@ class Gamestate:
 
     @classmethod
     def from_document(cls, document):
-        player1 = Player("Green")
+        player1 = Player("Green", document["player1"])
         player1.ai_name = document["player1_intelligence"]
         player1.ai = cls.get_ai_from_name(player1.ai_name)
 
-        player2 = Player("Red")
+        player2 = Player("Red", document["player2"])
         player2.ai_name = document["player2_intelligence"]
         player2.ai = cls.get_ai_from_name(player2.ai_name)
 
-        return cls(player1,
-                   cls.units_from_document(document["player1_units"]),
-                   player2,
-                   cls.units_from_document(document["player2_units"]),
-                   document["turn"],
-                   document["actions_remaining"],
-                   document["extra_action"],
-                   document["created_at"])
+        gamestate = cls(player1,
+                        cls.units_from_document(document["player1_units"]),
+                        player2,
+                        cls.units_from_document(document["player2_units"]),
+                        document["turn"],
+                        document["actions_remaining"],
+                        document["extra_action"],
+                        document["created_at"])
+
+        gamestate.action_number = document["action_number"]
+        return gamestate
 
     @classmethod
     def units_from_document(cls, document):
@@ -192,15 +199,18 @@ class Gamestate:
         player2_units = self.get_units_dict(self.units[1])
 
         return {
+            "player1": self.players[0].player_id,
             "player1_intelligence": self.players[0].ai_name,
             "player1_units": player1_units,
+            "player2": self.players[1].player_id,
             "player2_intelligence": self.players[1].ai_name,
             "player2_units": player2_units,
             "turn": self.turn,
             "extra_action": self.has_extra_action,
 
             "actions_remaining": self.actions_remaining,
-            "created_at": self.start_time
+            "created_at": self.start_time,
+            "action_number": self.action_number
         }
 
     def get_units_dict(self, units):
