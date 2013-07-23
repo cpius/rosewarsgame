@@ -32,10 +32,16 @@ class Client():
             sleep(1)
 
     def send_action(self, action):
-        data = urllib.urlencode(action)
+
         url = self.server + "/games/" + self.game_id + "/do_action"
-        response = json.load(urllib2.urlopen(url, data))
-        if response["Status"] == "OK":
+        print "sending json: " + json.dumps(action, cls=CustomJsonEncoder)
+        request = urllib2.Request(url, json.dumps(action, cls=CustomJsonEncoder), {"Content-Type": "application/json"})
+        response = urllib2.urlopen(request)
+        response_string = response.read()
+        print "received: " + response_string
+        json_response = json.loads(response_string)
+        response.close()
+        if json_response["Status"] == "OK":
             return True
         else:
             return False
