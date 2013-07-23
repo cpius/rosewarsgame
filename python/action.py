@@ -12,6 +12,7 @@ class Action(object):
                  move_with_attack=False,
                  ability="",
                  action_number=None):
+                 sub_actions=None):
         self.start_position = start_position  # The tile the unit starts it's action on
         if not end_position:
             self.end_position = start_position
@@ -24,7 +25,7 @@ class Action(object):
         self.move_with_attack = move_with_attack
         self.ability = ability
         self.action_number = action_number
-        self.sub_actions = []
+        self.sub_actions = sub_actions if sub_actions else []
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
 
         self.is_attack = bool(attack_position)
