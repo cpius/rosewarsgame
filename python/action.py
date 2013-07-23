@@ -1,4 +1,6 @@
 import battle
+import methods
+from copy import copy
 
 
 class Action(object):
@@ -8,7 +10,8 @@ class Action(object):
                  attack_position=None,
                  ability_position=None,
                  move_with_attack=False,
-                 ability=""):
+                 ability="",
+                 action_number=None):
         self.start_position = start_position  # The tile the unit starts it's action on
         if not end_position:
             self.end_position = start_position
@@ -20,6 +23,7 @@ class Action(object):
         self.ability_position = ability_position
         self.move_with_attack = move_with_attack
         self.ability = ability
+        self.action_number = action_number
         self.sub_actions = []
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
 
@@ -32,6 +36,14 @@ class Action(object):
         self.target_reference = None
         self.rolls = None
         self.outcome = None
+
+    @classmethod
+    def from_document(cls, document):
+        d = copy(document)
+        del d["created_at"]
+        for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
+            d[attribute] = methods.position_to_tuple(d[attribute])
+        return cls(**d)
 
     def attribute_representation(self):
         return str(self.__dict__)
