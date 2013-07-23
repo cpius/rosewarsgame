@@ -1,5 +1,6 @@
 class Player(object):
-    def __init__(self, color):
+    def __init__(self, color, player_id=None):
+        self.player_id = player_id
         self.color = color
         if color == "Red":
             self.backline = 8
