@@ -169,7 +169,6 @@ def get_actions(gamestate):
 
 def get_action(gamestate, action_document):
     start_position = get_position(action_document["start_position"])
-    print "start_position: " + str(start_position)
     if not start_position in gamestate.player_units():
         return None
 
