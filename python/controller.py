@@ -73,6 +73,7 @@ class Controller(object):
 
         print "received action from network: " + str(action)
 
+        action.ensure_outcome(action.outcome)
         self.perform_action(action)
 
         if hasattr(self.gamestate.current_player(), "extra_action"):
