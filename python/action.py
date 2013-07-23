@@ -11,7 +11,8 @@ class Action(object):
                  ability_position=None,
                  move_with_attack=False,
                  ability="",
-                 action_number=None):
+                 action_number=None,
+                 sub_actions=None):
         self.start_position = start_position  # The tile the unit starts it's action on
         if not end_position:
             self.end_position = start_position
@@ -24,7 +25,7 @@ class Action(object):
         self.move_with_attack = move_with_attack
         self.ability = ability
         self.action_number = action_number
-        self.sub_actions = []
+        self.sub_actions = sub_actions if sub_actions else []
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
 
         self.is_attack = bool(attack_position)
@@ -40,9 +41,11 @@ class Action(object):
     @classmethod
     def from_document(cls, document):
         d = copy(document)
-        del d["created_at"]
+        if "created_at" in d:
+            del d["created_at"]
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
             d[attribute] = methods.position_to_tuple(d[attribute])
+        d["sub_actions"] = [cls.from_document(sub_action_document) for sub_action_document in d["sub_actions"]]
         return cls(**d)
 
     def attribute_representation(self):
@@ -128,6 +131,19 @@ class Action(object):
         other = dict((attribute, other.__dict__[attribute]) for attribute in basic_attributes)
 
         return original == other
+
+    def to_document(self):
+        action_number = self.action_number if self.action_number else 0
+        sub_action_docs = [sub_action.to_document() for sub_action in self.sub_actions]
+
+        return {"action_number": action_number,
+                "start_position": methods.position_to_string(self.start_position),
+                "end_position": methods.position_to_string(self.end_position),
+                "attack_position": methods.position_to_string(self.attack_position),
+                "ability_position": methods.position_to_string(self.ability_position),
+                "move_with_attack": self.move_with_attack,
+                "ability": self.ability,
+                "sub_actions": sub_action_docs}
 
 
 def coordinates(position):
