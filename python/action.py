@@ -1,5 +1,6 @@
 import battle
 import methods
+from datetime import datetime
 from copy import copy
 
 
@@ -12,7 +13,8 @@ class Action(object):
                  move_with_attack=False,
                  ability="",
                  action_number=None,
-                 sub_actions=None):
+                 sub_actions=None,
+                 outcome=True):
         self.start_position = start_position  # The tile the unit starts it's action on
         if not end_position:
             self.end_position = start_position
@@ -36,17 +38,28 @@ class Action(object):
         self.unit_reference = None
         self.target_reference = None
         self.rolls = None
-        self.outcome = None
+        self.outcome = outcome
+
+        self.created_at = datetime.utcnow()
 
     @classmethod
     def from_document(cls, document):
-        d = copy(document)
-        if "created_at" in d:
-            del d["created_at"]
+        document_copy = copy(document)
+
+        meta_attributes = ["created_at", "game", "_id"]
+        for attribute in meta_attributes:
+            if attribute in document_copy:
+                del document_copy[attribute]
+
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
-            d[attribute] = methods.position_to_tuple(d[attribute])
-        d["sub_actions"] = [cls.from_document(sub_action_document) for sub_action_document in d["sub_actions"]]
-        return cls(**d)
+            document_copy[attribute] = methods.position_to_tuple(document_copy[attribute])
+
+        if "sub_actions" in document_copy:
+            document_copy["sub_actions"] =\
+                [cls.from_document(sub_action_document) for sub_action_document in document_copy["sub_actions"]]
+        action = cls(**document_copy)
+        action.created_at = document["created_at"]
+        return action
 
     def attribute_representation(self):
         return str(self.__dict__)
@@ -143,7 +156,21 @@ class Action(object):
                 "ability_position": methods.position_to_string(self.ability_position),
                 "move_with_attack": self.move_with_attack,
                 "ability": self.ability,
-                "sub_actions": sub_action_docs}
+                "sub_actions": sub_action_docs,
+                "created_at": self.created_at}
+
+    def ensure_outcome(self, outcome):
+        self.final_position = self.end_position
+
+        if outcome:
+            self.rolls = (1, 6)
+        else:
+            self.rolls = (6, 1)
+
+        for sub_action in self.sub_actions:
+            sub_action.rolls = self.rolls
+
+        return self
 
 
 def coordinates(position):

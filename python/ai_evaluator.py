@@ -145,21 +145,11 @@ def get_values_and_score(gamestate, original_gamestate):
 
 
 def get_action_success(action):
-    action.final_position = action.end_position
-    action.rolls = (1, 6)
-    for sub_action in action.sub_actions:
-        sub_action.rolls = (1, 6)
-        
-    return action
+    return action.ensure_outcome(True)
 
 
 def get_action_failure(action):
-    action.final_position = action.end_position
-    action.rolls = (6, 1)
-    for sub_action in action.sub_actions:
-        sub_action.rolls = (6, 1)
-        
-    return action
+    return action.ensure_outcome(False)
 
 
 def calculate_two_action_score(action):
