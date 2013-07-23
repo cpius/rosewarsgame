@@ -31,6 +31,7 @@ class Gamestate:
 
     def do_action(self, action, controller=None):
         action_doer.do_action(self, action, controller)
+        self.action_number += 1
 
         if self.actions_remaining > 0:
             self.available_actions = action_getter.get_actions(self)
