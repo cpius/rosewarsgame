@@ -45,8 +45,11 @@ class Action(object):
             del d["created_at"]
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
             d[attribute] = methods.position_to_tuple(d[attribute])
+
         d["sub_actions"] = [cls.from_document(sub_action_document) for sub_action_document in d["sub_actions"]]
-        return cls(**d)
+        action = cls(**d)
+        action.created_at = document["created_at"]
+        return action
 
     def attribute_representation(self):
         return str(self.__dict__)
