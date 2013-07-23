@@ -130,6 +130,17 @@ class Action(object):
         return original == other
 
 
+def to_document(self):
+    action_number = self.action_number if self.action_number else 0
+    return {"action_number": action_number,
+            "start_position": methods.position_to_string(self.start_position),
+            "end_position": methods.position_to_string(self.end_position),
+            "attack_position": methods.position_to_string(self.attack_position),
+            "ability_position": methods.position_to_string(self.ability_position),
+            "move_with_attack": self.move_with_attack,
+            "ability": self.ability}
+
+
 def coordinates(position):
     columns = list(" ABCDE")
     return columns[position[0]] + str(position[1])
