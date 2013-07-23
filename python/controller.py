@@ -144,7 +144,6 @@ class Controller(object):
 
         elif self.selecting_move(position):
             action = Action(self.start_position, end_position=position)
-            action.action_number = self.gamestate.action_number + 1
             self.perform_action(action)
 
     def pick_action_end_position(self, possible_actions):
@@ -297,6 +296,8 @@ class Controller(object):
                 units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
 
     def perform_action(self, action):
+        if not action.action_number:
+            action.action_number = self.gamestate.action_number + 1
 
         self.draw_action = True
 
