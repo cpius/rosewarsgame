@@ -145,6 +145,19 @@ class Action(object):
                 "ability": self.ability,
                 "sub_actions": sub_action_docs}
 
+    def ensure_outcome(self, outcome):
+        self.final_position = self.end_position
+
+        if outcome:
+            self.rolls = (1, 6)
+        else:
+            self.rolls = (6, 1)
+
+        for sub_action in self.sub_actions:
+            sub_action.rolls = self.rolls
+
+        return self
+
 
 def coordinates(position):
     columns = list(" ABCDE")
