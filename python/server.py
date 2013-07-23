@@ -47,7 +47,6 @@ def do_action_post(game_id):
 
     actions = list(get_actions_db().find({"game": ObjectId(game_id)}).sort("action_number"))
 
-    last_action = actions[-1]
     gamestate = get_current_gamestate(game, actions)
 
     action_document = request.json
@@ -63,8 +62,8 @@ def do_action_post(game_id):
 
     action_number = action_document["action_number"]
     expected_action_number = 1
-    if last_action:
-        expected_action_number += last_action["action_number"]
+    if len(actions):
+        expected_action_number += actions[-1]["action_number"]
     if action_number != expected_action_number:
         return {"Status": "Error", "Message": "The next action must be numbered " + str(expected_action_number)}
 
