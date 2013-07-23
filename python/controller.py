@@ -308,7 +308,6 @@ class Controller(object):
         for possible_action in all_actions:
             if action == possible_action:
                 matching_actions += 1
-                action = possible_action
 
         if matching_actions == 0:
             self.clear_move()
