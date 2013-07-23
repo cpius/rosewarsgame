@@ -11,7 +11,7 @@ class Action(object):
                  ability_position=None,
                  move_with_attack=False,
                  ability="",
-                 action_number=None):
+                 action_number=None,
                  sub_actions=None):
         self.start_position = start_position  # The tile the unit starts it's action on
         if not end_position:
