@@ -3,9 +3,11 @@ from gamestate_module import Gamestate
 
 
 def position_to_string(position):
-    if position:
-        columns = list(" ABCDE")
-        return columns[position[0]] + str(position[1])
+    if position is None:
+        return ""
+
+    columns = list(" ABCDE")
+    return columns[position[0]] + str(position[1])
 
 
 def position_to_tuple(position_string):
