@@ -73,12 +73,7 @@ class Controller(object):
 
         print "received action from network: " + str(action)
 
-        if action:
-            self.perform_action(action)
-        else:
-            self.gamestate.turn_shift()
-            self.gamestate.recalculate_special_counters()
-            self.view.draw_game(self.gamestate)
+        self.perform_action(action)
 
         if hasattr(self.gamestate.current_player(), "extra_action"):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
