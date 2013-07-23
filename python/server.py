@@ -51,6 +51,9 @@ def do_action_post(game_id):
 
     action_document = request.json
 
+    entirebody = request.body.getvalue()
+    print "received: " + entirebody
+
     action = get_action(gamestate, action_document)
 
     available_actions = gamestate.get_actions()
