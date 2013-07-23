@@ -1,15 +1,14 @@
 from bottle import run, get, post, install, JSONPlugin, request
 from pymongo import MongoClient
 from bson import ObjectId
-from json import dumps, JSONEncoder
+from json import dumps
 import time
-import datetime
 from gamestate_module import Gamestate
 from action_getter import get_action
 import socket
 from player import Player
 import setup
-from pprint import PrettyPrinter
+from methods import CustomJsonEncoder
 
 
 @get('/games/view/<game_id>')
@@ -131,14 +130,6 @@ def get_actions_db():
     database = client.unnamed
     return database.actions
 
-
-class CustomJsonEncoder(JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime.datetime):
-            return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
-        if isinstance(obj, ObjectId):
-            return str(obj)
-        return JSONEncoder.default(self, obj)
 
 host_address = "10.224.105.151"
 if socket.gethostname() == "MD-rMBP.local":

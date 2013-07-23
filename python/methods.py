@@ -1,5 +1,8 @@
 import json
 from gamestate_module import Gamestate
+from json import JSONEncoder
+from datetime import datetime
+from bson import ObjectId
 
 
 def position_to_string(position):
@@ -28,3 +31,12 @@ def merge_units(units1, units2):
 def load_gamestate_from_file(path):
     document = json.loads(open(path).read())
     return Gamestate.from_document(document)
+
+
+class CustomJsonEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return JSONEncoder.default(self, obj)
