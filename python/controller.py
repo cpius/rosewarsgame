@@ -11,6 +11,9 @@ from player import Player
 from action import Action
 import units as units_module
 from pprint import PrettyPrinter
+import json
+from json import JSONEncoder
+import datetime
 
 
 class Controller(object):
@@ -351,18 +354,12 @@ class Controller(object):
             return
 
     def save_game(self):
-        name = str(self.action_index) + ". " \
-            + self.gamestate.current_player().color \
-            + ", " \
-            + str(self.gamestate.turn) \
-            + "." \
-            + str(2 - self.gamestate.get_actions_remaining())
+        name = str(self.action_index) + ". " + self.gamestate.current_player().color + ", " + str(self.gamestate.turn) \
+                                      + "." + str(2 - self.gamestate.get_actions_remaining())
         self.view.save_screenshot(name)
 
-        pretty_printer = PrettyPrinter()
-        file = open("./replay/" + name + ".json", 'w')
-        file.write(pretty_printer.pformat(self.gamestate.to_document()))
-        file.close()
+        with open("./replay/" + name + ".json", 'w') as file:
+            file.write(json.dumps(self.gamestate.to_document(), cls=CustomJsonEncoder, indent=4))
 
         self.action_index += 1
 
@@ -404,3 +401,12 @@ class Controller(object):
 
 def within(point, area):
     return area[0].y <= point[1] <= area[1].y and area[0].x <= point[0] <= area[1].x
+
+
+class CustomJsonEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return JSONEncoder.default(self, obj)
