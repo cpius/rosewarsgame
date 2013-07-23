@@ -164,6 +164,7 @@ def get_actions(gamestate):
 
     for action in actions:
         add_unit_references(gamestate, action)
+        action.action_number = gamestate.action_number + 1
 
     return actions
 
