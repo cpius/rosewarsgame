@@ -376,10 +376,6 @@ class Controller(object):
 
         print "Getting move. Current player is: " + self.gamestate.current_player().ai_name
 
-        print "Available actions:"
-        for action in self.gamestate.get_actions():
-            print str(action)
-
         if self.gamestate.current_player().ai_name not in ["Human", "Network"]:
             self.trigger_artificial_intelligence()
         elif self.gamestate.current_player().ai_name == "Network":
