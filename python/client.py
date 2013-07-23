@@ -21,12 +21,9 @@ class Client():
         expected_action = last_known_action + 1
         while True:
             url = self.server + "/actions/view/" + self.game_id
-            print "Getting action from: " + url
-            print "last known action: " + str(last_known_action)
             actions = json.load(urllib2.urlopen(url))
             if "last_action" in actions and actions["last_action"] > last_known_action:
-                print "found new action. returning"
-                print Action.from_document(actions[str(expected_action)])
+                print json.dumps(actions[str(expected_action)])
                 return Action.from_document(actions[str(expected_action)])
             print "No new actions. Sleeping for one second"
             sleep(1)
