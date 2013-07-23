@@ -219,7 +219,7 @@ class Gamestate:
             unit = units[unit_position]
 
             unit_dict = {attribute: getattr(unit, attribute) for attribute in units_module.variable_attributes
-                         if getattr(unit, attribute)}
+                         if hasattr(unit, attribute) and getattr(unit, attribute)}
 
             easy_position = units_module.get_position_string(unit_position)
             if len(unit_dict) > 0:
