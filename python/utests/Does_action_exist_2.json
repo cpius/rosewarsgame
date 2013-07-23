@@ -2,7 +2,7 @@
  "Result": true,
  "Action": 
 {
-     "action_number": 3,
+    "action_number": 3,
     "start_position": "A2",
     "end_position": "A1",
     "attack_position": "",
