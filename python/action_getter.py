@@ -3,6 +3,7 @@ import settings
 from action import Action
 import collections
 import functools
+import methods
 from units import get_position
 
 
@@ -168,19 +169,19 @@ def get_actions(gamestate):
 
 
 def get_action(gamestate, action_document):
-    start_position = get_position(action_document["start_position"])
+    start_position = methods.position_to_tuple(action_document["start_position"])
     if not start_position in gamestate.player_units():
         return None
 
-    attack_position = get_position(action_document["attack_position"])
+    attack_position = methods.position_to_tuple(action_document["attack_position"])
     if attack_position and not attack_position in gamestate.opponent_units():
         return None
 
     action = Action(
         start_position,
-        get_position(action_document["end_position"]),
+        methods.position_to_tuple(action_document["end_position"]),
         attack_position,
-        get_position(action_document["ability_position"]),
+        methods.position_to_tuple(action_document["ability_position"]),
         action_document["move_with_attack"],
         action_document["ability"])
     add_unit_references(gamestate, action)
