@@ -54,23 +54,6 @@ class Action(object):
         action.created_at = document["created_at"]
         return action
 
-    def to_document(self):
-        print "self action_number is: " + str(self.action_number)
-        action_number = self.action_number
-        if not action_number:
-            action_number = 0
-
-        return {
-            "action_number": action_number,
-            "start_position": methods.position_to_string(self.start_position),
-            "end_position": methods.position_to_string(self.end_position),
-            "attack_position": methods.position_to_string(self.attack_position),
-            "ability_position": methods.position_to_string(self.ability_position),
-            "move_with_attack": self.move_with_attack,
-            "ability": self.ability,
-            "created_at": self.created_at
-        }
-
     def attribute_representation(self):
         return str(self.__dict__)
 
