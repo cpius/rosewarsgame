@@ -68,7 +68,7 @@ class Controller(object):
 
     def trigger_network_player(self):
 
-        action = self.client.select_action(self, self.action_index)
+        action = self.client.select_action(self.gamestate.action_number)
 
         if action:
             self.perform_action(action)
