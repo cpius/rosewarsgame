@@ -41,7 +41,8 @@ class Action(object):
     @classmethod
     def from_document(cls, document):
         d = copy(document)
-        del d["created_at"]
+        if "created_at" in d:
+            del d["created_at"]
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
             d[attribute] = methods.position_to_tuple(d[attribute])
         d["sub_actions"] = [cls.from_document(sub_action_document) for sub_action_document in d["sub_actions"]]
