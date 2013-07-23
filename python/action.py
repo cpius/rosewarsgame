@@ -1,5 +1,6 @@
 import battle
 import methods
+from datetime import datetime
 from copy import copy
 
 
@@ -37,6 +38,8 @@ class Action(object):
         self.target_reference = None
         self.rolls = None
         self.outcome = None
+
+        self.created_at = datetime.utcnow()
 
     @classmethod
     def from_document(cls, document):
