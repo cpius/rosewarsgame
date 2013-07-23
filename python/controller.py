@@ -407,6 +407,4 @@ class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.datetime):
             return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
-        if isinstance(obj, ObjectId):
-            return str(obj)
         return JSONEncoder.default(self, obj)
