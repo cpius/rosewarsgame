@@ -1,3 +1,7 @@
+import json
+from gamestate_module import Gamestate
+
+
 def position_to_string(position):
     columns = list(" ABCDE")
     return columns[position[0]] + str(position[1])
@@ -16,3 +20,8 @@ def merge_units(units1, units2):
     all_units = units1.copy()
     all_units.update(units2)
     return all_units
+
+
+def load_gamestate_from_file(path):
+    document = json.loads(open(path).read())
+    return Gamestate.from_document(document)
