@@ -188,6 +188,9 @@ class Controller(object):
         self.gamestate.recalculate_special_counters()
         self.view.draw_game(self.gamestate)
 
+        while self.gamestate.current_player().ai_name == "Network":
+            self.trigger_network_player()
+
         while True:
             for event in pygame.event.get():
 
