@@ -7,7 +7,8 @@ from action import Action
 
 
 class Client():
-    server = "http://localhost:8080"
+    # server = "http://localhost:8080"
+    server = "http://server.rosewarsgame.com:8080"
 
     def __init__(self, game_id):
         self.game_id = game_id
