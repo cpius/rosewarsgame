@@ -260,10 +260,7 @@ class Controller(object):
 
         self.view.draw_game(self.gamestate)
 
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            all_actions = self.gamestate.get_actions()
-        else:
-            all_actions = self.gamestate.get_actions()
+        all_actions = self.gamestate.get_actions()
 
         matching_actions = 0
         for possible_action in all_actions:
