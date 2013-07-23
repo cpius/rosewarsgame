@@ -44,6 +44,7 @@ class Action(object):
         del d["created_at"]
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
             d[attribute] = methods.position_to_tuple(d[attribute])
+        d["sub_actions"] = [cls.from_document(sub_action_document) for sub_action_document in d["sub_actions"]]
         return cls(**d)
 
     def attribute_representation(self):
@@ -130,16 +131,18 @@ class Action(object):
 
         return original == other
 
+    def to_document(self):
+        action_number = self.action_number if self.action_number else 0
+        sub_action_docs = [sub_action.to_document() for sub_action in self.sub_actions]
 
-def to_document(self):
-    action_number = self.action_number if self.action_number else 0
-    return {"action_number": action_number,
-            "start_position": methods.position_to_string(self.start_position),
-            "end_position": methods.position_to_string(self.end_position),
-            "attack_position": methods.position_to_string(self.attack_position),
-            "ability_position": methods.position_to_string(self.ability_position),
-            "move_with_attack": self.move_with_attack,
-            "ability": self.ability}
+        return {"action_number": action_number,
+                "start_position": methods.position_to_string(self.start_position),
+                "end_position": methods.position_to_string(self.end_position),
+                "attack_position": methods.position_to_string(self.attack_position),
+                "ability_position": methods.position_to_string(self.ability_position),
+                "move_with_attack": self.move_with_attack,
+                "ability": self.ability,
+                "sub_actions": sub_action_docs}
 
 
 def coordinates(position):
