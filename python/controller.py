@@ -352,6 +352,7 @@ class Controller(object):
     def save_game(self):
         name = str(self.action_index) + ". " + self.gamestate.current_player().color + ", " + str(self.gamestate.turn) \
                                       + "." + str(2 - self.gamestate.get_actions_remaining())
+
         self.view.save_screenshot(name)
 
         with open("./replay/" + name + ".json", 'w') as file:
@@ -371,25 +372,26 @@ class Controller(object):
         return not self.start_position and position in self.gamestate.player_units()
 
     def selecting_ability_target(self, position):
-        return self.start_position and (position in self.gamestate.opponent_units() or position in self.gamestate.player_units()) and self.selected_unit.abilities
+        return self.start_position and (
+            position in self.gamestate.opponent_units() or position in self.gamestate.player_units()) and self.selected_unit.abilities
 
     def selecting_attack_target_unit(self, position):
         pass
 
     def selecting_attack_ranged_target(self, position):
         return self.start_position and position in self.gamestate.opponent_units() and \
-            self.selected_unit.range > 1
+               self.selected_unit.range > 1
 
     def deselecting_active_unit(self, position):
         return self.start_position and self.start_position == position
 
     def selecting_ranged_target(self, position):
         return self.start_position and position in self.gamestate.opponent_units() and \
-            self.selected_unit.range > 1
+               self.selected_unit.range > 1
 
     def selecting_melee_target(self, position):
         return self.start_position and position in self.gamestate.opponent_units() and \
-            self.selected_unit.range == 1
+               self.selected_unit.range == 1
 
     def selecting_move(self, position):
         return self.start_position and position not in self.gamestate.opponent_units()
