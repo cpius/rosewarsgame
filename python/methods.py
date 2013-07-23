@@ -1,5 +1,3 @@
-import json
-from gamestate_module import Gamestate
 from json import JSONEncoder
 from datetime import datetime
 from bson import ObjectId
@@ -26,11 +24,6 @@ def merge_units(units1, units2):
     all_units = units1.copy()
     all_units.update(units2)
     return all_units
-
-
-def load_gamestate_from_file(path):
-    document = json.loads(open(path).read())
-    return Gamestate.from_document(document)
 
 
 class CustomJsonEncoder(JSONEncoder):
