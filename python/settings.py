@@ -1,4 +1,5 @@
 import interfaces
+import os
 
 
 pause_for_animation_attack = 100

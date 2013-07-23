@@ -10,3 +10,9 @@ def position_to_tuple(position_string):
     column = ord(position_string[0]) - 64  # In ASCII A, B, C, D, E is 65, 66, 67, 68, 69
     row = int(position_string[1])
     return column, row
+
+
+def merge_units(units1, units2):
+    all_units = units1.copy()
+    all_units.update(units2)
+    return all_units
