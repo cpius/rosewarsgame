@@ -1,9 +1,9 @@
-def convert_position_to_string(position):
+def position_to_string(position):
     columns = list(" ABCDE")
     return columns[position[0]] + str(position[1])
 
 
-def convert_position_to_tuple(position_string):
+def position_to_tuple(position_string):
     if len(position_string) != 2:
         return None
 
