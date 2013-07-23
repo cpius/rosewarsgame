@@ -1,9 +1,9 @@
 import json
-import urllib
 import urllib2
 from gamestate_module import Gamestate
 from time import sleep
-from pprint import PrettyPrinter
+from methods import CustomJsonEncoder
+from action import Action
 
 
 class Client():
@@ -18,12 +18,16 @@ class Client():
                 urllib2.urlopen(self.server + "/games/view/" + self.game_id)))
 
     def select_action(self, last_known_action):
+        expected_action = last_known_action + 1
         while True:
             url = self.server + "/actions/view/" + self.game_id
             print "Getting action from: " + url
+            print "last known action: " + str(last_known_action)
             actions = json.load(urllib2.urlopen(url))
             if "last_action" in actions and actions["last_action"] > last_known_action:
-                return actions
+                print "found new action. returning"
+                print Action.from_document(actions[str(expected_action)])
+                return Action.from_document(actions[str(expected_action)])
             print "No new actions. Sleeping for one second"
             sleep(1)
 
