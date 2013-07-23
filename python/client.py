@@ -40,11 +40,7 @@ class Client():
         json_response = json.loads(response_string)
         response.close()
         if json_response["Status"] == "OK":
-            return True
-        else:
-            return False
-
-
+            return json_response["Action outcome"] == "Success"
 
 
 # print "Polling for actions with number higher than 2"
