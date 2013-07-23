@@ -321,6 +321,8 @@ class Controller(object):
 
         if self.gamestate.current_player().ai == "Human":
 
+            add_unit_references(self.gamestate, action)
+
             if self.gamestate.opponent_player().ai == "Network":
                 outcome = self.client.send_action(action.to_document())
                 action.ensure_outcome(outcome)
