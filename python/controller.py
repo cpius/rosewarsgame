@@ -70,6 +70,8 @@ class Controller(object):
 
         action = self.client.select_action(self.gamestate.action_number)
 
+        print "received action from network: " + str(action)
+
         if action:
             self.perform_action(action)
         else:
@@ -145,6 +147,7 @@ class Controller(object):
 
         elif self.selecting_move(position):
             action = Action(self.start_position, end_position=position)
+            action.action_number = self.gamestate.action_number + 1
             self.perform_action(action)
 
     def pick_action_end_position(self, possible_actions):
@@ -318,8 +321,8 @@ class Controller(object):
 
         if self.gamestate.current_player().ai == "Human":
 
-            if self.gamestate.opponent_player() == "Network":
-                outcome = self.client.send_action(action)
+            if self.gamestate.opponent_player().ai == "Network":
+                outcome = self.client.send_action(action.to_document())
                 action.ensure_outcome(outcome)
 
             post_movement_possible = self.gamestate.do_action(action)
@@ -375,7 +378,7 @@ class Controller(object):
         if self.gamestate.current_player().ai_name not in ["Human", "Network"]:
             self.trigger_artificial_intelligence()
         elif self.gamestate.current_player().ai_name == "Network":
-            self.client.select_action(self.gamestate.action_number)
+            self.trigger_network_player()
 
     def show_attack(self, attack_position):
         action = Action(self.start_position, attack_position=attack_position)
