@@ -14,6 +14,7 @@ import json
 from json import JSONEncoder
 import datetime
 from client import Client
+from action_getter import add_unit_references
 
 
 class Controller(object):
@@ -67,8 +68,8 @@ class Controller(object):
         return controller
 
     def trigger_network_player(self):
-
         action = self.client.select_action(self.gamestate.action_number)
+        add_unit_references(self.gamestate, action)
 
         print "received action from network: " + str(action)
 
@@ -374,6 +375,10 @@ class Controller(object):
         self.clear_move()
 
         print "Getting move. Current player is: " + self.gamestate.current_player().ai_name
+
+        print "Available actions:"
+        for action in self.gamestate.get_actions():
+            print str(action)
 
         if self.gamestate.current_player().ai_name not in ["Human", "Network"]:
             self.trigger_artificial_intelligence()
