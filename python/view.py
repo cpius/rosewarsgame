@@ -101,5 +101,8 @@ class View(object):
 
     def draw_message(self, message):
         m.write_message(self.screen, self.interface, message)
+        pygame.display.update()
 
-
+    def draw_tutorial(self, game):
+        viewgame.draw_game(self.screen, self.interface, game)
+        pygame.display.update()

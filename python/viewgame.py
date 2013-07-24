@@ -159,7 +159,6 @@ def shade_positions(screen, interface, positions):
 
         dimensions = (interface.unit_width, interface.unit_height)
         m.draw_rectangle(screen, dimensions, base, interface.selected_shading)
-        m.write_message(screen, interface, "Click a tile to attack from")
 
     pygame.display.update()
 
