@@ -188,8 +188,8 @@ class Gamestate:
         self.initialize_action()
         self.set_available_actions()
 
-    def update_final_position(self, action, outcome):
-        action_doer.update_final_position(action, outcome)
+    def update_final_position(self, action):
+        action_doer.update_final_position(action)
 
 
 def save_gamestate(gamestate):
