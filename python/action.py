@@ -84,7 +84,12 @@ class Action(object):
         return str(self.__dict__)
 
     def get_simple_string(self):
-        representation = "Unit"
+        if self.unit:
+            representation = self.unit.name
+        elif self.unit_reference:
+            representation = self.unit_reference.name
+        else:
+            representation = "Unit"
 
         if self.start_position != self.end_position:
             representation += " move from " + coordinates(self.start_position)
@@ -109,7 +114,6 @@ class Action(object):
                               + coordinates(self.ability_position)
 
         return representation
-
 
     def get_basic_string(self):
         representation = self.unit_reference.name
