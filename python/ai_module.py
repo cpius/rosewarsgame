@@ -23,11 +23,6 @@ class AI(object):
         gamestate = game.gamestate.copy()
 
         actions = gamestate.get_actions()
-        print "Transformed gamestate given to ai:"
-        print json.dumps(gamestate.to_document(), indent=4, cls=CustomJsonEncoder)
-        print "Actions available to artificial intelligence:"
-        for available_action in actions:
-            print available_action
 
         if actions:
             return self.get_action(actions, gamestate)
