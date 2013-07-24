@@ -26,8 +26,7 @@ class Outcome:
         return SubOutcome.UNKNOWN
 
     def add_outcomes(self, other):
-        print "type of other is", type(other)
-        self.outcomes = dict(list(self.outcomes) + list(other.outcomes))
+        self.outcomes.update(other.outcomes)
 
     @classmethod
     def is_failure(cls, sub_outcome):
