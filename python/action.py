@@ -16,7 +16,7 @@ class Action(object):
                  end_position=None,
                  attack_position=None,
                  ability_position=None,
-                 move_with_attack=False,
+                 move_with_attack=MoveOrStay.UNKNOWN,
                  ability="",
                  action_number=None,
                  sub_actions=None,
@@ -129,13 +129,13 @@ class Action(object):
         else:
             representation += " at " + coordinates(self.start_position)
 
-        if self.is_attack and not self.move_with_attack:
+        if self.is_attack() and self.move_with_attack != MoveOrStay.MOVE:
             representation += " attack " + self.target_reference.name + " " + coordinates(self.attack_position)
 
-        if self.is_attack and self.move_with_attack:
+        if self.is_attack() and self.move_with_attack == MoveOrStay.MOVE:
             representation += " attack-move " + self.target_reference.name + " " + coordinates(self.attack_position)
 
-        if self.is_ability:
+        if self.is_ability():
             representation += " use "\
                               + self.ability\
                               + " on "\
@@ -226,6 +226,9 @@ class Action(object):
             document["sub_actions"] = sub_action_docs
         return document
 
+    def is_move_with_attack(self):
+        return self.move_with_attack == MoveOrStay.MOVE
+
     def ensure_outcome(self, outcome):
         self.final_position = self.end_position
 
@@ -244,6 +247,13 @@ class Action(object):
 
     def is_ability(self):
         return bool(self.ability)
+
+    def is_lancing(self):
+        distance = methods.distance(self.start_position, self.attack_position)
+        return self.unit.lancing and self.is_attack() and distance >= 3
+
+    def is_push(self):
+        return self.unit.hasattr("push") and self.is_attack()
 
 
 def coordinates(position):

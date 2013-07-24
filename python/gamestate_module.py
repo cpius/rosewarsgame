@@ -20,8 +20,8 @@ class Gamestate:
         self.extra_action = extra_action
         self.action_number = 0
 
-    def do_action(self, action, controller=None):
-        action_doer.do_action(self, action, controller)
+    def do_action(self, action, outcome=None):
+        outcome = action_doer.do_action(self, action, outcome)
         self.action_number += 1
         self.actions_remaining -= 1
         print self.actions_remaining
@@ -30,6 +30,8 @@ class Gamestate:
             self.available_actions = action_getter.get_actions(self)
             if not self.available_actions:
                 self.actions_remaining = 0
+
+        return outcome
 
     def initialize_turn(self):
         initializer.initialize_turn(self)
@@ -187,6 +189,9 @@ class Gamestate:
         self.initialize_turn()
         self.initialize_action()
         self.set_available_actions()
+
+    def update_final_position(self, action, outcome):
+        action_doer.update_final_position(action, outcome)
 
 
 def save_gamestate(gamestate):

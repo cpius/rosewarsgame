@@ -11,8 +11,9 @@ base_height = 48
 
 
 class Log():
-    def __init__(self, action, turn, action_number, player_color):
+    def __init__(self, action, outcome, turn, action_number, player_color):
         self.action = action
+        self.outcome = outcome
         self.turn = turn
         self.action_number = action_number
         self.player_color = player_color
@@ -28,10 +29,10 @@ class Log():
             return player_color, 2
 
 
-def draw_log(logbook, screen, interface, action=None, game=None):
+def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
 
     if action:
-        log = Log(action, game.turn, game.gamestate.get_actions_remaining(), game.current_player().color)
+        log = Log(action, outcome, game.turn, game.gamestate.get_actions_remaining(), game.current_player().color)
         logbook.append(log)
 
     if len(logbook) > maximum_logs:
@@ -44,6 +45,7 @@ def draw_log(logbook, screen, interface, action=None, game=None):
     for index, log in enumerate(logbook):
 
         action = log.action
+        outcome = log.outcome
         base_x = int(391 * zoom)
         base_y = int(index * log_heights)
         base = (base_x, base_y)
@@ -58,7 +60,7 @@ def draw_log(logbook, screen, interface, action=None, game=None):
         symbol_location = (base_x + 118 * zoom, base_y + 10 * zoom)
 
         if action.is_attack():
-            draw_attack(screen, interface, action, base, symbol_location, log)
+            draw_attack(screen, interface, action, outcome, base, symbol_location, log)
 
         elif action.is_ability():
 
@@ -104,11 +106,11 @@ def draw_log(logbook, screen, interface, action=None, game=None):
     return logbook
 
 
-def draw_attack(screen, interface, action, base, symbol_location, log):
+def draw_attack(screen, interface, action, outcome, base, symbol_location, log):
 
-    outcome = battle.get_outcome(action)
+    outcome_string = battle.get_outcome(action, outcome)
 
-    draw_outcome(screen, interface, outcome, *base)
+    draw_outcome(screen, interface, outcome_string, *base)
 
     pic = m.get_image(interface.attack_icon)
     screen.blit(pic, symbol_location)
