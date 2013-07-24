@@ -16,13 +16,18 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
     pic = m.get_image(interface.board_image)
     screen.blit(pic, (0, 0))
 
-    for position, unit in game.gamestate.units[0].items():
+    if game.current_player().color == "Red":
+        units = gamestate_module.transform_units(game.gamestate.units)
+    else:
+        units = game.gamestate.units
+
+    for position, unit in units[0].items():
         if actions and position == start_position:
             draw_unit(screen, interface, unit, position, game.current_player().color, selected=True)
         else:
             draw_unit(screen, interface, unit, position, game.current_player().color)
 
-    for position, unit in game.gamestate.units[1].items():
+    for position, unit in units[1].items():
         draw_unit(screen, interface, unit, position, game.players[1].color)
 
     attacks, moves, abilities = [], [], []
