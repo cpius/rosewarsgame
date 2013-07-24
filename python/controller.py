@@ -330,7 +330,7 @@ class Controller(object):
                     self.game.gamestate.update_final_position(action)
 
         else:
-            outcome = self.game.do_action(action)
+            outcome = self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
 
         if move_with_attack:
