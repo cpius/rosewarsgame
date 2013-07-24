@@ -15,7 +15,7 @@ class Unit(object):
         return self.name
 
 
-variable_attributes = ["xp", "used", "xp_gained_this_round", "blue_counters", "yellow_counters"]
+variable_attributes = ["xp", "used", "xp_gained_this_round", "frozen", "extra_life", "just_bribed", "attack_frozen"]
 
 
 class Archer(Unit):

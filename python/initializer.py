@@ -140,5 +140,3 @@ def initialize_turn(gamestate):
     for opponent_unit_position, opponent_unit in gamestate.opponent_units().items():
         opponent_unit.used = False
         resolve_bribe(opponent_unit, gamestate.opponent_units(), gamestate.player_units())
-
-    return gamestate.opponent_units(), gamestate.player_units(), gamestate.current_player()

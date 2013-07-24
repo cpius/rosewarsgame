@@ -138,7 +138,7 @@ def get_actions(gamestate):
         return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
             and not hasattr(unit, "attack_frozen")
 
-    if hasattr(gamestate.current_player(), "extra_action"):
+    if getattr(gamestate, "extra_action"):
         return get_extra_actions(gamestate)
 
     actions = []
