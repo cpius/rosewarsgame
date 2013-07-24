@@ -140,8 +140,7 @@ class Gamestate:
             name = document[position_string]["name"]
             unit = getattr(units_module, name.replace(" ", "_"))()
             for attribute in unit_document.keys():
-                if attribute == "experience":
-                    unit.xp = int(unit_document[attribute])
+                setattr(unit, attribute, unit_document[attribute])
 
             units[position] = unit
 
