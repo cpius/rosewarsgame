@@ -1,4 +1,6 @@
 import imp
+import json
+from methods import CustomJsonEncoder
 
 
 class AI(object):
@@ -18,14 +20,17 @@ class AI(object):
         self.name = name
 
     def select_action(self, game):
-
         gamestate = game.gamestate.copy()
 
         actions = gamestate.get_actions()
+        print "Transformed gamestate given to ai:"
+        print json.dumps(gamestate.to_document(), indent=4, cls=CustomJsonEncoder)
+        print "Actions available to artificial intelligence:"
+        for available_action in actions:
+            print available_action
 
         if actions:
             return self.get_action(actions, gamestate)
-
 
 
 class Direction:
@@ -71,8 +76,9 @@ def get_transformed_action(action):
 
     for sub_action in action.sub_actions:
         action.sub_action = get_transformed_action(sub_action)
-    if hasattr(action, "push"):
-        action.push_direction = get_transformed_direction(action.push_direction)
+    # since push_direction is now calculated instead of stored, we don't need to transform it
+    #if hasattr(action, "push"):
+    #    action.push_direction = get_transformed_direction(action.push_direction)
 
     return action
 

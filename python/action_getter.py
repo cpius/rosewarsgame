@@ -4,7 +4,9 @@ from action import Action
 import collections
 import functools
 import methods
+from methods import Direction
 from units import get_position
+from action import MoveOrStay
 
 
 class memoized(object):
@@ -35,36 +37,6 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-class Direction:
-    """ An object direction is one move up, down, left or right.
-    The class contains methods for returning the tile going one step in the direction will lead you to,
-    and for returning the tiles you should check for zone of control.
-    """
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def move(self, position):
-        return position[0] + self. x, position[1] + self.y
-
-    def perpendicular(self, position):
-        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
-
-    def __repr__(self):
-
-        if self.x == -1:
-            return "Left"
-
-        if self.x == 1:
-            return "Right"
-
-        if self.y == -1:
-            return "Down"
-
-        if self.y == 1:
-            return "Up"
-
-
 #global variables
 _action = 0
 board = set((column, row) for column in range(1, 6) for row in range(1, 9))
@@ -88,23 +60,14 @@ def two_forward_tiles(position, forward_position):
         set(direction.move(forward_position) for direction in directions)
 
 
-def get_direction(position, forward_position):
-    """ Returns the direction that would take you from position to forward_position """
-    return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
-
-
-def distance(position1, position2):
-    return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
-
-
 def find_all_friendly_units_except_current(current_unit_position, player_units):
     return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
 
 
 def add_target_reference(action, enemy_units, player_units):
-    if action.is_attack:
+    if action.is_attack():
         action.target_reference = enemy_units[action.attack_position]
-    elif action.is_ability:
+    elif action.is_ability():
         if action.ability_position in enemy_units:
             action.target_reference = enemy_units[action.ability_position]
         elif action.ability_position in player_units:
@@ -211,13 +174,13 @@ def get_extra_actions(gamestate):
             for position, new_position, move_with_attack in attack_generator(unit,
                                                                              moveset | {start_position},
                                                                              enemy_units):
-                if not move_with_attack:
-                    attacks.append(Action(start_position, end_position=position, attack_position=new_position,
-                                          move_with_attack=False))
-                else:
+                if move_with_attack:
                     if movement_remaining > 0:
                         attacks.append(Action(start_position, end_position=position, attack_position=new_position,
-                                              move_with_attack=True))
+                                              move_with_attack=MoveOrStay.MOVE))
+                else:
+                    attacks.append(Action(start_position, end_position=position, attack_position=new_position,
+                                          move_with_attack=MoveOrStay.STAY))
             return attacks
 
         attacks = melee_attacks_list_samurai_second(unit,
@@ -391,7 +354,7 @@ def move_actions(start_position, moveset):
 
 
 def ranged_attack_actions(start_position, attackset):
-    return [Action(start_position, attack_position=position, move_with_attack=False)
+    return [Action(start_position, attack_position=position, move_with_attack=MoveOrStay.STAY)
             for position in attackset]
 
 
@@ -402,8 +365,8 @@ def attack_generator(unit, moveset, enemy_units):
             new_position = direction.move(position)
             if new_position in enemy_units:
                 if not zoc_block(position, direction, unit.zoc_blocks):
-                    yield position, new_position, True
-                yield position, new_position, False
+                    yield position, new_position, MoveOrStay.MOVE
+                yield position, new_position, MoveOrStay.STAY
 
 
 def attack_generator_no_zoc_check(moveset, enemy_units):
@@ -457,7 +420,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
                                       move_with_attack=move_with_attack))
             for end_position, attack_position in attack_generator_no_zoc_check(moveset_no_leftover, enemy_units):
                 attacks.append(Action(position, end_position=end_position, attack_position=attack_position,
-                                      move_with_attack=False))
+                                      move_with_attack=MoveOrStay.STAY))
 
             moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
 
@@ -482,7 +445,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
                 for forward_position in four_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
                         attack.sub_actions.append(Action(position, end_position=end_position,
-                                                         attack_position=forward_position, move_with_attack=False))
+                                                         attack_position=forward_position, move_with_attack=MoveOrStay.STAY))
                 return attack
 
             attacks = [get_attack(position, end_position, attack_position, move_with_attack) for end_position,
@@ -501,7 +464,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
                 for forward_position in two_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
                         attack.sub_actions.append(Action(start_position, end_position=end_position,
-                                                         attack_position=forward_position, move_with_attack=False))
+                                                         attack_position=forward_position, move_with_attack=MoveOrStay.STAY))
                 return attack
 
             attacks = [get_attack(position, end_position, attack_position, move_with_attack) for end_position,
@@ -517,9 +480,10 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
             attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
             moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
 
-            for attack in attacks:
-                if distance(attack.start_position, attack.attack_position) >= 3:
-                    attack.lancing = True
+            #
+            #for attack in attacks:
+            #    if distance(attack.start_position, attack.attack_position) >= 3:
+            #        attack.lancing = True
 
             return moves, attacks
 
@@ -537,16 +501,17 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
 
             return moves, attacks
 
-        def get_attacks_push(attacks):
-            for attack in attacks:
-                push_direction = get_direction(attack.end_position, attack.attack_position)
-                for sub_attack in attack.sub_actions:
-                    sub_attack.push = True
-                    sub_attack.push_direction = push_direction
-                attack.push = True
-                attack.push_direction = push_direction
-
-            return attacks
+        # Calculate this on the fly instead
+        #def get_attacks_push(attacks):
+        #    for attack in attacks:
+        #        push_direction = get_direction(attack.end_position, attack.attack_position)
+        #        for sub_attack in attack.sub_actions:
+        #            sub_attack.push = True
+        #            sub_attack.push_direction = push_direction
+        #        attack.push = True
+        #        attack.push_direction = push_direction
+        #
+        #    return attacks
 
         moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units)
         attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
@@ -560,8 +525,8 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
                                                      moveset_no_leftover,
                                                      enemy_units)
 
-        if hasattr(unit, "push"):
-            attacks = get_attacks_push(attacks)
+        #if hasattr(unit, "push"):
+        #    attacks = get_attacks_push(attacks)
 
         return moves, attacks
 

@@ -24,8 +24,8 @@ class Game:
     def opponent_player(self):
         return self.players[1]
 
-    def do_action(self, action):
-        self.gamestate.do_action(action)
+    def do_action(self, action, outcome):
+        return self.gamestate.do_action(action, outcome)
 
     def shift_turn(self):
         self.gamestate.shift_turn()

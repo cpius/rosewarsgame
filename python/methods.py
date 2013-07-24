@@ -26,6 +26,45 @@ def merge_units(units1, units2):
     return all_units
 
 
+def distance(position1, position2):
+    return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
+
+
+def get_direction(position, forward_position):
+    """ Returns the direction that would take you from position to forward_position """
+    return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
+
+
+class Direction:
+    """ An object direction is one move up, down, left or right.
+    The class contains methods for returning the tile going one step in the direction will lead you to,
+    and for returning the tiles you should check for zone of control.
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def move(self, position):
+        return position[0] + self.x, position[1] + self.y
+
+    def perpendicular(self, position):
+        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
+
+    def __repr__(self):
+
+        if self.x == -1:
+            return "Left"
+
+        if self.x == 1:
+            return "Right"
+
+        if self.y == -1:
+            return "Down"
+
+        if self.y == 1:
+            return "Up"
+
+
 class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):

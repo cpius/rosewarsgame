@@ -114,7 +114,7 @@ def draw_ask_about_ability(unit):
 
 def draw_unit_lower_right(screen, interface, action, color, index, base_x, base_y):
 
-    if not action.is_attack:
+    if not action.is_attack():
         unit = action.unit_reference.name
     elif index == 0:
         unit = action.unit_reference.name

@@ -4,13 +4,19 @@ from datetime import datetime
 from copy import copy
 
 
+class MoveOrStay:
+    UNKNOWN = 0
+    MOVE = 1
+    STAY = 2
+
+
 class Action(object):
     def __init__(self,
                  start_position,
                  end_position=None,
                  attack_position=None,
                  ability_position=None,
-                 move_with_attack=False,
+                 move_with_attack=MoveOrStay.UNKNOWN,
                  ability="",
                  action_number=None,
                  sub_actions=None,
@@ -29,9 +35,6 @@ class Action(object):
         self.action_number = action_number
         self.sub_actions = sub_actions if sub_actions else []
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
-
-        self.is_attack = bool(attack_position)
-        self.is_ability = bool(ability)
 
         self.unit = None
         self.target = None
@@ -91,27 +94,32 @@ class Action(object):
         else:
             representation = "Unit"
 
+        if self.target_reference:
+            target = self.target_reference.name
+        else:
+            target = "Unit"
+
         if self.start_position != self.end_position:
-            representation += " move from " + coordinates(self.start_position)
-            representation += " to " + coordinates(self.end_position)
-            if self.is_attack:
+            representation += " move from " + methods.position_to_string(self.start_position)
+            representation += " to " + methods.position_to_string(self.end_position)
+            if self.is_attack():
                 representation += " and"
         else:
-            representation += " at " + coordinates(self.start_position)
+            representation += " at " + methods.position_to_string(self.start_position)
 
-        if self.is_attack and not self.move_with_attack:
-            representation += " attack " + self.target_reference.name + " " + coordinates(self.attack_position)
+        if self.is_attack() and not self.is_move_with_attack():
+            representation += " attack " + target + " " + methods.position_to_string(self.attack_position)
 
-        if self.is_attack and self.move_with_attack:
-            representation += " attack-move " + self.target_reference.name + " " + coordinates(self.attack_position)
+        if self.is_attack() and self.is_move_with_attack():
+            representation += " attack-move " + target + " " + methods.position_to_string(self.attack_position)
 
-        if self.is_ability:
-            representation += " use "\
+        if self.is_ability():
+            representation += " use " \
                               + self.ability\
-                              + " on "\
-                              + self.target_reference.name\
-                              + " "\
-                              + coordinates(self.ability_position)
+                              + " on " \
+                              + target \
+                              + " " \
+                              + methods.position_to_string(self.ability_position)
 
         return representation
 
@@ -119,26 +127,26 @@ class Action(object):
         representation = self.unit_reference.name
 
         if self.start_position != self.end_position:
-            representation += " move from " + coordinates(self.start_position)
-            representation += " to " + coordinates(self.end_position)
-            if self.is_attack:
+            representation += " move from " + methods.position_to_string(self.start_position)
+            representation += " to " + methods.position_to_string(self.end_position)
+            if self.is_attack():
                 representation += " and"
         else:
-            representation += " at " + coordinates(self.start_position)
+            representation += " at " + methods.position_to_string(self.start_position)
 
-        if self.is_attack and not self.move_with_attack:
-            representation += " attack " + self.target_reference.name + " " + coordinates(self.attack_position)
+        if self.is_attack() and self.move_with_attack != MoveOrStay.MOVE:
+            representation += " attack " + self.target_reference.name + " " + methods.position_to_string(self.attack_position)
 
-        if self.is_attack and self.move_with_attack:
-            representation += " attack-move " + self.target_reference.name + " " + coordinates(self.attack_position)
+        if self.is_attack() and self.move_with_attack == MoveOrStay.MOVE:
+            representation += " attack-move " + self.target_reference.name + " " + methods.position_to_string(self.attack_position)
 
-        if self.is_ability:
+        if self.is_ability():
             representation += " use "\
                               + self.ability\
                               + " on "\
                               + self.target_reference.name\
                               + " "\
-                              + coordinates(self.ability_position)
+                              + methods.position_to_string(self.ability_position)
 
         return representation
 
@@ -160,7 +168,7 @@ class Action(object):
 
         for sub_action in self.sub_actions:
             representation += "\n"
-            representation += "and attack " + coordinates(sub_action.attack_position)
+            representation += "and attack " + methods.position_to_string(sub_action.attack_position)
             if sub_action.rolls:
                 attack = battle.get_attack_rating(self.unit_reference, self.target_reference, self)
                 defence = battle.get_defence_rating(self.unit_reference, self.target_reference, attack)
@@ -187,9 +195,7 @@ class Action(object):
                             "end_position",
                             "attack_position",
                             "ability_position",
-                            "is_attack",
                             "move_with_attack",
-                            "is_ability",
                             "ability"]
         original = dict((attribute, self.__dict__[attribute]) for attribute in basic_attributes)
         other = dict((attribute, other.__dict__[attribute]) for attribute in basic_attributes)
@@ -225,6 +231,9 @@ class Action(object):
             document["sub_actions"] = sub_action_docs
         return document
 
+    def is_move_with_attack(self):
+        return self.move_with_attack == MoveOrStay.MOVE
+
     def ensure_outcome(self, outcome):
         self.final_position = self.end_position
 
@@ -238,7 +247,15 @@ class Action(object):
 
         return self
 
+    def is_attack(self):
+        return bool(self.attack_position)
 
-def coordinates(position):
-    columns = list(" ABCDE")
-    return columns[position[0]] + str(position[1])
+    def is_ability(self):
+        return bool(self.ability)
+
+    def is_lancing(self):
+        distance = methods.distance(self.start_position, self.attack_position)
+        return self.unit.lancing and self.is_attack() and distance >= 3
+
+    def is_push(self):
+        return self.unit.hasattr("push") and self.is_attack()

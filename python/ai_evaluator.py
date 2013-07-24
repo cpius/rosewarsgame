@@ -8,6 +8,7 @@ import copy
 import ai_module
 import action_getter
 import math
+import methods
 
 board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 
@@ -34,7 +35,7 @@ def document_actions(actions, gamestate):
         
         out.write("\n")
         
-        if action.is_attack:
+        if action.is_attack():
             out.write("Chance of success: " + str(round(action.chance_of_win * 100)) + "%\n\n")
             out.write("Success\n")
             if action.values_success["player1"]["gained"]:
@@ -174,7 +175,7 @@ def find_action_scores_two_actions(actions, original_gamestate):
 
         potential_gamestate = gamestate_module.load_gamestate(gamestate)
 
-        if action.is_attack:
+        if action.is_attack():
 
             action.chance_of_win = m.chance_of_win(action.unit_reference, action.target_reference, action)
 
@@ -228,7 +229,7 @@ def find_action_scores_one_action(actions, original_gamestate):
 
         potential_gamestate = gamestate_module.load_gamestate(gamestate)
 
-        if action.is_attack:
+        if action.is_attack():
 
             action.chance_of_win = m.chance_of_win(action.unit_reference, action.target_reference, action)
 
@@ -249,7 +250,7 @@ def find_action_scores_one_action(actions, original_gamestate):
             action.score = action.chance_of_win * action.score_success +\
                 (1 - action.chance_of_win) * action.score_failure
 
-        elif action.is_ability:
+        elif action.is_ability():
 
             perform_action(action, potential_gamestate)
 
@@ -353,7 +354,7 @@ def get_action_values(gamestate, original_gamestate):
                                                              friendly_units)[0]
                     if any(action.end_position[1] == 8 for action in actions):
                         return "One action from backline", 20
-                    elif any(action.is_attack and action.attack_position[1] == 8 and action.move_with_attack for
+                    elif any(action.is_attack() and action.attack_position[1] == 8 and action.is_move_with_attack() for
                              action in actions):
                         return "One attack from backline", 10
                     else:
@@ -365,7 +366,7 @@ def get_action_values(gamestate, original_gamestate):
                                                          friendly_units)[0]
                 if any(action.end_position[1] == 8 for action in actions):
                     return "One action from backline", 20
-                elif any(action.is_attack and action.attack_position[1] == 8 and action.move_with_attack
+                elif any(action.is_attack() and action.attack_position[1] == 8 and action.is_move_with_attack()
                          for action in actions):
                     return "One attack from backline", 10
 
@@ -421,7 +422,7 @@ def get_action_values(gamestate, original_gamestate):
 
         if unit.range > 1:
             for enemy_position in gamestate.units[1]:
-                if action_getter.distance(position, enemy_position) <= unit.range:
+                if methods.distance(position, enemy_position) <= unit.range:
                     values["Within range"] = 1
 
         if hasattr(unit, "improved_weapons"):
@@ -450,7 +451,7 @@ def get_action_values(gamestate, original_gamestate):
                                                              friendly_units)[0]
                     if any(action.end_position[1] == 1 for action in actions):
                         return "One action from backline", 200
-                    elif any(action.is_attack and action.attack_position[1] == 1 and action.move_with_attack for
+                    elif any(action.is_attack() and action.attack_position[1] == 1 and action.is_move_with_attack() for
                              action in actions):
                         return "One attack from backline", 40
                     else:
@@ -464,7 +465,7 @@ def get_action_values(gamestate, original_gamestate):
                                                          friendly_units)[0]
                 if any(action.end_position[1] == 1 for action in actions):
                     return "One action from backline", 200
-                elif any(action.is_attack and action.attack_position[1] == 1 and action.move_with_attack
+                elif any(action.is_attack() and action.attack_position[1] == 1 and action.is_move_with_attack()
                          for action in actions):
                     return "One attack from backline", 40
 

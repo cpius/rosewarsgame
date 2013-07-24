@@ -13,23 +13,23 @@ class Gamestate:
     def __init__(self,
                  player1_units,
                  player2_units,
-                 actions_remaining=1,
+                 actions_remaining,
                  extra_action=False):
         self.units = [player1_units, player2_units]
         self.actions_remaining = actions_remaining
         self.extra_action = extra_action
         self.action_number = 0
 
-    def do_action(self, action, controller=None):
-        action_doer.do_action(self, action, controller)
+    def do_action(self, action, outcome=None):
+        outcome = action_doer.do_action(self, action, outcome)
         self.action_number += 1
-        self.actions_remaining -= 1
-        print self.actions_remaining
 
         if self.actions_remaining > 0:
             self.available_actions = action_getter.get_actions(self)
             if not self.available_actions:
                 self.actions_remaining = 0
+
+        return outcome
 
     def initialize_turn(self):
         initializer.initialize_turn(self)
@@ -46,7 +46,7 @@ class Gamestate:
             actions = action_getter.get_actions(self)
 
         for action in actions:
-            if action.is_attack:
+            if action.is_attack():
                 action.chance_of_win = ai_methods.chance_of_win(action.unit_reference, action.target_reference, action)
                 for sub_action in action.sub_actions:
                     sub_action.chance_of_win = ai_methods.chance_of_win(sub_action.unit_reference,
@@ -178,7 +178,7 @@ class Gamestate:
 
         return units_dict
 
-    def turn_done(self):
+    def is_turn_done(self):
         return self.actions_remaining < 1 and not getattr(self, "extra_action")
 
     def shift_turn(self):
@@ -187,6 +187,9 @@ class Gamestate:
         self.initialize_turn()
         self.initialize_action()
         self.set_available_actions()
+
+    def update_final_position(self, action):
+        action_doer.update_final_position(action)
 
 
 def save_gamestate(gamestate):

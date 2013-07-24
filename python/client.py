@@ -4,6 +4,7 @@ from gamestate_module import Gamestate
 from time import sleep
 from methods import CustomJsonEncoder
 from action import Action
+from outcome import Outcome
 
 
 class Client():
@@ -19,13 +20,18 @@ class Client():
                 urllib2.urlopen(self.server + "/games/view/" + self.game_id)))
 
     def select_action(self, last_known_action):
-        expected_action = last_known_action + 1
+        expected_action = str(last_known_action + 1)
         while True:
             url = self.server + "/actions/view/" + self.game_id
             actions = json.load(urllib2.urlopen(url))
             if "last_action" in actions and actions["last_action"] > last_known_action:
-                print json.dumps(actions[str(expected_action)])
-                return Action.from_document(actions[str(expected_action)])
+                print json.dumps(actions[expected_action])
+                action = Action.from_document(actions[expected_action])
+                if action.is_deterministic():
+                    return action, None
+
+                outcome = Outcome.from_document(actions[expected_action + "_outcome"])
+                return action, outcome
             print "No new actions. Sleeping for one second"
             sleep(1)
 
