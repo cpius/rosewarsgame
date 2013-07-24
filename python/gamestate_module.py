@@ -114,10 +114,14 @@ class Gamestate:
 
     @classmethod
     def from_document(cls, document):
-        return cls(cls.units_from_document(document["player1_units"]),
-                        cls.units_from_document(document["player2_units"]),
-                        document["actions_remaining"],
-                        document["extra_action"])
+        player1_units = cls.units_from_document(document["player1_units"])
+        player2_units = cls.units_from_document(document["player2_units"])
+        actions_remaining = document["actions_remaining"]
+        if "extra_action" in document:
+            extra_action = document["extra_action"]
+        else:
+            extra_action = False
+        return cls(player1_units, player2_units, actions_remaining, extra_action)
 
     @classmethod
     def load_gamestate_from_file(cls, path):

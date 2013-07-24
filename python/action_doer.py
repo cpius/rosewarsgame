@@ -31,7 +31,7 @@ def do_action(gamestate, action, controller=None, unit=None):
 
     def update_actions_remaining(action):
 
-        if hasattr(gamestate, "extra_action"):
+        if getattr(gamestate, "extra_action"):
             return
 
         gamestate.decrement_actions_remaining()
