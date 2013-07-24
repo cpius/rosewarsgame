@@ -4,6 +4,7 @@ from action import Action
 import collections
 import functools
 import methods
+from methods import Direction
 from units import get_position
 from action import MoveOrStay
 
@@ -36,36 +37,6 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-class Direction:
-    """ An object direction is one move up, down, left or right.
-    The class contains methods for returning the tile going one step in the direction will lead you to,
-    and for returning the tiles you should check for zone of control.
-    """
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def move(self, position):
-        return position[0] + self. x, position[1] + self.y
-
-    def perpendicular(self, position):
-        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
-
-    def __repr__(self):
-
-        if self.x == -1:
-            return "Left"
-
-        if self.x == 1:
-            return "Right"
-
-        if self.y == -1:
-            return "Down"
-
-        if self.y == 1:
-            return "Up"
-
-
 #global variables
 _action = 0
 board = set((column, row) for column in range(1, 6) for row in range(1, 9))
@@ -87,15 +58,6 @@ def two_forward_tiles(position, forward_position):
     """ Returns the 2 other nearby tiles in the direction towards forward_position """
     return set(direction.move(position) for direction in eight_directions) & \
         set(direction.move(forward_position) for direction in directions)
-
-
-def get_direction(position, forward_position):
-    """ Returns the direction that would take you from position to forward_position """
-    return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
-
-
-def distance(position1, position2):
-    return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
 
 
 def find_all_friendly_units_except_current(current_unit_position, player_units):
