@@ -61,6 +61,25 @@ class Action(object):
         action.created_at = document["created_at"]
         return action
 
+    @classmethod
+    def from_document_simple(cls, document):
+        document_copy = copy(document)
+
+        simple_attributes = {"start_position", "end_position", "attack_position", "ability_position",
+                             "move_with_attack", "ability", "sub_actions"}
+        convert_attributes = {"start_position", "end_position", "attack_position", "ability_position"}
+
+        read_attributes = set(attribute for attribute in simple_attributes if attribute in document and document[attribute])
+
+        for attribute in convert_attributes & read_attributes:
+            document_copy[attribute] = methods.position_to_tuple(document_copy[attribute])
+
+        if "sub_actions" in document_copy and document_copy["sub_actions"]:
+            document_copy["sub_actions"] = [cls.from_document_simple(sub_action_document)
+                                            for sub_action_document in document_copy["sub_actions"]]
+
+        return cls(**document_copy)
+
     def attribute_representation(self):
         return str(self.__dict__)
 
@@ -186,6 +205,21 @@ class Action(object):
                 "ability": self.ability,
                 "sub_actions": sub_action_docs,
                 "created_at": self.created_at}
+
+    def to_document_simple(self):
+        sub_action_docs = [sub_action.to_document_simple() for sub_action in self.sub_actions]
+        simple_attributes = {"start_position", "end_position", "attack_position", "ability_position",
+                             "move_with_attack", "ability", "sub_actions"}
+        convert_attributes = {"start_position", "end_position", "attack_position", "ability_position"}
+        write_attributes = set(attribute for attribute in simple_attributes if getattr(self, attribute))
+        document = {}
+        for attribute in write_attributes & convert_attributes:
+            document[attribute] = methods.position_to_string(getattr(self, attribute))
+        for attribute in write_attributes - convert_attributes:
+            document[attribute] = getattr(self, attribute)
+        if sub_action_docs:
+            document["sub_actions"] = sub_action_docs
+        return document
 
     def ensure_outcome(self, outcome):
         self.final_position = self.end_position
