@@ -4,25 +4,26 @@ import battle
 import viewmethods as m
 from coordinates import Coordinates
 import settings
+import gamestate_module
 
 zoom = settings.zoom
 
 
-def draw_game(screen, interface, gamestate, start_position=None, actions=()):
+def draw_game(screen, interface, game, start_position=None, actions=()):
 
     coordinates, fonts = interface.coordinates, interface.fonts
 
     pic = m.get_image(interface.board_image)
     screen.blit(pic, (0, 0))
 
-    for position, unit in gamestate.units[0].items():
+    for position, unit in game.gamestate.units[0].items():
         if actions and position == start_position:
-            draw_unit(screen, interface, unit, position, gamestate.current_player().color, selected=True)
+            draw_unit(screen, interface, unit, position, game.current_player().color, selected=True)
         else:
-            draw_unit(screen, interface, unit, position, gamestate.current_player().color)
+            draw_unit(screen, interface, unit, position, game.current_player().color)
 
-    for position, unit in gamestate.units[1].items():
-        draw_unit(screen, interface, unit, position, gamestate.players[1].color)
+    for position, unit in game.gamestate.units[1].items():
+        draw_unit(screen, interface, unit, position, game.players[1].color)
 
     attacks, moves, abilities = [], [], []
     for action in actions:

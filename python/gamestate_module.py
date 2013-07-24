@@ -5,7 +5,6 @@ import action_getter
 import saver
 import ai_module
 import ai_methods
-from datetime import datetime
 import units as units_module
 from player import Player
 import json
@@ -14,25 +13,20 @@ import json
 class Gamestate:
     
     def __init__(self,
-                 player1,
                  player1_units,
-                 player2,
                  player2_units,
-                 turn=1,
-                 actions_remaining=2,
-                 has_extra_action=False,
-                 start_time=datetime.utcnow()):
-        self.turn = turn
+                 actions_remaining=1,
+                 extra_action=False):
         self.units = [player1_units, player2_units]
-        self.players = [player1, player2]
         self.actions_remaining = actions_remaining
-        self.has_extra_action = has_extra_action
-        self.start_time = start_time
+        self.extra_action = extra_action
         self.action_number = 0
 
     def do_action(self, action, controller=None):
         action_doer.do_action(self, action, controller)
         self.action_number += 1
+        self.actions_remaining -= 1
+        print self.actions_remaining
 
         if self.actions_remaining > 0:
             self.available_actions = action_getter.get_actions(self)
@@ -46,7 +40,7 @@ class Gamestate:
         initializer.initialize_action(self)
 
     def get_actions(self):
-        if hasattr(self.players[0], "extra_action"):
+        if getattr(self, "extra_action"):
             actions = action_getter.get_extra_actions(self)
         elif self.actions_remaining == 1 and hasattr(self, "available_actions"):
             actions = self.available_actions
@@ -69,14 +63,6 @@ class Gamestate:
     def __eq__(self, other):
         pass
 
-    def set_ais(self):
-        for player in range(2):
-            ai_name = self.players[player].ai_name
-            if ai_name in ["Human", "Network"]:
-                self.players[player].ai = ai_name
-            else:
-                self.players[player].ai = ai_module.AI(ai_name)
-
     def set_network_player(self, local_player):
         for player in range(2):
             if self.players[player].player_id != local_player:
@@ -86,20 +72,6 @@ class Gamestate:
     def set_available_actions(self):
         self.available_actions = self.get_actions()
 
-    def turn_shift(self):
-        if self.players[0].color == "Green":
-            self.turn += 1
-        self.units = [self.units[1], self.units[0]]
-        self.players = [self.players[1], self.players[0]]
-        self.initialize_turn()
-        self.initialize_action()
-        self.set_available_actions()
-
-    def current_player(self):
-        return self.players[0]
-
-    def opponent_player(self):
-        return self.players[1]
 
     def player_units(self):
         return self.units[0]
@@ -140,33 +112,12 @@ class Gamestate:
         if hasattr(unit, "just_bribed"):
             unit.blue_counters = 1
 
-    def shift_turn_if_done(self, all_actions=None):
-        if all_actions is None:
-            all_actions = self.get_actions()
-        if (self.actions_remaining < 1 or len(all_actions) == 1) and not hasattr(self.players[0], "extra_action"):
-            self.turn_shift()
-
     @classmethod
     def from_document(cls, document):
-        player1 = Player("Green", document["player1"])
-        player1.ai_name = document["player1_intelligence"]
-        player1.ai = cls.get_ai_from_name(player1.ai_name)
-
-        player2 = Player("Red", document["player2"])
-        player2.ai_name = document["player2_intelligence"]
-        player2.ai = cls.get_ai_from_name(player2.ai_name)
-
-        gamestate = cls(player1,
-                        cls.units_from_document(document["player1_units"]),
-                        player2,
+        return cls(cls.units_from_document(document["player1_units"]),
                         cls.units_from_document(document["player2_units"]),
-                        document["turn"],
                         document["actions_remaining"],
-                        document["extra_action"],
-                        document["created_at"])
-
-        gamestate.action_number = document["action_number"]
-        return gamestate
+                        document["extra_action"])
 
     @classmethod
     def load_gamestate_from_file(cls, path):
@@ -202,22 +153,11 @@ class Gamestate:
             return ai_module.AI(name)
 
     def to_document(self):
-        player1_units = self.get_units_dict(self.units[0])
-        player2_units = self.get_units_dict(self.units[1])
-
         return {
-            "player1": self.players[0].player_id,
-            "player1_intelligence": self.players[0].ai_name,
-            "player1_units": player1_units,
-            "player2": self.players[1].player_id,
-            "player2_intelligence": self.players[1].ai_name,
-            "player2_units": player2_units,
-            "turn": self.turn,
-            "extra_action": self.has_extra_action,
-
-            "actions_remaining": self.actions_remaining,
-            "created_at": self.start_time,
-            "action_number": self.action_number
+            "player1_units": self.get_units_dict(self.units[0]),
+            "player2_units": self.get_units_dict(self.units[1]),
+            "extra_action": self.extra_action,
+            "actions_remaining": self.actions_remaining
         }
 
     def get_units_dict(self, units):
@@ -237,10 +177,37 @@ class Gamestate:
 
         return units_dict
 
+    def turn_done(self):
+        return self.actions_remaining < 1 and not getattr(self, "extra_action")
+
+    def shift_turn(self):
+        self.units = transform_units(self.units)
+        self.units = self.units[::-1]
+        self.initialize_turn()
+        self.initialize_action()
+        self.set_available_actions()
+
 
 def save_gamestate(gamestate):
-    return saver.save_gamestate(gamestate)
+    return gamestate.to_document()
 
 
 def load_gamestate(saved_gamestate):
-    return saver.load_gamestate(saved_gamestate)
+    return Gamestate.from_document(saved_gamestate)
+
+
+def transform_position(position):
+    if position:
+        return position[0], 9 - position[1]
+
+
+def transform_units(units):
+    new_units_players = []
+    for units_player in units:
+        new_units = {}
+        for position, unit in units_player.items():
+            new_units[transform_position(position)] = unit
+
+        new_units_players.append(new_units)
+
+    return new_units_players

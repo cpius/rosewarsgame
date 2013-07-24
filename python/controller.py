@@ -15,12 +15,13 @@ from json import JSONEncoder
 import datetime
 from client import Client
 from action_getter import add_unit_references
+from game import Game
 
 
 class Controller(object):
     def __init__(self, view):
         self.view = view
-        self.gamestate = None
+        self.game = None
         self.client = None
         self.action_index = 1
 
@@ -28,20 +29,15 @@ class Controller(object):
     def new_game(cls, view):
         controller = Controller(view)
 
-        player1 = Player("Green")
-        player2 = Player("Red")
-
-        player1.ai_name = settings.player1_ai
-        player2.ai_name = settings.player2_ai
+        players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
 
         player1_units, player2_units = setup.get_start_units()
+        gamestate = Gamestate(player1_units, player2_units, 1)
 
-        controller.gamestate = Gamestate(player1, player1_units, player2, player2_units)
+        controller.game = Game(players, gamestate)
 
-        controller.gamestate.initialize_turn()
-        controller.gamestate.initialize_action()
-
-        controller.gamestate.set_actions_remaining(1)
+        controller.game.gamestate.initialize_turn()
+        controller.game.gamestate.initialize_action()
 
         if os.path.exists("./replay"):
             shutil.rmtree('./replay')
@@ -82,30 +78,30 @@ class Controller(object):
 
     def trigger_artificial_intelligence(self):
 
-        action = self.gamestate.current_player().ai.select_action(self.gamestate)
+        action = self.game.current_player().ai.select_action(self.game)
 
         if action:
             self.perform_action(action)
         else:
-            self.gamestate.turn_shift()
-            self.gamestate.recalculate_special_counters()
-            self.view.draw_game(self.gamestate)
+            self.game.shift_turn()
+            self.game.gamestate.recalculate_special_counters()
+            self.view.draw_game(self.game)
 
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
+        if getattr(self.game.gamestate, "extra_action"):
+            extra_action = self.game.current_player().ai.select_action(self.game.gamestate)
             self.perform_action(extra_action)
 
     def left_click(self, position):
         if self.deselecting_active_unit(position):
             self.clear_move()
-            self.view.draw_game(self.gamestate)
+            self.view.draw_game(self.game)
 
         elif self.selecting_active_unit(position):
             self.start_position = position
-            self.selected_unit = self.gamestate.player_units()[self.start_position]
-            illustrate_actions = (action for action in self.gamestate.get_actions() if \
+            self.selected_unit = self.game.gamestate.player_units()[self.start_position]
+            illustrate_actions = (action for action in self.game.gamestate.get_actions() if \
                                   action.start_position == position)
-            self.view.draw_game(self.gamestate, position, illustrate_actions)
+            self.view.draw_game(self.game, position, illustrate_actions)
 
         elif self.selecting_ability_target(position):
             if len(self.selected_unit.abilities) > 1:
@@ -124,20 +120,20 @@ class Controller(object):
 
         elif self.selecting_melee_target(position):
 
-            possible_actions = [action for action in self.gamestate.get_actions() if
+            possible_actions = [action for action in self.game.gamestate.get_actions() if
                                 action.start_position == self.start_position and action.attack_position == position and
                                 not action.move_with_attack]
 
             if not possible_actions:
                 self.view.draw_message("Action not possible")
                 self.clear_move()
-                self.view.draw_game(self.gamestate)
+                self.view.draw_game(self.game)
                 return
 
             if len(possible_actions) == 1:
                 action = possible_actions[0]
             else:
-                self.view.draw_game(self.gamestate)
+                self.view.draw_game(self.game)
                 action = self.pick_action_end_position(possible_actions)
 
             self.perform_action(action)
@@ -169,7 +165,7 @@ class Controller(object):
         if not self.start_position:
             self.show_unit(position)
         else:
-            if position in self.gamestate.opponent_units():
+            if position in self.game.gamestate.opponent_units():
                 self.show_attack(position)
 
     def clear_move(self):
@@ -177,14 +173,10 @@ class Controller(object):
 
     def run_game(self):
 
-        self.gamestate.set_ais()
-        self.gamestate.set_available_actions()
+        self.game.gamestate.set_available_actions()
 
-        self.gamestate.recalculate_special_counters()
-        self.view.draw_game(self.gamestate)
-
-        while self.gamestate.current_player().ai_name == "Network":
-            self.trigger_network_player()
+        self.game.gamestate.recalculate_special_counters()
+        self.view.draw_game(self.game)
 
         while True:
             for event in pygame.event.get():
@@ -199,7 +191,7 @@ class Controller(object):
 
                 if event.type == KEYDOWN and event.key == K_ESCAPE:
                     self.clear_move()
-                    self.view.draw_game(self.gamestate)
+                    self.view.draw_game(self.game)
 
                 elif event.type == KEYDOWN and self.command_q_down(event.key):
                     self.exit_game()
@@ -296,14 +288,11 @@ class Controller(object):
                 units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
 
     def perform_action(self, action):
-        if not action.action_number:
-            action.action_number = self.gamestate.action_number + 1
-
         self.draw_action = True
 
-        self.view.draw_game(self.gamestate)
+        self.view.draw_game(self.game)
 
-        all_actions = self.gamestate.get_actions()
+        all_actions = self.game.gamestate.get_actions()
 
         matching_actions = 0
         for possible_action in all_actions:
@@ -312,38 +301,38 @@ class Controller(object):
 
         if matching_actions == 0:
             self.clear_move()
-            self.view.draw_game(self.gamestate)
+            self.view.draw_game(self.game)
             self.view.draw_message("Action not allowed")
             return
 
         assert matching_actions <= 1
         move_with_attack = False
 
-        if self.gamestate.current_player().ai == "Human":
+        if self.game.current_player().intelligence == "Human":
 
-            add_unit_references(self.gamestate, action)
+            add_unit_references(self.game.gamestate, action)
 
-            if self.gamestate.opponent_player().ai == "Network":
+            if self.game.opponent_player().intelligence == "Network":
                 outcome = self.client.send_action(action.to_document())
                 action.ensure_outcome(outcome)
 
-            post_movement_possible = self.gamestate.do_action(action)
+            post_movement_possible = self.game.do_action(action)
 
-            self.view.draw_game(self.gamestate)
-            self.view.draw_action(action, self.gamestate)
+            self.view.draw_game(self.game)
+            self.view.draw_action(action, self.game)
 
             if post_movement_possible:
                 move_with_attack = self.ask_about_move_with_attack(action)
 
                 if move_with_attack:
-                    self.gamestate.update_final_position(action)
+                    self.game.gamestate.update_final_position(action)
 
         else:
-            self.gamestate.do_action(action)
-            self.view.draw_action(action, self.gamestate)
+            self.game.do_action(action)
+            self.view.draw_action(action, self.game)
 
         if move_with_attack:
-            self.view.draw_post_movement(action, self.gamestate)
+            self.view.draw_post_movement(action, self.game)
 
         self.save_game()
 
@@ -355,37 +344,36 @@ class Controller(object):
         else:
             pygame.time.delay(settings.pause_for_animation)
 
-        if hasattr(self.gamestate.current_player(), "won"):
-            self.game_end(self.gamestate.current_player())
+        if hasattr(self.game.current_player(), "won"):
+            self.game_end(self.game.current_player())
             return
 
-        if self.gamestate.current_player().ai_name == "Human":
-            self.view.draw_game(self.gamestate)
-            self.upgrade_units(self.gamestate.units[0])
+        if self.game.current_player().intelligence == "Human":
+            self.view.draw_game(self.game)
+            self.upgrade_units(self.game.gamestate.units[0])
         else:
             pass
 
-        self.gamestate.recalculate_special_counters()
-        self.view.draw_game(self.gamestate)
+        self.game.gamestate.recalculate_special_counters()
+        self.view.draw_game(self.game)
 
-        self.gamestate.initialize_action()
-        self.gamestate.shift_turn_if_done(all_actions)
-        self.gamestate.recalculate_special_counters()
-        self.view.draw_game(self.gamestate)
+        self.game.gamestate.initialize_action()
+        self.game.gamestate.recalculate_special_counters()
+        self.view.draw_game(self.game)
 
         self.clear_move()
 
-        print "Getting move. Current player is: " + self.gamestate.current_player().ai_name
+        print "Getting move. Current player is: " + self.game.current_player().intelligence
 
-        if self.gamestate.current_player().ai_name not in ["Human", "Network"]:
+        if self.game.current_player().intelligence not in ["Human", "Network"]:
             self.trigger_artificial_intelligence()
-        elif self.gamestate.current_player().ai_name == "Network":
+        elif self.game.current_player().intelligence == "Network":
             self.trigger_network_player()
 
     def show_attack(self, attack_position):
         action = Action(self.start_position, attack_position=attack_position)
-        player_unit = self.gamestate.player_units()[self.start_position]
-        opponent_unit = self.gamestate.opponent_units()[attack_position]
+        player_unit = self.game.gamestate.player_units()[self.start_position]
+        opponent_unit = self.game.gamestate.opponent_units()[attack_position]
         self.view.show_attack(action, player_unit, opponent_unit)
 
         return
@@ -393,25 +381,25 @@ class Controller(object):
     def show_unit(self, position):
 
         unit = None
-        if position in self.gamestate.units[0]:
-            unit = self.gamestate.units[0][position]
-        if position in self.gamestate.units[1]:
-            unit = self.gamestate.units[1][position]
+        if position in self.game.gamestate.units[0]:
+            unit = self.game.gamestate.units[0][position]
+        if position in self.game.gamestate.units[1]:
+            unit = self.game.gamestate.units[1][position]
 
         if unit:
             self.view.show_unit_zoomed(unit)
             self.pause()
-            self.view.draw_game(self.gamestate)
+            self.view.draw_game(self.game)
             return
 
     def save_game(self):
-        name = str(self.action_index) + ". " + self.gamestate.current_player().color + ", " + str(self.gamestate.turn) \
-                                      + "." + str(2 - self.gamestate.get_actions_remaining())
+        name = str(self.action_index) + ". " + self.game.current_player().color + ", " + str(self.game.turn) \
+                                      + "." + str(2 - self.game.gamestate.get_actions_remaining())
 
         self.view.save_screenshot(name)
 
         with open("./replay/" + name + ".json", 'w') as file:
-            file.write(json.dumps(self.gamestate.to_document(), cls=CustomJsonEncoder, indent=4))
+            file.write(json.dumps(self.game.gamestate.to_document(), cls=CustomJsonEncoder, indent=4))
 
         self.action_index += 1
 
@@ -424,32 +412,32 @@ class Controller(object):
         self.exit_game()
 
     def selecting_active_unit(self, position):
-        return not self.start_position and position in self.gamestate.player_units()
+        return not self.start_position and position in self.game.gamestate.player_units()
 
     def selecting_ability_target(self, position):
         return self.start_position and (
-            position in self.gamestate.opponent_units() or position in self.gamestate.player_units()) and self.selected_unit.abilities
+            position in self.game.gamestate.opponent_units() or position in self.game.gamestate.player_units()) and self.selected_unit.abilities
 
     def selecting_attack_target_unit(self, position):
         pass
 
     def selecting_attack_ranged_target(self, position):
-        return self.start_position and position in self.gamestate.opponent_units() and \
+        return self.start_position and position in self.game.gamestate.opponent_units() and \
                self.selected_unit.range > 1
 
     def deselecting_active_unit(self, position):
         return self.start_position and self.start_position == position
 
     def selecting_ranged_target(self, position):
-        return self.start_position and position in self.gamestate.opponent_units() and \
+        return self.start_position and position in self.game.gamestate.opponent_units() and \
                self.selected_unit.range > 1
 
     def selecting_melee_target(self, position):
-        return self.start_position and position in self.gamestate.opponent_units() and \
+        return self.start_position and position in self.game.gamestate.opponent_units() and \
                self.selected_unit.range == 1
 
     def selecting_move(self, position):
-        return self.start_position and position not in self.gamestate.opponent_units()
+        return self.start_position and position not in self.game.gamestate.opponent_units()
 
 
 def within(point, area):
