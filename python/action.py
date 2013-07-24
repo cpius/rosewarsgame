@@ -94,27 +94,32 @@ class Action(object):
         else:
             representation = "Unit"
 
+        if self.target_reference:
+            target = self.target_reference.name
+        else:
+            target = "Unit"
+
         if self.start_position != self.end_position:
-            representation += " move from " + coordinates(self.start_position)
-            representation += " to " + coordinates(self.end_position)
-            if self.is_attack:
+            representation += " move from " + methods.position_to_string(self.start_position)
+            representation += " to " + methods.position_to_string(self.end_position)
+            if self.is_attack():
                 representation += " and"
         else:
-            representation += " at " + coordinates(self.start_position)
+            representation += " at " + methods.position_to_string(self.start_position)
 
-        if self.is_attack and not self.move_with_attack:
-            representation += " attack " + self.target_reference.name + " " + coordinates(self.attack_position)
+        if self.is_attack() and not self.is_move_with_attack():
+            representation += " attack " + target + " " + methods.position_to_string(self.attack_position)
 
-        if self.is_attack and self.move_with_attack:
-            representation += " attack-move " + self.target_reference.name + " " + coordinates(self.attack_position)
+        if self.is_attack() and self.is_move_with_attack():
+            representation += " attack-move " + target + " " + methods.position_to_string(self.attack_position)
 
-        if self.is_ability:
-            representation += " use "\
+        if self.is_ability():
+            representation += " use " \
                               + self.ability\
-                              + " on "\
-                              + self.target_reference.name\
-                              + " "\
-                              + coordinates(self.ability_position)
+                              + " on " \
+                              + target \
+                              + " " \
+                              + methods.position_to_string(self.ability_position)
 
         return representation
 
@@ -122,18 +127,18 @@ class Action(object):
         representation = self.unit_reference.name
 
         if self.start_position != self.end_position:
-            representation += " move from " + coordinates(self.start_position)
-            representation += " to " + coordinates(self.end_position)
+            representation += " move from " + methods.position_to_string(self.start_position)
+            representation += " to " + methods.position_to_string(self.end_position)
             if self.is_attack():
                 representation += " and"
         else:
-            representation += " at " + coordinates(self.start_position)
+            representation += " at " + methods.position_to_string(self.start_position)
 
         if self.is_attack() and self.move_with_attack != MoveOrStay.MOVE:
-            representation += " attack " + self.target_reference.name + " " + coordinates(self.attack_position)
+            representation += " attack " + self.target_reference.name + " " + methods.position_to_string(self.attack_position)
 
         if self.is_attack() and self.move_with_attack == MoveOrStay.MOVE:
-            representation += " attack-move " + self.target_reference.name + " " + coordinates(self.attack_position)
+            representation += " attack-move " + self.target_reference.name + " " + methods.position_to_string(self.attack_position)
 
         if self.is_ability():
             representation += " use "\
@@ -141,7 +146,7 @@ class Action(object):
                               + " on "\
                               + self.target_reference.name\
                               + " "\
-                              + coordinates(self.ability_position)
+                              + methods.position_to_string(self.ability_position)
 
         return representation
 
@@ -163,7 +168,7 @@ class Action(object):
 
         for sub_action in self.sub_actions:
             representation += "\n"
-            representation += "and attack " + coordinates(sub_action.attack_position)
+            representation += "and attack " + methods.position_to_string(sub_action.attack_position)
             if sub_action.rolls:
                 attack = battle.get_attack_rating(self.unit_reference, self.target_reference, self)
                 defence = battle.get_defence_rating(self.unit_reference, self.target_reference, attack)
@@ -254,8 +259,3 @@ class Action(object):
 
     def is_push(self):
         return self.unit.hasattr("push") and self.is_attack()
-
-
-def coordinates(position):
-    columns = list(" ABCDE")
-    return columns[position[0]] + str(position[1])
