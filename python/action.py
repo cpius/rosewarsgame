@@ -64,6 +64,34 @@ class Action(object):
     def attribute_representation(self):
         return str(self.__dict__)
 
+    def get_simple_string(self):
+        representation = "Unit"
+
+        if self.start_position != self.end_position:
+            representation += " move from " + coordinates(self.start_position)
+            representation += " to " + coordinates(self.end_position)
+            if self.is_attack:
+                representation += " and"
+        else:
+            representation += " at " + coordinates(self.start_position)
+
+        if self.is_attack and not self.move_with_attack:
+            representation += " attack " + self.target_reference.name + " " + coordinates(self.attack_position)
+
+        if self.is_attack and self.move_with_attack:
+            representation += " attack-move " + self.target_reference.name + " " + coordinates(self.attack_position)
+
+        if self.is_ability:
+            representation += " use "\
+                              + self.ability\
+                              + " on "\
+                              + self.target_reference.name\
+                              + " "\
+                              + coordinates(self.ability_position)
+
+        return representation
+
+
     def get_basic_string(self):
         representation = self.unit_reference.name
 
@@ -121,7 +149,7 @@ class Action(object):
         return representation
 
     def __repr__(self):
-        return self.get_basic_string()
+        return self.get_simple_string()
 
     def full_string(self):
         return self.get_basic_string() + ", "\
