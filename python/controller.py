@@ -73,12 +73,8 @@ class Controller(object):
 
         print "received action from network: " + str(action)
 
-        if action:
-            self.perform_action(action)
-        else:
-            self.gamestate.turn_shift()
-            self.gamestate.recalculate_special_counters()
-            self.view.draw_game(self.gamestate)
+        action.ensure_outcome(action.outcome)
+        self.perform_action(action)
 
         if hasattr(self.gamestate.current_player(), "extra_action"):
             extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
@@ -148,7 +144,6 @@ class Controller(object):
 
         elif self.selecting_move(position):
             action = Action(self.start_position, end_position=position)
-            action.action_number = self.gamestate.action_number + 1
             self.perform_action(action)
 
     def pick_action_end_position(self, possible_actions):
@@ -301,6 +296,8 @@ class Controller(object):
                 units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
 
     def perform_action(self, action):
+        if not action.action_number:
+            action.action_number = self.gamestate.action_number + 1
 
         self.draw_action = True
 
@@ -312,7 +309,6 @@ class Controller(object):
         for possible_action in all_actions:
             if action == possible_action:
                 matching_actions += 1
-                action = possible_action
 
         if matching_actions == 0:
             self.clear_move()
@@ -324,6 +320,8 @@ class Controller(object):
         move_with_attack = False
 
         if self.gamestate.current_player().ai == "Human":
+
+            add_unit_references(self.gamestate, action)
 
             if self.gamestate.opponent_player().ai == "Network":
                 outcome = self.client.send_action(action.to_document())
