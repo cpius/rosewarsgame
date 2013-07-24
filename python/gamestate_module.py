@@ -23,7 +23,6 @@ class Gamestate:
     def do_action(self, action, outcome=None):
         outcome = action_doer.do_action(self, action, outcome)
         self.action_number += 1
-        self.actions_remaining -= 1
         print self.actions_remaining
 
         if self.actions_remaining > 0:
