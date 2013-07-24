@@ -183,7 +183,8 @@ def settle_attack(action, enemy_units, outcome):
     else:
         del enemy_units[action.attack_position]
 
-        update_final_position(action, outcome)
+        if outcome.for_position(action.attack_position) == SubOutcome.WIN:
+            update_final_position(action)
 
     return outcome
 
@@ -223,10 +224,10 @@ def add_target(action, enemy_units, player_units):
         add_target(sub_action, enemy_units, player_units)
 
 
-def update_final_position(action, outcome):
-    successful = outcome.for_position(action.attack_position) == SubOutcome.WIN
+def update_final_position(action):
+    #successful = outcome.for_position(action.attack_position) == SubOutcome.WIN
 
-    if successful and action.is_move_with_attack() and action.unit.range == 1:
+    if action.is_move_with_attack() and action.unit.range == 1:
         action.final_position = action.attack_position
 
 
