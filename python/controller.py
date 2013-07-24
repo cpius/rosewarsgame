@@ -39,6 +39,8 @@ class Controller(object):
         controller.game.gamestate.initialize_turn()
         controller.game.gamestate.initialize_action()
 
+        controller.game.gamestate.actions_remaining = 1
+
         if os.path.exists("./replay"):
             shutil.rmtree('./replay')
 
