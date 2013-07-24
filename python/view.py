@@ -85,10 +85,10 @@ class View(object):
     def draw_ask_about_ability(self, unit):
         pass
 
-    def draw_action(self, action, game):
+    def draw_action(self, action, game, flip=False):
 
         viewlog.draw_log(self.logbook, self.screen, self.interface, action, game)
-        viewgame.draw_action(self.screen, self.interface, action)
+        viewgame.draw_action(self.screen, self.interface, action, flip)
 
     def draw_post_movement(self, action, gamestate):
         viewgame.draw_post_movement(self.screen, self.interface, action)
