@@ -338,7 +338,7 @@ class Controller(object):
 
         self.save_game()
 
-        if action.is_attack:
+        if action.is_attack():
             if settings.pause_for_attack_until_click:
                 self.pause()
             else:

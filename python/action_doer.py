@@ -19,9 +19,8 @@ def do_action(gamestate, action, controller=None, unit=None):
     def prepare_extra_actions(action, unit):
 
         if hasattr(unit, "charioting"):
-            unit.movement_remaining = unit.movement - distance(action.start_position, action.final_position)
-            if (action.is_attack and not action.move_with_attack) or (action.is_attack and action.move_with_attack
-                                                                      and action.outcome != "Success"):
+            unit.movement_remaining = unit.movement - distance(action.start_position, action.end_position)
+            if action.is_attack():
                 unit.movement_remaining -= 1
             unit.extra_action = True
 
@@ -40,10 +39,10 @@ def do_action(gamestate, action, controller=None, unit=None):
             gamestate.decrement_actions_remaining()
 
     def secondary_action_effects(action, unit):
-        if hasattr(unit, "attack_cooldown") and action.is_attack:
+        if hasattr(unit, "attack_cooldown") and action.is_attack():
             unit.attack_frozen = unit.attack_cooldown
 
-        if hasattr(action.unit, "double_attack_cost") and action.is_attack:
+        if hasattr(action.unit, "double_attack_cost") and action.is_attack():
             action.double_cost = True
 
     if not unit:
@@ -65,13 +64,13 @@ def do_action(gamestate, action, controller=None, unit=None):
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
 
-    if action.is_attack:
+    if action.is_attack():
         if hasattr(action, "push"):
             settle_attack_push(action, gamestate.opponent_units(), gamestate.player_units())
         else:
             settle_attack(action, gamestate.opponent_units(), controller)
 
-    if action.is_ability:
+    if action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
     if getattr(gamestate, "extra_action"):
@@ -185,9 +184,9 @@ def settle_ability(action, enemy_units, player_units):
 
 
 def add_target(action, enemy_units, player_units):
-    if action.is_attack:
+    if action.is_attack():
         action.target_unit = enemy_units[action.attack_position]
-    elif action.is_ability:
+    elif action.is_ability():
         if action.ability_position in enemy_units:
             action.target_unit = enemy_units[action.ability_position]
         elif action.ability_position in player_units:

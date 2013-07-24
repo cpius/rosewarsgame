@@ -48,9 +48,9 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
 
     attacks, moves, abilities = [], [], []
     for action in actions:
-        if action.is_attack:
+        if action.is_attack():
             attacks.append(action)
-        elif action.is_ability:
+        elif action.is_ability():
             abilities.append(action)
         else:
             moves.append(action)
@@ -138,7 +138,7 @@ def draw_action(screen, interface, action, flip=False):
     pygame.draw.circle(screen, colors.black, coordinates["center"].get(action.start_position), 10)
     draw_line(screen, interface, action.start_position, action.end_position)
 
-    if action.is_attack:
+    if action.is_attack():
 
         draw_line(screen, interface, action.end_position, action.attack_position)
 
@@ -154,7 +154,7 @@ def draw_action(screen, interface, action, flip=False):
             pic = m.get_image(interface.high_morale_icon)
             screen.blit(pic, coordinates["battle"].get(action.end_position))
 
-    elif action.is_ability:
+    elif action.is_ability():
         draw_line(screen, interface, action.end_position, action.ability_position)
         pic = m.get_image(interface.ability_icon)
         screen.blit(pic, coordinates["battle"].get(action.ability_position))

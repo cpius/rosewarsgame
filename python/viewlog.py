@@ -57,10 +57,10 @@ def draw_log(logbook, screen, interface, action=None, game=None):
 
         symbol_location = (base_x + 118 * zoom, base_y + 10 * zoom)
 
-        if action.is_attack:
+        if action.is_attack():
             draw_attack(screen, interface, action, base, symbol_location, log)
 
-        elif action.is_ability:
+        elif action.is_ability():
 
             pic = m.get_image(interface.ability_icon)
             screen.blit(pic, symbol_location)
@@ -123,7 +123,7 @@ def draw_attack(screen, interface, action, base, symbol_location, log):
 
 def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
 
-    if not action.is_attack:
+    if not action.is_attack():
         unit = action.unit_reference
     elif index == 0:
         unit = action.unit_reference

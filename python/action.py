@@ -36,9 +36,6 @@ class Action(object):
         self.sub_actions = sub_actions if sub_actions else []
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
 
-        self.is_attack = bool(attack_position)
-        self.is_ability = bool(ability)
-
         self.unit = None
         self.target = None
         self.unit_reference = None
@@ -127,7 +124,7 @@ class Action(object):
         if self.start_position != self.end_position:
             representation += " move from " + coordinates(self.start_position)
             representation += " to " + coordinates(self.end_position)
-            if self.is_attack:
+            if self.is_attack():
                 representation += " and"
         else:
             representation += " at " + coordinates(self.start_position)
@@ -193,9 +190,7 @@ class Action(object):
                             "end_position",
                             "attack_position",
                             "ability_position",
-                            "is_attack",
                             "move_with_attack",
-                            "is_ability",
                             "ability"]
         original = dict((attribute, self.__dict__[attribute]) for attribute in basic_attributes)
         other = dict((attribute, other.__dict__[attribute]) for attribute in basic_attributes)
@@ -243,6 +238,12 @@ class Action(object):
             sub_action.rolls = self.rolls
 
         return self
+
+    def is_attack(self):
+        return bool(self.attack_position)
+
+    def is_ability(self):
+        return bool(self.ability)
 
 
 def coordinates(position):
