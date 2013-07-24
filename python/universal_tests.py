@@ -31,3 +31,7 @@ for i in range(1, 2):
     utest = json.loads(open("./utests/Is_attack_and_defence_correct_" + str(i) + ".json").read())
     print run_utest(utest)
 
+
+for i in range(1, 3):
+    utest = json.loads(open("./utests/Does_action_exist_" + str(i) + ".json").read())
+    print run_utest(utest)
