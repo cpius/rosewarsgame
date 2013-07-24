@@ -8,6 +8,7 @@ import ai_methods
 from datetime import datetime
 import units as units_module
 from player import Player
+import json
 
 
 class Gamestate:
@@ -166,6 +167,11 @@ class Gamestate:
 
         gamestate.action_number = document["action_number"]
         return gamestate
+
+    @classmethod
+    def load_gamestate_from_file(cls, path):
+        document = json.loads(open(path).read())
+        return Gamestate.from_document(document)
 
     @classmethod
     def units_from_document(cls, document):
