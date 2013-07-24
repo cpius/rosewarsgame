@@ -360,7 +360,7 @@ class Controller(object):
         self.view.draw_game(self.game)
 
         self.game.gamestate.initialize_action()
-        if self.game.gamestate.turn_done():
+        if self.game.gamestate.is_turn_done():
             self.game.shift_turn()
 
         self.game.gamestate.recalculate_special_counters()

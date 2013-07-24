@@ -180,7 +180,7 @@ class Gamestate:
 
         return units_dict
 
-    def turn_done(self):
+    def is_turn_done(self):
         return self.actions_remaining < 1 and not getattr(self, "extra_action")
 
     def shift_turn(self):
