@@ -2,11 +2,9 @@ from __future__ import division
 import action_doer
 import initializer
 import action_getter
-import saver
 import ai_module
 import ai_methods
 import units as units_module
-from player import Player
 import json
 
 
