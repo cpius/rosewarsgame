@@ -16,10 +16,6 @@ def out_of_board_horizontal(position):
 
 def do_action(gamestate, action, controller=None, unit=None):
 
-    def player_has_won(action, unit, opponent_units, opponent):
-        return (action.final_position[1] == opponent.backline and not hasattr(unit, "bribed")) or \
-               (not opponent_units and not action.ability == "bribe")
-
     def prepare_extra_actions(action, unit):
 
         if hasattr(unit, "charioting"):
@@ -35,7 +31,7 @@ def do_action(gamestate, action, controller=None, unit=None):
 
     def update_actions_remaining(action):
 
-        if hasattr(gamestate.current_player(), "extra_action") or hasattr(gamestate.current_player(), "sub_action"):
+        if getattr(gamestate, "extra_action"):
             return
 
         gamestate.decrement_actions_remaining()
@@ -78,25 +74,20 @@ def do_action(gamestate, action, controller=None, unit=None):
     if action.is_ability:
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
-    if hasattr(gamestate.current_player(), "extra_action"):
+    if getattr(gamestate, "extra_action"):
         del unit.extra_action
         del unit.movement_remaining
     else:
         prepare_extra_actions(action, unit)
 
     for sub_action in action.sub_actions:
-        gamestate.current_player().sub_action = True
         do_action(gamestate, sub_action, controller, unit)
-        del gamestate.current_player().sub_action
 
     if action.end_position in gamestate.player_units():
         gamestate.player_units()[action.final_position] = gamestate.player_units().pop(action.end_position)
 
-    if player_has_won(action, unit, gamestate.opponent_units(), gamestate.opponent_player()):
-        gamestate.current_player().won = True
-
-    if hasattr(gamestate.current_player(), "extra_action"):
-        del gamestate.current_player().extra_action
+    if hasattr(gamestate, "extra_action"):
+        gamestate.extra_action = False
 
     if hasattr(unit, "extra_action"):
         gamestate.current_player().extra_action = True

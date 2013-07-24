@@ -18,7 +18,7 @@ interface = interfaces.Rectangles(zoom)
 player1_ai = "Human"
 player2_ai = "Evaluator"
 
-document_ai_actions = True
+document_ai_actions = False
 
 required_special_units = []
 allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",

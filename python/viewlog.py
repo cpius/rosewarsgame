@@ -28,10 +28,10 @@ class Log():
             return player_color, 2
 
 
-def draw_log(logbook, screen, interface, action=None, gamestate=None):
+def draw_log(logbook, screen, interface, action=None, game=None):
 
     if action:
-        log = Log(action, gamestate.turn, gamestate.get_actions_remaining(), gamestate.current_player().color)
+        log = Log(action, game.turn, game.gamestate.get_actions_remaining(), game.current_player().color)
         logbook.append(log)
 
     if len(logbook) > maximum_logs:

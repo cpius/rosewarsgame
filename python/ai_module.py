@@ -17,23 +17,15 @@ class AI(object):
         self.get_action = ai_type.get_action
         self.name = name
 
-    def select_action(self, gamestate):
+    def select_action(self, game):
 
-        gamestate = gamestate.copy()
-
-        if gamestate.current_player().backline == 8:
-            gamestate = get_transformed_gamestate(gamestate)
-            transform_action = get_transformed_action
-        else:
-            transform_action = get_same_action
+        gamestate = game.gamestate.copy()
 
         actions = gamestate.get_actions()
 
         if actions:
-            action = self.get_action(actions, gamestate)
-            return transform_action(action)
-        else:
-            return None
+            return self.get_action(actions, gamestate)
+
 
 
 class Direction:
@@ -90,19 +82,3 @@ def get_same_action(action):
     return action
 
 
-def get_transformed_gamestate(gamestate):
-
-    new_units_players = []
-    for units_player in gamestate.units:
-        new_units = {}
-        for position, unit in units_player.items():
-            new_units[transform_position(position)] = unit
-
-        new_units_players.append(new_units)
-
-    gamestate.units = new_units_players
-
-    for player in gamestate.players:
-        player.backline = 9 - player.backline
-
-    return gamestate

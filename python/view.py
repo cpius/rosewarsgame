@@ -58,9 +58,9 @@ class View(object):
         m.write_message(self.screen, self.interface, color + " Wins")
         pygame.display.update()
 
-    def draw_game(self, gamestate, start_position=None, actions=()):
+    def draw_game(self, game, start_position=None, actions=()):
 
-        viewgame.draw_game(self.screen, self.interface, gamestate, start_position, actions)
+        viewgame.draw_game(self.screen, self.interface, game, start_position, actions)
         self.draw_right()
         pygame.display.update()
 
@@ -85,10 +85,10 @@ class View(object):
     def draw_ask_about_ability(self, unit):
         pass
 
-    def draw_action(self, action, gamestate):
+    def draw_action(self, action, game, flip=False):
 
-        viewlog.draw_log(self.logbook, self.screen, self.interface, action, gamestate)
-        viewgame.draw_action(self.screen, self.interface, action)
+        viewlog.draw_log(self.logbook, self.screen, self.interface, action, game)
+        viewgame.draw_action(self.screen, self.interface, action, flip)
 
     def draw_post_movement(self, action, gamestate):
         viewgame.draw_post_movement(self.screen, self.interface, action)
@@ -101,5 +101,8 @@ class View(object):
 
     def draw_message(self, message):
         m.write_message(self.screen, self.interface, message)
+        pygame.display.update()
 
-
+    def draw_tutorial(self, game):
+        viewgame.draw_game(self.screen, self.interface, game)
+        pygame.display.update()
