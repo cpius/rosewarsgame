@@ -8,7 +8,7 @@ import os
 import settings
 import shutil
 from player import Player
-from action import Action
+from action import Action, MoveOrStay
 import units as units_module
 import json
 from json import JSONEncoder
@@ -16,6 +16,7 @@ import datetime
 from client import Client
 from action_getter import add_unit_references
 from game import Game
+from outcome import Outcome, SubOutcome
 
 
 class Controller(object):
@@ -66,17 +67,16 @@ class Controller(object):
         return controller
 
     def trigger_network_player(self):
-        action = self.client.select_action(self.gamestate.action_number)
+        action, outcome = self.client.select_action(self.gamestate.action_number)
         add_unit_references(self.gamestate, action)
 
         print "received action from network: " + str(action)
 
-        action.ensure_outcome(action.outcome)
-        self.perform_action(action)
+        self.perform_action(action, outcome)
 
         if hasattr(self.gamestate.current_player(), "extra_action"):
-            extra_action = self.gamestate.current_player().ai.select_action(self.gamestate)
-            self.perform_action(extra_action)
+            extra_action, extra_outcome = self.client.select_action(self.gamestate)
+            self.perform_action(extra_action, extra_outcome)
 
     def trigger_artificial_intelligence(self):
 
@@ -117,14 +117,14 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.selecting_ranged_target(position):
-            action = Action(self.start_position, attack_position=position)
+            action = Action(self.start_position, attack_position=position, move_with_attack=MoveOrStay.STAY)
             self.perform_action(action)
 
         elif self.selecting_melee_target(position):
 
             possible_actions = [action for action in self.game.gamestate.get_actions() if
                                 action.start_position == self.start_position and action.attack_position == position and
-                                not action.move_with_attack]
+                                not action.is_move_with_attack()]
 
             if not possible_actions:
                 self.view.draw_message("Action not possible")
@@ -289,7 +289,7 @@ class Controller(object):
                 choice = self.get_input_upgrade(unit)
                 units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
 
-    def perform_action(self, action):
+    def perform_action(self, action, outcome=None):
         self.draw_action = True
 
         self.view.draw_game(self.game)
@@ -318,27 +318,27 @@ class Controller(object):
                 outcome = self.client.send_action(action.to_document())
                 action.ensure_outcome(outcome)
 
-            post_movement_possible = self.game.do_action(action)
+            outcome = self.game.do_action(action, outcome)
 
             self.view.draw_game(self.game)
-            self.view.draw_action(action, self.game)
+            self.view.draw_action(action, outcome, self.game)
 
-            if post_movement_possible:
+            if self.is_post_movement_possible(action, outcome):
                 move_with_attack = self.ask_about_move_with_attack(action)
 
                 if move_with_attack:
                     self.game.gamestate.update_final_position(action)
 
         else:
-            self.game.do_action(action)
-            self.view.draw_action(action, self.game, flip=True)
+            outcome = self.game.do_action(action, outcome)
+            self.view.draw_action(action, outcome, self.game, flip=True)
 
         if move_with_attack:
             self.view.draw_post_movement(action, self.game)
 
         self.save_game()
 
-        if action.is_attack:
+        if action.is_attack():
             if settings.pause_for_attack_until_click:
                 self.pause()
             else:
@@ -360,7 +360,7 @@ class Controller(object):
         self.view.draw_game(self.game)
 
         self.game.gamestate.initialize_action()
-        if self.game.gamestate.turn_done():
+        if self.game.gamestate.is_turn_done():
             self.game.shift_turn()
 
         self.game.gamestate.recalculate_special_counters()
@@ -374,6 +374,10 @@ class Controller(object):
             self.trigger_artificial_intelligence()
         elif self.game.current_player().intelligence == "Network":
             self.trigger_network_player()
+
+    def is_post_movement_possible(self, action, outcome):
+        successful = outcome.for_position(action.attack_position) == SubOutcome.WIN
+        return action.is_attack() and successful and action.unit.range == 1
 
     def show_attack(self, attack_position):
         action = Action(self.start_position, attack_position=attack_position)

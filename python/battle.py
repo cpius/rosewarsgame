@@ -1,16 +1,19 @@
-def attack_successful(action):
+from outcome import Outcome, SubOutcome
+
+
+def attack_successful(action, rolls):
     
     attack = get_attack_rating(action.unit, action.target_unit, action)
     
-    return action.rolls[0] <= attack
+    return rolls[0] <= attack
 
 
-def defence_successful(action):
+def defence_successful(action, rolls):
 
     attack_rating = get_attack_rating(action.unit, action.target_unit, action)
     defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating)
     
-    return action.rolls[1] <= defence_rating
+    return rolls[1] <= defence_rating
     
 
 def get_defence_rating(attacking_unit, defending_unit, attack_rating):
@@ -63,17 +66,11 @@ def get_attack_rating(attacking_unit, defending_unit, action):
     return attack
 
 
-def get_outcome(action):
-    attacking_unit = action.unit_reference
-    defending_unit = action.target_reference
-
-    attack = get_attack_rating(attacking_unit, defending_unit, action)
-    defence = get_defence_rating(attacking_unit, defending_unit, attack)
-
-    if action.rolls[0] <= attack:
-        if action.rolls[1] <= defence:
-            return "Defend"
-        else:
-            return" Win"
-    else:
+def get_outcome(action, outcome):
+    sub_outcome = outcome.for_position(action.attack_position)
+    if sub_outcome == SubOutcome.MISS:
         return " Miss"
+    elif sub_outcome == SubOutcome.DEFEND:
+        return " Defend"
+    elif sub_outcome == SubOutcome.WIN:
+        return " Win"

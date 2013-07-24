@@ -1,4 +1,4 @@
-from action import Action
+from action import Action, MoveOrStay
 
 
 class DocumentConverter:
@@ -31,9 +31,9 @@ class DocumentConverter:
             ability_position = None
 
         if "move_with_attack" in document:
-            move_with_attack = document["move_with_attack"].lower() == "True"
+            move_with_attack = document["move_with_attack"]
         else:
-            move_with_attack = False
+            move_with_attack = MoveOrStay.UNKNOWN
 
         if "ability" in document:
             ability = document["ability"]
