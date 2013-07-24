@@ -13,7 +13,7 @@ class Gamestate:
     def __init__(self,
                  player1_units,
                  player2_units,
-                 actions_remaining=1,
+                 actions_remaining,
                  extra_action=False):
         self.units = [player1_units, player2_units]
         self.actions_remaining = actions_remaining
