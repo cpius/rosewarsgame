@@ -1,6 +1,6 @@
 {"Type": "Is outcome correct",
  "Description": "Test if elephant attacks work correctly",
- "Outcome": ["B2": "WIN", "C2": "PUSH", "D2": "MISS"] 
+ "Outcome": {"B2": "WIN", "C2": "PUSH", "D2": "MISS"},
  "Action": 
 {
     "start_position": "C1",
@@ -23,8 +23,13 @@
  "Gamestate after action": 
  {
     "player1_units": {
-        "C2": "War Elephant" 
-    }, 
+	"C1":{
+            "xp_gained_this_round": true, 
+            "xp": 1, 
+            "used": true,
+			"name": "War Elephant"
+    }
+	}, 
     "actions_remaining": 0, 
     "player2_units": {
         "C3": "Royal Guard", 
