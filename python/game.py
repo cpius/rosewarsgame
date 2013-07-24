@@ -26,8 +26,6 @@ class Game:
 
     def do_action(self, action):
         self.gamestate.do_action(action)
-        if self.gamestate.turn_done():
-            self.shift_turn()
 
     def shift_turn(self):
         self.gamestate.shift_turn()
