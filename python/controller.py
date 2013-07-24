@@ -8,7 +8,7 @@ import os
 import settings
 import shutil
 from player import Player
-from action import Action
+from action import Action, MoveOrStay
 import units as units_module
 import json
 from json import JSONEncoder
@@ -117,7 +117,7 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.selecting_ranged_target(position):
-            action = Action(self.start_position, attack_position=position)
+            action = Action(self.start_position, attack_position=position, move_with_attack=MoveOrStay.STAY)
             self.perform_action(action)
 
         elif self.selecting_melee_target(position):
