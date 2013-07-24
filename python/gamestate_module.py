@@ -122,7 +122,7 @@ class Gamestate:
         return cls(player1_units, player2_units, actions_remaining, extra_action)
 
     @classmethod
-    def load_gamestate_from_file(cls, path):
+    def from_file(cls, path):
         document = json.loads(open(path).read())
         return Gamestate.from_document(document)
 
