@@ -11,7 +11,7 @@ class Unit(object):
     dbonus = {}
 
     def __repr__(self):
-        return self.name + " " + str(self.variables)
+        return self.name
 
 
 class Archer(Unit):
