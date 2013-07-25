@@ -28,26 +28,6 @@ class TestAI(unittest.TestCase):
         game = games.find_one({"_id": ObjectId("51e86e5fea5a8f135cbc0326")})
         self.assertEqual(1, game["Turn"])
 
-    def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
-
-        test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
-        gamestate = self.parse_test_case(test_file)
-
-        action = gamestate.current_player().ai.select_action(gamestate)
-
-        self.assertTrue(re.search(".*attack.*", str(action)), "The ai did not choose to attack")
-
-    def test_AI_Evaluator_WhenNoActionsAreAvailable_ThenReduceActionsToZero(self):
-
-        test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenReduceActionsToZero.txt", "r")
-        gamestate = self.parse_test_case(test_file)
-
-        action = gamestate.current_player().ai.select_action(gamestate)
-
-        gamestate.do_action(action)
-
-        self.assertEquals(0, gamestate.get_actions_remaining(), "There are too many actions left")
-
     def assert_equal_documents(self, expected, actual):
         pretty_printer = PrettyPrinter()
         pretty_documents = "Expected:\n" + pretty_printer.pformat(expected) \
