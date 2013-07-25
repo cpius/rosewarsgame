@@ -5,27 +5,17 @@ import action_getter
 import battle
 import methods
 from outcome import Outcome
-import tests
-from pprint import PrettyPrinter
-
-
-
-def assert_equal_documents(expected, actual):
-    pretty_printer = PrettyPrinter()
-    pretty_documents = "Expected:\n" + pretty_printer.pformat(expected) \
-                       + "\nActual:\n" + pretty_printer.pformat(actual)
-    self.assertEqual(expected, actual, "The document was mangled.\n\n" + pretty_documents)
 
 
 def run_utest(utest):
     if utest["Type"] == "Does action exist":
         gamestate = Gamestate.from_document(utest["Gamestate"])
-        action = Action.from_document(utest["Action"])
+        action = Action.from_document_simple(utest["Action"])
         return (action in action_getter.get_actions(gamestate)) == utest["Result"]
 
     if utest["Type"] == "Is attack and defence correct":
         gamestate = Gamestate.from_document(utest["Gamestate"])
-        action = Action.from_document(utest["Action"])
+        action = Action.from_document_simple(utest["Action"])
 
         all_units = methods.merge_units(gamestate.units[0], gamestate.units[1])
 
@@ -47,20 +37,13 @@ def run_utest(utest):
         actual_gamestate_document = actual_gamestate.to_document()
         post_gamestate_document = post_gamestate.to_document()
 
-        print "actual", json.dumps(actual_gamestate_document, indent=4)
-        print
-        print "post", json.dumps(post_gamestate_document, indent=4)
-
-
         return actual_gamestate_document == post_gamestate_document
-
 
 
 utest = json.loads(open("./utests/Is_outcome_correct_" + str(1) + ".utest").read())
 print run_utest(utest)
 
 
-"""
 for i in range(1, 2):
     utest = json.loads(open("./utests/Is_attack_and_defence_correct_" + str(i) + ".json").read())
     print run_utest(utest)
@@ -69,4 +52,3 @@ for i in range(1, 2):
 for i in range(1, 3):
     utest = json.loads(open("./utests/Does_action_exist_" + str(i) + ".json").read())
     print run_utest(utest)
-"""
