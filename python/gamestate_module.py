@@ -6,6 +6,7 @@ import ai_module
 import ai_methods
 import units as units_module
 import json
+from pprint import PrettyPrinter
 
 
 class Gamestate:
@@ -190,6 +191,10 @@ class Gamestate:
 
     def update_final_position(self, action):
         action_doer.update_final_position(action)
+
+    def __str__(self):
+        pp = PrettyPrinter()
+        return str(pp.pprint(self.to_document()))
 
 
 def save_gamestate(gamestate):
