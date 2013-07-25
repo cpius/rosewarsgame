@@ -1,5 +1,5 @@
 from __future__ import division
-import colors
+from viewmethods import colors
 import pygame
 import battle
 import settings
@@ -40,7 +40,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
 
     log_heights = base_height * zoom
 
-    pygame.draw.rect(screen, colors.light_grey, interface.right_side_rectangle)
+    pygame.draw.rect(screen, colors["light_grey"], interface.right_side_rectangle)
 
     for index, log in enumerate(logbook):
 
@@ -55,7 +55,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
         line_thickness = int(3 * zoom)
         line_start = (base_x, base_y + log_heights - line_thickness / 2)
         line_end = (int(interface.board_size[1] * zoom), base_y + log_heights - line_thickness / 2)
-        pygame.draw.line(screen, colors.black, line_start, line_end, line_thickness)
+        pygame.draw.line(screen, colors["black"], line_start, line_end, line_thickness)
 
         symbol_location = (base_x + 118 * zoom, base_y + 10 * zoom)
 
@@ -185,7 +185,7 @@ def draw_unit_box(screen, interface, base, color, height, width):
 
     inner_corners = scale_rectangle(base_corners, -1)
 
-    pygame.draw.lines(screen, colors.black, True, inner_corners)
+    pygame.draw.lines(screen, colors["black"], True, inner_corners)
 
     resize = height / (interface.unit_height * zoom)
     thickness = int(5 * zoom * resize)
@@ -195,7 +195,7 @@ def draw_unit_box(screen, interface, base, color, height, width):
         pygame.draw.lines(screen, border_color, True, middle_corners)
 
     outer_corners = scale_rectangle(base_corners, thickness)
-    pygame.draw.lines(screen, colors.black, True, outer_corners)
+    pygame.draw.lines(screen, colors["black"], True, outer_corners)
 
 
 def draw_outcome(screen, interface, outcome, base_x, base_y):

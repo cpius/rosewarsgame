@@ -1,11 +1,24 @@
 from __future__ import division
 import pygame
 import textwrap
-import colors
 import settings
 
+colors = {"black": (0, 0, 0),
+          "white": (255, 255, 255),
+          "green": (0, 255, 0),
+          "red": (255, 0, 0),
+          "blue": (0, 0, 255),
+          "brown": (128, 64, 0),
+          "grey": (48, 48, 48),
+          "yellow": (200, 200, 0),
+          "light_grey": (223, 223, 223),
+          "dark_green": (60, 113, 50),
+          "dark_red": (204, 0, 16),
+          "gold": (150, 130, 15),
+          "dull_red": (190, 55, 55),
+          "dodger_blue": (30, 144, 255)}
 
-zoom = settings.zoom
+
 _anti_alias = True
 _image_library = {}
 
@@ -31,13 +44,13 @@ def get_image(path, dimensions=None):
     image = _image_library.get(path)
     if not image:
         image = pygame.image.load(path).convert()
-        image = pygame.transform.scale(image, (int(image.get_size()[0] * zoom),
-                                               int(image.get_size()[1] * zoom)))
+        image = pygame.transform.scale(image, (int(image.get_size()[0] * settings.zoom),
+                                               int(image.get_size()[1] * settings.zoom)))
         _image_library[path] = image
     return image
 
 
-def write(screen, message, location, font, color=colors.black):
+def write(screen, message, location, font, color=colors["black"]):
     label = font.render(message, _anti_alias, color)
     screen.blit(label, location)
 
@@ -96,15 +109,15 @@ def draw_unit_box(screen, interface, base, color, resize=1):
 
     inner_corners = scale_rectangle(base_corners, -1)
 
-    pygame.draw.lines(screen, colors.black, True, inner_corners)
+    pygame.draw.lines(screen, colors["black"], True, inner_corners)
 
-    thickness = int(5 * zoom * resize)
+    thickness = int(5 * settings.zoom * resize)
 
     for i in range(thickness):
         middle_corners = scale_rectangle(base_corners, i)
         pygame.draw.lines(screen, border_color, True, middle_corners)
 
     outer_corners = scale_rectangle(base_corners, thickness)
-    pygame.draw.lines(screen, colors.black, True, outer_corners)
+    pygame.draw.lines(screen, colors["black"], True, outer_corners)
 
 

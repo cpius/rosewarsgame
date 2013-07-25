@@ -1,7 +1,7 @@
 from __future__ import division
 import pygame
 import settings
-import colors
+from viewmethods import colors
 import viewlog
 import viewgame
 import viewinfo
@@ -24,10 +24,10 @@ class View(object):
         self.counter_size = self.interface.counter_size
 
     def clear_right(self):
-        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
+        pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
 
     def clear_info(self):
-        pygame.draw.rect(self.screen, colors.light_grey, self.interface.lower_right_rectangle)
+        pygame.draw.rect(self.screen, colors["light_grey"], self.interface.lower_right_rectangle)
 
     def get_position_from_mouse_click(self, coordinates):
         x = int((coordinates[0] - self.interface.x_border) /
@@ -71,7 +71,7 @@ class View(object):
         pygame.display.flip()
 
     def draw_right(self):
-        pygame.draw.rect(self.screen, colors.light_grey, self.interface.right_side_rectangle)
+        pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
         self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface)
 
     def draw_log(self, action, gamestate):

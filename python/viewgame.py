@@ -1,10 +1,9 @@
 import pygame
-import colors
+from viewmethods import colors
 import battle
 import viewmethods as m
 from coordinates import Coordinates
 import settings
-import gamestate_module
 
 zoom = settings.zoom
 
@@ -75,7 +74,7 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
             if settings.show_chance_of_win:
                 chance_of_win_string = str(int(round(action.chance_of_win * 100))) + "%"
                 location = coordinates["percentage"].get(action.attack_position)
-                m.write(screen, chance_of_win_string, location, fonts["small"], colors.dodger_blue)
+                m.write(screen, chance_of_win_string, location, fonts["small"], colors["dodger_blue"])
 
     for action in abilities:
         location = coordinates["base"].get(action.ability_position)
@@ -120,7 +119,7 @@ def show_attack(self, action, player_unit, opponent_unit):
 def draw_post_movement(screen, interface, action):
     coordinates = interface.coordinates
 
-    pygame.draw.circle(screen, colors.black, coordinates["center"].get(action.start_position), 10)
+    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(action.start_position), 10)
     draw_line(screen, interface, action.end_position, action.attack_position)
 
     pic = m.get_image(interface.move_icon)
@@ -136,7 +135,7 @@ def draw_action(screen, interface, action, flip=False):
 
     coordinates = interface.coordinates
 
-    pygame.draw.circle(screen, colors.black, coordinates["center"].get(action.start_position), 10)
+    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(action.start_position), 10)
     draw_line(screen, interface, action.start_position, action.end_position)
 
     if action.is_attack():
@@ -170,7 +169,7 @@ def draw_action(screen, interface, action, flip=False):
 def draw_line(screen, interface, start_position, end_position):
     start_coordinates = interface.coordinates["center"].get(start_position)
     end_coordinates = interface.coordinates["center"].get(end_position)
-    pygame.draw.line(screen, colors.black, start_coordinates, end_coordinates, 5)
+    pygame.draw.line(screen, colors["black"], start_coordinates, end_coordinates, 5)
 
 
 def shade_positions(screen, interface, positions):
@@ -191,7 +190,7 @@ def draw_counters(screen, interface, unit, counters, color, position, counter_co
 
 
 def draw_bordered_circle(screen, position, size, color):
-    pygame.draw.circle(screen, colors.black, position, size + 2)
+    pygame.draw.circle(screen, colors["black"], position, size + 2)
     pygame.draw.circle(screen, color, position, size)
 
 
@@ -222,13 +221,13 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
         counters = unit.blue_counters
-        draw_counters(screen, interface, unit, counters, colors.blue, position, counter_coordinates, font_coordinates)
+        draw_counters(screen, interface, unit, counters, colors["blue"], position, counter_coordinates, font_coordinates)
         counters_drawn += 1
     if unit.yellow_counters:
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
         counters = unit.yellow_counters
-        draw_counters(screen, interface, unit, counters, colors.yellow, position, counter_coordinates, font_coordinates)
+        draw_counters(screen, interface, unit, counters, colors["yellow"], position, counter_coordinates, font_coordinates)
 
     dimensions = (int(interface.unit_width), int(interface.unit_height))
     pic = m.get_image(unit_pic, dimensions)
