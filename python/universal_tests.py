@@ -44,7 +44,14 @@ class UniversalTests(unittest.TestCase):
         available_actions = action_getter.get_actions(gamestate)
         actual = (action in available_actions)
 
-        self.assertEqual(actual, expected, [str(action) for action in available_actions])
+        if expected:
+            message = "Requested action:", action
+        else:
+            message = "Not-allowed action:", action
+
+        message += "Available actions:", [str(available_action) for available_action in available_actions]
+
+        self.assertEqual(actual, expected, message)
 
     def is_attack_and_defence_correct(self, gamestate, action, expected_attack, expected_defence):
         all_units = common.merge_units(gamestate.units[0], gamestate.units[1])
