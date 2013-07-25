@@ -3,13 +3,6 @@ import common
 from datetime import datetime
 from copy import copy
 
-
-class MoveOrStay:
-    UNKNOWN = 0
-    MOVE = 1
-    STAY = 2
-
-
 class Action(object):
     def __init__(self,
                  start_position,

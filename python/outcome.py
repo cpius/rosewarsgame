@@ -1,15 +1,6 @@
 import common
 
 
-class SubOutcome:
-    UNKNOWN = 0
-    WIN = 1
-    PUSH = 2
-    MISS = 4
-    DEFEND = 8
-    DETERMINISTIC = 16
-
-
 class Outcome:
     def __init__(self, outcomes=None):
         if outcomes is None:
