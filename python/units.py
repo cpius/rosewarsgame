@@ -11,7 +11,7 @@ class Unit(object):
     dbonus = {}
 
     def __repr__(self):
-        return self.name + " " + str(self.variables)
+        return self.name
 
 
 class Archer(Unit):
@@ -561,7 +561,8 @@ class Scout_II_B(Unit):
 class Viking(Unit):
 
     def __init__(self):
-        self.extra_life = True  # It takes two hits to kill viking
+        self.variables = {"xp_gained_this_round": False, "used": False, "xp": 0, "extra_life": True}
+        # It takes two hits to kill viking
 
     name = "Viking"
     image = "Viking"

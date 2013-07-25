@@ -15,7 +15,7 @@ def run_utest(utest):
 
     if utest["Type"] == "Is attack and defence correct":
         gamestate = Gamestate.from_document(utest["Gamestate"])
-        action = Action.from_document_simple(utest["Action"])
+        action = Action.from_document(utest["Action"])
 
         all_units = methods.merge_units(gamestate.units[0], gamestate.units[1])
 

@@ -35,6 +35,10 @@ def get_direction(position, forward_position):
     return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
 
 
+def flip(position):
+    if position:
+        return position[0], 9 - position[1]
+
 class Direction:
     """ An object direction is one move up, down, left or right.
     The class contains methods for returning the tile going one step in the direction will lead you to,

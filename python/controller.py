@@ -86,7 +86,6 @@ class Controller(object):
             self.perform_action(action)
         else:
             self.game.shift_turn()
-            self.game.gamestate.recalculate_special_counters()
             self.view.draw_game(self.game)
 
         if getattr(self.game.gamestate, "extra_action"):
@@ -177,7 +176,6 @@ class Controller(object):
 
         self.game.gamestate.set_available_actions()
 
-        self.game.gamestate.recalculate_special_counters()
         self.view.draw_game(self.game)
 
         while True:
@@ -356,14 +354,12 @@ class Controller(object):
         else:
             pass
 
-        self.game.gamestate.recalculate_special_counters()
         self.view.draw_game(self.game)
 
         self.game.gamestate.initialize_action()
         if self.game.gamestate.is_turn_done():
             self.game.shift_turn()
 
-        self.game.gamestate.recalculate_special_counters()
         self.view.draw_game(self.game)
 
         self.clear_move()

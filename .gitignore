@@ -4,6 +4,7 @@
 python/replay/*
 python/demo/*
 python/saves/*
+python/settings_user.py
 
 
 #########

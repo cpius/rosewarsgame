@@ -110,7 +110,6 @@ def get_units():
             basic_units_bag.remove_one_unit("Ballista")
             basic_units_bag.remove_one_unit("Catapult")
 
-
         while len(units) < settings.basic_unit_count:
 
             if settings.max_two_siege_weapons:
