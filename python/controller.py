@@ -407,7 +407,7 @@ class Controller(object):
 
         self.view.save_screenshot(name)
 
-        with open("./replay/" + name + ".json", 'w') as file:
+        with open("./replay/" + name + ".gamestate", 'w') as file:
             file.write(json.dumps(self.game.gamestate.to_document(), cls=CustomJsonEncoder, indent=4))
 
         self.action_index += 1
