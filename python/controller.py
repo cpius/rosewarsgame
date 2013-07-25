@@ -285,7 +285,7 @@ class Controller(object):
 
     def upgrade_units(self, units):
         for pos, unit in units.items():
-            if unit.xp == unit.xp_to_upgrade:
+            if unit.variables["xp"] == unit.xp_to_upgrade:
                 choice = self.get_input_upgrade(unit)
                 units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
 
@@ -407,7 +407,7 @@ class Controller(object):
 
         self.view.save_screenshot(name)
 
-        with open("./replay/" + name + ".json", 'w') as file:
+        with open("./replay/" + name + ".gamestate", 'w') as file:
             file.write(json.dumps(self.game.gamestate.to_document(), cls=CustomJsonEncoder, indent=4))
 
         self.action_index += 1

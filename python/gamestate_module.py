@@ -6,6 +6,8 @@ import ai_module
 import ai_methods
 import units as units_module
 import json
+import methods
+from pprint import PrettyPrinter
 
 
 class Gamestate:
@@ -14,11 +16,13 @@ class Gamestate:
                  player1_units,
                  player2_units,
                  actions_remaining,
-                 extra_action=False):
+                 extra_action=False,
+                 created_at=None):
         self.units = [player1_units, player2_units]
         self.actions_remaining = actions_remaining
         self.extra_action = extra_action
         self.action_number = 0
+        self.created_at = created_at
 
     def do_action(self, action, outcome=None):
         outcome = action_doer.do_action(self, action, outcome)
@@ -70,7 +74,6 @@ class Gamestate:
     def set_available_actions(self):
         self.available_actions = self.get_actions()
 
-
     def player_units(self):
         return self.units[0]
 
@@ -119,7 +122,11 @@ class Gamestate:
             extra_action = document["extra_action"]
         else:
             extra_action = False
-        return cls(player1_units, player2_units, actions_remaining, extra_action)
+        if "created_at" in document:
+            created_at = document["created_at"]
+        else:
+            created_at = None
+        return cls(player1_units, player2_units, actions_remaining, extra_action, created_at)
 
     @classmethod
     def from_file(cls, path):
@@ -129,20 +136,18 @@ class Gamestate:
     @classmethod
     def units_from_document(cls, document):
         units = {}
-        for position_string in document.keys():
-            position = units_module.get_position(position_string)
-            unit_document = document[position_string]
+        for position_string, unit_document in document.items():
+            position = methods.position_to_tuple(position_string)
 
-            if not type(unit_document) is dict:
+            if isinstance(unit_document, basestring):
                 units[position] = getattr(units_module, unit_document.replace(" ", "_"))()
-                continue
+            else:
+                unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
+                for attribute, value in unit_document.items():
+                    if attribute != "name":
+                        unit.variables[attribute] = value
 
-            name = document[position_string]["name"]
-            unit = getattr(units_module, name.replace(" ", "_"))()
-            for attribute in unit_document.keys():
-                setattr(unit, attribute, unit_document[attribute])
-
-            units[position] = unit
+                units[position] = unit
 
         return units
 
@@ -154,27 +159,24 @@ class Gamestate:
             return ai_module.AI(name)
 
     def to_document(self):
-        return {
-            "player1_units": self.get_units_dict(self.units[0]),
-            "player2_units": self.get_units_dict(self.units[1]),
-            "extra_action": self.extra_action,
-            "actions_remaining": self.actions_remaining
-        }
+        document = {attribute: getattr(self, attribute) for attribute in ["extra_action", "created_at", "actions_remaining"]
+                    if hasattr(self, attribute)}
+        document["player1_units"] = self.get_units_dict(self.units[0])
+        document["player2_units"] = self.get_units_dict(self.units[1])
+        return document
 
     def get_units_dict(self, units):
         units_dict = dict()
-        for unit_position in units.keys():
-            unit = units[unit_position]
+        for unit_position, unit in units.items():
 
-            unit_dict = {attribute: getattr(unit, attribute) for attribute in units_module.variable_attributes
-                         if hasattr(unit, attribute) and getattr(unit, attribute)}
-
-            easy_position = units_module.get_position_string(unit_position)
-            if len(unit_dict) > 0:
+            position = methods.position_to_string(unit_position)
+            document_variables = [attribute for attribute, value in unit.variables.items() if value]
+            if document_variables:
+                unit_dict = {attribute: unit.variables[attribute] for attribute in document_variables}
                 unit_dict["name"] = unit.name
-                units_dict[easy_position] = unit_dict
+                units_dict[position] = unit_dict
             else:
-                units_dict[easy_position] = unit.name
+                units_dict[position] = unit.name
 
         return units_dict
 
@@ -190,6 +192,10 @@ class Gamestate:
 
     def update_final_position(self, action):
         action_doer.update_final_position(action)
+
+    def __str__(self):
+        pp = PrettyPrinter()
+        return str(pp.pprint(self.to_document()))
 
 
 def save_gamestate(gamestate):

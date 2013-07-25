@@ -1,21 +1,17 @@
 class Unit(object):
+    def __init__(self):
+        self.variables = {"xp_gained_this_round": False, "used": False, "xp": 0}
 
     name = ""
-    xp = 0
     zoc = []
     abilities = []
-    used = False
-    xp_gained_this_round = False
     xp_to_upgrade = 4
     upgrades = []
     abonus = {}
     dbonus = {}
 
     def __repr__(self):
-        return self.name
-
-
-variable_attributes = ["xp", "used", "xp_gained_this_round", "frozen", "extra_life", "just_bribed", "attack_frozen"]
+        return self.name + " " + str(self.variables)
 
 
 class Archer(Unit):
