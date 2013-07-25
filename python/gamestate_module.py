@@ -160,7 +160,7 @@ class Gamestate:
         return self.actions_remaining < 1 and not getattr(self, "extra_action")
 
     def shift_turn(self):
-        self.units = transform_units(self.units)
+        self.flip_units()
         self.units = self.units[::-1]
         self.initialize_turn()
         self.initialize_action()
@@ -173,6 +173,10 @@ class Gamestate:
         pp = PrettyPrinter()
         return str(pp.pprint(self.to_document()))
 
+    def flip_units(self):
+        self.units = [dict((methods.flip(position), unit) for position, unit in self.units[0].items()),
+                      dict((methods.flip(position), unit) for position, unit in self.units[1].items())]
+
     def __eq__(self, other):
         return self.to_document() == other.to_document()
 
@@ -183,20 +187,3 @@ def save_gamestate(gamestate):
 
 def load_gamestate(saved_gamestate):
     return Gamestate.from_document(saved_gamestate)
-
-
-def transform_position(position):
-    if position:
-        return position[0], 9 - position[1]
-
-
-def transform_units(units):
-    new_units_players = []
-    for units_player in units:
-        new_units = {}
-        for position, unit in units_player.items():
-            new_units[transform_position(position)] = unit
-
-        new_units_players.append(new_units)
-
-    return new_units_players
