@@ -5,7 +5,6 @@ import units as units_module
 import ai_module
 from player import Player
 from gamestate_module import Gamestate
-from document import DocumentConverter
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pprint import PrettyPrinter
@@ -29,6 +28,14 @@ class TestAI(unittest.TestCase):
         same_action = Action.from_document(action_document)
 
         self.assertEquals(action, same_action)
+
+    def test_IfBoardIsFlippedTwoTimes_ThenItShouldBeTheSame(self):
+        gamestate = Gamestate.from_document(self.get_test_gamestate_document())
+        gamestate_copy = Gamestate.from_document(self.get_test_gamestate_document())
+        gamestate_copy.flip_units()
+        gamestate_copy.flip_units()
+
+        self.assertEquals(gamestate, gamestate_copy)
 
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):

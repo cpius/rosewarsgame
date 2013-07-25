@@ -59,8 +59,8 @@ class Gamestate:
         return actions
 
     def copy(self):
-        saved_gamestate = save_gamestate(self)
-        return load_gamestate(saved_gamestate)
+        gamestate_document = self.to_document()
+        return self.from_document(gamestate_document)
 
     def __eq__(self, other):
         pass
@@ -88,30 +88,6 @@ class Gamestate:
 
     def decrement_actions_remaining(self):
         self.actions_remaining -= 1
-
-    def recalculate_special_counters(self):
-        for unit in self.units[0].itervalues():
-            self.add_yellow_counters(unit)
-            self.add_blue_counters(unit)
-
-        for unit in self.units[1].itervalues():
-            self.add_yellow_counters(unit)
-            self.add_blue_counters(unit)
-
-    def add_yellow_counters(self, unit):
-        if hasattr(unit, "extra_life"):
-            unit.yellow_counters = 1
-        else:
-            unit.yellow_counters = 0
-
-    def add_blue_counters(self, unit):
-        unit.blue_counters = 0
-        if hasattr(unit, "frozen"):
-            unit.blue_counters = unit.frozen
-        if hasattr(unit, "attack_frozen"):
-            unit.blue_counters = unit.attack_frozen
-        if hasattr(unit, "just_bribed"):
-            unit.blue_counters = 1
 
     @classmethod
     def from_document(cls, document):
@@ -184,7 +160,7 @@ class Gamestate:
         return self.actions_remaining < 1 and not getattr(self, "extra_action")
 
     def shift_turn(self):
-        self.units = transform_units(self.units)
+        self.flip_units()
         self.units = self.units[::-1]
         self.initialize_turn()
         self.initialize_action()
@@ -197,6 +173,13 @@ class Gamestate:
         pp = PrettyPrinter()
         return str(pp.pprint(self.to_document()))
 
+    def flip_units(self):
+        self.units = [dict((methods.flip(position), unit) for position, unit in self.units[0].items()),
+                      dict((methods.flip(position), unit) for position, unit in self.units[1].items())]
+
+    def __eq__(self, other):
+        return self.to_document() == other.to_document()
+
 
 def save_gamestate(gamestate):
     return gamestate.to_document()
@@ -204,20 +187,3 @@ def save_gamestate(gamestate):
 
 def load_gamestate(saved_gamestate):
     return Gamestate.from_document(saved_gamestate)
-
-
-def transform_position(position):
-    if position:
-        return position[0], 9 - position[1]
-
-
-def transform_units(units):
-    new_units_players = []
-    for units_player in units:
-        new_units = {}
-        for position, unit in units_player.items():
-            new_units[transform_position(position)] = unit
-
-        new_units_players.append(new_units)
-
-    return new_units_players
