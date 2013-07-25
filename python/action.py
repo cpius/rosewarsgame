@@ -12,7 +12,7 @@ class Action(object):
                  attack_position=None,
                  ability_position=None,
                  move_with_attack=MoveOrStay.UNKNOWN,
-                 ability="",
+                 ability=None,
                  action_number=None,
                  sub_actions=None,
                  outcome=True,
