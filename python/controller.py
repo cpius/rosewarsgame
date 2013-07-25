@@ -285,7 +285,7 @@ class Controller(object):
 
     def upgrade_units(self, units):
         for pos, unit in units.items():
-            if unit.xp == unit.xp_to_upgrade:
+            if unit.variables["xp"] == unit.xp_to_upgrade:
                 choice = self.get_input_upgrade(unit)
                 units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
 
