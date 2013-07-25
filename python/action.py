@@ -2,6 +2,8 @@ import battle
 import common
 from datetime import datetime
 from copy import copy
+from common import MoveOrStay
+
 
 class Action(object):
     def __init__(self,
@@ -58,8 +60,12 @@ class Action(object):
             document_copy["sub_actions"] =\
                 [cls.from_document(sub_action_document) for sub_action_document in document_copy["sub_actions"]]
         action = cls(**document_copy)
+
         if "created_at" in document:
             action.created_at = document["created_at"]
+
+        action.move_with_attack = MoveOrStay[document["move_with_attack"]]
+
         return action
 
     @classmethod
