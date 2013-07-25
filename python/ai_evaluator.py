@@ -9,6 +9,7 @@ import ai_module
 import action_getter
 import math
 import methods
+from gamestate_module import Gamestate
 
 board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 
@@ -169,11 +170,11 @@ def calculate_two_action_score(action):
 
 def find_action_scores_two_actions(actions, original_gamestate):
 
-    gamestate = gamestate_module.save_gamestate(original_gamestate)
+    gamestate_document = original_gamestate.to_document()
 
     for action in actions:
 
-        potential_gamestate = gamestate_module.load_gamestate(gamestate)
+        potential_gamestate = Gamestate.from_document(gamestate_document)
 
         if action.is_attack():
 
@@ -190,7 +191,7 @@ def find_action_scores_two_actions(actions, original_gamestate):
 
             action.values_success, action.score_success = get_values_and_score(potential_gamestate, original_gamestate)
 
-            potential_gamestate = gamestate_module.load_gamestate(gamestate)
+            potential_gamestate = Gamestate.from_document(gamestate_document)
 
             action = get_action_failure(action)
 
@@ -223,11 +224,11 @@ def find_action_scores_two_actions(actions, original_gamestate):
 
 def find_action_scores_one_action(actions, original_gamestate):
 
-    gamestate = gamestate_module.save_gamestate(original_gamestate)
+    gamestate_document = original_gamestate.to_document()
 
     for action in actions:
 
-        potential_gamestate = gamestate_module.load_gamestate(gamestate)
+        potential_gamestate = Gamestate.from_document(gamestate_document)
 
         if action.is_attack():
 
@@ -239,7 +240,7 @@ def find_action_scores_one_action(actions, original_gamestate):
 
             action.values_success, action.score_success = get_values_and_score(potential_gamestate, original_gamestate)
 
-            potential_gamestate = gamestate_module.load_gamestate(gamestate)
+            potential_gamestate = gamestate_module.load_gamestate(gamestate_document)
 
             action = get_action_failure(action)
 

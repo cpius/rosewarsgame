@@ -179,11 +179,3 @@ class Gamestate:
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()
-
-
-def save_gamestate(gamestate):
-    return gamestate.to_document()
-
-
-def load_gamestate(saved_gamestate):
-    return Gamestate.from_document(saved_gamestate)
