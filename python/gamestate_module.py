@@ -6,7 +6,7 @@ import ai_module
 import ai_methods
 import units as units_module
 import json
-import methods
+import common
 from pprint import PrettyPrinter
 
 
@@ -113,7 +113,7 @@ class Gamestate:
     def units_from_document(cls, document):
         units = {}
         for position_string, unit_document in document.items():
-            position = methods.position_to_tuple(position_string)
+            position = common.position_to_tuple(position_string)
 
             if isinstance(unit_document, basestring):
                 units[position] = getattr(units_module, unit_document.replace(" ", "_"))()
@@ -145,7 +145,7 @@ class Gamestate:
         units_dict = dict()
         for unit_position, unit in units.items():
 
-            position = methods.position_to_string(unit_position)
+            position = common.position_to_string(unit_position)
             document_variables = [attribute for attribute, value in unit.variables.items() if value]
             if document_variables:
                 unit_dict = {attribute: unit.variables[attribute] for attribute in document_variables}
@@ -174,16 +174,8 @@ class Gamestate:
         return str(pp.pprint(self.to_document()))
 
     def flip_units(self):
-        self.units = [dict((methods.flip(position), unit) for position, unit in self.units[0].items()),
-                      dict((methods.flip(position), unit) for position, unit in self.units[1].items())]
+        self.units = [dict((common.flip(position), unit) for position, unit in self.units[0].items()),
+                      dict((common.flip(position), unit) for position, unit in self.units[1].items())]
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()
-
-
-def save_gamestate(gamestate):
-    return gamestate.to_document()
-
-
-def load_gamestate(saved_gamestate):
-    return Gamestate.from_document(saved_gamestate)

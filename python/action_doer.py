@@ -1,7 +1,7 @@
 from __future__ import division
 import random as rnd
 import battle
-import methods
+import common
 from outcome import Outcome, SubOutcome
 from action import MoveOrStay
 
@@ -121,7 +121,7 @@ def settle_attack_push(action, enemy_units, player_units, outcome=None):
         else:
             outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
 
-    push_direction = methods.get_direction(action.end_position, action.attack_position)
+    push_direction = common.get_direction(action.end_position, action.attack_position)
     push_destination = push_direction.move(action.attack_position)
 
     if outcome.for_position(action.attack_position) == SubOutcome.WIN:

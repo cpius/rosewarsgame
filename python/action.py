@@ -1,5 +1,5 @@
 import battle
-import methods
+import common
 from datetime import datetime
 from copy import copy
 
@@ -57,7 +57,7 @@ class Action(object):
                 del document_copy[attribute]
 
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
-            document_copy[attribute] = methods.position_to_tuple(document_copy[attribute])
+            document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
 
         if "sub_actions" in document_copy:
             document_copy["sub_actions"] =\
@@ -77,7 +77,7 @@ class Action(object):
         read_attributes = set(attribute for attribute in simple_attributes if attribute in document and document[attribute])
 
         for attribute in convert_attributes & read_attributes:
-            document_copy[attribute] = methods.position_to_tuple(document_copy[attribute])
+            document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
 
         if "sub_actions" in document_copy and document_copy["sub_actions"]:
             document_copy["sub_actions"] = [cls.from_document_simple(sub_action_document)
@@ -102,18 +102,18 @@ class Action(object):
             target = "Unit"
 
         if self.start_position != self.end_position:
-            representation += " move from " + methods.position_to_string(self.start_position)
-            representation += " to " + methods.position_to_string(self.end_position)
+            representation += " move from " + common.position_to_string(self.start_position)
+            representation += " to " + common.position_to_string(self.end_position)
             if self.is_attack():
                 representation += " and"
         else:
-            representation += " at " + methods.position_to_string(self.start_position)
+            representation += " at " + common.position_to_string(self.start_position)
 
         if self.is_attack() and not self.is_move_with_attack():
-            representation += " attack " + target + " " + methods.position_to_string(self.attack_position)
+            representation += " attack " + target + " " + common.position_to_string(self.attack_position)
 
         if self.is_attack() and self.is_move_with_attack():
-            representation += " attack-move " + target + " " + methods.position_to_string(self.attack_position)
+            representation += " attack-move " + target + " " + common.position_to_string(self.attack_position)
 
         if self.is_ability():
             representation += " use " \
@@ -121,7 +121,7 @@ class Action(object):
                               + " on " \
                               + target \
                               + " " \
-                              + methods.position_to_string(self.ability_position)
+                              + common.position_to_string(self.ability_position)
 
         return representation
 
@@ -129,18 +129,18 @@ class Action(object):
         representation = self.unit_reference.name
 
         if self.start_position != self.end_position:
-            representation += " move from " + methods.position_to_string(self.start_position)
-            representation += " to " + methods.position_to_string(self.end_position)
+            representation += " move from " + common.position_to_string(self.start_position)
+            representation += " to " + common.position_to_string(self.end_position)
             if self.is_attack():
                 representation += " and"
         else:
-            representation += " at " + methods.position_to_string(self.start_position)
+            representation += " at " + common.position_to_string(self.start_position)
 
         if self.is_attack() and self.move_with_attack != MoveOrStay.MOVE:
-            representation += " attack " + self.target_reference.name + " " + methods.position_to_string(self.attack_position)
+            representation += " attack " + self.target_reference.name + " " + common.position_to_string(self.attack_position)
 
         if self.is_attack() and self.move_with_attack == MoveOrStay.MOVE:
-            representation += " attack-move " + self.target_reference.name + " " + methods.position_to_string(self.attack_position)
+            representation += " attack-move " + self.target_reference.name + " " + common.position_to_string(self.attack_position)
 
         if self.is_ability():
             representation += " use "\
@@ -148,7 +148,7 @@ class Action(object):
                               + " on "\
                               + self.target_reference.name\
                               + " "\
-                              + methods.position_to_string(self.ability_position)
+                              + common.position_to_string(self.ability_position)
 
         return representation
 
@@ -170,7 +170,7 @@ class Action(object):
 
         for sub_action in self.sub_actions:
             representation += "\n"
-            representation += "and attack " + methods.position_to_string(sub_action.attack_position)
+            representation += "and attack " + common.position_to_string(sub_action.attack_position)
             if sub_action.rolls:
                 attack = battle.get_attack_rating(self.unit_reference, self.target_reference, self)
                 defence = battle.get_defence_rating(self.unit_reference, self.target_reference, attack)
@@ -209,10 +209,10 @@ class Action(object):
         sub_action_docs = [sub_action.to_document() for sub_action in self.sub_actions]
 
         return {"action_number": action_number,
-                "start_position": methods.position_to_string(self.start_position),
-                "end_position": methods.position_to_string(self.end_position),
-                "attack_position": methods.position_to_string(self.attack_position),
-                "ability_position": methods.position_to_string(self.ability_position),
+                "start_position": common.position_to_string(self.start_position),
+                "end_position": common.position_to_string(self.end_position),
+                "attack_position": common.position_to_string(self.attack_position),
+                "ability_position": common.position_to_string(self.ability_position),
                 "move_with_attack": self.move_with_attack,
                 "ability": self.ability,
                 "sub_actions": sub_action_docs,
@@ -226,7 +226,7 @@ class Action(object):
         write_attributes = set(attribute for attribute in simple_attributes if getattr(self, attribute))
         document = {}
         for attribute in write_attributes & convert_attributes:
-            document[attribute] = methods.position_to_string(getattr(self, attribute))
+            document[attribute] = common.position_to_string(getattr(self, attribute))
         for attribute in write_attributes - convert_attributes:
             document[attribute] = getattr(self, attribute)
         if sub_action_docs:
@@ -256,7 +256,7 @@ class Action(object):
         return bool(self.ability)
 
     def is_lancing(self):
-        distance = methods.distance(self.start_position, self.attack_position)
+        distance = common.distance(self.start_position, self.attack_position)
         return self.unit.lancing and self.is_attack() and distance >= 3
 
     def is_push(self):

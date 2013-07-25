@@ -1,6 +1,6 @@
 import imp
 import json
-from methods import CustomJsonEncoder
+from common import CustomJsonEncoder
 
 
 class AI(object):
