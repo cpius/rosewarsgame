@@ -9,6 +9,8 @@ from document import DocumentConverter
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pprint import PrettyPrinter
+import action_getter
+from action import Action
 
 
 class TestAI(unittest.TestCase):
@@ -19,6 +21,15 @@ class TestAI(unittest.TestCase):
         same_document = gamestate.to_document()
 
         self.assert_equal_documents(document, same_document)
+
+    def test_ActionDocument_WhenSavingAndLoading_ThenItShouldBeTheSame(self):
+        gamestate = Gamestate.from_document(self.get_test_gamestate_document())
+        action = action_getter.get_actions(gamestate)[3]
+        action_document = action.to_document()
+        same_action = Action.from_document(action_document)
+
+        self.assertEquals(action, same_action)
+
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
         client = MongoClient(host="server.rosewarsgame.com")
