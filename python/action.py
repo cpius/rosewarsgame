@@ -291,8 +291,3 @@ class Action(object):
 
     def distance_to_target(self):
         return common.distance(self.start_position, self.attack_position)
-
-
-
-
-
