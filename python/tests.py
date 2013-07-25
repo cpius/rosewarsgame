@@ -102,9 +102,6 @@ class TestAI(unittest.TestCase):
         now = datetime.utcnow()
 
         return {
-            "player1_intelligence": "Human",
-            "player2_intelligence": "Human",
-            "turn": 1,
             "actions_remaining": 1,
             "extra_action": False,
             "player1_units":
@@ -112,12 +109,16 @@ class TestAI(unittest.TestCase):
                 "D6":
                 {
                     "name": "Heavy Cavalry",
-                    "experience": 1
+                    "xp": 1
                 }
             },
             "player2_units":
             {
-                "C7": "Royal Guard",
+                "C7":
+                {
+                    "name": "Royal Guard",
+                    "xp": 3
+                },
                 "E7": "Archer"
             },
             "created_at": now
