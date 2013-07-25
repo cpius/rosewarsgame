@@ -1,4 +1,4 @@
-from json import JSONEncoder
+from json import JSONEncoder, dumps
 from datetime import datetime
 from bson import ObjectId
 from collections import namedtuple

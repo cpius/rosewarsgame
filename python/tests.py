@@ -29,6 +29,7 @@ class TestAI(unittest.TestCase):
 
         self.assertEquals(action, same_action)
 
+
     def test_IfBoardIsFlippedTwoTimes_ThenItShouldBeTheSame(self):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
         gamestate_copy = Gamestate.from_document(self.get_test_gamestate_document())
@@ -36,7 +37,6 @@ class TestAI(unittest.TestCase):
         gamestate_copy.flip_units()
 
         self.assertEquals(gamestate, gamestate_copy)
-
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
         client = MongoClient(host="server.rosewarsgame.com")
