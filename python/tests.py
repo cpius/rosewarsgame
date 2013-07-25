@@ -5,7 +5,6 @@ import units as units_module
 import ai_module
 from player import Player
 from gamestate_module import Gamestate
-from document import DocumentConverter
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pprint import PrettyPrinter
