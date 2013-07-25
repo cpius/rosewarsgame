@@ -1,4 +1,4 @@
-import methods
+import common
 
 
 class SubOutcome:
@@ -35,13 +35,13 @@ class Outcome:
     def to_document(self):
         outcome_document = dict()
         for outcome in self.outcomes:
-            outcome_document[methods.position_to_string(outcome)] = self.outcomes[outcome]
+            outcome_document[common.position_to_string(outcome)] = self.outcomes[outcome]
         return outcome_document
 
     @classmethod
     def from_document(cls, document):
         outcomes = dict()
         for outcome in document:
-            outcomes[methods.position_to_tuple(outcome)] = document[outcome]
+            outcomes[common.position_to_tuple(outcome)] = document[outcome]
 
         return cls(outcomes)

@@ -1,4 +1,4 @@
-import methods
+import common
 import view as view_module
 import json
 import pygame
@@ -9,7 +9,7 @@ from player import Player
 
 gamestate = Gamestate.from_file("./tutorial/tutorial_1.gamestate")
 
-marked_tiles = [methods.position_to_tuple(position) for position in
+marked_tiles = [common.position_to_tuple(position) for position in
                 json.loads(open("./tutorial/tutorial_1.marked").read())["tiles"]]
 
 text = open("./tutorial/tutorial_1.txt").readline()

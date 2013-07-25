@@ -8,7 +8,7 @@ import copy
 import ai_module
 import action_getter
 import math
-import methods
+import common
 from gamestate_module import Gamestate
 
 board = set((column, row) for column in range(1, 6) for row in range(1, 9))
@@ -423,7 +423,7 @@ def get_action_values(gamestate, original_gamestate):
 
         if unit.range > 1:
             for enemy_position in gamestate.units[1]:
-                if methods.distance(position, enemy_position) <= unit.range:
+                if common.distance(position, enemy_position) <= unit.range:
                     values["Within range"] = 1
 
         if hasattr(unit, "improved_weapons"):

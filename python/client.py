@@ -2,7 +2,7 @@ import json
 import urllib2
 from gamestate_module import Gamestate
 from time import sleep
-from methods import CustomJsonEncoder
+from common import CustomJsonEncoder
 from action import Action
 from outcome import Outcome
 
