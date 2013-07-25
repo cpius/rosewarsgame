@@ -1,68 +1,44 @@
-{"Type": "Is outcome correct",
- "Description": "Test if elephant attacks work correctly",
- "Outcome": ["B2": "WIN", "C2": "PUSH", "D2": "MISS"] 
- "Action": 
 {
-<<<<<<< Updated upstream
-    "start_position": "C1",
-    "end_position": "C1",
-    "attack_position": "C2",
-    "move_with_attack": "MOVE"
-=======
-    "start_position": "A2",
-    "end_position": "A1"
->>>>>>> Stashed changes
-},
- "Gamestate before action": 
- {
-<<<<<<< Updated upstream
-    "player1_units": {
-        "C1": "War Elephant" 
-    }, 
-    "actions_remaining": 2, 
-    "player2_units": {
-        "B2": "Longswordsman", 
-        "C2": "Royal Guard", 
-        "D2": "Ballista"
+    "type": "Is outcome correct",
+    "description": "Test if elephant attacks work correctly",
+    "outcome":
+    {
+        "B2": "WIN",
+        "C2": "PUSH",
+        "D2": "MISS"
+    },
+    "action":
+    {
+        "start_position": "C1",
+        "end_position": "C1",
+        "attack_position": "C2",
+        "move_with_attack": "MOVE"
+    },
+    "gamestate before action":
+    {
+        "player1_units":
+        {
+            "C1": "War Elephant"
+        },
+        "actions_remaining": 2,
+        "player2_units":
+        {
+            "B2": "Longswordsman",
+            "C2": "Royal Guard",
+            "D2": "Ballista"
+        }
+    },
+    "gamestate after action":
+    {
+        "player1_units":
+        {
+            "C2": "War Elephant"
+        },
+        "actions_remaining": 0,
+        "player2_units":
+        {
+            "C3": "Royal Guard",
+            "D2": "Ballista"
+        }
     }
-},
- "Gamestate after action": 
- {
-    "player1_units": {
-        "C2": "War Elephant" 
-    }, 
-    "actions_remaining": 0, 
-    "player2_units": {
-        "C3": "Royal Guard", 
-        "D2": "Ballista"
-=======
-    "player1_intelligence": "Human", 
-    "actions_remaining": 0, 
-    "player2_units": {
-        "D5": "Flag Bearer", 
-        "B6": "Catapult", 
-        "B7": "Ballista", 
-        "A5": "Longswordsman", 
-        "A6": "Saboteur", 
-        "E7": "Light Cavalry", 
-        "E6": "Light Cavalry", 
-        "C7": "Pikeman", 
-        "C5": "Heavy Cavalry"
-    }, 
-    "player1_units": {
-        "B4": "Longswordsman", 
-        "A3": "Royal Guard", 
-        "A2": "Ballista", 
-        "A4": "Heavy Cavalry", 
-        "C3": "Pikeman", 
-        "C2": "Weaponsmith", 
-        "D4": {
-            "used": true, 
-            "name": "Catapult"
-        }, 
-        "E3": "Light Cavalry", 
-        "E2": "Pikeman"
->>>>>>> Stashed changes
-    }
-}
 }

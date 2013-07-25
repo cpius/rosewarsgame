@@ -3,52 +3,74 @@ from gamestate_module import Gamestate
 from action import Action
 import action_getter
 import battle
-import common
 from outcome import Outcome
+import glob
+import unittest
 
 
-def run_utest(utest):
-    if utest["Type"] == "Does action exist":
-        gamestate = Gamestate.from_document(utest["Gamestate"])
-        action = Action.from_document_simple(utest["Action"])
-        return (action in action_getter.get_actions(gamestate)) == utest["Result"]
+class UniversalTests(unittest.TestCase):
 
-    if utest["Type"] == "Is attack and defence correct":
-        gamestate = Gamestate.from_document(utest["Gamestate"])
-        action = Action.from_document(utest["Action"])
+    def test_all_universal_tests(self):
+        testcase_files = glob.glob("./utests/*.utest")
+        for testcase_file in testcase_files:
+            print "Testing: ", testcase_file
 
-        all_units = common.merge_units(gamestate.units[0], gamestate.units[1])
+            test_document = json.loads(open(testcase_file).read())
+
+            if test_document["type"] == "Does action exist":
+                gamestate = Gamestate.from_document(test_document["gamestate"])
+                action = Action.from_document_simple(test_document["action"])
+                expected = test_document["result"]
+                self.does_action_exist(gamestate, action, expected)
+
+            if test_document["type"] == "Is attack and defence correct":
+                gamestate = Gamestate.from_document(test_document["gamestate"])
+                action = Action.from_document_simple(test_document["action"])
+                attack = test_document["attack"]
+                defence = test_document["defence"]
+
+                self.is_attack_and_defence_correct(gamestate, action, attack, defence)
+
+            if test_document["type"] == "Is outcome correct":
+                gamestate = Gamestate.from_document(test_document["gamestate before action"])
+                expected_gamestate = Gamestate.from_document(test_document["gamestate after action"])
+                action = Action.from_document_simple(test_document["action"])
+                outcome = Outcome.from_document(test_document["outcome"])
+
+                self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
+
+    def does_action_exist(self, gamestate, action, expected):
+        available_actions = action_getter.get_actions(gamestate)
+        actual = (action in available_actions)
+
+        self.assertEqual(actual, expected, [str(action) for action in available_actions])
+
+    def is_attack_and_defence_correct(self, gamestate, action, expected_attack, expected_defence):
+        all_units = methods.merge_units(gamestate.units[0], gamestate.units[1])
 
         attacking_unit = all_units[action.start_position]
         defending_unit = all_units[action.attack_position]
 
-        attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
-        defence = battle.get_defence_rating(attacking_unit, defending_unit, attack)
+        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
+        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack)
 
-        return (attack == int(utest["Attack"])) and (defence == int(utest["Defence"]))
+        self.assertEqual(actual_attack, expected_attack, "Attack was wrong")
+        self.assertEqual(actual_defence, expected_defence, "Defence was wrong")
 
-    if utest["Type"] == "Is outcome correct":
-        actual_gamestate = Gamestate.from_document(utest["Gamestate before action"])
-        post_gamestate = Gamestate.from_document(utest["Gamestate after action"])
-        action = Action.from_document_simple(utest["Action"])
-        outcome = Outcome.from_document(utest["Outcome"])
-        actual_gamestate.do_action(action, outcome)
+    def is_outcome_correct(self, gamestate, action, outcome, expected_gamestate):
+        gamestate.do_action(action, outcome)
 
-        actual_gamestate_document = actual_gamestate.to_document()
-        post_gamestate_document = post_gamestate.to_document()
+        actual_gamestate_document = gamestate.to_document()
+        expected_gamestate_document = expected_gamestate.to_document()
 
-        return actual_gamestate_document == post_gamestate_document
+        self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
 
-
-utest = json.loads(open("./utests/Is_outcome_correct_" + str(1) + ".utest").read())
-print run_utest(utest)
+    def assert_equal_documents(self, expected, actual):
+        documents = "Expected:\n" + methods.document_to_string(expected)
+        documents += "\nActual:\n" + methods.document_to_string(actual)
+        self.assertEqual(expected, actual, "The document was mangled.\n\n" + documents)
 
 
-for i in range(1, 2):
-    utest = json.loads(open("./utests/Is_attack_and_defence_correct_" + str(i) + ".json").read())
-    print run_utest(utest)
 
-
-for i in range(1, 3):
-    utest = json.loads(open("./utests/Does_action_exist_" + str(i) + ".json").read())
-    print run_utest(utest)
+if __name__ == "__main__":
+    unittest.main()
