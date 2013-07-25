@@ -12,26 +12,6 @@ from pprint import PrettyPrinter
 
 
 class TestAI(unittest.TestCase):
-    def test_GamestateDocument_WhenAnActionIsTaken_ItShouldBeReflected(self):
-        converter = DocumentConverter()
-        gamestate_document = self.get_test_gamestate_document()
-        gamestate = Gamestate.from_document(gamestate_document)
-        action = converter.document_to_action({"start_position": "D6", "end_position": "D7"})
-
-        gamestate.do_action(action)
-        gamestate.shift_turn_if_done()
-
-        actual = gamestate.to_document()
-        expected = gamestate_document
-
-        player2_units = expected["player2_units"]
-        expected["player2_units"] = {"D7": expected["player1_units"]["D6"]}
-        expected["player2_units"]["D7"]["experience"] = 2
-        expected["player1_units"] = player2_units
-        expected["turn"] += 1
-        expected["actions_remaining"] = 2
-
-        self.assert_equal_documents(expected, actual)
 
     def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
         document = self.get_test_gamestate_document()
