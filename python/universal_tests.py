@@ -7,6 +7,7 @@ from outcome import Outcome
 import glob
 import unittest
 import common
+from common import MoveOrStay
 
 
 class UniversalTests(unittest.TestCase):
@@ -21,6 +22,7 @@ class UniversalTests(unittest.TestCase):
             if test_document["type"] == "Does action exist":
                 gamestate = Gamestate.from_document(test_document["gamestate"])
                 action = Action.from_document_simple(test_document["action"])
+                action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
                 expected = test_document["result"]
                 self.does_action_exist(gamestate, action, expected)
 
@@ -36,6 +38,7 @@ class UniversalTests(unittest.TestCase):
                 gamestate = Gamestate.from_document(test_document["gamestate before action"])
                 expected_gamestate = Gamestate.from_document(test_document["gamestate after action"])
                 action = Action.from_document_simple(test_document["action"])
+                action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
                 outcome = Outcome.from_document(test_document["outcome"])
 
                 self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
