@@ -1,7 +1,7 @@
 import pygame
-from viewmethods import colors
+from viewcommon import colors
 import battle
-import viewmethods as m
+import viewcommon as m
 from coordinates import Coordinates
 import settings
 

@@ -1,4 +1,4 @@
-from viewmethods import colors
+from viewcommon import colors
 import pygame
 from coordinates import Coordinates
 from collections import namedtuple

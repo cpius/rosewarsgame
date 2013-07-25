@@ -1,11 +1,11 @@
 from __future__ import division
 import pygame
 import settings
-from viewmethods import colors
+from viewcommon import colors
 import viewlog
 import viewgame
 import viewinfo
-import viewmethods as m
+import viewcommon as m
 
 _anti_alias = 1
 

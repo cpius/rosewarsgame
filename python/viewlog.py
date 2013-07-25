@@ -1,9 +1,9 @@
 from __future__ import division
-from viewmethods import colors
+from viewcommon import colors
 import pygame
 import battle
 import settings
-import viewmethods as m
+import viewcommon as m
 
 zoom = settings.zoom
 maximum_logs = 5
