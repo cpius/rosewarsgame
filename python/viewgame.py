@@ -36,6 +36,7 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
         units = gamestate_module.transform_units(game.gamestate.units)
     else:
         units = game.gamestate.units
+    recalculate_special_counters(gamestate)
 
     for position, unit in units[0].items():
         if actions and position == start_position:
@@ -290,3 +291,30 @@ def get_transformed_direction(direction):
         return Direction(0, -1)
 
     return direction
+
+
+def recalculate_special_counters(gamestate):
+    for unit in gamestate.units[0].itervalues():
+        add_yellow_counters(unit)
+        add_blue_counters(unit)
+
+    for unit in gamestate.units[1].itervalues():
+        add_yellow_counters(unit)
+        add_blue_counters(unit)
+
+
+def add_yellow_counters(unit):
+    if hasattr(unit, "extra_life"):
+        unit.yellow_counters = 1
+    else:
+        unit.yellow_counters = 0
+
+
+def add_blue_counters(unit):
+    unit.blue_counters = 0
+    if hasattr(unit, "frozen"):
+        unit.blue_counters = unit.frozen
+    if hasattr(unit, "attack_frozen"):
+        unit.blue_counters = unit.attack_frozen
+    if hasattr(unit, "just_bribed"):
+        unit.blue_counters = 1
