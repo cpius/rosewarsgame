@@ -61,7 +61,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
     if action.is_attack():
         if hasattr(action, "push"):
-            outcome = settle_attack_push(action, gamestate.opponent_units(), gamestate.player_units(), outcome)
+            outcome = settle_attack_push(action, gamestate, outcome)
         else:
             outcome = settle_attack(action, gamestate.opponent_units(), outcome, gamestate)
 
@@ -97,6 +97,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
 
 def settle_attack_push(action, gamestate, outcome=None):
+    player_units = gamestate.player_units()
     opponent_units = gamestate.opponent_units()
     if not outcome:
         outcome = Outcome()
@@ -131,7 +132,7 @@ def settle_attack_push(action, gamestate, outcome=None):
 
             if not out_of_board_vertical(push_destination):
                 update_final_position(action)
-                if push_destination in gamestate.player_units() or push_destination in opponent_units or out_of_board_horizontal(push_destination):
+                if push_destination in player_units or push_destination in opponent_units or out_of_board_horizontal(push_destination):
                     del opponent_units[action.attack_position]
                 else:
                     opponent_units[push_destination] = opponent_units.pop(action.attack_position)
@@ -143,9 +144,11 @@ def settle_attack_push(action, gamestate, outcome=None):
     else:
         if not out_of_board_vertical(push_destination):
             update_final_position(action)
-            if push_destination in gamestate.player_units() or push_destination in opponent_units or out_of_board_horizontal(push_destination):
-                del opponent_units[action.attack_position]
 
+            is_push_destination_occupied = push_destination in player_units or push_destination in opponent_units
+
+            if is_push_destination_occupied or out_of_board_horizontal(push_destination):
+                del opponent_units[action.attack_position]
             else:
                 opponent_units[push_destination] = opponent_units.pop(action.attack_position)
 
