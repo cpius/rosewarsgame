@@ -173,6 +173,9 @@ class Gamestate:
         pp = PrettyPrinter()
         return str(pp.pprint(self.to_document()))
 
+    def __eq__(self, other):
+        return self.to_document() == other.to_document()
+
 
 def save_gamestate(gamestate):
     return gamestate.to_document()
