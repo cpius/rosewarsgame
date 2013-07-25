@@ -59,8 +59,8 @@ class Gamestate:
         return actions
 
     def copy(self):
-        saved_gamestate = save_gamestate(self)
-        return load_gamestate(saved_gamestate)
+        gamestate_document = self.to_document()
+        return self.from_document(gamestate_document)
 
     def __eq__(self, other):
         pass
