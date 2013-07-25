@@ -62,7 +62,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
     update_actions_remaining(action)
 
-    unit.used = True
+    unit.variables["used"] = True
 
     gain_xp(unit)
 
@@ -232,9 +232,9 @@ def update_final_position(action):
 
 
 def gain_xp(unit):
-    if not unit.xp_gained_this_round and unit.upgrades:
-        unit.xp += 1
-        unit.xp_gained_this_round = True
+    if not unit.variables["xp_gained_this_round"] and unit.upgrades:
+        unit.variables["xp"] += 1
+        unit.variables["xp_gained_this_round"] = True
 
 
 def distance(p1, p2):

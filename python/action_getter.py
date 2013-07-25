@@ -95,7 +95,7 @@ def add_modifiers(attacks, player_units):
 def get_actions(gamestate):
 
     def can_use_unit(unit):
-        return not (unit.used or hasattr(unit, "frozen") or hasattr(unit, "just_bribed"))
+        return not (unit.variables["used"] or hasattr(unit, "frozen") or hasattr(unit, "just_bribed"))
 
     def can_attack_with_unit(unit):
         return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
@@ -112,10 +112,7 @@ def get_actions(gamestate):
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
             units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
-            moves, attacks, abilities = get_unit_actions(unit,
-                                                         position,
-                                                         units,
-                                                         gamestate.opponent_units(),
+            moves, attacks, abilities = get_unit_actions(unit, position, units, gamestate.opponent_units(),
                                                          gamestate.player_units())
 
             add_modifiers(attacks, gamestate.player_units())

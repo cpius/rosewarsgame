@@ -9,29 +9,11 @@ from document import DocumentConverter
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pprint import PrettyPrinter
+import action_getter
+from action import Action
 
 
 class TestAI(unittest.TestCase):
-    def test_GamestateDocument_WhenAnActionIsTaken_ItShouldBeReflected(self):
-        converter = DocumentConverter()
-        gamestate_document = self.get_test_gamestate_document()
-        gamestate = Gamestate.from_document(gamestate_document)
-        action = converter.document_to_action({"start_position": "D6", "end_position": "D7"})
-
-        gamestate.do_action(action)
-        gamestate.shift_turn_if_done()
-
-        actual = gamestate.to_document()
-        expected = gamestate_document
-
-        player2_units = expected["player2_units"]
-        expected["player2_units"] = {"D7": expected["player1_units"]["D6"]}
-        expected["player2_units"]["D7"]["experience"] = 2
-        expected["player1_units"] = player2_units
-        expected["turn"] += 1
-        expected["actions_remaining"] = 2
-
-        self.assert_equal_documents(expected, actual)
 
     def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
         document = self.get_test_gamestate_document()
@@ -40,6 +22,15 @@ class TestAI(unittest.TestCase):
 
         self.assert_equal_documents(document, same_document)
 
+    def test_ActionDocument_WhenSavingAndLoading_ThenItShouldBeTheSame(self):
+        gamestate = Gamestate.from_document(self.get_test_gamestate_document())
+        action = action_getter.get_actions(gamestate)[3]
+        action_document = action.to_document()
+        same_action = Action.from_document(action_document)
+
+        self.assertEquals(action, same_action)
+
+
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
         client = MongoClient(host="server.rosewarsgame.com")
         database = client.unnamed
@@ -47,26 +38,6 @@ class TestAI(unittest.TestCase):
 
         game = games.find_one({"_id": ObjectId("51e86e5fea5a8f135cbc0326")})
         self.assertEqual(1, game["Turn"])
-
-    def test_AI_Evaluator_WhenMoveAttackIsPossible_ThenItShouldBeChosen(self):
-
-        test_file = open("tests/AI_Evaluator_WhenAttackIsAvailable_ThenChooseIt.txt", "r")
-        gamestate = self.parse_test_case(test_file)
-
-        action = gamestate.current_player().ai.select_action(gamestate)
-
-        self.assertTrue(re.search(".*attack.*", str(action)), "The ai did not choose to attack")
-
-    def test_AI_Evaluator_WhenNoActionsAreAvailable_ThenReduceActionsToZero(self):
-
-        test_file = open("tests/AI_Evaluator_WhenNoActionsAreAvailable_ThenReduceActionsToZero.txt", "r")
-        gamestate = self.parse_test_case(test_file)
-
-        action = gamestate.current_player().ai.select_action(gamestate)
-
-        gamestate.do_action(action)
-
-        self.assertEquals(0, gamestate.get_actions_remaining(), "There are too many actions left")
 
     def assert_equal_documents(self, expected, actual):
         pretty_printer = PrettyPrinter()
@@ -142,9 +113,6 @@ class TestAI(unittest.TestCase):
         now = datetime.utcnow()
 
         return {
-            "player1_intelligence": "Human",
-            "player2_intelligence": "Human",
-            "turn": 1,
             "actions_remaining": 1,
             "extra_action": False,
             "player1_units":
@@ -152,12 +120,16 @@ class TestAI(unittest.TestCase):
                 "D6":
                 {
                     "name": "Heavy Cavalry",
-                    "experience": 1
+                    "xp": 1
                 }
             },
             "player2_units":
             {
-                "C7": "Royal Guard",
+                "C7":
+                {
+                    "name": "Royal Guard",
+                    "xp": 3
+                },
                 "E7": "Archer"
             },
             "created_at": now

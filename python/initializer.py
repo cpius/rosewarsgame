@@ -87,10 +87,10 @@ def initialize_action(gamestate):
             if any(surrounding_position in gamestate.player_units()
                    and hasattr(gamestate.player_units()[surrounding_position], "crusading") and unit.range == 1
                    for surrounding_position in surrounding_tiles(position)):
-                unit.is_crusading = True
+                unit.variables["is_crusading"] = True
             else:
                 if hasattr(unit, "is_crusading"):
-                    del unit.is_crusading
+                    del unit.variables["is_crusading"]
 
     initialize_crusader()
 
@@ -100,7 +100,7 @@ def initialize_turn(gamestate):
     def initialize_abilities(unit):
 
         def frozen():
-            if unit.frozen == 1:
+            if unit.variables["frozen"] == 1:
                 del unit.frozen
             else:
                 unit.frozen -= 1
@@ -133,10 +133,10 @@ def initialize_turn(gamestate):
     gamestate.set_actions_remaining(2)
 
     for position, unit in gamestate.player_units().items():
-        unit.used = False
-        unit.xp_gained_this_round = False
+        unit.variables["used"] = False
+        unit.variables["xp_gained_this_round"] = False
         initialize_abilities(unit)
 
     for opponent_unit_position, opponent_unit in gamestate.opponent_units().items():
-        opponent_unit.used = False
+        opponent_unit.variables["used"] = False
         resolve_bribe(opponent_unit, gamestate.opponent_units(), gamestate.player_units())
