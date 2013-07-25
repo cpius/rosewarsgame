@@ -3,7 +3,7 @@ from gamestate_module import Gamestate
 from action import Action
 import action_getter
 import battle
-import methods
+import common
 from outcome import Outcome
 
 
@@ -17,7 +17,7 @@ def run_utest(utest):
         gamestate = Gamestate.from_document(utest["Gamestate"])
         action = Action.from_document(utest["Action"])
 
-        all_units = methods.merge_units(gamestate.units[0], gamestate.units[1])
+        all_units = common.merge_units(gamestate.units[0], gamestate.units[1])
 
         attacking_unit = all_units[action.start_position]
         defending_unit = all_units[action.attack_position]

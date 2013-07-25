@@ -8,7 +8,7 @@ from action_getter import get_action
 import socket
 from player import Player
 import setup
-from methods import CustomJsonEncoder
+from common import CustomJsonEncoder
 
 
 @get('/games/view/<game_id>')

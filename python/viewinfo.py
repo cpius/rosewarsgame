@@ -1,7 +1,7 @@
 import units as unitsmodule
 import pygame
 import textwrap
-import viewmethods as m
+import viewcommon as m
 import settings
 
 zoom = settings.zoom
