@@ -240,7 +240,7 @@ def find_action_scores_one_action(actions, original_gamestate):
 
             action.values_success, action.score_success = get_values_and_score(potential_gamestate, original_gamestate)
 
-            potential_gamestate = gamestate_module.load_gamestate(gamestate_document)
+            potential_gamestate = Gamestate.from_document(gamestate_document)
 
             action = get_action_failure(action)
 
