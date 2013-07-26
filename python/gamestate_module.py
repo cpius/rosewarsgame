@@ -137,7 +137,7 @@ class Gamestate:
     def to_document(self):
         document = {attribute: getattr(self, attribute) for attribute in ["extra_action", "created_at",
                                                                           "actions_remaining"]
-                    if hasattr(self, attribute) and getattr(self, attribute)}
+                    if hasattr(self, attribute) and (getattr(self, attribute) or attribute == "actions_remaining")}
         document["player1_units"] = self.get_units_dict(self.units[0])
         document["player2_units"] = self.get_units_dict(self.units[1])
         return document
@@ -145,8 +145,8 @@ class Gamestate:
     def get_units_dict(self, units):
         units_dict = dict()
         for unit_position, unit in units.items():
-
             position = common.position_to_string(unit_position)
+
             document_variables = [attribute for attribute, value in unit.variables.items() if value]
             if document_variables:
                 unit_dict = {attribute: unit.variables[attribute] for attribute in document_variables}
