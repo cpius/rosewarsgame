@@ -135,8 +135,9 @@ class Gamestate:
             return ai_module.AI(name)
 
     def to_document(self):
-        document = {attribute: getattr(self, attribute) for attribute in ["extra_action", "created_at", "actions_remaining"]
-                    if hasattr(self, attribute)}
+        document = {attribute: getattr(self, attribute) for attribute in ["extra_action", "created_at",
+                                                                          "actions_remaining"]
+                    if hasattr(self, attribute) and getattr(self, attribute)}
         document["player1_units"] = self.get_units_dict(self.units[0])
         document["player2_units"] = self.get_units_dict(self.units[1])
         return document
