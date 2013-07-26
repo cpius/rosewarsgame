@@ -97,45 +97,22 @@ def initialize_action(gamestate):
 
 def initialize_turn(gamestate):
 
-    def initialize_abilities(unit):
-
-        def frozen():
-            if unit.variables["frozen"] == 1:
-                del unit.frozen
-            else:
-                unit.frozen -= 1
-
-        def attack_frozen():
-            if unit.attack_frozen == 1:
-                del unit.attack_frozen
-            else:
-                unit.attack_frozen -= 1
-
-        def sabotaged():
-            del unit.sabotaged
-
-        def improved_weapons():
-            del unit.improved_weapons
-
-        def just_bribed():
-            del unit.just_bribed
-
-        for attribute in ["frozen", "attack_frozen", "sabotaged", "improved_weapons", "just_bribed"]:
-            if hasattr(unit, attribute):
-                locals()[attribute]()
-
     def resolve_bribe(unit, opponent_units, player_units):
-        if hasattr(unit, "bribed"):
+        if unit.is_bribed():
             player_units[position] = opponent_units.pop(position)
-            unit.just_bribed = True
-            del player_units[position].bribed
+            unit.set_recently_bribed()
+            player_units[position].remove_bribed()
 
     gamestate.set_actions_remaining(2)
 
     for position, unit in gamestate.player_units().items():
-        unit.variables["used"] = False
-        unit.variables["xp_gained_this_round"] = False
-        initialize_abilities(unit)
+        unit.remove_used()
+        unit.remove_xp_gained_this_turn()
+        unit.decrement_frozen()
+        unit.decrement_attack_frozen()
+        unit.remove_sabotaged()
+        unit.remove_improved_weapons()
+        unit.remove_recently_bribed()
 
     for opponent_unit_position, opponent_unit in gamestate.opponent_units().items():
         opponent_unit.variables["used"] = False

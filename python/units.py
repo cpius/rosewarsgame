@@ -1,6 +1,9 @@
+from collections import defaultdict
+
+
 class Unit(object):
     def __init__(self):
-        self.variables = {"xp_gained_this_round": False, "used": False, "xp": 0}
+        self.variables = defaultdict(int)
 
     name = ""
     zoc = []
@@ -12,6 +15,73 @@ class Unit(object):
 
     def __repr__(self):
         return self.name
+
+    # Frozen
+    def set_frozen(self, n):
+        self.variables["frozen"] = max(self.variables["frozen"], n)
+
+    def get_frozen(self):
+        return self.variables["frozen"]
+
+    def decrement_frozen(self):
+        self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
+
+    # xp gained this turn
+    def set_xp_gained_this_turn(self):
+        self.variables["xp_gained_this_turn"] = 1
+
+    def get_xp_gained_this_turn(self):
+        return self.variables["xp_gained_this_turn"]
+
+    def remove_xp_gained_this_turn(self):
+        self.variables["xp_gained_this_turn"] = 0
+
+    # Xp
+    def increment_xp(self):
+        self.variables["xp"] += 1
+
+    def get_xp(self):
+        return self.variables["xp"]
+
+    # Used
+    def set_used(self):
+        self.variables["used"] = 1
+
+    def get_used(self):
+        return self.variables["used"]
+
+    def remove_used(self):
+        self.variables["used"] = 0
+
+    # Attack frozen
+    def set_attack_frozen(self, n):
+        self.variables["attack_frozen"] = n
+
+    def get_attack_frozen(self):
+        return self.variables["attack_frozen"]
+
+    def decrement_attack_frozen(self):
+        self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
+
+    # Improved weapons
+    def set_improved_weapons(self):
+        self.variables["improved_weapons"] = 1
+
+    def get_improved_weapons(self):
+        return self.variables["improved_weapons"]
+
+    def remove_improved_weapons(self):
+        self.variables["improved_weapons"] = 0
+
+    # Sabotage
+    def set_sabotaged(self):
+        self.variables["sabotaged"] = 1
+
+    def get_sabotaged(self):
+        return self.variables["sabotaged"]
+
+    def remove_sabotaged(self):
+        self.variables["sabotaged"] = 0
 
 
 class Archer(Unit):

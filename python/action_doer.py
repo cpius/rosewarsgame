@@ -6,6 +6,7 @@ from outcome import Outcome, SubOutcome
 from action import MoveOrStay
 
 
+
 board = [(column, row) for column in range(1, 6) for row in range(1, 9)]
 
 
@@ -42,7 +43,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
     def secondary_action_effects(action, unit):
         if hasattr(unit, "attack_cooldown") and action.is_attack():
-            unit.attack_frozen = unit.attack_cooldown
+            unit.set_attack_frozen(unit.attack_cooldown)
 
         if hasattr(action.unit, "double_attack_cost") and action.is_attack():
             action.double_cost = True
@@ -62,7 +63,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
     update_actions_remaining(action)
 
-    unit.variables["used"] = True
+    unit.set_used()
 
     gain_xp(unit)
 
@@ -191,24 +192,19 @@ def settle_attack(action, enemy_units, outcome):
 
 def settle_ability(action, enemy_units, player_units):
 
-    def sabotage():
-        action.target_unit.sabotaged = True
-
-    def poison():
-        if not hasattr(action.target_unit, "frozen"):
-            action.target_unit.frozen = 3
-        else:
-            action.target_unit.frozen = max(action.target_unit.frozen, 3)
-
-    def improve_weapons():
-        action.target_unit.improved_weapons = True
-
     def bribe():
         position = action.ability_position
         player_units[position] = enemy_units.pop(position)
-        player_units[position].bribed = True
+        player_units[position].set_bribed()
 
-    locals()[action.ability]()
+    if action.ability == "sabotage":
+        action.target_unit.set_sabotaged()
+
+    if action.ability == "poison":
+        action.target_unit.set_frozen(2)
+
+    if action.ability == "improve_weapons":
+        action.target_unit.set_improved_weapons()
 
 
 def add_target(action, enemy_units, player_units):
@@ -232,9 +228,9 @@ def update_final_position(action):
 
 
 def gain_xp(unit):
-    if not unit.variables["xp_gained_this_round"] and unit.upgrades:
-        unit.variables["xp"] += 1
-        unit.variables["xp_gained_this_round"] = True
+    if not unit.get_xp_gained_this_turn() and unit.upgrades:
+        unit.set_xp_gained_this_turn()
+        unit.increment_xp()
 
 
 def distance(p1, p2):

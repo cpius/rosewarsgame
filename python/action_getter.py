@@ -95,11 +95,11 @@ def add_modifiers(attacks, player_units):
 def get_actions(gamestate):
 
     def can_use_unit(unit):
-        return not (unit.variables["used"] or hasattr(unit, "frozen") or hasattr(unit, "just_bribed"))
+        return not (unit.variables["used"] or unit.get_frozen() or hasattr(unit, "just_bribed"))
 
     def can_attack_with_unit(unit):
         return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
-            and not hasattr(unit, "attack_frozen")
+            and not unit.get_attack_frozen()
 
     if getattr(gamestate, "extra_action"):
         return get_extra_actions(gamestate)
@@ -545,7 +545,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
 
             elif ability == "bribe":
                 possible_targets = [target_position for target_position, target_unit in enemy_units.items()
-                                    if not hasattr(target_unit, "bribed") and not hasattr(target_unit, "just_bribed")]
+                                    if not target_unit.get_bribed() and not target_unit.recently_bribed()]
             else:
                 possible_targets = []
 

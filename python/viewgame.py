@@ -311,9 +311,9 @@ def add_yellow_counters(unit):
 
 def add_blue_counters(unit):
     unit.blue_counters = 0
-    if hasattr(unit, "frozen"):
-        unit.blue_counters = unit.frozen
-    if hasattr(unit, "attack_frozen"):
-        unit.blue_counters = unit.attack_frozen
+    if unit.get_frozen():
+        unit.blue_counters = unit.get_frozen()
+    if unit.get_attack_frozen():
+        unit.blue_counters = unit.get_attack_frozen()
     if hasattr(unit, "just_bribed"):
         unit.blue_counters = 1
