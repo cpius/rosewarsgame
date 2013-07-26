@@ -57,13 +57,15 @@ class Action(object):
                 del document_copy[attribute]
 
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
-            document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
+            if attribute in document_copy:
+                document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
 
         if "sub_actions" in document_copy:
             document_copy["sub_actions"] =\
                 [cls.from_document(sub_action_document) for sub_action_document in document_copy["sub_actions"]]
         action = cls(**document_copy)
-        action.created_at = document["created_at"]
+        if "created_at" in document:
+            action.created_at = document["created_at"]
         return action
 
     @classmethod
