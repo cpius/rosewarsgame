@@ -96,6 +96,14 @@ class Unit(object):
     def remove_recently_bribed(self):
         self.variables["recently_bribed"] = 0
 
+    # Extra life
+    def get_extra_life(self):
+        return self.name == "Viking" and not self.variables["lost_extra_life"]
+
+    def remove_extra_life(self):
+        self.variables["lost_extra_life"] = 1
+
+
 class Archer(Unit):
 
     name = "Archer"
@@ -643,7 +651,7 @@ class Scout_II_B(Unit):
 class Viking(Unit):
 
     def __init__(self):
-        self.variables["extra_life"] = 1
+        super(Viking, self).__init__()
 
     name = "Viking"
     image = "Viking"
@@ -658,51 +666,10 @@ class Viking(Unit):
 
     rage = True
 
-    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)"}
+    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)",
+                    "extra_life": "It takes two successful hits to kill Viking"}
 
     upgrades = ["Viking II_A", "Viking II_B"]
-
-
-class Viking_II_A(Unit):
-
-    def __init__(self):
-        self.extra_life = True  # It takes two hits to kill viking
-
-    name = "Viking II_A"
-    image = "Viking"
-    attack = 4
-    defence = 2
-    movement = 1
-    range = 1
-    abonus = {}
-    dbonus = {"Siege Weapon": 1}
-    zoc = []
-    type = "Infantry"
-
-    rage = True
-
-    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)"}
-
-
-class Viking_II_B(Unit):
-
-    def __init__(self):
-        self.extra_life = True  # It takes two hits to kill viking
-
-    name = "Viking II_B"
-    image = "Viking"
-    attack = 3
-    defence = 3
-    movement = 1
-    range = 1
-    abonus = {}
-    dbonus = {"Siege Weapon": 1}
-    zoc = []
-    type = "Infantry"
-
-    rage = True
-
-    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)"}
 
 
 class Cannon(Unit):

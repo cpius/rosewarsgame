@@ -303,7 +303,7 @@ def recalculate_special_counters(gamestate):
 
 
 def add_yellow_counters(unit):
-    if hasattr(unit, "extra_life"):
+    if unit.get_extra_life():
         unit.yellow_counters = 1
     else:
         unit.yellow_counters = 0

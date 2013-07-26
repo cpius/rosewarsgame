@@ -130,8 +130,8 @@ def settle_attack_push(action, enemy_units, player_units, outcome=None):
 
         gain_xp(action.unit)
 
-        if hasattr(action.target_unit, "extra_life"):
-            del action.target_unit.extra_life
+        if action.target_unit.get_extra_life():
+            action.target_unit.remove_extra_life()
 
             if not out_of_board_vertical(push_destination):
                 update_final_position(action)
@@ -179,8 +179,8 @@ def settle_attack(action, enemy_units, outcome):
 
     outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
 
-    if hasattr(action.target_unit, "extra_life"):
-        del action.target_unit.extra_life
+    if action.target_unit.get_extra_life():
+        action.target_unit.remove_extra_life()
     else:
         del enemy_units[action.attack_position]
 
