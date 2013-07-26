@@ -1,0 +1,38 @@
+{
+    "description": "Test if Cannon works", 
+    "type": "Is outcome correct", 
+    "pre_gamestate": {
+        "actions_remaining": 2, 
+        "player1_units": {
+            "C3": "Cannon", 
+            "A3": "Pikeman"
+        }, 
+        "player2_units": {
+            "D4": "Archer"
+        }
+    }, 
+    "action": {
+        "start_position": "C3", 
+        "attack_position": "D4", 
+        "end_position": "C3"
+    }, 
+    "outcome": {
+        "C4": "DEFEND"
+    }, 
+    "post_gamestate": {
+        "actions_remaining": 1, 
+        "player1_units": {
+            "C3": {
+                "attack_frozen": 3, 
+                "xp_gained_this_turn": 1, 
+                "xp": 1, 
+                "used": 1, 
+                "name": "Cannon"
+            }, 
+            "A3": "Pikeman"
+        }, 
+        "player2_units": {
+            "D4": "Archer"
+        }
+    }
+}
