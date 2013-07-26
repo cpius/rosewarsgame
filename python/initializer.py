@@ -98,7 +98,7 @@ def initialize_action(gamestate):
 def initialize_turn(gamestate):
 
     def resolve_bribe(unit, opponent_units, player_units):
-        if unit.is_bribed():
+        if unit.get_bribed():
             player_units[position] = opponent_units.pop(position)
             unit.set_recently_bribed()
             player_units[position].remove_bribed()

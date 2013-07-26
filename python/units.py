@@ -83,6 +83,18 @@ class Unit(object):
     def remove_sabotaged(self):
         self.variables["sabotaged"] = 0
 
+    # Bribe
+    def set_bribed(self):
+        self.variables["bribed"] = 1
+
+    def get_bribed(self):
+        return self.variables["bribed"]
+
+    def remove_bribed(self):
+        return self.variables["is_bribed"]
+
+    def remove_recently_bribed(self):
+        self.variables["recently_bribed"] = 0
 
 class Archer(Unit):
 
@@ -631,8 +643,7 @@ class Scout_II_B(Unit):
 class Viking(Unit):
 
     def __init__(self):
-        self.variables = {"xp_gained_this_round": False, "used": False, "xp": 0, "extra_life": True}
-        # It takes two hits to kill viking
+        self.variables["extra_life"] = 1
 
     name = "Viking"
     image = "Viking"
