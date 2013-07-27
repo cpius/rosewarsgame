@@ -200,8 +200,14 @@ def settle_ability(action, enemy_units, player_units):
     if action.ability == "sabotage":
         action.target_unit.set_sabotaged()
 
+    if action.ability == "sabotage_II":
+        action.target_unit.set_sabotaged_II()
+
     if action.ability == "poison":
         action.target_unit.set_frozen(2)
+
+    if action.ability == "poison_II":
+        action.target_unit.set_frozen(3)
 
     if action.ability == "improve_weapons":
         action.target_unit.set_improved_weapons()
@@ -228,7 +234,7 @@ def update_final_position(action):
 
 
 def gain_xp(unit):
-    if not unit.get_xp_gained_this_turn() and unit.upgrades:
+    if not unit.get_xp_gained_this_turn():
         unit.set_xp_gained_this_turn()
         unit.increment_xp()
 

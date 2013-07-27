@@ -35,8 +35,11 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating):
     if attack_rating > 6:
         defence_rating = defending_unit.defence - attack_rating + 6
     
-    if "sabotaged" in defending_unit.variables:
+    if defending_unit.get_sabotaged_II():
         defence_rating = 0
+
+    if defending_unit.get_sabotaged_II():
+        defence_rating = -1
     
     return defence_rating
 

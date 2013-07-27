@@ -83,6 +83,16 @@ class Unit(object):
     def remove_sabotaged(self):
         self.variables["sabotaged"] = 0
 
+    # Sabotage_II
+    def set_sabotaged_II(self):
+        self.variables["sabotaged_II"] = 1
+
+    def get_sabotaged_II(self):
+        return self.variables["sabotaged_II"]
+
+    def remove_sabotaged_II(self):
+        self.variables["sabotaged_II"] = 0
+
     # Bribe
     def set_bribed(self):
         self.variables["bribed"] = 1
@@ -1233,9 +1243,9 @@ class Saboteur_II_A(Unit):
     dbonus = {}
     type = "Specialist"
 
-    abilities = ["sabotage", "poison"]
+    abilities = ["sabotage", "poison_II"]
 
-    descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
+    descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison_II": "Freezes a unit for 3 turns."}
 
 
 class Saboteur_II_B(Unit):
@@ -1250,9 +1260,9 @@ class Saboteur_II_B(Unit):
     dbonus = {}
     type = "Specialist"
 
-    abilities = ["sabotage", "poison"]
+    abilities = ["sabotage_II", "poison"]
 
-    descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
+    descriptions = {"sabotage_II": "Reduces a units defence to -1 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
 
 
 class Diplomat(Unit):
