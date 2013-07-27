@@ -267,3 +267,7 @@ class Action(object):
 
     def is_push(self):
         return self.unit.hasattr("push") and self.is_attack()
+
+    def is_crusading(self, gamestate):
+        return any(position for position in common.surrounding_tiles(self.start_position) if position in gamestate.units[0] and
+               hasattr(gamestate.units[0][position], "crusading"))

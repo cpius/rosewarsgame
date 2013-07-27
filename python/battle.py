@@ -1,22 +1,22 @@
 from outcome import Outcome, SubOutcome
 
 
-def attack_successful(action, rolls):
+def attack_successful(action, rolls, gamestate):
     
-    attack = get_attack_rating(action.unit, action.target_unit, action)
+    attack = get_attack_rating(action.unit, action.target_unit, action, gamestate)
     
     return rolls[0] <= attack
 
 
-def defence_successful(action, rolls):
+def defence_successful(action, rolls, gamestate):
 
-    attack_rating = get_attack_rating(action.unit, action.target_unit, action)
-    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating)
+    attack_rating = get_attack_rating(action.unit, action.target_unit, action, gamestate)
+    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating, gamestate)
     
     return rolls[1] <= defence_rating
     
 
-def get_defence_rating(attacking_unit, defending_unit, attack_rating):
+def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate):
     
     defence_rating = defending_unit.defence
 
@@ -44,7 +44,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating):
     return defence_rating
 
 
-def get_attack_rating(attacking_unit, defending_unit, action):
+def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     
     attack = attacking_unit.attack
 
@@ -53,6 +53,9 @@ def get_attack_rating(attacking_unit, defending_unit, action):
 
     if action.is_lancing_II():
         attack += 3
+
+    if action.is_crusading(gamestate):
+        attack += 1
     
     if attacking_unit.get_bribed():
         attack += 1

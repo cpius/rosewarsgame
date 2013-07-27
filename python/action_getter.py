@@ -499,10 +499,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
 
         for attribute in ["rage", "berserking", "longsword", "triple_attack", "defence_maneuverability", "lancing"]:
             if hasattr(unit, attribute):
-                moves, attacks = locals()[attribute](unit,
-                                                     position,
-                                                     moveset_with_leftover,
-                                                     moveset_no_leftover,
+                moves, attacks = locals()[attribute](unit, position, moveset_with_leftover, moveset_no_leftover,
                                                      enemy_units)
 
         #if hasattr(unit, "push"):

@@ -74,7 +74,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
         if hasattr(action, "push"):
             outcome = settle_attack_push(action, gamestate.opponent_units(), gamestate.player_units(), outcome)
         else:
-            outcome = settle_attack(action, gamestate.opponent_units(), outcome)
+            outcome = settle_attack(action, gamestate.opponent_units(), outcome, gamestate)
 
     if action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
@@ -112,11 +112,11 @@ def settle_attack_push(action, enemy_units, player_units, outcome=None):
 
     if sub_outcome == SubOutcome.UNKNOWN:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
-        if not battle.attack_successful(action, rolls):
+        if not battle.attack_successful(action, rolls, gamestate):
             outcome.set_suboutcome(action.attack_position, SubOutcome.MISS)
             return
 
-        defense_successful = battle.defence_successful(action, rolls)
+        defense_successful = battle.defence_successful(action, rolls, gamestate)
         if defense_successful:
             outcome.set_suboutcome(action.attack_position, SubOutcome.PUSH)
         else:
@@ -156,7 +156,7 @@ def settle_attack_push(action, enemy_units, player_units, outcome=None):
     return outcome
 
 
-def settle_attack(action, enemy_units, outcome):
+def settle_attack(action, enemy_units, outcome, gamestate):
     if not outcome:
         outcome = Outcome()
 
@@ -168,8 +168,8 @@ def settle_attack(action, enemy_units, outcome):
     if sub_outcome == SubOutcome.UNKNOWN:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
 
-        attack_successful = battle.attack_successful(action, rolls)
-        defence_successful = battle.defence_successful(action, rolls)
+        attack_successful = battle.attack_successful(action, rolls, gamestate)
+        defence_successful = battle.defence_successful(action, rolls, gamestate)
         if not attack_successful or defence_successful:
             if not attack_successful:
                 outcome.set_suboutcome(action.attack_position, SubOutcome.MISS)
