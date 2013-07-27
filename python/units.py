@@ -757,7 +757,7 @@ class Cannon_II_A(Unit):
     defence = 1
     movement = 1
     range = 4
-    abonus = {}
+    abonus = {"Siege_weapons": 2}
     dbonus = {}
     zoc = []
     type = "Siege Weapon"
@@ -780,9 +780,11 @@ class Cannon_II_B(Unit):
     zoc = []
     type = "Siege Weapon"
 
-    attack_cooldown = 3
+    attack_cooldown = 2
+    far_sighted = True
 
-    descriptions = {"attack_cooldown": "Can only attack every third turn."}
+    descriptions = {"attack_cooldown": "Can only attack every third turn.",
+                    "far_sighted": "-1A if target is less than 4 tiles away."}
 
 
 class Lancer(Unit):

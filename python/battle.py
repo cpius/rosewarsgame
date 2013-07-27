@@ -1,4 +1,5 @@
 from outcome import Outcome, SubOutcome
+import common
 
 
 def attack_successful(action, rolls, gamestate):
@@ -83,6 +84,9 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
 
     if defending_unit.range == 1 and hasattr(attacking_unit, "melee_expert"):
         attack += 1
+
+    if hasattr(attacking_unit, "far_sighted") and common.distance(action.end_position, action.attack_position) < 4:
+        attack -= 1
 
     return attack
 
