@@ -149,6 +149,7 @@ class Unit(object):
         else:
             return self.zoc
 
+
 class Archer(Unit):
 
     name = "Archer"
@@ -486,7 +487,7 @@ class Catapult_II_A(Unit):
 
     name = "Catapult II_A"
     image = "Catapult"
-    attack = 6
+    attack = 7
     defence = 2
     movement = 1
     range = 3
@@ -509,7 +510,7 @@ class Catapult_II_B(Unit):
     attack = 6
     defence = 2
     movement = 1
-    range = 3
+    range = 4
     abonus = {}
     dbonus = {}
     type = "Siege Weapon"
@@ -560,7 +561,7 @@ class Catapult_III_C(Unit):
 
     name = "Catapult III_C"
     image = "Catapult"
-    attack = 7
+    attack = 6
     defence = 2
     movement = 1
     range = 5
