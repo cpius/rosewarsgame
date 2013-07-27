@@ -192,10 +192,10 @@ def settle_attack(action, enemy_units, outcome):
 
 def settle_ability(action, enemy_units, player_units):
 
-    def bribe():
-        position = action.ability_position
-        player_units[position] = enemy_units.pop(position)
-        player_units[position].set_bribed()
+    if action.ability == "bribe":
+        action.target_unit.set_bribed()
+        player_units[action.ability_position] = enemy_units.pop(action.ability_position)
+        player_units[action.ability_position].set_bribed()
 
     if action.ability == "sabotage":
         action.target_unit.set_sabotaged()

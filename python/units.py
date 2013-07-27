@@ -93,8 +93,16 @@ class Unit(object):
     def remove_bribed(self):
         return self.variables["is_bribed"]
 
+    def set_recently_bribed(self):
+        self.variables["recently_bribed"] = 1
+
+    def get_recently_bribed(self):
+        return self.variables["recently_bribed"]
+
     def remove_recently_bribed(self):
         self.variables["recently_bribed"] = 0
+
+
 
     # Extra life
     def get_extra_life(self):

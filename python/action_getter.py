@@ -95,7 +95,7 @@ def add_modifiers(attacks, player_units):
 def get_actions(gamestate):
 
     def can_use_unit(unit):
-        return not (unit.variables["used"] or unit.get_frozen() or hasattr(unit, "just_bribed"))
+        return not (unit.get_used() or unit.get_frozen() or unit.get_recently_bribed())
 
     def can_attack_with_unit(unit):
         return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \

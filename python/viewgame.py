@@ -197,7 +197,7 @@ def draw_bordered_circle(screen, position, size, color):
 def draw_symbols(screen, interface, unit, position):
     m.write(screen, str(unit.variables["xp"]), interface.coordinates["flag"].get(position), interface.fonts["xp"])
 
-    if hasattr(unit, "bribed"):
+    if unit.get_bribed():
         draw_bribed(screen, interface, position)
     if hasattr(unit, "is_crusading"):
         draw_crusading(screen, interface, position)
@@ -315,5 +315,5 @@ def add_blue_counters(unit):
         unit.blue_counters = unit.get_frozen()
     if unit.get_attack_frozen():
         unit.blue_counters = unit.get_attack_frozen()
-    if hasattr(unit, "just_bribed"):
+    if unit.get_recently_bribed():
         unit.blue_counters = 1
