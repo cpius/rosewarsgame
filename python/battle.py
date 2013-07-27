@@ -48,6 +48,9 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
     if defending_unit.get_sabotaged_II():
         defence_rating = -1
 
+    if attacking_unit.range == 1 and hasattr(defending_unit, "big_shield"):
+        defence_rating += 2
+
     return defence_rating
 
 

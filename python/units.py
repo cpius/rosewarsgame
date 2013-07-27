@@ -1048,15 +1048,17 @@ class Berserker_II_A(Unit):
     type = "Infantry"
 
     berserking = True
+    big_shield = True
 
-    descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack."}
+    descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack.",
+                    "big_shield": "+2D v melee"}
 
 
 class Berserker_II_B(Unit):
 
     name = "Berserker II_B"
     image = "Berserker"
-    attack = 5
+    attack = 7
     defence = 1
     movement = 1
     range = 1
