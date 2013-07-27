@@ -28,10 +28,10 @@
     "actions_remaining": 0, 
     "created_at": "2013-07-23T14:42:27Z", 
     "player1_units": {
-        "D5": "Heavy Cavalry", 
+        "D5": "Knight", 
         "B5": "Pikeman", 
         "B6": "Light Cavalry", 
-        "A5": "Heavy Cavalry", 
+        "A5": "Knight", 
         "C5": "Flag Bearer", 
         "D6": "Berserker", 
         "E6": {
