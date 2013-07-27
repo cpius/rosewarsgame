@@ -48,8 +48,11 @@ def get_attack_rating(attacking_unit, defending_unit, action):
     if hasattr(attacking_unit, "is_crusading"):
         attack += 1
     
-    if hasattr(action, "lancing"):
+    if action.is_lancing():
         attack += 2
+
+    if action.is_lancing_II():
+        attack += 3
     
     if attacking_unit.get_bribed():
         attack += 1

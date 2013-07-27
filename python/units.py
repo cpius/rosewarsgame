@@ -102,8 +102,6 @@ class Unit(object):
     def remove_recently_bribed(self):
         self.variables["recently_bribed"] = 0
 
-
-
     # Extra life
     def get_extra_life(self):
         return self.name == "Viking" and not self.variables["lost_extra_life"]
@@ -333,9 +331,9 @@ class Cavalry_Lieutenant(Unit):
     upgrades = ["Cavalry_Luitenant_II_A", "Cavalry_Luitenant_II_B"]
 
 
-class Cavalry_Luitenant_II_A(Unit):
+class Cavalry_Lieutenant_II_A(Unit):
 
-    name = "Cavalry Liuetenant II_A"
+    name = "Cavalry Lieutenant II_A"
     image = "Light Cavalry"
     attack = 3
     defence = 3
@@ -346,9 +344,9 @@ class Cavalry_Luitenant_II_A(Unit):
     type = "Cavalry"
 
 
-class Cavalry_Luitenant_II_B(Unit):
+class Cavalry_Lieutenant_II_B(Unit):
 
-    name = "Cavalry Liuetenant II_B"
+    name = "Cavalry Lieutenant II_B"
     image = "Light Cavalry"
     attack = 2
     defence = 4
@@ -765,8 +763,8 @@ class Lancer_II_A(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {"Cavalry": 1}
-    dbonus = {}
+    abonus = {"Cavalry": 2}
+    dbonus = {"Cavalry": 1}
     zoc = []
     type = "Cavalry"
 
@@ -781,16 +779,16 @@ class Lancer_II_B(Unit):
     image = "Lancer"
     attack = 2
     defence = 3
-    movement = 3
+    movement = 4
     range = 1
     abonus = {"Cavalry": 1}
     dbonus = {}
     zoc = []
     type = "Cavalry"
 
-    lancing = True
+    lancing_II = True
 
-    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
+    descriptions = {"lancing_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."}
 
 
 class Flag_Bearer(Unit):

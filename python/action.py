@@ -259,7 +259,11 @@ class Action(object):
 
     def is_lancing(self):
         distance = common.distance(self.start_position, self.attack_position)
-        return self.unit.lancing and self.is_attack() and distance >= 3
+        return hasattr(self.unit_reference, "lancing") and self.is_attack() and distance >= 3
+
+    def is_lancing_II(self):
+        distance = common.distance(self.start_position, self.attack_position)
+        return hasattr(self.unit_reference, "lancing_II") and self.is_attack() and distance >= 4
 
     def is_push(self):
         return self.unit.hasattr("push") and self.is_attack()
