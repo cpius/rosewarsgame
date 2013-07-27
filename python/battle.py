@@ -32,6 +32,12 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
     if hasattr(attacking_unit, "sharpshooting"):
         defence_rating = 1
 
+    if attacking_unit.range > 1 and hasattr(defending_unit, "tall_shield"):
+        defence_rating += 1
+
+    if attacking_unit.range == 1 and hasattr(defending_unit, "melee_expert"):
+        defence_rating += 1
+
     if attack_rating > 6:
         defence_rating = defending_unit.defence - attack_rating + 6
     
@@ -74,7 +80,10 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
  
     if defending_unit.type in attacking_unit.abonus:
         attack += attacking_unit.abonus[defending_unit.type]
-    
+
+    if defending_unit.range == 1 and hasattr(attacking_unit, "melee_expert"):
+        attack += 1
+
     return attack
 
 

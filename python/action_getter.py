@@ -80,6 +80,10 @@ def get_actions(gamestate):
     def can_use_unit(unit):
         return not (unit.get_used() or unit.get_frozen() or unit.get_recently_bribed())
 
+    def moving_allowed(unit_position):
+        return not any(position for position in common.adjacent_tiles(unit_position) if position in gamestate.units[1] and
+                   hasattr(gamestate.units[1][position], "melee_freeze"))
+
     def can_attack_with_unit(unit):
         return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
             and not unit.get_attack_frozen()
@@ -100,10 +104,20 @@ def get_actions(gamestate):
 
             add_modifiers(attacks, gamestate.player_units())
 
-            if can_attack_with_unit(unit):
+            print "m", moving_allowed(position)
+
+            if can_attack_with_unit(unit) and moving_allowed(position):
+                print "not"
                 actions += moves + attacks + abilities
-            else:
+
+            if not can_attack_with_unit(unit) and moving_allowed(position):
+                print "not"
                 actions += moves + abilities
+
+            if can_attack_with_unit(unit) and not moving_allowed(position):
+                print "here"
+                print attacks
+                return attacks + abilities
 
     for action in actions:
         add_unit_references(gamestate, action)

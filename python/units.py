@@ -558,11 +558,9 @@ class Royal_Guard(Unit):
     
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
     defence_maneuverability = True
-    shield = True
     xp_to_upgrade = 3
 
-    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.",
-                    "shield": "+1D v melee units."}
+    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways."}
 
     upgrades = ["Royal Guard II_A", "Royal Guard II_B"]
 
@@ -571,7 +569,7 @@ class Royal_Guard_II_A(Unit):
 
     name = "Royal Guard II_A"
     image = "Royal Guard"
-    attack = 4
+    attack = 3
     defence = 3
     movement = 1
     range = 1
@@ -581,10 +579,10 @@ class Royal_Guard_II_A(Unit):
 
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
     defence_maneuverability = True
-    shield = True
+    melee_expert = True
 
-    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.",
-                    "shield": "+1D v melee units."}
+    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.", "melee_expert":
+                    "+1A, +1D vs melee units."}
 
 
 class Royal_Guard_II_B(Unit):
@@ -592,7 +590,7 @@ class Royal_Guard_II_B(Unit):
     name = "Royal Guard II_B"
     image = "Royal Guard"
     attack = 3
-    defence = 4
+    defence = 3
     movement = 1
     range = 1
     abonus = {}
@@ -601,10 +599,11 @@ class Royal_Guard_II_B(Unit):
 
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
     defence_maneuverability = True
-    shield = True
+    tall_shield = True
+    melee_freeze = True
 
-    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.",
-                    "shield": "+1D v melee units."}
+    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.", "tall_shield":
+                    "+1D against ranged attacks", "melee_freeze": "Units adjacent to it can only attack it, not move."}
 
 
 class Scout(Unit):
