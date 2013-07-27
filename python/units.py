@@ -149,6 +149,14 @@ class Unit(object):
         else:
             return self.zoc
 
+    #Movement remaining
+    def set_movement_remaining(self, n):
+        self.variables["movement_remaining"] = n
+
+    def get_movement_remaining(self):
+        return self.variables["movement_remaining"]
+
+
 
 class Archer(Unit):
 
@@ -1106,7 +1114,7 @@ class Chariot(Unit):
 
     name = "Chariot"
     image = "Chariot"
-    attack = 4
+    attack = 3
     defence = 3
     movement = 3
     range = 1
@@ -1126,9 +1134,9 @@ class Chariot_II_A(Unit):
 
     name = "Chariot II_A"
     image = "Chariot"
-    attack = 4
+    attack = 3
     defence = 3
-    movement = 3
+    movement = 4
     range = 1
     abonus = {}
     dbonus = {}
@@ -1144,11 +1152,11 @@ class Chariot_II_B(Unit):
 
     name = "Chariot II_B"
     image = "Chariot"
-    attack = 4
+    attack = 3
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
+    abonus = {"Infantry": 2}
     dbonus = {}
     zoc = []
     type = "Cavalry"

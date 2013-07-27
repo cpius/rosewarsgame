@@ -22,9 +22,10 @@ def do_action(gamestate, action, outcome=None, unit=None):
     def prepare_extra_actions(action, unit):
 
         if hasattr(unit, "charioting"):
-            unit.movement_remaining = unit.movement - distance(action.start_position, action.end_position)
+            movement_remaining = unit.movement - distance(action.start_position, action.end_position)
             if action.is_attack():
-                unit.movement_remaining -= 1
+                movement_remaining -= 1
+            unit.set_movement_remaining(movement_remaining)
             unit.extra_action = True
 
         if hasattr(unit, "samuraiing"):
@@ -81,7 +82,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
     if getattr(gamestate, "extra_action"):
         del unit.extra_action
-        del unit.movement_remaining
+        unit.set_movement_remaining(0)
     else:
         prepare_extra_actions(action, unit)
 
@@ -96,7 +97,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
         gamestate.extra_action = False
 
     if hasattr(unit, "extra_action"):
-        gamestate.current_player().extra_action = True
+        gamestate.extra_action = True
 
     return outcome
 

@@ -1,0 +1,46 @@
+{"type": "Is outcome correct",
+ "outcome": {"E4": 1},
+ "action": 
+{
+    "start_position": "E3",
+    "end_position": "E3",
+    "attack_position": "E4",
+    "move_with_attack": 1
+},
+ "pre_gamestate": 
+ {
+	"actions_remaining": 2, 
+    "player1_units": 
+	{
+        "E3": "Chariot",
+		"A2": "Pikeman"
+    }, 
+    "player2_units": 
+	{
+        "E4": "Archer",
+		"D7": "Ballista"
+    }
+ },
+ "post_gamestate": 
+ {
+	"extra_action": true,
+	"actions_remaining": 1, 
+    "player1_units": 
+	{
+        "E3":
+		{	
+			"name": "Chariot",
+			"used": 1,
+			"xp_gained_this_turn": 1,
+			"xp": 1,
+			"movement_remaining": 2
+		},
+		"A2": "Pikeman"
+    },
+    "player2_units": 
+	{
+        "E4": "Archer",
+		"D7": "Ballista"
+    }
+ }
+}

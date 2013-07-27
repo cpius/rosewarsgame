@@ -226,7 +226,7 @@ def get_unit_actions(unit, position, units, enemy_units, player_units):
 
 
 def generate_extra_moveset(unit, position, units):
-    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.movement_remaining, unit.movement_remaining)
+    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get_movement_remaining(), unit.get_movement_remaining())
 
 
 def generate_moveset(unit, position, units):
