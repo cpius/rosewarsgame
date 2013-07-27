@@ -270,7 +270,7 @@ class Action(object):
 
     def is_crusading(self, gamestate):
         return any(position for position in common.surrounding_tiles(self.start_position) if position in gamestate.units[0] and
-               hasattr(gamestate.units[0][position], "crusading"))
+                   hasattr(gamestate.units[0][position], "crusading"))
 
     def has_high_morale(self, gamestate):
         return any(position for position in common.adjacent_tiles(self.end_position) if
