@@ -666,8 +666,26 @@ class Scout_II_B(Unit):
 
 class Viking(Unit):
 
-    def __init__(self):
-        super(Viking, self).__init__()
+    name = "Viking"
+    image = "Viking"
+    attack = 3
+    defence = 2
+    movement = 1
+    range = 1
+    abonus = {}
+    dbonus = {"Siege Weapon": 1}
+    zoc = []
+    type = "Infantry"
+
+    rage = True
+
+    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)",
+                    "extra_life": "It takes two successful hits to kill Viking"}
+
+    upgrades = ["Viking II_A", "Viking II_B"]
+
+
+class Viking_II_A(Unit):
 
     name = "Viking"
     image = "Viking"
@@ -677,6 +695,28 @@ class Viking(Unit):
     range = 1
     abonus = {}
     dbonus = {"Siege Weapon": 1}
+    zoc = []
+    type = "Infantry"
+
+    rage_II = True
+
+    descriptions = {"rage": "Can move up to two tiles to make an attack. (But cannot take over the attacked tile if "
+                            "it's 3 tiles away.)",
+                    "extra_life": "It takes two successful hits to kill Viking"}
+
+    upgrades = ["Viking II_A", "Viking II_B"]
+
+
+class Viking_II_B(Unit):
+
+    name = "Viking"
+    image = "Viking"
+    attack = 3
+    defence = 2
+    movement = 1
+    range = 1
+    abonus = {"Siege Weapons": 1}
+    dbonus = {"Siege Weapons": 2}
     zoc = []
     type = "Infantry"
 
