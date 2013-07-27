@@ -69,6 +69,25 @@ class Direction:
             return "Up"
 
 
+eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
+
+
+def four_forward_tiles(position, forward_position):
+    """ Returns the 4 other nearby tiles in the direction towards forward_position """
+    return surrounding_tiles(position) & surrounding_tiles(forward_position)
+
+
+def two_forward_tiles(position, forward_position):
+    """ Returns the 2 other nearby tiles in the direction towards forward_position """
+    return set(direction.move(position) for direction in eight_directions) & \
+        set(direction.move(forward_position) for direction in directions)
+
+
+def surrounding_tiles(position):
+    """ Returns the 8 surrounding tiles"""
+    return set(direction.move(position) for direction in eight_directions)
+
+
 class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):

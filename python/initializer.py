@@ -36,22 +36,6 @@ def zoc(unit, position, enemy_units):
     return position in enemy_units and unit.type in enemy_units[position].zoc
 
 
-def surrounding_tiles(position):
-    """ Returns the 8 surrounding tiles"""
-    return set(direction.move(position) for direction in eight_directions)
-
-
-def four_forward_tiles(position, forward_position):
-    """ Returns the 4 other nearby tiles in the direction towards forward_position. """
-    return surrounding_tiles(position) & surrounding_tiles(forward_position)
-
-
-def two_forward_tiles(position, forward_position):
-    """ Returns the 2 other nearby tiles in the direction towards forward_position. """
-    return set(direction.move(position) for direction in eight_directions) & \
-           set(direction.move(forward_position) for direction in directions)
-
-
 def get_direction(position, forward_position):
     """ Returns the direction would take you from position to forward_position. """
     return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
@@ -111,6 +95,7 @@ def initialize_turn(gamestate):
         unit.decrement_frozen()
         unit.decrement_attack_frozen()
         unit.remove_sabotaged()
+        unit.remove_sabotaged_II()
         unit.remove_improved_weapons()
         unit.remove_recently_bribed()
 

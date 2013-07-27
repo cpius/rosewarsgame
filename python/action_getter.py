@@ -41,23 +41,6 @@ class memoized(object):
 _action = 0
 board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
-eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
-
-
-def surrounding_tiles(position):
-    """ Returns the 8 surrounding tiles"""
-    return set(direction.move(position) for direction in eight_directions)
-
-
-def four_forward_tiles(position, forward_position):
-    """ Returns the 4 other nearby tiles in the direction towards forward_position """
-    return surrounding_tiles(position) & surrounding_tiles(forward_position)
-
-
-def two_forward_tiles(position, forward_position):
-    """ Returns the 2 other nearby tiles in the direction towards forward_position """
-    return set(direction.move(position) for direction in eight_directions) & \
-        set(direction.move(forward_position) for direction in directions)
 
 
 def find_all_friendly_units_except_current(current_unit_position, player_units):
@@ -439,7 +422,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
             def get_attack(position, end_position, attack_position, move_with_attack):
                 attack = Action(position, end_position=end_position, attack_position=attack_position,
                                 move_with_attack=move_with_attack)
-                for forward_position in four_forward_tiles(end_position, attack_position):
+                for forward_position in common.four_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
                         attack.sub_actions.append(Action(position, end_position=end_position,
                                                          attack_position=forward_position, move_with_attack=MoveOrStay.STAY))
@@ -458,7 +441,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
             def get_attack(start_position, end_position, attack_position, move_with_attack):
                 attack = Action(start_position, end_position=end_position, attack_position=attack_position,
                                 move_with_attack=move_with_attack)
-                for forward_position in two_forward_tiles(end_position, attack_position):
+                for forward_position in common.two_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
                         attack.sub_actions.append(Action(start_position, end_position=end_position,
                                                          attack_position=forward_position, move_with_attack=MoveOrStay.STAY))
