@@ -357,10 +357,10 @@ class Cavalry_Lieutenant_II_B(Unit):
     type = "Cavalry"
 
 
-class Heavy_Cavalry(Unit):
+class Knight(Unit):
 
-    name = "Heavy Cavalry"
-    image = "Heavy Cavalry"
+    name = "Knight"
+    image = "Knight"
     attack = 3
     defence = 3
     movement = 2

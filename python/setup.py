@@ -52,7 +52,7 @@ Info = namedtuple("Info", ["allowed_rows", "copies_in_bag", "protection_required
 units_info = {"Archer": Info({2, 3}, 3, False),
               "Ballista": Info({2, 3}, 2, True),
               "Catapult": Info({2, 3}, 2, False),
-              "Heavy Cavalry": Info({4}, 3, False),
+              "Knight": Info({4}, 3, False),
               "Light Cavalry": Info({2, 3}, 3, False),
               "Pikeman": Info({2, 3, 4}, 3, False),
               "Berserker": Info({2, 3}, 1, False),
