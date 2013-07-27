@@ -73,6 +73,29 @@ class Unit(object):
     def remove_improved_weapons(self):
         self.variables["improved_weapons"] = 0
 
+    # Improved weapons_II_A
+    def set_improved_weapons_II_A(self):
+        self.variables["improved_weapons_II_A"] = 2
+
+    def get_improved_weapons_II_A(self):
+        return self.variables["improved_weapons_II_A"]
+
+    def decrease_improved_weapons_II_A(self):
+        self.variables["improved_weapons_II_A"] = max(0, self.get_improved_weapons() - 1)
+
+    # Improved weapons_II_B
+    def set_improved_weapons_II_B(self):
+        self.variables["improved_weapons_II_B"] = 1
+        self.zoc = {"Cavalry"}
+
+    def get_improved_weapons_II_B(self):
+        return self.variables["improved_weapons_II_B"]
+
+    def remove_improved_weapons_II_B(self):
+        self.variables["improved_weapons_II_B"] = 0
+        self.zoc = {}
+
+
     # Sabotage
     def set_sabotaged(self):
         self.variables["sabotaged"] = 1
@@ -119,6 +142,12 @@ class Unit(object):
     def remove_extra_life(self):
         self.variables["lost_extra_life"] = 1
 
+    #Zoc
+    def get_zoc(self):
+        if self.get_improved_weapons_II_B():
+            return self.zoc + ["Cavalry"]
+        else:
+            return self.zoc
 
 class Archer(Unit):
 
@@ -1372,7 +1401,7 @@ class Weaponsmith(Unit):
     attack = False   
     defence = 2
     movement = 1
-    range = 3
+    range = 4
     abonus = {}
     dbonus = {}
     type = "Specialist"
@@ -1391,14 +1420,14 @@ class Weaponsmith_II_A(Unit):
     attack = False
     defence = 2
     movement = 1
-    range = 3
+    range = 4
     abonus = {}
     dbonus = {}
     type = "Specialist"
 
-    abilities = ["improve_weapons"]
+    abilities = ["improve_weapons_II_A"]
 
-    descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}
+    descriptions = {"improve_weapons_II_A": "Give melee unit +2 attack, +1 defence for two turns"}
 
 
 class Weaponsmith_II_B(Unit):
@@ -1408,14 +1437,15 @@ class Weaponsmith_II_B(Unit):
     attack = False
     defence = 2
     movement = 1
-    range = 3
+    range = 4
     abonus = {}
     dbonus = {}
     type = "Specialist"
 
-    abilities = ["improve_weapons"]
+    abilities = ["improve_weapons_II_B"]
 
-    descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}
+    descriptions = {"improve_weapons": "Give melee unit +3 attack, +2 defence, and "
+                                       "zoc against cavalry until your next turn"}
 
 
 def get_position(position_string):

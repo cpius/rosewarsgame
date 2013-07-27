@@ -33,7 +33,7 @@ class Direction:
 
 def zoc(unit, position, enemy_units):
     """ Returns whether an enemy unit can exert ZOC on a friendly unit """
-    return position in enemy_units and unit.type in enemy_units[position].zoc
+    return position in enemy_units and unit.type in enemy_units[position].get_zoc()
 
 
 def get_direction(position, forward_position):
@@ -97,6 +97,8 @@ def initialize_turn(gamestate):
         unit.remove_sabotaged()
         unit.remove_sabotaged_II()
         unit.remove_improved_weapons()
+        unit.decrease_improved_weapons_II_A()
+        unit.remove_improved_weapons_II_B()
         unit.remove_recently_bribed()
 
     for opponent_unit_position, opponent_unit in gamestate.opponent_units().items():

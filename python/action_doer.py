@@ -212,6 +212,11 @@ def settle_ability(action, enemy_units, player_units):
     if action.ability == "improve_weapons":
         action.target_unit.set_improved_weapons()
 
+    if action.ability == "improve_weapons_II_A":
+        action.target_unit.set_improved_weapons_II_A()
+
+    if action.ability == "improve_weapons_II_B":
+        action.target_unit.set_improved_weapons_II_B()
 
 def add_target(action, enemy_units, player_units):
     if action.is_attack():

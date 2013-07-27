@@ -24,8 +24,14 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
     if attacking_unit.type in defending_unit.dbonus:
         defence_rating += defending_unit.dbonus[attacking_unit.type]
 
-    if hasattr(defending_unit, "improved_weapons"):
+    if defending_unit.get_improved_weapons():
         defence_rating += 1
+
+    if defending_unit.get_improved_weapons_II_A():
+            defence_rating += 1
+
+    if defending_unit.get_improved_weapons_II_B():
+            defence_rating += 2
 
     if hasattr(defending_unit, "shield") and attacking_unit.range == 1:
         defence_rating += 1
@@ -79,9 +85,15 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if action.has_high_morale_II_B(gamestate):
             attack += 3
 
-    if hasattr(attacking_unit, "improved_weapons"):
+    if attacking_unit.get_improved_weapons():
         attack += 3
- 
+
+    if attacking_unit.get_improved_weapons_II_A():
+        attack += 2
+
+    if attacking_unit.get_improved_weapons_II_B():
+        attack += 3
+
     if defending_unit.type in attacking_unit.abonus:
         attack += attacking_unit.abonus[defending_unit.type]
 

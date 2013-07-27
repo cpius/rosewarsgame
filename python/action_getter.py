@@ -104,18 +104,13 @@ def get_actions(gamestate):
 
             add_modifiers(attacks, gamestate.player_units())
 
-            print "m", moving_allowed(position)
-
             if can_attack_with_unit(unit) and moving_allowed(position):
-                print "not"
                 actions += moves + attacks + abilities
 
             if not can_attack_with_unit(unit) and moving_allowed(position):
-                print "not"
                 actions += moves + abilities
 
             if can_attack_with_unit(unit) and not moving_allowed(position):
-                print "here"
                 print attacks
                 return attacks + abilities
 
@@ -195,7 +190,7 @@ def get_extra_actions(gamestate):
 
             opponent_units = gamestate.opponent_units()
             unit.zoc_blocks = frozenset(position for position,
-                                        opponent_unit in opponent_units.items() if unit.type in opponent_unit.zoc)
+                                        opponent_unit in opponent_units.items() if unit.type in opponent_unit.get_zoc())
 
             moves, attacks, abilities = [], [], []
 
@@ -215,7 +210,8 @@ def get_extra_actions(gamestate):
 
 def get_unit_actions(unit, position, units, enemy_units, player_units):
 
-    unit.zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
+    unit.zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items()
+                                if unit.type in enemy_unit.get_zoc())
 
     if unit.name not in settings.allowed_special_units:
         if unit.range == 1:
@@ -533,7 +529,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
             if ability in ["sabotage", "poison"]:
                 possible_targets = enemy_units
 
-            elif ability == "improve_weapons":
+            elif ability in ["improve_weapons", "improve_weapons_II_A", "improve_weapons_II_B"]:
                 possible_targets = [target_position for target_position, target_unit in player_units.items()
                                     if target_unit.attack and target_unit.range == 1]
 
