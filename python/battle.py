@@ -40,7 +40,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
 
     if defending_unit.get_sabotaged_II():
         defence_rating = -1
-    
+
     return defence_rating
 
 
@@ -60,7 +60,7 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if attacking_unit.get_bribed():
         attack += 1
 
-    if hasattr(action, "high_morale"):
+    if action.has_high_morale(gamestate):
         attack += 2
 
     if hasattr(attacking_unit, "improved_weapons"):

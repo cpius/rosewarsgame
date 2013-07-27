@@ -70,11 +70,16 @@ class Direction:
 
 
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
+four_directions = [Direction(*tuple) for tuple in [0, 1], [0, -1], [1, 0], [-1, 0]]
 
 
 def four_forward_tiles(position, forward_position):
     """ Returns the 4 other nearby tiles in the direction towards forward_position """
     return surrounding_tiles(position) & surrounding_tiles(forward_position)
+
+
+def four_adjacent_tiles(position):
+    return set(direction.move(position) for direction in four_directions)
 
 
 def two_forward_tiles(position, forward_position):
