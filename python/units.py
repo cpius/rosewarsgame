@@ -978,7 +978,7 @@ class Crusader_II_A(Unit):
 
     name = "Crusader II_A"
     image = "Crusader"
-    attack = 3
+    attack = 4
     defence = 3
     movement = 3
     range = 1
@@ -1006,10 +1006,10 @@ class Crusader_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    crusading = True
+    crusading_II = True
 
-    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
-                                 "Crusader get +1A."}
+    descriptions = {"crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+                                 "Crusader get +1A, +1D."}
 
 
 class Berserker(Unit):
