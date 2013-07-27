@@ -631,7 +631,7 @@ class Scout_II_A(Unit):
 
     name = "Scout II_A"
     image = "Scout"
-    attack = False
+    attack = 2
     defence = 3
     movement = 4
     range = 1
@@ -659,8 +659,9 @@ class Scout_II_B(Unit):
     type = "Cavalry"
 
     scouting = True
+    tall_shield = "True"
 
-    descriptions = {"scouting": "Can move past all units."}
+    descriptions = {"scouting": "Can move past all units.", "tall_shield": "+1D against ranged attacks"}
 
 
 class Viking(Unit):
