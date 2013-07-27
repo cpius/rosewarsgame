@@ -78,7 +78,7 @@ def four_forward_tiles(position, forward_position):
     return surrounding_tiles(position) & surrounding_tiles(forward_position)
 
 
-def four_adjacent_tiles(position):
+def adjacent_tiles(position):
     return set(direction.move(position) for direction in four_directions)
 
 

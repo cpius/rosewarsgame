@@ -874,9 +874,9 @@ class Flag_Bearer_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    flag_bearing = True  #
+    flag_bearing_II_A = True
 
-    descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
+    descriptions = {"flag_bearing_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer."}
 
 
 class Flag_Bearer_II_B(Unit):
@@ -892,9 +892,9 @@ class Flag_Bearer_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    flag_bearing = True  #
+    flag_bearing_II_B = True  #
 
-    descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
+    descriptions = {"flag_bearing_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer."}
 
 
 class Longswordsman(Unit):

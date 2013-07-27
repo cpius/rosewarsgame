@@ -63,6 +63,12 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if action.has_high_morale(gamestate):
         attack += 2
 
+    if action.has_high_morale_II_A(gamestate):
+        attack += 2
+
+    if action.has_high_morale_II_B(gamestate):
+            attack += 3
+
     if hasattr(attacking_unit, "improved_weapons"):
         attack += 3
  

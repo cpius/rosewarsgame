@@ -273,6 +273,13 @@ class Action(object):
                hasattr(gamestate.units[0][position], "crusading"))
 
     def has_high_morale(self, gamestate):
-        return any(position for position in common.four_adjacent_tiles(self.end_position) if
+        return any(position for position in common.adjacent_tiles(self.end_position) if
                    position in gamestate.units[0] and hasattr(gamestate.units[0][position], "flag_bearing"))
 
+    def has_high_morale_II_A(self, gamestate):
+        return any(position for position in common.surrounding_tiles(self.end_position) if
+                   position in gamestate.units[0] and hasattr(gamestate.units[0][position], "flag_bearing_II_A"))
+
+    def has_high_morale_II_B(self, gamestate):
+        return any(position for position in common.adjacent_tiles(self.end_position) if
+                   position in gamestate.units[0] and hasattr(gamestate.units[0][position], "flag_bearing_II_B"))

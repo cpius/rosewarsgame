@@ -1,0 +1,27 @@
+{"type": "Is attack and defence correct",
+ "attack": 5,
+ "defence": 1,
+ "action": 
+{
+    "start_position": "D4",
+    "end_position": "E4",
+    "attack_position": "E5",
+    "move_with_attack": "MOVE"
+},
+ "gamestate": 
+ {
+	"actions_remaining": 1,
+    "player1_units": 
+	{
+        "D3": "Flag Bearer_II_A",
+        "D4": "Knight" 
+    }, 
+    "player2_units": 
+	{
+        "A8": "Archer", 
+        "E5": "Ballista" 
+
+    }
+ } 
+}
+
