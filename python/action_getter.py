@@ -3,8 +3,7 @@ import settings
 from action import Action
 import collections
 import functools
-import common
-from common import Direction
+from common import *
 from action import MoveOrStay
 
 
@@ -36,11 +35,6 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-#global variables
-board = set((column, row) for column in range(1, 6) for row in range(1, 9))
-directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
-
-
 def find_all_friendly_units_except_current(current_unit_position, player_units):
     return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
 
@@ -64,7 +58,7 @@ def get_actions(gamestate):
         return not (unit.is_used() or unit.is_frozen() or unit.get_recently_bribed())
 
     def moving_allowed(unit_position):
-        return not any(position for position in common.adjacent_tiles(unit_position) if
+        return not any(position for position in adjacent_tiles(unit_position) if
                        position in gamestate.units[1] and hasattr(gamestate.units[1][position], "melee_freeze"))
 
     def can_attack_with_unit(unit):
@@ -101,19 +95,19 @@ def get_actions(gamestate):
 
 
 def get_action(gamestate, action_document):
-    start_position = common.position_to_tuple(action_document["start_position"])
+    start_position = position_to_tuple(action_document["start_position"])
     if not start_position in gamestate.player_units():
         return None
 
-    attack_position = common.position_to_tuple(action_document["attack_position"])
+    attack_position = position_to_tuple(action_document["attack_position"])
     if attack_position and not attack_position in gamestate.opponent_units():
         return None
 
     action = Action(
         start_position,
-        common.position_to_tuple(action_document["end_position"]),
+        position_to_tuple(action_document["end_position"]),
         attack_position,
-        common.position_to_tuple(action_document["ability_position"]),
+        position_to_tuple(action_document["ability_position"]),
         action_document["move_with_attack"],
         action_document["ability"])
     add_unit_references(gamestate, action)
@@ -191,11 +185,11 @@ def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
                                 if unit.type in enemy_unit.get_zoc())
 
     movement = unit.movement
-    if any(position for position in common.surrounding_tiles(position) if position in friendly_units
+    if any(position for position in surrounding_tiles(position) if position in friendly_units
            if hasattr(friendly_units[position], "cavalry_charging")):
         movement += 1
 
-    units = common.merge_units(friendly_units, enemy_units)
+    units = merge_units(friendly_units, enemy_units)
 
     if unit.name not in settings.allowed_special_units:
         if unit.range == 1:
@@ -289,7 +283,7 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
         attackset.add(position)
 
     if range_remaining > 0:
-        for new_position in common.adjacent_tiles(position):
+        for new_position in adjacent_tiles(position):
             attackset |= ranged_attacks_set(new_position, enemy_units, range_remaining - 1)
 
     return attackset
@@ -304,7 +298,7 @@ def abilities_set(unit, position, units, possible_targets, range_remaining):
         abilityset.add(position)
 
     if range_remaining > 0:
-        for new_position in common.adjacent_tiles(position):
+        for new_position in adjacent_tiles(position):
             abilityset |= abilities_set(unit, new_position, units, possible_targets, range_remaining - 1)
 
     return abilityset
@@ -403,7 +397,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
             def get_attack(position, end_position, attack_position, move_with_attack):
                 attack = Action(position, end_position=end_position, attack_position=attack_position,
                                 move_with_attack=move_with_attack)
-                for forward_position in common.four_forward_tiles(end_position, attack_position):
+                for forward_position in four_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
                         attack.sub_actions.append(Action(position, end_position=end_position,
                                                          attack_position=forward_position, move_with_attack=MoveOrStay.STAY))
@@ -422,7 +416,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
             def get_attack(start_position, end_position, attack_position, move_with_attack):
                 attack = Action(start_position, end_position=end_position, attack_position=attack_position,
                                 move_with_attack=move_with_attack)
-                for forward_position in common.two_forward_tiles(end_position, attack_position):
+                for forward_position in two_forward_tiles(end_position, attack_position):
                     if forward_position in enemy_units:
                         attack.sub_actions.append(Action(start_position, end_position=end_position,
                                                          attack_position=forward_position, move_with_attack=MoveOrStay.STAY))

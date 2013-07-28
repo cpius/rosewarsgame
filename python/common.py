@@ -44,6 +44,7 @@ Position = namedtuple("Position", ["column", "row"])
 
 Position.__repr__ = position_to_string
 
+board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 
 def position_to_tuple(position_string):
     if position_string is None or len(position_string) != 2:
@@ -66,7 +67,7 @@ def distance(position1, position2):
 
 def get_direction(position, forward_position):
     """ Returns the direction that would take you from position to forward_position """
-    return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
+    return Direction(-position.column + forward_position.column, -position.row + forward_position.row)
 
 
 def flip(position):
@@ -74,7 +75,7 @@ def flip(position):
 
 
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
-four_directions = [Direction(*tuple) for tuple in [0, 1], [0, -1], [1, 0], [-1, 0]]
+directions = [Direction(*tuple) for tuple in [0, 1], [0, -1], [1, 0], [-1, 0]]
 
 
 def four_forward_tiles(position, forward_position):
@@ -83,13 +84,13 @@ def four_forward_tiles(position, forward_position):
 
 
 def adjacent_tiles(position):
-    return set(direction.move(position) for direction in four_directions)
+    return set(direction.move(position) for direction in directions)
 
 
 def two_forward_tiles(position, forward_position):
     """ Returns the 2 other nearby tiles in the direction towards forward_position """
     return set(direction.move(position) for direction in eight_directions) & \
-        set(direction.move(forward_position) for direction in four_directions)
+        set(direction.move(forward_position) for direction in directions)
 
 
 def surrounding_tiles(position):
