@@ -1,9 +1,11 @@
 from __future__ import division
 import random as rnd
 import battle
+import common
 from common import *
 from outcome import Outcome
 import settings
+from action import Action
 
 
 def do_action(gamestate, action, outcome=None, unit=None):
@@ -59,13 +61,24 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
 
-    if action.is_attack():
-        if hasattr(action, "push"):
-            outcome = settle_attack_push(action, gamestate, outcome)
-        else:
-            outcome = settle_attack(action, gamestate.opponent_units(), outcome, gamestate)
+    if action.is_push():
+        outcome = settle_attack_push(action, gamestate, outcome)
 
-    if action.is_ability():
+        if action.is_triple_attack():
+            push_direction = common.get_direction(action.end_position, action.attack_position)
+            for forward_position in common.two_forward_tiles(action.end_position, action.attack_position):
+                if forward_position in gamestate.opponent_units():
+                    sub_action = Action(
+                        action.start_position,
+                        end_position=action.end_position,
+                        attack_position=forward_position)
+                    sub_action.unit = action.unit
+                    sub_action.target_unit = gamestate.opponent_units()[forward_position]
+                    outcome = do_sub_action(gamestate, sub_action, push_direction, outcome)
+
+    elif action.is_attack():
+        outcome = settle_attack(action, gamestate, outcome)
+    elif action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
     if unit.has("bloodlust") and outcome.outcomes[action.attack_position] == 1:
@@ -155,7 +168,7 @@ def settle_attack_push(action, gamestate, outcome=None):
     return outcome
 
 
-def settle_attack(action, enemy_units, outcome, gamestate):
+def settle_attack(action, gamestate, outcome):
     if not outcome:
         outcome = Outcome()
 
@@ -181,7 +194,7 @@ def settle_attack(action, enemy_units, outcome, gamestate):
     if action.target_unit.has_extra_life():
         action.target_unit.remove_extra_life()
     else:
-        del enemy_units[action.attack_position]
+        del gamestate.opponent_units()[action.attack_position]
 
         if outcome.for_position(action.attack_position) == SubOutcome.WIN:
             update_final_position(action)
