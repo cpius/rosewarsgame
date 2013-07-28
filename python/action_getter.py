@@ -89,6 +89,7 @@ def get_actions(gamestate):
             and not unit.get_attack_frozen()
 
     if getattr(gamestate, "extra_action"):
+        print "A"
         return get_extra_actions(gamestate)
 
     actions = []
@@ -160,8 +161,7 @@ def get_extra_actions(gamestate):
     def samuraiing():
         def melee_attacks_list_samurai_second(unit, start_position, moveset, enemy_units, movement_remaining):
             attacks = []
-            for position, new_position, move_with_attack in attack_generator(unit,
-                                                                             moveset | {start_position},
+            for position, new_position, move_with_attack in attack_generator(unit, moveset | {start_position},
                                                                              enemy_units):
                 if move_with_attack == 1:
                     if movement_remaining > 0:
@@ -172,19 +172,18 @@ def get_extra_actions(gamestate):
                                           move_with_attack=MoveOrStay.STAY))
             return attacks
 
-        attacks = melee_attacks_list_samurai_second(unit,
-                                                    position,
-                                                    {position},
-                                                    gamestate.opponent_units(),
-                                                    unit.movement_remaining)
-        moves = move_actions(position, {position})
+        attacks = melee_attacks_list_samurai_second(unit, position, {position}, gamestate.opponent_units(),
+                                                    unit.get_movement_remaining())
+
+        moveset = generate_extra_moveset(unit, position, units)
+        moves = move_actions(position, moveset)
 
         return moves, attacks, []
 
     extra_actions = []
 
     for position, unit in gamestate.player_units().items():
-        if hasattr(unit, "extra_action"):
+        if unit.get_extra_action():
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
             units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
@@ -226,7 +225,8 @@ def get_unit_actions(unit, position, units, enemy_units, player_units):
 
 
 def generate_extra_moveset(unit, position, units):
-    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get_movement_remaining(), unit.get_movement_remaining())
+    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get_movement_remaining(),
+                     unit.get_movement_remaining())
 
 
 def generate_moveset(unit, position, units):

@@ -95,7 +95,6 @@ class Unit(object):
         self.variables["improved_weapons_II_B"] = 0
         self.zoc = {}
 
-
     # Sabotage
     def set_sabotaged(self):
         self.variables["sabotaged"] = 1
@@ -156,6 +155,15 @@ class Unit(object):
     def get_movement_remaining(self):
         return self.variables["movement_remaining"]
 
+    #Extra_action
+    def set_extra_action(self):
+        self.variables["extra_action"] = 1
+
+    def get_extra_action(self):
+        return self.variables["extra_action"]
+
+    def remove_extra_action(self):
+        self.variables["extra_action"] = 0
 
 
 class Archer(Unit):
@@ -1242,7 +1250,7 @@ class Samurai(Unit):
     
     name = "Samurai"
     image = "Samurai"
-    attack = 6
+    attack = 3
     defence = 3
     movement = 1
     range = 1
@@ -1262,7 +1270,7 @@ class Samurai_II_A(Unit):
 
     name = "Samurai II_A"
     image = "Samurai"
-    attack = 6
+    attack = 4
     defence = 3
     movement = 1
     range = 1
@@ -1280,7 +1288,7 @@ class Samurai_II_B(Unit):
 
     name = "Samurai II_B"
     image = "Samurai"
-    attack = 6
+    attack = 3
     defence = 3
     movement = 1
     range = 1
@@ -1290,8 +1298,10 @@ class Samurai_II_B(Unit):
     type = "Infantry"
 
     samuraiing = True
+    bloodlust = True
 
-    descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)"}
+    descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)",
+                    "bloodlust": "Every kill gives it an extra attack"}
 
 
 class Saboteur(Unit):

@@ -26,15 +26,15 @@ def do_action(gamestate, action, outcome=None, unit=None):
             if action.is_attack():
                 movement_remaining -= 1
             unit.set_movement_remaining(movement_remaining)
-            unit.extra_action = True
+            unit.set_extra_action()
 
         if hasattr(unit, "samuraiing"):
-            unit.movement_remaining = unit.movement - distance(action.start_position, action.final_position)
-            unit.extra_action = True
+            unit.set_movement_remaining(unit.movement - distance(action.start_position, action.final_position))
+            unit.set_extra_action()
 
     def update_actions_remaining(action):
 
-        if getattr(gamestate, "extra_action"):
+        if gamestate.extra_action:
             return
 
         gamestate.decrement_actions_remaining()
@@ -80,8 +80,15 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
-    if getattr(gamestate, "extra_action"):
-        del unit.extra_action
+    if hasattr(unit, "bloodlust") and outcome.outcomes[action.attack_position] == 1:
+        print "A"
+        bloodlust = True
+    else:
+        unit.remove_extra_action()
+        bloodlust = False
+
+    if gamestate.extra_action and not bloodlust:
+        gamestate.extra_action = 0
         unit.set_movement_remaining(0)
     else:
         prepare_extra_actions(action, unit)
@@ -93,10 +100,10 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if action.end_position in gamestate.player_units():
         gamestate.player_units()[action.final_position] = gamestate.player_units().pop(action.end_position)
 
-    if hasattr(gamestate, "extra_action"):
+    if gamestate.extra_action:
         gamestate.extra_action = False
 
-    if hasattr(unit, "extra_action"):
+    if unit.get_extra_action():
         gamestate.extra_action = True
 
     return outcome
