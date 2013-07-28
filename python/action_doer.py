@@ -16,7 +16,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
             unit.set_movement_remaining(movement_remaining)
             unit.set_extra_action()
 
-        if unit.has("samurai"):
+        if unit.has("battle_agility"):
             unit.set_movement_remaining(unit.movement - distance(action.start_position, action.final_position))
             unit.set_extra_action()
 
