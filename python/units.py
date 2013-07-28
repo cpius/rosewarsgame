@@ -226,6 +226,7 @@ class Longbowman_II_B(Unit):
 
     descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
+
 class Crossbow_Archer(Unit):
     name = "Crossbow Archer"
     image = "Archer"
@@ -394,44 +395,23 @@ class Dragoon_II_B(Unit):
     descriptions = {"charioting": "Can use remaining moves after attacking."}
 
 
-class Dragoon_II_A(Unit):
-
-    name = "Dragoon II_A"
-    image = "Light Cavalry"
-    attack = 4
-    defence = 2
-    movement = 4
-    range = 1
-    abonus = {}
-    dbonus = {}
-    type = "Cavalry"
-
-
-class Dragoon_II_B(Unit):
-
-    name = "Dragoon II_B"
-    image = "Light Cavalry"
-    attack = 3
-    defence = 3
-    movement = 4
-    range = 1
-    abonus = {}
-    dbonus = {}
-    type = "Cavalry"
-
-
 class Cavalry_Lieutenant(Unit):
 
     name = "Cavalry Lieutenant"
     image = "Light Cavalry"
-    attack = 2
-    defence = 3
-    movement = 4
+    attack = 3
+    defence = 2
+    movement = 3
     range = 1
     abonus = {}
     dbonus = {}
     type = "Cavalry"
     upgrades = ["Cavalry_Luitenant_II_A", "Cavalry_Luitenant_II_B"]
+
+    cavalry_charging = True
+
+    descriptions = {"cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 "
+                                        "Movement"}
 
 
 class Cavalry_Lieutenant_II_A(Unit):
@@ -446,18 +426,27 @@ class Cavalry_Lieutenant_II_A(Unit):
     dbonus = {}
     type = "Cavalry"
 
+    cavalry_charging = True
+
+    descriptions = {"cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 "
+                                        "Movement"}
 
 class Cavalry_Lieutenant_II_B(Unit):
 
     name = "Cavalry Lieutenant II_B"
     image = "Light Cavalry"
-    attack = 2
-    defence = 4
-    movement = 4
+    attack = 4
+    defence = 3
+    movement = 3
     range = 1
     abonus = {}
     dbonus = {}
     type = "Cavalry"
+
+    cavalry_charging = True
+
+    descriptions = {"cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 "
+                                        "Movement"}
 
 
 class Knight(Unit):

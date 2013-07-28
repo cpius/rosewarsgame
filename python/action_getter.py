@@ -94,13 +94,13 @@ def get_actions(gamestate):
 
     actions = []
 
+
     for position, unit in gamestate.player_units().items():
         if can_use_unit(unit):
 
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
-            units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
-            moves, attacks, abilities = get_unit_actions(unit, position, units, gamestate.opponent_units(),
+            moves, attacks, abilities = get_unit_actions(unit, position, friendly_units, gamestate.opponent_units(),
                                                          gamestate.player_units())
 
             add_modifiers(attacks, gamestate.player_units())
@@ -207,21 +207,28 @@ def get_extra_actions(gamestate):
     return extra_actions
 
 
-def get_unit_actions(unit, position, units, enemy_units, player_units):
+def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
 
     unit.zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items()
                                 if unit.type in enemy_unit.get_zoc())
 
+    movement = unit.movement
+    if any(position for position in common.surrounding_tiles(position) if position in friendly_units
+           if hasattr(friendly_units[position], "cavalry_charging")):
+        movement += 1
+
+    units = common.merge_units(friendly_units, enemy_units)
+
     if unit.name not in settings.allowed_special_units:
         if unit.range == 1:
-            moves, attacks = melee_actions(unit, position, units, enemy_units)
+            moves, attacks = melee_actions(unit, position, units, enemy_units, movement)
             return moves, attacks, []
         else:
             moves, attacks = ranged_actions(unit, position, units, enemy_units)
             return moves, attacks, []
 
     else:
-        return get_special_unit_actions(unit, position, units, enemy_units, player_units)
+        return get_special_unit_actions(unit, position, units, enemy_units, player_units, movement)
 
 
 def generate_extra_moveset(unit, position, units):
@@ -233,8 +240,8 @@ def generate_moveset(unit, position, units):
     return moves_set(position, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
 
 
-def generate_movesets(unit, position, units):
-    return moves_sets(position, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
+def generate_movesets(unit, position, units, movement):
+    return moves_sets(position, frozenset(units), unit.zoc_blocks, movement, movement)
 
 
 def zoc_block(position, direction, zoc_blocks):
@@ -374,9 +381,9 @@ def melee_attack_actions(unit, start_position, moveset, enemy_units):
             move_with_attack in attack_generator(unit, moveset, enemy_units)]
 
 
-def melee_actions(unit, position, units, enemy_units):
+def melee_actions(unit, position, units, enemy_units, movement):
 
-    moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units)
+    moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units, movement)
     attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
     moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
 
@@ -396,9 +403,9 @@ def ability_actions(start_position, abilityset, ability):
     return [Action(start_position, ability_position=position, ability=ability) for position in abilityset]
 
 
-def get_special_unit_actions(unit, position, units, enemy_units, player_units):
+def get_special_unit_actions(unit, position, units, enemy_units, player_units, movement):
 
-    def melee_units(unit, position, units, enemy_units):
+    def melee_units(unit, position, units, enemy_units, movement):
 
         def rage(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
@@ -503,7 +510,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
         #
         #    return attacks
 
-        moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units)
+        moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units, movement)
         attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
         moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
 
@@ -566,7 +573,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
 
     if unit.attack:
         if unit.range == 1:
-            moves, attacks = melee_units(unit, position, units, enemy_units)
+            moves, attacks = melee_units(unit, position, units, enemy_units, movement)
         else:
             moves, attacks = ranged_units(unit, position, units, enemy_units)
 
