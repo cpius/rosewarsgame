@@ -1,3 +1,6 @@
+import common
+
+
 class Coordinates(object):
     def __init__(self, coordinates, interface):
         self.add_x = coordinates[0]
@@ -18,6 +21,6 @@ class Coordinates(object):
 
         x = int((position.column - 1) * (self.unit_width + self.unit_padding_width) + self.x_border +
                 self.add_x)
-        y = int((8 - position.column) * (self.unit_height + self.unit_padding_height) + y_border + self.add_y)
+        y = int((8 - position.row) * (self.unit_height + self.unit_padding_height) + y_border + self.add_y)
 
         return x, y

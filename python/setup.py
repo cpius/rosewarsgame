@@ -197,16 +197,13 @@ def get_units():
 
 
 def flip_units(units):
-    
-    def flip(position):
-        return position.column, 9 - position.row
-    
-    return dict((flip(position), unit) for position, unit in units.items())
+
+    return dict((common.flip(position), unit) for position, unit in units.items())
 
 
 def get_start_units():
 
     player1_units = get_units()
     player2_units = flip_units(get_units())
-    
+
     return player1_units, player2_units

@@ -35,6 +35,7 @@ class Controller(object):
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
 
+
         controller.game = Game(players, gamestate)
 
         controller.game.gamestate.initialize_turn()
@@ -100,8 +101,8 @@ class Controller(object):
         elif self.selecting_active_unit(position):
             self.start_position = position
             self.selected_unit = self.game.gamestate.player_units()[self.start_position]
-            illustrate_actions = (action for action in self.game.gamestate.get_actions() if \
-                                  action.start_position == position)
+            illustrate_actions = [action for action in self.game.gamestate.get_actions() if \
+                                  action.start_position == position]
             self.view.draw_game(self.game, position, illustrate_actions)
 
         elif self.selecting_ability_target(position):
@@ -363,8 +364,6 @@ class Controller(object):
         self.view.draw_game(self.game)
 
         self.clear_move()
-
-        print "Getting move. Current player is: " + self.game.current_player().intelligence
 
         if self.game.current_player().intelligence not in ["Human", "Network"]:
             self.trigger_artificial_intelligence()

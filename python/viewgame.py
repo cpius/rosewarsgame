@@ -4,6 +4,7 @@ import battle
 import viewcommon as m
 from coordinates import Coordinates
 import settings
+import common
 
 zoom = settings.zoom
 
@@ -131,7 +132,7 @@ def draw_post_movement(screen, interface, action):
 def draw_action(screen, interface, action, flip=False):
 
     if flip:
-        action = get_transformed_action(action)
+        action = flip_action(action)
 
     coordinates = interface.coordinates
 
@@ -260,26 +261,20 @@ def get_font_coordinates(interface, counters_drawn):
         2: Coordinates(interface.third_font_coordinates, interface),
     }[counters_drawn]
 
-def get_transformed_action(action):
 
-    action.start_position = transform_position(action.start_position)
-    action.end_position = transform_position(action.end_position)
-    action.attack_position = transform_position(action.attack_position)
-    action.ability_position = transform_position(action.ability_position)
+def flip_action(action):
+
+    action.start_position = common.flip(action.start_position)
+    action.end_position = common.flip(action.end_position)
+    action.attack_position = common.flip(action.attack_position)
+    action.ability_position = common.flip(action.ability_position)
 
     for sub_action in action.sub_actions:
-        action.sub_action = get_transformed_action(sub_action)
+        action.sub_action = flip_action(sub_action)
     if hasattr(action, "push"):
         action.push_direction = get_transformed_direction(action.push_direction)
 
     return action
-
-
-def transform_position(position):
-    if position:
-        return position[0], 9 - position[1]
-    else:
-        return None
 
 
 def get_transformed_direction(direction):

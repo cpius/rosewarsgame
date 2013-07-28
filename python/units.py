@@ -1561,16 +1561,3 @@ class Hussar(Unit):
                     "pikeman_specialist": "Pikemen do not get +1D against Hussar."}
 
     upgrades = ["Hussar II_A", "Hussar II_B"]
-
-
-def get_position(position_string):
-    if len(position_string) != 2:
-        return None
-
-    column = ord(position_string[0]) - 64  # In ASCII A, B, C, D, E is 65, 66, 67, 68, 69
-    row = int(position_string[1])
-    return column, row
-
-
-def get_position_string(position):
-    return " ABCDE"[position.column] + str(position.row)

@@ -6,6 +6,7 @@ import viewlog
 import viewgame
 import viewinfo
 import viewcommon as m
+import common
 
 _anti_alias = 1
 
@@ -38,7 +39,7 @@ class View(object):
         else:
             y = 8 - int((coordinates[1] - self.interface.y_border_top) /
                         (self.interface.unit_height + self.interface.unit_padding_height))
-        return x, y
+        return common.Position(x, y)
 
     def draw_ask_about_move_with_attack(self, position):
 

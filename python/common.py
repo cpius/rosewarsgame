@@ -14,10 +14,10 @@ class Direction:
         self.y = y
 
     def move(self, position):
-        return position[0] + self.x, position[1] + self.y
+        return Position(position[0] + self.x, position[1] + self.y)
 
     def perpendicular(self, position):
-        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
+        return Position((position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x))
 
     def __repr__(self):
 
@@ -34,15 +34,15 @@ class Direction:
             return "Up"
 
 
-Position = namedtuple("Position", ["column", "row"])
-
-
 def position_to_string(position):
     if position is None:
         return ""
+    else:
+        return " ABCDE"[position.column] + str(position.row)
 
-    columns = list(" ABCDE")
-    return columns[position[0]] + str(position[1])
+Position = namedtuple("Position", ["column", "row"])
+
+Position.__repr__ = position_to_string
 
 
 def position_to_tuple(position_string):
@@ -51,7 +51,7 @@ def position_to_tuple(position_string):
 
     column = ord(position_string[0]) - 64  # In ASCII A, B, C, D, E is 65, 66, 67, 68, 69
     row = int(position_string[1])
-    return column, row
+    return Position(column, row)
 
 
 def merge_units(units1, units2):
@@ -71,7 +71,7 @@ def get_direction(position, forward_position):
 
 def flip(position):
     if position:
-        return position[0], 9 - position[1]
+        return Position(position.column, 9 - position.row)
 
 
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]

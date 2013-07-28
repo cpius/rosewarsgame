@@ -5,7 +5,6 @@ import collections
 import functools
 import common
 from common import Direction
-from units import get_position
 from action import MoveOrStay
 
 
@@ -92,7 +91,6 @@ def get_actions(gamestate):
                 actions += moves + abilities
 
             if can_attack_with_unit(unit) and not moving_allowed(position):
-                print attacks
                 return attacks + abilities
 
     for action in actions:
