@@ -205,7 +205,7 @@ def draw_symbols(screen, interface, unit, position):
 
 def draw_bribed(screen, interface, position):
     pic = m.get_image(interface.ability_icon)
-    screen.blit(pic, interface.coordinates.get(position))
+    screen.blit(pic, interface.coordinates["flag"].get(position))
 
 
 def draw_crusading(screen, interface, position):

@@ -22,7 +22,7 @@ document_ai_actions = False
 
 required_special_units = []
 allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
-                         "Scout", "War Elephant", "Weaponsmith", "Longbowman", "Diplomat", "Viking"]
+                         "Scout", "War Elephant", "Weaponsmith", "Longbowman", "Viking"]
 basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
 unit_bag_size = 3
