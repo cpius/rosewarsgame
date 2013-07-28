@@ -44,7 +44,9 @@ Position = namedtuple("Position", ["column", "row"])
 
 Position.__repr__ = position_to_string
 
-board = set((column, row) for column in range(1, 6) for row in range(1, 9))
+board_height = 8
+board_width = 5
+board = set((column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
 
 def position_to_tuple(position_string):
     if position_string is None or len(position_string) != 2:

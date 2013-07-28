@@ -1,33 +1,31 @@
 from __future__ import division
 import random as rnd
 import battle
-import common
+from common import *
 from outcome import Outcome, SubOutcome
 import settings
 
-board = [common.Position(column, row) for column in range(1, 6) for row in range(1, 9)]
-
 
 def out_of_board_vertical(position):
-    return position[1] < board[1][0] or position[1] > board[1][-1]
+    return position.row < 1 or position.row > board_height
 
 
 def out_of_board_horizontal(position):
-    return position[0] < board[0][0] or position[0] > board[0][-1]
+    return position.column < 1 or position.column > board_width
 
 
 def do_action(gamestate, action, outcome=None, unit=None):
     def prepare_extra_actions(action, unit):
 
         if unit.is_swift():
-            movement_remaining = unit.movement - common.distance(action.start_position, action.end_position)
+            movement_remaining = unit.movement - distance(action.start_position, action.end_position)
             if action.is_attack():
                 movement_remaining -= 1
             unit.set_movement_remaining(movement_remaining)
             unit.set_extra_action()
 
         if unit.is_samurai():
-            unit.set_movement_remaining(unit.movement - common.distance(action.start_position, action.final_position))
+            unit.set_movement_remaining(unit.movement - distance(action.start_position, action.final_position))
             unit.set_extra_action()
 
     def update_actions_remaining(action):
@@ -127,7 +125,7 @@ def settle_attack_push(action, enemy_units, player_units, outcome=None):
         else:
             outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
 
-    push_direction = common.get_direction(action.end_position, action.attack_position)
+    push_direction = get_direction(action.end_position, action.attack_position)
     push_destination = push_direction.move(action.attack_position)
 
     if outcome.for_position(action.attack_position) == SubOutcome.WIN:
