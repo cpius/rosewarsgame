@@ -38,7 +38,6 @@ class Gamestate:
     def initialize_turn(self):
         initializer.initialize_turn(self)
 
-
     def get_actions(self):
         if getattr(self, "extra_action"):
             actions = action_getter.get_extra_actions(self)

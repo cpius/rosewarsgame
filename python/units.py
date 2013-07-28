@@ -10,8 +10,8 @@ class Unit(object):
     abilities = []
     xp_to_upgrade = 4
     upgrades = []
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
 
     def __repr__(self):
         return self.name
@@ -210,8 +210,8 @@ class Archer(Unit):
     defence = 2
     movement = 1
     range = 4
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     type = "Infantry"
     upgrades = ["Longbowman", "Crossbow Archer"]
 
@@ -238,8 +238,8 @@ class Longbowman_II_A(Unit):
     defence = 2
     movement = 1
     range = 4
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     type = "Infantry"
 
     sharpshooter = True
@@ -254,8 +254,8 @@ class Longbowman_II_B(Unit):
     defence = 3
     movement = 1
     range = 4
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     type = "Infantry"
 
     sharpshooter = True
@@ -270,8 +270,8 @@ class Crossbow_Archer(Unit):
     defence = 3
     movement = 1
     range = 4
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     type = "Infantry"
     upgrades = ["Crossbow Archer II_A", "Crossbow Archer II_B"]
 
@@ -283,8 +283,8 @@ class Crossbow_Archer_II_A(Unit):
     defence = 3
     movement = 1
     range = 4
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     type = "Infantry"
 
 
@@ -295,8 +295,8 @@ class Crossbow_Archer_II_B(Unit):
     defence = 4
     movement = 1
     range = 4
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     type = "Infantry"
 
 
@@ -308,8 +308,8 @@ class Pikeman(Unit):
     defence = 2
     movement = 1
     range = 1
-    abonus = {"Cavalry": 1}
-    dbonus = {"Cavalry": 1}
+    attack_bonuses = {"Cavalry": 1}
+    defence_bonuses = {"Cavalry": 1}
     type = "Infantry"   
     zoc = ["Cavalry"]
     upgrades = ["Halberdier", "Royal Guard"]
@@ -369,8 +369,8 @@ class Light_Cavalry(Unit):
     defence = 2
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
 
     upgrades = ["Dragoon", "Cavalry Lieutenant"]
@@ -385,8 +385,8 @@ class Dragoon(Unit):
     defence = 2
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
@@ -403,8 +403,8 @@ class Dragoon_II_A(Unit):
     defence = 2
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
@@ -421,8 +421,8 @@ class Dragoon_II_B(Unit):
     defence = 3
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
@@ -439,8 +439,8 @@ class Cavalry_Lieutenant(Unit):
     defence = 2
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
     upgrades = ["Cavalry_Luitenant_II_A", "Cavalry_Luitenant_II_B"]
 
@@ -458,8 +458,8 @@ class Cavalry_Lieutenant_II_A(Unit):
     defence = 3
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
 
     cavalry_charging = True
@@ -476,8 +476,8 @@ class Cavalry_Lieutenant_II_B(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
 
     cavalry_charging = True
@@ -494,8 +494,8 @@ class Knight(Unit):
     defence = 3
     movement = 2
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Cavalry"
     upgrades = ["Lancer", "Hobelar"]
 
@@ -508,8 +508,8 @@ class Ballista(Unit):
     defence = 1
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
     upgrades = ["Cannon", "Trebuchet"]
 
@@ -522,8 +522,8 @@ class Trebuchet(Unit):
     defence = 1
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
     upgrades = ["Trebuchet II_A", "Trebuchet II_A"]
 
@@ -536,8 +536,8 @@ class Trebuchet_II_A(Unit):
     defence = 1
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
 
 
@@ -549,8 +549,8 @@ class Trebuchet_II_B(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
 
 
@@ -562,8 +562,8 @@ class Catapult(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
         
     double_attack_cost = True
@@ -580,8 +580,8 @@ class Catapult_II_A(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
 
     double_attack_cost = True
@@ -600,8 +600,8 @@ class Catapult_II_B(Unit):
     defence = 2
     movement = 1
     range = 4
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
 
     double_attack_cost = True
@@ -620,8 +620,8 @@ class Catapult_III_A(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
 
     double_attack_cost = True
@@ -637,8 +637,8 @@ class Catapult_III_B(Unit):
     defence = 2
     movement = 1
     range = 4
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
 
     double_attack_cost = True
@@ -654,8 +654,8 @@ class Catapult_III_C(Unit):
     defence = 2
     movement = 1
     range = 5
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Siege Weapon"
 
     double_attack_cost = True
@@ -671,8 +671,8 @@ class Royal_Guard(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Infantry"
     
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
@@ -692,8 +692,8 @@ class Royal_Guard_II_A(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Infantry"
 
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
@@ -712,8 +712,8 @@ class Royal_Guard_II_B(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Infantry"
 
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
@@ -733,8 +733,8 @@ class Scout(Unit):
     defence = 2
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
         
@@ -754,8 +754,8 @@ class Scout_II_A(Unit):
     defence = 3
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -772,8 +772,8 @@ class Scout_II_B(Unit):
     defence = 2
     movement = 5
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -791,8 +791,8 @@ class Viking(Unit):
     defence = 2
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {"Siege Weapon": 1}
+    attack_bonuses = {}
+    defence_bonuses = {"Siege Weapon": 1}
     zoc = []
     type = "Infantry"
 
@@ -812,8 +812,8 @@ class Viking_II_A(Unit):
     defence = 2
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {"Siege Weapon": 1}
+    attack_bonuses = {}
+    defence_bonuses = {"Siege Weapon": 1}
     zoc = []
     type = "Infantry"
 
@@ -834,8 +834,8 @@ class Viking_II_B(Unit):
     defence = 2
     movement = 1
     range = 1
-    abonus = {"Siege Weapons": 1}
-    dbonus = {"Siege Weapons": 2}
+    attack_bonuses = {"Siege Weapons": 1}
+    defence_bonuses = {"Siege Weapons": 2}
     zoc = []
     type = "Infantry"
 
@@ -855,8 +855,8 @@ class Cannon(Unit):
     defence = 1
     movement = 1
     range = 4
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Siege Weapon"
         
@@ -876,8 +876,8 @@ class Cannon_II_A(Unit):
     defence = 1
     movement = 1
     range = 4
-    abonus = {"Siege_weapons": 2}
-    dbonus = {}
+    attack_bonuses = {"Siege_weapons": 2}
+    defence_bonuses = {}
     zoc = []
     type = "Siege Weapon"
 
@@ -894,8 +894,8 @@ class Cannon_II_B(Unit):
     defence = 1
     movement = 1
     range = 4
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Siege Weapon"
 
@@ -914,8 +914,8 @@ class Lancer(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {"Cavalry": 1}
-    dbonus = {}
+    attack_bonuses = {"Cavalry": 1}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
         
@@ -934,8 +934,8 @@ class Lancer_II_A(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {"Cavalry": 2}
-    dbonus = {"Cavalry": 1}
+    attack_bonuses = {"Cavalry": 2}
+    defence_bonuses = {"Cavalry": 1}
     zoc = []
     type = "Cavalry"
 
@@ -952,8 +952,8 @@ class Lancer_II_B(Unit):
     defence = 3
     movement = 4
     range = 1
-    abonus = {"Cavalry": 1}
-    dbonus = {}
+    attack_bonuses = {"Cavalry": 1}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -970,8 +970,8 @@ class Flag_Bearer(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
         
@@ -990,8 +990,8 @@ class Flag_Bearer_II_A(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1008,8 +1008,8 @@ class Flag_Bearer_II_B(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1026,8 +1026,8 @@ class Longswordsman(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
         
@@ -1046,8 +1046,8 @@ class Longswordsman_II_A(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
 
@@ -1064,8 +1064,8 @@ class Longswordsman_II_B(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
 
@@ -1082,8 +1082,8 @@ class Crusader(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
         
@@ -1103,8 +1103,8 @@ class Crusader_II_A(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1122,8 +1122,8 @@ class Crusader_II_B(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1141,8 +1141,8 @@ class Berserker(Unit):
     defence = 1
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
         
@@ -1161,8 +1161,8 @@ class Berserker_II_A(Unit):
     defence = 1
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
 
@@ -1181,8 +1181,8 @@ class Berserker_II_B(Unit):
     defence = 1
     movement = 1
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
 
@@ -1199,8 +1199,8 @@ class Hobelar(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1219,8 +1219,8 @@ class Hobelar_II_A(Unit):
     defence = 3
     movement = 4
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1237,8 +1237,8 @@ class Hobelar_II_B(Unit):
     defence = 3
     movement = 3
     range = 1
-    abonus = {"Infantry": 2}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 2}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1255,8 +1255,8 @@ class War_Elephant(Unit):
     defence = 3
     movement = 2
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
         
@@ -1281,8 +1281,8 @@ class War_Elephant_II_A(Unit):
     defence = 3
     movement = 2
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1304,8 +1304,8 @@ class War_Elephant_II_B(Unit):
     defence = 3
     movement = 2
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 
@@ -1327,8 +1327,8 @@ class Samurai(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
         
@@ -1347,8 +1347,8 @@ class Samurai_II_A(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
 
@@ -1365,8 +1365,8 @@ class Samurai_II_B(Unit):
     defence = 3
     movement = 1
     range = 1
-    abonus = {"Infantry": 1}
-    dbonus = {}
+    attack_bonuses = {"Infantry": 1}
+    defence_bonuses = {}
     zoc = []
     type = "Infantry"
 
@@ -1385,8 +1385,8 @@ class Saboteur(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
     
     abilities = ["sabotage", "poison"]
@@ -1404,8 +1404,8 @@ class Saboteur_II_A(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
 
     abilities = ["sabotage", "poison_II"]
@@ -1421,8 +1421,8 @@ class Saboteur_II_B(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
 
     abilities = ["sabotage_II", "poison"]
@@ -1438,8 +1438,8 @@ class Diplomat(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
         
     abilities = ["bribe"]
@@ -1458,8 +1458,8 @@ class Diplomat_II_A(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
 
     abilities = ["bribe"]
@@ -1476,8 +1476,8 @@ class Diplomat_II_B(Unit):
     defence = 2
     movement = 1
     range = 3
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
 
     abilities = ["bribe"]
@@ -1494,8 +1494,8 @@ class Weaponsmith(Unit):
     defence = 2
     movement = 1
     range = 4
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
     
     abilities = ["improve_weapons"]
@@ -1513,8 +1513,8 @@ class Weaponsmith_II_A(Unit):
     defence = 2
     movement = 1
     range = 4
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
 
     abilities = ["improve_weapons_II_A"]
@@ -1530,8 +1530,8 @@ class Weaponsmith_II_B(Unit):
     defence = 2
     movement = 1
     range = 4
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     type = "Specialist"
 
     abilities = ["improve_weapons_II_B"]
@@ -1548,8 +1548,8 @@ class Hussar(Unit):
     defence = 2
     movement = 3
     range = 1
-    abonus = {}
-    dbonus = {}
+    attack_bonuses = {}
+    defence_bonuses = {}
     zoc = []
     type = "Cavalry"
 

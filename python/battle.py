@@ -21,8 +21,8 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
     
     defence_rating = defending_unit.defence
 
-    if attacking_unit.type in defending_unit.dbonus:
-        defence_rating += defending_unit.dbonus[attacking_unit.type]
+    if attacking_unit.type in defending_unit.defence_bonuses:
+        defence_rating += defending_unit.defence_bonuses[attacking_unit.type]
 
     if defending_unit.has_improved_weapons():
         defence_rating += 1
@@ -94,8 +94,8 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if attacking_unit.has_improved_weapons_II_B():
         attack += 3
 
-    if defending_unit.type in attacking_unit.abonus:
-        attack += attacking_unit.abonus[defending_unit.type]
+    if defending_unit.type in attacking_unit.attack_bonuses:
+        attack += attacking_unit.attack_bonuses[defending_unit.type]
 
     if defending_unit.range == 1 and hasattr(attacking_unit, "melee_expert"):
         attack += 1
