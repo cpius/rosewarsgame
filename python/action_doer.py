@@ -93,10 +93,6 @@ def do_action(gamestate, action, outcome=None, unit=None):
     else:
         prepare_extra_actions(action, unit)
 
-    for sub_action in action.sub_actions:
-        sub_outcomes = do_action(gamestate, sub_action, unit=unit)
-        outcome.add_outcomes(sub_outcomes)
-
     if action.end_position in gamestate.player_units():
         gamestate.player_units()[action.final_position] = gamestate.player_units().pop(action.end_position)
 
