@@ -1,0 +1,55 @@
+{"type": "Is outcome correct",
+ "outcome": {"E4": 1},
+ "action": 
+{
+    "start_position": "E3",
+    "end_position": "E3",
+    "attack_position": "E4",
+    "move_with_attack": 2
+},
+ "pre_gamestate": 
+ {
+	"extra_action": true,
+	"actions_remaining": 1, 
+    "player1_units": 
+	{
+        "E3":
+		{	
+			"name": "Samurai_II_B",
+			"used": 1,
+			"xp_gained_this_turn": 1,
+			"xp": 1,
+			"movement_remaining": 0,
+			"extra_action": 1
+		},
+		"A2": "Pikeman"
+    },
+    "player2_units": 
+	{
+		"E4": "Archer",
+		"D7": "Ballista"
+    }
+ },
+ "post_gamestate": 
+ {
+	"extra_action": true,
+	"actions_remaining": 1, 
+    "player1_units": 
+	{
+        "E3":
+		{	
+			"name": "Samurai_II_B",
+			"used": 1,
+			"xp_gained_this_turn": 1,
+			"xp": 1,
+			"movement_remaining": 1,
+			"extra_action": 1
+		},
+		"A2": "Pikeman"
+    },
+    "player2_units": 
+	{
+		"D7": "Ballista"
+    }
+ }
+}

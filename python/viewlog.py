@@ -1,9 +1,9 @@
 from __future__ import division
-from viewcommon import colors
+from viewcommon import *
 import pygame
 import battle
 import settings
-import viewcommon as m
+
 
 zoom = settings.zoom
 maximum_logs = 5
@@ -64,7 +64,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
 
         elif action.is_ability():
 
-            pic = m.get_image(interface.ability_icon)
+            pic = get_image(interface.ability_icon)
             screen.blit(pic, symbol_location)
 
             if log.player_color == "Green":
@@ -75,7 +75,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
                 draw_unit_right(screen, interface, action, "Green", 1, *base)
 
         else:
-            pic = m.get_image(interface.move_icon)
+            pic = get_image(interface.move_icon)
             screen.blit(pic, symbol_location)
 
             if log.player_color == "Green":
@@ -112,7 +112,7 @@ def draw_attack(screen, interface, action, outcome, base, symbol_location, log):
 
     draw_outcome(screen, interface, outcome_string, *base)
 
-    pic = m.get_image(interface.attack_icon)
+    pic = get_image(interface.attack_icon)
     screen.blit(pic, symbol_location)
 
     if log.player_color == "Green":
@@ -136,8 +136,8 @@ def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
     unit_width = int((interface.unit_width / interface.unit_height) * unit_height)
 
     location = (base_x + (65 + index * 100) * zoom, base_y + 4 * zoom)
-    unit_pic = m.get_unit_pic(interface, unit.image)
-    unit_image = m.get_image(unit_pic, (unit_width, unit_height))
+    unit_pic = get_unit_pic(interface, unit.image)
+    unit_image = get_image(unit_pic, (unit_width, unit_height))
 
     screen.blit(unit_image, location)
 
@@ -157,7 +157,7 @@ def draw_turn_box(screen, interface, color, action_number, base_x, base_y):
 
     current_action = 2 - action_number
     location = (base_x + 7 * zoom, base_y)
-    m.write(screen, str(current_action), location, interface.fonts["big"])
+    write(screen, str(current_action), location, interface.fonts["big"])
 
 
 def draw_unit_box(screen, interface, base, color, height, width):
@@ -200,5 +200,5 @@ def draw_unit_box(screen, interface, base, color, height, width):
 
 def draw_outcome(screen, interface, outcome, base_x, base_y):
     location = (base_x + 230 * zoom, base_y + 5 * zoom)
-    m.write(screen, outcome, location, interface.fonts["big"])
+    write(screen, outcome, location, interface.fonts["big"])
 

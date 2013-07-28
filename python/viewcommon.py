@@ -2,6 +2,7 @@ from __future__ import division
 import pygame
 import textwrap
 import settings
+from common import *
 
 colors = {"black": (0, 0, 0),
           "white": (255, 255, 255),
@@ -120,4 +121,13 @@ def draw_unit_box(screen, interface, base, color, resize=1):
     outer_corners = scale_rectangle(base_corners, thickness)
     pygame.draw.lines(screen, colors["black"], True, outer_corners)
 
-
+def get_position_from_mouseclick(interface, coordinates):
+    x = int((coordinates[0] - interface.x_border) /
+        (interface.unit_width + interface.unit_padding_width)) + 1
+    if coordinates[1] > interface.board_size[1] / 2:
+        y = 8 - int((coordinates[1] - interface.y_border_bottom) /
+                    (interface.unit_height + interface.unit_padding_height))
+    else:
+        y = 8 - int((coordinates[1] - interface.y_border_top) /
+                    (interface.unit_height + interface.unit_padding_height))
+    return Position(x, y)

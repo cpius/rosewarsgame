@@ -1,0 +1,21 @@
+{
+    "defence": 1, 
+    "description": "Test if Longbowman works", 
+    "attack": 2, 
+    "gamestate": {
+        "actions_remaining": 2, 
+        "player1_units": {
+            "C3": "Longbowman", 
+            "A3": "Pikeman"
+        }, 
+        "player2_units": {
+            "D4": "Archer"
+        }
+    }, 
+    "action": {
+        "start_position": "C3", 
+        "attack_position": "D4", 
+        "end_position": "C3"
+    }, 
+    "type": "Is attack and defence correct"
+}

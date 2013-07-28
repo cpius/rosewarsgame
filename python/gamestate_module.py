@@ -38,9 +38,6 @@ class Gamestate:
     def initialize_turn(self):
         initializer.initialize_turn(self)
 
-    def initialize_action(self):
-        initializer.initialize_action(self)
-
     def get_actions(self):
         if getattr(self, "extra_action"):
             actions = action_getter.get_extra_actions(self)
@@ -51,9 +48,10 @@ class Gamestate:
 
         for action in actions:
             if action.is_attack():
-                action.chance_of_win = ai_methods.chance_of_win(action.unit_reference, action.target_reference, action)
+                action.chance_of_win = ai_methods.chance_of_win(self, action.unit_reference, action.target_reference,
+                                                                action)
                 for sub_action in action.sub_actions:
-                    sub_action.chance_of_win = ai_methods.chance_of_win(sub_action.unit_reference,
+                    sub_action.chance_of_win = ai_methods.chance_of_win(self, sub_action.unit_reference,
                                                                         sub_action.target_reference, sub_action)
 
         return actions
@@ -135,8 +133,9 @@ class Gamestate:
             return ai_module.AI(name)
 
     def to_document(self):
-        document = {attribute: getattr(self, attribute) for attribute in ["extra_action", "created_at", "actions_remaining"]
-                    if hasattr(self, attribute)}
+        document = {attribute: getattr(self, attribute) for attribute in ["extra_action", "created_at",
+                                                                          "actions_remaining"]
+                    if hasattr(self, attribute) and (getattr(self, attribute) or attribute == "actions_remaining")}
         document["player1_units"] = self.get_units_dict(self.units[0])
         document["player2_units"] = self.get_units_dict(self.units[1])
         return document
@@ -144,8 +143,8 @@ class Gamestate:
     def get_units_dict(self, units):
         units_dict = dict()
         for unit_position, unit in units.items():
-
             position = common.position_to_string(unit_position)
+
             document_variables = [attribute for attribute, value in unit.variables.items() if value]
             if document_variables:
                 unit_dict = {attribute: unit.variables[attribute] for attribute in document_variables}
@@ -163,7 +162,6 @@ class Gamestate:
         self.flip_units()
         self.units = self.units[::-1]
         self.initialize_turn()
-        self.initialize_action()
         self.set_available_actions()
 
     def update_final_position(self, action):

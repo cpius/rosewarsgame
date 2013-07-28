@@ -1,43 +1,8 @@
 from json import JSONEncoder
 from datetime import datetime
 from bson import ObjectId
+from collections import namedtuple
 
-
-def position_to_string(position):
-    if position is None:
-        return ""
-
-    columns = list(" ABCDE")
-    return columns[position[0]] + str(position[1])
-
-
-def position_to_tuple(position_string):
-    if position_string is None or len(position_string) != 2:
-        return None
-
-    column = ord(position_string[0]) - 64  # In ASCII A, B, C, D, E is 65, 66, 67, 68, 69
-    row = int(position_string[1])
-    return column, row
-
-
-def merge_units(units1, units2):
-    all_units = units1.copy()
-    all_units.update(units2)
-    return all_units
-
-
-def distance(position1, position2):
-    return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
-
-
-def get_direction(position, forward_position):
-    """ Returns the direction that would take you from position to forward_position """
-    return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
-
-
-def flip(position):
-    if position:
-        return position[0], 9 - position[1]
 
 class Direction:
     """ An object direction is one move up, down, left or right.
@@ -49,10 +14,10 @@ class Direction:
         self.y = y
 
     def move(self, position):
-        return position[0] + self.x, position[1] + self.y
+        return Position(position[0] + self.x, position[1] + self.y)
 
     def perpendicular(self, position):
-        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
+        return Position((position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x))
 
     def __repr__(self):
 
@@ -69,6 +34,72 @@ class Direction:
             return "Up"
 
 
+def position_to_string(position):
+    if position is None:
+        return ""
+    else:
+        return " ABCDE"[position.column] + str(position.row)
+
+Position = namedtuple("Position", ["column", "row"])
+
+Position.__repr__ = position_to_string
+
+board_height = 8
+board_width = 5
+board = set((column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
+
+def position_to_tuple(position_string):
+    if position_string is None or len(position_string) != 2:
+        return None
+
+    column = ord(position_string[0]) - 64  # In ASCII A, B, C, D, E is 65, 66, 67, 68, 69
+    row = int(position_string[1])
+    return Position(column, row)
+
+
+def merge_units(units1, units2):
+    all_units = units1.copy()
+    all_units.update(units2)
+    return all_units
+
+
+def distance(position1, position2):
+    return abs(position1.column - position2.column) + abs(position1.row - position2.row)
+
+
+def get_direction(position, forward_position):
+    """ Returns the direction that would take you from position to forward_position """
+    return Direction(-position.column + forward_position.column, -position.row + forward_position.row)
+
+
+def flip(position):
+    return Position(position.column, board_height - position.row + 1)
+
+
+eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
+directions = [Direction(*tuple) for tuple in [0, 1], [0, -1], [1, 0], [-1, 0]]
+
+
+def four_forward_tiles(position, forward_position):
+    """ Returns the 4 other nearby tiles in the direction towards forward_position """
+    return surrounding_tiles(position) & surrounding_tiles(forward_position)
+
+
+def adjacent_tiles(position):
+    return set(direction.move(position) for direction in directions)
+
+
+def two_forward_tiles(position, forward_position):
+    """ Returns the 2 other nearby tiles in the direction towards forward_position """
+    return set(direction.move(position) for direction in eight_directions) & \
+        set(direction.move(forward_position) for direction in directions)
+
+
+def surrounding_tiles(position):
+    """ Returns the 8 surrounding tiles"""
+    return set(direction.move(position) for direction in eight_directions)
+
+
 class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
@@ -76,3 +107,15 @@ class CustomJsonEncoder(JSONEncoder):
         if isinstance(obj, ObjectId):
             return str(obj)
         return JSONEncoder.default(self, obj)
+
+
+def out_of_board_vertical(position):
+    return position.row < 1 or position.row > board_height
+
+
+def out_of_board_horizontal(position):
+    return position.column < 1 or position.column > board_width
+
+
+def find_all_friendly_units_except_current(current_unit_position, player_units):
+    return dict((position, player_units[position]) for position in player_units if position != current_unit_position)

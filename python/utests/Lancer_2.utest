@@ -1,0 +1,27 @@
+{"type": "Is attack and defence correct",
+ "attack": 2,
+ "defence": 2,
+ "action": 
+{
+    "start_position": "B2",
+    "end_position": "B3",
+    "attack_position": "C3",
+    "move_with_attack": "MOVE"
+},
+ "gamestate": 
+ {
+	"actions_remaining": 1,
+    "player1_units": 
+	{
+        "B2": "Lancer", 
+        "A3": "Archer" 
+    }, 
+    "player2_units": 
+	{
+        "C3": "Archer", 
+        "E5": "Ballista" 
+
+    }
+ } 
+}
+

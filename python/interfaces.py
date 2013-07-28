@@ -99,10 +99,12 @@ class Rectangles(Interface):
         self.show_unit_location = (410 * zoom, 40 * zoom)
 
         self.upgrade_locations = [(410 * zoom, 370 * zoom), (600 * zoom, 370 * zoom)]
+        self.show_attack_location = (410 * zoom, 230 * zoom)
+        self.ask_about_ability_location = (410 * zoom, 230 * zoom)
 
         self.upgrade_text_locations = [(410 * zoom, 510 * zoom), (600 * zoom, 510 * zoom)]
 
-        self.small_line_distance = 15 * zoom
+        self.small_line_distance = 18 * zoom
 
         pygame.init()
 

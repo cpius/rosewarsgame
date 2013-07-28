@@ -44,6 +44,7 @@ class Action(object):
         self.target_reference = None
         self.rolls = None
         self.outcome = outcome
+        self.double_cost = False
 
         self.created_at = datetime.utcnow()
 
@@ -57,13 +58,15 @@ class Action(object):
                 del document_copy[attribute]
 
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
-            document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
+            if attribute in document_copy:
+                document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
 
         if "sub_actions" in document_copy:
             document_copy["sub_actions"] =\
                 [cls.from_document(sub_action_document) for sub_action_document in document_copy["sub_actions"]]
         action = cls(**document_copy)
-        action.created_at = document["created_at"]
+        if "created_at" in document:
+            action.created_at = document["created_at"]
         return action
 
     @classmethod
@@ -256,8 +259,41 @@ class Action(object):
         return bool(self.ability)
 
     def is_lancing(self):
-        distance = common.distance(self.start_position, self.attack_position)
-        return self.unit.lancing and self.is_attack() and distance >= 3
+        return self.unit_reference.has("lancing") and self.is_attack() and self.distance_to_target() >= 3
+
+    def is_lancing_II(self):
+        return self.unit_reference.has("lancing_II") and self.is_attack() and self.distance_to_target() >= 4
 
     def is_push(self):
-        return self.unit.hasattr("push") and self.is_attack()
+        return self.unit_reference.has("push") and self.is_attack()
+
+    def is_crusading(self, gamestate):
+        return any(unit for unit in self.surrounding_friendly_units(gamestate) if unit.has("crusading"))
+
+    def is_crusading_II(self, gamestate):
+        return any(unit for unit in self.surrounding_friendly_units(gamestate) if unit.has("crusading_II"))
+
+    def has_high_morale(self, gamestate):
+        return any(unit for unit in self.adjacent_friendly_units(gamestate) if unit.has("flag_bearing"))
+
+    def has_high_morale_II_A(self, gamestate):
+        return any(unit for unit in self.adjacent_friendly_units(gamestate) if unit.has("flag_bearing_II_A"))
+
+    def has_high_morale_II_B(self, gamestate):
+        return any(unit for unit in self.adjacent_friendly_units(gamestate) if unit.has("flag_bearing_II_B"))
+
+    def surrounding_friendly_units(self, gamestate):
+        return (gamestate.units[0][position] for position in common.surrounding_tiles(self.start_position) if position
+                in gamestate.units[0])
+
+    def adjacent_friendly_units(self, gamestate):
+        return (gamestate.units[0][position] for position in common.adjacent_tiles(self.start_position) if position
+                in gamestate.units[0])
+
+    def distance_to_target(self):
+        return common.distance(self.start_position, self.attack_position)
+
+
+
+
+

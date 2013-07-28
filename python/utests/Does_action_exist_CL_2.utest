@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "result": false,
+    "action":
+    {
+        "start_position": "D3",
+        "end_position": "C5"
+    },
+    "gamestate":
+    {
+        "actions_remaining": 0,
+        "player1_units":
+        {
+            "B2": "Cavalry_Lieutenant",
+            "D3": "Knight"
+        },
+        "player2_units":
+        {
+            "E7": "Knight"
+        }
+    }
+}
