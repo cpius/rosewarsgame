@@ -345,7 +345,7 @@ def abilities_set(unit, position, units, possible_targets, range_remaining):
 
 
 def move_actions(start_position, moveset):
-    return [Action(start_position, end_position=position) for position in moveset]
+    return [Action(start_position, end_position=position, move_with_attack=MoveOrStay.STAY) for position in moveset]
 
 
 def ranged_attack_actions(start_position, attackset):
