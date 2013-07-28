@@ -1305,9 +1305,9 @@ class Samurai(Unit):
     zoc = []
     type = "Infantry"
         
-    battle_agility = True
+    combat_agility = True
 
-    descriptions = {"battle_agility": "Can make an attack after its first action. (But not a second move.)"}
+    descriptions = {"combat_agility": "Can make an attack after its first action. (But not a second move.)"}
 
     upgrades = ["Samurai II_A", "Samurai II_B"]
 
@@ -1325,9 +1325,9 @@ class Samurai_II_A(Unit):
     zoc = []
     type = "Infantry"
 
-    battle_agility = True
+    combat_agility = True
 
-    descriptions = {"battle_agility": "Can make an attack after its first action. (But not a second move.)"}
+    descriptions = {"combat_agility": "Can make an attack after its first action. (But not a second move.)"}
 
 
 class Samurai_II_B(Unit):
@@ -1343,10 +1343,10 @@ class Samurai_II_B(Unit):
     zoc = []
     type = "Infantry"
 
-    battle_agility = True
+    combat_agility = True
     bloodlust = True
 
-    descriptions = {"battle_agility": "Can make an attack after its first action. (But not a second move.)",
+    descriptions = {"combat_agility": "Can make an attack after its first action. (But not a second move.)",
                     "bloodlust": "Every kill gives it an extra attack"}
 
 
