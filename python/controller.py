@@ -39,7 +39,6 @@ class Controller(object):
         controller.game = Game(players, gamestate)
 
         controller.game.gamestate.initialize_turn()
-        controller.game.gamestate.initialize_action()
 
         controller.game.gamestate.actions_remaining = 1
 
@@ -357,7 +356,6 @@ class Controller(object):
 
         self.view.draw_game(self.game)
 
-        self.game.gamestate.initialize_action()
         if self.game.gamestate.is_turn_done():
             self.game.shift_turn()
 

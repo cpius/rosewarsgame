@@ -1,29 +1,4 @@
 from __future__ import division
-from common import *
-
-
-def zoc(unit, position, enemy_units):
-    """ Returns whether an enemy unit can exert ZOC on a friendly unit """
-    return position in enemy_units and unit.type in enemy_units[position].get_zoc()
-
-
-def find_all_friendly_units_except_current(current_unit_position, p):
-    return dict((position, p[0].units[position]) for position in p[0].units if position != current_unit_position)
-
-
-def initialize_action(gamestate):
-
-    def initialize_crusader():
-        for position, unit in gamestate.player_units().items():
-            if any(surrounding_position in gamestate.player_units()
-                   and hasattr(gamestate.player_units()[surrounding_position], "crusading") and unit.range == 1
-                   for surrounding_position in surrounding_tiles(position)):
-                unit.variables["is_crusading"] = True
-            else:
-                if hasattr(unit, "is_crusading"):
-                    del unit.variables["is_crusading"]
-
-    initialize_crusader()
 
 
 def initialize_turn(gamestate):

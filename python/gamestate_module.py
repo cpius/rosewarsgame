@@ -38,8 +38,6 @@ class Gamestate:
     def initialize_turn(self):
         initializer.initialize_turn(self)
 
-    def initialize_action(self):
-        initializer.initialize_action(self)
 
     def get_actions(self):
         if getattr(self, "extra_action"):
@@ -165,7 +163,6 @@ class Gamestate:
         self.flip_units()
         self.units = self.units[::-1]
         self.initialize_turn()
-        self.initialize_action()
         self.set_available_actions()
 
     def update_final_position(self, action):
