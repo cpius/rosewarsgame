@@ -1,0 +1,31 @@
+{
+    "type": "Does action exist",
+    "result": true,
+    "action":
+    {
+        "start_position": "E4",
+        "end_position": "E5"
+    },
+    "gamestate":
+	{
+		"extra_action": true,
+		"actions_remaining": 0, 
+		"player1_units": 
+		{
+			"E4":
+			{	
+				"name": "Dragoon",
+				"used": 1,
+				"xp_gained_this_turn": 1,
+				"xp": 1,
+				"movement_remaining": 1,
+				"extra_action": 1
+			},
+			"A2": "Pikeman"
+		},
+		"player2_units": 
+		{
+			"D7": "Ballista"
+		}
+	}
+}

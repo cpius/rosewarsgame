@@ -6,6 +6,7 @@ import battle
 from outcome import Outcome
 import glob
 import unittest
+import common
 
 
 class UniversalTests(unittest.TestCase):
@@ -46,7 +47,7 @@ class UniversalTests(unittest.TestCase):
         self.assertEqual(actual, expected, [str(action) for action in available_actions])
 
     def is_attack_and_defence_correct(self, gamestate, action, expected_attack, expected_defence):
-        all_units = methods.merge_units(gamestate.units[0], gamestate.units[1])
+        all_units = common.merge_units(gamestate.units[0], gamestate.units[1])
 
         attacking_unit = all_units[action.start_position]
         defending_unit = all_units[action.attack_position]
@@ -66,11 +67,9 @@ class UniversalTests(unittest.TestCase):
         self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
 
     def assert_equal_documents(self, expected, actual):
-        documents = "Expected:\n" + methods.document_to_string(expected)
-        documents += "\nActual:\n" + methods.document_to_string(actual)
+        documents = "Expected:\n" + common.document_to_string(expected)
+        documents += "\nActual:\n" + common.document_to_string(actual)
         self.assertEqual(expected, actual, "The document was mangled.\n\n" + documents)
-
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,14 +1,14 @@
-{"Type": "Is outcome correct",
- "Description": "Test if elephant attacks work correctly",
- "Outcome": {"B2": "WIN", "C2": "PUSH", "D2": "MISS"},
- "Action": 
+{"type": "Is outcome correct",
+ "description": "Test if elephant attacks work correctly",
+ "outcome": {"B2": "WIN", "C2": "PUSH", "D2": "MISS"},
+ "action": 
 {
     "start_position": "C1",
     "end_position": "C1",
     "attack_position": "C2",
     "move_with_attack": "MOVE"
 },
- "Gamestate before action": 
+ "pre_gamestate": 
  {
     "player1_units": {
         "C1": "War Elephant" 
@@ -20,7 +20,7 @@
         "D2": "Ballista"
     }
 },
- "Gamestate after action": 
+ "post_gamestate": 
  {
     "player1_units": {
 	"C1":{

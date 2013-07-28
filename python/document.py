@@ -54,4 +54,4 @@ class DocumentConverter:
 
     def get_position_string(self, position):
         columns = list(" ABCDE")
-        return columns[position[0]] + str(position[1])
+        return columns[position.column] + str(position.row)

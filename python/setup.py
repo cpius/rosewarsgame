@@ -3,22 +3,23 @@ import random
 import units as units_module
 import settings
 from collections import namedtuple
+import common
 
 
 class Tiles_bag(object):
     def __init__(self):
-        self.tiles = [(column, row) for column in board_columns for row in board_rows]
+        self.tiles = [common.Position(column, row) for column in board_columns for row in board_rows]
         
     def pick_from_row(self, rows):
-        pick = random.choice([tile for tile in self.tiles if tile[1] in rows])
+        pick = random.choice([tile for tile in self.tiles if tile.row in rows])
         self.tiles.remove(pick)
         return pick
 
     def pick_protected_tile(self, rows):
-        possible_tiles = [(coloumn, row) for coloumn in board_columns for
-                          row in [2, 3] if (coloumn, row) in self.tiles and (coloumn, row + 1) not in self.tiles]
+        possible_tiles = [common.Position(column, row) for column in board_columns for
+                          row in [2, 3] if (column, row) in self.tiles and (column, row + 1) not in self.tiles]
 
-        pick = random.choice([tile for tile in possible_tiles if tile[1] in rows])
+        pick = random.choice([tile for tile in possible_tiles if tile.row in rows])
         self.tiles.remove(pick)
         return pick
 
@@ -52,12 +53,12 @@ Info = namedtuple("Info", ["allowed_rows", "copies_in_bag", "protection_required
 units_info = {"Archer": Info({2, 3}, 3, False),
               "Ballista": Info({2, 3}, 2, True),
               "Catapult": Info({2, 3}, 2, False),
-              "Heavy Cavalry": Info({4}, 3, False),
+              "Knight": Info({4}, 3, False),
               "Light Cavalry": Info({2, 3}, 3, False),
               "Pikeman": Info({2, 3, 4}, 3, False),
               "Berserker": Info({2, 3}, 1, False),
               "Cannon": Info({2}, 1, True),
-              "Chariot": Info({3, 4}, 1, False),
+              "Hobelar": Info({3, 4}, 1, False),
               "Crusader": Info({3, 4}, 1, False),
               "Diplomat": Info({2, 3}, 1, False),
               "Flag Bearer": Info({3, 4}, 1, False),
@@ -69,23 +70,24 @@ units_info = {"Archer": Info({2, 3}, 3, False),
               "Scout": Info({2, 3}, 1, False),
               "Viking": Info({4}, 1, False),
               "War Elephant": Info({4}, 1, False),
-              "Weaponsmith": Info({2, 3}, 1, True)}
+              "Weaponsmith": Info({2, 3}, 1, True),
+              "Longbowman": Info({2, 3}, 3, False)}
 
 
-def test_coloumn_blocks(units):
-    """ Tests whether there on each coloumn are at least two 'blocks'.
+def test_column_blocks(units):
+    """ Tests whether there on each column are at least two 'blocks'.
     A block is either a unit, or a Pikeman zoc tile. """
     
-    columns = [position[0] + x for x in [-1, +1] for position, unit in units.items() if unit.name == "Pikeman"]\
-        + [position[0] for position in units]
+    columns = [position.column + x for x in [-1, +1] for position, unit in units.items() if unit.name == "Pikeman"]\
+        + [position.column for position in units]
 
     return not any(columns.count(column) < 2 for column in board_columns)
      
 
-def test_pikeman_coloumn(units):
-    """ Tests whether there is more than one Pikeman on any coloumn."""
+def test_pikeman_column(units):
+    """ Tests whether there is more than one Pikeman on any column."""
     
-    columns = [position[0] for position, unit in units.items() if unit.name == "Pikeman"]
+    columns = [position.column for position, unit in units.items() if unit.name == "Pikeman"]
     
     return not any(columns.count(column) > 1 for column in board_columns)
 
@@ -188,23 +190,20 @@ def get_units():
         except IndexError:
             continue
 
-        if any(not requirement(units) for requirement in [test_coloumn_blocks, test_pikeman_coloumn]):
+        if any(not requirement(units) for requirement in [test_column_blocks, test_pikeman_column]):
             continue
              
         return units
 
 
 def flip_units(units):
-    
-    def flip(position):
-        return position[0], 9 - position[1]
-    
-    return dict((flip(position), unit) for position, unit in units.items())
+
+    return dict((common.flip(position), unit) for position, unit in units.items())
 
 
 def get_start_units():
 
     player1_units = get_units()
     player2_units = flip_units(get_units())
-    
+
     return player1_units, player2_units

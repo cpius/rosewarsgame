@@ -3,9 +3,7 @@ import settings
 from action import Action
 import collections
 import functools
-import common
-from common import Direction
-from units import get_position
+from common import *
 from action import MoveOrStay
 
 
@@ -33,35 +31,8 @@ class memoized(object):
     def __repr__(self):
         return self.func.__doc__
 
-    def __get__(self, obj, objtype):
+    def __get__(self, obj):
         return functools.partial(self.__call__, obj)
-
-
-#global variables
-_action = 0
-board = set((column, row) for column in range(1, 6) for row in range(1, 9))
-directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
-eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
-
-
-def surrounding_tiles(position):
-    """ Returns the 8 surrounding tiles"""
-    return set(direction.move(position) for direction in eight_directions)
-
-
-def four_forward_tiles(position, forward_position):
-    """ Returns the 4 other nearby tiles in the direction towards forward_position """
-    return surrounding_tiles(position) & surrounding_tiles(forward_position)
-
-
-def two_forward_tiles(position, forward_position):
-    """ Returns the 2 other nearby tiles in the direction towards forward_position """
-    return set(direction.move(position) for direction in eight_directions) & \
-        set(direction.move(forward_position) for direction in directions)
-
-
-def find_all_friendly_units_except_current(current_unit_position, player_units):
-    return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
 
 
 def add_target_reference(action, enemy_units, player_units):
@@ -77,29 +48,18 @@ def add_target_reference(action, enemy_units, player_units):
         add_target_reference(sub_action, enemy_units, player_units)
 
 
-def add_modifiers(attacks, player_units):
-    def flag_bearing_bonus():
-        for attack in attacks:
-            if player_units[attack.start_position].range == 1:
-                friendly_units = find_all_friendly_units_except_current(attack.start_position, player_units)
-                for direction in directions:
-                    adjacent_position = direction.move(attack.end_position)
-                    if adjacent_position in friendly_units and hasattr(friendly_units[adjacent_position],
-                                                                       "flag_bearing"):
-                        attack.high_morale = True
-
-    for modifier in [flag_bearing_bonus]:
-        modifier()
-
-
 def get_actions(gamestate):
 
     def can_use_unit(unit):
-        return not (unit.variables["used"] or hasattr(unit, "frozen") or hasattr(unit, "just_bribed"))
+        return not (unit.is_used() or unit.is_frozen() or unit.is_recently_bribed())
+
+    def moving_allowed(unit_position):
+        return not any(position for position in adjacent_tiles(unit_position) if
+                       position in gamestate.units[1] and gamestate.units[1][position].has("melee_freeze"))
 
     def can_attack_with_unit(unit):
-        return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
-            and not hasattr(unit, "attack_frozen")
+        return not (gamestate.get_actions_remaining() == 1 and unit.has("double_attack_cost")) \
+            and not unit.is_attack_frozen()
 
     if getattr(gamestate, "extra_action"):
         return get_extra_actions(gamestate)
@@ -110,17 +70,18 @@ def get_actions(gamestate):
         if can_use_unit(unit):
 
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
-            units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
-            moves, attacks, abilities = get_unit_actions(unit, position, units, gamestate.opponent_units(),
+            moves, attacks, abilities = get_unit_actions(unit, position, friendly_units, gamestate.opponent_units(),
                                                          gamestate.player_units())
 
-            add_modifiers(attacks, gamestate.player_units())
-
-            if can_attack_with_unit(unit):
+            if can_attack_with_unit(unit) and moving_allowed(position):
                 actions += moves + attacks + abilities
-            else:
+
+            if not can_attack_with_unit(unit) and moving_allowed(position):
                 actions += moves + abilities
+
+            if can_attack_with_unit(unit) and not moving_allowed(position):
+                return attacks + abilities
 
     for action in actions:
         add_unit_references(gamestate, action)
@@ -130,19 +91,19 @@ def get_actions(gamestate):
 
 
 def get_action(gamestate, action_document):
-    start_position = common.position_to_tuple(action_document["start_position"])
+    start_position = position_to_tuple(action_document["start_position"])
     if not start_position in gamestate.player_units():
         return None
 
-    attack_position = common.position_to_tuple(action_document["attack_position"])
+    attack_position = position_to_tuple(action_document["attack_position"])
     if attack_position and not attack_position in gamestate.opponent_units():
         return None
 
     action = Action(
         start_position,
-        common.position_to_tuple(action_document["end_position"]),
+        position_to_tuple(action_document["end_position"]),
         attack_position,
-        common.position_to_tuple(action_document["ability_position"]),
+        position_to_tuple(action_document["ability_position"]),
         action_document["move_with_attack"],
         action_document["ability"])
     add_unit_references(gamestate, action)
@@ -159,19 +120,18 @@ def add_unit_references(gamestate, action):
 
 def get_extra_actions(gamestate):
 
-    def charioting():
+    def get_actions_swiftness():
         moveset = generate_extra_moveset(unit, position, units)
         moves = move_actions(position, moveset | {position})
 
         return moves, [], []
 
-    def samuraiing():
+    def get_actions_samurai():
         def melee_attacks_list_samurai_second(unit, start_position, moveset, enemy_units, movement_remaining):
             attacks = []
-            for position, new_position, move_with_attack in attack_generator(unit,
-                                                                             moveset | {start_position},
+            for position, new_position, move_with_attack in attack_generator(unit, moveset | {start_position},
                                                                              enemy_units):
-                if move_with_attack:
+                if move_with_attack == 1:
                     if movement_remaining > 0:
                         attacks.append(Action(start_position, end_position=position, attack_position=new_position,
                                               move_with_attack=MoveOrStay.MOVE))
@@ -180,33 +140,32 @@ def get_extra_actions(gamestate):
                                           move_with_attack=MoveOrStay.STAY))
             return attacks
 
-        attacks = melee_attacks_list_samurai_second(unit,
-                                                    position,
-                                                    {position},
-                                                    gamestate.opponent_units(),
-                                                    unit.movement_remaining)
-        moves = move_actions(position, {position})
+        attacks = melee_attacks_list_samurai_second(unit, position, {position}, gamestate.opponent_units(),
+                                                    unit.get_movement_remaining())
+
+        moveset = generate_extra_moveset(unit, position, units)
+        moves = move_actions(position, moveset)
 
         return moves, attacks, []
 
     extra_actions = []
 
     for position, unit in gamestate.player_units().items():
-        if hasattr(unit, "extra_action"):
+        if unit.has_extra_action():
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
             units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
             opponent_units = gamestate.opponent_units()
             unit.zoc_blocks = frozenset(position for position,
-                                        opponent_unit in opponent_units.items() if unit.type in opponent_unit.zoc)
+                                        opponent_unit in opponent_units.items() if unit.type in opponent_unit.get_zoc())
 
-            moves, attacks, abilities = [], [], []
+            if unit.is_swift():
+                moves, attacks, abilities = get_actions_swiftness()
+            elif unit.is_samurai():
+                moves, attacks, abilities = get_actions_samurai()
+            else:
+                moves, attacks, abilities = [], [], []
 
-            for attribute in ["charioting", "samuraiing"]:
-                if hasattr(unit, attribute):
-                    moves, attacks, abilities = locals()[attribute]()
-
-            add_modifiers(attacks, gamestate.player_units())
             extra_actions = moves + attacks + abilities
 
     for action in extra_actions:
@@ -216,32 +175,41 @@ def get_extra_actions(gamestate):
     return extra_actions
 
 
-def get_unit_actions(unit, position, units, enemy_units, player_units):
+def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
 
-    unit.zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
+    unit.zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items()
+                                if unit.type in enemy_unit.get_zoc())
+
+    movement = unit.movement
+    if any(position for position in surrounding_tiles(position) if position in friendly_units
+           if friendly_units[position].has("cavalry_charging")):
+        movement += 1
+
+    units = merge_units(friendly_units, enemy_units)
 
     if unit.name not in settings.allowed_special_units:
         if unit.range == 1:
-            moves, attacks = melee_actions(unit, position, units, enemy_units)
+            moves, attacks = melee_actions(unit, position, units, enemy_units, movement)
             return moves, attacks, []
         else:
             moves, attacks = ranged_actions(unit, position, units, enemy_units)
             return moves, attacks, []
 
     else:
-        return get_special_unit_actions(unit, position, units, enemy_units, player_units)
+        return get_special_unit_actions(unit, position, units, enemy_units, player_units, movement)
 
 
 def generate_extra_moveset(unit, position, units):
-    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.movement_remaining, unit.movement_remaining)
+    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get_movement_remaining(),
+                     unit.get_movement_remaining())
 
 
 def generate_moveset(unit, position, units):
     return moves_set(position, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
 
 
-def generate_movesets(unit, position, units):
-    return moves_sets(position, frozenset(units), unit.zoc_blocks, unit.movement, unit.movement)
+def generate_movesets(unit, position, units, movement):
+    return moves_sets(position, frozenset(units), unit.zoc_blocks, movement, movement)
 
 
 def zoc_block(position, direction, zoc_blocks):
@@ -255,20 +223,6 @@ def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
         if new_position in board and new_position not in units:
             if not zoc_block(position, direction, zoc_blocks):
                 yield new_position
-
-
-def adjacent_unoccupied_tiles(position, units):
-    for direction in directions:
-        new_position = direction.move(position)
-        if new_position in board and new_position not in units:
-            yield new_position
-
-
-def adjacent_tiles(position):
-    for direction in directions:
-        new_position = direction.move(position)
-        if new_position in board:
-            yield new_position
 
 
 @memoized
@@ -381,9 +335,9 @@ def melee_attack_actions(unit, start_position, moveset, enemy_units):
             move_with_attack in attack_generator(unit, moveset, enemy_units)]
 
 
-def melee_actions(unit, position, units, enemy_units):
+def melee_actions(unit, position, units, enemy_units, movement):
 
-    moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units)
+    moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units, movement)
     attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
     moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
 
@@ -403,9 +357,9 @@ def ability_actions(start_position, abilityset, ability):
     return [Action(start_position, ability_position=position, ability=ability) for position in abilityset]
 
 
-def get_special_unit_actions(unit, position, units, enemy_units, player_units):
+def get_special_unit_actions(unit, position, units, enemy_units, player_units, movement):
 
-    def melee_units(unit, position, units, enemy_units):
+    def melee_units(unit, position, units, enemy_units, movement):
 
         def rage(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
@@ -472,18 +426,6 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
 
             return moves, attacks
 
-        def lancing(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
-
-            attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
-            moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
-
-            #
-            #for attack in attacks:
-            #    if distance(attack.start_position, attack.attack_position) >= 3:
-            #        attack.lancing = True
-
-            return moves, attacks
-
         def defence_maneuverability(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
             extended_moveset_no_leftover = set()
             for move_position in moveset_no_leftover:
@@ -510,16 +452,13 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
         #
         #    return attacks
 
-        moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units)
+        moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units, movement)
         attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
         moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
 
-        for attribute in ["rage", "berserking", "longsword", "triple_attack", "defence_maneuverability", "lancing"]:
-            if hasattr(unit, attribute):
-                moves, attacks = locals()[attribute](unit,
-                                                     position,
-                                                     moveset_with_leftover,
-                                                     moveset_no_leftover,
+        for attribute in ["rage", "berserking", "longsword", "triple_attack", "defence_maneuverability"]:
+            if unit.has(attribute):
+                moves, attacks = locals()[attribute](unit, position, moveset_with_leftover, moveset_no_leftover,
                                                      enemy_units)
 
         #if hasattr(unit, "push"):
@@ -539,13 +478,13 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
             if ability in ["sabotage", "poison"]:
                 possible_targets = enemy_units
 
-            elif ability == "improve_weapons":
+            elif ability in ["improve_weapons", "improve_weapons_II_A", "improve_weapons_II_B"]:
                 possible_targets = [target_position for target_position, target_unit in player_units.items()
                                     if target_unit.attack and target_unit.range == 1]
 
             elif ability == "bribe":
                 possible_targets = [target_position for target_position, target_unit in enemy_units.items()
-                                    if not hasattr(target_unit, "bribed") and not hasattr(target_unit, "just_bribed")]
+                                    if not target_unit.get_bribed() and not target_unit.is_recently_bribed()]
             else:
                 possible_targets = []
 
@@ -563,9 +502,8 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
         moveset = generate_moveset(unit, position, units)
         moves = move_actions(position, moveset)
 
-        for attribute in ["scouting"]:
-            if hasattr(unit, attribute):
-                moves = locals()[attribute]()
+        if unit.has("scouting"):
+            moves = scouting()
 
         return moves
 
@@ -576,7 +514,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units):
 
     if unit.attack:
         if unit.range == 1:
-            moves, attacks = melee_units(unit, position, units, enemy_units)
+            moves, attacks = melee_units(unit, position, units, enemy_units, movement)
         else:
             moves, attacks = ranged_units(unit, position, units, enemy_units)
 

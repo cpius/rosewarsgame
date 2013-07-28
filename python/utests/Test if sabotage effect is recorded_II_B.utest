@@ -1,0 +1,42 @@
+{
+    "description": "Test if poison effect is recorded", 
+    "type": "Is outcome correct", 
+    "pre_gamestate": {
+        "actions_remaining": 2, 
+        "player1_units": {
+            "C3": "Saboteur_II_B", 
+            "A1": "Pikeman"
+        }, 
+        "player2_units": {
+            "D4": "Archer"
+        }
+    }, 
+    "action": {
+        "ability_position": "D4", 
+        "end_position": "C3", 
+        "start_position": "C3", 
+        "ability": "sabotage_II", 
+        "attack_position": "D4"
+    }, 
+    "outcome": {
+        "C4": "DETERMINISTIC"
+    }, 
+    "post_gamestate": {
+        "actions_remaining": 1, 
+        "player1_units": {
+            "A1": "Pikeman", 
+            "C3": {
+                "xp_gained_this_turn": 1, 
+                "xp": 1, 
+                "used": 1, 
+                "name": "Saboteur_II_B"
+            }
+        }, 
+        "player2_units": {
+            "D4": {
+                "sabotaged_II": 1, 
+                "name": "Archer"
+            }
+        }
+    }
+}

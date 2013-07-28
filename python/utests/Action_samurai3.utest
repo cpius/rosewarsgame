@@ -1,0 +1,34 @@
+{
+    "type": "Does action exist",
+    "result": true,
+    "action":
+    {
+        "start_position": "E4",
+        "end_position": "E4",
+		"attack_position": "E5",
+		"move_with_attack": 2
+    },
+    "gamestate":
+	{
+		"extra_action": true,
+		"actions_remaining": 0, 
+		"player1_units": 
+		{
+			"E4":
+			{	
+				"name": "Samurai",
+				"used": 1,
+				"xp_gained_this_turn": 1,
+				"xp": 1,
+				"movement_remaining": 0,
+				"extra_action": 1
+			},
+			"A2": "Pikeman"
+		},
+		"player2_units": 
+		{
+			"E5": "Knight",
+			"D7": "Ballista"
+		}
+	}
+}

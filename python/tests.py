@@ -126,7 +126,7 @@ class TestAI(unittest.TestCase):
             {
                 "D6":
                 {
-                    "name": "Heavy Cavalry",
+                    "name": "Knight",
                     "xp": 1
                 }
             },
