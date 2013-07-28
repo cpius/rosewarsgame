@@ -542,7 +542,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
 
             elif ability == "bribe":
                 possible_targets = [target_position for target_position, target_unit in enemy_units.items()
-                                    if not target_unit.get_bribed() and not target_unit.recently_bribed()]
+                                    if not target_unit.get_bribed() and not target_unit.get_recently_bribed()]
             else:
                 possible_targets = []
 

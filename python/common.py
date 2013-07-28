@@ -85,7 +85,7 @@ def adjacent_tiles(position):
 def two_forward_tiles(position, forward_position):
     """ Returns the 2 other nearby tiles in the direction towards forward_position """
     return set(direction.move(position) for direction in eight_directions) & \
-        set(direction.move(forward_position) for direction in directions)
+        set(direction.move(forward_position) for direction in four_directions)
 
 
 def surrounding_tiles(position):

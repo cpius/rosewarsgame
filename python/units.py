@@ -431,6 +431,7 @@ class Cavalry_Lieutenant_II_A(Unit):
     descriptions = {"cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 "
                                         "Movement"}
 
+
 class Cavalry_Lieutenant_II_B(Unit):
 
     name = "Cavalry Lieutenant II_B"

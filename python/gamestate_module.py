@@ -51,9 +51,10 @@ class Gamestate:
 
         for action in actions:
             if action.is_attack():
-                action.chance_of_win = ai_methods.chance_of_win(action.unit_reference, action.target_reference, action)
+                action.chance_of_win = ai_methods.chance_of_win(self, action.unit_reference, action.target_reference,
+                                                                action)
                 for sub_action in action.sub_actions:
-                    sub_action.chance_of_win = ai_methods.chance_of_win(sub_action.unit_reference,
+                    sub_action.chance_of_win = ai_methods.chance_of_win(self, sub_action.unit_reference,
                                                                         sub_action.target_reference, sub_action)
 
         return actions

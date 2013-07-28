@@ -1,4 +1,5 @@
 from __future__ import division
+import common
 
 
 class Direction:
@@ -70,7 +71,7 @@ def initialize_action(gamestate):
         for position, unit in gamestate.player_units().items():
             if any(surrounding_position in gamestate.player_units()
                    and hasattr(gamestate.player_units()[surrounding_position], "crusading") and unit.range == 1
-                   for surrounding_position in surrounding_tiles(position)):
+                   for surrounding_position in common.surrounding_tiles(position)):
                 unit.variables["is_crusading"] = True
             else:
                 if hasattr(unit, "is_crusading"):
