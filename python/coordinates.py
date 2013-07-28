@@ -11,13 +11,13 @@ class Coordinates(object):
         self.y_border_bottom = interface.y_border_bottom
 
     def get(self, position):
-        if position[1] >= 5:
+        if position.row >= 5:
             y_border = self.y_border_top
         else:
             y_border = self.y_border_bottom
 
-        x = int((position[0] - 1) * (self.unit_width + self.unit_padding_width) + self.x_border +
+        x = int((position.column - 1) * (self.unit_width + self.unit_padding_width) + self.x_border +
                 self.add_x)
-        y = int((8 - position[1]) * (self.unit_height + self.unit_padding_height) + y_border + self.add_y)
+        y = int((8 - position.column) * (self.unit_height + self.unit_padding_height) + y_border + self.add_y)
 
         return x, y

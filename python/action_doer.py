@@ -5,7 +5,7 @@ import common
 from outcome import Outcome, SubOutcome
 import settings
 
-board = [(column, row) for column in range(1, 6) for row in range(1, 9)]
+board = [common.Position(column, row) for column in range(1, 6) for row in range(1, 9)]
 
 
 def out_of_board_vertical(position):

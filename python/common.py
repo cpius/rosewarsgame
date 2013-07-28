@@ -1,6 +1,8 @@
 from json import JSONEncoder
 from datetime import datetime
 from bson import ObjectId
+from collections import namedtuple
+
 
 class Direction:
     """ An object direction is one move up, down, left or right.
@@ -32,7 +34,7 @@ class Direction:
             return "Up"
 
 
-Position = namedtuple("Position", ["x", "y"])
+Position = namedtuple("Position", ["column", "row"])
 
 
 def position_to_string(position):

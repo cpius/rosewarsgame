@@ -3,22 +3,23 @@ import random
 import units as units_module
 import settings
 from collections import namedtuple
+import common
 
 
 class Tiles_bag(object):
     def __init__(self):
-        self.tiles = [(column, row) for column in board_columns for row in board_rows]
+        self.tiles = [common.Position(column, row) for column in board_columns for row in board_rows]
         
     def pick_from_row(self, rows):
-        pick = random.choice([tile for tile in self.tiles if tile[1] in rows])
+        pick = random.choice([tile for tile in self.tiles if tile.row in rows])
         self.tiles.remove(pick)
         return pick
 
     def pick_protected_tile(self, rows):
-        possible_tiles = [(coloumn, row) for coloumn in board_columns for
-                          row in [2, 3] if (coloumn, row) in self.tiles and (coloumn, row + 1) not in self.tiles]
+        possible_tiles = [common.Position(column, row) for column in board_columns for
+                          row in [2, 3] if (column, row) in self.tiles and (column, row + 1) not in self.tiles]
 
-        pick = random.choice([tile for tile in possible_tiles if tile[1] in rows])
+        pick = random.choice([tile for tile in possible_tiles if tile.row in rows])
         self.tiles.remove(pick)
         return pick
 
@@ -74,19 +75,19 @@ units_info = {"Archer": Info({2, 3}, 3, False),
 
 
 def test_coloumn_blocks(units):
-    """ Tests whether there on each coloumn are at least two 'blocks'.
+    """ Tests whether there on each column are at least two 'blocks'.
     A block is either a unit, or a Pikeman zoc tile. """
     
-    columns = [position[0] + x for x in [-1, +1] for position, unit in units.items() if unit.name == "Pikeman"]\
-        + [position[0] for position in units]
+    columns = [position.column + x for x in [-1, +1] for position, unit in units.items() if unit.name == "Pikeman"]\
+        + [position.column for position in units]
 
     return not any(columns.count(column) < 2 for column in board_columns)
      
 
-def test_pikeman_coloumn(units):
-    """ Tests whether there is more than one Pikeman on any coloumn."""
+def test_pikeman_column(units):
+    """ Tests whether there is more than one Pikeman on any column."""
     
-    columns = [position[0] for position, unit in units.items() if unit.name == "Pikeman"]
+    columns = [position.column for position, unit in units.items() if unit.name == "Pikeman"]
     
     return not any(columns.count(column) > 1 for column in board_columns)
 
@@ -189,7 +190,7 @@ def get_units():
         except IndexError:
             continue
 
-        if any(not requirement(units) for requirement in [test_coloumn_blocks, test_pikeman_coloumn]):
+        if any(not requirement(units) for requirement in [test_coloumn_blocks, test_pikeman_column]):
             continue
              
         return units
@@ -198,7 +199,7 @@ def get_units():
 def flip_units(units):
     
     def flip(position):
-        return position[0], 9 - position[1]
+        return position.column, 9 - position.row
     
     return dict((flip(position), unit) for position, unit in units.items())
 

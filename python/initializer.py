@@ -12,7 +12,7 @@ class Direction:
         self.y = y
 
     def move(self, position):
-        return position[0] + self. x, position[1] + self.y
+        return position.column + self. x, position.row + self.y
 
     def perpendicular(self, position):
         return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
@@ -51,11 +51,11 @@ def find_all_friendly_units_except_current(current_unit_position, p):
 
 
 def out_of_board_vertical(position):
-    return position[1] < 1 or position[1] > 8
+    return position.row < 1 or position.row > 8
 
 
 def out_of_board_horizontal(position):
-    return position[0] < 1 or position[0] > 5
+    return position.column < 1 or position.column > 5
 
 
 #global variables
