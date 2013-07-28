@@ -20,14 +20,14 @@ def do_action(gamestate, action, outcome=None, unit=None):
     def prepare_extra_actions(action, unit):
 
         if unit.is_swift():
-            movement_remaining = unit.movement - distance(action.start_position, action.end_position)
+            movement_remaining = unit.movement - common.distance(action.start_position, action.end_position)
             if action.is_attack():
                 movement_remaining -= 1
             unit.set_movement_remaining(movement_remaining)
             unit.set_extra_action()
 
         if unit.is_samurai():
-            unit.set_movement_remaining(unit.movement - distance(action.start_position, action.final_position))
+            unit.set_movement_remaining(unit.movement - common.distance(action.start_position, action.final_position))
             unit.set_extra_action()
 
     def update_actions_remaining(action):
@@ -248,7 +248,3 @@ def gain_xp(unit):
     if not unit.get_xp_gained_this_turn() and not settings.beginner_mode:
         unit.set_xp_gained_this_turn()
         unit.increment_xp()
-
-
-def distance(p1, p2):
-    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])

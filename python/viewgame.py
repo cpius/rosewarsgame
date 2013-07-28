@@ -9,22 +9,6 @@ import common
 zoom = settings.zoom
 
 
-class Direction:
-    """ A object direction is one move up, down, left or right.
-    The class contains methods for returning the tile you will
-    go to after the move, and for returning the tiles you should check for zone of control.
-    """
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def move(self, position):
-        return position[0] + self. x, position[1] + self.y
-
-    def perpendicular(self, position):
-        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
-
-
 def draw_game(screen, interface, game, start_position=None, actions=()):
 
     coordinates, fonts = interface.coordinates, interface.fonts

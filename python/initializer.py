@@ -42,10 +42,6 @@ def get_direction(position, forward_position):
     return Direction(-position[0] + forward_position[0], -position[1] + forward_position[1])
 
 
-def distance(position1, position2):
-    return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
-
-
 def find_all_friendly_units_except_current(current_unit_position, p):
     return dict((position, p[0].units[position]) for position in p[0].units if position != current_unit_position)
 

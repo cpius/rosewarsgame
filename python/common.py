@@ -61,7 +61,7 @@ def merge_units(units1, units2):
 
 
 def distance(position1, position2):
-    return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
+    return abs(position1.column - position2.column) + abs(position1.row - position2.row)
 
 
 def get_direction(position, forward_position):
@@ -70,8 +70,7 @@ def get_direction(position, forward_position):
 
 
 def flip(position):
-    if position:
-        return Position(position.column, 9 - position.row)
+    return Position(position.column, 9 - position.row)
 
 
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
