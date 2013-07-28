@@ -294,5 +294,5 @@ def add_blue_counters(unit):
         unit.blue_counters = unit.get_frozen_counters()
     if unit.is_attack_frozen():
         unit.blue_counters = unit.get_attack_frozen_counter()
-    if unit.get_recently_bribed():
+    if unit.is_recently_bribed():
         unit.blue_counters = 1

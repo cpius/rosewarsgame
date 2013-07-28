@@ -115,3 +115,7 @@ def out_of_board_vertical(position):
 
 def out_of_board_horizontal(position):
     return position.column < 1 or position.column > board_width
+
+
+def find_all_friendly_units_except_current(current_unit_position, player_units):
+    return dict((position, player_units[position]) for position in player_units if position != current_unit_position)

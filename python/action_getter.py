@@ -35,10 +35,6 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-def find_all_friendly_units_except_current(current_unit_position, player_units):
-    return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
-
-
 def add_target_reference(action, enemy_units, player_units):
     if action.is_attack():
         action.target_reference = enemy_units[action.attack_position]
@@ -55,7 +51,7 @@ def add_target_reference(action, enemy_units, player_units):
 def get_actions(gamestate):
 
     def can_use_unit(unit):
-        return not (unit.is_used() or unit.is_frozen() or unit.get_recently_bribed())
+        return not (unit.is_used() or unit.is_frozen() or unit.is_recently_bribed())
 
     def moving_allowed(unit_position):
         return not any(position for position in adjacent_tiles(unit_position) if
@@ -488,7 +484,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
 
             elif ability == "bribe":
                 possible_targets = [target_position for target_position, target_unit in enemy_units.items()
-                                    if not target_unit.get_bribed() and not target_unit.get_recently_bribed()]
+                                    if not target_unit.get_bribed() and not target_unit.is_recently_bribed()]
             else:
                 possible_targets = []
 

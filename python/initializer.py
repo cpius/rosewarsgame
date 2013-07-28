@@ -24,5 +24,5 @@ def initialize_turn(gamestate):
         unit.remove_recently_bribed()
 
     for opponent_unit_position, opponent_unit in gamestate.opponent_units().items():
-        opponent_unit.variables["used"] = False
+        opponent_unit.remove_used()
         resolve_bribe(opponent_unit, gamestate.opponent_units(), gamestate.player_units())
