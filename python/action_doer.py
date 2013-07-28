@@ -3,7 +3,7 @@ import random as rnd
 import battle
 import common
 from outcome import Outcome, SubOutcome
-from action import MoveOrStay
+import settings
 
 
 
@@ -247,7 +247,7 @@ def update_final_position(action):
 
 
 def gain_xp(unit):
-    if not unit.get_xp_gained_this_turn():
+    if not unit.get_xp_gained_this_turn() and not settings.beginner_mode:
         unit.set_xp_gained_this_turn()
         unit.increment_xp()
 

@@ -11,6 +11,7 @@ show_chance_of_win = False
 
 pause_for_attack_until_click = False
 
+beginner_mode = True
 
 zoom = 1.3
 interface = interfaces.Rectangles(zoom)
@@ -20,14 +21,20 @@ player2_ai = "Evaluator"
 
 document_ai_actions = False
 
+
 required_special_units = []
 allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
                          "Scout", "War Elephant", "Weaponsmith", "Longbowman", "Viking"]
 basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
+
 unit_bag_size = 3
-special_unit_count = 3
-basic_unit_count = 6
+if beginner_mode:
+    basic_unit_count = 9
+    special_unit_count = 0
+else:
+    special_unit_count = 3
+    basic_unit_count = 6
 max_two_siege_weapons = True
 at_least_one_siege_weapon = True
 
