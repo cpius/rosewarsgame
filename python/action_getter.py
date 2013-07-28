@@ -58,7 +58,7 @@ def get_actions(gamestate):
                        position in gamestate.units[1] and gamestate.units[1][position].has("melee_freeze"))
 
     def can_attack_with_unit(unit):
-        return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
+        return not (gamestate.get_actions_remaining() == 1 and unit.has("double_attack_cost")) \
             and not unit.is_attack_frozen()
 
     if getattr(gamestate, "extra_action"):
@@ -182,7 +182,7 @@ def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
 
     movement = unit.movement
     if any(position for position in surrounding_tiles(position) if position in friendly_units
-           if hasattr(friendly_units[position], "cavalry_charging")):
+           if friendly_units[position].has("cavalry_charging")):
         movement += 1
 
     units = merge_units(friendly_units, enemy_units)
@@ -457,7 +457,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
         moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
 
         for attribute in ["rage", "berserking", "longsword", "triple_attack", "defence_maneuverability"]:
-            if hasattr(unit, attribute):
+            if unit.has(attribute):
                 moves, attacks = locals()[attribute](unit, position, moveset_with_leftover, moveset_no_leftover,
                                                      enemy_units)
 
@@ -502,9 +502,8 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
         moveset = generate_moveset(unit, position, units)
         moves = move_actions(position, moveset)
 
-        for attribute in ["scouting"]:
-            if hasattr(unit, attribute):
-                moves = locals()[attribute]()
+        if unit.has("scouting"):
+            moves = scouting()
 
         return moves
 

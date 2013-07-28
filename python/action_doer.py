@@ -27,7 +27,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
         gamestate.decrement_actions_remaining()
 
-        if hasattr(action, "double_cost"):
+        if action.double_cost:
             gamestate.decrement_actions_remaining()
 
     def secondary_action_effects(action, unit):

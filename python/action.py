@@ -44,6 +44,7 @@ class Action(object):
         self.target_reference = None
         self.rolls = None
         self.outcome = outcome
+        self.double_cost = False
 
         self.created_at = datetime.utcnow()
 
