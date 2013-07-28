@@ -163,7 +163,7 @@ def get_extra_actions(gamestate):
             for position, new_position, move_with_attack in attack_generator(unit,
                                                                              moveset | {start_position},
                                                                              enemy_units):
-                if move_with_attack:
+                if move_with_attack == 1:
                     if movement_remaining > 0:
                         attacks.append(Action(start_position, end_position=position, attack_position=new_position,
                                               move_with_attack=MoveOrStay.MOVE))
