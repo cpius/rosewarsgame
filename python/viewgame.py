@@ -195,7 +195,8 @@ def draw_bordered_circle(screen, position, size, color):
 
 
 def draw_symbols(screen, interface, unit, position):
-    m.write(screen, str(unit.variables["xp"]), interface.coordinates["flag"].get(position), interface.fonts["xp"])
+    if unit.get_xp():
+        m.write(screen, str(unit.get_xp()), interface.coordinates["flag"].get(position), interface.fonts["xp"])
 
     if unit.get_bribed():
         draw_bribed(screen, interface, position)
