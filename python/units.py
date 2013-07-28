@@ -123,7 +123,7 @@ class Unit(object):
         return self.variables["bribed"]
 
     def remove_bribed(self):
-        return self.variables["is_bribed"]
+        self.variables["is_bribed"] = 0
 
     def set_recently_bribed(self):
         self.variables["recently_bribed"] = 1
