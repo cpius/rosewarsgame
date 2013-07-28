@@ -105,7 +105,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
     return outcome
 
 
-def settle_attack_push(action, gamestate, outcome=None):
+def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
     player_units = gamestate.player_units()
     opponent_units = gamestate.opponent_units()
     if not outcome:
@@ -162,6 +162,11 @@ def settle_attack_push(action, gamestate, outcome=None):
                 opponent_units[push_destination] = opponent_units.pop(action.attack_position)
 
     return outcome
+
+
+def do_sub_action(gamestate, action, direction, outcome):
+    if action.is_triple_attack():
+        return settle_attack_push(action, gamestate, outcome, direction)
 
 
 def settle_attack(action, gamestate, outcome):
