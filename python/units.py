@@ -198,7 +198,7 @@ class Longbowman(Unit):
 class Longbowman_II_A(Unit):
     name = "Longbowman II_A"
     image = "Archer"
-    attack = 4
+    attack = 3
     defence = 2
     movement = 1
     range = 4
@@ -206,11 +206,15 @@ class Longbowman_II_A(Unit):
     dbonus = {}
     type = "Infantry"
 
+    sharpshooting = True
+
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
+
 
 class Longbowman_II_B(Unit):
     name = "Longbowman II_B"
     image = "Archer"
-    attack = 3
+    attack = 2
     defence = 3
     movement = 1
     range = 4
@@ -218,6 +222,9 @@ class Longbowman_II_B(Unit):
     dbonus = {}
     type = "Infantry"
 
+    sharpshooting = True
+
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 class Crossbow_Archer(Unit):
     name = "Crossbow Archer"
