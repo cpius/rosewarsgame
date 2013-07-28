@@ -248,10 +248,9 @@ def get_font_coordinates(interface, counters_drawn):
 
 def flip_action(action):
 
-    action.start_position = common.flip(action.start_position)
-    action.end_position = common.flip(action.end_position)
-    action.attack_position = common.flip(action.attack_position)
-    action.ability_position = common.flip(action.ability_position)
+    for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
+        if getattr(action, attribute):
+            setattr(action, attribute, common.flip(getattr(action, attribute)))
 
     for sub_action in action.sub_actions:
         action.sub_action = flip_action(sub_action)
