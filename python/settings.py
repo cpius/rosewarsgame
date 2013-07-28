@@ -11,7 +11,7 @@ show_chance_of_win = False
 
 pause_for_attack_until_click = False
 
-beginner_mode = True
+beginner_mode = False
 
 zoom = 1.3
 interface = interfaces.Rectangles(zoom)
