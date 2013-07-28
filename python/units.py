@@ -30,7 +30,6 @@ class Unit(object):
         return self.variables["frozen"]
 
     def decrement_frozen(self):
-        print "o"
         self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
 
     # xp gained this turn
@@ -71,7 +70,7 @@ class Unit(object):
         return self.variables["attack_frozen"]
 
     def decrement_attack_frozen(self):
-        self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
+        self.variables["attack_frozen"] = max(self.variables["attack_frozen"] - 1, 0)
 
     # Improved weapons
     def improve_weapons(self):
