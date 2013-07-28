@@ -1,5 +1,5 @@
 {"type": "Is outcome correct",
- "outcome": {"E4": 1},
+ "outcome": {"E4": 8},
  "action": 
 {
     "start_position": "E3",
@@ -33,7 +33,8 @@
 			"used": 1,
 			"xp_gained_this_turn": 1,
 			"xp": 1,
-			"movement_remaining": 2
+			"movement_remaining": 2,
+			"extra_action": 1																								
 		},
 		"A2": "Pikeman"
     },
