@@ -16,6 +16,9 @@ class Unit(object):
     def __repr__(self):
         return self.name
 
+    def has(self, attribute):
+        return hasattr(self, attribute)
+
     # Frozen
     def freeze(self, n):
         self.variables["frozen"] = max(self.variables["frozen"], n)
@@ -171,36 +174,6 @@ class Unit(object):
     def remove_extra_action(self):
         self.variables["extra_action"] = 0
 
-    #Special unit attributes
-    def crusading(self):
-        return hasattr(self, "crusader")
-
-    def crusading_II(self):
-        return hasattr(self, "crusader_II")
-
-    def flag_bearing(self):
-        return hasattr(self, "flag_bearer")
-
-    def flag_bearing_II_A(self):
-        return hasattr(self, "flag_bearer_II_A")
-
-    def flag_bearing_II_B(self):
-        return hasattr(self, "flag_bearer_II_B")
-
-    def lancing(self):
-        return hasattr(self, "lancer")
-
-    def lancing_II(self):
-        return hasattr(self, "lancer_II")
-
-    def is_swift(self):
-        return hasattr(self, "swiftness")
-
-    def is_samurai(self):
-        return hasattr(self, "samurai")
-
-    def sharpshooting(self):
-        return hasattr(self, "sharpshooter")
 
 class Archer(Unit):
 

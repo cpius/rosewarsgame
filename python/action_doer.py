@@ -9,14 +9,14 @@ import settings
 def do_action(gamestate, action, outcome=None, unit=None):
     def prepare_extra_actions(action, unit):
 
-        if unit.is_swift():
+        if unit.has("swiftness"):
             movement_remaining = unit.movement - distance(action.start_position, action.end_position)
             if action.is_attack():
                 movement_remaining -= 1
             unit.set_movement_remaining(movement_remaining)
             unit.set_extra_action()
 
-        if unit.is_samurai():
+        if unit.has("samurai"):
             unit.set_movement_remaining(unit.movement - distance(action.start_position, action.final_position))
             unit.set_extra_action()
 
@@ -31,10 +31,10 @@ def do_action(gamestate, action, outcome=None, unit=None):
             gamestate.decrement_actions_remaining()
 
     def secondary_action_effects(action, unit):
-        if hasattr(unit, "attack_cooldown") and action.is_attack():
+        if unit.has("attack_cooldown") and action.is_attack():
             unit.set_attack_frozen(unit.attack_cooldown)
 
-        if hasattr(action.unit, "double_attack_cost") and action.is_attack():
+        if action.unit.has("double_attack_cost") and action.is_attack():
             action.double_cost = True
 
     if not outcome:
@@ -68,7 +68,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
-    if hasattr(unit, "bloodlust") and outcome.outcomes[action.attack_position] == 1:
+    if unit.has("bloodlust") and outcome.outcomes[action.attack_position] == 1:
         bloodlust = True
     else:
         unit.remove_extra_action()

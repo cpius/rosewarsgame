@@ -1,5 +1,5 @@
 from outcome import Outcome, SubOutcome
-import common
+from common import *
 
 
 def attack_successful(action, rolls, gamestate):
@@ -24,25 +24,22 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
     if attacking_unit.type in defending_unit.defence_bonuses:
         defence_rating += defending_unit.defence_bonuses[attacking_unit.type]
 
-    if defending_unit.has_improved_weapons():
+    if defending_unit.has("improved_weapons"):
         defence_rating += 1
 
-    if defending_unit.has_improved_weapons_II_A():
+    if defending_unit.has("improved_weapons_II_A"):
             defence_rating += 1
 
-    if defending_unit.has_improved_weapons_II_B():
+    if defending_unit.has("improved_weapons_II_B"):
             defence_rating += 2
 
-    if hasattr(defending_unit, "shield") and attacking_unit.range == 1:
-        defence_rating += 1
-
-    if attacking_unit.sharpshooting():
+    if attacking_unit.has("sharpshooting"):
         defence_rating = 1
 
-    if attacking_unit.range > 1 and hasattr(defending_unit, "tall_shield"):
+    if attacking_unit.range > 1 and defending_unit.has("tall_shield"):
         defence_rating += 1
 
-    if attacking_unit.range == 1 and hasattr(defending_unit, "melee_expert"):
+    if attacking_unit.range == 1 and defending_unit.has("melee_expert"):
         defence_rating += 1
 
     if attack_rating > 6:
@@ -54,7 +51,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
     if defending_unit.is_sabotaged_II():
         defence_rating = -1
 
-    if attacking_unit.range == 1 and hasattr(defending_unit, "big_shield"):
+    if attacking_unit.range == 1 and defending_unit.has("big_shield"):
         defence_rating += 2
 
     return defence_rating
@@ -97,10 +94,10 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.type in attacking_unit.attack_bonuses:
         attack += attacking_unit.attack_bonuses[defending_unit.type]
 
-    if defending_unit.range == 1 and hasattr(attacking_unit, "melee_expert"):
+    if defending_unit.range == 1 and attacking_unit.has("melee_expert"):
         attack += 1
 
-    if hasattr(attacking_unit, "far_sighted") and common.distance(action.end_position, action.attack_position) < 4:
+    if attacking_unit.has("far_sighted") and distance(action.end_position, action.attack_position) < 4:
         attack -= 1
 
     return attack

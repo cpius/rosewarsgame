@@ -55,7 +55,7 @@ def get_actions(gamestate):
 
     def moving_allowed(unit_position):
         return not any(position for position in adjacent_tiles(unit_position) if
-                       position in gamestate.units[1] and hasattr(gamestate.units[1][position], "melee_freeze"))
+                       position in gamestate.units[1] and gamestate.units[1][position].has("melee_freeze"))
 
     def can_attack_with_unit(unit):
         return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
