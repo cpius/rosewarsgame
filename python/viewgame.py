@@ -264,10 +264,10 @@ def flip_action(action):
 def get_transformed_direction(direction):
 
     if direction.y == -1:
-        return Direction(0, 1)
+        return common.Direction(0, 1)
 
     if direction.y == 1:
-        return Direction(0, -1)
+        return common.Direction(0, -1)
 
     return direction
 
