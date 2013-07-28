@@ -165,6 +165,27 @@ class Unit(object):
     def remove_extra_action(self):
         self.variables["extra_action"] = 0
 
+    #Special unit attributes
+    def crusading(self):
+        return hasattr(self, "crusader")
+
+    def crusading_II(self):
+        return hasattr(self, "crusader_II")
+
+    def flag_bearing(self):
+        return hasattr(self, "flag_bearer")
+
+    def flag_bearing_II_A(self):
+        return hasattr(self, "flag_bearer_II_A")
+
+    def flag_bearing_II_B(self):
+        return hasattr(self, "flag_bearer_II_B")
+
+    def lancing(self):
+        return hasattr(self, "lancer")
+
+    def lancing_II(self):
+        return hasattr(self, "lancer_II")
 
 class Archer(Unit):
 
@@ -883,9 +904,9 @@ class Lancer(Unit):
     zoc = []
     type = "Cavalry"
         
-    lancing = True
+    lancer = True
 
-    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
+    descriptions = {"lancer": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
 
     upgrades = ["Lancer II_A", "Lancer II_B"]
 
@@ -903,9 +924,9 @@ class Lancer_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    lancing = True
+    lancer = True
 
-    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
+    descriptions = {"lancer": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
 
 
 class Lancer_II_B(Unit):
@@ -921,9 +942,9 @@ class Lancer_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    lancing_II = True
+    lancer_II = True
 
-    descriptions = {"lancing_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."}
+    descriptions = {"lancer_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."}
 
 
 class Flag_Bearer(Unit):
@@ -939,9 +960,9 @@ class Flag_Bearer(Unit):
     zoc = []
     type = "Cavalry"
         
-    flag_bearing = True  #
+    flag_bearer = True
 
-    descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
+    descriptions = {"flag_bearer": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
 
     upgrades = ["Flag Bearer II_A", "Flag Bearer II_B"]
 
@@ -959,9 +980,9 @@ class Flag_Bearer_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    flag_bearing_II_A = True
+    flag_bearer_II_A = True
 
-    descriptions = {"flag_bearing_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer."}
+    descriptions = {"flag_bearer_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer."}
 
 
 class Flag_Bearer_II_B(Unit):
@@ -977,9 +998,9 @@ class Flag_Bearer_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    flag_bearing_II_B = True  #
+    flag_bearing_II_B = True
 
-    descriptions = {"flag_bearing_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer."}
+    descriptions = {"flag_bearer_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer."}
 
 
 class Longswordsman(Unit):
@@ -1051,9 +1072,9 @@ class Crusader(Unit):
     zoc = []
     type = "Cavalry"
         
-    crusading = True
+    crusader = True
 
-    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+    descriptions = {"crusader": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
                                  "Crusader get +1A."}
 
     upgrades = ["Crusader II_A", "Crusader II_B"]
@@ -1072,9 +1093,9 @@ class Crusader_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    crusading = True
+    crusader = True
 
-    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+    descriptions = {"crusader": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
                                  "Crusader get +1A."}
 
 
@@ -1091,9 +1112,9 @@ class Crusader_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    crusading_II = True
+    crusader_II = True
 
-    descriptions = {"crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+    descriptions = {"crusader_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
                                  "Crusader get +1A, +1D."}
 
 
