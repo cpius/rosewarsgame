@@ -1,12 +1,11 @@
 from __future__ import division
 import pygame
 import settings
-from viewcommon import colors
 import viewlog
 import viewgame
 import viewinfo
-import viewcommon as m
-import common
+from viewcommon import *
+from common import *
 
 _anti_alias = 1
 
@@ -39,23 +38,23 @@ class View(object):
         else:
             y = 8 - int((coordinates[1] - self.interface.y_border_top) /
                         (self.interface.unit_height + self.interface.unit_padding_height))
-        return common.Position(x, y)
+        return Position(x, y)
 
     def draw_ask_about_move_with_attack(self, position):
 
         base = self.interface.coordinates["base"].get(position)
 
         dimensions = (self.interface.unit_width, self.interface.unit_height)
-        m.draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+        draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
 
-        m.write_message(self.screen, self.interface, "Click the tile you want to stand on.")
+        write_message(self.screen, self.interface, "Click the tile you want to stand on.")
         pygame.display.update()
 
     def save_screenshot(self, name):
         pygame.image.save(self.screen, "./replay/" + name + ".jpeg")
 
     def draw_game_end(self, color):
-        m.write_message(self.screen, self.interface, color + " Wins")
+        write_message(self.screen, self.interface, color + " Wins")
         pygame.display.update()
 
     def draw_game(self, game, start_position=None, actions=()):
@@ -99,7 +98,7 @@ class View(object):
         pass
 
     def draw_message(self, message):
-        m.write_message(self.screen, self.interface, message)
+        write_message(self.screen, self.interface, message)
         pygame.display.update()
 
     def draw_tutorial(self, game):

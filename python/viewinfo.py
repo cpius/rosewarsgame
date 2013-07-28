@@ -1,7 +1,7 @@
 import units as unitsmodule
 import pygame
 import textwrap
-import viewcommon as m
+from viewcommon import *
 import settings
 
 zoom = settings.zoom
@@ -11,8 +11,8 @@ upgrade_unit_size = (int(118 * zoom), int(135.5 * zoom))
 
 def show_unit_zoomed(screen, interface, unit):
 
-    unit_pic = m.get_unit_pic(interface, unit.image)
-    pic = m.get_image(unit_pic, zoomed_unit_size)
+    unit_pic = get_unit_pic(interface, unit.image)
+    pic = get_image(unit_pic, zoomed_unit_size)
 
     base = interface.show_unit_location
     title_location = base
@@ -20,7 +20,7 @@ def show_unit_zoomed(screen, interface, unit):
     text_location = [base[0], base[1] + 290 * zoom]
     lines = []
 
-    m.write(screen, unit.name, title_location, interface.fonts["normal"])
+    write(screen, unit.name, title_location, interface.fonts["normal"])
     screen.blit(pic, image_location)
 
     for attribute in ["attack", "defence", "range", "movement"]:
@@ -44,8 +44,7 @@ def show_unit_zoomed(screen, interface, unit):
             lines.append("")
 
     line_length = 30
-    m.show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
-
+    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
     pygame.display.flip()
 
@@ -57,11 +56,11 @@ def draw_upgrade_choice(screen, interface, index, unit):
     image_location = [base[0], base[1] + 20 * zoom]
     text_location = [base[0], base[1] + 160 * zoom]
 
-    unit_pic = m.get_unit_pic(interface, unit.image)
-    pic = m.get_image(unit_pic, upgrade_unit_size)
+    unit_pic = get_unit_pic(interface, unit.image)
+    pic = get_image(unit_pic, upgrade_unit_size)
     screen.blit(pic, image_location)
 
-    m.write(screen, unit.name, title_location, interface.fonts["normal"])
+    write(screen, unit.name, title_location, interface.fonts["normal"])
 
     lines = []
 
@@ -86,7 +85,7 @@ def draw_upgrade_choice(screen, interface, index, unit):
             lines.append("")
 
     line_length = 30
-    m.show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
+    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
 def draw_upgrade_options(screen, interface, unit):
@@ -107,7 +106,7 @@ def draw_ask_about_ability(unit):
 
     for i, line in enumerate(lines):
         line_y = y + i * self.message_line_distance
-        m.write(line, (x, line_y), location, font)
+        write(line, (x, line_y), location, font)
 
     pygame.display.update()
 
@@ -123,13 +122,13 @@ def draw_unit_lower_right(screen, interface, action, color, index, base_x, base_
 
     resize = 0.2 * zoom
     location = (base_x + (65 + index * 100) * zoom, base_y + 8 * zoom)
-    unit_pic = m.get_unit_pic(interface, unit)
-    unit_image = m.get_image(unit_pic)
+    unit_pic = get_unit_pic(interface, unit)
+    unit_image = get_image(unit_pic)
 
     unit_image = pygame.transform.scale(unit_image, (int(interface.unit_width * resize),
                                         int(interface.unit_height * resize)))
 
     screen.blit(unit_image, location)
 
-    m.draw_unit_box(screen, interface, location, color, resize)
+    draw_unit_box(screen, interface, location, color, resize)
 
