@@ -337,6 +337,24 @@ class Dragoon(Unit):
 
     name = "Dragoon"
     image = "Light Cavalry"
+    attack = 2
+    defence = 2
+    movement = 4
+    range = 1
+    abonus = {}
+    dbonus = {}
+    type = "Cavalry"
+    upgrades = ["Dragoon II_A", "Dragoon II_B"]
+
+    charioting = True
+
+    descriptions = {"charioting": "Can use remaining moves after attacking."}
+
+
+class Dragoon_II_A(Unit):
+
+    name = "Dragoon"
+    image = "Light Cavalry"
     attack = 3
     defence = 2
     movement = 4
@@ -345,6 +363,28 @@ class Dragoon(Unit):
     dbonus = {}
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
+
+    charioting = True
+
+    descriptions = {"charioting": "Can use remaining moves after attacking."}
+
+
+class Dragoon_II_B(Unit):
+
+    name = "Dragoon"
+    image = "Light Cavalry"
+    attack = 2
+    defence = 3
+    movement = 4
+    range = 1
+    abonus = {}
+    dbonus = {}
+    type = "Cavalry"
+    upgrades = ["Dragoon II_A", "Dragoon II_B"]
+
+    charioting = True
+
+    descriptions = {"charioting": "Can use remaining moves after attacking."}
 
 
 class Dragoon_II_A(Unit):
@@ -1465,6 +1505,29 @@ class Weaponsmith_II_B(Unit):
 
     descriptions = {"improve_weapons": "Give melee unit +3 attack, +2 defence, and "
                                        "zoc against cavalry until your next turn"}
+
+
+class Hussar(Unit):
+
+    name = "Hussar"
+    image = "Hussar"
+    attack = 2
+    defence = 2
+    movement = 3
+    range = 1
+    abonus = {}
+    dbonus = {}
+    zoc = []
+    type = "Cavalry"
+
+    triple_attack = True
+    triple_attack = True
+    pikeman_specialist = True
+
+    descriptions = {"triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
+                    "pikeman_specialist": "Pikemen do not get +1D against Hussar."}
+
+    upgrades = ["Hussar II_A", "Hussar II_B"]
 
 
 def get_position(position_string):
