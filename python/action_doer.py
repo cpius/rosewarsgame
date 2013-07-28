@@ -19,7 +19,7 @@ def out_of_board_horizontal(position):
 def do_action(gamestate, action, outcome=None, unit=None):
     def prepare_extra_actions(action, unit):
 
-        if hasattr(unit, "charioting"):
+        if unit.is_swift():
             movement_remaining = unit.movement - distance(action.start_position, action.end_position)
             if action.is_attack():
                 movement_remaining -= 1

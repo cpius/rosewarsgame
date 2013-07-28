@@ -187,6 +187,9 @@ class Unit(object):
     def lancing_II(self):
         return hasattr(self, "lancer_II")
 
+    def is_swift(self):
+        return hasattr(self, "swiftness")
+
 class Archer(Unit):
 
     name = "Archer"
@@ -375,9 +378,9 @@ class Dragoon(Unit):
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
-    charioting = True
+    swiftness = True
 
-    descriptions = {"charioting": "Can use remaining moves after attacking."}
+    descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
 
 class Dragoon_II_A(Unit):
@@ -393,9 +396,9 @@ class Dragoon_II_A(Unit):
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
-    charioting = True
+    swiftness = True
 
-    descriptions = {"charioting": "Can use remaining moves after attacking."}
+    descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
 
 class Dragoon_II_B(Unit):
@@ -411,9 +414,9 @@ class Dragoon_II_B(Unit):
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
-    charioting = True
+    swiftness = True
 
-    descriptions = {"charioting": "Can use remaining moves after attacking."}
+    descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
 
 class Cavalry_Lieutenant(Unit):
@@ -1189,9 +1192,9 @@ class Chariot(Unit):
     zoc = []
     type = "Cavalry"
 
-    charioting = True
+    swiftness = True
 
-    descriptions = {"charioting": "Can use remaining moves after attacking."}
+    descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
     upgrades = ["Chariot II_A", "Chariot II_B"]
 
@@ -1209,9 +1212,9 @@ class Chariot_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    charioting = True
+    swiftness = True
 
-    descriptions = {"charioting": "Can use remaining moves after attacking."}
+    descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
 
 class Chariot_II_B(Unit):
@@ -1227,9 +1230,9 @@ class Chariot_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    charioting = True
+    swiftness = True
 
-    descriptions = {"charioting": "Can use remaining moves after attacking."}
+    descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
 
 class War_Elephant(Unit):

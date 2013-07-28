@@ -132,7 +132,7 @@ def add_unit_references(gamestate, action):
 
 def get_extra_actions(gamestate):
 
-    def charioting():
+    def get_actions_swiftness():
         moveset = generate_extra_moveset(unit, position, units)
         moves = move_actions(position, moveset | {position})
 
