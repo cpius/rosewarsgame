@@ -159,9 +159,9 @@ def get_extra_actions(gamestate):
             unit.zoc_blocks = frozenset(position for position,
                                         opponent_unit in opponent_units.items() if unit.type in opponent_unit.get_zoc())
 
-            if unit.is_swift():
+            if unit.has("swiftness"):
                 moves, attacks, abilities = get_actions_swiftness()
-            elif unit.is_samurai():
+            elif unit.has("combat_agility"):
                 moves, attacks, abilities = get_actions_samurai()
             else:
                 moves, attacks, abilities = [], [], []
