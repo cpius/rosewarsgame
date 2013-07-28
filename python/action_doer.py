@@ -128,7 +128,9 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
         else:
             outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
 
-    push_direction = get_direction(action.end_position, action.attack_position)
+    if not push_direction:
+        push_direction = get_direction(action.end_position, action.attack_position)
+
     push_destination = push_direction.move(action.attack_position)
 
     if outcome.for_position(action.attack_position) == SubOutcome.WIN:
