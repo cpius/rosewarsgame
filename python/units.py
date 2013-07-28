@@ -87,7 +87,7 @@ class Unit(object):
         return self.variables["improved_weapons_II_A"]
 
     def decrease_improved_weapons_II_A(self):
-        self.variables["improved_weapons_II_A"] = max(0, self.get_improved_weapons() - 1)
+        self.variables["improved_weapons_II_A"] = max(0, self.variables["improved_weapons"] - 1)
 
     # Improved weapons_II_B
     def improve_weapons_II_B(self):

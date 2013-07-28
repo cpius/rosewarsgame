@@ -258,13 +258,13 @@ class Action(object):
         return bool(self.ability)
 
     def is_lancing(self):
-        return self.unit.lancing() and self.is_attack() and self.distance_to_target() >= 3
+        return self.unit_reference.lancing() and self.is_attack() and self.distance_to_target() >= 3
 
     def is_lancing_II(self):
-        return self.unit.lancing_II() and self.is_attack() and self.distance_to_target() >= 4
+        return self.unit_reference.lancing_II() and self.is_attack() and self.distance_to_target() >= 4
 
     def is_push(self):
-        return self.unit.hasattr("push") and self.is_attack()
+        return self.unit_reference.hasattr("push") and self.is_attack()
 
     def is_crusading(self, gamestate):
         return any(unit for unit in self.surrounding_friendly_units(gamestate) if unit.crusading())
