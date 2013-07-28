@@ -5,8 +5,6 @@ import common
 from outcome import Outcome, SubOutcome
 import settings
 
-
-
 board = [(column, row) for column in range(1, 6) for row in range(1, 9)]
 
 
@@ -81,7 +79,6 @@ def do_action(gamestate, action, outcome=None, unit=None):
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
     if hasattr(unit, "bloodlust") and outcome.outcomes[action.attack_position] == 1:
-        print "A"
         bloodlust = True
     else:
         unit.remove_extra_action()
