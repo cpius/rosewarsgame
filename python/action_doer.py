@@ -113,7 +113,7 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
 
     sub_outcome = outcome.for_position(action.attack_position)
 
-    if sub_outcome.is_failure():
+    if Outcome.is_failure(sub_outcome):
         return outcome
 
     if sub_outcome == SubOutcome.UNKNOWN:
