@@ -81,5 +81,6 @@ class UniversalTests(unittest.TestCase):
         documents += "\nActual:\n" + common.document_to_string(actual)
         self.assertEqual(expected, actual, "The document was mangled.\n\n" + documents)
 
+
 if __name__ == "__main__":
     unittest.main()
