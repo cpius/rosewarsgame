@@ -485,7 +485,7 @@ class Knight(Unit):
     abonus = {}
     dbonus = {}
     type = "Cavalry"
-    upgrades = ["Lancer", "Chariot"]
+    upgrades = ["Lancer", "Hobelar"]
 
 
 class Ballista(Unit):
@@ -1179,10 +1179,10 @@ class Berserker_II_B(Unit):
     descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack."}
 
 
-class Chariot(Unit):
+class Hobelar(Unit):
 
-    name = "Chariot"
-    image = "Chariot"
+    name = "Hobelar"
+    image = "Hobelar"
     attack = 3
     defence = 3
     movement = 3
@@ -1196,13 +1196,13 @@ class Chariot(Unit):
 
     descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
-    upgrades = ["Chariot II_A", "Chariot II_B"]
+    upgrades = ["Hobelar II_A", "Hobelar II_B"]
 
 
-class Chariot_II_A(Unit):
+class Hobelar_II_A(Unit):
 
-    name = "Chariot II_A"
-    image = "Chariot"
+    name = "Hobelar II_A"
+    image = "Hobelar"
     attack = 3
     defence = 3
     movement = 4
@@ -1217,10 +1217,10 @@ class Chariot_II_A(Unit):
     descriptions = {"swiftness": "Can use remaining moves after attacking."}
 
 
-class Chariot_II_B(Unit):
+class Hobelar_II_B(Unit):
 
-    name = "Chariot II_B"
-    image = "Chariot"
+    name = "Hobelar II_B"
+    image = "Hobelar"
     attack = 3
     defence = 3
     movement = 3

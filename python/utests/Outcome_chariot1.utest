@@ -12,7 +12,7 @@
 	"actions_remaining": 2, 
     "player1_units": 
 	{
-        "E3": "Chariot",
+        "E3": "Hobelar",
 		"A2": "Pikeman"
     }, 
     "player2_units": 
@@ -29,7 +29,7 @@
 	{
         "E3":
 		{	
-			"name": "Chariot",
+			"name": "Hobelar",
 			"used": 1,
 			"xp_gained_this_turn": 1,
 			"xp": 1,
