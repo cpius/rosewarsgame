@@ -174,7 +174,7 @@ def settle_attack(action, enemy_units, outcome, gamestate):
 
     outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
 
-    if action.target_unit.get_extra_life():
+    if action.target_unit.has_extra_life():
         action.target_unit.remove_extra_life()
     else:
         del enemy_units[action.attack_position]

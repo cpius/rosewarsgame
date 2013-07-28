@@ -374,9 +374,10 @@ class Controller(object):
 
     def show_attack(self, attack_position):
         action = Action(self.start_position, attack_position=attack_position)
+        add_unit_references(self.game.gamestate, action)
         player_unit = self.game.gamestate.player_units()[self.start_position]
         opponent_unit = self.game.gamestate.opponent_units()[attack_position]
-        self.view.show_attack(action, player_unit, opponent_unit)
+        self.view.show_attack(self.game.gamestate, action, player_unit, opponent_unit)
 
         return
 

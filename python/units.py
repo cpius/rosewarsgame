@@ -30,6 +30,7 @@ class Unit(object):
         return self.variables["frozen"]
 
     def decrement_frozen(self):
+        print "o"
         self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
 
     # xp gained this turn
@@ -144,7 +145,7 @@ class Unit(object):
         self.variables["recently_bribed"] = 0
 
     # Extra life
-    def get_extra_life(self):
+    def has_extra_life(self):
         return self.name == "Viking" and not self.variables["lost_extra_life"]
 
     def remove_extra_life(self):

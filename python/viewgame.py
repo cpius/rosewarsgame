@@ -3,116 +3,62 @@ import battle
 from viewcommon import *
 from coordinates import Coordinates
 import settings
-from common import *
-
-zoom = settings.zoom
 
 
 def draw_game(screen, interface, game, start_position=None, actions=()):
 
-    coordinates, fonts = interface.coordinates, interface.fonts
-
-    pic = get_image(interface.board_image)
-    screen.blit(pic, (0, 0))
+    screen.blit(get_image(interface.board_image), (0, 0))
 
     gamestate = game.gamestate.copy()
     if game.current_player().color == "Red":
         gamestate.flip_units()
 
-    recalculate_special_counters(gamestate)
+    draw_units(screen, interface, gamestate.player_units(), game.current_player().color, gamestate.opponent_units(),
+               game.opponent_player().color, start_position, actions)
 
-    for position, unit in gamestate.units[0].items():
+    shade_actions(screen, interface, actions)
+
+
+def draw_units(screen, interface, player_units, player_color, opponent_units, opponent_color, start_position, actions):
+    for position, unit in player_units.items():
         if actions and position == start_position:
-            draw_unit(screen, interface, unit, position, game.current_player().color, selected=True)
+            draw_unit(screen, interface, unit, position, player_color, selected=True)
         else:
-            draw_unit(screen, interface, unit, position, game.current_player().color)
+            draw_unit(screen, interface, unit, position, player_color)
 
-    for position, unit in gamestate.units[1].items():
-        draw_unit(screen, interface, unit, position, game.players[1].color)
+    for position, unit in opponent_units.items():
+        draw_unit(screen, interface, unit, position, opponent_color)
 
-    attacks, moves, abilities = [], [], []
+
+def shade_actions(screen, interface, actions):
+    unit_dimensions = (interface.unit_width, interface.unit_height)
+    drawn_tiles = set()
     for action in actions:
         if action.is_attack():
-            attacks.append(action)
-        elif action.is_ability():
-            abilities.append(action)
-        else:
-            moves.append(action)
-
-    unit_dimensions = (interface.unit_width, interface.unit_height)
-
-    move_locations, attack_locations, ability_locations, sub_attack_locations = set(), set(), set(), set()
-
-    for action in moves:
-        location = coordinates["base"].get(action.end_position)
-        if location not in move_locations:
-            move_locations.add(location)
-            draw_rectangle(screen, unit_dimensions, location, interface.move_shading)
-
-    for action in attacks:
-        location = coordinates["base"].get(action.attack_position)
-        if location not in attack_locations:
-            attack_locations.add(location)
-
-            draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
-            if settings.show_chance_of_win:
-                chance_of_win_string = str(int(round(action.chance_of_win * 100))) + "%"
-                location = coordinates["percentage"].get(action.attack_position)
-                write(screen, chance_of_win_string, location, fonts["small"], colors["dodger_blue"])
-
-    for action in abilities:
-        location = coordinates["base"].get(action.ability_position)
-        if location not in ability_locations:
-            ability_locations.add(location)
-
-            location = coordinates["base"].get(action.ability_position)
-            draw_rectangle(screen, unit_dimensions, location, interface.ability_shading)
-
-    for attack in attacks:
-        for sub_attack in attack.sub_actions:
-            location = coordinates["base"].get(sub_attack.attack_position)
-            if location not in sub_attack_locations and location not in attack_locations:
-                sub_attack_locations.add(location)
+            location = interface.coordinates["base"].get(action.attack_position)
+            if location not in drawn_tiles:
+                drawn_tiles.add(location)
                 draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
-
-
-def show_attack(self, action, player_unit, opponent_unit):
-
-    self.clear_lower_right()
-
-    base = self.interface.message_location
-
-    attack = battle.get_attack_rating(player_unit, opponent_unit, action)
-
-    defence = battle.get_defence_rating(player_unit, opponent_unit, attack)
-
-    attack = min(attack, 6)
-
-    defence = min(defence, 6)
-
-    lines = ["Attack: " + str(attack),
-             "Defence: " + str(defence),
-             "Chance of win = " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
-             str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
-
-    self.show_lines(lines, *base)
-
-    pygame.display.flip()
+        elif action.is_ability():
+            location = interface.coordinates["base"].get(action.ability_position)
+            if location not in drawn_tiles:
+                drawn_tiles.add(location)
+                draw_rectangle(screen, unit_dimensions, location, interface.ability_shading)
+        else:
+            location = interface.coordinates["base"].get(action.end_position)
+            if location not in drawn_tiles:
+                drawn_tiles.add(location)
+                draw_rectangle(screen, unit_dimensions, location, interface.move_shading)
 
 
 def draw_post_movement(screen, interface, action):
-    coordinates = interface.coordinates
-
-    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(action.start_position), 10)
+    pygame.draw.circle(screen, colors["black"], interface.coordinates["center"].get(action.start_position), 10)
     draw_line(screen, interface, action.end_position, action.attack_position)
-
     pic = get_image(interface.move_icon)
-    screen.blit(pic, coordinates["battle"].get(action.attack_position))
-
-    pygame.display.update()
+    screen.blit(pic, interface.coordinates["battle"].get(action.attack_position))
 
 
-def draw_action(screen, interface, action, gamestate, flip=False):
+def draw_action(screen, interface, action, flip=False):
 
     if flip:
         action = flip_action(action)
@@ -123,20 +69,7 @@ def draw_action(screen, interface, action, gamestate, flip=False):
     draw_line(screen, interface, action.start_position, action.end_position)
 
     if action.is_attack():
-
         draw_line(screen, interface, action.end_position, action.attack_position)
-
-        if settings.show_dice_game:
-            attack_dice = get_image(interface.dice[action.rolls[0]])
-            screen.blit(attack_dice, coordinates["battle"].get(action.start_position))
-
-            if battle.attack_successful(action, gamestate):
-                defence_dice = get_image(interface.dice[action.rolls[1]])
-                screen.blit(defence_dice, coordinates["battle"].get(action.attack_position))
-
-        if action.has_high_morale(gamestate):
-            pic = get_image(interface.high_morale_icon)
-            screen.blit(pic, coordinates["battle"].get(action.end_position))
 
     elif action.is_ability():
         draw_line(screen, interface, action.end_position, action.ability_position)
@@ -146,8 +79,6 @@ def draw_action(screen, interface, action, gamestate, flip=False):
     else:
         pic = get_image(interface.move_icon)
         screen.blit(pic, coordinates["battle"].get(action.end_position))
-
-    pygame.display.update()
 
 
 def draw_line(screen, interface, start_position, end_position):
@@ -159,18 +90,15 @@ def draw_line(screen, interface, start_position, end_position):
 def shade_positions(screen, interface, positions):
     for position in positions:
         base = interface.coordinates["base"].get(position)
-
         dimensions = (interface.unit_width, interface.unit_height)
         draw_rectangle(screen, dimensions, base, interface.selected_shading)
 
-    pygame.display.update()
 
-
-def draw_counters(screen, interface, unit, counters, color, position, counter_coordinates, font_coordinates):
+def draw_counters(screen, interface, counters, color, position, counter_coordinates, font_coordinates):
     draw_bordered_circle(screen, counter_coordinates.get(position), interface.counter_size, color)
 
     if counters > 1:
-        write(screen, str(unit.blue_counters), font_coordinates.get(position), interface.fonts["small"])
+        write(screen, str(counters), font_coordinates.get(position), interface.fonts["small"])
 
 
 def draw_bordered_circle(screen, position, size, color):
@@ -200,17 +128,17 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
     unit_pic = get_unit_pic(interface, unit.image)
     counters_drawn = 0
 
-    if unit.blue_counters:
+    if get_blue_counters(unit):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
-        counters = unit.blue_counters
-        draw_counters(screen, interface, unit, counters, colors["blue"], position, counter_coordinates, font_coordinates)
+        counters = get_blue_counters(unit)
+        draw_counters(screen, interface, counters, colors["blue"], position, counter_coordinates, font_coordinates)
         counters_drawn += 1
-    if unit.yellow_counters:
+    if get_yellow_counters(unit):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
-        counters = unit.yellow_counters
-        draw_counters(screen, interface, unit, counters, colors["yellow"], position, counter_coordinates, font_coordinates)
+        counters = get_yellow_counters(unit)
+        draw_counters(screen, interface, counters, colors["yellow"], position, counter_coordinates, font_coordinates)
 
     dimensions = (int(interface.unit_width), int(interface.unit_height))
     pic = get_image(unit_pic, dimensions)
@@ -252,44 +180,24 @@ def flip_action(action):
     for sub_action in action.sub_actions:
         action.sub_action = flip_action(sub_action)
     if hasattr(action, "push"):
-        action.push_direction = get_transformed_direction(action.push_direction)
+        action.push_direction = flip_direction(action.push_direction)
 
     return action
 
 
-def get_transformed_direction(direction):
-
-    if direction.y == -1:
-        return Direction(0, 1)
-
-    if direction.y == 1:
-        return Direction(0, -1)
-
-    return direction
+def flip_direction(direction):
+    return Direction(direction.x, - direction.y)
 
 
-def recalculate_special_counters(gamestate):
-    for unit in gamestate.units[0].itervalues():
-        add_yellow_counters(unit)
-        add_blue_counters(unit)
-
-    for unit in gamestate.units[1].itervalues():
-        add_yellow_counters(unit)
-        add_blue_counters(unit)
+def get_yellow_counters(unit):
+    return 1 if unit.has_extra_life() else 0
 
 
-def add_yellow_counters(unit):
-    if unit.get_extra_life():
-        unit.yellow_counters = 1
-    else:
-        unit.yellow_counters = 0
+def get_blue_counters(unit):
+    return max(unit.get_frozen_counters(), unit.get_attack_frozen_counters(), unit.is_recently_bribed())
 
 
-def add_blue_counters(unit):
-    unit.blue_counters = 0
-    if unit.is_frozen():
-        unit.blue_counters = unit.get_frozen_counters()
-    if unit.is_attack_frozen():
-        unit.blue_counters = unit.get_attack_frozen_counter()
-    if unit.is_recently_bribed():
-        unit.blue_counters = 1
+def draw_ask_about_move_with_attack(screen, interface, position):
+    base = interface.coordinates["base"].get(position)
+    dimensions = (interface.unit_width, interface.unit_height)
+    draw_rectangle(screen, dimensions, base, interface.selected_shading)

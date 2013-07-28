@@ -1,12 +1,18 @@
+from __future__ import division
 import units as unitsmodule
 import pygame
 import textwrap
 from viewcommon import *
 import settings
+import battle
 
 zoom = settings.zoom
 zoomed_unit_size = (int(236 * zoom), int(271 * zoom))
 upgrade_unit_size = (int(118 * zoom), int(135.5 * zoom))
+
+
+def clear(screen, interface):
+    pygame.draw.rect(screen, colors["light_grey"], interface.lower_right_rectangle)
 
 
 def show_unit_zoomed(screen, interface, unit):
@@ -43,10 +49,12 @@ def show_unit_zoomed(screen, interface, unit):
                 lines.append(description)
             lines.append("")
 
-    line_length = 30
-    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
+    for attribute in unit.variables:
+        if unit.variables[attribute]:
+            lines.append(attribute + ": " + str(unit.variables[attribute]))
 
-    pygame.display.flip()
+    line_length = 40
+    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
 def draw_upgrade_choice(screen, interface, index, unit):
@@ -88,27 +96,44 @@ def draw_upgrade_choice(screen, interface, index, unit):
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
+def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate):
+
+    clear(screen, interface)
+
+    attack = battle.get_attack_rating(player_unit, opponent_unit, action, gamestate)
+    defence = battle.get_defence_rating(player_unit, opponent_unit, attack, gamestate)
+    attack = min(attack, 6)
+    defence = min(defence, 6)
+
+    lines = ["Attack: " + str(attack),
+             "Defence: " + str(defence),
+             "Chance of win = " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+             str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
+
+    base = interface.show_attack_location
+    text_location = [base[0], base[1] + 160 * zoom]
+    line_length = 80
+    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
+
+
 def draw_upgrade_options(screen, interface, unit):
 
     for i, upgrade in enumerate(unit.upgrades):
         upgrade = getattr(unitsmodule, unit.upgrades[i].replace(" ", "_"))()
         draw_upgrade_choice(screen, interface, i, upgrade)
 
-    pygame.display.flip()
 
-
-def draw_ask_about_ability(unit):
-    x, y = self.message_location
+def draw_ask_about_ability(screen, interface, unit):
+    clear(screen, interface)
     lines = ["Select ability:"]
     for i, ability in enumerate(unit.abilities):
         description_string = str(i + 1) + ". " + ability.title() + ": " + unit.descriptions[ability]
-        lines += textwrap.wrap(description_string, self.interface.message_line_length)
+        lines += textwrap.wrap(description_string, interface.message_line_length)
 
-    for i, line in enumerate(lines):
-        line_y = y + i * self.message_line_distance
-        write(line, (x, line_y), location, font)
-
-    pygame.display.update()
+    base = interface.ask_about_ability_location
+    text_location = [base[0], base[1] + 160 * zoom]
+    line_length = 80
+    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
 def draw_unit_lower_right(screen, interface, action, color, index, base_x, base_y):
