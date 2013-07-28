@@ -34,6 +34,41 @@ class Direction:
             return "Up"
 
 
+class Direction:
+    """ An object direction is one move up, down, left or right.
+    The class contains methods for returning the tile going one step in the direction will lead you to,
+    and for returning the tiles you should check for zone of control.
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def move(self, position):
+        return position[0] + self.x, position[1] + self.y
+
+    def perpendicular(self, position):
+        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
+
+    def __repr__(self):
+
+        if self.x == -1:
+            return "Left"
+
+        if self.x == 1:
+            return "Right"
+
+        if self.y == -1:
+            return "Down"
+
+        if self.y == 1:
+            return "Up"
+
+
+board = set((column, row) for column in range(1, 6) for row in range(1, 9))
+directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
+eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
+
+
 def position_to_string(position):
     if position is None:
         return ""
