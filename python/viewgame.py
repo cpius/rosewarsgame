@@ -113,7 +113,7 @@ def draw_post_movement(screen, interface, action):
     pygame.display.update()
 
 
-def draw_action(screen, interface, action, flip=False):
+def draw_action(screen, interface, action, gamestate, flip=False):
 
     if flip:
         action = flip_action(action)
@@ -131,11 +131,11 @@ def draw_action(screen, interface, action, flip=False):
             attack_dice = m.get_image(interface.dice[action.rolls[0]])
             screen.blit(attack_dice, coordinates["battle"].get(action.start_position))
 
-            if battle.attack_successful(action):
+            if battle.attack_successful(action, gamestate):
                 defence_dice = m.get_image(interface.dice[action.rolls[1]])
                 screen.blit(defence_dice, coordinates["battle"].get(action.attack_position))
 
-        if hasattr(action, "high_morale"):
+        if action.has_high_morale(gamestate):
             pic = m.get_image(interface.high_morale_icon)
             screen.blit(pic, coordinates["battle"].get(action.end_position))
 
@@ -185,8 +185,6 @@ def draw_symbols(screen, interface, unit, position):
 
     if unit.get_bribed():
         draw_bribed(screen, interface, position)
-    if hasattr(unit, "is_crusading"):
-        draw_crusading(screen, interface, position)
 
 
 def draw_bribed(screen, interface, position):
