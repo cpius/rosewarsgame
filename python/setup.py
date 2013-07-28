@@ -74,7 +74,7 @@ units_info = {"Archer": Info({2, 3}, 3, False),
               "Longbowman": Info({2, 3}, 3, False)}
 
 
-def test_coloumn_blocks(units):
+def test_column_blocks(units):
     """ Tests whether there on each column are at least two 'blocks'.
     A block is either a unit, or a Pikeman zoc tile. """
     
@@ -190,7 +190,7 @@ def get_units():
         except IndexError:
             continue
 
-        if any(not requirement(units) for requirement in [test_coloumn_blocks, test_pikeman_column]):
+        if any(not requirement(units) for requirement in [test_column_blocks, test_pikeman_column]):
             continue
              
         return units
