@@ -2,6 +2,38 @@ from json import JSONEncoder
 from datetime import datetime
 from bson import ObjectId
 
+class Direction:
+    """ An object direction is one move up, down, left or right.
+    The class contains methods for returning the tile going one step in the direction will lead you to,
+    and for returning the tiles you should check for zone of control.
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def move(self, position):
+        return position[0] + self.x, position[1] + self.y
+
+    def perpendicular(self, position):
+        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
+
+    def __repr__(self):
+
+        if self.x == -1:
+            return "Left"
+
+        if self.x == 1:
+            return "Right"
+
+        if self.y == -1:
+            return "Down"
+
+        if self.y == 1:
+            return "Up"
+
+
+Position = namedtuple("Position", ["x", "y"])
+
 
 def position_to_string(position):
     if position is None:
@@ -38,35 +70,6 @@ def get_direction(position, forward_position):
 def flip(position):
     if position:
         return position[0], 9 - position[1]
-
-class Direction:
-    """ An object direction is one move up, down, left or right.
-    The class contains methods for returning the tile going one step in the direction will lead you to,
-    and for returning the tiles you should check for zone of control.
-    """
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def move(self, position):
-        return position[0] + self.x, position[1] + self.y
-
-    def perpendicular(self, position):
-        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
-
-    def __repr__(self):
-
-        if self.x == -1:
-            return "Left"
-
-        if self.x == 1:
-            return "Right"
-
-        if self.y == -1:
-            return "Down"
-
-        if self.y == 1:
-            return "Up"
 
 
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
