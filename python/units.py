@@ -17,10 +17,13 @@ class Unit(object):
         return self.name
 
     # Frozen
-    def set_frozen(self, n):
+    def freeze(self, n):
         self.variables["frozen"] = max(self.variables["frozen"], n)
 
-    def get_frozen(self):
+    def is_frozen(self):
+        return self.variables["frozen"]
+
+    def get_frozen_counters(self):
         return self.variables["frozen"]
 
     def decrement_frozen(self):
@@ -47,7 +50,7 @@ class Unit(object):
     def set_used(self):
         self.variables["used"] = 1
 
-    def get_used(self):
+    def is_used(self):
         return self.variables["used"]
 
     def remove_used(self):
@@ -57,38 +60,41 @@ class Unit(object):
     def set_attack_frozen(self, n):
         self.variables["attack_frozen"] = n
 
-    def get_attack_frozen(self):
+    def is_attack_frozen(self):
+        return self.variables["attack_frozen"]
+
+    def get_attack_frozen_counters(self):
         return self.variables["attack_frozen"]
 
     def decrement_attack_frozen(self):
         self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
 
     # Improved weapons
-    def set_improved_weapons(self):
+    def improve_weapons(self):
         self.variables["improved_weapons"] = 1
 
-    def get_improved_weapons(self):
+    def has_improved_weapons(self):
         return self.variables["improved_weapons"]
 
     def remove_improved_weapons(self):
         self.variables["improved_weapons"] = 0
 
     # Improved weapons_II_A
-    def set_improved_weapons_II_A(self):
+    def improve_weapons_II_A(self):
         self.variables["improved_weapons_II_A"] = 2
 
-    def get_improved_weapons_II_A(self):
+    def has_improved_weapons_II_A(self):
         return self.variables["improved_weapons_II_A"]
 
     def decrease_improved_weapons_II_A(self):
         self.variables["improved_weapons_II_A"] = max(0, self.get_improved_weapons() - 1)
 
     # Improved weapons_II_B
-    def set_improved_weapons_II_B(self):
+    def improve_weapons_II_B(self):
         self.variables["improved_weapons_II_B"] = 1
         self.zoc = {"Cavalry"}
 
-    def get_improved_weapons_II_B(self):
+    def has_improved_weapons_II_B(self):
         return self.variables["improved_weapons_II_B"]
 
     def remove_improved_weapons_II_B(self):
@@ -96,20 +102,20 @@ class Unit(object):
         self.zoc = {}
 
     # Sabotage
-    def set_sabotaged(self):
+    def sabotage(self):
         self.variables["sabotaged"] = 1
 
-    def get_sabotaged(self):
+    def is_sabotaged(self):
         return self.variables["sabotaged"]
 
     def remove_sabotaged(self):
         self.variables["sabotaged"] = 0
 
     # Sabotage_II
-    def set_sabotaged_II(self):
+    def sabotage_II(self):
         self.variables["sabotaged_II"] = 1
 
-    def get_sabotaged_II(self):
+    def is_sabotaged_II(self):
         return self.variables["sabotaged_II"]
 
     def remove_sabotaged_II(self):
@@ -143,7 +149,7 @@ class Unit(object):
 
     #Zoc
     def get_zoc(self):
-        if self.get_improved_weapons_II_B():
+        if self.has_improved_weapons_II_B():
             return self.zoc + ["Cavalry"]
         else:
             return self.zoc
@@ -159,7 +165,7 @@ class Unit(object):
     def set_extra_action(self):
         self.variables["extra_action"] = 1
 
-    def get_extra_action(self):
+    def has_extra_action(self):
         return self.variables["extra_action"]
 
     def remove_extra_action(self):
@@ -190,6 +196,12 @@ class Unit(object):
     def is_swift(self):
         return hasattr(self, "swiftness")
 
+    def is_samurai(self):
+        return hasattr(self, "samurai")
+
+    def sharpshooting(self):
+        return hasattr(self, "sharpshooter")
+
 class Archer(Unit):
 
     name = "Archer"
@@ -214,9 +226,9 @@ class Longbowman(Unit):
     type = "Infantry"
     upgrades = ["Longbowman II_A", "Longbowman II_B"]
 
-    sharpshooting = True
+    sharpshooter = True
 
-    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Longbowman_II_A(Unit):
@@ -230,9 +242,9 @@ class Longbowman_II_A(Unit):
     dbonus = {}
     type = "Infantry"
 
-    sharpshooting = True
+    sharpshooter = True
 
-    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Longbowman_II_B(Unit):
@@ -246,9 +258,9 @@ class Longbowman_II_B(Unit):
     dbonus = {}
     type = "Infantry"
 
-    sharpshooting = True
+    sharpshooter = True
 
-    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Crossbow_Archer(Unit):
@@ -1320,9 +1332,9 @@ class Samurai(Unit):
     zoc = []
     type = "Infantry"
         
-    samuraiing = True
+    samurai = True
 
-    descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)"}
+    descriptions = {"samurai": "Can make an attack after its first action. (But not a second move.)"}
 
     upgrades = ["Samurai II_A", "Samurai II_B"]
 
@@ -1340,9 +1352,9 @@ class Samurai_II_A(Unit):
     zoc = []
     type = "Infantry"
 
-    samuraiing = True
+    samurai = True
 
-    descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)"}
+    descriptions = {"samurai": "Can make an attack after its first action. (But not a second move.)"}
 
 
 class Samurai_II_B(Unit):
@@ -1358,10 +1370,10 @@ class Samurai_II_B(Unit):
     zoc = []
     type = "Infantry"
 
-    samuraiing = True
+    samurai = True
     bloodlust = True
 
-    descriptions = {"samuraiing": "Can make an attack after its first action. (But not a second move.)",
+    descriptions = {"samurai": "Can make an attack after its first action. (But not a second move.)",
                     "bloodlust": "Every kill gives it an extra attack"}
 
 

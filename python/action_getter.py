@@ -62,15 +62,15 @@ def add_target_reference(action, enemy_units, player_units):
 def get_actions(gamestate):
 
     def can_use_unit(unit):
-        return not (unit.get_used() or unit.get_frozen() or unit.get_recently_bribed())
+        return not (unit.is_used() or unit.is_frozen() or unit.get_recently_bribed())
 
     def moving_allowed(unit_position):
-        return not any(position for position in common.adjacent_tiles(unit_position) if position in gamestate.units[1] and
-                   hasattr(gamestate.units[1][position], "melee_freeze"))
+        return not any(position for position in common.adjacent_tiles(unit_position) if
+                       position in gamestate.units[1] and hasattr(gamestate.units[1][position], "melee_freeze"))
 
     def can_attack_with_unit(unit):
         return not (gamestate.get_actions_remaining() == 1 and hasattr(unit, "double_attack_cost")) \
-            and not unit.get_attack_frozen()
+            and not unit.is_attack_frozen()
 
     if getattr(gamestate, "extra_action"):
         return get_extra_actions(gamestate)
@@ -138,7 +138,7 @@ def get_extra_actions(gamestate):
 
         return moves, [], []
 
-    def samuraiing():
+    def get_actions_samurai():
         def melee_attacks_list_samurai_second(unit, start_position, moveset, enemy_units, movement_remaining):
             attacks = []
             for position, new_position, move_with_attack in attack_generator(unit, moveset | {start_position},
@@ -163,7 +163,7 @@ def get_extra_actions(gamestate):
     extra_actions = []
 
     for position, unit in gamestate.player_units().items():
-        if unit.get_extra_action():
+        if unit.has_extra_action():
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
             units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
@@ -171,11 +171,12 @@ def get_extra_actions(gamestate):
             unit.zoc_blocks = frozenset(position for position,
                                         opponent_unit in opponent_units.items() if unit.type in opponent_unit.get_zoc())
 
-            moves, attacks, abilities = [], [], []
-
-            for attribute in ["charioting", "samuraiing"]:
-                if hasattr(unit, attribute):
-                    moves, attacks, abilities = locals()[attribute]()
+            if unit.is_swift():
+                moves, attacks, abilities = get_actions_swiftness()
+            elif unit.is_samurai():
+                moves, attacks, abilities = get_actions_samurai()
+            else:
+                moves, attacks, abilities = [], [], []
 
             extra_actions = moves + attacks + abilities
 

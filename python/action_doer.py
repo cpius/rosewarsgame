@@ -26,7 +26,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
             unit.set_movement_remaining(movement_remaining)
             unit.set_extra_action()
 
-        if hasattr(unit, "samuraiing"):
+        if unit.is_samurai():
             unit.set_movement_remaining(unit.movement - distance(action.start_position, action.final_position))
             unit.set_extra_action()
 
@@ -100,7 +100,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if gamestate.extra_action:
         gamestate.extra_action = False
 
-    if unit.get_extra_action():
+    if unit.has_extra_action():
         gamestate.extra_action = True
 
     return outcome
@@ -203,25 +203,26 @@ def settle_ability(action, enemy_units, player_units):
         player_units[action.ability_position].set_bribed()
 
     if action.ability == "sabotage":
-        action.target_unit.set_sabotaged()
+        action.target_unit.sabotage()
 
     if action.ability == "sabotage_II":
-        action.target_unit.set_sabotaged_II()
+        action.target_unit.sabotage_II()
 
     if action.ability == "poison":
-        action.target_unit.set_frozen(2)
+        action.target_unit.freeze(2)
 
     if action.ability == "poison_II":
-        action.target_unit.set_frozen(3)
+        action.target_unit.freeze(3)
 
     if action.ability == "improve_weapons":
-        action.target_unit.set_improved_weapons()
+        action.target_unit.improve_weapons()
 
     if action.ability == "improve_weapons_II_A":
-        action.target_unit.set_improved_weapons_II_A()
+        action.target_unit.improve_weapons_II_A()
 
     if action.ability == "improve_weapons_II_B":
-        action.target_unit.set_improved_weapons_II_B()
+        action.target_unit.improve_weapons_II_B()
+
 
 def add_target(action, enemy_units, player_units):
     if action.is_attack():
