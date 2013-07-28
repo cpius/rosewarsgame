@@ -1573,5 +1573,4 @@ def get_position(position_string):
 
 
 def get_position_string(position):
-    columns = list(" ABCDE")
-    return columns[position.column] + str(position.row)
+    return " ABCDE"[position.column] + str(position.row)
