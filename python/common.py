@@ -73,7 +73,7 @@ def get_direction(position, forward_position):
 
 
 def flip(position):
-    return Position(position.column, 9 - position.row)
+    return Position(position.column, board_height - position.row + 1)
 
 
 eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
@@ -107,3 +107,11 @@ class CustomJsonEncoder(JSONEncoder):
         if isinstance(obj, ObjectId):
             return str(obj)
         return JSONEncoder.default(self, obj)
+
+
+def out_of_board_vertical(position):
+    return position.row < 1 or position.row > board_height
+
+
+def out_of_board_horizontal(position):
+    return position.column < 1 or position.column > board_width

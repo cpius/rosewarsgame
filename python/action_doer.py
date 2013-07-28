@@ -6,14 +6,6 @@ from outcome import Outcome, SubOutcome
 import settings
 
 
-def out_of_board_vertical(position):
-    return position.row < 1 or position.row > board_height
-
-
-def out_of_board_horizontal(position):
-    return position.column < 1 or position.column > board_width
-
-
 def do_action(gamestate, action, outcome=None, unit=None):
     def prepare_extra_actions(action, unit):
 
