@@ -44,9 +44,6 @@ def add_target_reference(action, enemy_units, player_units):
         elif action.ability_position in player_units:
             action.target_reference = player_units[action.ability_position]
 
-    for sub_action in action.sub_actions:
-        add_target_reference(sub_action, enemy_units, player_units)
-
 
 def get_actions(gamestate):
     def can_use_unit(unit):
@@ -113,8 +110,6 @@ def get_action(gamestate, action_document):
 def add_unit_references(gamestate, action):
     action.unit_reference = gamestate.player_units()[action.start_position]
     add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
-    for sub_action in action.sub_actions:
-        sub_action.unit_reference = gamestate.player_units()[action.start_position]
 
 
 def get_extra_actions(gamestate):
@@ -400,10 +395,6 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
                 direction = end_position.get_direction(attack_position)
                 attack = Action(position, end_position=end_position, attack_position=attack_position,
                                 move_with_attack=move_with_attack)
-                for forward_position in end_position.four_forward_tiles(direction):
-                    if forward_position in enemy_units:
-                        attack.sub_actions.append(Action(position, end_position=end_position,
-                                                         attack_position=forward_position, move_with_attack=MoveOrStay.STAY))
                 return attack
 
             attacks = [get_attack(position, end_position, attack_position, move_with_attack) for end_position,
@@ -417,13 +408,8 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
         def triple_attack(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
             def get_attack(start_position, end_position, attack_position, move_with_attack):
-                direction = end_position.get_direction(attack_position)
                 attack = Action(start_position, end_position=end_position, attack_position=attack_position,
                                 move_with_attack=move_with_attack)
-                for forward_position in end_position.two_forward_tiles(direction):
-                    if forward_position in enemy_units:
-                        attack.sub_actions.append(Action(start_position, end_position=end_position,
-                                                         attack_position=forward_position, move_with_attack=MoveOrStay.STAY))
                 return attack
 
             attacks = [get_attack(position, end_position, attack_position, move_with_attack) for end_position,
