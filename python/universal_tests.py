@@ -67,8 +67,13 @@ class UniversalTestCase(unittest.TestCase):
         actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
         actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action, gamestate)
 
-        self.assertEqual(actual_attack, expected_attack, "Attack was wrong")
-        self.assertEqual(actual_defence, expected_defence, "Defence was wrong")
+        error_string = "Filename" + self.testcase_file + "\n" + \
+                       "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence) + "\n" + \
+                       "Actual attack / defence " + str(expected_attack) + "," + str(actual_attack) + "\n" \
+
+
+        self.assertEqual(actual_attack, expected_attack, error_string)
+        self.assertEqual(actual_defence, expected_defence, error_string)
 
     def is_outcome_correct(self, gamestate, action, outcome, expected_gamestate):
         gamestate.do_action(action, outcome)
