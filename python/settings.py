@@ -17,7 +17,7 @@ zoom = 1.3
 interface = interfaces.Rectangles(zoom)
 
 player1_ai = "Human"
-player2_ai = "Evaluator"
+player2_ai = "Advancer"
 
 document_ai_actions = False
 

@@ -30,7 +30,6 @@ class Unit(object):
         return self.variables["frozen"]
 
     def decrement_frozen(self):
-        print "o"
         self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
 
     # xp gained this turn
@@ -71,7 +70,7 @@ class Unit(object):
         return self.variables["attack_frozen"]
 
     def decrement_attack_frozen(self):
-        self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
+        self.variables["attack_frozen"] = max(self.variables["attack_frozen"] - 1, 0)
 
     # Improved weapons
     def improve_weapons(self):
@@ -893,9 +892,9 @@ class Lancer(Unit):
     zoc = []
     type = "Cavalry"
         
-    lancer = True
+    lancing = True
 
-    descriptions = {"lancer": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
+    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
 
     upgrades = ["Lancer II_A", "Lancer II_B"]
 
@@ -913,9 +912,9 @@ class Lancer_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    lancer = True
+    lancing = True
 
-    descriptions = {"lancer": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
+    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
 
 
 class Lancer_II_B(Unit):
@@ -931,9 +930,9 @@ class Lancer_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    lancer_II = True
+    lancing_II = True
 
-    descriptions = {"lancer_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."}
+    descriptions = {"lancing_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."}
 
 
 class Flag_Bearer(Unit):
@@ -949,9 +948,9 @@ class Flag_Bearer(Unit):
     zoc = []
     type = "Cavalry"
         
-    flag_bearer = True
+    flag_bearing = True
 
-    descriptions = {"flag_bearer": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
+    descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
 
     upgrades = ["Flag Bearer II_A", "Flag Bearer II_B"]
 
@@ -969,9 +968,9 @@ class Flag_Bearer_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    flag_bearer_II_A = True
+    flag_bearing_II_A = True
 
-    descriptions = {"flag_bearer_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer."}
+    descriptions = {"flag_bearing_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer."}
 
 
 class Flag_Bearer_II_B(Unit):
@@ -989,7 +988,7 @@ class Flag_Bearer_II_B(Unit):
 
     flag_bearing_II_B = True
 
-    descriptions = {"flag_bearer_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer."}
+    descriptions = {"flag_bearing_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer."}
 
 
 class Longswordsman(Unit):
@@ -1061,9 +1060,9 @@ class Crusader(Unit):
     zoc = []
     type = "Cavalry"
         
-    crusader = True
+    crusading = True
 
-    descriptions = {"crusader": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
                                  "Crusader get +1A."}
 
     upgrades = ["Crusader II_A", "Crusader II_B"]
@@ -1082,9 +1081,9 @@ class Crusader_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    crusader = True
+    crusading = True
 
-    descriptions = {"crusader": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
                                  "Crusader get +1A."}
 
 
@@ -1101,9 +1100,9 @@ class Crusader_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    crusader_II = True
+    crusading_II = True
 
-    descriptions = {"crusader_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
+    descriptions = {"crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
                                  "Crusader get +1A, +1D."}
 
 
@@ -1251,7 +1250,7 @@ class War_Elephant_II_A(Unit):
 
     name = "War Elephant II_A"
     image = "War Elephant"
-    attack = 3
+    attack = 4
     defence = 3
     movement = 2
     range = 1
@@ -1275,7 +1274,7 @@ class War_Elephant_II_B(Unit):
     name = "War Elephant II_B"
     image = "War Elephant"
     attack = 3
-    defence = 3
+    defence = 4
     movement = 2
     range = 1
     attack_bonuses = {}

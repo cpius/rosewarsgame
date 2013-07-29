@@ -292,22 +292,6 @@ class Controller(object):
 
         self.view.draw_game(self.game)
 
-        all_actions = self.game.gamestate.get_actions()
-
-        matching_actions = 0
-        for possible_action in all_actions:
-            if action == possible_action:
-                matching_actions += 1
-
-        if matching_actions == 0:
-            self.clear_move()
-            self.view.draw_game(self.game)
-            self.view.draw_message("Action not allowed")
-            return
-
-        assert matching_actions <= 1
-        move_with_attack = False
-
         if self.game.current_player().intelligence == "Human":
 
             add_unit_references(self.game.gamestate, action)
@@ -331,7 +315,7 @@ class Controller(object):
             outcome = self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
 
-        if move_with_attack:
+        if action.move_with_attack == MoveOrStay.MOVE:
             self.view.draw_post_movement(action, self.game)
 
         self.save_game()
