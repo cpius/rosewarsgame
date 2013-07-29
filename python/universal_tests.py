@@ -10,38 +10,39 @@ import common
 from common import MoveOrStay
 
 
-class UniversalTests(unittest.TestCase):
+class UniversalTestCase(unittest.TestCase):
+    def __init__(self, testcase_file):
+        super(UniversalTestCase, self).__init__()
+        self.testcase_file = testcase_file
 
-    def test_all_universal_tests(self):
-        testcase_files = glob.glob("./utests/*.utest")
-        for testcase_file in testcase_files:
-            print "Testing: ", testcase_file
+    def runTest(self):
+        print "Testing: ", self.testcase_file
 
-            test_document = json.loads(open(testcase_file).read())
+        test_document = json.loads(open(self.testcase_file).read())
 
-            if test_document["type"] == "Does action exist":
-                gamestate = Gamestate.from_document(test_document["gamestate"])
-                action = Action.from_document_simple(test_document["action"])
-                action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
-                expected = test_document["result"]
-                self.does_action_exist(gamestate, action, expected)
+        if test_document["type"] == "Does action exist":
+            gamestate = Gamestate.from_document(test_document["gamestate"])
+            action = Action.from_document(test_document["action"])
+            action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
+            expected = test_document["result"]
+            self.does_action_exist(gamestate, action, expected)
 
-            if test_document["type"] == "Is attack and defence correct":
-                gamestate = Gamestate.from_document(test_document["gamestate"])
-                action = Action.from_document_simple(test_document["action"])
-                attack = test_document["attack"]
-                defence = test_document["defence"]
+        if test_document["type"] == "Is attack and defence correct":
+            gamestate = Gamestate.from_document(test_document["gamestate"])
+            action = Action.from_document(test_document["action"])
+            attack = test_document["attack"]
+            defence = test_document["defence"]
 
-                self.is_attack_and_defence_correct(gamestate, action, attack, defence)
+            self.is_attack_and_defence_correct(gamestate, action, attack, defence)
 
-            if test_document["type"] == "Is outcome correct":
-                gamestate = Gamestate.from_document(test_document["gamestate before action"])
-                expected_gamestate = Gamestate.from_document(test_document["gamestate after action"])
-                action = Action.from_document_simple(test_document["action"])
-                action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
-                outcome = Outcome.from_document(test_document["outcome"])
+        if test_document["type"] == "Is outcome correct":
+            gamestate = Gamestate.from_document(test_document["gamestate before action"])
+            expected_gamestate = Gamestate.from_document(test_document["gamestate after action"])
+            action = Action.from_document(test_document["action"])
+            action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
+            outcome = Outcome.from_document(test_document["outcome"])
 
-                self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
+            self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
 
     def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)
@@ -83,4 +84,11 @@ class UniversalTests(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    runner = unittest.TextTestRunner()
+
+    suite = unittest.TestSuite()
+    testcase_files = glob.glob("./utests/*.utest")
+    for testcase_file in testcase_files:
+        suite.addTest(UniversalTestCase(testcase_file))
+
+    runner.run(suite)
