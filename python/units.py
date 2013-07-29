@@ -1250,7 +1250,7 @@ class War_Elephant_II_A(Unit):
 
     name = "War Elephant II_A"
     image = "War Elephant"
-    attack = 3
+    attack = 4
     defence = 3
     movement = 2
     range = 1
@@ -1274,7 +1274,7 @@ class War_Elephant_II_B(Unit):
     name = "War Elephant II_B"
     image = "War Elephant"
     attack = 3
-    defence = 3
+    defence = 4
     movement = 2
     range = 1
     attack_bonuses = {}
