@@ -48,9 +48,8 @@ def do_action(gamestate, action, outcome=None, unit=None):
 
     update_actions_remaining(action)
 
-    unit.set_used()
-
     gain_xp(unit)
+    unit.set_used()
 
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
@@ -237,6 +236,5 @@ def update_final_position(action):
 
 
 def gain_xp(unit):
-    if not unit.get_xp_gained_this_turn() and not settings.beginner_mode:
-        unit.set_xp_gained_this_turn()
+    if not unit.is_used() and not settings.beginner_mode:
         unit.increment_xp()

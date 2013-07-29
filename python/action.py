@@ -1,5 +1,3 @@
-import battle
-import common
 from datetime import datetime
 from copy import copy
 from common import *
@@ -79,8 +77,8 @@ class Action(object):
                             "ability_position",
                             "move_with_attack",
                             "ability"]
-        original = dict((attribute, self.__dict__[attribute]) for attribute in basic_attributes)
-        other = dict((attribute, other.__dict__[attribute]) for attribute in basic_attributes)
+        original = dict((attr, self.__dict__[attr]) for attr in basic_attributes if self.__dict__[attr])
+        other = dict((attr, other.__dict__[attr]) for attr in basic_attributes if other.__dict__[attr])
 
         return original == other
 
@@ -141,7 +139,8 @@ class Action(object):
         return any(unit for unit in surrounding_friendly_units(self.attack_position, units) if unit.has("crusading_II"))
 
     def has_high_morale(self, units):
-        return any(unit for unit in adjacent_friendly_units(self.end_position, units) if unit.has("flag_bearing"))
+        return any(pos for pos in adjacent_friendly_positions(self.end_position, units) if
+                   pos != self.start_position and units[pos].has("flag_bearing"))
 
     def has_high_morale_II_A(self, units):
         return any(unit for unit in surrounding_friendly_units(self.end_position, units) if unit.has("flag_bearing_II_A"))

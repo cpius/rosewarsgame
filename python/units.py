@@ -32,16 +32,6 @@ class Unit(object):
     def decrement_frozen(self):
         self.variables["frozen"] = max(self.variables["frozen"] - 1, 0)
 
-    # xp gained this turn
-    def set_xp_gained_this_turn(self):
-        self.variables["xp_gained_this_turn"] = True
-
-    def get_xp_gained_this_turn(self):
-        return self.variables["xp_gained_this_turn"]
-
-    def remove_xp_gained_this_turn(self):
-        self.variables["xp_gained_this_turn"] = False
-
     # Xp
     def increment_xp(self):
         self.variables["xp"] += 1
@@ -199,9 +189,9 @@ class Longbowman(Unit):
     type = "Infantry"
     upgrades = ["Longbowman II_A", "Longbowman II_B"]
 
-    sharpshooter = True
+    sharpshooting = True
 
-    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Longbowman_II_A(Unit):
@@ -215,9 +205,9 @@ class Longbowman_II_A(Unit):
     defence_bonuses = {}
     type = "Infantry"
 
-    sharpshooter = True
+    sharpshooting = True
 
-    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Longbowman_II_B(Unit):
@@ -231,9 +221,9 @@ class Longbowman_II_B(Unit):
     defence_bonuses = {}
     type = "Infantry"
 
-    sharpshooter = True
+    sharpshooting = True
 
-    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Crossbow_Archer(Unit):

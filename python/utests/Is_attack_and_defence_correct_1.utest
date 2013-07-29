@@ -35,7 +35,6 @@
             "D6": "Berserker",
             "E6":
             {
-                "xp_gained_this_turn": true,
                 "xp": 1,
                 "used": true,
                 "name": "Ballista"
@@ -43,7 +42,6 @@
             "C6": "Catapult",
             "E3":
             {
-                "xp_gained_this_turn": true,
                 "xp": 1,
                 "used": true,
                  "name": "Crusader"
