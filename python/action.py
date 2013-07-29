@@ -153,7 +153,7 @@ class Action(object):
         return distance(self.start_position, self.attack_position)
 
     def is_triple_attack(self):
-        return self.unit_reference.has("triple_attack") and self.is_attack()
+        return self.unit.has("triple_attack") and self.is_attack()
 
     def add_references(self, gamestate):
         player_units = gamestate.player_units()
