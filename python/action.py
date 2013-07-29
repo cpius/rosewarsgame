@@ -71,16 +71,11 @@ class Action(object):
         return not self.__eq__(other)
 
     def to_document(self):
-        d = {"action_number": self.action_number,
-             "start_position": str(self.start_position),
-             "end_position": str(self.end_position),
-             "attack_position": str(self.attack_position),
-             "ability_position": str(self.ability_position),
-             "move_with_attack": self.move_with_attack,
-             "ability": self.ability,
-             "created_at": self.created_at}
-
-        return dict((key, value) for key, value in d.items() if value and value != "None")
+        attrs = ["action_number", "start_position", "end_position", "attack_position", "ability_position",
+                 "ability", "created_at"]
+        d = dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
+        d.update({"move_with_attack": MoveOrStay.reverse_mapping[self.move_with_attack]})
+        return d
 
     def is_move_with_attack(self):
         return self.move_with_attack == MoveOrStay.MOVE
