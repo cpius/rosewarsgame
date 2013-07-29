@@ -36,20 +36,6 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-def surrounding_tiles(position):
-    """ Returns the 8 surrounding tiles"""
-    return set(direction.move(position) for direction in common.eight_directions)
-
-
-def four_forward_tiles(position, forward_position):
-    """ Returns the 4 other nearby tiles in the direction towards forward_position """
-    return surrounding_tiles(position) & surrounding_tiles(forward_position)
-
-
-def find_all_friendly_units_except_current(current_unit_position, player_units):
-    return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
-
-
 def add_target_reference(action, enemy_units, player_units):
     if action.is_attack():
         action.target_reference = enemy_units[action.attack_position]
@@ -79,7 +65,6 @@ def add_modifiers(attacks, player_units):
 
 
 def get_actions(gamestate):
-
     def can_use_unit(unit):
         return not (unit.is_used() or unit.is_frozen() or unit.is_recently_bribed())
 
