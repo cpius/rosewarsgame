@@ -69,7 +69,7 @@ class UniversalTestCase(unittest.TestCase):
 
         error_string = "Filename" + self.testcase_file + "\n" + \
                        "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence) + "\n" + \
-                       "Actual attack / defence " + str(expected_attack) + "," + str(actual_attack) + "\n" \
+                       "Actual attack / defence " + str(actual_attack) + "," + str(actual_defence) + "\n" \
 
 
         self.assertEqual(actual_attack, expected_attack, error_string)
