@@ -12,30 +12,22 @@ class Action(object):
                  move_with_attack=MoveOrStay.UNKNOWN,
                  ability=None,
                  action_number=None,
-                 sub_actions=None,
                  outcome=True,
                  created_at=None):
         self.start_position = start_position  # The tile the unit starts it's action on
-        if not end_position:
-            self.end_position = start_position
-        else:
-            self.end_position = end_position  # If the action is a movement, the tile the unit ends its movement on.
-                                          # If the action is an attack, tile the unit stops at while attacking
-                                          # an adjacent tile.
+        self.end_position = end_position if end_position else start_position  # If the action is a movement, the tile
+        # the unit ends its movement on. If the action is an attack, tile the unit stops at while attacking an adjacent
+        # tile.
         self.attack_position = attack_position  # The tile a unit attacks
         self.ability_position = ability_position
         self.move_with_attack = move_with_attack
         self.ability = ability
         self.action_number = action_number
-        self.sub_actions = sub_actions if sub_actions else []
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
-        self.created_at = created_at
-
+        self.created_at = created_at if created_at else datetime.utcnow()
         self.rolls = None
         self.outcome = outcome
         self.double_cost = False
-
-        self.created_at = datetime.utcnow()
 
     @classmethod
     def from_document(cls, document):
@@ -50,9 +42,6 @@ class Action(object):
             if attribute in document_copy:
                 document_copy[attribute] = Position.from_string(document_copy[attribute])
 
-        if "sub_actions" in document_copy:
-            document_copy["sub_actions"] =\
-                [cls.from_document(sub_action_document) for sub_action_document in document_copy["sub_actions"]]
         action = cls(**document_copy)
 
         if "created_at" in document:
@@ -71,32 +60,22 @@ class Action(object):
         return document_to_string(self.to_document())
 
     def __eq__(self, other):
-        basic_attributes = ["start_position",
-                            "end_position",
-                            "attack_position",
-                            "ability_position",
-                            "move_with_attack",
+        basic_attributes = ["start_position", "end_position", "attack_position", "ability_position", "move_with_attack",
                             "ability"]
         original = dict((attr, self.__dict__[attr]) for attr in basic_attributes if self.__dict__[attr])
         other = dict((attr, other.__dict__[attr]) for attr in basic_attributes if other.__dict__[attr])
 
         return original == other
 
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def to_document(self):
-        action_number = self.action_number if self.action_number else 0
-        sub_action_docs = [sub_action.to_document() for sub_action in self.sub_actions]
-
-        d = {"action_number": action_number,
-             "start_position": str(self.start_position),
-             "end_position": str(self.end_position),
-             "attack_position": str(self.attack_position),
-             "ability_position": str(self.ability_position),
-             "move_with_attack": self.move_with_attack,
-             "ability": self.ability,
-             "sub_actions": sub_action_docs,
-             "created_at": self.created_at}
-
-        return dict((key, value) for key, value in d.items() if value and value != "None")
+        attrs = ["action_number", "start_position", "end_position", "attack_position", "ability_position",
+                 "ability", "created_at"]
+        d = dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
+        d.update({"move_with_attack": MoveOrStay.reverse_mapping[self.move_with_attack]})
+        return d
 
     def is_move_with_attack(self):
         return self.move_with_attack == MoveOrStay.MOVE
@@ -108,9 +87,6 @@ class Action(object):
             self.rolls = (1, 6)
         else:
             self.rolls = (6, 1)
-
-        for sub_action in self.sub_actions:
-            sub_action.rolls = self.rolls
 
         return self
 
@@ -143,7 +119,8 @@ class Action(object):
                    pos != self.start_position and units[pos].has("flag_bearing"))
 
     def has_high_morale_II_A(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.end_position, units) if unit.has("flag_bearing_II_A"))
+        return any(unit for unit in surrounding_friendly_units(self.end_position, units)
+                   if unit.has("flag_bearing_II_A"))
 
     def has_high_morale_II_B(self, units):
         return any(unit for unit in adjacent_friendly_units(self.end_position, units) if unit.has("flag_bearing_II_B"))
