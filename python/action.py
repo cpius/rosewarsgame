@@ -60,8 +60,10 @@ class Action(object):
         if "created_at" in document:
             action.created_at = document["created_at"]
 
-        if "move_with_attack" in document:
-            action.move_with_attack = MoveOrStay[document["move_with_attack"]]
+        if "move_with_attack" in document and isinstance(document["move_with_attack"], basestring):
+            action.move_with_attack = getattr(MoveOrStay, document["move_with_attack"].upper())
+        elif not action.is_attack():
+            action.move_with_attack = MoveOrStay.STAY
         else:
             action.move_with_attack = MoveOrStay.UNKNOWN
 
