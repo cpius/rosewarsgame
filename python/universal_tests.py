@@ -7,7 +7,7 @@ from outcome import Outcome
 import glob
 import unittest
 import common
-from common import MoveOrStay
+import sys
 
 
 class UniversalTestCase(unittest.TestCase):
@@ -23,7 +23,6 @@ class UniversalTestCase(unittest.TestCase):
         if test_document["type"] == "Does action exist":
             gamestate = Gamestate.from_document(test_document["gamestate"])
             action = Action.from_document(test_document["action"])
-            action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
             expected = test_document["result"]
             self.does_action_exist(gamestate, action, expected)
 
@@ -33,19 +32,22 @@ class UniversalTestCase(unittest.TestCase):
             attack = test_document["attack"]
             defence = test_document["defence"]
 
+            action.add_references(gamestate)
+
             self.is_attack_and_defence_correct(gamestate, action, attack, defence)
 
         if test_document["type"] == "Is outcome correct":
-            gamestate = Gamestate.from_document(test_document["gamestate before action"])
-            expected_gamestate = Gamestate.from_document(test_document["gamestate after action"])
+            gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+            expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
             action = Action.from_document(test_document["action"])
-            action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
             outcome = Outcome.from_document(test_document["outcome"])
 
+            action.add_references(gamestate)
             self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
 
     def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)
+        print "does action exist: ", action
         actual = (action in available_actions)
 
         if expected:
@@ -63,8 +65,8 @@ class UniversalTestCase(unittest.TestCase):
         attacking_unit = all_units[action.start_position]
         defending_unit = all_units[action.attack_position]
 
-        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action)
-        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack)
+        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
+        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, gamestate)
 
         self.assertEqual(actual_attack, expected_attack, "Attack was wrong")
         self.assertEqual(actual_defence, expected_defence, "Defence was wrong")
@@ -80,15 +82,19 @@ class UniversalTestCase(unittest.TestCase):
     def assert_equal_documents(self, expected, actual):
         documents = "Expected:\n" + common.document_to_string(expected)
         documents += "\nActual:\n" + common.document_to_string(actual)
-        self.assertEqual(expected, actual, "The document was mangled.\n\n" + documents)
+        self.assertEqual(expected, actual, "The document was wrong.\n\n" + documents)
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner()
+    if len(sys.argv) == 2:
+        testcase = UniversalTestCase(sys.argv[1])
+        testcase.runTest()
+    else:
+        runner = unittest.TextTestRunner()
 
-    suite = unittest.TestSuite()
-    testcase_files = glob.glob("./utests/*.utest")
-    for testcase_file in testcase_files:
-        suite.addTest(UniversalTestCase(testcase_file))
+        suite = unittest.TestSuite()
+        testcase_files = glob.glob("./utests/*.utest")
+        for testcase_file in testcase_files:
+            suite.addTest(UniversalTestCase(testcase_file))
 
-    runner.run(suite)
+        runner.run(suite)
