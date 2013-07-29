@@ -86,15 +86,17 @@ class UniversalTestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    runner = unittest.TextTestRunner()
+
+    suite = unittest.TestSuite()
+
     if len(sys.argv) == 2:
-        testcase = UniversalTestCase(sys.argv[1])
-        testcase.runTest()
+        testcase_files = [sys.argv[1]]
+
     else:
-        runner = unittest.TextTestRunner()
-
-        suite = unittest.TestSuite()
         testcase_files = glob.glob("./utests/*.utest")
-        for testcase_file in testcase_files:
-            suite.addTest(UniversalTestCase(testcase_file))
 
-        runner.run(suite)
+    for testcase_file in testcase_files:
+        suite.addTest(UniversalTestCase(testcase_file))
+
+    runner.run(suite)
