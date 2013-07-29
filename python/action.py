@@ -2,12 +2,7 @@ import battle
 import common
 from datetime import datetime
 from copy import copy
-
-
-class MoveOrStay:
-    UNKNOWN = 0
-    MOVE = 1
-    STAY = 2
+from common import MoveOrStay
 
 
 class Action(object):
@@ -17,7 +12,7 @@ class Action(object):
                  attack_position=None,
                  ability_position=None,
                  move_with_attack=MoveOrStay.UNKNOWN,
-                 ability="",
+                 ability=None,
                  action_number=None,
                  sub_actions=None,
                  outcome=True,
@@ -65,8 +60,12 @@ class Action(object):
             document_copy["sub_actions"] =\
                 [cls.from_document(sub_action_document) for sub_action_document in document_copy["sub_actions"]]
         action = cls(**document_copy)
+
         if "created_at" in document:
             action.created_at = document["created_at"]
+
+        action.move_with_attack = MoveOrStay[document["move_with_attack"]]
+
         return action
 
     @classmethod
@@ -293,7 +292,5 @@ class Action(object):
     def distance_to_target(self):
         return common.distance(self.start_position, self.attack_position)
 
-
-
-
-
+    def is_triple_attack(self):
+        return self.unit_reference.has("triple_attack") and self.is_attack()

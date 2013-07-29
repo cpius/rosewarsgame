@@ -1,9 +1,11 @@
 from __future__ import division
 import random as rnd
 import battle
+import common
 from common import *
-from outcome import Outcome, SubOutcome
+from outcome import Outcome
 import settings
+from action import Action
 
 
 def do_action(gamestate, action, outcome=None, unit=None):
@@ -59,13 +61,24 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
 
-    if action.is_attack():
-        if hasattr(action, "push"):
-            outcome = settle_attack_push(action, gamestate.opponent_units(), gamestate.player_units(), outcome)
-        else:
-            outcome = settle_attack(action, gamestate.opponent_units(), outcome, gamestate)
+    if action.is_push():
+        outcome = settle_attack_push(action, gamestate, outcome)
 
-    if action.is_ability():
+        if action.is_triple_attack():
+            push_direction = common.get_direction(action.end_position, action.attack_position)
+            for forward_position in common.two_forward_tiles(action.end_position, action.attack_position):
+                if forward_position in gamestate.opponent_units():
+                    sub_action = Action(
+                        action.start_position,
+                        end_position=action.end_position,
+                        attack_position=forward_position)
+                    sub_action.unit = action.unit
+                    sub_action.target_unit = gamestate.opponent_units()[forward_position]
+                    outcome = do_sub_action(gamestate, sub_action, push_direction, outcome)
+
+    elif action.is_attack():
+        outcome = settle_attack(action, gamestate, outcome)
+    elif action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
     if unit.has("bloodlust") and outcome.outcomes[action.attack_position] == 1:
@@ -80,10 +93,6 @@ def do_action(gamestate, action, outcome=None, unit=None):
     else:
         prepare_extra_actions(action, unit)
 
-    for sub_action in action.sub_actions:
-        sub_outcomes = do_action(gamestate, sub_action, unit=unit)
-        outcome.add_outcomes(sub_outcomes)
-
     if action.end_position in gamestate.player_units():
         gamestate.player_units()[action.final_position] = gamestate.player_units().pop(action.end_position)
 
@@ -96,13 +105,15 @@ def do_action(gamestate, action, outcome=None, unit=None):
     return outcome
 
 
-def settle_attack_push(action, enemy_units, player_units, outcome=None):
+def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
+    player_units = gamestate.player_units()
+    opponent_units = gamestate.opponent_units()
     if not outcome:
         outcome = Outcome()
 
     sub_outcome = outcome.for_position(action.attack_position)
 
-    if sub_outcome.is_failure():
+    if Outcome.is_failure(sub_outcome):
         return outcome
 
     if sub_outcome == SubOutcome.UNKNOWN:
@@ -117,12 +128,12 @@ def settle_attack_push(action, enemy_units, player_units, outcome=None):
         else:
             outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
 
-    push_direction = get_direction(action.end_position, action.attack_position)
+    if not push_direction:
+        push_direction = get_direction(action.end_position, action.attack_position)
+
     push_destination = push_direction.move(action.attack_position)
 
     if outcome.for_position(action.attack_position) == SubOutcome.WIN:
-        outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
-
         gain_xp(action.unit)
 
         if action.target_unit.get_extra_life():
@@ -130,28 +141,35 @@ def settle_attack_push(action, enemy_units, player_units, outcome=None):
 
             if not out_of_board_vertical(push_destination):
                 update_final_position(action)
-                if push_destination in player_units or push_destination in enemy_units or out_of_board_horizontal(push_destination):
-                    del enemy_units[action.attack_position]
+                if push_destination in player_units or push_destination in opponent_units or out_of_board_horizontal(push_destination):
+                    del opponent_units[action.attack_position]
                 else:
-                    enemy_units[push_destination] = enemy_units.pop(action.attack_position)
+                    opponent_units[push_destination] = opponent_units.pop(action.attack_position)
 
         else:
             update_final_position(action)
-            del enemy_units[action.attack_position]
+            del opponent_units[action.attack_position]
 
     else:
         if not out_of_board_vertical(push_destination):
             update_final_position(action)
-            if push_destination in player_units or push_destination in enemy_units or out_of_board_horizontal(push_destination):
-                del enemy_units[action.attack_position]
 
+            is_push_destination_occupied = push_destination in player_units or push_destination in opponent_units
+
+            if is_push_destination_occupied or out_of_board_horizontal(push_destination):
+                del opponent_units[action.attack_position]
             else:
-                enemy_units[push_destination] = enemy_units.pop(action.attack_position)
+                opponent_units[push_destination] = opponent_units.pop(action.attack_position)
 
     return outcome
 
 
-def settle_attack(action, enemy_units, outcome, gamestate):
+def do_sub_action(gamestate, action, direction, outcome):
+    if action.is_triple_attack():
+        return settle_attack_push(action, gamestate, outcome, direction)
+
+
+def settle_attack(action, gamestate, outcome):
     if not outcome:
         outcome = Outcome()
 
@@ -177,7 +195,7 @@ def settle_attack(action, enemy_units, outcome, gamestate):
     if action.target_unit.has_extra_life():
         action.target_unit.remove_extra_life()
     else:
-        del enemy_units[action.attack_position]
+        del gamestate.opponent_units()[action.attack_position]
 
         if outcome.for_position(action.attack_position) == SubOutcome.WIN:
             update_final_position(action)

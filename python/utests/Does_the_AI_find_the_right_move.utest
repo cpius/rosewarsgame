@@ -1,18 +1,22 @@
-'{"type": "Does the AI find the right move",
- "action": 
 {
-    "start_position": "C2",
-    "end_position": "C2"
-	"attack_position": "C4"
-	"move_with_attack": "
-},
- "gamestate": 
-     "actions_remaining": 2, 
-    "player1_units": {
-        "C2": "Ballista" 
-    }, 
-    "player2_units": {
-        "C4": "Longswordsman", 
+    "type": "Does the AI find the right move",
+    "action":
+    {
+        "start_position": "C2",
+        "end_position": "C2",
+        "attack_position": "C4",
+        "move_with_attack": "STAY"
+    },
+    "gamestate":
+    {
+        "actions_remaining": 2,
+        "player1_units":
+        {
+            "C2": "Ballista"
+        },
+        "player2_units":
+        {
+            "C4": "Longswordsman"
+        }
     }
-}
 }

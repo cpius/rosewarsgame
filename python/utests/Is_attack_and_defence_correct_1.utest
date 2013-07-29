@@ -1,54 +1,58 @@
-{"type": "Is attack and defence correct",
- "attack": 3,
- "defence": 3,
- "action": 
 {
-    "action_number": 3,
-    "start_position": "D4",
-    "end_position": "D4",
-    "attack_position": "D5",
-    "ability_position": "",
-    "move_with_attack": false,
-    "ability": "",
-    "created_at": "2013-07-22T17:15:38.289Z"
-},
- "gamestate": 
- {
-    "turn": 2, 
-    "player2_intelligence": "Human", 
-    "player2_units": {
-        "B4": "Pikeman", 
-        "A3": "Archer", 
-        "B3": "Flag Bearer", 
-        "C2": "Light Cavalry", 
-        "D4": "Longswordsman", 
-        "D2": "Berserker", 
-        "D3": "Ballista"
-    }, 
-    "actions_remaining": 0, 
-    "created_at": "2013-07-23T14:42:27Z", 
-    "player1_units": {
-        "D5": "Knight", 
-        "B5": "Pikeman", 
-        "B6": "Light Cavalry", 
-        "A5": "Knight", 
-        "C5": "Flag Bearer", 
-        "D6": "Berserker", 
-        "E6": {
-            "xp_gained_this_round": true, 
-            "xp": 1, 
-            "used": true, 
-            "name": "Ballista"
-        }, 
-        "C6": "Catapult", 
-        "E3": {
-            "xp_gained_this_round": true, 
-            "xp": 1, 
-            "used": true, 
-            "name": "Crusader"
-        }
-    }, 
-    "player1_intelligence": "Evaluator", 
-    "extra_action": false
-}
+    "type": "Is attack and defence correct",
+    "attack": 3,
+    "defence": 3,
+    "action":
+    {
+        "action_number": 3,
+        "start_position": "D4",
+        "end_position": "D4",
+        "attack_position": "D5",
+        "ability_position": "",
+        "move_with_attack": "STAY",
+        "ability": ""
+    },
+    "gamestate":
+    {
+        "turn": 2,
+        "player2_intelligence": "Human",
+        "player2_units":
+        {
+            "B4": "Pikeman",
+            "A3": "Archer",
+            "B3": "Flag Bearer",
+            "C2": "Light Cavalry",
+            "D4": "Longswordsman",
+            "D2": "Berserker",
+            "D3": "Ballista"
+        },
+        "actions_remaining": 0,
+        "created_at": "2013-07-23T14:42:27Z",
+        "player1_units":
+        {
+            "D5": "Heavy Cavalry",
+            "B5": "Pikeman",
+            "B6": "Light Cavalry",
+            "A5": "Heavy Cavalry",
+            "C5": "Flag Bearer",
+            "D6": "Berserker",
+            "E6":
+            {
+                "xp_gained_this_round": true,
+                "xp": 1,
+                "used": true,
+                "name": "Ballista"
+            },
+            "C6": "Catapult",
+            "E3":
+            {
+                "xp_gained_this_round": true,
+                "xp": 1,
+                "used": true,
+                 "name": "Crusader"
+            }
+        },
+        "player1_intelligence": "Evaluator",
+        "extra_action": false
+    }
 }
