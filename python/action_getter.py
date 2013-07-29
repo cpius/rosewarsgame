@@ -438,7 +438,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
             extended_moveset_no_leftover = set()
             for move_position in moveset_no_leftover:
                 extended_moveset_no_leftover.add(move_position)
-                for direction in directions[2:]:
+                for direction in [Direction("Right"), Direction("Left")]:
                     new_position = direction.move(move_position)
                     if new_position in board and new_position not in units:
                         extended_moveset_no_leftover.add(new_position)
