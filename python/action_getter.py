@@ -18,8 +18,6 @@ class memoized(object):
 
     def __call__(self, *args):
         if not isinstance(args, collections.Hashable):
-            # uncacheable. a list, for instance.
-            # better to not cache than blow up.
             return self.func(*args)
         if args in self.cache:
             return self.cache[args]
@@ -33,16 +31,6 @@ class memoized(object):
 
     def __get__(self, obj):
         return functools.partial(self.__call__, obj)
-
-
-def add_target_reference(action, enemy_units, player_units):
-    if action.is_attack():
-        action.target_reference = enemy_units[action.attack_position]
-    elif action.is_ability():
-        if action.ability_position in enemy_units:
-            action.target_reference = enemy_units[action.ability_position]
-        elif action.ability_position in player_units:
-            action.target_reference = player_units[action.ability_position]
 
 
 def get_actions(gamestate):
@@ -80,7 +68,6 @@ def get_actions(gamestate):
                 return attacks + abilities
 
     for action in actions:
-        add_unit_references(gamestate, action)
         action.action_number = gamestate.action_number + 1
 
     return actions
@@ -102,14 +89,8 @@ def get_action(gamestate, action_document):
         Position.from_string(action_document["ability_position"]),
         action_document["move_with_attack"],
         action_document["ability"])
-    add_unit_references(gamestate, action)
 
     return action
-
-
-def add_unit_references(gamestate, action):
-    action.unit_reference = gamestate.player_units()[action.start_position]
-    add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
 
 
 def get_extra_actions(gamestate):
@@ -164,7 +145,6 @@ def get_extra_actions(gamestate):
 
     for action in extra_actions:
         action.unit_reference = gamestate.player_units()[action.start_position]
-        add_target_reference(action, gamestate.opponent_units(), gamestate.player_units())
 
     return extra_actions
 
@@ -254,7 +234,7 @@ def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
 
 @memoized
 def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
-    """Returns all the tiles a unit can move to, in one set. """
+    """Returns all the tiles a unit can move to. """
 
     if movement_remaining == 0:
         return {position}
@@ -272,7 +252,7 @@ def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
 
 @memoized
 def ranged_attacks_set(position, enemy_units, range_remaining):
-    """ Returns all the tiles a ranged unit can attack, in a set."""
+    """ Returns all the tiles a ranged unit can attack"""
 
     attackset = set()
 
@@ -287,7 +267,7 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
 
 
 def abilities_set(unit, position, units, possible_targets, range_remaining):
-    """ Returns all the tiles an ability unit can target, in a set."""
+    """ Returns all the tiles an ability unit can target."""
 
     abilityset = set()
 
@@ -392,7 +372,6 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
         def longsword(unit, position, moveset_with_leftover, moveset_no_leftover, enemy_units):
 
             def get_attack(position, end_position, attack_position, move_with_attack):
-                direction = end_position.get_direction(attack_position)
                 attack = Action(position, end_position=end_position, attack_position=attack_position,
                                 move_with_attack=move_with_attack)
                 return attack

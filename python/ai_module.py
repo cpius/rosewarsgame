@@ -22,5 +22,7 @@ class AI(object):
     def select_action(self, game):
         gamestate = game.gamestate.copy()
         actions = gamestate.get_actions()
+        for action in actions:
+            action.add_references(gamestate)
         if actions:
             return self.get_action(actions, gamestate)

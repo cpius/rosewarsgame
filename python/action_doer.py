@@ -7,7 +7,7 @@ import settings
 from action import Action
 
 
-def do_action(gamestate, action, outcome=None, unit=None):
+def do_action(gamestate, action, outcome=None):
     def prepare_extra_actions(action, unit):
 
         if unit.has("swiftness"):
@@ -54,7 +54,6 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
 
-    start_position = action.start_position
     end_position = action.end_position
     attack_position = action.attack_position
     if action.is_attack() and action.unit.range == 1:
