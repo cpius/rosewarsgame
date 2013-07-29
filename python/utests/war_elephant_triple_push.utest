@@ -35,7 +35,6 @@
             "C2":
              {
                  "name": "War Elephant",
-                 "xp_gained_this_turn": true,
                  "used": true,
                  "xp": 1
              }

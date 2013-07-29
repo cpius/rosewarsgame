@@ -7,7 +7,7 @@
             "C3": "Diplomat", 
             "A3": "Catapult"
         }, 
-        "player2_units": {
+     "player2_units": {
             "D7": "Archer", 
             "C4": {
                 "lost_extra_life": 1,
@@ -29,8 +29,7 @@
         "player1_units": {
             "C3": 
 			{
-				"name": "Diplomat", 
-				"xp_gained_this_turn": true,
+				"name": "Diplomat",
 				"xp": 1,
 				"used": 1
 			},

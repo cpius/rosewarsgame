@@ -41,6 +41,9 @@ class Position:
     def __eq__(self, other):
         return self.column == other.column and self.row == other.row
 
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __hash__(self):
         return self.column * 10 + self.row
 
@@ -109,6 +112,10 @@ def find_all_friendly_units_except_current(current_unit_position, player_units):
 
 def adjacent_friendly_units(position, units):
     return (units[pos] for pos in position.adjacent_tiles() if pos in units)
+
+
+def adjacent_friendly_positions(position, units):
+    return (pos for pos in position.adjacent_tiles() if pos in units)
 
 
 def surrounding_friendly_units(position, units):

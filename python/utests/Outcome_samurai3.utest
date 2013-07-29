@@ -17,7 +17,6 @@
 		{	
 			"name": "Samurai",
 			"used": 1,
-			"xp_gained_this_turn": true,
 			"xp": 1,
 			"movement_remaining": 0,
 			"extra_action": 1
@@ -40,7 +39,6 @@
 		{	
 			"name": "Samurai",
 			"used": 1,
-			"xp_gained_this_turn": true,
 			"xp": 1,
 			"movement_remaining": 0
 		},
