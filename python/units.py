@@ -199,9 +199,9 @@ class Longbowman(Unit):
     type = "Infantry"
     upgrades = ["Longbowman II_A", "Longbowman II_B"]
 
-    sharpshooter = True
+    sharpshooting = True
 
-    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Longbowman_II_A(Unit):
@@ -215,9 +215,9 @@ class Longbowman_II_A(Unit):
     defence_bonuses = {}
     type = "Infantry"
 
-    sharpshooter = True
+    sharpshooting = True
 
-    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Longbowman_II_B(Unit):
@@ -231,9 +231,9 @@ class Longbowman_II_B(Unit):
     defence_bonuses = {}
     type = "Infantry"
 
-    sharpshooter = True
+    sharpshooting = True
 
-    descriptions = {"sharpshooter": "Targets have their defence reduced to 1 during the attack"}
+    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
 
 
 class Crossbow_Archer(Unit):
