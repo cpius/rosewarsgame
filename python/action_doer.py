@@ -207,26 +207,8 @@ def settle_ability(action, enemy_units, player_units):
         player_units[action.ability_position] = enemy_units.pop(action.ability_position)
         player_units[action.ability_position].set_bribed()
 
-    if action.ability == "sabotage":
-        action.target_unit.sabotage()
-
-    if action.ability == "sabotage_II":
-        action.target_unit.sabotage_II()
-
-    if action.ability == "poison":
-        action.target_unit.freeze(2)
-
-    if action.ability == "poison_II":
-        action.target_unit.freeze(3)
-
-    if action.ability == "improve_weapons":
-        action.target_unit.improve_weapons()
-
-    if action.ability == "improve_weapons_II_A":
-        action.target_unit.improve_weapons_II_A()
-
-    if action.ability == "improve_weapons_II_B":
-        action.target_unit.improve_weapons_II_B()
+    else:
+        getattr(action.target_unit, action.ability)()
 
 
 def update_final_position(action):
