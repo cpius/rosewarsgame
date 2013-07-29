@@ -9,7 +9,7 @@
 			"name": "Saboteur",
 			"used": 1,
 			"xp": 1,
-			"xp_gained_this_turn": 1
+			"xp_gained_this_turn": true
 		},
         "E4": "Light Cavalry" 
     }, 
@@ -33,7 +33,7 @@
 		{
 			"name": "Saboteur",
 			"xp": 1,
-			"xp_gained_this_turn": 1
+			"xp_gained_this_turn": true
 		},
         "E4": "Light Cavalry" 
     }, 

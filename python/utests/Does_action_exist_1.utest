@@ -6,10 +6,7 @@
         "action_number": 3,
         "start_position": "C7",
         "end_position": "B7",
-        "attack_position": "",
-        "ability_position": "",
-        "move_with_attack": "STAY",
-        "ability": ""
+        "move_with_attack": "stay",
     },
     "gamestate":
     {

@@ -60,8 +60,10 @@ class Action(object):
         if "created_at" in document:
             action.created_at = document["created_at"]
 
-        if "move_with_attack" in document:
-            action.move_with_attack = MoveOrStay[document["move_with_attack"]]
+        if "move_with_attack" in document and isinstance(document["move_with_attack"], basestring):
+            action.move_with_attack = getattr(MoveOrStay, document["move_with_attack"].upper())
+        elif not action.is_attack():
+            action.move_with_attack = MoveOrStay.STAY
         else:
             action.move_with_attack = MoveOrStay.UNKNOWN
 
@@ -151,7 +153,7 @@ class Action(object):
         return distance(self.start_position, self.attack_position)
 
     def is_triple_attack(self):
-        return self.unit_reference.has("triple_attack") and self.is_attack()
+        return self.unit.has("triple_attack") and self.is_attack()
 
     def add_references(self, gamestate):
         player_units = gamestate.player_units()

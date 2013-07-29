@@ -19,14 +19,15 @@
         "end_position": "C3"
     }, 
     "outcome": {
-        "C4": "WIN"
+        "C4": "win"
     }, 
     "post_gamestate": {
         "actions_remaining": 1, 
         "player1_units": {
             "C3": {
-                "xp_gained_this_turn": 1, 
-                "xp": 1, 
+                "xp_gained_this_turn": true,
+                "xp": 1,
+
                 "used": 1, 
                 "name": "Ballista"
             }, 
