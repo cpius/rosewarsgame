@@ -66,7 +66,7 @@ class UniversalTestCase(unittest.TestCase):
         defending_unit = all_units[action.attack_position]
 
         actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
-        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, gamestate)
+        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action, gamestate)
 
         self.assertEqual(actual_attack, expected_attack, "Attack was wrong")
         self.assertEqual(actual_defence, expected_defence, "Defence was wrong")
