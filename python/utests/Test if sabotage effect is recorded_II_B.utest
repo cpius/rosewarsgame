@@ -15,8 +15,7 @@
         "ability_position": "D4", 
         "end_position": "C3", 
         "start_position": "C3", 
-        "ability": "sabotage_II", 
-        "attack_position": "D4"
+        "ability": "sabotage_II"
     }, 
     "outcome": {
         "C4": "deterministic"
