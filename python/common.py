@@ -41,6 +41,9 @@ class Position:
     def __eq__(self, other):
         return self.column == other.column and self.row == other.row
 
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __hash__(self):
         return self.column * 10 + self.row
 
