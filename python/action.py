@@ -1,5 +1,3 @@
-import battle
-import common
 from datetime import datetime
 from copy import copy
 from common import *
