@@ -176,8 +176,6 @@ def flip_action(action):
         if getattr(action, attribute):
             setattr(action, attribute, getattr(action, attribute).flip())
 
-    for sub_action in action.sub_actions:
-        action.sub_action = flip_action(sub_action)
     if hasattr(action, "push"):
         action.push_direction = flip_direction(action.push_direction)
 
