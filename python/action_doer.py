@@ -58,7 +58,7 @@ def do_action(gamestate, action, outcome=None, unit=None):
     start_position = action.start_position
     end_position = action.end_position
     attack_position = action.attack_position
-    if action.is_attack():
+    if action.is_attack() and action.unit.range == 1:
         attack_direction = end_position.get_direction(attack_position)
 
     if action.is_push():

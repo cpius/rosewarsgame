@@ -1,8 +1,7 @@
 import pygame
-import battle
 from viewcommon import *
 from coordinates import Coordinates
-import settings
+from common import *
 
 
 def draw_game(screen, interface, game, start_position=None, actions=()):
@@ -175,7 +174,7 @@ def flip_action(action):
 
     for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
         if getattr(action, attribute):
-            setattr(action, attribute, flip(getattr(action, attribute)))
+            setattr(action, attribute, getattr(action, attribute).flip())
 
     for sub_action in action.sub_actions:
         action.sub_action = flip_action(sub_action)
