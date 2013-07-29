@@ -9,6 +9,8 @@ class Direction:
     The class contains methods for returning the tile going one step in the direction will lead you to,
     and for returning the tiles you should check for zone of control.
     """
+    in_words = {(-1, 0): "Left", (1, 0): "Right", (0, -1): "Down", (0, 1): "Up"}
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -20,18 +22,7 @@ class Direction:
         return Position((position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x))
 
     def __repr__(self):
-
-        if self.x == -1:
-            return "Left"
-
-        if self.x == 1:
-            return "Right"
-
-        if self.y == -1:
-            return "Down"
-
-        if self.y == 1:
-            return "Up"
+        return self.in_words[(self.x, self.y)]
 
 
 board_height = 8
@@ -60,12 +51,8 @@ MoveOrStay = enum("UNKNOWN", "MOVE", "STAY")
 
 
 def position_to_tuple(position_string):
-    if position_string is None or len(position_string) != 2:
-        return None
-
-    column = ord(position_string[0]) - 64  # In ASCII A, B, C, D, E is 65, 66, 67, 68, 69
-    row = int(position_string[1])
-    return Position(column, row)
+    if position_string and len(position_string) == 2:
+        return Position(ord(position_string[0]) - 64, int(position_string[1]))  # In ASCII A, B,.. is 65, 66, ..
 
 
 def merge_units(units1, units2):
