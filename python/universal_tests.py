@@ -47,7 +47,6 @@ class UniversalTestCase(unittest.TestCase):
 
     def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)
-        print "does action exist: ", action
         actual = (action in available_actions)
 
         if expected:
