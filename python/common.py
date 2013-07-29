@@ -78,7 +78,7 @@ class Position:
 
 board_height = 8
 board_width = 5
-board = set((column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
+board = set(Position(column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
 directions = {Direction(name) for name in ["Up", "Down", "Left", "Right"]}
 eight_directions = {Direction(name) for name in Direction.to_coordinates}
 
