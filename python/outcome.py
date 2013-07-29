@@ -33,6 +33,6 @@ class Outcome:
     def from_document(cls, document):
         outcomes = dict()
         for outcome in document:
-            outcomes[Position.from_string(outcome)] = getattr(SubOutcome, document[outcome])
+            outcomes[Position.from_string(outcome)] = getattr(SubOutcome, document[outcome].upper())
 
         return cls(outcomes)
