@@ -41,13 +41,8 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if not outcome:
         outcome = Outcome()
 
-    if not unit:
-        action.unit = gamestate.player_units()[action.start_position]
-        unit = action.unit
-    else:
-        action.unit = unit
-
-    add_target(action, gamestate.opponent_units(), gamestate.player_units())
+    action.add_references(gamestate)
+    unit = action.unit
 
     secondary_action_effects(action, unit)
 
@@ -234,19 +229,6 @@ def settle_ability(action, enemy_units, player_units):
 
     if action.ability == "improve_weapons_II_B":
         action.target_unit.improve_weapons_II_B()
-
-
-def add_target(action, enemy_units, player_units):
-    if action.is_attack():
-        action.target_unit = enemy_units[action.attack_position]
-    elif action.is_ability():
-        if action.ability_position in enemy_units:
-            action.target_unit = enemy_units[action.ability_position]
-        elif action.ability_position in player_units:
-            action.target_unit = player_units[action.ability_position]
-
-    for sub_action in action.sub_actions:
-        add_target(sub_action, enemy_units, player_units)
 
 
 def update_final_position(action):

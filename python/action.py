@@ -293,3 +293,15 @@ class Action(object):
 
     def is_triple_attack(self):
         return self.unit_reference.has("triple_attack") and self.is_attack()
+
+    def add_references(self, gamestate):
+        player_units = gamestate.player_units()
+        enemy_units = gamestate.opponent_units()
+        self.unit = player_units[self.start_position]
+        if self.is_attack():
+            self.target_unit = enemy_units[self.attack_position]
+        elif self.is_ability():
+            if self.ability_position in enemy_units:
+                self.target_unit = enemy_units[self.ability_position]
+            elif self.ability_position in player_units:
+                self.target_unit = player_units[self.ability_position]
