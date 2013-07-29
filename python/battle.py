@@ -12,7 +12,7 @@ def attack_successful(action, rolls, gamestate):
 def defence_successful(action, rolls, gamestate):
 
     attack_rating = get_attack_rating(action.unit, action.target_unit, action, gamestate)
-    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating, gamestate)
+    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating, action, gamestate)
     
     return rolls[1] <= defence_rating
     

@@ -135,7 +135,7 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
     if outcome.for_position(action.attack_position) == SubOutcome.WIN:
         gain_xp(action.unit)
 
-        if action.target_unit.get_extra_life():
+        if action.target_unit.has_extra_life():
             action.target_unit.remove_extra_life()
 
             if not push_destination.out_of_board_vertical():

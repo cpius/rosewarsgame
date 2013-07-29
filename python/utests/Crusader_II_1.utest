@@ -6,7 +6,7 @@
     "start_position": "C3",
     "end_position": "C3",
     "attack_position": "D6",
-    "move_with_attack": "STAY"
+    "move_with_attack": "stay"
 },
  "gamestate": 
  {

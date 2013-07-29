@@ -125,6 +125,3 @@ class CustomJsonEncoder(JSONEncoder):
 
 def document_to_string(document):
     return dumps(document, indent=4, cls=CustomJsonEncoder)
-
-
-
