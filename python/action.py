@@ -79,8 +79,8 @@ class Action(object):
                             "ability_position",
                             "move_with_attack",
                             "ability"]
-        original = dict((attribute, self.__dict__[attribute]) for attribute in basic_attributes)
-        other = dict((attribute, other.__dict__[attribute]) for attribute in basic_attributes)
+        original = dict((attr, self.__dict__[attr]) for attr in basic_attributes if self.__dict__[attr])
+        other = dict((attr, other.__dict__[attr]) for attr in basic_attributes if other.__dict__[attr])
 
         return original == other
 
