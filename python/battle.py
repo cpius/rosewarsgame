@@ -58,8 +58,9 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
 
 
 def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
-    
+
     attack = attacking_unit.attack
+    action.add_references(gamestate)
 
     if action.is_lancing():
         attack += 2

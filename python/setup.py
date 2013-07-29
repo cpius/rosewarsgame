@@ -3,12 +3,12 @@ import random
 import units as units_module
 import settings
 from collections import namedtuple
-import common
+from common import *
 
 
 class Tiles_bag(object):
     def __init__(self):
-        self.tiles = [common.Position(column, row) for column in board_columns for row in board_rows]
+        self.tiles = [Position(column, row) for column in board_columns for row in board_rows]
         
     def pick_from_row(self, rows):
         pick = random.choice([tile for tile in self.tiles if tile.row in rows])
@@ -16,8 +16,8 @@ class Tiles_bag(object):
         return pick
 
     def pick_protected_tile(self, rows):
-        possible_tiles = [common.Position(column, row) for column in board_columns for
-                          row in [2, 3] if (column, row) in self.tiles and (column, row + 1) not in self.tiles]
+        possible_tiles = [Position(column, row) for column in board_columns for
+                          row in [2, 3] if Position(column, row) in self.tiles and Position(column, row + 1) not in self.tiles]
 
         pick = random.choice([tile for tile in possible_tiles if tile.row in rows])
         self.tiles.remove(pick)
@@ -198,7 +198,7 @@ def get_units():
 
 def flip_units(units):
 
-    return dict((common.flip(position), unit) for position, unit in units.items())
+    return dict((position.flip(), unit) for position, unit in units.items())
 
 
 def get_start_units():

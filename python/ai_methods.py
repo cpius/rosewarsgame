@@ -1,6 +1,5 @@
 from __future__ import division
 import battle
-from ai_module import get_transformed_action
 import copy
 
 
