@@ -5,7 +5,7 @@
         "action_number": 3,
         "start_position": "A2",
         "end_position": "A1",
-        "move_with_attack": "STAY"
+        "move_with_attack": "stay"
     },
     "gamestate": {
         "turn": 1,
@@ -19,7 +19,7 @@
             "E7": "Light Cavalry",
             "E6": "Light Cavalry",
             "C7": "Pikeman",
-            "C5": "Heavy Cavalry"
+            "C5": "Knight"
         },
         "actions_remaining": 0,
         "created_at": "2013-07-23T11:42:00Z",
@@ -27,7 +27,7 @@
             "B4": "Longswordsman",
             "A3": "Royal Guard",
             "A2": "Ballista",
-            "A4": "Heavy Cavalry",
+            "A4": "Knight",
             "C3": "Pikeman",
             "C2": "Weaponsmith",
             "D4": {

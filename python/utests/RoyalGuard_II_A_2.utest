@@ -6,7 +6,7 @@
     "start_position": "B4",
     "end_position": "B4",
     "attack_position": "B5",
-    "move_with_attack": 1
+    "move_with_attack": "move"
 },
  "gamestate": 
  {

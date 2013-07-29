@@ -7,7 +7,7 @@
     "start_position": "E3",
     "end_position": "E4",
     "attack_position": "E5",
-    "move_with_attack": "MOVE"
+    "move_with_attack": "move"
 },
  "gamestate": 
  {

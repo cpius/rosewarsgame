@@ -22,7 +22,7 @@
 		"ability": "bribe"
     }, 
     "outcome": {
-        "C4": "DETERMINISTIC"
+        "C4": "deterministic"
     }, 
     "post_gamestate": {
         "actions_remaining": 1, 
@@ -30,7 +30,7 @@
             "C3": 
 			{
 				"name": "Diplomat", 
-				"xp_gained_this_turn": 1,
+				"xp_gained_this_turn": true,
 				"xp": 1,
 				"used": 1
 			},

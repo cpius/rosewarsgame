@@ -19,14 +19,14 @@
         "attack_position": "D4"
     }, 
     "outcome": {
-        "C4": "DETERMINISTIC"
+        "C4": "deterministic"
     }, 
     "post_gamestate": {
         "actions_remaining": 1, 
         "player1_units": {
             "A1": "Pikeman", 
             "C3": {
-                "xp_gained_this_turn": 1, 
+                "xp_gained_this_turn": true,
                 "xp": 1, 
                 "used": 1, 
                 "name": "Saboteur_II_B"

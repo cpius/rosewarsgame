@@ -3,16 +3,16 @@
     "description": "Test if elephant attacks work correctly",
     "outcome":
     {
-        "B2": "WIN",
-        "C2": "PUSH",
-        "D2": "MISS"
+        "B2": "win",
+        "C2": "push",
+        "D2": "miss"
     },
     "action":
     {
         "start_position": "C1",
         "end_position": "C1",
         "attack_position": "C2",
-        "move_with_attack": "MOVE"
+        "move_with_attack": "move"
     },
     "gamestate before action":
     {
@@ -35,7 +35,7 @@
             "C2":
              {
                  "name": "War Elephant",
-                 "xp_gained_this_round": true,
+                 "xp_gained_this_turn": true,
                  "used": true,
                  "xp": 1
              }

@@ -3,14 +3,14 @@
     "description": "Test a move-attack",
     "outcome":
     {
-        "E4": "WIN"
+        "E4": "win"
     },
     "action":
     {
         "start_position": "E3",
         "end_position": "E3",
         "attack_position": "E4",
-        "move_with_attack": "MOVE"
+        "move_with_attack": "move"
     },
     "pre_gamestate":
     {
@@ -32,7 +32,7 @@
         {
 	        "E4":
 	        {
-                "xp_gained_this_round": true,
+                "xp_gained_this_turn": true,
                 "xp": 1,
                 "used": true,
 			    "name": "Pikeman"
