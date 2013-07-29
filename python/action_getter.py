@@ -199,13 +199,6 @@ def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
                 yield new_position
 
 
-def adjacent_unoccupied_tiles(position, units):
-    for direction in directions:
-        new_position = direction.move(position)
-        if new_position in board and new_position not in units:
-            yield new_position
-
-
 @memoized
 def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
     """
@@ -217,11 +210,11 @@ def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
 
     if movement_remaining == 0:
         return set(), {position}
-
-    if movement_remaining != total_movement:
+    elif movement_remaining < total_movement:
         moveset_with_leftover = {position}
     else:
         moveset_with_leftover = set()
+
     moveset_no_leftover = set()
 
     for new_position in adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
@@ -238,8 +231,7 @@ def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
 
     if movement_remaining == 0:
         return {position}
-
-    if movement_remaining != total_movement:
+    elif movement_remaining < total_movement:
         moveset = {position}
     else:
         moveset = set()
