@@ -1,0 +1,24 @@
+{
+    "type": "Does action exist",
+    "result": false,
+    "action":
+    {
+        "start_position": "C3",
+        "end_position": "C6",
+		"attack_position": "D7",
+		"move_with_attack": "stay"
+    },
+    "gamestate":
+	{
+		"actions_remaining": 2, 
+		"player1_units": 
+		{
+			"C3": "Berserker",
+			"A2": "Pikeman"
+		},
+		"player2_units": 
+		{
+			"C7": "Ballista"
+		}
+	}
+}

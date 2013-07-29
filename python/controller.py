@@ -81,6 +81,7 @@ class Controller(object):
     def trigger_artificial_intelligence(self):
 
         action = self.game.current_player().ai.select_action(self.game)
+        action.add_references(self.game.gamestate)
 
         if action:
             self.perform_action(action)

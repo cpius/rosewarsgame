@@ -19,6 +19,13 @@ class Unit(object):
     def has(self, attribute):
         return hasattr(self, attribute)
 
+    #Poison
+    def poison(self):
+        self.freeze(2)
+
+    def poison_II(self):
+        self.freeze(3)
+
     # Frozen
     def freeze(self, n):
         self.variables["frozen"] = max(self.variables["frozen"], n)

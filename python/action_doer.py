@@ -7,7 +7,7 @@ import settings
 from action import Action
 
 
-def do_action(gamestate, action, outcome=None, unit=None):
+def do_action(gamestate, action, outcome=None):
     def prepare_extra_actions(action, unit):
 
         if unit.has("swiftness"):
@@ -54,7 +54,6 @@ def do_action(gamestate, action, outcome=None, unit=None):
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
 
-    start_position = action.start_position
     end_position = action.end_position
     attack_position = action.attack_position
     if action.is_attack() and action.unit.range == 1:
@@ -208,26 +207,8 @@ def settle_ability(action, enemy_units, player_units):
         player_units[action.ability_position] = enemy_units.pop(action.ability_position)
         player_units[action.ability_position].set_bribed()
 
-    if action.ability == "sabotage":
-        action.target_unit.sabotage()
-
-    if action.ability == "sabotage_II":
-        action.target_unit.sabotage_II()
-
-    if action.ability == "poison":
-        action.target_unit.freeze(2)
-
-    if action.ability == "poison_II":
-        action.target_unit.freeze(3)
-
-    if action.ability == "improve_weapons":
-        action.target_unit.improve_weapons()
-
-    if action.ability == "improve_weapons_II_A":
-        action.target_unit.improve_weapons_II_A()
-
-    if action.ability == "improve_weapons_II_B":
-        action.target_unit.improve_weapons_II_B()
+    else:
+        getattr(action.target_unit, action.ability)()
 
 
 def update_final_position(action):
