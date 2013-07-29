@@ -129,28 +129,23 @@ class Action(object):
     def is_push(self):
         return self.unit.has("push") and self.is_attack()
 
-    def is_crusading(self, gamestate):
-        return any(unit for unit in self.surrounding_friendly_units(gamestate) if unit.has("crusading"))
+    def is_crusading(self, units):
+        return any(unit for unit in surrounding_friendly_units(self.start_position, units) if unit.has("crusading"))
 
-    def is_crusading_II(self, gamestate):
-        return any(unit for unit in self.surrounding_friendly_units(gamestate) if unit.has("crusading_II"))
+    def is_crusading_II_attack(self, units):
+        return any(unit for unit in surrounding_friendly_units(self.start_position, units) if unit.has("crusading_II"))
 
-    def has_high_morale(self, gamestate):
-        return any(unit for unit in self.adjacent_friendly_units(gamestate) if unit.has("flag_bearing"))
+    def is_crusading_II_defence(self, units):
+        return any(unit for unit in surrounding_friendly_units(self.attack_position, units) if unit.has("crusading_II"))
 
-    def has_high_morale_II_A(self, gamestate):
-        return any(unit for unit in self.adjacent_friendly_units(gamestate) if unit.has("flag_bearing_II_A"))
+    def has_high_morale(self, units):
+        return any(unit for unit in adjacent_friendly_units(self.end_position, units) if unit.has("flag_bearing"))
 
-    def has_high_morale_II_B(self, gamestate):
-        return any(unit for unit in self.adjacent_friendly_units(gamestate) if unit.has("flag_bearing_II_B"))
+    def has_high_morale_II_A(self, units):
+        return any(unit for unit in surrounding_friendly_units(self.end_position, units) if unit.has("flag_bearing_II_A"))
 
-    def surrounding_friendly_units(self, gamestate):
-        return (gamestate.units[0][position] for position in self.start_position.surrounding_tiles() if position
-                in gamestate.units[0])
-
-    def adjacent_friendly_units(self, gamestate):
-        return (gamestate.units[0][position] for position in self.start_position.adjacent_tiles() if position
-                in gamestate.units[0])
+    def has_high_morale_II_B(self, units):
+        return any(unit for unit in adjacent_friendly_units(self.end_position, units) if unit.has("flag_bearing_II_B"))
 
     def distance_to_target(self):
         return distance(self.start_position, self.attack_position)
