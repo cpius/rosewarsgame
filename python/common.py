@@ -9,27 +9,30 @@ class Direction:
     The class contains methods for returning the tile going one step in the direction will lead you to,
     and for returning the tiles you should check for zone of control.
     """
-    in_words = {(-1, 0): "Left", (1, 0): "Right", (0, -1): "Down", (0, 1): "Up"}
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    to_coordinates = {"Left": (-1, 0), "Right": (1, 0), "Down": (0, -1), "Up": (0, 1),
+                      "Up-Left": (-1, 1), "Up-Right": (1, 1), "Down-Left": (-1, -1), "Down-Right": (-1, 1)}
+
+    def __init__(self, name):
+        self.x, self.y = self.to_coordinates[name]
+        self.name = name
 
     def move(self, position):
-        return Position(position[0] + self.x, position[1] + self.y)
+        return Position(position.column + self.x, position.row + self.y)
 
     def perpendicular(self, position):
-        return Position((position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x))
+        return Position(position.column + self.y, position.row + self.x), \
+            Position(position.column - self.y, position.row - self.x)
 
     def __repr__(self):
-        return self.in_words[(self.x, self.y)]
+        return self.name
 
 
 board_height = 8
 board_width = 5
 board = set((column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
-directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
-eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
+directions = {Direction(name) for name in ["Up", "Down", "Left", "Right"]}
+eight_directions = {Direction(name) for name in Direction.to_coordinates}
 
 
 def position_to_string(position):
@@ -67,7 +70,7 @@ def distance(position1, position2):
 
 def get_direction(position, forward_position):
     """ Returns the direction that would take you from position to forward_position """
-    return Direction(-position.column + forward_position.column, -position.row + forward_position.row)
+    return next(direction for direction in directions if direction.move(position) == forward_position)
 
 
 def flip(position):
