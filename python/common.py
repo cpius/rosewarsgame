@@ -1,4 +1,4 @@
-from json import JSONEncoder
+from json import JSONEncoder, dumps
 from datetime import datetime
 from bson import ObjectId
 from collections import namedtuple
@@ -32,6 +32,41 @@ class Direction:
 
         if self.y == 1:
             return "Up"
+
+
+class Direction:
+    """ An object direction is one move up, down, left or right.
+    The class contains methods for returning the tile going one step in the direction will lead you to,
+    and for returning the tiles you should check for zone of control.
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def move(self, position):
+        return position[0] + self.x, position[1] + self.y
+
+    def perpendicular(self, position):
+        return (position[0] + self.y, position[1] + self.x), (position[0] - self.y, position[1] - self.x)
+
+    def __repr__(self):
+
+        if self.x == -1:
+            return "Left"
+
+        if self.x == 1:
+            return "Right"
+
+        if self.y == -1:
+            return "Down"
+
+        if self.y == 1:
+            return "Up"
+
+
+board = set((column, row) for column in range(1, 6) for row in range(1, 9))
+directions = [Direction(0, -1), Direction(0, +1), Direction(-1, 0), Direction(1, 0)]
+eight_directions = [Direction(i, j) for i in[-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0]
 
 
 def position_to_string(position):
@@ -119,3 +154,18 @@ def out_of_board_horizontal(position):
 
 def find_all_friendly_units_except_current(current_unit_position, player_units):
     return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
+
+
+def document_to_string(document):
+    return dumps(document, indent=4, cls=CustomJsonEncoder)
+
+
+def enum(*sequential, **named):
+    enums = dict(zip(sequential, range(len(sequential))), **named)
+    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums['reverse_mapping'] = reverse
+    return type('Enum', (), enums)
+
+
+SubOutcome = enum("UNKNOWN", "WIN", "PUSH", "MISS", "DEFEND", "DETERMINISTIC")
+MoveOrStay = enum("UNKNOWN", "MOVE", "STAY")

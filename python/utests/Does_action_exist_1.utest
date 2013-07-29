@@ -8,7 +8,7 @@
         "end_position": "B7",
         "attack_position": "",
         "ability_position": "",
-        "move_with_attack": false,
+        "move_with_attack": "STAY",
         "ability": ""
     },
     "gamestate":

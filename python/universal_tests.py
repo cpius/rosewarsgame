@@ -7,6 +7,7 @@ from outcome import Outcome
 import glob
 import unittest
 import common
+from common import MoveOrStay
 
 
 class UniversalTests(unittest.TestCase):
@@ -21,6 +22,7 @@ class UniversalTests(unittest.TestCase):
             if test_document["type"] == "Does action exist":
                 gamestate = Gamestate.from_document(test_document["gamestate"])
                 action = Action.from_document_simple(test_document["action"])
+                action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
                 expected = test_document["result"]
                 self.does_action_exist(gamestate, action, expected)
 
@@ -36,6 +38,7 @@ class UniversalTests(unittest.TestCase):
                 gamestate = Gamestate.from_document(test_document["gamestate before action"])
                 expected_gamestate = Gamestate.from_document(test_document["gamestate after action"])
                 action = Action.from_document_simple(test_document["action"])
+                action.move_with_attack = getattr(MoveOrStay, test_document["action"]["move_with_attack"])
                 outcome = Outcome.from_document(test_document["outcome"])
 
                 self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
@@ -44,7 +47,14 @@ class UniversalTests(unittest.TestCase):
         available_actions = action_getter.get_actions(gamestate)
         actual = (action in available_actions)
 
-        self.assertEqual(actual, expected, [str(action) for action in available_actions])
+        if expected:
+            message = "Requested action:", action
+        else:
+            message = "Not-allowed action:", action
+
+        message += "Available actions:", [str(available_action) for available_action in available_actions]
+
+        self.assertEqual(actual, expected, message)
 
     def is_attack_and_defence_correct(self, gamestate, action, expected_attack, expected_defence):
         all_units = common.merge_units(gamestate.units[0], gamestate.units[1])
@@ -70,6 +80,7 @@ class UniversalTests(unittest.TestCase):
         documents = "Expected:\n" + common.document_to_string(expected)
         documents += "\nActual:\n" + common.document_to_string(actual)
         self.assertEqual(expected, actual, "The document was mangled.\n\n" + documents)
+
 
 if __name__ == "__main__":
     unittest.main()
