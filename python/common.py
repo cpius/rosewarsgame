@@ -107,6 +107,13 @@ def find_all_friendly_units_except_current(current_unit_position, player_units):
     return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
 
 
+def adjacent_friendly_units(position, units):
+    return (units[pos] for pos in position.adjacent_tiles() if pos in units)
+
+
+def surrounding_friendly_units(position, units):
+    return (units[pos] for pos in position.surrounding_tiles() if pos in units)
+
 class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):

@@ -17,9 +17,10 @@ def defence_successful(action, rolls, gamestate):
     return rolls[1] <= defence_rating
     
 
-def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate):
+def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate):
     
     defence_rating = defending_unit.defence
+    enemy_units = gamestate.opponent_units()
 
     if attacking_unit.type in defending_unit.defence_bonuses:
         defence_rating += defending_unit.defence_bonuses[attacking_unit.type]
@@ -54,6 +55,9 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, gamestate)
     if attacking_unit.range == 1 and defending_unit.has("big_shield"):
         defence_rating += 2
 
+    if action.is_crusading_II_defence(enemy_units):
+        defence_rating += 1
+
     return defence_rating
 
 
@@ -61,6 +65,7 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
 
     attack = attacking_unit.attack
     action.add_references(gamestate)
+    player_units = gamestate.player_units()
 
     if action.is_lancing():
         attack += 2
@@ -68,19 +73,22 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if action.is_lancing_II():
         attack += 3
 
-    if action.is_crusading(gamestate):
+    if action.is_crusading(player_units):
+        attack += 1
+
+    if action.is_crusading_II_attack(player_units):
         attack += 1
     
     if attacking_unit.get_bribed():
         attack += 1
 
-    if action.has_high_morale(gamestate):
+    if action.has_high_morale(player_units):
         attack += 2
 
-    if action.has_high_morale_II_A(gamestate):
+    if action.has_high_morale_II_A(player_units):
         attack += 2
 
-    if action.has_high_morale_II_B(gamestate):
+    if action.has_high_morale_II_B(player_units):
             attack += 3
 
     if attacking_unit.has_improved_weapons():
