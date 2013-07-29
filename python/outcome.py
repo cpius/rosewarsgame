@@ -1,5 +1,4 @@
-import common
-from common import SubOutcome
+from common import *
 
 
 class Outcome:
@@ -27,13 +26,13 @@ class Outcome:
     def to_document(self):
         outcome_document = dict()
         for outcome in self.outcomes:
-            outcome_document[common.position_to_string(outcome)] = SubOutcome.reverse_mapping[outcome]
+            outcome_document[Position.from_string(outcome)] = SubOutcome.reverse_mapping[outcome]
         return outcome_document
 
     @classmethod
     def from_document(cls, document):
         outcomes = dict()
         for outcome in document:
-            outcomes[common.position_to_tuple(outcome)] = getattr(SubOutcome, document[outcome])
+            outcomes[Position.from_string(outcome)] = getattr(SubOutcome, document[outcome])
 
         return cls(outcomes)

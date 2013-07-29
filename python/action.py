@@ -2,7 +2,7 @@ import battle
 import common
 from datetime import datetime
 from copy import copy
-from common import MoveOrStay
+from common import *
 
 
 class Action(object):
@@ -33,10 +33,6 @@ class Action(object):
         self.final_position = self.end_position  # The tile a unit ends up at after attacks are resolved
         self.created_at = created_at
 
-        self.unit = None
-        self.target = None
-        self.unit_reference = None
-        self.target_reference = None
         self.rolls = None
         self.outcome = outcome
         self.double_cost = False
@@ -54,7 +50,7 @@ class Action(object):
 
         for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
             if attribute in document_copy:
-                document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
+                document_copy[attribute] = Position.from_string(document_copy[attribute])
 
         if "sub_actions" in document_copy:
             document_copy["sub_actions"] =\
@@ -64,7 +60,10 @@ class Action(object):
         if "created_at" in document:
             action.created_at = document["created_at"]
 
-        action.move_with_attack = MoveOrStay[document["move_with_attack"]]
+        if "move_with_attack" in document:
+            action.move_with_attack = MoveOrStay[document["move_with_attack"]]
+        else:
+            action.move_with_attack = MoveOrStay.UNKNOWN
 
         return action
 
@@ -79,7 +78,7 @@ class Action(object):
         read_attributes = set(attribute for attribute in simple_attributes if attribute in document and document[attribute])
 
         for attribute in convert_attributes & read_attributes:
-            document_copy[attribute] = common.position_to_tuple(document_copy[attribute])
+            document_copy[attribute] = Position.from_string(document_copy[attribute])
 
         if "sub_actions" in document_copy and document_copy["sub_actions"]:
             document_copy["sub_actions"] = [cls.from_document_simple(sub_action_document)
@@ -282,15 +281,15 @@ class Action(object):
         return any(unit for unit in self.adjacent_friendly_units(gamestate) if unit.has("flag_bearing_II_B"))
 
     def surrounding_friendly_units(self, gamestate):
-        return (gamestate.units[0][position] for position in common.surrounding_tiles(self.start_position) if position
+        return (gamestate.units[0][position] for position in self.start_position.surrounding_tiles() if position
                 in gamestate.units[0])
 
     def adjacent_friendly_units(self, gamestate):
-        return (gamestate.units[0][position] for position in common.adjacent_tiles(self.start_position) if position
+        return (gamestate.units[0][position] for position in self.start_position.adjacent_tiles() if position
                 in gamestate.units[0])
 
     def distance_to_target(self):
-        return common.distance(self.start_position, self.attack_position)
+        return distance(self.start_position, self.attack_position)
 
     def is_triple_attack(self):
         return self.unit_reference.has("triple_attack") and self.is_attack()

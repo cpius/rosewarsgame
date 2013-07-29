@@ -6,7 +6,7 @@ import ai_module
 import ai_methods
 import units as units_module
 import json
-import common
+from common import *
 from pprint import PrettyPrinter
 
 
@@ -111,7 +111,7 @@ class Gamestate:
     def units_from_document(cls, document):
         units = {}
         for position_string, unit_document in document.items():
-            position = common.position_to_tuple(position_string)
+            position = Position.from_string(position_string)
 
             if isinstance(unit_document, basestring):
                 units[position] = getattr(units_module, unit_document.replace(" ", "_"))()
@@ -143,7 +143,7 @@ class Gamestate:
     def get_units_dict(self, units):
         units_dict = dict()
         for unit_position, unit in units.items():
-            position = common.position_to_string(unit_position)
+            position = str(unit_position)
 
             document_variables = [attribute for attribute, value in unit.variables.items() if value]
             if document_variables:
@@ -162,7 +162,7 @@ class Gamestate:
         self.flip_units()
         self.units = self.units[::-1]
         self.initialize_turn()
-        self.set_available_actions()
+        #self.set_available_actions()
 
     def update_final_position(self, action):
         action_doer.update_final_position(action)
@@ -172,8 +172,8 @@ class Gamestate:
         return str(pp.pprint(self.to_document()))
 
     def flip_units(self):
-        self.units = [dict((common.flip(position), unit) for position, unit in self.units[0].items()),
-                      dict((common.flip(position), unit) for position, unit in self.units[1].items())]
+        self.units = [dict((position.flip(), unit) for position, unit in self.units[0].items()),
+                      dict((position.flip(), unit) for position, unit in self.units[1].items())]
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()
