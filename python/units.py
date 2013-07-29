@@ -30,17 +30,17 @@ class Unit(object):
         return self.variables["frozen"]
 
     def decrement_frozen(self):
-        self.variables["frozen"] = max(self.variables["frozen"]-1, 0)
+        self.variables["frozen"] = max(self.variables["frozen"] - 1, 0)
 
     # xp gained this turn
     def set_xp_gained_this_turn(self):
-        self.variables["xp_gained_this_turn"] = 1
+        self.variables["xp_gained_this_turn"] = True
 
     def get_xp_gained_this_turn(self):
         return self.variables["xp_gained_this_turn"]
 
     def remove_xp_gained_this_turn(self):
-        self.variables["xp_gained_this_turn"] = 0
+        self.variables["xp_gained_this_turn"] = False
 
     # Xp
     def increment_xp(self):
