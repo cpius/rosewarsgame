@@ -156,6 +156,10 @@ def find_all_friendly_units_except_current(current_unit_position, player_units):
     return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
 
 
+def document_to_string(document):
+    return dumps(document, indent=4, cls=CustomJsonEncoder)
+
+
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
