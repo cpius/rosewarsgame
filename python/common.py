@@ -111,6 +111,10 @@ def adjacent_friendly_units(position, units):
     return (units[pos] for pos in position.adjacent_tiles() if pos in units)
 
 
+def adjacent_friendly_positions(position, units):
+    return (pos for pos in position.adjacent_tiles() if pos in units)
+
+
 def surrounding_friendly_units(position, units):
     return (units[pos] for pos in position.surrounding_tiles() if pos in units)
 

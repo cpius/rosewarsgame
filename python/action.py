@@ -141,7 +141,8 @@ class Action(object):
         return any(unit for unit in surrounding_friendly_units(self.attack_position, units) if unit.has("crusading_II"))
 
     def has_high_morale(self, units):
-        return any(unit for unit in adjacent_friendly_units(self.end_position, units) if unit.has("flag_bearing"))
+        return any(pos for pos in adjacent_friendly_positions(self.end_position, units) if
+                   pos != self.start_position and units[pos].has("flag_bearing"))
 
     def has_high_morale_II_A(self, units):
         return any(unit for unit in surrounding_friendly_units(self.end_position, units) if unit.has("flag_bearing_II_A"))
