@@ -17,7 +17,7 @@
         "end_position": "C3"
     }, 
     "outcome": {
-        "C4": "defend"
+        "D4": "defend"
     }, 
     "post_gamestate": {
         "actions_remaining": 1, 
