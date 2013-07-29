@@ -86,15 +86,17 @@ class Action(object):
         action_number = self.action_number if self.action_number else 0
         sub_action_docs = [sub_action.to_document() for sub_action in self.sub_actions]
 
-        return {"action_number": action_number,
-                "start_position": str(self.start_position),
-                "end_position": str(self.end_position),
-                "attack_position": str(self.attack_position),
-                "ability_position": str(self.ability_position),
-                "move_with_attack": self.move_with_attack,
-                "ability": self.ability,
-                "sub_actions": sub_action_docs,
-                "created_at": self.created_at}
+        d = {"action_number": action_number,
+             "start_position": str(self.start_position),
+             "end_position": str(self.end_position),
+             "attack_position": str(self.attack_position),
+             "ability_position": str(self.ability_position),
+             "move_with_attack": self.move_with_attack,
+             "ability": self.ability,
+             "sub_actions": sub_action_docs,
+             "created_at": self.created_at}
+
+        return dict((key, value) for key, value in d.items() if value and value != "None")
 
     def is_move_with_attack(self):
         return self.move_with_attack == MoveOrStay.MOVE
