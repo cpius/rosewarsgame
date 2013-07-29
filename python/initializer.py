@@ -13,7 +13,6 @@ def initialize_turn(gamestate):
 
     for position, unit in gamestate.player_units().items():
         unit.remove_used()
-        unit.remove_xp_gained_this_turn()
         unit.decrement_frozen()
         unit.decrement_attack_frozen()
         unit.remove_sabotaged()

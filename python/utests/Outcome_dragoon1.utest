@@ -31,7 +31,6 @@
 		{	
 			"name": "Dragoon",
 			"used": 1,
-			"xp_gained_this_turn": true,
 			"xp": 1,
 			"movement_remaining": 3,
 			"extra_action": 1																								
