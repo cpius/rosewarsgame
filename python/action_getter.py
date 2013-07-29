@@ -448,18 +448,6 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
 
             return moves, attacks
 
-        # Calculate this on the fly instead
-        #def get_attacks_push(attacks):
-        #    for attack in attacks:
-        #        push_direction = get_direction(attack.end_position, attack.attack_position)
-        #        for sub_attack in attack.sub_actions:
-        #            sub_attack.push = True
-        #            sub_attack.push_direction = push_direction
-        #        attack.push = True
-        #        attack.push_direction = push_direction
-        #
-        #    return attacks
-
         moveset_with_leftover, moveset_no_leftover = generate_movesets(unit, position, units, movement)
         attacks = melee_attack_actions(unit, position, moveset_with_leftover | {position}, enemy_units)
         moves = move_actions(position, moveset_with_leftover | moveset_no_leftover)
@@ -468,9 +456,6 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
             if unit.has(attribute):
                 moves, attacks = locals()[attribute](unit, position, moveset_with_leftover, moveset_no_leftover,
                                                      enemy_units)
-
-        #if hasattr(unit, "push"):
-        #    attacks = get_attacks_push(attacks)
 
         return moves, attacks
 
