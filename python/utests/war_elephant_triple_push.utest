@@ -14,7 +14,7 @@
         "attack_position": "C2",
         "move_with_attack": "move"
     },
-    "gamestate before action":
+    "pre_gamestate":
     {
         "player1_units":
         {
@@ -28,7 +28,7 @@
             "D2": "Ballista"
         }
     },
-    "gamestate after action":
+    "post_gamestate":
     {
         "player1_units":
         {
