@@ -8,7 +8,7 @@ import os
 import settings
 import shutil
 from player import Player
-from action import Action, MoveOrStay
+from action import Action
 import units as units_module
 import json
 from json import JSONEncoder
@@ -16,7 +16,7 @@ import datetime
 from client import Client
 from action_getter import add_unit_references
 from game import Game
-from outcome import Outcome, SubOutcome
+from outcome import SubOutcome
 
 
 class Controller(object):
@@ -34,7 +34,6 @@ class Controller(object):
 
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
-
 
         controller.game = Game(players, gamestate)
 
@@ -102,7 +101,7 @@ class Controller(object):
             self.start_position = position
             self.selected_unit = self.game.gamestate.player_units()[self.start_position]
             illustrate_actions = [action for action in self.game.gamestate.get_actions() if \
-                                  action.start_position == position]
+                                  action.start_at == position]
             self.view.draw_game(self.game, position, illustrate_actions)
 
         elif self.selecting_ability_target(position):
@@ -113,17 +112,17 @@ class Controller(object):
             else:
                 ability = self.selected_unit.abilities[0]
 
-            action = Action(self.start_position, ability_position=position, ability=ability)
+            action = Action(self.game.gamestate.all_units(), self.start_position, target_at=position, ability=ability)
             self.perform_action(action)
 
         elif self.selecting_ranged_target(position):
-            action = Action(self.start_position, attack_position=position, move_with_attack=MoveOrStay.STAY)
+            action = Action(self.game.gamestate.all_units(), self.start_position, target_at=position)
             self.perform_action(action)
 
         elif self.selecting_melee_target(position):
 
             possible_actions = [action for action in self.game.gamestate.get_actions() if
-                                action.start_position == self.start_position and action.attack_position == position and
+                                action.start_at == self.start_position and action.target_at == position and
                                 not action.is_move_with_attack()]
 
             if not possible_actions:
@@ -141,12 +140,12 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.selecting_move(position):
-            action = Action(self.start_position, end_position=position)
+            action = Action(self.game.gamestate.all_units(), self.start_position, end_at=position)
             self.perform_action(action)
 
     def pick_action_end_position(self, possible_actions):
 
-        end_positions = [action.end_position for action in possible_actions]
+        end_positions = [action.end_at for action in possible_actions]
 
         self.view.shade_positions(end_positions)
 
@@ -157,7 +156,7 @@ class Controller(object):
 
                     if event.button == 1:
                         for action in possible_actions:
-                            if position == action.end_position:
+                            if position == action.end_at:
                                 return action
 
                 elif event.type == QUIT:
@@ -258,7 +257,7 @@ class Controller(object):
 
     def ask_about_move_with_attack(self, action):
 
-        self.view.draw_ask_about_move_with_attack(action.attack_position)
+        self.view.draw_ask_about_move_with_attack(action.target_at)
 
         while True:
             for event in pygame.event.get():
@@ -266,9 +265,9 @@ class Controller(object):
                     position = self.view.get_position_from_mouse_click(event.pos)
 
                     if event.button == 1:
-                        if position == action.attack_position:
+                        if position == action.target_at:
                             return True
-                        if position == action.end_position:
+                        if position == action.end_at:
                             return False
 
                 elif event.type == QUIT:
@@ -316,7 +315,7 @@ class Controller(object):
             outcome = self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
 
-        if action.move_with_attack == MoveOrStay.MOVE:
+        if action.move_with_attack:
             self.view.draw_post_movement(action, self.game)
 
         self.save_game()
@@ -335,7 +334,7 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
             self.view.draw_game(self.game)
-            self.upgrade_units(self.game.gamestate.units[0])
+            self.upgrade_units(self.game.gamestate.player_units())
         else:
             pass
 
@@ -354,11 +353,11 @@ class Controller(object):
             self.trigger_network_player()
 
     def is_post_movement_possible(self, action, outcome):
-        successful = outcome.for_position(action.attack_position) == SubOutcome.WIN
+        successful = outcome.for_position(action.target_at) == SubOutcome.WIN
         return action.is_attack() and successful and action.unit.range == 1
 
     def show_attack(self, attack_position):
-        action = Action(self.start_position, attack_position=attack_position)
+        action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
         add_unit_references(self.game.gamestate, action)
         player_unit = self.game.gamestate.player_units()[self.start_position]
         opponent_unit = self.game.gamestate.opponent_units()[attack_position]
@@ -369,10 +368,10 @@ class Controller(object):
     def show_unit(self, position):
 
         unit = None
-        if position in self.game.gamestate.units[0]:
-            unit = self.game.gamestate.units[0][position]
-        if position in self.game.gamestate.units[1]:
-            unit = self.game.gamestate.units[1][position]
+        if position in self.game.gamestate.player_units():
+            unit = self.game.gamestate.player_units()[position]
+        if position in self.game.gamestate.opponent_units():
+            unit = self.game.gamestate.opponent_units()[position]
 
         if unit:
             self.view.show_unit_zoomed(unit)

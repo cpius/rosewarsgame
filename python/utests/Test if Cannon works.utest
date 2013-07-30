@@ -12,10 +12,10 @@
         }
     }, 
     "action": {
-        "start_position": "C3", 
-        "attack_position": "D4", 
-        "end_position": "C3"
-    }, 
+        "start_at": "C3",
+        "target_at": "D4",
+        "end_at": "C3"
+    },
     "outcome": {
         "D4": "defend"
     }, 

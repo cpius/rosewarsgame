@@ -3,15 +3,15 @@
     "result": true,
     "action":
     {
-        "start_position": "C3",
-        "end_position": "C6"
+        "start_at": "C3",
+        "end_at": "C6"
     },
     "gamestate":
     {
-        "actions_remaining": 0,
+        "actions_remaining": 1,
         "player1_units":
         {
-            "B2": "Cavalry_Lieutenant",
+            "B2": "Cavalry Lieutenant",
             "C3": "Knight"
         },
         "player2_units":

@@ -2,10 +2,10 @@
     "type": "Does the AI find the right move",
     "action":
     {
-        "start_position": "C2",
-        "end_position": "C2",
-        "attack_position": "C4",
-        "move_with_attack": "stay"
+        "start_at": "C2",
+        "end_at": "C2",
+        "target_at": "C4",
+        "move_with_attack": false
     },
     "gamestate":
     {

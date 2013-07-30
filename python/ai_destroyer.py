@@ -5,12 +5,12 @@ import random as rnd
 import settings
 
 
-def get_action(actions, g):
+def get_action(actions, gamestate):
 
     for action in actions:
         if action.is_attack():
-            enemy_unit = g.units[1][action.attack_position]
-            unit = g.units[0][action.start_position]
+            enemy_unit = gamestate.opponent_units()[action.target_at]
+            unit = gamestate.player_units()[action.start_at]
             chance = m.chance_of_win(unit, enemy_unit, action)
             action.score = chance * 10
             if hasattr(action.unit, "double_attack_cost"):
@@ -21,7 +21,7 @@ def get_action(actions, g):
     rnd.shuffle(actions)
     actions.sort(key=attrgetter("score"), reverse=True)
     if settings.document_ai_actions:
-        m.document_actions(actions, g)
+        m.document_actions(actions, gamestate)
     return actions[0]
 
 
@@ -29,7 +29,7 @@ def put_counter(g):
     def decide_counter(unit):
         unit.attack_counters += 1
 
-    for unit in g.units[0].values():
+    for unit in g.player_units().values():
         if unit.xp == 2:
             if unit.defence + unit.defence_counters == 4:
                 unit.attack_counters += 1

@@ -12,10 +12,10 @@
         }
     }, 
     "action": {
-        "ability_position": "A3", 
-        "start_position": "C3", 
+        "target_at": "A3",
+        "start_at": "C3",
         "ability": "improve_weapons", 
-        "end_position": "C3"
+        "end_at": "C3"
     }, 
     "outcome": {
         "C4": "deterministic"

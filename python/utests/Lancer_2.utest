@@ -3,10 +3,10 @@
  "defence": 2,
  "action": 
 {
-    "start_position": "B2",
-    "end_position": "B3",
-    "attack_position": "C3",
-    "move_with_attack": "move"
+    "start_at": "B2",
+    "end_at": "B3",
+    "target_at": "C3",
+    "move_with_attack": true
 },
  "gamestate": 
  {

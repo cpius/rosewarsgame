@@ -3,9 +3,9 @@
     "result": true,
     "action":
     {
-        "start_position": "C3",
-        "end_position": "C6",
-		"attack_position": "C7",
+        "start_at": "C3",
+        "end_at": "C6",
+		"target_at": "C7",
 		"move_with_attack": "move"
     },
     "gamestate":

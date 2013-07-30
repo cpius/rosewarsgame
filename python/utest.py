@@ -16,7 +16,6 @@ def utest(test_document):
         action = Action.from_document(test_document["action"])
         outcome = Outcome.from_document(test_document["outcome"])
 
-        action.add_references(gamestate)
         gamestate.do_action(action, outcome)
 
         gamestate_document = gamestate.to_document()
@@ -33,16 +32,14 @@ def utest(test_document):
         attack = test_document["attack"]
         defence = test_document["defence"]
 
-        action.unit = gamestate.player_units()[action.start_position]
-
-        action.add_references(gamestate)
+        action.unit = gamestate.player_units()[action.start_at]
 
         action_getter.add_unit_references(gamestate, action)
-        all_units = common.merge_units(gamestate.units[0], gamestate.units[1])
+        all_units = gamestate.all_units()
 
-        attacking_unit = all_units[action.start_position]
+        attacking_unit = all_units[action.start_at]
 
-        defending_unit = all_units[action.attack_position]
+        defending_unit = all_units[action.target_at]
 
         actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
         actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action, gamestate)
