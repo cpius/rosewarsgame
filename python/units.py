@@ -114,9 +114,7 @@ class Longbowman(Unit):
     type = "Infantry"
     upgrades = ["Longbowman II_A", "Longbowman II_B"]
 
-    sharpshooting = True
-
-    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
+    constants = [Trait.sharpshooting]
 
 
 class Longbowman_II_A(Unit):
@@ -130,9 +128,7 @@ class Longbowman_II_A(Unit):
     defence_bonuses = {}
     type = "Infantry"
 
-    sharpshooting = True
-
-    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
+    constants = [Trait.sharpshooting]
 
 
 class Longbowman_II_B(Unit):
@@ -146,9 +142,7 @@ class Longbowman_II_B(Unit):
     defence_bonuses = {}
     type = "Infantry"
 
-    sharpshooting = True
-
-    descriptions = {"sharpshooting": "Targets have their defence reduced to 1 during the attack"}
+    constants = [Trait.sharpshooting]
 
 
 class Crossbow_Archer(Unit):
@@ -213,10 +207,7 @@ class Halberdier(Unit):
     range = 1
     type = "Infantry"
 
-    push = True
-
-    descriptions = {"push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
-                            "opponents units must retreat directly backwards or die."}
+    constants = Trait.push
 
 
 class Halberdier_II_A(Unit):
@@ -228,10 +219,7 @@ class Halberdier_II_A(Unit):
     range = 1
     type = "Infantry"
 
-    push = True
-
-    descriptions = {"push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
-                            "opponents units must retreat directly backwards or die."}
+    constants = Trait.push
 
 
 class Halberdier_II_B(Unit):
@@ -243,10 +231,7 @@ class Halberdier_II_B(Unit):
     range = 1
     type = "Infantry"
 
-    push = True
-
-    descriptions = {"push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
-                            "opponents units must retreat directly backwards or die."}
+    constants = Trait.push
 
 
 class Light_Cavalry(Unit):
@@ -260,7 +245,6 @@ class Light_Cavalry(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Cavalry"
-
     upgrades = ["Dragoon", "Cavalry Lieutenant"]
     xp_to_upgrade = 3
 
@@ -278,9 +262,7 @@ class Dragoon(Unit):
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
-    swiftness = True
-
-    descriptions = {"swiftness": "Can use remaining moves after attacking."}
+    constants = [Trait.swiftness]
 
 
 class Dragoon_II_A(Unit):
@@ -296,9 +278,7 @@ class Dragoon_II_A(Unit):
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
-    swiftness = True
-
-    descriptions = {"swiftness": "Can use remaining moves after attacking."}
+    constants = [Trait.swiftness]
 
 
 class Dragoon_II_B(Unit):
@@ -314,9 +294,7 @@ class Dragoon_II_B(Unit):
     type = "Cavalry"
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
-    swiftness = True
-
-    descriptions = {"swiftness": "Can use remaining moves after attacking."}
+    constants = [Trait.swiftness]
 
 
 class Cavalry_Lieutenant(Unit):
@@ -332,10 +310,7 @@ class Cavalry_Lieutenant(Unit):
     type = "Cavalry"
     upgrades = ["Cavalry_Luitenant_II_A", "Cavalry_Luitenant_II_B"]
 
-    cavalry_charging = True
-
-    descriptions = {"cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 "
-                                        "Movement"}
+    constants = [Trait.cavalry_charging]
 
 
 class Cavalry_Lieutenant_II_A(Unit):
@@ -350,10 +325,7 @@ class Cavalry_Lieutenant_II_A(Unit):
     defence_bonuses = {}
     type = "Cavalry"
 
-    cavalry_charging = True
-
-    descriptions = {"cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 "
-                                        "Movement"}
+    constants = [Trait.cavalry_charging]
 
 
 class Cavalry_Lieutenant_II_B(Unit):
@@ -368,10 +340,7 @@ class Cavalry_Lieutenant_II_B(Unit):
     defence_bonuses = {}
     type = "Cavalry"
 
-    cavalry_charging = True
-
-    descriptions = {"cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 "
-                                        "Movement"}
+    constants = [Trait.cavalry_charging]
 
 
 class Knight(Unit):
@@ -453,11 +422,9 @@ class Catapult(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Siege Weapon"
-        
-    double_attack_cost = True
     xp_to_upgrade = 2
 
-    descriptions = {"double_attack_cost": "Attack takes two actions."}
+    constants = [Trait.double_attack_cost]
 
 
 class Catapult_II_A(Unit):
@@ -471,13 +438,10 @@ class Catapult_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Siege Weapon"
-
-    double_attack_cost = True
     xp_to_upgrade = 3
-
-    descriptions = {"double_attack_cost": "Attack takes two actions."}
-
     upgrades = ["Catapult III_A", "Catapult III_B"]
+
+    constants = [Trait.double_attack_cost]
 
 
 class Catapult_II_B(Unit):
@@ -491,11 +455,9 @@ class Catapult_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Siege Weapon"
-
-    double_attack_cost = True
     xp_to_upgrade = 3
 
-    descriptions = {"double_attack_cost": "Attack takes two actions."}
+    constants = [Trait.double_attack_cost]
 
     upgrades = ["Catapult III_B", "Catapult IIIC"]
 
@@ -512,9 +474,7 @@ class Catapult_III_A(Unit):
     defence_bonuses = {}
     type = "Siege Weapon"
 
-    double_attack_cost = True
-
-    descriptions = {"double_attack_cost": "Attack takes two actions."}
+    constants = [Trait.double_attack_cost]
 
 
 class Catapult_III_B(Unit):
@@ -529,9 +489,7 @@ class Catapult_III_B(Unit):
     defence_bonuses = {}
     type = "Siege Weapon"
 
-    double_attack_cost = True
-
-    descriptions = {"double_attack_cost": "Attack takes two actions."}
+    constants = [Trait.double_attack_cost]
 
 
 class Catapult_III_C(Unit):
@@ -546,9 +504,7 @@ class Catapult_III_C(Unit):
     defence_bonuses = {}
     type = "Siege Weapon"
 
-    double_attack_cost = True
-
-    descriptions = {"double_attack_cost": "Attack takes two actions."}
+    constants = [Trait.double_attack_cost]
 
 
 class Royal_Guard(Unit):
@@ -562,14 +518,11 @@ class Royal_Guard(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Infantry"
-    
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
-    defence_maneuverability = True
     xp_to_upgrade = 3
-
-    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways."}
-
     upgrades = ["Royal Guard II_A", "Royal Guard II_B"]
+
+    constants = [Trait.defence_maneuverability]
 
 
 class Royal_Guard_II_A(Unit):
@@ -583,13 +536,9 @@ class Royal_Guard_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Infantry"
-
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
-    defence_maneuverability = True
-    melee_expert = True
 
-    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.", "melee_expert":
-                    "+1A, +1D vs melee units."}
+    constants = [Trait.defence_maneuverability, Trait.melee_expert]
 
 
 class Royal_Guard_II_B(Unit):
@@ -603,14 +552,9 @@ class Royal_Guard_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Infantry"
-
     zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
-    defence_maneuverability = True
-    tall_shield = True
-    melee_freeze = True
 
-    descriptions = {"defence_maneuverability": "Can move two tiles if one of them is sideways.", "tall_shield":
-                    "+1D against ranged attacks", "melee_freeze": "Units adjacent to it can only attack it, not move."}
+    constants = [Trait.defence_maneuverability, Trait.tall_shield, Trait.melee_freeze]
 
 
 class Scout(Unit):
@@ -625,13 +569,10 @@ class Scout(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Cavalry"
-        
-    scouting = True
     xp_to_upgrade = 2
-
-    descriptions = {"scouting": "Can move past all units."}
-
     upgrades = ["Scout II_A", "Scout II_B"]
+
+    constants = [Trait.scouting]
 
 
 class Scout_II_A(Unit):
@@ -647,9 +588,7 @@ class Scout_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    scouting = True
-
-    descriptions = {"scouting": "Can move past all units."}
+    constants = [Trait.scouting]
 
 
 class Scout_II_B(Unit):
@@ -665,10 +604,7 @@ class Scout_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    scouting = True
-    tall_shield = "True"
-
-    descriptions = {"scouting": "Can move past all units.", "tall_shield": "+1D against ranged attacks"}
+    constants = [Trait.scouting, Trait.tall_shield]
 
 
 class Viking(Unit):
@@ -683,13 +619,9 @@ class Viking(Unit):
     defence_bonuses = {"Siege Weapon": 1}
     zoc = []
     type = "Infantry"
-
-    rage = True
-
-    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)",
-                    "extra_life": "It takes two successful hits to kill Viking"}
-
     upgrades = ["Viking II_A", "Viking II_B"]
+
+    constants = [Trait.rage, Trait.extra_life]
 
 
 class Viking_II_A(Unit):
@@ -705,13 +637,7 @@ class Viking_II_A(Unit):
     zoc = []
     type = "Infantry"
 
-    rage_II = True
-
-    descriptions = {"rage": "Can move up to two tiles to make an attack. (But cannot take over the attacked tile if "
-                            "it's 3 tiles away.)",
-                    "extra_life": "It takes two successful hits to kill Viking"}
-
-    upgrades = ["Viking II_A", "Viking II_B"]
+    constants = [Trait.rage_II, Trait.extra_life]
 
 
 class Viking_II_B(Unit):
@@ -727,12 +653,7 @@ class Viking_II_B(Unit):
     zoc = []
     type = "Infantry"
 
-    rage = True
-
-    descriptions = {"rage": "Can make an attack after it's move. (But not a second move.)",
-                    "extra_life": "It takes two successful hits to kill Viking"}
-
-    upgrades = ["Viking II_A", "Viking II_B"]
+    constants = [Trait.rage, Trait.extra_life]
 
 
 class Cannon(Unit):
@@ -747,13 +668,10 @@ class Cannon(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Siege Weapon"
-        
-    attack_cooldown = 3
     xp_to_upgrade = 3
-
-    descriptions = {"attack_cooldown": "Can only attack every third turn."}
-
     upgrades = ["Cannon II_A", "Cannon II_B"]
+
+    constants = [Trait.attack_cooldown]
 
 
 class Cannon_II_A(Unit):
@@ -769,9 +687,7 @@ class Cannon_II_A(Unit):
     zoc = []
     type = "Siege Weapon"
 
-    attack_cooldown = 3
-
-    descriptions = {"attack_cooldown": "Can only attack every third turn."}
+    constants = [Trait.attack_cooldown]
 
 
 class Cannon_II_B(Unit):
@@ -787,11 +703,7 @@ class Cannon_II_B(Unit):
     zoc = []
     type = "Siege Weapon"
 
-    attack_cooldown = 2
-    far_sighted = True
-
-    descriptions = {"attack_cooldown": "Can only attack every third turn.",
-                    "far_sighted": "-1A if target is less than 4 tiles away."}
+    constants = [Trait.attack_cooldown_II, Trait.far_sighted]
 
 
 class Lancer(Unit):
@@ -806,12 +718,9 @@ class Lancer(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Cavalry"
-        
-    lancing = True
-
-    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
-
     upgrades = ["Lancer II_A", "Lancer II_B"]
+
+    constants = [Trait.lancing]
 
 
 class Lancer_II_A(Unit):
@@ -827,9 +736,7 @@ class Lancer_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    lancing = True
-
-    descriptions = {"lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."}
+    constants = [Trait.lancing]
 
 
 class Lancer_II_B(Unit):
@@ -845,9 +752,7 @@ class Lancer_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    lancing_II = True
-
-    descriptions = {"lancing_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."}
+    constants = [Trait.lancing_II]
 
 
 class Flag_Bearer(Unit):
@@ -862,12 +767,9 @@ class Flag_Bearer(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Cavalry"
-        
-    flag_bearing = True
-
-    descriptions = {"flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer."}
-
     upgrades = ["Flag Bearer II_A", "Flag Bearer II_B"]
+
+    constants = [Trait.flag_bearing]
 
 
 class Flag_Bearer_II_A(Unit):
@@ -883,9 +785,7 @@ class Flag_Bearer_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    flag_bearing_II_A = True
-
-    descriptions = {"flag_bearing_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer."}
+    constants = [Trait.flag_bearing_II_A]
 
 
 class Flag_Bearer_II_B(Unit):
@@ -901,9 +801,7 @@ class Flag_Bearer_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    flag_bearing_II_B = True
-
-    descriptions = {"flag_bearing_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer."}
+    constants = [Trait.flag_bearing_II_B]
 
 
 class Longswordsman(Unit):
@@ -918,12 +816,9 @@ class Longswordsman(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Infantry"
-        
-    longsword = True
-
-    descriptions = {"longsword": "Also hits the 4 nearby tiles in the attack direction."}
-
     upgrades = ["Longswordsman II_A", "Longswordsman II_B"]
+
+    constants = [Trait.longsword]
 
 
 class Longswordsman_II_A(Unit):
@@ -939,9 +834,7 @@ class Longswordsman_II_A(Unit):
     zoc = []
     type = "Infantry"
 
-    longsword = True
-
-    descriptions = {"longsword": "Also hits the 4 nearby tiles in the attack direction."}
+    constants = [Trait.longsword]
 
 
 class Longswordsman_II_B(Unit):
@@ -957,9 +850,7 @@ class Longswordsman_II_B(Unit):
     zoc = []
     type = "Infantry"
 
-    longsword = True
-
-    descriptions = {"longsword": "Also hits the 4 nearby tiles in the attack direction."}
+    constants = [Trait.longsword]
 
 
 class Crusader(Unit):
@@ -974,13 +865,9 @@ class Crusader(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Cavalry"
-        
-    crusading = True
-
-    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
-                                 "Crusader get +1A."}
-
     upgrades = ["Crusader II_A", "Crusader II_B"]
+
+    constants = [Trait.crusading]
 
 
 class Crusader_II_A(Unit):
@@ -996,17 +883,14 @@ class Crusader_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    crusading = True
-
-    descriptions = {"crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
-                                 "Crusader get +1A."}
+    constants = [Trait.crusading]
 
 
 class Crusader_II_B(Unit):
 
-    name = "Crusader II_B"
+    name = "Crusader II_A"
     image = "Crusader"
-    attack = 3
+    attack = 4
     defence = 3
     movement = 3
     range = 1
@@ -1015,11 +899,7 @@ class Crusader_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    crusading_II = True
-
-    descriptions = {"crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding "
-                                 "Crusader get +1A, +1D."}
-
+    constants = [Trait.crusading_II]
 
 class Berserker(Unit):
 
@@ -1033,12 +913,9 @@ class Berserker(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Infantry"
-        
-    berserking = True
-
-    descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack."}
-
     upgrades = ["Berserker II_A", "Berserker II_B"]
+
+    constants = [Trait.berserking]
 
 
 class Berserker_II_A(Unit):
@@ -1054,11 +931,7 @@ class Berserker_II_A(Unit):
     zoc = []
     type = "Infantry"
 
-    berserking = True
-    big_shield = True
-
-    descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack.",
-                    "big_shield": "+2D v melee"}
+    constants = [Trait.berserking, Trait.big_shield]
 
 
 class Berserker_II_B(Unit):
@@ -1074,9 +947,7 @@ class Berserker_II_B(Unit):
     zoc = []
     type = "Infantry"
 
-    berserking = True
-
-    descriptions = {"berserking": "Can move 4 tiles if movement ends with an attack."}
+    constants = [Trait.berserking]
 
 
 class Hobelar(Unit):
@@ -1091,12 +962,9 @@ class Hobelar(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Cavalry"
-
-    swiftness = True
-
-    descriptions = {"swiftness": "Can use remaining moves after attacking."}
-
     upgrades = ["Hobelar II_A", "Hobelar II_B"]
+
+    constants = [Trait.swiftness]
 
 
 class Hobelar_II_A(Unit):
@@ -1112,9 +980,7 @@ class Hobelar_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    swiftness = True
-
-    descriptions = {"swiftness": "Can use remaining moves after attacking."}
+    constants = [Trait.swiftness]
 
 
 class Hobelar_II_B(Unit):
@@ -1130,9 +996,7 @@ class Hobelar_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    swiftness = True
-
-    descriptions = {"swiftness": "Can use remaining moves after attacking."}
+    constants = [Trait.swiftness]
 
 
 class War_Elephant(Unit):
@@ -1147,18 +1011,10 @@ class War_Elephant(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Cavalry"
-        
-    double_attack_cost = True
-    triple_attack = True
-    push = True
+    upgrades = ["War Elephant II_A", "War Elephant II_B"]
     xp_to_upgrade = 3
 
-    descriptions = {"double_attack_cost": "Attack takes two actions.",
-                    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-                    "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
-                            "opponents units must retreat directly backwards or die."}
-
-    upgrades = ["War Elephant II_A", "War Elephant II_B"]
+    constants = [Trait.double_attack_cost, Trait.triple_attack, Trait.push]
 
 
 class War_Elephant_II_A(Unit):
@@ -1174,14 +1030,7 @@ class War_Elephant_II_A(Unit):
     zoc = []
     type = "Cavalry"
 
-    double_attack_cost = True
-    triple_attack = True
-    push = True
-
-    descriptions = {"double_attack_cost": "Attack takes two actions.",
-                    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-                    "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
-                            "opponents units must retreat directly backwards or die."}
+    constants = [Trait.double_attack_cost, Trait.triple_attack, Trait.push]
 
 
 class War_Elephant_II_B(Unit):
@@ -1197,14 +1046,7 @@ class War_Elephant_II_B(Unit):
     zoc = []
     type = "Cavalry"
 
-    double_attack_cost = True
-    triple_attack = True
-    push = True
-
-    descriptions = {"double_attack_cost": "Attack takes two actions.",
-                    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-                    "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, "
-                            "opponents units must retreat directly backwards or die."}
+    constants = [Trait.double_attack_cost, Trait.triple_attack, Trait.push]
 
 
 class Samurai(Unit):
@@ -1219,12 +1061,9 @@ class Samurai(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Infantry"
-        
-    combat_agility = True
-
-    descriptions = {"combat_agility": "Can make an attack after its first action. (But not a second move.)"}
-
     upgrades = ["Samurai II_A", "Samurai II_B"]
+
+    constants = [Trait.combat_agility]
 
 
 class Samurai_II_A(Unit):
@@ -1240,9 +1079,7 @@ class Samurai_II_A(Unit):
     zoc = []
     type = "Infantry"
 
-    combat_agility = True
-
-    descriptions = {"combat_agility": "Can make an attack after its first action. (But not a second move.)"}
+    constants = [Trait.combat_agility]
 
 
 class Samurai_II_B(Unit):
@@ -1258,11 +1095,7 @@ class Samurai_II_B(Unit):
     zoc = []
     type = "Infantry"
 
-    combat_agility = True
-    bloodlust = True
-
-    descriptions = {"combat_agility": "Can make an attack after its first action. (But not a second move.)",
-                    "bloodlust": "Every kill gives it an extra attack"}
+    constants = [Trait.combat_agility, Trait.bloodlust]
 
 
 class Saboteur(Unit):
@@ -1276,12 +1109,9 @@ class Saboteur(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Specialist"
-    
-    abilities = ["sabotage", "poison"]
-
-    descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
-
     upgrades = ["Saboteur II_A", "Saboteur II_B"]
+
+    abilities = [Ability.sabotage, Ability.poison]
 
 
 class Saboteur_II_A(Unit):
@@ -1296,9 +1126,7 @@ class Saboteur_II_A(Unit):
     defence_bonuses = {}
     type = "Specialist"
 
-    abilities = ["sabotage", "poison_II"]
-
-    descriptions = {"sabotage": "Reduces a units defence to 0 for 1 turn.", "poison_II": "Freezes a unit for 3 turns."}
+    abilities = [Ability.sabotage, Ability.poison_II]
 
 
 class Saboteur_II_B(Unit):
@@ -1313,9 +1141,7 @@ class Saboteur_II_B(Unit):
     defence_bonuses = {}
     type = "Specialist"
 
-    abilities = ["sabotage_II", "poison"]
-
-    descriptions = {"sabotage_II": "Reduces a units defence to -1 for 1 turn.", "poison": "Freezes a unit for 2 turns."}
+    abilities = [Ability.sabotage_II, Ability.poison]
 
 
 class Diplomat(Unit):
@@ -1329,13 +1155,9 @@ class Diplomat(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Specialist"
-        
-    abilities = ["bribe"]
-
-    descriptions = {"bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. "
-                             "You can't bribe the same unit on your next turn. The unit gets +1A until end of turn."}
-
     upgrades = ["Diplomat II_A", "Diplomat II_B"]
+
+    abilities = [Ability.bribe]
 
 
 class Diplomat_II_A(Unit):
@@ -1350,10 +1172,7 @@ class Diplomat_II_A(Unit):
     defence_bonuses = {}
     type = "Specialist"
 
-    abilities = ["bribe"]
-
-    descriptions = {"bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. "
-                             "You can't bribe the same unit on your next turn. The unit gets +1A until end of turn."}
+    abilities = [Ability.bribe]
 
 
 class Diplomat_II_B(Unit):
@@ -1368,10 +1187,7 @@ class Diplomat_II_B(Unit):
     defence_bonuses = {}
     type = "Specialist"
 
-    abilities = ["bribe_II"]
-
-    descriptions = {"bribe_II": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn."
-                                "You can't bribe the same unit on your next turn. The unit gets +2A until end of turn."}
+    abilities = [Ability.bribe_II]
 
 
 class Weaponsmith(Unit):
@@ -1385,12 +1201,9 @@ class Weaponsmith(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Specialist"
-    
-    abilities = ["improve_weapons"]
-
-    descriptions = {"improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn"}
-
     upgrades = ["Weaponsmith II_A", "Weaponsmith II_B"]
+
+    abilities = [Ability.improve_weapons]
 
 
 class Weaponsmith_II_A(Unit):
@@ -1405,9 +1218,7 @@ class Weaponsmith_II_A(Unit):
     defence_bonuses = {}
     type = "Specialist"
 
-    abilities = ["improve_weapons_II_A"]
-
-    descriptions = {"improve_weapons_II_A": "Give melee unit +2 attack, +1 defence for two turns"}
+    abilities = [Ability.improve_weapons_II_A]
 
 
 class Weaponsmith_II_B(Unit):
@@ -1422,10 +1233,7 @@ class Weaponsmith_II_B(Unit):
     defence_bonuses = {}
     type = "Specialist"
 
-    abilities = ["improve_weapons_II_B"]
-
-    descriptions = {"improve_weapons": "Give melee unit +3 attack, +2 defence, and "
-                                       "zoc against cavalry until your next turn"}
+    abilities = [Ability.improve_weapons_II_B]
 
 
 class Hussar(Unit):
@@ -1440,12 +1248,38 @@ class Hussar(Unit):
     defence_bonuses = {}
     zoc = []
     type = "Cavalry"
-
-    triple_attack = True
-    triple_attack = True
-    pikeman_specialist = True
-
-    descriptions = {"triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-                    "pikeman_specialist": "Pikemen do not get +1D against Hussar."}
-
     upgrades = ["Hussar II_A", "Hussar II_B"]
+
+    constants = [Ability.triple_attack, Ability.pikeman_specialist]
+
+
+class Hussar_II_A(Unit):
+
+    name = "Hussar II_A"
+    image = "Hussar"
+    attack = 3
+    defence = 2
+    movement = 3
+    range = 1
+    attack_bonuses = {}
+    defence_bonuses = {}
+    zoc = []
+    type = "Cavalry"
+
+    constants = [Ability.triple_attack, Ability.pikeman_specialist]
+
+
+class Hussar_II_B(Unit):
+
+    name = "Hussar II_B"
+    image = "Hussar"
+    attack = 2
+    defence = 3
+    movement = 3
+    range = 1
+    attack_bonuses = {}
+    defence_bonuses = {}
+    zoc = []
+    type = "Cavalry"
+
+    constants = [Ability.triple_attack, Ability.pikeman_specialist]
