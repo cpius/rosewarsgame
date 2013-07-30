@@ -334,7 +334,7 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
             self.view.draw_game(self.game)
-            self.upgrade_units(self.game.gamestate.units[0])
+            self.upgrade_units(self.game.gamestate.player_units())
         else:
             pass
 
@@ -368,10 +368,10 @@ class Controller(object):
     def show_unit(self, position):
 
         unit = None
-        if position in self.game.gamestate.units[0]:
-            unit = self.game.gamestate.units[0][position]
-        if position in self.game.gamestate.units[1]:
-            unit = self.game.gamestate.units[1][position]
+        if position in self.game.gamestate.player_units():
+            unit = self.game.gamestate.player_units()[position]
+        if position in self.game.gamestate.opponent_units():
+            unit = self.game.gamestate.opponent_units()[position]
 
         if unit:
             self.view.show_unit_zoomed(unit)
