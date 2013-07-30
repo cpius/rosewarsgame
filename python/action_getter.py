@@ -144,9 +144,6 @@ def get_extra_actions(gamestate):
 
             extra_actions = moves + attacks + abilities
 
-    for action in extra_actions:
-        action.unit_reference = gamestate.player_units()[action.start_position]
-
     return extra_actions
 
 
