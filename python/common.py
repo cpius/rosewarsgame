@@ -157,7 +157,7 @@ ability_descriptions = {
 }
 
 
-types = ["Cavalry", "Infantry", "Siege_Weapon"]
+types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
 Trait = enum(*(trait for trait in trait_descriptions))
 
@@ -170,7 +170,8 @@ if 1 == 2:
     class Type:
         Cavalry = 1
         Infantry = 2
-        Siege_weapon = 3
+        Siege_Weapon = 3
+        Specialist = 4
 
     class Trait:
         attack_cooldown = 1
