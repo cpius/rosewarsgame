@@ -1,0 +1,33 @@
+{"type": "Is attack and defence correct",
+ "attack": 2,
+ "defence": 1,
+ "action": 
+{
+    "start_position": "B2",
+    "end_position": "B2",
+    "attack_position": "B4"
+},
+ "gamestate": 
+ {
+	"actions_remaining": 1,
+    "player1_units": 
+	{
+        "B2": 
+		{
+			"name": "Longbowman",
+			"xp": 1
+		},
+        "A3": "Weaponsmith" 
+    }, 
+    "player2_units": 
+	{
+        "B4":
+		{
+			"name": "Royal_Guard_II_B", 
+			"improved_weapons": 1
+		},
+        "E5": "Ballista" 
+    }
+ } 
+}
+
