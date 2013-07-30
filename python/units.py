@@ -65,11 +65,9 @@ class Unit(object):
         if not self.has(Trait.used) and not settings.beginner_mode:
             self.increment(Trait.xp)
 
-    def set_attack_frozen(self, n):
-        self.s = n
-
     def improve_weapons_II_A(self):
-        self.set(Ability.improve_weapons_II_A, 2)
+        print "a"
+        self.set(Trait.improved_weapons_II_A, 2)
 
     def improve_weapons_II_B(self):
         self.variables[Ability.improve_weapons_II_B] = 1
