@@ -10,7 +10,7 @@
     },
     "gamestate":
     {
-        "actions_remaining": 0,
+        "actions_remaining": 1,
         "player1_units":
         {
             "A1": "Flag Bearer",
