@@ -75,6 +75,9 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if attacking_unit.get("bribed"):
         attack += 1
 
+    if attacking_unit.get("bribed_II"):
+        attack += 2
+
     effects = {"improved_weapons": 3, "improved_weapons_II_A": 2, "improved_weapons_II_B": 3}
     for name, value in effects.items():
         if attacking_unit.has(name):

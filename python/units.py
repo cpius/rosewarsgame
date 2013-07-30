@@ -1345,7 +1345,7 @@ class Diplomat_II_A(Unit):
     attack = False
     defence = 2
     movement = 1
-    range = 3
+    range = 4
     attack_bonuses = {}
     defence_bonuses = {}
     type = "Specialist"
@@ -1368,10 +1368,10 @@ class Diplomat_II_B(Unit):
     defence_bonuses = {}
     type = "Specialist"
 
-    abilities = ["bribe"]
+    abilities = ["bribe_II"]
 
-    descriptions = {"bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. "
-                             "You can't bribe the same unit on your next turn. The unit gets +1A until end of turn."}
+    descriptions = {"bribe_II": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn."
+                                "You can't bribe the same unit on your next turn. The unit gets +2A until end of turn."}
 
 
 class Weaponsmith(Unit):
