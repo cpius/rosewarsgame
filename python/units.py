@@ -16,10 +16,32 @@ class Unit(object):
     def __repr__(self):
         return self.name
 
-    def has(self, attribute):
-        return hasattr(self, attribute)
+    def set(self, attribute, n=1):
+        if attribute in self.custom_set_function:
+            getattr(self, attribute)()
+        elif attribute in self.custom_set_name:
+            self.set(self.custom_set_name[attribute])
+        else:
+            self.variables[attribute] = n
 
-    #Poison
+    def has(self, attribute):
+        if attribute in ["extra_life"]:
+            return getattr(self, "has_" + attribute)()
+        return hasattr(self, attribute) or self.variables[attribute]
+
+    def get(self, attribute):
+        return self.variables[attribute]
+
+    def increment(self, attribute):
+        self.variables[attribute] += 1
+
+    def remove(self, attribute):
+        if attribute in ["improved_weapons_II_B", "extra_life"]:
+            getattr(self, "remove_" + attribute)()
+        self.variables[attribute] = 0
+
+    def decrement(self, attribute):
+        self.variables[attribute] = max(0, self.variables["attribute"] - 1)
     def poison(self):
         self.freeze(2)
 
