@@ -45,6 +45,9 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, ga
     if attacking_unit.has(Trait.sharpshooting):
         defence = 1
 
+    if attacking_unit.has(Trait.pikeman_specialist) and defending_unit.name == "Pikeman":
+        defence -= 1
+
     for effect in [Trait.sabotaged, Trait.sabotaged_II]:
         if defending_unit.has(effect):
             defence = 0
@@ -84,6 +87,9 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
 
     if defending_unit.type in attacking_unit.attack_bonuses:
         attack += attacking_unit.attack_bonuses[defending_unit.type]
+
+    if defending_unit.has(Trait.pikeman_specialist) and attacking_unit.name == "Pikeman":
+        attack -= 1
 
     if defending_unit.range == 1 and attacking_unit.has(Trait.melee_expert):
         attack += 1

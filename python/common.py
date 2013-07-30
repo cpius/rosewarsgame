@@ -117,6 +117,7 @@ trait_descriptions = {
     "melee_expert": "+1A, +1D vs melee units.",
     "melee_freeze": "Units adjacent to it can only attack it, not move.",
     "movement_remaining": "Movement points left for doing an extra action",
+    "pikeman_specialist": "Pikemen do not get +1A/+1D against it.",
     "lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A.",
     "lancing_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A.",
     "longsword": "Also hits the 4 nearby tiles in the attack direction.",
@@ -217,6 +218,7 @@ if 1 == 2:
         attack_cooldown_II = 43
         crusading_II = 44
         xp = 45
+        pikeman_specialist = 46
 
     class Ability:
         bribe = 1

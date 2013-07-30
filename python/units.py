@@ -1237,7 +1237,7 @@ class Hussar(Unit):
     type = Type.Cavalry
     upgrades = ["Hussar II_A", "Hussar II_B"]
 
-    constants = [Ability.triple_attack, Ability.pikeman_specialist]
+    constants = [Trait.triple_attack, Trait.pikeman_specialist]
 
 
 class Hussar_II_A(Unit):
@@ -1253,7 +1253,7 @@ class Hussar_II_A(Unit):
     zoc = []
     type = Type.Cavalry
 
-    constants = [Ability.triple_attack, Ability.pikeman_specialist]
+    constants = [Trait.triple_attack, Trait.pikeman_specialist]
 
 
 class Hussar_II_B(Unit):
@@ -1269,4 +1269,4 @@ class Hussar_II_B(Unit):
     zoc = []
     type = Type.Cavalry
 
-    constants = [Ability.triple_attack, Ability.pikeman_specialist]
+    constants = [Trait.triple_attack, Trait.pikeman_specialist]
