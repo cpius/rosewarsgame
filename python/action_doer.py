@@ -15,11 +15,11 @@ def do_action(gamestate, action, outcome=None):
             if action.is_attack():
                 movement_remaining -= 1
             unit.set_movement_remaining(movement_remaining)
-            unit.set_extra_action()
+            unit.set("extra_action")
 
         if unit.has("combat_agility"):
             unit.set_movement_remaining(unit.movement - distance(action.start_position, action.final_position))
-            unit.set_extra_action()
+            unit.set("extra_action")
 
     def update_actions_remaining(action):
 
@@ -48,8 +48,8 @@ def do_action(gamestate, action, outcome=None):
 
     update_actions_remaining(action)
 
-    gain_xp(unit)
-    unit.set_used()
+    unit.gain_xp()
+    unit.set("used")
 
     if action.start_position in gamestate.player_units():
         gamestate.player_units()[action.end_position] = gamestate.player_units().pop(action.start_position)
@@ -81,7 +81,7 @@ def do_action(gamestate, action, outcome=None):
     if unit.has("bloodlust") and outcome.outcomes[action.attack_position] == 1:
         bloodlust = True
     else:
-        unit.remove_extra_action()
+        unit.remove("extra_action")
         bloodlust = False
 
     if gamestate.extra_action and not bloodlust:
@@ -96,7 +96,7 @@ def do_action(gamestate, action, outcome=None):
     if gamestate.extra_action:
         gamestate.extra_action = False
 
-    if unit.has_extra_action():
+    if unit.has("extra_action"):
         gamestate.extra_action = True
 
     return outcome
@@ -131,10 +131,10 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
     push_destination = push_direction.move(action.attack_position)
 
     if outcome.for_position(action.attack_position) == SubOutcome.WIN:
-        gain_xp(action.unit)
+        action.unit.gain_xp()
 
-        if action.target_unit.has_extra_life():
-            action.target_unit.remove_extra_life()
+        if action.target_unit.has("extra_life"):
+            action.target_unit.remove("extra_life")
 
             if not push_destination.out_of_board_vertical():
                 update_final_position(action)
@@ -189,8 +189,8 @@ def settle_attack(action, gamestate, outcome):
 
     outcome.set_suboutcome(action.attack_position, SubOutcome.WIN)
 
-    if action.target_unit.has_extra_life():
-        action.target_unit.remove_extra_life()
+    if action.target_unit.has("extra_life"):
+        action.target_unit.remove("extra_life")
     else:
         del gamestate.opponent_units()[action.attack_position]
 
@@ -208,7 +208,8 @@ def settle_ability(action, enemy_units, player_units):
         player_units[action.ability_position].set_bribed()
 
     else:
-        getattr(action.target_unit, action.ability)()
+        print action.ability
+        action.target_unit.set(action.ability)
 
 
 def update_final_position(action):
@@ -216,6 +217,3 @@ def update_final_position(action):
         action.final_position = action.attack_position
 
 
-def gain_xp(unit):
-    if not unit.is_used() and not settings.beginner_mode:
-        unit.increment_xp()

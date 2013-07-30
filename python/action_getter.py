@@ -35,7 +35,7 @@ class memoized(object):
 
 def get_actions(gamestate):
     def can_use_unit(unit):
-        return not (unit.is_used() or unit.is_frozen() or unit.is_recently_bribed())
+        return not (unit.has("used") or unit.has("frozen") or unit.is_recently_bribed())
 
     def moving_allowed(unit_position):
         return not any(position for position in unit_position.adjacent_tiles() if
@@ -43,7 +43,7 @@ def get_actions(gamestate):
 
     def can_attack_with_unit(unit):
         return not (gamestate.get_actions_remaining() == 1 and unit.has("double_attack_cost")) \
-            and not unit.is_attack_frozen()
+            and not unit.has("attack_frozen")
 
     if getattr(gamestate, "extra_action"):
         return get_extra_actions(gamestate)
@@ -116,7 +116,7 @@ def get_extra_actions(gamestate):
             return attacks
 
         attacks = melee_attacks_list_samurai_second(unit, position, {position}, gamestate.opponent_units(),
-                                                    unit.get_movement_remaining())
+                                                    unit.get("movement_remaining"))
 
         moveset = generate_extra_moveset(unit, position, units)
         moves = move_actions(position, moveset)
@@ -126,7 +126,7 @@ def get_extra_actions(gamestate):
     extra_actions = []
 
     for position, unit in gamestate.player_units().items():
-        if unit.has_extra_action():
+        if unit.has("extra_action"):
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
             units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
@@ -174,8 +174,8 @@ def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
 
 
 def generate_extra_moveset(unit, position, units):
-    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get_movement_remaining(),
-                     unit.get_movement_remaining())
+    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get("movement_remaining"),
+                     unit.get("movement_remaining"))
 
 
 def generate_moveset(unit, position, units):

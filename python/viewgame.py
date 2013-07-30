@@ -106,10 +106,10 @@ def draw_bordered_circle(screen, position, size, color):
 
 
 def draw_symbols(screen, interface, unit, position):
-    if unit.get_xp():
-        write(screen, str(unit.get_xp()), interface.coordinates["flag"].get(position), interface.fonts["xp"])
+    if unit.get("xp"):
+        write(screen, str(unit.get("xp")), interface.coordinates["flag"].get(position), interface.fonts["xp"])
 
-    if unit.get_bribed():
+    if unit.get("bribed"):
         draw_bribed(screen, interface, position)
 
 
@@ -187,11 +187,11 @@ def flip_direction(direction):
 
 
 def get_yellow_counters(unit):
-    return 1 if unit.has_extra_life() else 0
+    return 1 if unit.has("extra_life") else 0
 
 
 def get_blue_counters(unit):
-    return max(unit.get_frozen_counters(), unit.get_attack_frozen_counters(), unit.is_recently_bribed())
+    return max(unit.get("frozen"), unit.get("attack_frozen"), unit.is_recently_bribed())
 
 
 def draw_ask_about_move_with_attack(screen, interface, position):
