@@ -11,7 +11,7 @@
         "actions_remaining": 1,
         "player1_units":
         {
-            "B2": "Cavalry_Lieutenant",
+            "B2": "Cavalry Lieutenant",
             "C3": "Knight"
         },
         "player2_units":
