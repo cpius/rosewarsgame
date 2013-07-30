@@ -1,5 +1,6 @@
 from collections import defaultdict
 import settings
+from common import *
 
 
 class Unit(object):
@@ -13,24 +14,22 @@ class Unit(object):
     upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}
-    custom_set_name = {"sabotage": "sabotaged", "sabotage_II": "sabotaged_II", "improve_weapons": "improved_weapons"}
-    custom_set_function = ["poison", "poison_II", "improve_weapons_II_A", "improve_weapons_II_B"]
+    custom_ability_functions = {Ability.poison: "poison",
+                                Ability.poison_II: "poison_II",
+                                Ability.improve_weapons_II_A: "improve_weapons_II_A",
+                                Ability.improve_weapons_II_B: "improve_weapons_II_B"}
+    apply_ability = {Ability.sabotage: Trait.sabotaged,
+                     Ability.sabotage_II: Trait.sabotaged_II,
+                     Ability.improve_weapons: Trait.improved_weapons}
 
     def __repr__(self):
         return self.name
 
     def set(self, attribute, n=1):
-        if attribute in self.custom_set_function:
-            getattr(self, attribute)()
-        elif attribute in self.custom_set_name:
-            self.set(self.custom_set_name[attribute])
-        else:
-            self.variables[attribute] = n
+        self.variables[attribute] = n
 
     def has(self, attribute):
-        if attribute in ["extra_life"]:
-            return getattr(self, "has_" + attribute)()
-        return hasattr(self, attribute) or self.variables[attribute]
+        return (hasattr(self, "constants") and attribute in self.constants) or self.variables[attribute]
 
     def get(self, attribute):
         return self.variables[attribute]
@@ -39,12 +38,20 @@ class Unit(object):
         self.variables[attribute] += 1
 
     def remove(self, attribute):
-        if attribute in ["improved_weapons_II_B", "extra_life"]:
-            getattr(self, "remove_" + attribute)()
         self.variables[attribute] = 0
 
     def decrement(self, attribute):
         self.variables[attribute] = max(0, self.variables["attribute"] - 1)
+
+    def do(self, ability):
+        print "Do", ability
+        if ability in self.apply_ability:
+            self.set(self.apply_ability[ability])
+        elif ability in self.custom_ability_functions:
+            getattr(self, self.custom_ability_functions[ability])()
+        else:
+            print "ability not fount"
+
 
     # custom functions
     def poison(self):
@@ -54,14 +61,14 @@ class Unit(object):
         self.freeze(3)
 
     def freeze(self, n):
-        self.set("frozen", max(self.get("frozen"), n))
+        self.set(Trait.frozen, max(self.get(Trait.frozen), n))
 
     def gain_xp(self):
-        if not self.has("used") and not settings.beginner_mode:
-            self.increment("xp")
+        if not self.has(Trait.used) and not settings.beginner_mode:
+            self.increment(Trait.xp)
 
     def set_attack_frozen(self, n):
-        self.variables["attack_frozen"] = n
+        self.s = n
 
     def improve_weapons_II_A(self):
         self.set("improved_weapons_II_A", 2)
@@ -81,13 +88,10 @@ class Unit(object):
         self.variables["lost_extra_life"] = 1
 
     def get_zoc(self):
-        if self.has("improved_weapons_II_B"):
+        if self.has(Trait.improved_weapons_II_B):
             return self.zoc + ["Cavalry"]
         else:
             return self.zoc
-
-    def set_movement_remaining(self, n):
-        self.variables["movement_remaining"] = n
 
 
 class Archer(Unit):
