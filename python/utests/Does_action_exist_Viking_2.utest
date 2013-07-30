@@ -3,14 +3,14 @@
     "result": true,
     "action":
     {
-        "start_position": "C3",
-        "end_position": "C4",
-        "attack_position": "C5",
-        "move_with_attack": "stay"
+        "start_at": "C3",
+        "end_at": "C4",
+        "target_at": "C5",
+        "move_with_attack": false
     },
     "gamestate":
     {
-        "actions_remaining": 0,
+        "actions_remaining": 1,
         "player1_units":
         {
             "A1": "Flag Bearer",

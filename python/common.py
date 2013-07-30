@@ -97,13 +97,6 @@ def enum(*sequential, **named):
     return type('Enum', (), enums)
 
 SubOutcome = enum("UNKNOWN", "WIN", "PUSH", "MISS", "DEFEND", "DETERMINISTIC")
-MoveOrStay = enum("UNKNOWN", "MOVE", "STAY")
-
-
-def merge_units(units1, units2):
-    all_units = units1.copy()
-    all_units.update(units2)
-    return all_units
 
 
 def find_all_friendly_units_except_current(current_unit_position, player_units):
@@ -120,6 +113,7 @@ def adjacent_friendly_positions(position, units):
 
 def surrounding_friendly_units(position, units):
     return (units[pos] for pos in position.surrounding_tiles() if pos in units)
+
 
 class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):

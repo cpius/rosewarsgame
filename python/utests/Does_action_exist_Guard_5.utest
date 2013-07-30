@@ -3,8 +3,8 @@
     "result": true,
     "action":
     {
-        "start_position": "B5",
-        "end_position": "B4"
+        "start_at": "B5",
+        "end_at": "B4"
     },
     "gamestate":
     {

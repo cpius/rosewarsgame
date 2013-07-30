@@ -5,10 +5,10 @@
     "action":
     {
         "action_number": 3,
-        "start_position": "D4",
-        "end_position": "D4",
-        "attack_position": "D5",
-        "move_with_attack": "stay"
+        "start_at": "D4",
+        "end_at": "D4",
+        "target_at": "D5",
+        "move_with_attack": false
     },
     "gamestate":
     {
