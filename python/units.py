@@ -44,14 +44,12 @@ class Unit(object):
         self.variables[attribute] = max(0, self.variables["attribute"] - 1)
 
     def do(self, ability):
-        print "Do", ability
         if ability in self.apply_ability:
             self.set(self.apply_ability[ability])
         elif ability in self.custom_ability_functions:
             getattr(self, self.custom_ability_functions[ability])()
         else:
             print "ability not fount"
-
 
     # custom functions
     def poison(self):
@@ -71,21 +69,15 @@ class Unit(object):
         self.s = n
 
     def improve_weapons_II_A(self):
-        self.set("improved_weapons_II_A", 2)
+        self.set(Ability.improve_weapons_II_A, 2)
 
     def improve_weapons_II_B(self):
-        self.variables["improved_weapons_II_B"] = 1
+        self.variables[Ability.improve_weapons_II_B] = 1
         self.zoc = {"Cavalry"}
 
     def remove_improved_weapons_II_B(self):
-        self.variables["improved_weapons_II_B"] = 0
+        self.variables[Ability.improve_weapons_II_B] = 0
         self.zoc = {}
-
-    def has_extra_life(self):
-        return self.name == "Viking" and not self.variables["lost_extra_life"]
-
-    def remove_extra_life(self):
-        self.variables["lost_extra_life"] = 1
 
     def get_zoc(self):
         if self.has(Trait.improved_weapons_II_B):
