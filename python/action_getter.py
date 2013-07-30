@@ -34,15 +34,17 @@ class memoized(object):
 
 def get_actions(gamestate):
     def can_use_unit(unit):
-        return not (unit.has("used") or unit.has("frozen") or unit.has("recently_bribed"))
+        return not any(unit.has(trait) for trait in (Trait.frozen, Trait.recently_bribed, Trait.used))
 
     def moving_allowed(unit_position):
         return not any(position for position in unit_position.adjacent_tiles() if
-                       position in gamestate.opponent_units() and gamestate.opponent_units()[position].has("melee_freeze"))
+                       position in gamestate.opponent_units() and
+                       gamestate.opponent_units()[position].has(Trait.melee_freeze))
+
 
     def can_attack_with_unit(unit):
-        return not (gamestate.get_actions_remaining() == 1 and unit.has("double_attack_cost")) \
-            and not unit.has("attack_frozen")
+        return not (gamestate.get_actions_remaining() == 1 and unit.has(Trait.double_attack_cost)) \
+            and not unit.has(Trait.attack_frozen)
 
     if getattr(gamestate, "extra_action"):
         return get_extra_actions(gamestate)
@@ -117,7 +119,7 @@ def get_extra_actions(gamestate):
             return attacks
 
         attacks = melee_attacks_list_samurai_second(unit, position, {position}, gamestate.opponent_units(),
-                                                    unit.get("movement_remaining"))
+                                                    unit.get(Trait.movement_remaining))
 
         moveset = generate_extra_moveset(unit, position, units)
         moves = move_actions(gamestate.all_units(), position, moveset)
@@ -127,7 +129,7 @@ def get_extra_actions(gamestate):
     extra_actions = []
 
     for position, unit in gamestate.player_units().items():
-        if unit.has("extra_action"):
+        if unit.has(Trait.extra_action):
             friendly_units = find_all_friendly_units_except_current(position, gamestate.player_units())
             units = dict(friendly_units.items() + gamestate.opponent_units().items())
 
@@ -135,9 +137,9 @@ def get_extra_actions(gamestate):
             unit.zoc_blocks = frozenset(position for position,
                                         opponent_unit in opponent_units.items() if unit.type in opponent_unit.get_zoc())
 
-            if unit.has("swiftness"):
+            if unit.has(Trait.swiftness):
                 moves, attacks, abilities = get_actions_swiftness()
-            elif unit.has("combat_agility"):
+            elif unit.has(Trait.combat_agility):
                 moves, attacks, abilities = get_actions_samurai()
             else:
                 moves, attacks, abilities = [], [], []
@@ -154,7 +156,7 @@ def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
 
     movement = unit.movement
     if any(position for position in position.surrounding_tiles() if position in friendly_units
-           if friendly_units[position].has("cavalry_charging")):
+           if friendly_units[position].has(Trait.cavalry_charging)):
         movement += 1
 
     units = player_units.copy()
@@ -173,8 +175,8 @@ def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
 
 
 def generate_extra_moveset(unit, position, units):
-    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get("movement_remaining"),
-                     unit.get("movement_remaining"))
+    return moves_set(position, frozenset(units), unit.zoc_blocks, unit.get(Trait.movement_remaining),
+                     unit.get(Trait.movement_remaining))
 
 
 def generate_moveset(unit, position, units):
@@ -405,10 +407,20 @@ def get_special_unit_actions(unit, start_at, units, enemy_units, player_units, m
         attacks = melee_attack_actions(unit, start_at, moveset_with_leftover | {start_at}, enemy_units)
         moves = move_actions(units, start_at, moveset_with_leftover | moveset_no_leftover)
 
-        for attribute in ["rage", "berserking", "longsword", "triple_attack", "defence_maneuverability"]:
-            if unit.has(attribute):
-                moves, attacks = locals()[attribute](unit, start_at, moveset_with_leftover, moveset_no_leftover,
-                                                     enemy_units)
+        if unit.has(Trait.rage):
+            moves, attacks = rage(unit, start_at, moveset_with_leftover, moveset_no_leftover, enemy_units)
+
+        if unit.has(Trait.berserking):
+            moves, attacks = berserking(unit, start_at, moveset_with_leftover, moveset_no_leftover, enemy_units)
+
+        if unit.has(Trait.longsword):
+            moves, attacks = longsword(unit, start_at, moveset_with_leftover, moveset_no_leftover, enemy_units)
+
+        if unit.has(Trait.triple_attack):
+            moves, attacks = triple_attack(unit, start_at, moveset_with_leftover, moveset_no_leftover, enemy_units)
+
+        if unit.has(Trait.defence_maneuverability):
+            moves, attacks = defence_maneuverability(unit, start_at, moveset_with_leftover, moveset_no_leftover, enemy_units)
 
         return moves, attacks
 
@@ -430,7 +442,7 @@ def get_special_unit_actions(unit, start_at, units, enemy_units, player_units, m
 
             elif ability == "bribe":
                 possible_targets = [target_position for target_position, target_unit in enemy_units.items()
-                                    if not target_unit.get_bribed() and not target_unit.has("recently_bribed")]
+                                    if not target_unit.get_bribed() and not target_unit.has(Trait.recently_bribed)]
             else:
                 possible_targets = []
 
@@ -448,7 +460,7 @@ def get_special_unit_actions(unit, start_at, units, enemy_units, player_units, m
         moveset = generate_moveset(unit, position, units)
         moves = move_actions(units, position, moveset)
 
-        if unit.has("scouting"):
+        if unit.has(Trait.scouting):
             moves = scouting()
 
         return moves

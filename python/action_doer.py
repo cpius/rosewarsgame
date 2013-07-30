@@ -10,16 +10,18 @@ from action import Action
 def do_action(gamestate, action, outcome=None):
     def prepare_extra_actions(action, unit):
 
-        if unit.has("swiftness"):
+        if unit.has(Trait.swiftness):
             movement_remaining = unit.movement - distance(action.start_at, action.end_at)
+
             if action.is_attack():
                 movement_remaining -= 1
-            unit.set_movement_remaining(movement_remaining)
-            unit.set("extra_action")
+            unit.set(Trait.movement_remaining, movement_remaining)
+            unit.set(Trait.extra_action)
 
-        if unit.has("combat_agility"):
-            unit.set_movement_remaining(unit.movement - distance(action.start_at, action.final_position))
-            unit.set("extra_action")
+        if unit.has(Trait.combat_agility):
+            unit.set(Trait.movement_remaining, unit.movement - distance(action.start_at, action.final_position))
+            unit.set(Trait.extra_action)
+
 
     def update_actions_remaining(action):
 
@@ -32,10 +34,10 @@ def do_action(gamestate, action, outcome=None):
             gamestate.decrement_actions_remaining()
 
     def secondary_action_effects(action, unit):
-        if unit.has("attack_cooldown") and action.is_attack():
-            unit.set_attack_frozen(unit.attack_cooldown)
+        if unit.has(Trait.attack_cooldown) and action.is_attack():
+            unit.set(Trait.attack_frozen, 3)
 
-        if action.unit.has("double_attack_cost") and action.is_attack():
+        if action.unit.has(Trait.double_attack_cost) and action.is_attack():
             action.double_cost = True
 
     if not outcome:
@@ -48,7 +50,7 @@ def do_action(gamestate, action, outcome=None):
     update_actions_remaining(action)
 
     unit.gain_xp()
-    unit.set("used")
+    unit.set(Trait.used)
 
     if action.start_at in gamestate.player_units():
         gamestate.player_units()[action.end_at] = gamestate.player_units().pop(action.start_at)
@@ -77,7 +79,7 @@ def do_action(gamestate, action, outcome=None):
     elif action.is_attack():
         outcome = settle_attack(action, gamestate, outcome)
 
-        if action.unit.has("longsword"):
+        if action.unit.has(Trait.longsword):
             direction = end_at.get_direction(target_at)
 
             for forward_position in end_at.four_forward_tiles(direction):
@@ -93,15 +95,15 @@ def do_action(gamestate, action, outcome=None):
     elif action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
-    if unit.has("bloodlust") and outcome.outcomes[action.target_at] == 1:
+    if unit.has(Trait.bloodlust) and outcome.outcomes[action.target_at] == 1:
         bloodlust = True
     else:
-        unit.remove("extra_action")
+        unit.remove(Trait.extra_action)
         bloodlust = False
 
     if gamestate.extra_action and not bloodlust:
         gamestate.extra_action = 0
-        unit.set_movement_remaining(0)
+        unit.set(Trait.movement_remaining, 0)
     else:
         prepare_extra_actions(action, unit)
 
@@ -111,7 +113,7 @@ def do_action(gamestate, action, outcome=None):
     if gamestate.extra_action:
         gamestate.extra_action = False
 
-    if unit.has("extra_action"):
+    if unit.has(Trait.extra_action):
         gamestate.extra_action = True
 
     return outcome
@@ -148,8 +150,8 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
     if outcome.for_position(action.target_at) == SubOutcome.WIN:
         action.unit.gain_xp()
 
-        if action.target_unit.has("extra_life"):
-            action.target_unit.remove("extra_life")
+        if action.target_unit.has(Trait.extra_life)  and not action.target_unit.has(Trait.lost_extra_life):
+            action.target_unit.set(Trait.lost_extra_life)
 
             if not push_destination.out_of_board_vertical():
                 update_final_position(action)
@@ -204,8 +206,8 @@ def settle_attack(action, gamestate, outcome):
 
     outcome.set_suboutcome(action.target_at, SubOutcome.WIN)
 
-    if action.target_unit.has("extra_life"):
-        action.target_unit.remove("extra_life")
+    if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
+        action.target_unit.set(Trait.lost_extra_life)
     else:
         del gamestate.opponent_units()[action.target_at]
 
@@ -216,11 +218,11 @@ def settle_attack(action, gamestate, outcome):
 
 
 def settle_ability(action, enemy_units, player_units):
-    if action.ability == "bribe":
-        action.target_unit.set("bribed")
+    if action.ability == Ability.bribe:
+        action.target_unit.set(Trait.bribed)
         player_units[action.target_at] = enemy_units.pop(action.target_at)
     else:
-        action.target_unit.set(action.ability)
+        action.target_unit.do(action.ability)
 
 
 def update_final_position(action):
