@@ -73,7 +73,7 @@ class Unit(object):
 
     def improve_weapons_II_B(self):
         self.variables[Ability.improve_weapons_II_B] = 1
-        self.zoc = {"Cavalry"}
+        self.zoc = {Type.Cavalry}
 
     def remove_improved_weapons_II_B(self):
         self.variables[Ability.improve_weapons_II_B] = 0
@@ -94,9 +94,9 @@ class Archer(Unit):
     defence = 2
     movement = 1
     range = 4
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
-    type = "Infantry"
+    type = Type.Infantry
     upgrades = ["Longbowman", "Crossbow Archer"]
 
 
@@ -107,7 +107,7 @@ class Longbowman(Unit):
     defence = 2
     movement = 1
     range = 4
-    type = "Infantry"
+    type = Type.Infantry
     upgrades = ["Longbowman II_A", "Longbowman II_B"]
 
     constants = [Trait.sharpshooting]
@@ -120,9 +120,9 @@ class Longbowman_II_A(Unit):
     defence = 2
     movement = 1
     range = 4
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.sharpshooting]
 
@@ -134,9 +134,9 @@ class Longbowman_II_B(Unit):
     defence = 3
     movement = 1
     range = 4
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.sharpshooting]
 
@@ -148,9 +148,9 @@ class Crossbow_Archer(Unit):
     defence = 3
     movement = 1
     range = 4
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
-    type = "Infantry"
+    type = Type.Infantry
     upgrades = ["Crossbow Archer II_A", "Crossbow Archer II_B"]
 
 
@@ -161,9 +161,9 @@ class Crossbow_Archer_II_A(Unit):
     defence = 3
     movement = 1
     range = 4
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
-    type = "Infantry"
+    type = Type.Infantry
 
 
 class Crossbow_Archer_II_B(Unit):
@@ -173,9 +173,9 @@ class Crossbow_Archer_II_B(Unit):
     defence = 4
     movement = 1
     range = 4
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
-    type = "Infantry"
+    type = Type.Infantry
 
 
 class Pikeman(Unit):
@@ -186,10 +186,10 @@ class Pikeman(Unit):
     defence = 2
     movement = 1
     range = 1
-    attack_bonuses = {"Cavalry": 1}
-    defence_bonuses = {"Cavalry": 1}
-    type = "Infantry"   
-    zoc = ["Cavalry"]
+    attack_bonuses = {Type.Cavalry: 1}
+    defence_bonuses = {Type.Cavalry: 1}
+    type = Type.Infantry
+    zoc = [Type.Cavalry]
     upgrades = ["Halberdier", "Royal Guard"]
     xp_to_upgrade = 3
 
@@ -201,7 +201,7 @@ class Halberdier(Unit):
     defence = 3
     movement = 1
     range = 1
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = Trait.push
 
@@ -213,7 +213,7 @@ class Halberdier_II_A(Unit):
     defence = 3
     movement = 1
     range = 1
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = Trait.push
 
@@ -225,7 +225,7 @@ class Halberdier_II_B(Unit):
     defence = 4
     movement = 1
     range = 1
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = Trait.push
 
@@ -240,7 +240,7 @@ class Light_Cavalry(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Dragoon", "Cavalry Lieutenant"]
     xp_to_upgrade = 3
 
@@ -255,7 +255,7 @@ class Dragoon(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
     constants = [Trait.swiftness]
@@ -271,7 +271,7 @@ class Dragoon_II_A(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
     constants = [Trait.swiftness]
@@ -287,7 +287,7 @@ class Dragoon_II_B(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Dragoon II_A", "Dragoon II_B"]
 
     constants = [Trait.swiftness]
@@ -303,7 +303,7 @@ class Cavalry_Lieutenant(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Cavalry_Luitenant_II_A", "Cavalry_Luitenant_II_B"]
 
     constants = [Trait.cavalry_charging]
@@ -319,7 +319,7 @@ class Cavalry_Lieutenant_II_A(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.cavalry_charging]
 
@@ -334,7 +334,7 @@ class Cavalry_Lieutenant_II_B(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.cavalry_charging]
 
@@ -349,7 +349,7 @@ class Knight(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Lancer", "Hobelar"]
 
 
@@ -363,7 +363,7 @@ class Ballista(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
     upgrades = ["Cannon", "Trebuchet"]
 
 
@@ -377,7 +377,7 @@ class Trebuchet(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
     upgrades = ["Trebuchet II_A", "Trebuchet II_A"]
 
 
@@ -391,7 +391,7 @@ class Trebuchet_II_A(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
 
 
 class Trebuchet_II_B(Unit):
@@ -404,7 +404,7 @@ class Trebuchet_II_B(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
 
 
 class Catapult(Unit):
@@ -417,7 +417,7 @@ class Catapult(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
     xp_to_upgrade = 2
 
     constants = [Trait.double_attack_cost]
@@ -433,7 +433,7 @@ class Catapult_II_A(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
     xp_to_upgrade = 3
     upgrades = ["Catapult III_A", "Catapult III_B"]
 
@@ -450,7 +450,7 @@ class Catapult_II_B(Unit):
     range = 4
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
     xp_to_upgrade = 3
 
     constants = [Trait.double_attack_cost]
@@ -468,7 +468,7 @@ class Catapult_III_A(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
 
     constants = [Trait.double_attack_cost]
 
@@ -483,7 +483,7 @@ class Catapult_III_B(Unit):
     range = 4
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
 
     constants = [Trait.double_attack_cost]
 
@@ -498,7 +498,7 @@ class Catapult_III_C(Unit):
     range = 5
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
 
     constants = [Trait.double_attack_cost]
 
@@ -513,8 +513,8 @@ class Royal_Guard(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Infantry"
-    zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
+    type = Type.Infantry
+    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, "Specialist"]
     xp_to_upgrade = 3
     upgrades = ["Royal Guard II_A", "Royal Guard II_B"]
 
@@ -531,8 +531,8 @@ class Royal_Guard_II_A(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Infantry"
-    zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
+    type = Type.Infantry
+    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, "Specialist"]
 
     constants = [Trait.defence_maneuverability, Trait.melee_expert]
 
@@ -547,8 +547,8 @@ class Royal_Guard_II_B(Unit):
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Infantry"
-    zoc = ["Cavalry", "Infantry", "Siege Weapon", "Specialist"]
+    type = Type.Infantry
+    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, "Specialist"]
 
     constants = [Trait.defence_maneuverability, Trait.tall_shield, Trait.melee_freeze]
 
@@ -564,7 +564,7 @@ class Scout(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
     xp_to_upgrade = 2
     upgrades = ["Scout II_A", "Scout II_B"]
 
@@ -582,7 +582,7 @@ class Scout_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.scouting]
 
@@ -598,7 +598,7 @@ class Scout_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.scouting, Trait.tall_shield]
 
@@ -612,9 +612,9 @@ class Viking(Unit):
     movement = 1
     range = 1
     attack_bonuses = {}
-    defence_bonuses = {"Siege Weapon": 1}
+    defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
     upgrades = ["Viking II_A", "Viking II_B"]
 
     constants = [Trait.rage, Trait.extra_life]
@@ -629,9 +629,9 @@ class Viking_II_A(Unit):
     movement = 1
     range = 1
     attack_bonuses = {}
-    defence_bonuses = {"Siege Weapon": 1}
+    defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.rage_II, Trait.extra_life]
 
@@ -647,7 +647,7 @@ class Viking_II_B(Unit):
     attack_bonuses = {"Siege Weapons": 1}
     defence_bonuses = {"Siege Weapons": 2}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.rage, Trait.extra_life]
 
@@ -663,7 +663,7 @@ class Cannon(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
     xp_to_upgrade = 3
     upgrades = ["Cannon II_A", "Cannon II_B"]
 
@@ -681,7 +681,7 @@ class Cannon_II_A(Unit):
     attack_bonuses = {"Siege_weapons": 2}
     defence_bonuses = {}
     zoc = []
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
 
     constants = [Trait.attack_cooldown]
 
@@ -697,7 +697,7 @@ class Cannon_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Siege Weapon"
+    type = Type.Siege_Weapon
 
     constants = [Trait.attack_cooldown_II, Trait.far_sighted]
 
@@ -710,10 +710,10 @@ class Lancer(Unit):
     defence = 3
     movement = 3
     range = 1
-    attack_bonuses = {"Cavalry": 1}
+    attack_bonuses = {Type.Cavalry: 1}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Lancer II_A", "Lancer II_B"]
 
     constants = [Trait.lancing]
@@ -727,10 +727,10 @@ class Lancer_II_A(Unit):
     defence = 3
     movement = 3
     range = 1
-    attack_bonuses = {"Cavalry": 2}
-    defence_bonuses = {"Cavalry": 1}
+    attack_bonuses = {Type.Cavalry: 2}
+    defence_bonuses = {Type.Cavalry: 1}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.lancing]
 
@@ -743,10 +743,10 @@ class Lancer_II_B(Unit):
     defence = 3
     movement = 4
     range = 1
-    attack_bonuses = {"Cavalry": 1}
+    attack_bonuses = {Type.Cavalry: 1}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.lancing_II]
 
@@ -762,7 +762,7 @@ class Flag_Bearer(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Flag Bearer II_A", "Flag Bearer II_B"]
 
     constants = [Trait.flag_bearing]
@@ -779,7 +779,7 @@ class Flag_Bearer_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.flag_bearing_II_A]
 
@@ -795,7 +795,7 @@ class Flag_Bearer_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.flag_bearing_II_B]
 
@@ -811,7 +811,7 @@ class Longswordsman(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
     upgrades = ["Longswordsman II_A", "Longswordsman II_B"]
 
     constants = [Trait.longsword]
@@ -828,7 +828,7 @@ class Longswordsman_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.longsword]
 
@@ -844,7 +844,7 @@ class Longswordsman_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.longsword]
 
@@ -860,7 +860,7 @@ class Crusader(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Crusader II_A", "Crusader II_B"]
 
     constants = [Trait.crusading]
@@ -877,7 +877,7 @@ class Crusader_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.crusading]
 
@@ -893,7 +893,7 @@ class Crusader_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.crusading_II]
 
@@ -908,7 +908,7 @@ class Berserker(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
     upgrades = ["Berserker II_A", "Berserker II_B"]
 
     constants = [Trait.berserking]
@@ -925,7 +925,7 @@ class Berserker_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.berserking, Trait.big_shield]
 
@@ -941,7 +941,7 @@ class Berserker_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.berserking]
 
@@ -957,7 +957,7 @@ class Hobelar(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Hobelar II_A", "Hobelar II_B"]
 
     constants = [Trait.swiftness]
@@ -974,7 +974,7 @@ class Hobelar_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.swiftness]
 
@@ -987,10 +987,10 @@ class Hobelar_II_B(Unit):
     defence = 3
     movement = 3
     range = 1
-    attack_bonuses = {"Infantry": 2}
+    attack_bonuses = {Type.Infantry: 2}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.swiftness]
 
@@ -1006,7 +1006,7 @@ class War_Elephant(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["War Elephant II_A", "War Elephant II_B"]
     xp_to_upgrade = 3
 
@@ -1024,7 +1024,7 @@ class War_Elephant_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.double_attack_cost, Trait.triple_attack, Trait.push]
 
@@ -1040,7 +1040,7 @@ class War_Elephant_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Trait.double_attack_cost, Trait.triple_attack, Trait.push]
 
@@ -1053,10 +1053,10 @@ class Samurai(Unit):
     defence = 3
     movement = 1
     range = 1
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
     upgrades = ["Samurai II_A", "Samurai II_B"]
 
     constants = [Trait.combat_agility]
@@ -1070,10 +1070,10 @@ class Samurai_II_A(Unit):
     defence = 3
     movement = 1
     range = 1
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.combat_agility]
 
@@ -1086,10 +1086,10 @@ class Samurai_II_B(Unit):
     defence = 3
     movement = 1
     range = 1
-    attack_bonuses = {"Infantry": 1}
+    attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     zoc = []
-    type = "Infantry"
+    type = Type.Infantry
 
     constants = [Trait.combat_agility, Trait.bloodlust]
 
@@ -1243,7 +1243,7 @@ class Hussar(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
     upgrades = ["Hussar II_A", "Hussar II_B"]
 
     constants = [Ability.triple_attack, Ability.pikeman_specialist]
@@ -1260,7 +1260,7 @@ class Hussar_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Ability.triple_attack, Ability.pikeman_specialist]
 
@@ -1276,6 +1276,6 @@ class Hussar_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = "Cavalry"
+    type = Type.Cavalry
 
     constants = [Ability.triple_attack, Ability.pikeman_specialist]

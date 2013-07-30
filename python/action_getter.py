@@ -433,16 +433,16 @@ def get_special_unit_actions(unit, start_at, units, enemy_units, player_units, m
 
         for ability in unit.abilities:
 
-            if ability in ["sabotage", "poison"]:
+            if ability in [Ability.sabotage, Ability.sabotage_II]:
                 possible_targets = enemy_units
 
-            elif ability in ["improve_weapons", "improve_weapons_II_A", "improve_weapons_II_B"]:
+            elif ability in [Ability.improve_weapons, Ability.improve_weapons_II_A, Ability.improve_weapons_II_B]:
                 possible_targets = [target_position for target_position, target_unit in player_units.items()
                                     if target_unit.attack and target_unit.range == 1]
 
-            elif ability == "bribe":
+            elif ability in [Ability.bribe, Ability.bribe_II]:
                 possible_targets = [target_position for target_position, target_unit in enemy_units.items()
-                                    if not target_unit.get_bribed() and not target_unit.has(Trait.recently_bribed)]
+                                    if not target_unit.get(Trait.bribed) and not target_unit.has(Trait.recently_bribed)]
             else:
                 possible_targets = []
 
