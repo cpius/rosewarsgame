@@ -1,0 +1,28 @@
+{
+    "type": "Does action exist",
+    "result": false,
+    "action":
+    {
+        "start_at": "C3",
+        "target_at": "C6",
+		"end_at": "C3",
+		"ability": "bribe"
+    },
+    "gamestate":
+	{
+		"actions_remaining": 2, 
+		"player1_units": 
+		{
+			"C3": "Diplomat",
+			"A2": "Pikeman"
+		},
+		"player2_units": 
+		{
+			"C6":
+			{
+				"name": "Ballista",
+				"recently_bribed": true
+			}
+		}
+	}
+}

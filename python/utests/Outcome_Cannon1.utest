@@ -1,5 +1,5 @@
 {
-    "description": "Test if Cannon works", 
+    "description": "Test if Cannon gets attack frozen", 
     "type": "Is outcome correct", 
     "pre_gamestate": {
         "actions_remaining": 2, 

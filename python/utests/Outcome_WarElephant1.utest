@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct",
-    "description": "Test if elephant attacks work correctly",
+    "description": "Test Elephant triple push",
     "outcome":
     {
         "B2": "win",

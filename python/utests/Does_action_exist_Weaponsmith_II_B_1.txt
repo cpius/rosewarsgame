@@ -20,7 +20,8 @@
 			"A4": 
 			{
 				"name": "Knight",
-				"improved_weapons_II_B": 1
+				"improved_weapons_II_B": 1,
+				"zoc": {"Cavalry": "true"}
 			}
         }
     }
