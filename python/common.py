@@ -139,20 +139,6 @@ trait_descriptions = {
 }
 
 
-class Ability:
-    bribe = 1
-    bribe_II = 2
-    improve_weapons = 3
-    improve_weapons_II_A = 4
-    improve_weapons_II_B = 5
-    pikeman_specialist = 6
-    poison = 7
-    sabotage = 8
-    sabotage_II = 9
-    triple_attack = 10
-    poison_II = 11
-
-
 ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
@@ -173,6 +159,7 @@ ability_descriptions = {
 
 
 
+Ability = enum(*(ability for ability in ability_descriptions))
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
@@ -231,6 +218,18 @@ if 1 == 2:
         crusading_II = 44
         xp = 45
 
+    class Ability:
+        bribe = 1
+        bribe_II = 2
+        improve_weapons = 3
+        improve_weapons_II_A = 4
+        improve_weapons_II_B = 5
+        pikeman_specialist = 6
+        poison = 7
+        sabotage = 8
+        sabotage_II = 9
+        triple_attack = 10
+        poison_II = 11
 
 
 board_height = 8
