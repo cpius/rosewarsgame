@@ -132,6 +132,38 @@ trait_descriptions = {
 }
 
 
+class Ability:
+    bribe = 1
+    bribe_II = 2
+    improve_weapons = 3
+    improve_weapons_II_A = 4
+    improve_weapons_II_B = 5
+    pikeman_specialist = 6
+    poison = 7
+    sabotage = 8
+    sabotage_II = 9
+    triple_attack = 10
+    poison_II = 11
+
+
+ability_descriptions = {
+    "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
+             "the same unit on your next turn. The unit gets +1A until end of turn.",
+    "bribe_II": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
+                "the same unit on your next turn. The unit gets +2A until end of turn.",
+    "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
+    "improve_weapons_II_A": "Give melee unit +2 attack, +1 defence for two turns.",
+    "improve_weapons_II_B": "Give melee unit +3 attack, +2 defence, and zoc against cavalry until your next turn",
+    "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
+    "poison": "Freezes a unit for 2 turns.",
+    "poison_II": "Freezes a unit for 3 turns.",
+    "sabotage": "Reduces a units defence to 0 for 1 turn.",
+    "sabotage_II": "Reduces a units defence to -1 for 1 turn.",
+    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction."
+
+}
+
+
 
 
 def enum(*sequential, **named):
