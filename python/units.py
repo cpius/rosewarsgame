@@ -66,7 +66,6 @@ class Unit(object):
             self.increment(Trait.xp)
 
     def improve_weapons_II_A(self):
-        print "a"
         self.set(Trait.improved_weapons_II_A, 2)
 
     def improve_weapons_II_B(self):
