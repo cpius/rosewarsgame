@@ -95,7 +95,7 @@ def do_action(gamestate, action, outcome=None):
     elif action.is_ability():
         settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
 
-    if unit.has(Trait.bloodlust) and outcome.outcomes[action.target_at] == 1:
+    if unit.has(Trait.bloodlust) and outcome.outcomes[action.target_at] == SubOutcome.WIN:
         bloodlust = True
     else:
         unit.remove(Trait.extra_action)
