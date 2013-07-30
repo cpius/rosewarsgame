@@ -14,6 +14,7 @@ class Action(object):
                  action_number=None,
                  outcome=SubOutcome.UNKNOWN,
                  created_at=None):
+
         # The tile the unit starts it's action on
         self.start_at = start_at
 

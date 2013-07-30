@@ -9,7 +9,6 @@ from action import Action
 
 def do_action(gamestate, action, outcome=None):
     def prepare_extra_actions(action, unit):
-
         if unit.has(Trait.swiftness):
             movement_remaining = unit.movement - distance(action.start_at, action.end_at)
 
@@ -21,7 +20,6 @@ def do_action(gamestate, action, outcome=None):
         if unit.has(Trait.combat_agility):
             unit.set(Trait.movement_remaining, unit.movement - distance(action.start_at, action.final_position))
             unit.set(Trait.extra_action)
-
 
     def update_actions_remaining(action):
 

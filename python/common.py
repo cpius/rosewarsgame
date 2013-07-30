@@ -4,7 +4,7 @@ from bson import ObjectId
 
 
 class Direction:
-    """ An object direction is one move up, down, left or right.
+    """ A direction is one move up, down, left or right.
     The class contains methods for returning the tile going one step in the direction will lead you to,
     and for returning the tiles you should check for zone of control.
     """
@@ -220,6 +220,7 @@ if 1 == 2:
         crusading_II = 44
         xp = 45
         pikeman_specialist = 46
+        lost_extra_life = 47
 
     class Ability:
         bribe = 1
@@ -233,7 +234,6 @@ if 1 == 2:
         sabotage_II = 9
         triple_attack = 10
         poison_II = 11
-
 
 board_height = 8
 board_width = 5
