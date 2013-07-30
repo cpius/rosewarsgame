@@ -14,7 +14,6 @@ import json
 from json import JSONEncoder
 import datetime
 from client import Client
-from action_getter import add_unit_references
 from game import Game
 from outcome import SubOutcome
 
@@ -67,7 +66,6 @@ class Controller(object):
 
     def trigger_network_player(self):
         action, outcome = self.client.select_action(self.gamestate.action_number)
-        add_unit_references(self.gamestate, action)
 
         print "received action from network: " + str(action)
 
@@ -80,7 +78,6 @@ class Controller(object):
     def trigger_artificial_intelligence(self):
 
         action = self.game.current_player().ai.select_action(self.game)
-        action.add_references(self.game.gamestate)
 
         if action:
             self.perform_action(action)
@@ -294,8 +291,6 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
 
-            add_unit_references(self.game.gamestate, action)
-
             if self.game.opponent_player().intelligence == "Network":
                 outcome = self.client.send_action(action.to_document())
                 action.ensure_outcome(outcome)
@@ -358,7 +353,6 @@ class Controller(object):
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
-        add_unit_references(self.game.gamestate, action)
         player_unit = self.game.gamestate.player_units()[self.start_position]
         opponent_unit = self.game.gamestate.opponent_units()[attack_position]
         self.view.show_attack(self.game.gamestate, action, player_unit, opponent_unit)
