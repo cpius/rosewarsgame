@@ -505,7 +505,7 @@ class Royal_Guard(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Infantry
-    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, "Specialist"]
+    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
     xp_to_upgrade = 3
     upgrades = ["Royal Guard II_A", "Royal Guard II_B"]
 
@@ -523,7 +523,7 @@ class Royal_Guard_II_A(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Infantry
-    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, "Specialist"]
+    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Siege_Weapon]
 
     constants = [Trait.defence_maneuverability, Trait.melee_expert]
 
@@ -539,7 +539,7 @@ class Royal_Guard_II_B(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Infantry
-    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, "Specialist"]
+    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
 
     constants = [Trait.defence_maneuverability, Trait.tall_shield, Trait.melee_freeze]
 
@@ -635,8 +635,8 @@ class Viking_II_B(Unit):
     defence = 2
     movement = 1
     range = 1
-    attack_bonuses = {"Siege Weapons": 1}
-    defence_bonuses = {"Siege Weapons": 2}
+    attack_bonuses = {Type.Siege_Weapon: 1}
+    defence_bonuses = {Type.Siege_Weapon: 2}
     zoc = []
     type = Type.Infantry
 
@@ -669,7 +669,7 @@ class Cannon_II_A(Unit):
     defence = 1
     movement = 1
     range = 4
-    attack_bonuses = {"Siege_weapons": 2}
+    attack_bonuses = {Type.Siege_Weapon: 2}
     defence_bonuses = {}
     zoc = []
     type = Type.Siege_Weapon
@@ -1095,7 +1095,7 @@ class Saboteur(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
     upgrades = ["Saboteur II_A", "Saboteur II_B"]
 
     abilities = [Ability.sabotage, Ability.poison]
@@ -1111,7 +1111,7 @@ class Saboteur_II_A(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
 
     abilities = [Ability.sabotage, Ability.poison_II]
 
@@ -1126,7 +1126,7 @@ class Saboteur_II_B(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
 
     abilities = [Ability.sabotage_II, Ability.poison]
 
@@ -1141,7 +1141,7 @@ class Diplomat(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
     upgrades = ["Diplomat II_A", "Diplomat II_B"]
 
     abilities = [Ability.bribe]
@@ -1157,7 +1157,7 @@ class Diplomat_II_A(Unit):
     range = 4
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
 
     abilities = [Ability.bribe]
 
@@ -1172,7 +1172,7 @@ class Diplomat_II_B(Unit):
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
 
     abilities = [Ability.bribe_II]
 
@@ -1187,7 +1187,7 @@ class Weaponsmith(Unit):
     range = 4
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
     upgrades = ["Weaponsmith II_A", "Weaponsmith II_B"]
 
     abilities = [Ability.improve_weapons]
@@ -1203,7 +1203,7 @@ class Weaponsmith_II_A(Unit):
     range = 4
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
 
     abilities = [Ability.improve_weapons_II_A]
 
@@ -1218,7 +1218,7 @@ class Weaponsmith_II_B(Unit):
     range = 4
     attack_bonuses = {}
     defence_bonuses = {}
-    type = "Specialist"
+    type = Type.Specialist
 
     abilities = [Ability.improve_weapons_II_B]
 
