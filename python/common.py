@@ -79,6 +79,12 @@ class Position:
         return self.column < 1 or self.column > board_width
 
 
+def enum(*sequential, **named):
+    enums = dict(zip(sequential, range(1, len(sequential) + 1)), **named)
+    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums['reverse_mapping'] = reverse
+    return type('Enum', (), enums)
+
 
 trait_descriptions = {
     "attack_cooldown": "Can only attack every third turn.",
