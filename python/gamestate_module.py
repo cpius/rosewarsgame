@@ -119,7 +119,8 @@ class Gamestate:
                 unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
                 for attribute, value in unit_document.items():
                     if attribute != "name":
-                        unit.variables[attribute] = value
+                        attr = getattr(Trait, attribute)
+                        unit.variables[attr] = value
 
                 units[position] = unit
 
@@ -147,7 +148,7 @@ class Gamestate:
 
             document_variables = [attribute for attribute, value in unit.variables.items() if value]
             if document_variables:
-                unit_dict = {attribute: unit.variables[attribute] for attribute in document_variables}
+                unit_dict = {Trait.reverse_mapping[attribute]: unit.variables[attribute] for attribute in document_variables}
                 unit_dict["name"] = unit.name
                 units_dict[position] = unit_dict
             else:
