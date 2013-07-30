@@ -220,7 +220,6 @@ def settle_ability(action, enemy_units, player_units):
         action.target_unit.set("bribed")
         player_units[action.target_at] = enemy_units.pop(action.target_at)
     else:
-        print action.ability
         action.target_unit.set(action.ability)
 
 
