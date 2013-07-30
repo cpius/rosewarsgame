@@ -203,9 +203,8 @@ def settle_attack(action, gamestate, outcome):
 def settle_ability(action, enemy_units, player_units):
 
     if action.ability == "bribe":
-        action.target_unit.set_bribed()
+        action.target_unit.set("bribed")
         player_units[action.ability_position] = enemy_units.pop(action.ability_position)
-        player_units[action.ability_position].set_bribed()
 
     else:
         print action.ability

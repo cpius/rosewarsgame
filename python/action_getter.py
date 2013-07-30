@@ -35,7 +35,7 @@ class memoized(object):
 
 def get_actions(gamestate):
     def can_use_unit(unit):
-        return not (unit.has("used") or unit.has("frozen") or unit.is_recently_bribed())
+        return not (unit.has("used") or unit.has("frozen") or unit.has("recently_bribed"))
 
     def moving_allowed(unit_position):
         return not any(position for position in unit_position.adjacent_tiles() if
@@ -434,7 +434,7 @@ def get_special_unit_actions(unit, position, units, enemy_units, player_units, m
 
             elif ability == "bribe":
                 possible_targets = [target_position for target_position, target_unit in enemy_units.items()
-                                    if not target_unit.get_bribed() and not target_unit.is_recently_bribed()]
+                                    if not target_unit.get_bribed() and not target_unit.has("recently_bribed")]
             else:
                 possible_targets = []
 

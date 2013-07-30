@@ -74,21 +74,6 @@ class Unit(object):
         self.variables["improved_weapons_II_B"] = 0
         self.zoc = {}
 
-    def set_bribed(self):
-        self.variables["bribed"] = 1
-
-    def remove_bribed(self):
-        self.variables["is_bribed"] = 0
-
-    def set_recently_bribed(self):
-        self.variables["recently_bribed"] = 1
-
-    def is_recently_bribed(self):
-        return self.variables["recently_bribed"]
-
-    def remove_recently_bribed(self):
-        self.variables["recently_bribed"] = 0
-
     def has_extra_life(self):
         return self.name == "Viking" and not self.variables["lost_extra_life"]
 
