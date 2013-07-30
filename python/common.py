@@ -79,53 +79,6 @@ class Position:
         return self.column < 1 or self.column > board_width
 
 
-class Trait:
-    attack_cooldown = 1
-    attack_frozen = 2
-    berserking = 3
-    big_shield = 4
-    bloodlust = 5
-    bribed = 6
-    bribed_II = 7
-    cavalry_charging = 8
-    combat_agility = 9
-    defence_maneuverability = 10
-    double_attack_cost = 11
-    extra_action = 12
-    extra_life = 13
-    frozen = 14
-    improved_weapons = 15
-    improved_weapons_II_A = 16
-    improved_weapons_II_B = 17
-    melee_expert = 18
-    melee_freeze = 19
-    movement_remaining = 20
-    longsword = 21
-    push = 22
-    rage = 23
-    rage_II = 24
-    recently_bribed = 25
-    sabotaged = 26
-    sabotaged_II = 27
-    scouting = 28
-    sharpshooting = 29
-    swiftness = 30
-    tall_shield = 31
-    triple_attack = 32
-    used = 33
-    lancing = 34
-    attack_cooldown = 35
-    far_sighted = 36
-    lancing_II = 37
-    flag_bearing = 38
-    flag_bearing_II_A = 39
-    flag_bearing_II_B = 40
-    crusading = 41
-    crusading = 42
-    attack_cooldown_II = 43
-    crusading_II = 44
-    xp = 45
-
 
 trait_descriptions = {
     "attack_cooldown": "Can only attack every third turn.",
@@ -222,6 +175,56 @@ def enum(*sequential, **named):
 
 
 Trait = enum(*(trait for trait in trait_descriptions))
+
+
+if 1 == 2:
+    class Trait:
+        attack_cooldown = 1
+        attack_frozen = 2
+        berserking = 3
+        big_shield = 4
+        bloodlust = 5
+        bribed = 6
+        bribed_II = 7
+        cavalry_charging = 8
+        combat_agility = 9
+        defence_maneuverability = 10
+        double_attack_cost = 11
+        extra_action = 12
+        extra_life = 13
+        frozen = 14
+        improved_weapons = 15
+        improved_weapons_II_A = 16
+        improved_weapons_II_B = 17
+        melee_expert = 18
+        melee_freeze = 19
+        movement_remaining = 20
+        longsword = 21
+        push = 22
+        rage = 23
+        rage_II = 24
+        recently_bribed = 25
+        sabotaged = 26
+        sabotaged_II = 27
+        scouting = 28
+        sharpshooting = 29
+        swiftness = 30
+        tall_shield = 31
+        triple_attack = 32
+        used = 33
+        lancing = 34
+        attack_cooldown = 35
+        far_sighted = 36
+        lancing_II = 37
+        flag_bearing = 38
+        flag_bearing_II_A = 39
+        flag_bearing_II_B = 40
+        crusading = 41
+        crusading = 42
+        attack_cooldown_II = 43
+        crusading_II = 44
+        xp = 45
+
 
 
 board_height = 8
