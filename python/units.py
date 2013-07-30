@@ -77,12 +77,6 @@ class Unit(object):
         self.variables[Ability.improve_weapons_II_B] = 0
         self.zoc = {}
 
-    def get_zoc(self):
-        if self.has(Trait.improved_weapons_II_B):
-            return self.zoc + ["Cavalry"]
-        else:
-            return self.zoc
-
 
 class Archer(Unit):
 
