@@ -1,6 +1,7 @@
 from __future__ import division
 from common import *
 
+
 def initialize_turn(gamestate):
 
     def resolve_bribe(unit):
