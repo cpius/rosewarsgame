@@ -18,7 +18,7 @@ class UniversalTestCase(unittest.TestCase):
     def runTest(self):
         test_document = json.loads(open(self.testcase_file).read())
 
-        print "\n\nTesting", self.testcase_file
+        # print "\n\nTesting", self.testcase_file
 
         if test_document["type"] == "Does action exist":
             gamestate = Gamestate.from_document(test_document["gamestate"])
