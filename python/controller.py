@@ -117,10 +117,9 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.selecting_melee_target(position):
+            all_actions = self.game.gamestate.get_actions()
 
-            possible_actions = [action for action in self.game.gamestate.get_actions() if
-                                action.start_at == self.start_position and action.target_at == position and
-                                not action.is_move_with_attack()]
+            possible_actions = [action for action in all_actions if self.possible_melee_target(action, position)]
 
             if not possible_actions:
                 self.view.draw_message("Action not possible")
@@ -139,6 +138,11 @@ class Controller(object):
         elif self.selecting_move(position):
             action = Action(self.game.gamestate.all_units(), self.start_position, end_at=position)
             self.perform_action(action)
+
+    def possible_melee_target(self, action, position):
+        same_start = action.start_at == self.start_position
+        same_target = action.target_at and action.target_at == position
+        return same_start and same_target and action.is_move_with_attack()
 
     def pick_action_end_position(self, possible_actions):
 
