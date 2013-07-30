@@ -99,12 +99,6 @@ def enum(*sequential, **named):
 SubOutcome = enum("UNKNOWN", "WIN", "PUSH", "MISS", "DEFEND", "DETERMINISTIC")
 
 
-def merge_units(units1, units2):
-    all_units = units1.copy()
-    all_units.update(units2)
-    return all_units
-
-
 def find_all_friendly_units_except_current(current_unit_position, player_units):
     return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
 

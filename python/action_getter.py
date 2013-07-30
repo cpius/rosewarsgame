@@ -160,7 +160,8 @@ def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
            if friendly_units[position].has("cavalry_charging")):
         movement += 1
 
-    units = merge_units(player_units, enemy_units)
+    units = player_units.copy()
+    units.update(enemy_units)
 
     if unit.name not in settings.allowed_special_units:
         if unit.range == 1:
