@@ -1,4 +1,4 @@
-from outcome import Outcome, SubOutcome
+from outcome import SubOutcome
 from common import *
 
 
