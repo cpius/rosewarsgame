@@ -34,7 +34,7 @@ class Action(object):
         self.created_at = created_at if created_at else datetime.utcnow()
 
         self.unit = units[self.start_at]
-        if self.target_at:
+        if self.target_at and self.target_at in units:
             self.target_unit = units[self.target_at]
 
         self.outcome = outcome
