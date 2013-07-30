@@ -1,0 +1,40 @@
+{"type": "Does turn shift work", 
+ "pre_gamestate": 
+ {
+	"actions_remaining": 0,
+    "player1_units": 
+	{
+        "C3": "Diplomat",
+        "E4": "Light Cavalry",
+		"C6":
+		{
+			"name": "Knight",
+			"bribed": true
+		}
+    }, 
+    "player2_units": 
+	{
+        "A4": "Ballista" 
+    }
+ }, 
+ "post_gamestate": 
+ {
+	"actions_remaining": 2,
+    "player2_units": 
+	{
+        "C3": "Diplomat",
+        "E4": "Light Cavalry" 
+    }, 
+    "player1_units": 
+	{
+        "C6": 
+		{
+			"name": "Knight", 
+			"recently_bribed": true
+		},
+        "A4": "Ballista" 
+
+    }
+ } 
+}
+

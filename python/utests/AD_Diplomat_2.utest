@@ -1,0 +1,31 @@
+{"type": "Is attack and defence correct",
+ "attack": 4,
+ "defence": 2,
+ "action": 
+{
+    "start_position": "B2",
+    "end_position": "B4",
+    "attack_position": "B5",
+    "move_with_attack": "move"
+},
+ "gamestate": 
+ {
+	"actions_remaining": 1,
+    "player1_units": 
+	{
+        "B2": 
+		{
+			"name": "Light Cavalry", 
+			"bribed_II": true
+		},
+        "A3": "Archer" 
+    }, 
+    "player2_units": 
+	{
+        "B5": "Archer", 
+        "E5": "Ballista" 
+
+    }
+ } 
+}
+
