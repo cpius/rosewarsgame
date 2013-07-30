@@ -139,11 +139,11 @@ def draw_ask_about_ability(screen, interface, unit):
 def draw_unit_lower_right(screen, interface, action, color, index, base_x, base_y):
 
     if not action.is_attack():
-        unit = action.unit_reference.name
+        unit = action.unit.name
     elif index == 0:
-        unit = action.unit_reference.name
+        unit = action.unit.name
     else:
-        unit = action.target_reference.name
+        unit = action.target_unit.name
 
     resize = 0.2 * zoom
     location = (base_x + (65 + index * 100) * zoom, base_y + 8 * zoom)

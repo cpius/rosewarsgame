@@ -177,7 +177,7 @@ def find_action_scores_two_actions(actions, original_gamestate):
 
         if action.is_attack():
 
-            action.chance_of_win = m.chance_of_win(potential_gamestate, action.unit_reference, action.target_reference, action)
+            action.chance_of_win = m.chance_of_win(potential_gamestate, action.unit, action.target_unit, action)
 
             action = get_action_success(action)
 
@@ -231,8 +231,7 @@ def find_action_scores_one_action(actions, original_gamestate):
 
         if action.is_attack():
 
-            action.chance_of_win = m.chance_of_win(potential_gamestate, action.unit_reference,
-                                                   action.target_reference, action)
+            action.chance_of_win = m.chance_of_win(potential_gamestate, action.unit, action.target_unit, action)
 
             action = get_action_success(action)
 
