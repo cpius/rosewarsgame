@@ -1,4 +1,5 @@
 from collections import defaultdict
+import settings
 
 
 class Unit(object):
@@ -12,6 +13,8 @@ class Unit(object):
     upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}
+    custom_set_name = {"sabotage": "sabotaged", "sabotage_II": "sabotaged_II", "improve_weapons": "improved_weapons"}
+    custom_set_function = ["poison", "poison_II", "improve_weapons_II_A", "improve_weapons_II_B"]
 
     def __repr__(self):
         return self.name
@@ -42,113 +45,37 @@ class Unit(object):
 
     def decrement(self, attribute):
         self.variables[attribute] = max(0, self.variables["attribute"] - 1)
+
+    # custom functions
     def poison(self):
         self.freeze(2)
 
     def poison_II(self):
         self.freeze(3)
 
-    # Frozen
     def freeze(self, n):
-        self.variables["frozen"] = max(self.variables["frozen"], n)
+        self.set("frozen", max(self.get("frozen"), n))
 
-    def is_frozen(self):
-        return self.variables["frozen"]
+    def gain_xp(self):
+        if not self.has("used") and not settings.beginner_mode:
+            self.increment("xp")
 
-    def get_frozen_counters(self):
-        return self.variables["frozen"]
-
-    def decrement_frozen(self):
-        self.variables["frozen"] = max(self.variables["frozen"] - 1, 0)
-
-    # Xp
-    def increment_xp(self):
-        self.variables["xp"] += 1
-
-    def get_xp(self):
-        return self.variables["xp"]
-
-    # Used
-    def set_used(self):
-        self.variables["used"] = 1
-
-    def is_used(self):
-        return self.variables["used"]
-
-    def remove_used(self):
-        self.variables["used"] = 0
-
-    # Attack frozen
     def set_attack_frozen(self, n):
         self.variables["attack_frozen"] = n
 
-    def is_attack_frozen(self):
-        return self.variables["attack_frozen"]
-
-    def get_attack_frozen_counters(self):
-        return self.variables["attack_frozen"]
-
-    def decrement_attack_frozen(self):
-        self.variables["attack_frozen"] = max(self.variables["attack_frozen"] - 1, 0)
-
-    # Improved weapons
-    def improve_weapons(self):
-        self.variables["improved_weapons"] = 1
-
-    def has_improved_weapons(self):
-        return self.variables["improved_weapons"]
-
-    def remove_improved_weapons(self):
-        self.variables["improved_weapons"] = 0
-
-    # Improved weapons_II_A
     def improve_weapons_II_A(self):
-        self.variables["improved_weapons_II_A"] = 2
+        self.set("improved_weapons_II_A", 2)
 
-    def has_improved_weapons_II_A(self):
-        return self.variables["improved_weapons_II_A"]
-
-    def decrease_improved_weapons_II_A(self):
-        self.variables["improved_weapons_II_A"] = max(0, self.variables["improved_weapons"] - 1)
-
-    # Improved weapons_II_B
     def improve_weapons_II_B(self):
         self.variables["improved_weapons_II_B"] = 1
         self.zoc = {"Cavalry"}
-
-    def has_improved_weapons_II_B(self):
-        return self.variables["improved_weapons_II_B"]
 
     def remove_improved_weapons_II_B(self):
         self.variables["improved_weapons_II_B"] = 0
         self.zoc = {}
 
-    # Sabotage
-    def sabotage(self):
-        self.variables["sabotaged"] = 1
-
-    def is_sabotaged(self):
-        return self.variables["sabotaged"]
-
-    def remove_sabotaged(self):
-        self.variables["sabotaged"] = 0
-
-    # Sabotage_II
-    def sabotage_II(self):
-        self.variables["sabotaged_II"] = 1
-
-    def is_sabotaged_II(self):
-        return self.variables["sabotaged_II"]
-
-    def remove_sabotaged_II(self):
-        self.variables["sabotaged_II"] = 0
-
-    # Bribe
     def set_bribed(self):
         self.variables["bribed"] = 1
-
-    def get_bribed(self):
-        return self.variables["bribed"]
 
     def remove_bribed(self):
         self.variables["is_bribed"] = 0
@@ -162,36 +89,20 @@ class Unit(object):
     def remove_recently_bribed(self):
         self.variables["recently_bribed"] = 0
 
-    # Extra life
     def has_extra_life(self):
         return self.name == "Viking" and not self.variables["lost_extra_life"]
 
     def remove_extra_life(self):
         self.variables["lost_extra_life"] = 1
 
-    #Zoc
     def get_zoc(self):
-        if self.has_improved_weapons_II_B():
+        if self.has("improved_weapons_II_B"):
             return self.zoc + ["Cavalry"]
         else:
             return self.zoc
 
-    #Movement remaining
     def set_movement_remaining(self, n):
         self.variables["movement_remaining"] = n
-
-    def get_movement_remaining(self):
-        return self.variables["movement_remaining"]
-
-    #Extra_action
-    def set_extra_action(self):
-        self.variables["extra_action"] = 1
-
-    def has_extra_action(self):
-        return self.variables["extra_action"]
-
-    def remove_extra_action(self):
-        self.variables["extra_action"] = 0
 
 
 class Archer(Unit):
