@@ -39,7 +39,6 @@ class Action(object):
             self.target_unit = units[self.target_at]
 
         self.outcome = outcome
-        self.double_cost = False
 
     @classmethod
     def from_document(cls, units, document):
@@ -153,3 +152,6 @@ class Action(object):
 
     def is_triple_attack(self):
         return self.unit.has(Trait.triple_attack) and self.is_attack()
+
+    def double_cost(self):
+        return self.unit.has(Trait.double_attack_cost) and self.is_attack()

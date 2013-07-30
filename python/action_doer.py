@@ -28,15 +28,12 @@ def do_action(gamestate, action, outcome=None):
 
         gamestate.decrement_actions_remaining()
 
-        if action.double_cost:
+        if action.double_cost():
             gamestate.decrement_actions_remaining()
 
     def secondary_action_effects(action, unit):
         if unit.has(Trait.attack_cooldown) and action.is_attack():
             unit.set(Trait.attack_frozen, 3)
-
-        if action.unit.has(Trait.double_attack_cost) and action.is_attack():
-            action.double_cost = True
 
     if not outcome:
         outcome = Outcome()
