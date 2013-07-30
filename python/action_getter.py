@@ -135,7 +135,7 @@ def get_extra_actions(gamestate):
 
             opponent_units = gamestate.opponent_units()
             unit.zoc_blocks = frozenset(position for position,
-                                        opponent_unit in opponent_units.items() if unit.type in opponent_unit.get_zoc())
+                                        opponent_unit in opponent_units.items() if unit.type in opponent_unit.zoc)
 
             if unit.has(Trait.swiftness):
                 moves, attacks, abilities = get_actions_swiftness()
@@ -152,7 +152,7 @@ def get_extra_actions(gamestate):
 def get_unit_actions(unit, position, friendly_units, enemy_units, player_units):
 
     unit.zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items()
-                                if unit.type in enemy_unit.get_zoc())
+                                if unit.type in enemy_unit.zoc)
 
     movement = unit.movement
     if any(position for position in position.surrounding_tiles() if position in friendly_units

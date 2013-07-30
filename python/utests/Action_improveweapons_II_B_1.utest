@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+	"description": "Does temporary zoc traits work",
     "result": false,
     "action":
     {

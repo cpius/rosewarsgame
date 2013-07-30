@@ -118,7 +118,9 @@ class Gamestate:
             else:
                 unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
                 for attribute, value in unit_document.items():
-                    if attribute != "name":
+                    if attribute == "zoc":
+                        unit.zoc = {getattr(Type, type) for type in unit_document["zoc"]}
+                    elif attribute != "name":
                         attr = getattr(Trait, attribute)
                         unit.variables[attr] = value
 
