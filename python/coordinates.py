@@ -1,6 +1,3 @@
-import common
-
-
 class Coordinates(object):
     def __init__(self, coordinates, interface):
         self.add_x = coordinates[0]

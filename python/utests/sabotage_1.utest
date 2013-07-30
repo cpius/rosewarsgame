@@ -1,0 +1,33 @@
+{"type": "Is attack and defence correct",
+ "attack": 3,
+ "defence": 0,
+ "action": 
+{
+    "start_position": "B2",
+    "end_position": "B2",
+    "attack_position": "B4"
+},
+ "gamestate": 
+ {
+	"actions_remaining": 1,
+    "player1_units": 
+	{
+        "B2": 
+		{
+			"name": "Archer",
+			"xp": 1
+		},
+        "A3": "Saboteur" 
+    }, 
+    "player2_units": 
+	{
+        "B4": 
+		{
+			"name": "Archer",
+			"sabotaged": 1
+		},
+        "A5": "Weaponsmith" 
+    }
+ } 
+}
+

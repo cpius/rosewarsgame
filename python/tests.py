@@ -1,15 +1,11 @@
 import unittest
-import re
 from datetime import datetime
-import units as units_module
-import ai_module
-from player import Player
 from gamestate_module import Gamestate
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from pprint import PrettyPrinter
 import action_getter
 from action import Action
+import common
 
 
 class TestAI(unittest.TestCase):
@@ -26,8 +22,10 @@ class TestAI(unittest.TestCase):
         action = action_getter.get_actions(gamestate)[3]
         action_document = action.to_document()
         same_action = Action.from_document(action_document)
+        same_action_document = same_action.to_document()
 
         self.assertEquals(action, same_action)
+        self.assertEquals(action_document, same_action_document)
 
     def test_IfBoardIsFlippedTwoTimes_ThenItShouldBeTheSame(self):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
@@ -45,12 +43,16 @@ class TestAI(unittest.TestCase):
         game = games.find_one({"_id": ObjectId("51e86e5fea5a8f135cbc0326")})
         self.assertEqual(1, game["Turn"])
 
+    def assert_equal_documents(self, expected, actual):
+        documents = "Expected:\n" + common.document_to_string(expected)
+        documents += "\nActual:\n" + common.document_to_string(actual)
+        self.assertEqual(expected, actual, "The document was wrong.\n\n" + documents)
+
     def get_test_gamestate_document(self):
         now = datetime.utcnow()
 
         return {
             "actions_remaining": 1,
-            "extra_action": False,
             "player1_units":
             {
                 "D6":
