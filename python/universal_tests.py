@@ -16,9 +16,9 @@ class UniversalTestCase(unittest.TestCase):
         self.testcase_file = testcase_file
 
     def runTest(self):
-        print "Testing: ", self.testcase_file
-
         test_document = json.loads(open(self.testcase_file).read())
+
+        print "\n\nTesting", self.testcase_file
 
         if test_document["type"] == "Does action exist":
             gamestate = Gamestate.from_document(test_document["gamestate"])
@@ -46,20 +46,21 @@ class UniversalTestCase(unittest.TestCase):
         available_actions = action_getter.get_actions(gamestate)
         actual = (action in available_actions)
 
+        message = "Wrong action existance for", self.testcase_file + "\n\n"
         if expected:
-            message = "Requested action:", action
+            message += "Requested action:", action
         else:
-            message = "Not-allowed action:", action
+            message += "Not-allowed action:", action
 
         message += "Available actions:", [str(available_action) for available_action in available_actions]
 
         self.assertEqual(actual, expected, message)
 
     def is_attack_and_defence_correct(self, gamestate, action, expected_attack, expected_defence):
-        all_units = common.merge_units(gamestate.units[0], gamestate.units[1])
+        all_units = gamestate.all_units()
 
-        attacking_unit = all_units[action.start_position]
-        defending_unit = all_units[action.attack_position]
+        attacking_unit = all_units[action.start_at]
+        defending_unit = all_units[action.target_at]
 
         actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
         actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action, gamestate)
@@ -81,9 +82,11 @@ class UniversalTestCase(unittest.TestCase):
         self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
 
     def assert_equal_documents(self, expected, actual):
-        documents = "Expected:\n" + common.document_to_string(expected)
-        documents += "\nActual:\n" + common.document_to_string(actual)
-        self.assertEqual(expected, actual, "The document was wrong.\n\n" + documents)
+        message = "Wrong document for " + self.testcase_file + "\n\n"
+        message += "Expected:\n" + common.document_to_string(expected)
+        message += "\nActual:\n" + common.document_to_string(actual)
+
+        self.assertEqual(expected, actual, message)
 
 
 if __name__ == "__main__":
