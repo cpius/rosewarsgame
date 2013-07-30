@@ -34,27 +34,27 @@ def shade_actions(screen, interface, actions):
     drawn_tiles = set()
     for action in actions:
         if action.is_attack():
-            location = interface.coordinates["base"].get(action.attack_position)
+            location = interface.coordinates["base"].get(action.target_at)
             if location not in drawn_tiles:
                 drawn_tiles.add(location)
                 draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
         elif action.is_ability():
-            location = interface.coordinates["base"].get(action.ability_position)
+            location = interface.coordinates["base"].get(action.target_at)
             if location not in drawn_tiles:
                 drawn_tiles.add(location)
                 draw_rectangle(screen, unit_dimensions, location, interface.ability_shading)
         else:
-            location = interface.coordinates["base"].get(action.end_position)
+            location = interface.coordinates["base"].get(action.end_at)
             if location not in drawn_tiles:
                 drawn_tiles.add(location)
                 draw_rectangle(screen, unit_dimensions, location, interface.move_shading)
 
 
 def draw_post_movement(screen, interface, action):
-    pygame.draw.circle(screen, colors["black"], interface.coordinates["center"].get(action.start_position), 10)
-    draw_line(screen, interface, action.end_position, action.attack_position)
+    pygame.draw.circle(screen, colors["black"], interface.coordinates["center"].get(action.start_at), 10)
+    draw_line(screen, interface, action.end_at, action.target_at)
     pic = get_image(interface.move_icon)
-    screen.blit(pic, interface.coordinates["battle"].get(action.attack_position))
+    screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
 
 
 def draw_action(screen, interface, action, flip=False):
@@ -64,20 +64,20 @@ def draw_action(screen, interface, action, flip=False):
 
     coordinates = interface.coordinates
 
-    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(action.start_position), 10)
-    draw_line(screen, interface, action.start_position, action.end_position)
+    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(action.start_at), 10)
+    draw_line(screen, interface, action.start_at, action.end_at)
 
     if action.is_attack():
-        draw_line(screen, interface, action.end_position, action.attack_position)
+        draw_line(screen, interface, action.end_at, action.target_at)
 
     elif action.is_ability():
-        draw_line(screen, interface, action.end_position, action.ability_position)
+        draw_line(screen, interface, action.end_at, action.target_at)
         pic = get_image(interface.ability_icon)
-        screen.blit(pic, coordinates["battle"].get(action.ability_position))
+        screen.blit(pic, coordinates["battle"].get(action.target_at))
 
     else:
         pic = get_image(interface.move_icon)
-        screen.blit(pic, coordinates["battle"].get(action.end_position))
+        screen.blit(pic, coordinates["battle"].get(action.end_at))
 
 
 def draw_line(screen, interface, start_position, end_position):
@@ -172,7 +172,7 @@ def get_font_coordinates(interface, counters_drawn):
 
 def flip_action(action):
 
-    for attribute in ["start_position", "end_position", "attack_position", "ability_position"]:
+    for attribute in ["start_at", "end_at", "target_at"]:
         if getattr(action, attribute):
             setattr(action, attribute, getattr(action, attribute).flip())
 

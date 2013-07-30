@@ -22,27 +22,24 @@ class UniversalTestCase(unittest.TestCase):
 
         if test_document["type"] == "Does action exist":
             gamestate = Gamestate.from_document(test_document["gamestate"])
-            action = Action.from_document(test_document["action"])
+            action = Action.from_document(gamestate.all_units(), test_document["action"])
             expected = test_document["result"]
             self.does_action_exist(gamestate, action, expected)
 
         if test_document["type"] == "Is attack and defence correct":
             gamestate = Gamestate.from_document(test_document["gamestate"])
-            action = Action.from_document(test_document["action"])
+            action = Action.from_document(gamestate.all_units(), test_document["action"])
             attack = test_document["attack"]
             defence = test_document["defence"]
-
-            action.add_references(gamestate)
 
             self.is_attack_and_defence_correct(gamestate, action, attack, defence)
 
         if test_document["type"] == "Is outcome correct":
             gamestate = Gamestate.from_document(test_document["pre_gamestate"])
             expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
-            action = Action.from_document(test_document["action"])
+            action = Action.from_document(gamestate.all_units(), test_document["action"])
             outcome = Outcome.from_document(test_document["outcome"])
 
-            action.add_references(gamestate)
             self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
 
     def does_action_exist(self, gamestate, action, expected):

@@ -3,9 +3,8 @@
     "result": true,
     "action": {
         "action_number": 3,
-        "start_position": "A2",
-        "end_position": "A1",
-        "move_with_attack": "stay"
+        "start_at": "A2",
+        "end_at": "A1"
     },
     "gamestate": {
         "turn": 1,

@@ -9,10 +9,10 @@
     },
     "action":
     {
-        "start_position": "C1",
-        "end_position": "C1",
-        "attack_position": "C2",
-        "move_with_attack": "move"
+        "start_at": "C1",
+        "end_at": "C1",
+        "target_at": "C2",
+        "move_with_attack": true
     },
     "pre_gamestate":
     {

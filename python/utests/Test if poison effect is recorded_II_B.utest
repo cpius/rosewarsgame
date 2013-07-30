@@ -12,9 +12,9 @@
         }
     }, 
     "action": {
-        "ability_position": "D4", 
-        "end_position": "C3", 
-        "start_position": "C3", 
+        "target_at": "D4",
+        "end_at": "C3",
+        "start_at": "C3",
         "ability": "poison"
     }, 
     "outcome": {

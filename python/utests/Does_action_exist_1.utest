@@ -4,9 +4,8 @@
     "action":
     {
         "action_number": 3,
-        "start_position": "C7",
-        "end_position": "B7",
-        "move_with_attack": "stay"
+        "start_at": "C7",
+        "end_at": "B7"
     },
     "gamestate":
     {

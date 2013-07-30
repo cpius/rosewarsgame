@@ -16,9 +16,9 @@
         }
     }, 
     "action": {
-        "start_position": "C3", 
-        "ability_position": "C4", 
-        "end_position": "C3",
+        "start_at": "C3",
+        "target_at": "C4",
+        "end_at": "C3",
 		"ability": "bribe"
     }, 
     "outcome": {

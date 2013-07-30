@@ -7,7 +7,6 @@ import ai_methods
 import units as units_module
 import json
 from common import *
-from pprint import PrettyPrinter
 
 
 class Gamestate:
@@ -23,6 +22,11 @@ class Gamestate:
         self.extra_action = extra_action
         self.action_number = 0
         self.created_at = created_at
+
+    def all_units(self):
+        all_units = self.units[0].copy()
+        all_units.update(self.units[1])
+        return all_units
 
     def do_action(self, action, outcome=None):
         outcome = action_doer.do_action(self, action, outcome)
@@ -47,11 +51,9 @@ class Gamestate:
             actions = action_getter.get_actions(self)
 
         for action in actions:
-            action.add_references(self)
             if action.is_attack():
                 action.chance_of_win = ai_methods.chance_of_win(self, action.unit_reference, action.target_reference,
                                                                 action)
-
         return actions
 
     def copy(self):

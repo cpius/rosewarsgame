@@ -58,7 +58,6 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, ga
 def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
 
     attack = attacking_unit.attack
-    action.add_references(gamestate)
     player_units = gamestate.player_units()
 
     effects = {"is_lancing": 2, "is_lancing_II": 3}
@@ -89,14 +88,14 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.range == 1 and attacking_unit.has("melee_expert"):
         attack += 1
 
-    if attacking_unit.has("far_sighted") and distance(action.end_position, action.attack_position) < 4:
+    if attacking_unit.has("far_sighted") and distance(action.end_at, action.target_at) < 4:
         attack -= 1
 
     return attack
 
 
 def get_outcome(action, outcome):
-    sub_outcome = outcome.for_position(action.attack_position)
+    sub_outcome = outcome.for_position(action.target_at)
     if sub_outcome == SubOutcome.MISS:
         return " Miss"
     elif sub_outcome == SubOutcome.DEFEND:
