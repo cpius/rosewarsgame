@@ -153,24 +153,24 @@ ability_descriptions = {
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
     "sabotage_II": "Reduces a units defence to -1 for 1 turn.",
     "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction."
-
 }
 
 
-
-
-Ability = enum(*(ability for ability in ability_descriptions))
-def enum(*sequential, **named):
-    enums = dict(zip(sequential, range(len(sequential))), **named)
-    reverse = dict((value, key) for key, value in enums.iteritems())
-    enums['reverse_mapping'] = reverse
-    return type('Enum', (), enums)
-
+types = ["Cavalry", "Infantry", "Siege_Weapon"]
 
 Trait = enum(*(trait for trait in trait_descriptions))
 
+Ability = enum(*(ability for ability in ability_descriptions))
+
+Type = enum(*types)
+
 
 if 1 == 2:
+    class Type:
+        Cavalry = 1
+        Infantry = 2
+        Siege_weapon = 3
+
     class Trait:
         attack_cooldown = 1
         attack_frozen = 2
