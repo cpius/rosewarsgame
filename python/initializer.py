@@ -1,6 +1,11 @@
 from __future__ import division
 from common import *
 
+remove_traits = [Trait.used, Trait.sabotaged, Trait.sabotaged_II, Trait.improved_weapons, Trait.improved_weapons_II_B,
+                 Trait.recently_bribed]
+
+decrement_traits = [Trait.frozen, Trait.attack_frozen, Trait.improved_weapons_II_A]
+
 
 def initialize_turn(gamestate):
 
@@ -13,10 +18,9 @@ def initialize_turn(gamestate):
     gamestate.set_actions_remaining(2)
 
     for position, unit in gamestate.player_units.items():
-        for attr in [Trait.used, Trait.sabotaged, Trait.sabotaged_II, Trait.improved_weapons,
-                     Trait.improved_weapons_II_B, Trait.recently_bribed]:
-            unit.remove(attr)
-        for attr in [Trait.frozen, Trait.attack_frozen, Trait.improved_weapons_II_A]:
-            unit.decrement(attr)
+        for trait in remove_traits:
+            unit.remove(trait)
+        for trait in decrement_traits:
+            unit.decrement(trait)
 
         resolve_bribe(unit)
