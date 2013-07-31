@@ -76,6 +76,13 @@ class Unit(object):
         self.variables[Ability.improve_weapons_II_B] = 0
         self.zoc = {}
 
+    def is_melee(self):
+        return self.range == 1
+
+    def is_ranged(self):
+        return self.range > 1
+
+
 
 class Archer(Unit):
 
