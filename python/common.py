@@ -223,6 +223,8 @@ if 1 == 2:
         pikeman_specialist = 46
         lost_extra_life = 47
 
+        reverse_mapping = {}
+
     class Ability:
         bribe = 1
         bribe_II = 2
