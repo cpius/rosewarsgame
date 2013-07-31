@@ -71,10 +71,6 @@ class Unit(object):
         self.variables[Trait.improved_weapons_II_B] = 1
         self.zoc = {Type.Cavalry}
 
-    def remove_improved_weapons_II_B(self):
-        self.variables[Ability.improve_weapons_II_B] = 0
-        self.zoc = {}
-
     def is_melee(self):
         return self.range == 1
 
