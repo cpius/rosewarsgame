@@ -105,7 +105,7 @@ def get_unit_actions(unit, start_at, friendly_units, enemy_units, player_units):
             attacks = []
             for terms in attack_generator(moveset | {start_at}):
                 if terms["move_with_attack"]:
-                    if unit.get(Trait.movement_remaining) > 0:
+                    if unit.get(Trait.movement_remaining):
                         attacks.append(Action(units, start_at, **terms))
                 else:
                     attacks.append(Action(units, start_at, **terms))
@@ -243,7 +243,7 @@ def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
 def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
     """Returns all the tiles a unit can move to. """
 
-    if movement_remaining == 0:
+    if not movement_remaining:
         return {position}
     elif movement_remaining < total_movement:
         moveset = {position}
@@ -265,7 +265,7 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
     if position in enemy_units:
         attackset.add(position)
 
-    if range_remaining > 0:
+    if range_remaining:
         for new_position in position.adjacent_tiles():
             attackset |= ranged_attacks_set(new_position, enemy_units, range_remaining - 1)
 
