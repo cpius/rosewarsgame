@@ -72,6 +72,7 @@ class Gamestate:
     def set_available_actions(self):
         self.available_actions = self.get_actions()
 
+    @property
     def player_units(self):
         return self.units[0]
 

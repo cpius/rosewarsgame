@@ -61,7 +61,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, ga
 def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
 
     attack = attacking_unit.attack
-    player_units = gamestate.player_units()
+    player_units = gamestate.player_units
 
     effects = {"is_lancing": 2, "is_lancing_II": 3}
     for effect, value in effects.items():

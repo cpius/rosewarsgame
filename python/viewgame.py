@@ -12,7 +12,7 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
     if game.current_player().color == "Red":
         gamestate.flip_units()
 
-    draw_units(screen, interface, gamestate.player_units(), game.current_player().color, gamestate.opponent_units(),
+    draw_units(screen, interface, gamestate.player_units, game.current_player().color, gamestate.opponent_units(),
                game.opponent_player().color, start_position, actions)
 
     shade_actions(screen, interface, actions)

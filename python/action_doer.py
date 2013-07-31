@@ -47,8 +47,8 @@ def do_action(gamestate, action, outcome=None):
     unit.gain_xp()
     unit.set(Trait.used)
 
-    if action.start_at in gamestate.player_units():
-        gamestate.player_units()[action.end_at] = gamestate.player_units().pop(action.start_at)
+    if action.start_at in gamestate.player_units:
+        gamestate.player_units[action.end_at] = gamestate.player_units.pop(action.start_at)
 
     end_at = action.end_at
     target_at = action.target_at
@@ -88,7 +88,7 @@ def do_action(gamestate, action, outcome=None):
                     outcome = settle_attack(sub_action, gamestate, outcome)
 
     elif action.is_ability():
-        settle_ability(action, gamestate.opponent_units(), gamestate.player_units())
+        settle_ability(action, gamestate.opponent_units(), gamestate.player_units)
 
     if unit.has(Trait.bloodlust) and outcome.outcomes[action.target_at] == SubOutcome.WIN:
         bloodlust = True
@@ -102,8 +102,8 @@ def do_action(gamestate, action, outcome=None):
     else:
         prepare_extra_actions(action, unit)
 
-    if action.end_at in gamestate.player_units():
-        gamestate.player_units()[action.final_position] = gamestate.player_units().pop(action.end_at)
+    if action.end_at in gamestate.player_units:
+        gamestate.player_units[action.final_position] = gamestate.player_units.pop(action.end_at)
 
     if gamestate.extra_action:
         gamestate.extra_action = False
@@ -115,7 +115,7 @@ def do_action(gamestate, action, outcome=None):
 
 
 def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
-    player_units = gamestate.player_units()
+    player_units = gamestate.player_units
     opponent_units = gamestate.opponent_units()
     if not outcome:
         outcome = Outcome()
