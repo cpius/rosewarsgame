@@ -142,7 +142,7 @@ class Controller(object):
     def possible_melee_target(self, action, position):
         same_start = action.start_at == self.start_position
         same_target = action.target_at and action.target_at == position
-        return same_start and same_target and action.is_move_with_attack()
+        return same_start and same_target and not action.is_move_with_attack()
 
     def pick_action_end_position(self, possible_actions):
 
