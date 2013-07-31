@@ -2,6 +2,7 @@ from json import JSONEncoder, dumps
 from datetime import datetime
 from bson import ObjectId
 import collections
+import functools
 
 
 class Direction:
@@ -256,7 +257,7 @@ SubOutcome = enum("UNKNOWN", "WIN", "PUSH", "MISS", "DEFEND", "DETERMINISTIC")
 
 
 def find_all_friendly_units_except_current(current_unit_position, player_units):
-    return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
+    return dict((pos, player_units[pos]) for pos in player_units if pos != current_unit_position)
 
 
 def adjacent_friendly_units(position, units):

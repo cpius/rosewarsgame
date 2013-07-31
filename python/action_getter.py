@@ -13,8 +13,7 @@ def get_actions(gamestate):
     for position, unit in gamestate.player_units.items():
         if can_use_unit(unit):
 
-            moves, attacks, abilities = get_unit_actions(unit, position, gamestate.enemy_units,
-                                                         gamestate.player_units)
+            moves, attacks, abilities = get_unit_actions(unit, position, gamestate.enemy_units, gamestate.player_units)
 
             if not can_attack_with_unit(gamestate, unit):
                 attacks = []
@@ -69,7 +68,6 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     def rage():
         attacks = [make_action(terms) for terms in attack_generator(moveset_with_leftover | {start_at})] + \
                   [make_action(terms) for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
-
         return moves, attacks
 
     def berserking():
@@ -92,9 +90,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
     def extra_action():
 
-        def get_actions_samurai():
-
-            attacks = []
+        def get_actions_combat_agility():
             for terms in attack_generator(moveset | {start_at}):
                 if terms["move_with_attack"]:
                     if unit.get(Trait.movement_remaining):
@@ -108,7 +104,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         attacks = []
 
         if unit.has(Trait.combat_agility):
-            attacks = get_actions_samurai()
+            attacks = get_actions_combat_agility()
 
         return moves, attacks
 
