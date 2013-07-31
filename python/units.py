@@ -14,10 +14,11 @@ class Unit(object):
     upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}
-    custom_ability_functions = {Ability.poison: "poison",
-                                Ability.poison_II: "poison_II",
-                                Ability.improve_weapons_II_A: "improve_weapons_II_A",
-                                Ability.improve_weapons_II_B: "improve_weapons_II_B"}
+    constants = []
+    custom_ability = {Ability.poison: "poison",
+                      Ability.poison_II: "poison_II",
+                      Ability.improve_weapons_II_A: "improve_weapons_II_A",
+                      Ability.improve_weapons_II_B: "improve_weapons_II_B"}
     apply_ability = {Ability.sabotage: Trait.sabotaged,
                      Ability.sabotage_II: Trait.sabotaged_II,
                      Ability.improve_weapons: Trait.improved_weapons}
@@ -29,7 +30,7 @@ class Unit(object):
         self.variables[attribute] = n
 
     def has(self, attribute):
-        return (hasattr(self, "constants") and attribute in self.constants) or self.variables[attribute]
+        return attribute in self.constants or self.variables[attribute]
 
     def get(self, attribute):
         return self.variables[attribute]
@@ -46,10 +47,8 @@ class Unit(object):
     def do(self, ability):
         if ability in self.apply_ability:
             self.set(self.apply_ability[ability])
-        elif ability in self.custom_ability_functions:
-            getattr(self, self.custom_ability_functions[ability])()
-        else:
-            print "ability not fount"
+        if ability in self.custom_ability:
+            getattr(self, self.custom_ability[ability])()
 
     # custom functions
     def poison(self):
@@ -81,7 +80,6 @@ class Unit(object):
 
     def is_ranged(self):
         return self.range > 1
-
 
 
 class Archer(Unit):
