@@ -24,11 +24,7 @@ class UniversalTestCase(unittest.TestCase):
             gamestate = Gamestate.from_document(test_document["gamestate"])
             action = Action.from_document(gamestate.all_units(), test_document["action"])
             expected = test_document["result"]
-            try:
-                self.does_action_exist(gamestate, action, expected)
-            except Exception as e:
-                print "Exception", e
-                print self.testcase_file
+            self.does_action_exist(gamestate, action, expected)
 
         if test_document["type"] == "Is attack and defence correct":
             gamestate = Gamestate.from_document(test_document["gamestate"])
