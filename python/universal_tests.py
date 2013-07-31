@@ -64,8 +64,9 @@ class UniversalTestCase(unittest.TestCase):
         attacking_unit = all_units[action.start_at]
         defending_unit = all_units[action.target_at]
 
-        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
-        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action, gamestate)
+        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate.player_units)
+        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action,
+                                                   gamestate.enemy_units)
 
         error_string = "Filename" + self.testcase_file + "\n" + \
                        "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence) + "\n" + \
