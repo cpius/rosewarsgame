@@ -10,12 +10,12 @@ import shutil
 from player import Player
 from action import Action
 import units as units_module
-import json
 from json import JSONEncoder
 import datetime
 from client import Client
 from game import Game
 from outcome import SubOutcome
+import common
 
 
 class Controller(object):
@@ -383,8 +383,8 @@ class Controller(object):
 
         self.view.save_screenshot(name)
 
-        with open("./replay/" + name + ".gamestate", 'w') as file:
-            file.write(json.dumps(self.game.gamestate.to_document(), cls=CustomJsonEncoder, indent=4))
+        with open("./replay/" + name + ".gamestate", 'w') as gamestate_file:
+            gamestate_file.write(common.document_to_string(self.game.gamestate.to_document()))
 
         self.action_index += 1
 
