@@ -1,35 +1,31 @@
 {
     "type": "Is outcome correct",
-    "description": "Test if longswordsman can kill five enemies at once",
+    "description": "Test Elephant triple push",
     "outcome":
     {
         "B2": "win",
-        "B3": "win",
-        "C3": "win",
-        "D3": "win",
-        "D2": "win"
+        "C2": "push",
+        "D2": "miss"
     },
     "action":
     {
-        "start_at": "C2",
-        "end_at": "C2",
-        "target_at": "C3",
-        "move_with_attack": false
+        "start_at": "C1",
+        "end_at": "C1",
+        "target_at": "C2",
+        "move_with_attack": true
     },
     "pre_gamestate":
     {
         "player1_units":
         {
-            "C2": "Longswordsman"
+            "C1": "War Elephant"
         },
         "actions_remaining": 2,
         "player2_units":
         {
-            "B2": "Pikeman",
-            "B3": "Pikeman",
-            "C3": "Pikeman",
-            "D3": "Pikeman",
-            "D2": "Pikeman"
+            "B2": "Longswordsman",
+            "C2": "Royal Guard",
+            "D2": "Ballista"
         }
     },
     "post_gamestate":
@@ -38,7 +34,7 @@
         {
             "C2":
              {
-                 "name": "Longswordsman",
+                 "name": "War Elephant",
                  "used": true,
                  "xp": 1
              }
@@ -46,6 +42,8 @@
         "actions_remaining": 0,
         "player2_units":
         {
+            "C3": "Royal Guard",
+            "D2": "Ballista"
         }
     }
 }
