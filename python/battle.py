@@ -25,27 +25,30 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, ga
     if attacking_unit.type in defending_unit.defence_bonuses:
         defence += defending_unit.defence_bonuses[attacking_unit.type]
 
-    effects = {"improved_weapons": 1, "improved_weapons_II_A": 1, "improved_weapons_II_B": 2}
+    effects = {Trait.improved_weapons: 1, Trait.improved_weapons_II_A: 1, Trait.improved_weapons_II_B: 2}
     for name, value in effects.items():
         if defending_unit.has(name):
             defence += value
 
-    if attacking_unit.range > 1 and defending_unit.has("tall_shield"):
+    if attacking_unit.range > 1 and defending_unit.has(Trait.tall_shield):
         defence += 1
 
-    if attacking_unit.range == 1 and defending_unit.has("melee_expert"):
+    if attacking_unit.range == 1 and defending_unit.has(Trait.melee_expert):
         defence += 1
 
-    if attacking_unit.range == 1 and defending_unit.has("big_shield"):
+    if attacking_unit.range == 1 and defending_unit.has(Trait.big_shield):
         defence += 2
 
     if action.is_crusading_II_defence(enemy_units):
         defence += 1
 
-    if attacking_unit.has("sharpshooting"):
+    if attacking_unit.has(Trait.sharpshooting):
         defence = 1
 
-    for effect in ["sabotaged", "sabotaged_II"]:
+    if attacking_unit.has(Trait.pikeman_specialist) and defending_unit.name == "Pikeman":
+        defence -= 1
+
+    for effect in [Trait.sabotaged, Trait.sabotaged_II]:
         if defending_unit.has(effect):
             defence = 0
 
@@ -71,13 +74,13 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
         if getattr(action, effect)(player_units):
             attack += value
 
-    if attacking_unit.get("bribed"):
+    if attacking_unit.get(Trait.bribed):
         attack += 1
 
-    if attacking_unit.get("bribed_II"):
+    if attacking_unit.get(Trait.bribed_II):
         attack += 2
 
-    effects = {"improved_weapons": 3, "improved_weapons_II_A": 2, "improved_weapons_II_B": 3}
+    effects = {Trait.improved_weapons: 3, Trait.improved_weapons_II_A: 2, Trait.improved_weapons_II_B: 3}
     for name, value in effects.items():
         if attacking_unit.has(name):
             attack += value
@@ -85,10 +88,13 @@ def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.type in attacking_unit.attack_bonuses:
         attack += attacking_unit.attack_bonuses[defending_unit.type]
 
-    if defending_unit.range == 1 and attacking_unit.has("melee_expert"):
+    if defending_unit.has(Trait.pikeman_specialist) and attacking_unit.name == "Pikeman":
+        attack -= 1
+
+    if defending_unit.range == 1 and attacking_unit.has(Trait.melee_expert):
         attack += 1
 
-    if attacking_unit.has("far_sighted") and distance(action.end_at, action.target_at) < 4:
+    if attacking_unit.has(Trait.far_sighted) and distance(action.end_at, action.target_at) < 4:
         attack -= 1
 
     return attack

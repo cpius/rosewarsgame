@@ -24,7 +24,11 @@ class UniversalTestCase(unittest.TestCase):
             gamestate = Gamestate.from_document(test_document["gamestate"])
             action = Action.from_document(gamestate.all_units(), test_document["action"])
             expected = test_document["result"]
-            self.does_action_exist(gamestate, action, expected)
+            try:
+                self.does_action_exist(gamestate, action, expected)
+            except Exception as e:
+                print "Exception", e
+                print self.testcase_file
 
         if test_document["type"] == "Is attack and defence correct":
             gamestate = Gamestate.from_document(test_document["gamestate"])
@@ -46,13 +50,15 @@ class UniversalTestCase(unittest.TestCase):
         available_actions = action_getter.get_actions(gamestate)
         actual = (action in available_actions)
 
-        message = "Wrong action existance for", self.testcase_file + "\n\n"
+        message = "Wrong action existance for " + self.testcase_file + "\n\n"
         if expected:
-            message += "Requested action:", action
+            message += "Requested action: " + str(action) + "\n"
         else:
-            message += "Not-allowed action:", action
+            message += "Not-allowed action:" + str(action) + "\n"
 
-        message += "Available actions:", [str(available_action) for available_action in available_actions]
+        message += "Available actions:"
+        for available_action in available_actions:
+            message += str(available_action) + "\n"
 
         self.assertEqual(actual, expected, message)
 

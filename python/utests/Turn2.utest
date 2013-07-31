@@ -1,4 +1,5 @@
-{"type": "Does turn shift work", 
+{"type": "Does turn shift work",
+ "description": "Tests if 'frozen' decreases by 1", 
  "pre_gamestate": 
  {
 	"actions_remaining": 0,

@@ -14,6 +14,7 @@ class Action(object):
                  action_number=None,
                  outcome=SubOutcome.UNKNOWN,
                  created_at=None):
+
         # The tile the unit starts it's action on
         self.start_at = start_at
 
@@ -38,7 +39,6 @@ class Action(object):
             self.target_unit = units[self.target_at]
 
         self.outcome = outcome
-        self.double_cost = False
 
     @classmethod
     def from_document(cls, units, document):
@@ -66,7 +66,7 @@ class Action(object):
 
         ability = None
         if "ability" in document_copy:
-            ability = document_copy["ability"]
+            ability = getattr(Ability, document_copy["ability"])
 
         created_at = None
         if "created_at" in document_copy:
@@ -79,7 +79,7 @@ class Action(object):
         return cls(units, start_at, end_at, target_at, move_with_attack, ability, action_number=action_number, created_at=created_at)
 
     def __repr__(self):
-        return document_to_string(self.to_document())
+        return document_to_string(self.to_document_no_created_at())
 
     def __eq__(self, other):
         basic_attributes = ["start_at", "end_at", "target_at", "move_with_attack", "ability"]
@@ -90,6 +90,10 @@ class Action(object):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def to_document_no_created_at(self):
+        attrs = ["action_number", "start_at", "end_at", "target_at", "ability"]
+        return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
 
     def to_document(self):
         attrs = ["action_number", "start_at", "end_at", "target_at", "ability", "created_at"]
@@ -115,36 +119,39 @@ class Action(object):
         return bool(self.ability)
 
     def is_lancing(self):
-        return self.unit.has("lancing") and self.is_attack() and self.distance_to_target() >= 3
+        return self.unit.has(Trait.lancing) and self.is_attack() and self.distance_to_target() >= 3
 
     def is_lancing_II(self):
-        return self.unit.has("lancing_II") and self.is_attack() and self.distance_to_target() >= 4
+        return self.unit.has(Trait.lancing_II) and self.is_attack() and self.distance_to_target() >= 4
 
     def is_push(self):
-        return self.unit.has("push") and self.is_attack()
+        return self.unit.has(Trait.push) and self.is_attack()
 
     def is_crusading(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.start_at, units) if unit.has("crusading"))
+        return any(unit for unit in surrounding_friendly_units(self.start_at, units) if unit.has(Trait.crusading))
 
     def is_crusading_II_attack(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.start_at, units) if unit.has("crusading_II"))
+        return any(unit for unit in surrounding_friendly_units(self.start_at, units) if unit.has(Trait.crusading_II))
 
     def is_crusading_II_defence(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.target_at, units) if unit.has("crusading_II"))
+        return any(unit for unit in surrounding_friendly_units(self.target_at, units) if unit.has(Trait.crusading_II))
 
     def has_high_morale(self, units):
         return any(pos for pos in adjacent_friendly_positions(self.end_at, units) if
-                   pos != self.start_at and units[pos].has("flag_bearing"))
+                   pos != self.start_at and units[pos].has(Trait.flag_bearing))
 
     def has_high_morale_II_A(self, units):
         return any(unit for unit in surrounding_friendly_units(self.end_at, units)
-                   if unit.has("flag_bearing_II_A"))
+                   if unit.has(Trait.flag_bearing_II_A))
 
     def has_high_morale_II_B(self, units):
-        return any(unit for unit in adjacent_friendly_units(self.end_at, units) if unit.has("flag_bearing_II_B"))
+        return any(unit for unit in adjacent_friendly_units(self.end_at, units) if unit.has(Trait.flag_bearing_II_B))
 
     def distance_to_target(self):
         return distance(self.start_at, self.target_at)
 
     def is_triple_attack(self):
-        return self.unit.has("triple_attack") and self.is_attack()
+        return self.unit.has(Trait.triple_attack) and self.is_attack()
+
+    def double_cost(self):
+        return self.unit.has(Trait.double_attack_cost) and self.is_attack()
