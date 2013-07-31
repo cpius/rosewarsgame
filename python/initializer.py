@@ -6,7 +6,7 @@ def initialize_turn(gamestate):
 
     def resolve_bribe(unit):
         if unit.has(Trait.bribed):
-            gamestate.player_units[position] = gamestate.opponent_units().pop(position)
+            gamestate.player_units[position] = gamestate.enemy_units.pop(position)
             unit.set(Trait.recently_bribed)
             gamestate.player_units[position].remove(Trait.bribed)
 

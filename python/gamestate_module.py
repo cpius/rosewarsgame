@@ -76,7 +76,8 @@ class Gamestate:
     def player_units(self):
         return self.units[0]
 
-    def opponent_units(self):
+    @property
+    def enemy_units(self):
         return self.units[1]
 
     def get_actions_remaining(self):

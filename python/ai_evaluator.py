@@ -318,7 +318,7 @@ def get_action_values(gamestate, original_gamestate):
     def get_values_unit_player(unit, position, gamestate):
 
         friendly_units = action_getter.find_all_friendly_units_except_current(position, gamestate.player_units())
-        all_units = dict(friendly_units.items() + gamestate.opponent_units().items())
+        all_units = dict(friendly_units.items() + gamestate.enemy_units().items())
 
         def get_backline_value(unit, position, gamestate):
 
@@ -328,7 +328,7 @@ def get_action_values(gamestate, original_gamestate):
                 coloumn_blocks = []
                 for column in columns:
                     blocks = 0
-                    for enemy_position, enemy_unit in gamestate.opponent_units().items():
+                    for enemy_position, enemy_unit in gamestate.enemy_units().items():
                         if enemy_position[0] == column and enemy_position[1] > position[1]:
                             blocks += 1
                         if (enemy_position[0] == column - 1 or enemy_position[0] == column - 1) and enemy_position[1] >= position[1]:
@@ -350,7 +350,7 @@ def get_action_values(gamestate, original_gamestate):
 
             if unit.name == "Berserker":
                 if math.ceil((8 - position[1]) / 4) == 1:
-                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.opponent_units(),
+                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.enemy_units(),
                                                              friendly_units)[0]
                     if any(action.end_at[1] == 8 for action in actions):
                         return "One action from backline", 20
@@ -362,7 +362,7 @@ def get_action_values(gamestate, original_gamestate):
                             return "Berserking distance", 5
 
             if moves_to_backline == 1:
-                actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.opponent_units(),
+                actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.enemy_units(),
                                                          friendly_units)[0]
                 if any(action.end_at[1] == 8 for action in actions):
                     return "One action from backline", 20
@@ -401,7 +401,7 @@ def get_action_values(gamestate, original_gamestate):
             values[value_title] = value
 
         if unit.name == "Longswordsman":
-            attacks = action_getter.get_unit_actions(unit, position, all_units, gamestate.opponent_units(), friendly_units)[1]
+            attacks = action_getter.get_unit_actions(unit, position, all_units, gamestate.enemy_units(), friendly_units)[1]
             maxscore = 0
             for attack in attacks:
                 if attack.sub_actions:
@@ -421,7 +421,7 @@ def get_action_values(gamestate, original_gamestate):
             pass
 
         if unit.range > 1:
-            for enemy_position in gamestate.opponent_units():
+            for enemy_position in gamestate.enemy_units():
                 if common.distance(position, enemy_position) <= unit.range:
                     values["Within range"] = 1
 
@@ -433,7 +433,7 @@ def get_action_values(gamestate, original_gamestate):
     def get_values_unit_opponent(unit, position, gamestate):
 
         friendly_units = action_getter.find_all_friendly_units_except_current(position, gamestate.player_units())
-        all_units = dict(friendly_units.items() + gamestate.opponent_units().items())
+        all_units = dict(friendly_units.items() + gamestate.enemy_units().items())
 
         def get_backline_value(unit, position, gamestate):
 
@@ -447,7 +447,7 @@ def get_action_values(gamestate, original_gamestate):
 
             if unit.name == "Berserker":
                 if math.ceil((position[1] - 1) / 4):
-                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.opponent_units(),
+                    actions = action_getter.get_unit_actions(unit, position, all_units, gamestate.enemy_units(),
                                                              friendly_units)[0]
                     if any(action.end_at[1] == 1 for action in actions):
                         return "One action from backline", 200
@@ -461,7 +461,7 @@ def get_action_values(gamestate, original_gamestate):
                 actions = action_getter.get_unit_actions(unit,
                                                          position,
                                                          all_units,
-                                                         gamestate.opponent_units(),
+                                                         gamestate.enemy_units(),
                                                          friendly_units)[0]
                 if any(action.end_at[1] == 1 for action in actions):
                     return "One action from backline", 200
@@ -518,21 +518,21 @@ def get_action_values(gamestate, original_gamestate):
         return values
 
     def give_back_bribed_units():
-        for position, unit in gamestate.opponent_units().items():
+        for position, unit in gamestate.enemy_units().items():
             if hasattr(unit, "bribed"):
-                gamestate.player_units()[position] = gamestate.opponent_units().pop(position)
+                gamestate.player_units()[position] = gamestate.enemy_units().pop(position)
 
         for position, unit in gamestate.player_units().items():
             if hasattr(unit, "bribed"):
-                gamestate.opponent_units()[position] = gamestate.player_units().pop(position)
+                gamestate.enemy_units()[position] = gamestate.player_units().pop(position)
 
     def fill_values():
 
         new_player1 = set(gamestate.player_units()) - set(original_gamestate.player_units())
         old_player1 = set(original_gamestate.player_units()) - set(gamestate.player_units())
 
-        new_player2 = set(gamestate.opponent_units()) - set(original_gamestate.opponent_units())
-        old_player2 = set(original_gamestate.opponent_units) - set(gamestate.opponent_units())
+        new_player2 = set(gamestate.enemy_units()) - set(original_gamestate.enemy_units())
+        old_player2 = set(original_gamestate.enemy_units) - set(gamestate.enemy_units())
 
         for position in new_player1:
             values["player1"]["gained"] = get_values_unit_player(gamestate.player_units()[position], position, gamestate)
@@ -547,10 +547,10 @@ def get_action_values(gamestate, original_gamestate):
                 del values["player1"]["lost"][key]
 
         for position in new_player2:
-            values["player2"]["gained"] = get_values_unit_opponent(gamestate.opponent_units()[position], position, gamestate)
+            values["player2"]["gained"] = get_values_unit_opponent(gamestate.enemy_units()[position], position, gamestate)
 
         for position in old_player2:
-            values["player2"]["lost"] = get_values_unit_opponent(original_gamestate.opponent_units()[position], position,
+            values["player2"]["lost"] = get_values_unit_opponent(original_gamestate.enemy_units()[position], position,
                                                                  gamestate)
 
     values = {"player1": {"gained": {}, "lost": {}}, "player2": {"gained": {}, "lost": {}}}

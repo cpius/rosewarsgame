@@ -13,13 +13,13 @@ def get_actions(gamestate):
     for position, unit in gamestate.player_units.items():
         if can_use_unit(unit):
 
-            moves, attacks, abilities = get_unit_actions(unit, position, gamestate.opponent_units(),
+            moves, attacks, abilities = get_unit_actions(unit, position, gamestate.enemy_units,
                                                          gamestate.player_units)
 
             if not can_attack_with_unit(gamestate, unit):
                 attacks = []
 
-            if melee_frozen(gamestate.opponent_units(), position):
+            if melee_frozen(gamestate.enemy_units, position):
                 moves = []
 
             actions += moves + attacks + abilities

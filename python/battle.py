@@ -20,7 +20,7 @@ def defence_successful(action, rolls, gamestate):
 def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate):
     
     defence = defending_unit.defence
-    enemy_units = gamestate.opponent_units()
+    enemy_units = gamestate.enemy_units
 
     if attacking_unit.type in defending_unit.defence_bonuses:
         defence += defending_unit.defence_bonuses[attacking_unit.type]
