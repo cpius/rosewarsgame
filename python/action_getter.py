@@ -92,7 +92,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         return moves, attacks
 
-    def extra_actions():
+    def extra_action():
 
         def get_actions_samurai():
 
@@ -172,10 +172,10 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     if unit.is_ranged():
         return ranged_actions()
 
-    for trait, function in {Trait.extra_action: extra_actions, Trait.rage: rage, Trait.berserking: berserking,
-                            Trait.scouting: scouting, Trait.defence_maneuverability: defence_maneuverability}.items():
+    for trait in [Trait.extra_action, Trait.rage, Trait.berserking, Trait.scouting, Trait.defence_maneuverability]:
         if unit.has(trait):
-            moves, attacks = function()
+            moves, attacks = locals()[Trait.reverse_mapping[trait]]()
+            print
 
     return moves, attacks, []
 
