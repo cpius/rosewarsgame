@@ -12,20 +12,20 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
     if game.current_player().color == "Red":
         gamestate.flip_units()
 
-    draw_units(screen, interface, gamestate.player_units(), game.current_player().color, gamestate.opponent_units(),
+    draw_units(screen, interface, gamestate.player_units, game.current_player().color, gamestate.enemy_units,
                game.opponent_player().color, start_position, actions)
 
     shade_actions(screen, interface, actions)
 
 
-def draw_units(screen, interface, player_units, player_color, opponent_units, opponent_color, start_position, actions):
+def draw_units(screen, interface, player_units, player_color, enemy_units, opponent_color, start_position, actions):
     for position, unit in player_units.items():
         if actions and position == start_position:
             draw_unit(screen, interface, unit, position, player_color, selected=True)
         else:
             draw_unit(screen, interface, unit, position, player_color)
 
-    for position, unit in opponent_units.items():
+    for position, unit in enemy_units.items():
         draw_unit(screen, interface, unit, position, opponent_color)
 
 

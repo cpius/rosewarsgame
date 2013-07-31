@@ -96,7 +96,7 @@ class Controller(object):
 
         elif self.selecting_active_unit(position):
             self.start_position = position
-            self.selected_unit = self.game.gamestate.player_units()[self.start_position]
+            self.selected_unit = self.game.gamestate.player_units[self.start_position]
             illustrate_actions = [action for action in self.game.gamestate.get_actions() if \
                                   action.start_at == position]
             self.view.draw_game(self.game, position, illustrate_actions)
@@ -167,7 +167,7 @@ class Controller(object):
         if not self.start_position:
             self.show_unit(position)
         else:
-            if position in self.game.gamestate.opponent_units():
+            if position in self.game.gamestate.enemy_units:
                 self.show_attack(position)
 
     def clear_move(self):
@@ -333,7 +333,7 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
             self.view.draw_game(self.game)
-            self.upgrade_units(self.game.gamestate.player_units())
+            self.upgrade_units(self.game.gamestate.player_unit)
         else:
             pass
 
@@ -357,8 +357,9 @@ class Controller(object):
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
-        player_unit = self.game.gamestate.player_units()[self.start_position]
-        opponent_unit = self.game.gamestate.opponent_units()[attack_position]
+        player_unit = self.game.gamestate.player_units[self.start_position]
+
+        opponent_unit = self.game.gamestate.enemy_units[attack_position]
         self.view.show_attack(self.game.gamestate, action, player_unit, opponent_unit)
 
         return
@@ -366,10 +367,10 @@ class Controller(object):
     def show_unit(self, position):
 
         unit = None
-        if position in self.game.gamestate.player_units():
-            unit = self.game.gamestate.player_units()[position]
-        if position in self.game.gamestate.opponent_units():
-            unit = self.game.gamestate.opponent_units()[position]
+        if position in self.game.gamestate.player_units:
+            unit = self.game.gamestate.player_units[position]
+        if position in self.game.gamestate.enemy_units:
+            unit = self.game.gamestate.enemy_units[position]
 
         if unit:
             self.view.show_unit_zoomed(unit)
@@ -397,32 +398,32 @@ class Controller(object):
         self.exit_game()
 
     def selecting_active_unit(self, position):
-        return not self.start_position and position in self.game.gamestate.player_units()
+        return not self.start_position and position in self.game.gamestate.player_units
 
     def selecting_ability_target(self, position):
         return self.start_position and (
-            position in self.game.gamestate.opponent_units() or position in self.game.gamestate.player_units()) and self.selected_unit.abilities
+            position in self.game.gamestate.enemy_units or position in self.game.gamestate.player_units) and self.selected_unit.abilities
 
     def selecting_attack_target_unit(self, position):
         pass
 
     def selecting_attack_ranged_target(self, position):
-        return self.start_position and position in self.game.gamestate.opponent_units() and \
+        return self.start_position and position in self.game.gamestate.enemy_units and \
                self.selected_unit.range > 1
 
     def deselecting_active_unit(self, position):
         return self.start_position and self.start_position == position
 
     def selecting_ranged_target(self, position):
-        return self.start_position and position in self.game.gamestate.opponent_units() and \
+        return self.start_position and position in self.game.gamestate.enemy_units and \
                self.selected_unit.range > 1
 
     def selecting_melee_target(self, position):
-        return self.start_position and position in self.game.gamestate.opponent_units() and \
+        return self.start_position and position in self.game.gamestate.enemy_units and \
                self.selected_unit.range == 1
 
     def selecting_move(self, position):
-        return self.start_position and position not in self.game.gamestate.opponent_units()
+        return self.start_position and position not in self.game.gamestate.enemy_units()
 
 
 def within(point, area):

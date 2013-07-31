@@ -114,11 +114,11 @@ def get_units():
 
         while len(units) < settings.basic_unit_count:
 
-            if settings.max_two_siege_weapons:
-                enforce_max_siege_weapons(units, basic_units_bag)
-
             unit_name = basic_units_bag.pick()
             units.append(getattr(units_module, unit_name.replace(" ", "_"))())
+
+            if settings.max_two_siege_weapons:
+                enforce_max_siege_weapons(units, basic_units_bag)
 
         random.shuffle(units)
 

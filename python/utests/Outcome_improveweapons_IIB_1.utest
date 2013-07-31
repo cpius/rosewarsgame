@@ -5,7 +5,7 @@
         "actions_remaining": 2, 
         "player1_units": {
             "C3": "Weaponsmith_II_B", 
-            "A3": "Pikeman"
+            "A3": "Knight"
         }, 
         "player2_units": {
             "D4": "Archer"
@@ -29,7 +29,7 @@
                 "name": "Weaponsmith_II_B"
             }, 
             "A3": {
-                "name": "Pikeman", 
+                "name": "Knight", 
                 "improved_weapons_II_B": 1,
 				"zoc": {"Cavalry": "true"}
             }
