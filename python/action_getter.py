@@ -175,7 +175,6 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     for trait in [Trait.extra_action, Trait.rage, Trait.berserking, Trait.scouting, Trait.defence_maneuverability]:
         if unit.has(trait):
             moves, attacks = locals()[Trait.reverse_mapping[trait]]()
-            print
 
     return moves, attacks, []
 
