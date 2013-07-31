@@ -194,7 +194,7 @@ class Halberdier(Unit):
     range = 1
     type = Type.Infantry
 
-    constants = Trait.push
+    constants = [Trait.push]
 
 
 class Halberdier_II_A(Unit):
@@ -206,7 +206,7 @@ class Halberdier_II_A(Unit):
     range = 1
     type = Type.Infantry
 
-    constants = Trait.push
+    constants = [Trait.push]
 
 
 class Halberdier_II_B(Unit):
@@ -218,7 +218,7 @@ class Halberdier_II_B(Unit):
     range = 1
     type = Type.Infantry
 
-    constants = Trait.push
+    constants = [Trait.push]
 
 
 class Light_Cavalry(Unit):
