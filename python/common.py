@@ -56,7 +56,7 @@ class Position:
     def distance(self, other):
         return abs(self.column - other.column) + abs(self.row - other.row)
 
-    def get_direction(self, other):
+    def get_direction_to(self, other):
         return list(direction for direction in directions if direction.move(self) == other)[0]
 
     def flip(self):
