@@ -126,11 +126,11 @@ def draw_attack(screen, interface, action, outcome, base, symbol_location, log):
 def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
 
     if not action.is_attack():
-        unit = action.unit_reference
+        unit = action.unit
     elif index == 0:
-        unit = action.unit_reference
+        unit = action.unit
     else:
-        unit = action.target_reference
+        unit = action.target_unit
 
     unit_height = int((base_height - 10) * zoom)
     unit_width = int((interface.unit_width / interface.unit_height) * unit_height)
