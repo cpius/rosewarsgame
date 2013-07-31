@@ -3,7 +3,6 @@ import random as rnd
 import battle
 from common import *
 from outcome import Outcome
-import settings
 from action import Action
 
 
