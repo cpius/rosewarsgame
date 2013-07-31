@@ -103,13 +103,12 @@ def get_unit_actions(unit, start_at, friendly_units, enemy_units, player_units):
         def get_actions_samurai():
 
             attacks = []
-            for end_at, target_at, move_with_attack in attack_generator(moveset | {start_at}):
-                if move_with_attack:
+            for terms in attack_generator(moveset | {start_at}):
+                if terms["move_with_attack"]:
                     if unit.get(Trait.movement_remaining) > 0:
-                        attacks.append(Action(units, start_at, end_at=end_at, target_at=target_at,
-                                              move_with_attack=True))
+                        attacks.append(Action(units, start_at, **terms))
                 else:
-                    attacks.append(Action(units, start_at, end_at=position, target_at=target_at))
+                    attacks.append(Action(units, start_at, **terms))
             return attacks
 
         moveset = generate_extra_moveset()
