@@ -10,13 +10,12 @@ import shutil
 from player import Player
 from action import Action
 import units as units_module
-import json
 from json import JSONEncoder
 import datetime
 from client import Client
-from action_getter import add_unit_references
 from game import Game
 from outcome import SubOutcome
+import common
 
 
 class Controller(object):
@@ -67,7 +66,6 @@ class Controller(object):
 
     def trigger_network_player(self):
         action, outcome = self.client.select_action(self.gamestate.action_number)
-        add_unit_references(self.gamestate, action)
 
         print "received action from network: " + str(action)
 
@@ -80,7 +78,6 @@ class Controller(object):
     def trigger_artificial_intelligence(self):
 
         action = self.game.current_player().ai.select_action(self.game)
-        action.add_references(self.game.gamestate)
 
         if action:
             self.perform_action(action)
@@ -120,10 +117,9 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.selecting_melee_target(position):
+            all_actions = self.game.gamestate.get_actions()
 
-            possible_actions = [action for action in self.game.gamestate.get_actions() if
-                                action.start_at == self.start_position and action.target_at == position and
-                                not action.is_move_with_attack()]
+            possible_actions = [action for action in all_actions if self.possible_melee_target(action, position)]
 
             if not possible_actions:
                 self.view.draw_message("Action not possible")
@@ -142,6 +138,11 @@ class Controller(object):
         elif self.selecting_move(position):
             action = Action(self.game.gamestate.all_units(), self.start_position, end_at=position)
             self.perform_action(action)
+
+    def possible_melee_target(self, action, position):
+        same_start = action.start_at == self.start_position
+        same_target = action.target_at and action.target_at == position
+        return same_start and same_target and not action.is_move_with_attack()
 
     def pick_action_end_position(self, possible_actions):
 
@@ -294,8 +295,6 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
 
-            add_unit_references(self.game.gamestate, action)
-
             if self.game.opponent_player().intelligence == "Network":
                 outcome = self.client.send_action(action.to_document())
                 action.ensure_outcome(outcome)
@@ -358,7 +357,6 @@ class Controller(object):
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
-        add_unit_references(self.game.gamestate, action)
         player_unit = self.game.gamestate.player_units()[self.start_position]
         opponent_unit = self.game.gamestate.opponent_units()[attack_position]
         self.view.show_attack(self.game.gamestate, action, player_unit, opponent_unit)
@@ -385,8 +383,8 @@ class Controller(object):
 
         self.view.save_screenshot(name)
 
-        with open("./replay/" + name + ".gamestate", 'w') as file:
-            file.write(json.dumps(self.game.gamestate.to_document(), cls=CustomJsonEncoder, indent=4))
+        with open("./replay/" + name + ".gamestate", 'w') as gamestate_file:
+            gamestate_file.write(common.document_to_string(self.game.gamestate.to_document()))
 
         self.action_index += 1
 

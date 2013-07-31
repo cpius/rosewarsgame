@@ -52,8 +52,8 @@ class Gamestate:
 
         for action in actions:
             if action.is_attack():
-                action.chance_of_win = ai_methods.chance_of_win(self, action.unit_reference, action.target_reference,
-                                                                action)
+                action.chance_of_win = ai_methods.chance_of_win(self, action.unit, action.target_unit, action)
+
         return actions
 
     def copy(self):

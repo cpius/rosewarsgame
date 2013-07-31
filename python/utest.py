@@ -34,7 +34,6 @@ def utest(test_document):
 
         action.unit = gamestate.player_units()[action.start_at]
 
-        action_getter.add_unit_references(gamestate, action)
         all_units = gamestate.all_units()
 
         attacking_unit = all_units[action.start_at]
