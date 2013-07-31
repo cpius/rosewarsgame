@@ -27,13 +27,13 @@
     },
     "post_gamestate":
     {
-        "actions_remaining": 0,
+        "actions_remaining": 1,
         "player1_units":
         {
 	        "E4":
 	        {
                 "xp": 1,
-                "used": true,
+                "used": 1,
 			    "name": "Pikeman"
             }
 	    },

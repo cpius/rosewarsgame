@@ -39,11 +39,11 @@
             "C2":
              {
                  "name": "Longswordsman",
-                 "used": true,
+                 "used": 1,
                  "xp": 1
              }
         },
-        "actions_remaining": 0,
+        "actions_remaining": 1,
         "player2_units":
         {
         }
