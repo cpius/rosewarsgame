@@ -1,8 +1,5 @@
 {
     "type": "Is outcome correct",
-    "outcome": {
-        "E4": "defend"
-    },
     "action": {
         "start_at": "E2",
         "end_at": "E2",

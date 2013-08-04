@@ -1,6 +1,7 @@
 from datetime import datetime
 from copy import copy
 from common import *
+import battle
 
 
 class Action(object):
@@ -12,7 +13,7 @@ class Action(object):
                  move_with_attack=False,
                  ability=None,
                  action_number=None,
-                 outcome=SubOutcome.UNKNOWN,
+                 outcome=None,
                  created_at=None):
 
         # The tile the unit starts it's action on
@@ -155,3 +156,21 @@ class Action(object):
 
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack()
+
+    def is_successful(self, rolls, gamestate):
+        if not self.is_attack():
+            return True
+        attack_successful = battle.attack_successful(self, rolls, gamestate)
+        if not attack_successful:
+            return False
+        defence_successful = battle.defence_successful(self, rolls, gamestate)
+        return not defence_successful
+
+    def is_failure(self, rolls, gamestate):
+        if not rolls:
+            return False
+
+        return not self.is_successful(rolls, gamestate)
+
+    def is_miss(self, rolls, gamestate):
+        return not battle.attack_successful(self, rolls, gamestate)

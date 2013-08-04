@@ -16,10 +16,7 @@
         "end_at": "C3",
         "start_at": "C3",
         "ability": "poison"
-    }, 
-    "outcome": {
-        "C4": "deterministic"
-    }, 
+    },
     "post_gamestate": {
         "actions_remaining": 1, 
         "player1_units": {

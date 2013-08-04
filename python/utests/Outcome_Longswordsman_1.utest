@@ -3,11 +3,11 @@
     "description": "Test if longswordsman can kill five enemies at once",
     "outcome":
     {
-        "B2": "win",
-        "B3": "win",
-        "C3": "win",
-        "D3": "win",
-        "D2": "win"
+        "B2": [1, 6],
+        "B3": [1, 6],
+        "C3": [1, 6],
+        "D3": [1, 6],
+        "D2": [1, 6]
     },
     "action":
     {

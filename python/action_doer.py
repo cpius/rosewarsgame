@@ -57,6 +57,7 @@ def do_action(gamestate, action, outcome=None):
     end_at = action.end_at
     target_at = action.target_at
 
+    attack_direction = None
     if action.is_attack() and action.unit.is_melee():
         attack_direction = end_at.get_direction_to(target_at)
 
@@ -71,8 +72,6 @@ def do_action(gamestate, action, outcome=None):
                         action.start_at,
                         end_at=end_at,
                         target_at=forward_position)
-                    sub_action.unit = action.unit
-                    sub_action.target_unit = gamestate.enemy_units[forward_position]
                     outcome = do_sub_action(gamestate, sub_action, attack_direction, outcome)
 
     elif action.is_attack():
@@ -94,7 +93,7 @@ def do_action(gamestate, action, outcome=None):
     elif action.is_ability():
         settle_ability(action, gamestate.enemy_units, gamestate.player_units)
 
-    if unit.has(Trait.bloodlust) and outcome.outcomes[action.target_at] == SubOutcome.WIN:
+    if unit.has(Trait.bloodlust) and action.is_successful(outcome.outcomes[action.target_at], gamestate):
         bloodlust = True
     else:
         unit.remove(Trait.extra_action)
@@ -118,32 +117,23 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
     if not outcome:
         outcome = Outcome()
 
-    sub_outcome = outcome.for_position(action.target_at)
+    rolls = outcome.for_position(action.target_at)
 
-    if Outcome.is_failure(sub_outcome):
-        return outcome
-
-    if sub_outcome == SubOutcome.UNKNOWN:
+    if not rolls:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
-        if not battle.attack_successful(action, rolls, gamestate):
-            outcome.set_suboutcome(action.target_at, SubOutcome.MISS)
-            return
-
-        defense_successful = battle.defence_successful(action, rolls, gamestate)
-        if defense_successful:
-            outcome.set_suboutcome(action.target_at, SubOutcome.PUSH)
-        else:
-            outcome.set_suboutcome(action.target_at, SubOutcome.WIN)
+        outcome.set_suboutcome(action.target_at, rolls)
 
     if not push_direction:
         push_direction = action.end_at.get_direction_to(action.target_at)
 
     push_destination = push_direction.move(action.target_at)
 
-    if outcome.for_position(action.target_at) == SubOutcome.WIN:
+    if action.is_miss(rolls, gamestate):
+        return
+    if action.is_successful(rolls, gamestate):
         action.unit.gain_xp()
 
-        if action.target_unit.has(Trait.extra_life)  and not action.target_unit.has(Trait.lost_extra_life):
+        if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
             action.target_unit.set(Trait.lost_extra_life)
 
             if not push_destination.out_of_board_vertical():
@@ -180,31 +170,27 @@ def settle_attack(action, gamestate, outcome):
     if not outcome:
         outcome = Outcome()
 
-    sub_outcome = outcome.for_position(action.target_at)
+    rolls = outcome.for_position(action.target_at)
 
-    if Outcome.is_failure(sub_outcome):
+    if action.is_failure(rolls, gamestate):
         return outcome
 
-    if sub_outcome == SubOutcome.UNKNOWN:
+    if not rolls:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
 
         attack_successful = battle.attack_successful(action, rolls, gamestate)
         defence_successful = battle.defence_successful(action, rolls, gamestate)
         if not attack_successful or defence_successful:
-            if not attack_successful:
-                outcome.set_suboutcome(action.target_at, SubOutcome.MISS)
-            else:
-                outcome.set_suboutcome(action.target_at, SubOutcome.DEFEND)
-            return outcome
+            outcome.set_suboutcome(action.target_at, rolls)
 
-    outcome.set_suboutcome(action.target_at, SubOutcome.WIN)
+    outcome.set_suboutcome(action.target_at, rolls)
 
     if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
         action.target_unit.set(Trait.lost_extra_life)
     else:
         del gamestate.enemy_units[action.target_at]
 
-        if outcome.for_position(action.target_at) == SubOutcome.WIN:
+        if action.is_successful(rolls, gamestate):
             update_final_position(action)
 
     return outcome

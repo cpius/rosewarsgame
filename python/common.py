@@ -253,9 +253,6 @@ def distance(position1, position2):
     return position1.distance(position2)
 
 
-SubOutcome = enum("UNKNOWN", "WIN", "PUSH", "MISS", "DEFEND", "DETERMINISTIC")
-
-
 def find_all_friendly_units_except_current(current_unit_position, player_units):
     return dict((pos, player_units[pos]) for pos in player_units if pos != current_unit_position)
 

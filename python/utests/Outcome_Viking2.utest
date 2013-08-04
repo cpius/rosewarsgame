@@ -21,7 +21,7 @@
         "end_at": "C3"
     }, 
     "outcome": {
-        "C4": "win"
+        "C4": [1, 6]
     }, 
     "post_gamestate": {
         "actions_remaining": 1, 
