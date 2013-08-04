@@ -21,9 +21,6 @@
         "end_at": "C3",
 		"ability": "bribe"
     }, 
-    "outcome": {
-        "C4": "deterministic"
-    }, 
     "post_gamestate": {
         "actions_remaining": 1, 
         "player1_units": {
