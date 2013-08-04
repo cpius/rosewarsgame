@@ -1,5 +1,5 @@
 {"type": "Is outcome correct",
- "outcome": {"E4": "defend"},
+ "outcome": {"E4": [1, 1]},
  "action": 
 {
     "start_at": "E3",
