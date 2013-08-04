@@ -24,11 +24,7 @@ class UniversalTestCase(unittest.TestCase):
             gamestate = Gamestate.from_document(test_document["gamestate"])
             action = Action.from_document(gamestate.all_units(), test_document["action"])
             expected = test_document["result"]
-            try:
-                self.does_action_exist(gamestate, action, expected)
-            except Exception as e:
-                print "Exception", e
-                print self.testcase_file
+            self.does_action_exist(gamestate, action, expected)
 
         if test_document["type"] == "Is attack and defence correct":
             gamestate = Gamestate.from_document(test_document["gamestate"])
@@ -68,8 +64,9 @@ class UniversalTestCase(unittest.TestCase):
         attacking_unit = all_units[action.start_at]
         defending_unit = all_units[action.target_at]
 
-        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
-        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action, gamestate)
+        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate.player_units)
+        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action,
+                                                   gamestate.enemy_units)
 
         error_string = "Filename" + self.testcase_file + "\n" + \
                        "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence) + "\n" + \

@@ -1,4 +1,5 @@
 {"type": "Is attack and defence correct",
+ "Description": "Test if the bribe attack bonus applies",
  "attack": 3,
  "defence": 2,
  "action": 

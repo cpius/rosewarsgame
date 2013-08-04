@@ -7,7 +7,7 @@
 	{
         "C3": 
 		{
-			"name": "Pikeman",
+			"name": "Light Cavalry",
 			"improved_weapons_II_B": 1,
 			"zoc": {"Cavalry": "true"},
 			"xp": 1
@@ -28,7 +28,7 @@
 	{
         "C3": 
 		{
-			"name": "Pikeman",
+			"name": "Light CAvalry",
 			"xp": 1
 		},
         "E4": "Weaponsmith_II_B" 

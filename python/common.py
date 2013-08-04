@@ -2,6 +2,7 @@ from json import JSONEncoder, dumps
 from datetime import datetime
 from bson import ObjectId
 import collections
+import functools
 
 
 class Direction:
@@ -11,7 +12,7 @@ class Direction:
     """
 
     to_coordinates = {"Left": (-1, 0), "Right": (1, 0), "Down": (0, -1), "Up": (0, 1),
-                      "Up-Left": (-1, 1), "Up-Right": (1, 1), "Down-Left": (-1, -1), "Down-Right": (-1, 1)}
+                      "Up_Left": (-1, 1), "Up_Right": (1, 1), "Down_Left": (-1, -1), "Down_Right": (-1, 1)}
 
     def __init__(self, name):
         self.x, self.y = self.to_coordinates[name]
@@ -55,7 +56,7 @@ class Position:
     def distance(self, other):
         return abs(self.column - other.column) + abs(self.row - other.row)
 
-    def get_direction(self, other):
+    def get_direction_to(self, other):
         return list(direction for direction in directions if direction.move(self) == other)[0]
 
     def flip(self):
@@ -223,6 +224,8 @@ if 1 == 2:
         pikeman_specialist = 46
         lost_extra_life = 47
 
+        reverse_mapping = {}
+
     class Ability:
         bribe = 1
         bribe_II = 2
@@ -239,8 +242,11 @@ if 1 == 2:
 board_height = 8
 board_width = 5
 board = set(Position(column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
-directions = {Direction(name) for name in ["Up", "Down", "Left", "Right"]}
-eight_directions = {Direction(name) for name in Direction.to_coordinates}
+
+eight_directions_namedtuple = collections.namedtuple("eight_directions", [name for name in Direction.to_coordinates])
+eight_directions = eight_directions_namedtuple(*(Direction(name) for name in Direction.to_coordinates))
+four_directions_namedtuple = collections.namedtuple("directions", [name for name in ["Up", "Down", "Left", "Right"]])
+directions = four_directions_namedtuple(*(Direction(name) for name in ["Up", "Down", "Left", "Right"]))
 
 
 def distance(position1, position2):
@@ -251,7 +257,7 @@ SubOutcome = enum("UNKNOWN", "WIN", "PUSH", "MISS", "DEFEND", "DETERMINISTIC")
 
 
 def find_all_friendly_units_except_current(current_unit_position, player_units):
-    return dict((position, player_units[position]) for position in player_units if position != current_unit_position)
+    return dict((pos, player_units[pos]) for pos in player_units if pos != current_unit_position)
 
 
 def adjacent_friendly_units(position, units):

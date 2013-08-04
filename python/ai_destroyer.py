@@ -9,7 +9,7 @@ def get_action(actions, gamestate):
 
     for action in actions:
         if action.is_attack():
-            enemy_unit = gamestate.opponent_units()[action.target_at]
+            enemy_unit = gamestate.enemy_units()[action.target_at]
             unit = gamestate.player_units()[action.start_at]
             chance = m.chance_of_win(unit, enemy_unit, action)
             action.score = chance * 10

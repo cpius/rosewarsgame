@@ -7,6 +7,7 @@ import ai_methods
 import units as units_module
 import json
 from common import *
+from pprint import PrettyPrinter
 
 
 class Gamestate:
@@ -72,10 +73,12 @@ class Gamestate:
     def set_available_actions(self):
         self.available_actions = self.get_actions()
 
+    @property
     def player_units(self):
         return self.units[0]
 
-    def opponent_units(self):
+    @property
+    def enemy_units(self):
         return self.units[1]
 
     def get_actions_remaining(self):
