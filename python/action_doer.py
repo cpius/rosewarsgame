@@ -57,6 +57,7 @@ def do_action(gamestate, action, outcome=None):
     end_at = action.end_at
     target_at = action.target_at
 
+    attack_direction = None
     if action.is_attack() and action.unit.is_melee():
         attack_direction = end_at.get_direction_to(target_at)
 
