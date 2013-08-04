@@ -71,8 +71,6 @@ def do_action(gamestate, action, outcome=None):
                         action.start_at,
                         end_at=end_at,
                         target_at=forward_position)
-                    sub_action.unit = action.unit
-                    sub_action.target_unit = gamestate.enemy_units[forward_position]
                     outcome = do_sub_action(gamestate, sub_action, attack_direction, outcome)
 
     elif action.is_attack():
