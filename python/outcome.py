@@ -14,25 +14,20 @@ class Outcome:
     def for_position(self, position):
         if position in self.outcomes:
             return self.outcomes[position]
-        return SubOutcome.UNKNOWN
 
     def add_outcomes(self, other):
         self.outcomes.update(other.outcomes)
 
-    @classmethod
-    def is_failure(cls, sub_outcome):
-        return sub_outcome in [SubOutcome.MISS, SubOutcome.DEFEND]
-
     def to_document(self):
         outcome_document = dict()
         for outcome in self.outcomes:
-            outcome_document[Position.from_string(outcome)] = SubOutcome.reverse_mapping[outcome]
+            outcome_document[Position.from_string(outcome)] = outcome
         return outcome_document
 
     @classmethod
     def from_document(cls, document):
         outcomes = dict()
         for outcome in document:
-            outcomes[Position.from_string(outcome)] = getattr(SubOutcome, document[outcome].upper())
+            outcomes[Position.from_string(outcome)] = document[outcome]
 
         return cls(outcomes)
