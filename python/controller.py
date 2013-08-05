@@ -330,7 +330,7 @@ class Controller(object):
         else:
             pygame.time.delay(settings.pause_for_animation)
 
-        if hasattr(self.game.current_player(), "won"):
+        if self.game.gamestate.is_ended():
             self.game_end(self.game.current_player())
             return
 
