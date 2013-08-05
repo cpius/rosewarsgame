@@ -112,7 +112,7 @@ def settle_attack_push(action, gamestate, outcome, push_direction=None):
     if action.is_successful(rolls, gamestate):
         action.unit.gain_xp()
 
-        if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
+        if action.target_unit.has_extra_life():
             action.target_unit.set(Trait.lost_extra_life)
 
             if not push_destination.out_of_board_vertical():
@@ -150,7 +150,7 @@ def settle_attack(action, gamestate, outcome):
     if action.is_failure(rolls, gamestate):
         return
 
-    if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
+    if action.target_unit.has_extra_life():
         action.target_unit.set(Trait.lost_extra_life)
     else:
         del gamestate.enemy_units[action.target_at]
