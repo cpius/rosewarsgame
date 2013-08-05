@@ -5,51 +5,33 @@ from action import Action
 
 def do_action(gamestate, action, outcome):
 
-    def settle_attack_push(action, outcome):
-        player_units = gamestate.player_units
-        enemy_units = gamestate.enemy_units
+    def settle_attack_push(action):
+
+        def apply_push():
+            if not push_destination.out_of_board_vertical():
+                update_final_position(action)
+                if push_destination in all_units or push_destination.out_of_board_horizontal():
+                    del enemy_units[action.target_at]
+                else:
+                    enemy_units[push_destination] = enemy_units.pop(action.target_at)
 
         rolls = outcome.for_position(action.target_at)
-
         push_destination = attack_direction.move(action.target_at)
 
         if action.is_miss(rolls, gamestate):
             return
 
         if action.is_successful(rolls, gamestate):
-            action.unit.gain_xp()
-
             if action.target_unit.has_extra_life():
                 action.target_unit.set(Trait.lost_extra_life)
-
-                if not push_destination.out_of_board_vertical():
-                    update_final_position(action)
-                    destination_is_occupied = push_destination in player_units or push_destination in enemy_units
-                    if destination_is_occupied or push_destination.out_of_board_horizontal():
-                        del enemy_units[action.target_at]
-                    else:
-                        enemy_units[push_destination] = enemy_units.pop(action.target_at)
-
+                apply_push()
             else:
                 update_final_position(action)
                 del enemy_units[action.target_at]
-
         else:
-            if not push_destination.out_of_board_vertical():
-                update_final_position(action)
+            apply_push()
 
-                is_push_destination_occupied = push_destination in player_units or push_destination in enemy_units
-
-                if is_push_destination_occupied or push_destination.out_of_board_horizontal():
-                    del enemy_units[action.target_at]
-                else:
-                    enemy_units[push_destination] = enemy_units.pop(action.target_at)
-
-    def do_sub_action(action, outcome):
-        if action.is_triple_attack():
-            settle_attack_push(action, outcome)
-
-    def settle_attack(action, outcome):
+    def settle_attack(action):
         rolls = outcome.for_position(action.target_at)
 
         if action.is_failure(rolls, gamestate):
@@ -58,12 +40,16 @@ def do_action(gamestate, action, outcome):
         if action.target_unit.has_extra_life():
             action.target_unit.set(Trait.lost_extra_life)
         else:
-            del gamestate.enemy_units[action.target_at]
+            del enemy_units[action.target_at]
+            update_final_position(action)
 
-            if action.is_successful(rolls, gamestate):
-                update_final_position(action)
+    def do_sub_action(action):
+        if action.is_push():
+            settle_attack_push(action)
+        else:
+            settle_attack(action)
 
-    def settle_ability(action, enemy_units, player_units):
+    def settle_ability(action):
         if action.ability == Ability.bribe:
             action.target_unit.set(Trait.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
@@ -71,14 +57,22 @@ def do_action(gamestate, action, outcome):
             action.target_unit.do(action.ability)
 
     def prepare_extra_actions(action):
-        if unit.has(Trait.swiftness):
-            movement_remaining = unit.movement - distance(action.start_at, action.end_at) - int(action.is_attack())
-            unit.set(Trait.movement_remaining, movement_remaining)
-            unit.set(Trait.extra_action)
 
-        if unit.has(Trait.combat_agility):
-            unit.set(Trait.movement_remaining, unit.movement - distance(action.start_at, action.final_position))
+        if gamestate.extra_action:
+            movement_remaining = 0
+
+            if unit.has(Trait.bloodlust) and action.is_attack() and action.is_successful(rolls, gamestate):
+                movement_remaining = unit.get(Trait.movement_remaining) - distance(action.start_at, action.final_position)
+                unit.set(Trait.extra_action)
+        else:
+
             unit.set(Trait.extra_action)
+            movement_remaining = unit.movement - distance(action.start_at, action.final_position)
+
+            if unit.has(Trait.swiftness) and action.is_attack() and action.end_at == action.final_position:
+                movement_remaining -= 1
+
+        unit.set(Trait.movement_remaining, movement_remaining)
 
     def update_actions_remaining():
 
@@ -101,59 +95,50 @@ def do_action(gamestate, action, outcome):
         unit.set(Trait.used)
 
     def update_unit_position():
-        gamestate.player_units[action.end_at] = gamestate.player_units.pop(action.start_at)
+        player_units[action.end_at] = player_units.pop(action.start_at)
+
+    def triple_attack():
+        for forward_position in action.end_at.two_forward_tiles(attack_direction):
+            if forward_position in enemy_units:
+                sub_action = Action(all_units, action.start_at, action.end_at, forward_position)
+                do_sub_action(sub_action)
+
+    def longsword():
+        for forward_position in action.end_at.four_forward_tiles(attack_direction):
+            if forward_position in enemy_units:
+                sub_action = Action(all_units, action.start_at, action.end_at, forward_position)
+                do_sub_action(sub_action)
 
     unit = action.unit
+    player_units = gamestate.player_units
+    enemy_units = gamestate.enemy_units
+    all_units = gamestate.all_units()
+    if action.is_attack() and action.unit.is_melee():
+        attack_direction = action.end_at.get_direction_to(action.target_at)
 
     apply_unit_effects()
 
     update_actions_remaining()
 
+    unit.remove(Trait.extra_action)
+
     update_unit_position()
 
-    attack_direction = None
-    if action.is_attack() and action.unit.is_melee():
-        attack_direction = action.end_at.get_direction_to(action.target_at)
+    if action.is_attack():
+        rolls = outcome.for_position(action.target_at)
+        if action.is_push():
+            settle_attack_push(action)
+        else:
+            settle_attack(action)
 
-    if action.is_push():
-        settle_attack_push(action, outcome)
-
-        if action.is_triple_attack():
-            for forward_position in action.end_at.two_forward_tiles(attack_direction):
-                if forward_position in gamestate.enemy_units:
-                    sub_action = Action(
-                        gamestate.all_units(),
-                        action.start_at,
-                        end_at=action.end_at,
-                        target_at=forward_position)
-                    do_sub_action(sub_action, outcome)
-
-    elif action.is_attack():
-        settle_attack(action, outcome)
-
-        if action.unit.has(Trait.longsword):
-            for forward_position in action.end_at.four_forward_tiles(attack_direction):
-                if forward_position in gamestate.enemy_units:
-                    sub_action = Action(
-                        gamestate.all_units(),
-                        action.start_at,
-                        end_at=action.end_at,
-                        target_at=forward_position)
-
-                    settle_attack(sub_action, outcome)
+        for trait in [Trait.triple_attack, Trait.longsword]:
+            if unit.has(trait):
+                locals()[Trait.reverse_mapping[trait]]()
 
     elif action.is_ability():
-        settle_ability(action, gamestate.enemy_units, gamestate.player_units)
+        settle_ability(action)
 
-    if unit.has(Trait.bloodlust) and action.is_successful(outcome.outcomes[action.target_at], gamestate):
-        bloodlust = True
-    else:
-        unit.remove(Trait.extra_action)
-        bloodlust = False
-
-    if gamestate.extra_action and not bloodlust:
-        unit.set(Trait.movement_remaining, 0)
-    else:
+    if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility, Trait.bloodlust]):
         prepare_extra_actions(action)
 
     update_unit_to_final_position(gamestate, action)

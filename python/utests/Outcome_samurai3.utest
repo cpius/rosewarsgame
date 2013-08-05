@@ -1,4 +1,5 @@
 {"type": "Is outcome correct",
+ "description": "After Samurai does it's extra action, it shouldn't have more extra actions",
  "outcome": {"E4": [1, 6]},
  "action": 
 {

@@ -148,9 +148,6 @@ class Action(object):
     def distance_to_target(self):
         return distance(self.start_at, self.target_at)
 
-    def is_triple_attack(self):
-        return self.unit.has(Trait.triple_attack) and self.is_attack()
-
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack()
 
