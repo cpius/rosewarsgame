@@ -4,7 +4,7 @@ from bson import ObjectId
 from json import dumps
 import time
 from gamestate import Gamestate
-from action_getter import get_action
+from action import Action
 import socket
 from player import Player
 import setup
@@ -54,7 +54,7 @@ def do_action_post(game_id):
     entirebody = request.body.getvalue()
     print "received: " + entirebody
 
-    action = get_action(gamestate, action_document)
+    action = Action.from_document(gamestate.all_units(), action_document)
 
     available_actions = gamestate.get_actions()
     if not action:
@@ -113,7 +113,7 @@ def get_current_gamestate(game_document, actions=None):
         actions = get_actions_db().find({"game": ObjectId(game_document["_id"])}).sort("action_number")
 
     for action_document in actions:
-        action_with_references = get_action(gamestate, action_document)
+        action_with_references = Action.from_document(gamestate.all_units(), action_document)
         action_with_references.ensure_outcome(action_document["outcome"])
         gamestate.do_action(action_with_references)
         gamestate.shift_turn_if_done()
