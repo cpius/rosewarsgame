@@ -166,9 +166,6 @@ def do_sub_action(gamestate, action, direction, outcome):
 def settle_attack(action, gamestate, outcome):
     rolls = outcome.for_position(action.target_at)
 
-    if action.is_failure(rolls, gamestate):
-        return outcome
-
     if not rolls:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
 
@@ -179,6 +176,8 @@ def settle_attack(action, gamestate, outcome):
 
         outcome.set_suboutcome(action.target_at, rolls)
 
+    if action.is_failure(rolls, gamestate):
+        return outcome
     if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
         action.target_unit.set(Trait.lost_extra_life)
     else:
