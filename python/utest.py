@@ -1,8 +1,7 @@
 import json
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 from action import Action
 from outcome import Outcome
-import common
 import battle
 import action_getter
 import glob

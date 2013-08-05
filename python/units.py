@@ -77,6 +77,9 @@ class Unit(object):
     def is_ranged(self):
         return self.range > 1
 
+    def is_bribed(self):
+        return self.has(Trait.bribed) or self.has(Trait.bribed_II)
+
 
 class Archer(Unit):
 
