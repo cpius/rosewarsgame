@@ -40,9 +40,6 @@ def do_action(gamestate, action, outcome=None):
     def update_unit_position():
         gamestate.player_units[action.end_at] = gamestate.player_units.pop(action.start_at)
 
-    def update_unit_to_final_position():
-        gamestate.player_units[action.final_position] = gamestate.player_units.pop(action.end_at)
-
     if not outcome:
         outcome = Outcome()
 
@@ -78,9 +75,7 @@ def do_action(gamestate, action, outcome=None):
         outcome = settle_attack(action, gamestate, outcome)
 
         if action.unit.has(Trait.longsword):
-            direction = end_at.get_direction_to(target_at)
-
-            for forward_position in end_at.four_forward_tiles(direction):
+            for forward_position in end_at.four_forward_tiles(attack_direction):
                 if forward_position in gamestate.enemy_units:
                     sub_action = Action(
                         gamestate.all_units(),
@@ -104,7 +99,7 @@ def do_action(gamestate, action, outcome=None):
     else:
         prepare_extra_actions(action, unit)
 
-    update_unit_to_final_position()
+    update_unit_to_final_position(gamestate, action)
 
     gamestate.extra_action = unit.has(Trait.extra_action)
 
@@ -130,6 +125,7 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
 
     if action.is_miss(rolls, gamestate):
         return
+
     if action.is_successful(rolls, gamestate):
         action.unit.gain_xp()
 
@@ -138,7 +134,8 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
 
             if not push_destination.out_of_board_vertical():
                 update_final_position(action)
-                if push_destination in player_units or push_destination in enemy_units or push_destination.out_of_board_horizontal():
+                destination_is_occupied = push_destination in player_units or push_destination in enemy_units
+                if destination_is_occupied or push_destination.out_of_board_horizontal():
                     del enemy_units[action.target_at]
                 else:
                     enemy_units[push_destination] = enemy_units.pop(action.target_at)
@@ -167,13 +164,7 @@ def do_sub_action(gamestate, action, direction, outcome):
 
 
 def settle_attack(action, gamestate, outcome):
-    if not outcome:
-        outcome = Outcome()
-
     rolls = outcome.for_position(action.target_at)
-
-    if action.is_failure(rolls, gamestate):
-        return outcome
 
     if not rolls:
         rolls = [rnd.randint(1, 6), rnd.randint(1, 6)]
@@ -183,7 +174,10 @@ def settle_attack(action, gamestate, outcome):
         if not attack_successful or defence_successful:
             outcome.set_suboutcome(action.target_at, rolls)
 
-    outcome.set_suboutcome(action.target_at, rolls)
+        outcome.set_suboutcome(action.target_at, rolls)
+
+    if action.is_failure(rolls, gamestate):
+        return outcome
 
     if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
         action.target_unit.set(Trait.lost_extra_life)
@@ -205,7 +199,9 @@ def settle_ability(action, enemy_units, player_units):
 
 
 def update_final_position(action):
-    if action.is_move_with_attack() and action.unit.is_melee():
+    if action.move_with_attack and action.unit.is_melee():
         action.final_position = action.target_at
 
 
+def update_unit_to_final_position(gamestate, action):
+    gamestate.player_units[action.final_position] = gamestate.player_units.pop(action.end_at)
