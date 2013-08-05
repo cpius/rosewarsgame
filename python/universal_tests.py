@@ -16,31 +16,36 @@ class UniversalTestCase(unittest.TestCase):
         self.testcase_file = testcase_file
 
     def runTest(self):
-        test_document = json.loads(open(self.testcase_file).read())
+        try:
+            test_document = json.loads(open(self.testcase_file).read())
 
-        # print "\n\nTesting", self.testcase_file
+            # print "\n\nTesting", self.testcase_file
 
-        if test_document["type"] == "Does action exist":
-            gamestate = Gamestate.from_document(test_document["gamestate"])
-            action = Action.from_document(gamestate.all_units(), test_document["action"])
-            expected = test_document["result"]
-            self.does_action_exist(gamestate, action, expected)
+            if test_document["type"] == "Does action exist":
+                gamestate = Gamestate.from_document(test_document["gamestate"])
+                action = Action.from_document(gamestate.all_units(), test_document["action"])
+                expected = test_document["result"]
+                self.does_action_exist(gamestate, action, expected)
 
-        if test_document["type"] == "Is attack and defence correct":
-            gamestate = Gamestate.from_document(test_document["gamestate"])
-            action = Action.from_document(gamestate.all_units(), test_document["action"])
-            attack = test_document["attack"]
-            defence = test_document["defence"]
+            if test_document["type"] == "Is attack and defence correct":
+                gamestate = Gamestate.from_document(test_document["gamestate"])
+                action = Action.from_document(gamestate.all_units(), test_document["action"])
+                attack = test_document["attack"]
+                defence = test_document["defence"]
 
-            self.is_attack_and_defence_correct(gamestate, action, attack, defence)
+                self.is_attack_and_defence_correct(gamestate, action, attack, defence)
 
-        if test_document["type"] == "Is outcome correct":
-            gamestate = Gamestate.from_document(test_document["pre_gamestate"])
-            expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
-            action = Action.from_document(gamestate.all_units(), test_document["action"])
-            outcome = Outcome.from_document(test_document["outcome"])
+            if test_document["type"] == "Is outcome correct":
+                gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+                expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+                action = Action.from_document(gamestate.all_units(), test_document["action"])
+                outcome = None
+                if "outcome" in test_document:
+                    outcome = Outcome.from_document(test_document["outcome"])
 
-            self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
+                self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
+        except ValueError as error:
+            self.assertTrue(False, "Failed to load test document: " + self.testcase_file + "\n\n" + error.message)
 
     def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)

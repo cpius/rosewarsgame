@@ -3,7 +3,7 @@
     "description": "Test a move-attack",
     "outcome":
     {
-        "E4": "win"
+        "E4": [1, 6]
     },
     "action":
     {

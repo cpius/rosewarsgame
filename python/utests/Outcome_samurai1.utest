@@ -1,7 +1,7 @@
 {
     "type": "Is outcome correct",
     "outcome": {
-        "E4": "defend"
+        "E4": [1, 1]
     },
     "action": {
         "start_at": "E3",

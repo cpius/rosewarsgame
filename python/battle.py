@@ -1,10 +1,9 @@
-from outcome import SubOutcome
 from common import *
 
 
 def attack_successful(action, rolls, gamestate):
     
-    attack = get_attack_rating(action.unit, action.target_unit, action, gamestate)
+    attack = get_attack_rating(action.unit, action.target_unit, action, gamestate.player_units)
     
     return rolls[0] <= attack
 
