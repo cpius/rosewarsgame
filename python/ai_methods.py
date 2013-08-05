@@ -3,23 +3,21 @@ import battle
 import copy
 
 
-def document_actions(actions, g):
+def document_actions(actions, gamestate):
     
-    if g.get_actions_remaining() == 1:
+    if gamestate.get_actions_remaining() == 1:
         current_action = "1"
     else:
         current_action = "2"
         
-    if hasattr(g.players[0], "extra_action"):
-        current_action += ".2"
+    if hasattr(gamestate.player_units, "extra_action"):
+        current_action += ".extra"
     
-    out = open("./replay/" + g.players[0].color + " AI actions " + str(g.turn) + "." + current_action + ".txt", 'w')
+    out = open("./replay/AI actions " + str(gamestate.action_number) + "." + current_action + ".txt", 'w')
     
     for action in actions:
-        if g.players[0].color == "Red":
-            action = copy.copy(action)
-            action = get_transformed_action(action)
-            
+        action = copy.copy(action)
+
         out.write(str(action) + "\n")
         out.write("Score: " + str(round(action.score, 2)) + "\n")
         if hasattr(action, "score_success"):
