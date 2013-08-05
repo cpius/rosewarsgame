@@ -15,6 +15,7 @@ import datetime
 from client import Client
 from game import Game
 import common
+from outcome import Outcome
 
 
 class Controller(object):
@@ -298,7 +299,8 @@ class Controller(object):
                 outcome = self.client.send_action(action.to_document())
                 action.ensure_outcome(outcome)
 
-            outcome = self.game.do_action(action, outcome)
+            outcome = Outcome.determine_outcome(action, self.game.gamestate)
+            self.game.do_action(action, outcome)
 
             self.view.draw_game(self.game)
             self.view.draw_action(action, outcome, self.game)
@@ -310,7 +312,9 @@ class Controller(object):
                     self.game.gamestate.update_final_position(action)
 
         else:
-            outcome = self.game.do_action(action, outcome)
+            if not outcome:
+                outcome = Outcome.determine_outcome(action, self.game.gamestate)
+            self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
 
         if action.move_with_attack:
