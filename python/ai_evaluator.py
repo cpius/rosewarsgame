@@ -8,7 +8,7 @@ import ai_module
 import action_getter
 import math
 import common
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 
 board = set((column, row) for column in range(1, 6) for row in range(1, 9))
 

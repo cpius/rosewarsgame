@@ -1,5 +1,5 @@
 import json
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 from action import Action
 import action_getter
 import battle

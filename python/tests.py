@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import action_getter
