@@ -30,9 +30,6 @@ class Action(object):
         self.ability = ability
         self.action_number = action_number
 
-        # The tile a unit ends up at after attacks are resolved
-        self.final_position = self.end_at
-
         self.created_at = created_at if created_at else datetime.utcnow()
 
         self.unit = units[self.start_at]
@@ -101,7 +98,6 @@ class Action(object):
         return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
 
     def ensure_outcome(self, outcome):
-        self.final_position = self.end_at
 
         if outcome:
             self.rolls = (1, 6)
