@@ -44,19 +44,18 @@ def do_action(gamestate, action, outcome=None):
         outcome = Outcome()
 
     unit = action.unit
+    start_at = action.start_at
+    end_at = action.end_at
+    target_at = action.target_at
+    attack_direction = None
+    if action.is_attack() and action.unit.is_melee():
+        attack_direction = end_at.get_direction_to(target_at)
 
     apply_unit_effects()
 
     update_actions_remaining()
 
     update_unit_position()
-
-    end_at = action.end_at
-    target_at = action.target_at
-
-    attack_direction = None
-    if action.is_attack() and action.unit.is_melee():
-        attack_direction = end_at.get_direction_to(target_at)
 
     if action.is_push():
         outcome = settle_attack_push(action, gamestate, outcome)
