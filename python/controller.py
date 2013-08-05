@@ -332,9 +332,7 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
             self.view.draw_game(self.game)
-            self.upgrade_units(self.game.gamestate.player_unit)
-        else:
-            pass
+            self.upgrade_units(self.game.gamestate.player_units)
 
         self.view.draw_game(self.game)
 
