@@ -168,7 +168,6 @@ class Gamestate:
         self.initialize_turn()
 
     def update_final_position(self, action):
-        action_doer.update_final_position(action)
         action_doer.update_unit_to_final_position(self, action)
 
     def __str__(self):
