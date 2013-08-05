@@ -411,12 +411,16 @@ class Controller(object):
         return self.start_position and self.start_position == position
 
     def selecting_ranged_target(self, position):
-        return self.start_position and position in self.game.gamestate.enemy_units and \
-               self.selected_unit.range > 1
+        if not self.start_position:
+            return False
+
+        return position in self.game.gamestate.enemy_units and self.selected_unit.is_ranged()
 
     def selecting_melee_target(self, position):
-        return self.start_position and position in self.game.gamestate.enemy_units and \
-               self.selected_unit.range == 1
+        if not self.start_position:
+            return False
+
+        return position in self.game.gamestate.enemy_units and self.selected_unit.is_melee()
 
     def selecting_move(self, position):
         return self.start_position and position not in self.game.gamestate.enemy_units
