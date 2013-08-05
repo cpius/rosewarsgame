@@ -174,3 +174,15 @@ class Action(object):
 
     def is_miss(self, rolls, gamestate):
         return not battle.attack_successful(self, rolls, gamestate)
+
+    def outcome_string(self, rolls, gamestate):
+        if not self.is_attack() or not rolls:
+            return ""
+
+        if self.is_miss(rolls, gamestate):
+            return "Miss"
+
+        if self.is_successful(rolls, gamestate):
+            return "Win"
+
+        return "Defend"

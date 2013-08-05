@@ -60,7 +60,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
         symbol_location = (base_x + 118 * zoom, base_y + 8 * zoom)
 
         if action.is_attack():
-            draw_attack(screen, interface, action, outcome, base, symbol_location, log)
+            draw_attack(screen, interface, action, outcome, base, symbol_location, log, game)
 
         elif action.is_ability():
 
@@ -106,9 +106,11 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
     return logbook
 
 
-def draw_attack(screen, interface, action, outcome, base, symbol_location, log):
+def draw_attack(screen, interface, action, outcome, base, symbol_location, log, game):
 
-    outcome_string = battle.get_outcome(action, outcome)
+    outcome_string = ""
+    if game:
+        outcome_string = action.outcome_string(outcome.for_position(action.target_at), game.gamestate)
 
     draw_outcome(screen, interface, outcome_string, *base)
 
