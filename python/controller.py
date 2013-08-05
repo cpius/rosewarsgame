@@ -96,7 +96,7 @@ class Controller(object):
         elif self.selecting_active_unit(position):
             self.start_position = position
             self.selected_unit = self.game.gamestate.player_units[self.start_position]
-            illustrate_actions = [action for action in self.game.gamestate.get_actions() if \
+            illustrate_actions = [action for action in self.game.gamestate.get_actions() if
                                   action.start_at == position]
             self.view.draw_game(self.game, position, illustrate_actions)
 
