@@ -407,10 +407,6 @@ class Controller(object):
     def selecting_attack_target_unit(self, position):
         pass
 
-    def selecting_attack_ranged_target(self, position):
-        return self.start_position and position in self.game.gamestate.enemy_units and \
-               self.selected_unit.range > 1
-
     def deselecting_active_unit(self, position):
         return self.start_position and self.start_position == position
 
