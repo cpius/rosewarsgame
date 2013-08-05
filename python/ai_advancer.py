@@ -1,11 +1,10 @@
-import itertools
 from operator import attrgetter
-import ai_methods as m
-import random as rnd
+import ai_methods
+import random
 import settings
 
 
-def get_action(actions, g):
+def get_action(actions, gamestate):
     
     for action in actions:
         action.score = action.end_at.row
@@ -18,9 +17,10 @@ def get_action(actions, g):
             if action.target_at.row > action.end_at.row and action.move_with_attack:
                 action.score += 0.5
     
-    rnd.shuffle(actions)
+    random.shuffle(actions)
     actions.sort(key=attrgetter("score"), reverse=True)
     
     if settings.document_ai_actions:
-        m.document_actions(actions, g)
+        ai_methods.document_actions(actions, gamestate)
+
     return actions[0]
