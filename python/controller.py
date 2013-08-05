@@ -64,14 +64,14 @@ class Controller(object):
         return controller
 
     def trigger_network_player(self):
-        action, outcome = self.client.select_action(self.gamestate.action_number)
+        action, outcome = self.client.select_action(self.game.gamestate.action_number)
 
         print "received action from network: " + str(action)
 
         self.perform_action(action, outcome)
 
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            extra_action, extra_outcome = self.client.select_action(self.gamestate)
+        if hasattr(self.game.gamestate.current_player(), "extra_action"):
+            extra_action, extra_outcome = self.client.select_action(self.game.gamestate)
             self.perform_action(extra_action, extra_outcome)
 
     def trigger_artificial_intelligence(self):
