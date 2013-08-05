@@ -1,4 +1,5 @@
 from common import *
+import random
 
 
 class Outcome:
@@ -23,6 +24,31 @@ class Outcome:
         for outcome in self.outcomes:
             outcome_document[Position.from_string(outcome)] = outcome
         return outcome_document
+
+    @classmethod
+    def determine_outcome(cls, action, gamestate):
+        outcome = cls()
+        if not action.is_attack():
+            return outcome
+
+        outcome.set_suboutcome(action.target_at, [random.randint(1, 6), random.randint(1, 6)])
+
+        attack_direction = None
+        if action.is_attack() and action.unit.is_melee():
+            attack_direction = action.end_at.get_direction_to(action.target_at)
+
+        if action.is_triple_attack():
+            for forward_position in action.end_at.two_forward_tiles(attack_direction):
+                if forward_position in gamestate.enemy_units:
+                    outcome.set_suboutcome(forward_position, [random.randint(1, 6), random.randint(1, 6)])
+
+        if action.unit.has(Trait.longsword):
+            for forward_position in action.end_at.four_forward_tiles(attack_direction):
+                if forward_position in gamestate.enemy_units:
+                    outcome.set_suboutcome(forward_position, [random.randint(1, 6), random.randint(1, 6)])
+
+        return outcome
+
 
     @classmethod
     def from_document(cls, document):
