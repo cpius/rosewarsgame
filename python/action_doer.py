@@ -167,9 +167,6 @@ def do_sub_action(gamestate, action, direction, outcome):
 
 
 def settle_attack(action, gamestate, outcome):
-    if not outcome:
-        outcome = Outcome()
-
     rolls = outcome.for_position(action.target_at)
 
     if action.is_failure(rolls, gamestate):
