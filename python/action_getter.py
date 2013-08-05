@@ -245,8 +245,10 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
 
 
 def can_use_unit(unit):
-    return not unit.has(Trait.frozen) and not unit.has(Trait.recently_bribed) and not \
-        (unit.has(Trait.used and not unit.has(Trait.extra_action)))
+    is_frozen = unit.has(Trait.frozen)
+    is_bribed = unit.has(Trait.recently_bribed)
+    is_used = unit.has(Trait.used) and not unit.has(Trait.extra_action)
+    return not is_frozen and not is_bribed and not is_used
 
 
 def melee_frozen(enemy_units, start_at):
