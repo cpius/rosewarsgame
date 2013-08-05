@@ -71,6 +71,9 @@ class Unit(object):
         self.variables[Trait.improved_weapons_II_B] = 1
         self.zoc = {Type.Cavalry}
 
+    def has_extra_life(self):
+        return self.has(Trait.extra_life) and not self.has(Trait.lost_extra_life)
+
     def is_melee(self):
         return self.range == 1
 
