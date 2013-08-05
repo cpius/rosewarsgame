@@ -349,8 +349,8 @@ class Controller(object):
             self.trigger_network_player()
 
     def is_post_movement_possible(self, action, outcome):
-        successful = outcome.for_position(action.target_at) == SubOutcome.WIN
-        return action.is_attack() and successful and action.unit.range == 1
+        successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)
+        return action.is_attack() and successful and action.unit.is_melee()
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
