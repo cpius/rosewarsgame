@@ -37,7 +37,7 @@ class Outcome:
         if action.is_attack() and action.unit.is_melee():
             attack_direction = action.end_at.get_direction_to(action.target_at)
 
-        if action.is_triple_attack():
+        if action.unit.has(Trait.triple_attack):
             for forward_position in action.end_at.two_forward_tiles(attack_direction):
                 if forward_position in gamestate.enemy_units:
                     outcome.set_suboutcome(forward_position, [random.randint(1, 6), random.randint(1, 6)])
