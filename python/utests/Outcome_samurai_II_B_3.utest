@@ -1,12 +1,12 @@
 {"type": "Is outcome correct",
- "description": "Test if bloodlust triggers",
+ "description": "Test if movement is reduced during bloodlust",
  "outcome": {"E4": [1, 6]},
  "action": 
 {
     "start_at": "E3",
     "end_at": "E3",
     "target_at": "E4",
-    "move_with_attack": false
+    "move_with_attack": true
 },
  "pre_gamestate": 
  {
@@ -20,7 +20,7 @@
 			"used": 1,
 			"xp": 1,
 			"movement_remaining": 1,
-			"extra_action": 1
+			"extra_action": 0
 		},
 		"A2": "Pikeman"
     },
@@ -36,12 +36,12 @@
 	"actions_remaining": 1, 
     "player1_units": 
 	{
-        "E3":
+        "E4":
 		{	
 			"name": "Samurai_II_B",
 			"used": 1,
 			"xp": 1,
-			"movement_remaining": 1,
+			"movement_remaining": 0,
 			"extra_action": 1
 		},
 		"A2": "Pikeman"
