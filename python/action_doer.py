@@ -180,7 +180,7 @@ def settle_attack(action, gamestate, outcome):
         if not attack_successful or defence_successful:
             outcome.set_suboutcome(action.target_at, rolls)
 
-    outcome.set_suboutcome(action.target_at, rolls)
+        outcome.set_suboutcome(action.target_at, rolls)
 
     if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
         action.target_unit.set(Trait.lost_extra_life)
