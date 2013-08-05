@@ -9,7 +9,6 @@ def do_action(gamestate, action, outcome):
 
         def apply_push():
             if not push_destination.out_of_board_vertical():
-                update_final_position(action)
                 if push_destination in all_units or push_destination.out_of_board_horizontal():
                     del enemy_units[action.target_at]
                 else:
@@ -26,7 +25,6 @@ def do_action(gamestate, action, outcome):
                 action.target_unit.set(Trait.lost_extra_life)
                 apply_push()
             else:
-                update_final_position(action)
                 del enemy_units[action.target_at]
         else:
             apply_push()
@@ -41,7 +39,6 @@ def do_action(gamestate, action, outcome):
             action.target_unit.set(Trait.lost_extra_life)
         else:
             del enemy_units[action.target_at]
-            update_final_position(action)
 
     def do_sub_action(action):
         if action.is_push():
@@ -62,14 +59,16 @@ def do_action(gamestate, action, outcome):
             movement_remaining = 0
 
             if unit.has(Trait.bloodlust) and action.is_attack() and action.is_successful(rolls, gamestate):
-                movement_remaining = unit.get(Trait.movement_remaining) - distance(action.start_at, action.final_position)
+                movement_remaining = unit.get(Trait.movement_remaining) - int(action.move_with_attack)
                 unit.set(Trait.extra_action)
         else:
-
             unit.set(Trait.extra_action)
-            movement_remaining = unit.movement - distance(action.start_at, action.final_position)
+            movement_remaining = unit.movement - distance(action.start_at, action.end_at)
 
-            if unit.has(Trait.swiftness) and action.is_attack() and action.end_at == action.final_position:
+            if unit.has(Trait.swiftness) and action.is_attack():
+                movement_remaining -= 1
+
+            if unit.has(Trait.combat_agility) and action.is_attack() and action.is_successful(rolls, gamestate):
                 movement_remaining -= 1
 
         unit.set(Trait.movement_remaining, movement_remaining)
@@ -141,15 +140,11 @@ def do_action(gamestate, action, outcome):
     if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility, Trait.bloodlust]):
         prepare_extra_actions(action)
 
-    update_unit_to_final_position(gamestate, action)
+    if action.is_attack() and action.move_with_attack and action.target_at not in enemy_units:
+        update_unit_to_final_position(gamestate, action)
 
     gamestate.extra_action = unit.has(Trait.extra_action)
 
 
-def update_final_position(action):
-    if action.move_with_attack and action.unit.is_melee():
-        action.final_position = action.target_at
-
-
 def update_unit_to_final_position(gamestate, action):
-    gamestate.player_units[action.final_position] = gamestate.player_units.pop(action.end_at)
+    gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
