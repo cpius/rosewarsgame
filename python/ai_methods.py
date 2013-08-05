@@ -31,8 +31,8 @@ def document_actions(actions, g):
 
 def chance_of_win(gamestate, attacking_unit, defending_unit, action):
 
-    attack_rating = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
-    defence_rating = battle.get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate)
+    attack_rating = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate.player_units)
+    defence_rating = battle.get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate.enemy_units)
 
     if attack_rating < 0:
         attack_rating = 0
