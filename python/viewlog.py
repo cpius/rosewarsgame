@@ -57,7 +57,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
         line_end = (int(interface.board_size[1] * zoom), base_y + log_heights - line_thickness / 2)
         pygame.draw.line(screen, colors["black"], line_start, line_end, line_thickness)
 
-        symbol_location = (base_x + 118 * zoom, base_y + 10 * zoom)
+        symbol_location = (base_x + 118 * zoom, base_y + 8 * zoom)
 
         if action.is_attack():
             draw_attack(screen, interface, action, outcome, base, symbol_location, log)
@@ -135,7 +135,7 @@ def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
     unit_height = int((base_height - 10) * zoom)
     unit_width = int((interface.unit_width / interface.unit_height) * unit_height)
 
-    location = (base_x + (65 + index * 100) * zoom, base_y + 4 * zoom)
+    location = (base_x + (65 + index * 100) * zoom, base_y + 3 * zoom)
     unit_pic = get_unit_pic(interface, unit.image)
     unit_image = get_image(unit_pic, (unit_width, unit_height))
 
