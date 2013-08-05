@@ -398,8 +398,10 @@ class Controller(object):
         return not self.start_position and position in self.game.gamestate.player_units
 
     def selecting_ability_target(self, position):
-        return self.start_position and (
-            position in self.game.gamestate.enemy_units or position in self.game.gamestate.player_units) and self.selected_unit.abilities
+        if not self.start_position:
+            return False
+
+        return position in self.game.gamestate.all_units() and self.selected_unit.abilities
 
     def selecting_attack_target_unit(self, position):
         pass
