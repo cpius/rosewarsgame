@@ -178,6 +178,7 @@ def settle_attack(action, gamestate, outcome):
 
     if action.is_failure(rolls, gamestate):
         return outcome
+
     if action.target_unit.has(Trait.extra_life) and not action.target_unit.has(Trait.lost_extra_life):
         action.target_unit.set(Trait.lost_extra_life)
     else:
@@ -198,7 +199,7 @@ def settle_ability(action, enemy_units, player_units):
 
 
 def update_final_position(action):
-    if action.is_move_with_attack() and action.unit.is_melee():
+    if action.move_with_attack and action.unit.is_melee():
         action.final_position = action.target_at
 
 

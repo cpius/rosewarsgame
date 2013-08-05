@@ -15,7 +15,7 @@ def get_action(actions, g):
         
         if action.is_attack():
             action.score += 0.25
-            if action.target_at.row > action.end_at.row and action.is_move_with_attack():
+            if action.target_at.row > action.end_at.row and action.move_with_attack:
                 action.score += 0.5
     
     rnd.shuffle(actions)

@@ -354,7 +354,7 @@ def get_action_values(gamestate, original_gamestate):
                                                              friendly_units)[0]
                     if any(action.end_at[1] == 8 for action in actions):
                         return "One action from backline", 20
-                    elif any(action.is_attack() and action.target_at[1] == 8 and action.is_move_with_attack() for
+                    elif any(action.is_attack() and action.target_at[1] == 8 and action.move_with_attack for
                              action in actions):
                         return "One attack from backline", 10
                     else:
@@ -366,7 +366,7 @@ def get_action_values(gamestate, original_gamestate):
                                                          friendly_units)[0]
                 if any(action.end_at[1] == 8 for action in actions):
                     return "One action from backline", 20
-                elif any(action.is_attack() and action.target_at[1] == 8 and action.is_move_with_attack()
+                elif any(action.is_attack() and action.target_at[1] == 8 and action.move_with_attack
                          for action in actions):
                     return "One attack from backline", 10
 
@@ -451,7 +451,7 @@ def get_action_values(gamestate, original_gamestate):
                                                              friendly_units)[0]
                     if any(action.end_at[1] == 1 for action in actions):
                         return "One action from backline", 200
-                    elif any(action.is_attack() and action.target_at[1] == 1 and action.is_move_with_attack() for
+                    elif any(action.is_attack() and action.target_at[1] == 1 and action.move_with_attack for
                              action in actions):
                         return "One attack from backline", 40
                     else:
@@ -465,7 +465,7 @@ def get_action_values(gamestate, original_gamestate):
                                                          friendly_units)[0]
                 if any(action.end_at[1] == 1 for action in actions):
                     return "One action from backline", 200
-                elif any(action.is_attack() and action.target_at[1] == 1 and action.is_move_with_attack()
+                elif any(action.is_attack() and action.target_at[1] == 1 and action.move_with_attack
                          for action in actions):
                     return "One attack from backline", 40
 

@@ -100,9 +100,6 @@ class Action(object):
         attrs = ["action_number", "start_at", "end_at", "target_at", "ability", "created_at"]
         return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
 
-    def is_move_with_attack(self):
-        return self.move_with_attack
-
     def ensure_outcome(self, outcome):
         self.final_position = self.end_at
 
