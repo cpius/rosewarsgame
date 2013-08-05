@@ -419,7 +419,7 @@ class Controller(object):
                self.selected_unit.range == 1
 
     def selecting_move(self, position):
-        return self.start_position and position not in self.game.gamestate.enemy_units()
+        return self.start_position and position not in self.game.gamestate.enemy_units
 
 
 def within(point, area):
