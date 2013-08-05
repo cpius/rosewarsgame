@@ -14,7 +14,6 @@ from json import JSONEncoder
 import datetime
 from client import Client
 from game import Game
-from outcome import SubOutcome
 import common
 
 
