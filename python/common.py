@@ -145,8 +145,8 @@ trait_descriptions = {
 ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
-    "bribe_II": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
-                "the same unit on your next turn. The unit gets +2A until end of turn.",
+    "bribe_II": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't "
+                "bribe the same unit on your next turn. The unit gets +2A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
     "improve_weapons_II_A": "Give melee unit +2 attack, +1 defence for two turns.",
     "improve_weapons_II_B": "Give melee unit +3 attack, +2 defence, and zoc against cavalry until your next turn",

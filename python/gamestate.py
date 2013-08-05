@@ -27,7 +27,7 @@ class Gamestate:
         all_units.update(self.units[1])
         return all_units
 
-    def do_action(self, action, outcome=None):
+    def do_action(self, action, outcome):
         outcome = action_doer.do_action(self, action, outcome)
         self.action_number += 1
 

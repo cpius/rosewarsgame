@@ -10,7 +10,7 @@ decrement_traits = [Trait.frozen, Trait.attack_frozen, Trait.improved_weapons_II
 def initialize_turn(gamestate):
 
     def resolve_bribe(unit):
-        if unit.has(Trait.bribed):
+        if unit.is_bribed():
             gamestate.player_units[position] = gamestate.enemy_units.pop(position)
             unit.set(Trait.recently_bribed)
             gamestate.player_units[position].remove(Trait.bribed)
@@ -23,4 +23,9 @@ def initialize_turn(gamestate):
         for trait in decrement_traits:
             unit.decrement(trait)
 
+    # We just got the turn. Any bribed units we own is still controlled by the enemy,
+    # at least until we take it back at the start of our turn (now)
+    for position, unit in gamestate.enemy_units.items():
         resolve_bribe(unit)
+        if unit.has(Trait.used):
+            unit.remove(Trait.used)
