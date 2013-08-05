@@ -305,9 +305,9 @@ class Controller(object):
             self.view.draw_action(action, outcome, self.game)
 
             if self.is_post_movement_possible(action, outcome):
-                move_with_attack = self.ask_about_move_with_attack(action)
+                action.move_with_attack = self.ask_about_move_with_attack(action)
 
-                if move_with_attack:
+                if action.move_with_attack:
                     self.game.gamestate.update_final_position(action)
 
         else:
