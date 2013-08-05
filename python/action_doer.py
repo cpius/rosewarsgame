@@ -125,6 +125,7 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
 
     if action.is_miss(rolls, gamestate):
         return
+
     if action.is_successful(rolls, gamestate):
         action.unit.gain_xp()
 
@@ -133,7 +134,8 @@ def settle_attack_push(action, gamestate, outcome=None, push_direction=None):
 
             if not push_destination.out_of_board_vertical():
                 update_final_position(action)
-                if push_destination in player_units or push_destination in enemy_units or push_destination.out_of_board_horizontal():
+                destination_is_occupied = push_destination in player_units or push_destination in enemy_units
+                if destination_is_occupied or push_destination.out_of_board_horizontal():
                     del enemy_units[action.target_at]
                 else:
                     enemy_units[push_destination] = enemy_units.pop(action.target_at)
