@@ -111,13 +111,3 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
     attack += sum([locals()[factor]() for factor in attack_adjusters])
 
     return attack
-
-
-def get_outcome(action, outcome):
-    sub_outcome = outcome.for_position(action.target_at)
-    if sub_outcome == SubOutcome.MISS:
-        return " Miss"
-    elif sub_outcome == SubOutcome.DEFEND:
-        return " Defend"
-    elif sub_outcome == SubOutcome.WIN:
-        return " Win"

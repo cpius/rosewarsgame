@@ -100,9 +100,6 @@ class Action(object):
         attrs = ["action_number", "start_at", "end_at", "target_at", "ability", "created_at"]
         return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
 
-    def is_move_with_attack(self):
-        return self.move_with_attack
-
     def ensure_outcome(self, outcome):
         self.final_position = self.end_at
 
@@ -174,3 +171,15 @@ class Action(object):
 
     def is_miss(self, rolls, gamestate):
         return not battle.attack_successful(self, rolls, gamestate)
+
+    def outcome_string(self, rolls, gamestate):
+        if not self.is_attack() or not rolls:
+            return ""
+
+        if self.is_miss(rolls, gamestate):
+            return "Miss"
+
+        if self.is_successful(rolls, gamestate):
+            return "Win"
+
+        return "Defend"

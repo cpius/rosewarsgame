@@ -14,7 +14,6 @@ from json import JSONEncoder
 import datetime
 from client import Client
 from game import Game
-from outcome import SubOutcome
 import common
 
 
@@ -65,14 +64,14 @@ class Controller(object):
         return controller
 
     def trigger_network_player(self):
-        action, outcome = self.client.select_action(self.gamestate.action_number)
+        action, outcome = self.client.select_action(self.game.gamestate.action_number)
 
         print "received action from network: " + str(action)
 
         self.perform_action(action, outcome)
 
-        if hasattr(self.gamestate.current_player(), "extra_action"):
-            extra_action, extra_outcome = self.client.select_action(self.gamestate)
+        if hasattr(self.game.gamestate.current_player(), "extra_action"):
+            extra_action, extra_outcome = self.client.select_action(self.game.gamestate)
             self.perform_action(extra_action, extra_outcome)
 
     def trigger_artificial_intelligence(self):
@@ -97,7 +96,7 @@ class Controller(object):
         elif self.selecting_active_unit(position):
             self.start_position = position
             self.selected_unit = self.game.gamestate.player_units[self.start_position]
-            illustrate_actions = [action for action in self.game.gamestate.get_actions() if \
+            illustrate_actions = [action for action in self.game.gamestate.get_actions() if
                                   action.start_at == position]
             self.view.draw_game(self.game, position, illustrate_actions)
 
@@ -142,7 +141,7 @@ class Controller(object):
     def possible_melee_target(self, action, position):
         same_start = action.start_at == self.start_position
         same_target = action.target_at and action.target_at == position
-        return same_start and same_target and not action.is_move_with_attack()
+        return same_start and same_target and not action.move_with_attack
 
     def pick_action_end_position(self, possible_actions):
 
@@ -305,9 +304,9 @@ class Controller(object):
             self.view.draw_action(action, outcome, self.game)
 
             if self.is_post_movement_possible(action, outcome):
-                move_with_attack = self.ask_about_move_with_attack(action)
+                action.move_with_attack = self.ask_about_move_with_attack(action)
 
-                if move_with_attack:
+                if action.move_with_attack:
                     self.game.gamestate.update_final_position(action)
 
         else:
@@ -333,9 +332,7 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
             self.view.draw_game(self.game)
-            self.upgrade_units(self.game.gamestate.player_unit)
-        else:
-            pass
+            self.upgrade_units(self.game.gamestate.player_units)
 
         self.view.draw_game(self.game)
 
@@ -352,8 +349,8 @@ class Controller(object):
             self.trigger_network_player()
 
     def is_post_movement_possible(self, action, outcome):
-        successful = outcome.for_position(action.target_at) == SubOutcome.WIN
-        return action.is_attack() and successful and action.unit.range == 1
+        successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)
+        return action.is_attack() and successful and action.unit.is_melee()
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
@@ -401,29 +398,31 @@ class Controller(object):
         return not self.start_position and position in self.game.gamestate.player_units
 
     def selecting_ability_target(self, position):
-        return self.start_position and (
-            position in self.game.gamestate.enemy_units or position in self.game.gamestate.player_units) and self.selected_unit.abilities
+        if not self.start_position:
+            return False
+
+        return position in self.game.gamestate.all_units() and self.selected_unit.abilities
 
     def selecting_attack_target_unit(self, position):
         pass
-
-    def selecting_attack_ranged_target(self, position):
-        return self.start_position and position in self.game.gamestate.enemy_units and \
-               self.selected_unit.range > 1
 
     def deselecting_active_unit(self, position):
         return self.start_position and self.start_position == position
 
     def selecting_ranged_target(self, position):
-        return self.start_position and position in self.game.gamestate.enemy_units and \
-               self.selected_unit.range > 1
+        if not self.start_position:
+            return False
+
+        return position in self.game.gamestate.enemy_units and self.selected_unit.is_ranged()
 
     def selecting_melee_target(self, position):
-        return self.start_position and position in self.game.gamestate.enemy_units and \
-               self.selected_unit.range == 1
+        if not self.start_position:
+            return False
+
+        return position in self.game.gamestate.enemy_units and self.selected_unit.is_melee()
 
     def selecting_move(self, position):
-        return self.start_position and position not in self.game.gamestate.enemy_units()
+        return self.start_position and position not in self.game.gamestate.enemy_units
 
 
 def within(point, area):
