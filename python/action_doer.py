@@ -40,9 +40,6 @@ def do_action(gamestate, action, outcome=None):
     def update_unit_position():
         gamestate.player_units[action.end_at] = gamestate.player_units.pop(action.start_at)
 
-    def update_unit_to_final_position():
-        gamestate.player_units[action.final_position] = gamestate.player_units.pop(action.end_at)
-
     if not outcome:
         outcome = Outcome()
 
@@ -104,7 +101,7 @@ def do_action(gamestate, action, outcome=None):
     else:
         prepare_extra_actions(action, unit)
 
-    update_unit_to_final_position()
+    update_unit_to_final_position(gamestate, action)
 
     gamestate.extra_action = unit.has(Trait.extra_action)
 
@@ -206,3 +203,5 @@ def update_final_position(action):
         action.final_position = action.target_at
 
 
+def update_unit_to_final_position(gamestate, action):
+    gamestate.player_units[action.final_position] = gamestate.player_units.pop(action.end_at)
