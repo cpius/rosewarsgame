@@ -75,9 +75,7 @@ def do_action(gamestate, action, outcome=None):
         outcome = settle_attack(action, gamestate, outcome)
 
         if action.unit.has(Trait.longsword):
-            direction = end_at.get_direction_to(target_at)
-
-            for forward_position in end_at.four_forward_tiles(direction):
+            for forward_position in end_at.four_forward_tiles(attack_direction):
                 if forward_position in gamestate.enemy_units:
                     sub_action = Action(
                         gamestate.all_units(),
