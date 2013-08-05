@@ -15,6 +15,7 @@ class Unit(object):
     attack_bonuses = {}
     defence_bonuses = {}
     constants = []
+    range = 0
     custom_ability = {Ability.poison: "poison",
                       Ability.poison_II: "poison_II",
                       Ability.improve_weapons_II_A: "improve_weapons_II_A",

@@ -1,5 +1,5 @@
 {"type": "Is outcome correct",
- "description": "Test if bloodlust triggers",
+ "description": "Test if bloodlust triggers even if its out of moves",
  "outcome": {"E4": [1, 6]},
  "action": 
 {
@@ -19,7 +19,7 @@
 			"name": "Samurai_II_B",
 			"used": 1,
 			"xp": 1,
-			"movement_remaining": 1,
+			"movement_remaining": 0,
 			"extra_action": 1
 		},
 		"A2": "Pikeman"
@@ -41,7 +41,7 @@
 			"name": "Samurai_II_B",
 			"used": 1,
 			"xp": 1,
-			"movement_remaining": 1,
+			"movement_remaining": 0,
 			"extra_action": 1
 		},
 		"A2": "Pikeman"
