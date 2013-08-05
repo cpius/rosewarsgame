@@ -7,11 +7,9 @@ import ai_methods
 import units as units_module
 import json
 from common import *
-from pprint import PrettyPrinter
 
 
 class Gamestate:
-    
     def __init__(self,
                  player1_units,
                  player2_units,
@@ -168,15 +166,13 @@ class Gamestate:
         self.flip_units()
         self.units = self.units[::-1]
         self.initialize_turn()
-        #self.set_available_actions()
 
     def update_final_position(self, action):
         action_doer.update_final_position(action)
         action_doer.update_unit_to_final_position(self, action)
 
     def __str__(self):
-        pp = PrettyPrinter()
-        return str(pp.pprint(self.to_document()))
+        return document_to_string(self.to_document())
 
     def flip_units(self):
         self.units = [dict((position.flip(), unit) for position, unit in self.units[0].items()),
@@ -184,3 +180,20 @@ class Gamestate:
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()
+
+    def is_ended(self):
+        backline = 8
+        for position, unit in self.player_units.items():
+            if not unit.is_bribed():
+                if position.row == backline:
+                    return True
+
+        if not self.enemy_units:
+            at_least_one_bribed = False
+            for unit in self.player_units:
+                if unit.is_bribed():
+                    at_least_one_bribed = True
+            if not at_least_one_bribed:
+                return True
+
+        return False

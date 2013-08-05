@@ -3,7 +3,7 @@ import view as view_module
 import json
 import pygame
 from pygame.locals import *
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 from game import Game
 from player import Player
 

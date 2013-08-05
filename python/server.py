@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 from json import dumps
 import time
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 from action_getter import get_action
 import socket
 from player import Player

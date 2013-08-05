@@ -3,7 +3,7 @@ import pygame
 import sys
 from pygame.locals import *
 import setup
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 import os
 import settings
 import shutil

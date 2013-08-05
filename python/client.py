@@ -1,6 +1,6 @@
 import json
 import urllib2
-from gamestate_module import Gamestate
+from gamestate import Gamestate
 from time import sleep
 from common import CustomJsonEncoder
 from action import Action
