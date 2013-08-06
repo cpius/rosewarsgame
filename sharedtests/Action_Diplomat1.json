@@ -1,0 +1,25 @@
+{
+    "type": "Does action exist",
+	"description": "Can the diplomat bribe a unit",
+    "result": true,
+    "action":
+    {
+        "start_at": "C3",
+		"end_at": "C3",
+        "target_at": "C6",
+		"ability": "bribe"
+    },
+    "gamestate":
+	{
+		"actions_remaining": 2,
+		"player1_units":
+		{
+			"C3": "Diplomat",
+			"A2": "Pikeman"
+		},
+		"player2_units":
+		{
+			"C6": "Ballista"
+		}
+	}
+}

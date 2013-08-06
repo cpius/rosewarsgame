@@ -1,0 +1,34 @@
+{"type": "Is attack and defence correct",
+ "attack": 6,
+ "defence": 3,
+ "action":
+{
+    "start_at": "B2",
+    "end_at": "B3",
+    "target_at": "B4",
+    "move_with_attack": "move"
+},
+ "gamestate": 
+ {
+	"actions_remaining": 1,
+    "player1_units":
+	{
+        "B2":
+		{
+			"name": "Knight",
+			"improved_weapons": 1
+		},
+        "A3": "Weaponsmith"
+    },
+    "player2_units":
+	{
+        "B4":
+		{
+			"name": "Archer",
+			"improved_weapons": 1
+		},
+        "A5": "Weaponsmith"
+    }
+ }
+}
+

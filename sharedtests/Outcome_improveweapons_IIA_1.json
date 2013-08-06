@@ -1,0 +1,39 @@
+{
+    "description": "Test if improve_weapons_II_A effect is recorded",
+    "type": "Is outcome correct",
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": "Weaponsmith_II_A",
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    },
+    "action": {
+        "target_at": "A3",
+        "start_at": "C3",
+        "ability": "improve_weapons_II_A",
+        "end_at": "C3"
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C3": {
+                "xp": 1,
+                "used": 1,
+                "name": "Weaponsmith_II_A"
+            },
+            "A3": {
+                "name": "Pikeman",
+                "improved_weapons_II_A": 2
+            }
+        },
+        "player2_units": {
+            "D4": {
+                "name": "Archer"
+            }
+        }
+    }
+}

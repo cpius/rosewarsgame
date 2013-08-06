@@ -1,0 +1,45 @@
+{"type": "Is outcome correct",
+ "outcome": {"E4": [1, 6]},
+ "action":
+{
+    "start_at": "E3",
+    "end_at": "E3",
+    "target_at": "E4",
+    "move_with_attack": true
+},
+ "pre_gamestate":
+ {
+	"actions_remaining": 2,
+    "player1_units":
+	{
+        "E3": "Hobelar",
+		"A2": "Pikeman"
+    },
+    "player2_units":
+	{
+        "E4": "Archer",
+		"D7": "Ballista"
+    }
+ },
+ "post_gamestate":
+ {
+	"extra_action": true,
+	"actions_remaining": 1,
+    "player1_units":
+	{
+        "E4":
+		{
+			"name": "Hobelar",
+			"used": 1,
+			"xp": 1,
+			"movement_remaining": 2,
+			"extra_action": 1
+		},
+		"A2": "Pikeman"
+    },
+    "player2_units":
+	{
+		"D7": "Ballista"
+    }
+ }
+}
