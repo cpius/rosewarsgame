@@ -10,8 +10,6 @@ import shutil
 from player import Player
 from action import Action
 import units as units_module
-from json import JSONEncoder
-import datetime
 from client import Client
 from game import Game
 import common
@@ -431,10 +429,3 @@ class Controller(object):
 
 def within(point, area):
     return area[0].y <= point[1] <= area[1].y and area[0].x <= point[0] <= area[1].x
-
-
-class CustomJsonEncoder(JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime.datetime):
-            return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
-        return JSONEncoder.default(self, obj)
