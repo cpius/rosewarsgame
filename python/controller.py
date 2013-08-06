@@ -424,7 +424,7 @@ class Controller(object):
         return position in self.game.gamestate.enemy_units and self.selected_unit.is_melee()
 
     def selecting_move(self, position):
-        return self.start_position and position not in self.game.gamestate.enemy_units
+        return self.start_position and position not in self.game.gamestate.all_units()
 
 
 def within(point, area):
