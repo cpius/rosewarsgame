@@ -1,0 +1,47 @@
+{
+    "type": "Is outcome correct",
+    "description": "After Samurai does it's extra action, it shouldn't have more extra actions",
+    "outcome": {
+        "E4": [1, 6]
+    },
+    "action": {
+        "start_at": "E3",
+        "end_at": "E3",
+        "target_at": "E4",
+        "move_with_attack": false
+    },
+    "pre_gamestate": {
+        "extra_action": true,
+        "actions_remaining": 1,
+        "player1_units": {
+            "E3": {
+                "name": "Samurai",
+                "used": 1,
+                "xp": 1,
+                "movement_remaining": 0,
+                "extra_action": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D7": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "extra_action": false,
+        "actions_remaining": 1,
+        "player1_units": {
+            "E3": {
+                "name": "Samurai",
+                "used": 1,
+                "xp": 1,
+                "movement_remaining": 0
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "D7": "Ballista"
+        }
+    }
+}

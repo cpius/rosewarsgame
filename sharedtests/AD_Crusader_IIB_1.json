@@ -1,0 +1,24 @@
+{
+    "type": "Is attack and defence correct",
+    "attack": 3,
+    "defence": 3,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C3",
+        "target_at": "D6",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C3": "Archer",
+            "D4": "Light Cavalry"
+        },
+        "player2_units": {
+            "D6": "Archer",
+            "C6": "Crusader_II_B"
+
+        }
+    }
+}
+
