@@ -1,47 +1,38 @@
 {
     "type": "Is outcome correct",
     "description": "Test Elephant triple push",
-    "outcome":
-    {
+    "outcome": {
         "B2": [1, 6],
         "C2": [1, 1],
         "D2": [6, 1]
     },
-    "action":
-    {
+    "action": {
         "start_at": "C1",
         "end_at": "C1",
         "target_at": "C2",
         "move_with_attack": true
     },
-    "pre_gamestate":
-    {
-        "player1_units":
-        {
+    "pre_gamestate": {
+        "player1_units": {
             "C1": "War Elephant"
         },
         "actions_remaining": 2,
-        "player2_units":
-        {
+        "player2_units": {
             "B2": "Longswordsman",
             "C2": "Royal Guard",
             "D2": "Ballista"
         }
     },
-    "post_gamestate":
-    {
-        "player1_units":
-        {
-            "C2":
-             {
-                 "name": "War Elephant",
-                 "used": true,
-                 "xp": 1
-             }
+    "post_gamestate": {
+        "player1_units": {
+            "C2": {
+                "name": "War Elephant",
+                "used": true,
+                "xp": 1
+            }
         },
         "actions_remaining": 0,
-        "player2_units":
-        {
+        "player2_units": {
             "C3": "Royal Guard",
             "D2": "Ballista"
         }

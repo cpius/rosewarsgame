@@ -1,22 +1,18 @@
 {
     "type": "Does action exist",
-	"description": "Test if a specialist can do a simple move of one tile.",
+    "description": "Test if a specialist can do a simple move of one tile.",
     "result": true,
-    "action":
-    {
+    "action": {
         "start_at": "B2",
         "end_at": "B3"
     },
-    "gamestate":
-    {
+    "gamestate": {
         "actions_remaining": 1,
-        "player1_units":
-        {
+        "player1_units": {
             "B2": "Weaponsmith",
             "C5": "Viking"
         },
-        "player2_units":
-        {
+        "player2_units": {
             "A2": "Knight",
             "E4": "Pikeman"
         }

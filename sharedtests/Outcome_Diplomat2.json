@@ -7,7 +7,7 @@
             "C3": "Diplomat",
             "A3": "Catapult"
         },
-     "player2_units": {
+        "player2_units": {
             "D7": "Archer",
             "C4": {
                 "lost_extra_life": 1,
@@ -19,24 +19,22 @@
         "start_at": "C3",
         "target_at": "C4",
         "end_at": "C3",
-		"ability": "bribe"
+        "ability": "bribe"
     },
     "post_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
-            "C3":
-			{
-				"name": "Diplomat",
-				"xp": 1,
-				"used": 1
-			},
+            "C3": {
+                "name": "Diplomat",
+                "xp": 1,
+                "used": 1
+            },
             "A3": "Catapult",
-			"C4":
-			{
-				"name": "Viking",
-				"lost_extra_life": 1,
-				"bribed": 1
-			}
+            "C4": {
+                "name": "Viking",
+                "lost_extra_life": 1,
+                "bribed": 1
+            }
         },
         "player2_units": {
             "D7": "Archer"

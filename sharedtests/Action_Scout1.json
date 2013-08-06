@@ -1,22 +1,18 @@
 {
     "type": "Does action exist",
     "result": true,
-    "action":
-    {
+    "action": {
         "start_at": "E3",
         "end_at": "E7"
     },
-    "gamestate":
-	{
-		"actions_remaining": 2, 
-		"player1_units":
-		{
-			"E3": "Scout",
-			"A2": "Pikeman"
-		},
-		"player2_units":
-		{
-			"B5": "Pikeman"
-		}
-	}
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E3": "Scout",
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "B5": "Pikeman"
+        }
+    }
 }

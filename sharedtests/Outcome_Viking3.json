@@ -1,46 +1,37 @@
 {
     "type": "Is outcome correct",
     "description": "Test if viking dies if it cant retreat",
-    "outcome":
-    {
+    "outcome": {
         "A4": [1, 1]
     },
-    "action":
-    {
+    "action": {
         "start_at": "B4",
         "end_at": "B4",
-		"target_at": "A4",
-		"move_with_attack": 1
+        "target_at": "A4",
+        "move_with_attack": 1
     },
-    "pre_gamestate":
-    {
-        "player1_units":
-        {
-			"E2": "Pikeman",
+    "pre_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
             "B4": "Halberdier"
         },
         "actions_remaining": 2,
-        "player2_units":
-        {
+        "player2_units": {
             "A4": "Viking",
             "D6": "Ballista"
         }
     },
-    "post_gamestate":
-    {
-        "player1_units":
-        {
-			"E2": "Pikeman",
-            "A4":
-             {
-                 "name": "Halberdier",
-                 "used": true,
-                 "xp": 1
-             }
+    "post_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
+            "A4": {
+                "name": "Halberdier",
+                "used": true,
+                "xp": 1
+            }
         },
         "actions_remaining": 1,
-        "player2_units":
-        {
+        "player2_units": {
 
             "D6": "Ballista"
         }

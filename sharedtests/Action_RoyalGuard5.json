@@ -1,21 +1,17 @@
 {
     "type": "Does action exist",
     "result": true,
-    "action":
-    {
+    "action": {
         "start_at": "B5",
         "end_at": "B4"
     },
-    "gamestate":
-    {
+    "gamestate": {
         "actions_remaining": 1,
-        "player1_units":
-        {
+        "player1_units": {
             "B5": "Pikeman",
             "B2": "Ballista"
         },
-        "player2_units":
-        {
+        "player2_units": {
             "B6": "Royal Guard"
         }
     }

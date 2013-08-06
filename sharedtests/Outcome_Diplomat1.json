@@ -26,11 +26,10 @@
                 "xp": 1
             },
             "A2": "Pikeman",
-			"E4":
-			{
-				"name": "Archer",
-				"bribed": 1
-			}
+            "E4": {
+                "name": "Archer",
+                "bribed": 1
+            }
         },
         "player2_units": {
             "D7": "Ballista"

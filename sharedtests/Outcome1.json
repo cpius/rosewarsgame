@@ -1,44 +1,35 @@
 {
     "type": "Is outcome correct",
     "description": "Test a move-attack",
-    "outcome":
-    {
+    "outcome": {
         "E4": [1, 6]
     },
-    "action":
-    {
+    "action": {
         "start_at": "E3",
         "end_at": "E3",
         "target_at": "E4",
         "move_with_attack": true
     },
-    "pre_gamestate":
-    {
-	    "actions_remaining": 2,
-        "player1_units":
-        {
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
             "E3": "Pikeman"
         },
-        "player2_units":
-        {
+        "player2_units": {
             "E4": "Archer",
-		    "D7": "Ballista"
+            "D7": "Ballista"
         }
     },
-    "post_gamestate":
-    {
+    "post_gamestate": {
         "actions_remaining": 0,
-        "player1_units":
-        {
-	        "E4":
-	        {
+        "player1_units": {
+            "E4": {
                 "xp": 1,
                 "used": 1,
-			    "name": "Pikeman"
+                "name": "Pikeman"
             }
-	    },
-        "player2_units":
-        {
+        },
+        "player2_units": {
             "D7": "Ballista"
         }
     }

@@ -1,29 +1,26 @@
 {
     "type": "Does action exist",
-	"description": "Does temporary zoc traits work",
+    "description": "Does temporary zoc traits work",
     "result": false,
-    "action":
-    {
+    "action": {
         "start_at": "B4",
         "end_at": "B5"
     },
-    "gamestate":
-    {
+    "gamestate": {
         "actions_remaining": 1,
-        "player1_units":
-        {
+        "player1_units": {
             "B4": "Knight",
             "B2": "Ballista"
         },
-        "player2_units":
-        {
+        "player2_units": {
             "A6": "Weaponsmith_II_B",
-			"A4":
-			{
-				"name": "Knight",
-				"improved_weapons_II_B": 1,
-				"zoc": {"Cavalry": "true"}
-			}
+            "A4": {
+                "name": "Knight",
+                "improved_weapons_II_B": 1,
+                "zoc": {
+                    "Cavalry": "true"
+                }
+            }
         }
     }
 }

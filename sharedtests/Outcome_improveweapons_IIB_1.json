@@ -28,7 +28,9 @@
             "A3": {
                 "name": "Knight",
                 "improved_weapons_II_B": 1,
-				"zoc": {"Cavalry": "true"}
+                "zoc": {
+                    "Cavalry": "true"
+                }
             }
         },
         "player2_units": {

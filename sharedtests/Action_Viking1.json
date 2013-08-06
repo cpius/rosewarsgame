@@ -1,23 +1,19 @@
 {
     "type": "Does action exist",
     "result": false,
-    "action":
-    {
+    "action": {
         "start_at": "C3",
         "end_at": "C4",
         "target_at": "C5",
         "move_with_attack": true
     },
-    "gamestate":
-    {
+    "gamestate": {
         "actions_remaining": 0,
-        "player1_units":
-        {
+        "player1_units": {
             "A1": "Flag Bearer",
             "C3": "Viking"
         },
-        "player2_units":
-        {
+        "player2_units": {
             "C5": "Longswordsman",
             "E4": "Knight"
         }
