@@ -1,0 +1,25 @@
+{
+    "type": "Is attack and defence correct",
+    "description": "Does Royal Guard_II_B get its tall shield bonus",
+    "attack": 4,
+    "defence": 4,
+    "action": {
+        "start_at": "B5",
+        "end_at": "B5",
+        "target_at": "B4",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player2_units": {
+            "B4": "Royal_Guard_II_B",
+            "C2": "Knight"
+        },
+        "player1_units": {
+            "A4": "Knight",
+            "B5": "Ballista"
+
+        }
+    }
+}
+

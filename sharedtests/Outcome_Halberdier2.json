@@ -1,0 +1,39 @@
+{
+    "type": "Is outcome correct",
+    "description": "Test if Halberdiers push triggers if it misses",
+    "outcome": {
+        "B5": [6, 1]
+    },
+    "action": {
+        "start_at": "B4",
+        "end_at": "B4",
+        "target_at": "B5",
+        "move_with_attack": 1
+    },
+    "pre_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
+            "B4": "Halberdier"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B5": "Archer",
+            "D7": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
+            "B4": {
+                "name": "Halberdier",
+                "used": true,
+                "xp": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "B5": "Archer",
+            "D7": "Ballista"
+        }
+    }
+}
