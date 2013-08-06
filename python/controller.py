@@ -92,13 +92,6 @@ class Controller(object):
             self.clear_move()
             self.view.draw_game(self.game)
 
-        elif self.selecting_active_unit(position):
-            self.start_position = position
-            self.selected_unit = self.game.gamestate.player_units[self.start_position]
-            illustrate_actions = [action for action in self.game.gamestate.get_actions() if
-                                  action.start_at == position]
-            self.view.draw_game(self.game, position, illustrate_actions)
-
         elif self.selecting_ability_target(position):
             if len(self.selected_unit.abilities) > 1:
                 index = self.get_input_abilities(self.selected_unit)
@@ -109,6 +102,13 @@ class Controller(object):
 
             action = Action(self.game.gamestate.all_units(), self.start_position, target_at=position, ability=ability)
             self.perform_action(action)
+
+        elif self.selecting_active_unit(position):
+            self.start_position = position
+            self.selected_unit = self.game.gamestate.player_units[self.start_position]
+            illustrate_actions = [action for action in self.game.gamestate.get_actions() if
+                                  action.start_at == position]
+            self.view.draw_game(self.game, position, illustrate_actions)
 
         elif self.selecting_ranged_target(position):
             action = Action(self.game.gamestate.all_units(), self.start_position, target_at=position)
@@ -397,7 +397,7 @@ class Controller(object):
         self.exit_game()
 
     def selecting_active_unit(self, position):
-        return not self.start_position and position in self.game.gamestate.player_units
+        return position in self.game.gamestate.player_units
 
     def selecting_ability_target(self, position):
         if not self.start_position:
