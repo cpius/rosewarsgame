@@ -21,8 +21,8 @@ class Outcome:
 
     def to_document(self):
         outcome_document = dict()
-        for outcome in self.outcomes:
-            outcome_document[Position.from_string(outcome)] = outcome
+        for position, outcome in self.outcomes.items():
+            outcome_document[str(position)] = outcome
         return outcome_document
 
     @classmethod
