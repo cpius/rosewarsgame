@@ -1,3 +1,5 @@
 2. Movement.
 
 A move of 1, is one tile in one of the four directions up, down, left, or right. To move diagonal, you need 2 moves. Infantry and Siege Weapons can only move 1 tile per action, while Cavalry can move 2-4 tiles.
+
+The Archer can move to the marked tiles

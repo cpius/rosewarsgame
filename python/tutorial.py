@@ -7,6 +7,7 @@ from gamestate import Gamestate
 from game import Game
 from player import Player
 import os
+import settings
 
 shading_blue = pygame.Color(*[0, 0, 100, 160])
 shading_red = pygame.Color(*[100, 0, 0, 160])
@@ -50,7 +51,7 @@ def draw_unit(path):
 
     view.show_unit_zoomed(unit)
     description = open(path + "Description.txt").readlines()
-    view.draw_tutorial_message(description, 550)
+    view.draw_tutorial_message(description, 440 * settings.zoom)
 
 
 def run_tutorial():

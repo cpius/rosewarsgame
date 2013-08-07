@@ -1,1 +1,1 @@
-This is the end of the tutorial. Left-click to exit.
+This is the end of the tutorial. Mouse-click to exit.

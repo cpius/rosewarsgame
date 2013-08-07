@@ -1,1 +1,1 @@
-This is the Catapult. It has a very strong attack, but its attack costs two actions. 
+This is the Catapult. It has a very strong attack, but if you attack with it, you use both the actions you have in one turn. 

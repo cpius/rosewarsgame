@@ -79,8 +79,8 @@ class View(object):
         self.refresh()
 
     def draw_tutorial_message(self, message, horisontal_position=17):
-        show_lines(self.screen, message, 50, self.interface.line_distances["small"], self.interface.fonts["small"],
-                   400, horisontal_position)
+        show_lines(self.screen, message, 47 * settings.zoom, self.interface.line_distances["small"], self.interface.fonts["small"],
+                   400 * settings.zoom, horisontal_position * settings.zoom)
         self.refresh()
 
     def draw_tutorial(self, game):
