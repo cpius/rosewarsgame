@@ -10,7 +10,7 @@ class Action(object):
                  start_at,
                  end_at=None,
                  target_at=None,
-                 move_with_attack=False,
+                 move_with_attack=None,
                  ability=None,
                  number=None,
                  outcome=None,
@@ -58,7 +58,7 @@ class Action(object):
         if "target_at" in document_copy:
             target_at = document_copy["target_at"]
 
-        move_with_attack = False
+        move_with_attack = None
         if "move_with_attack" in document_copy:
             move_with_attack = bool(document["move_with_attack"])
 
