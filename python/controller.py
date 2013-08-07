@@ -6,13 +6,11 @@ import setup
 from gamestate import Gamestate
 import os
 import settings
-import shutil
 from player import Player
 from action import Action
 import units as units_module
 from client import Client
 from game import Game
-import common
 from outcome import Outcome
 
 
@@ -21,10 +19,12 @@ class Controller(object):
         self.view = view
         self.game = None
         self.client = None
-        self.action_index = 1
 
     @classmethod
     def new_game(cls, view):
+        if not os.path.exists("./replay"):
+            os.makedirs("./replay")
+
         controller = Controller(view)
 
         players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
@@ -37,11 +37,6 @@ class Controller(object):
         controller.game.gamestate.initialize_turn()
 
         controller.game.gamestate.actions_remaining = 1
-
-        if os.path.exists("./replay"):
-            shutil.rmtree('./replay')
-
-        os.makedirs("./replay")
 
         controller.clear_move()
 
@@ -56,7 +51,6 @@ class Controller(object):
 
         controller.gamestate = controller.client.get_gamestate()
         controller.gamestate.set_network_player(player)
-        controller.action_index = 1
 
         controller.clear_move()
 
@@ -305,7 +299,7 @@ class Controller(object):
         if action.move_with_attack:
             self.view.draw_post_movement(action, self.game)
 
-        self.save_game()
+        self.game.save(self.view, action)
 
         if action.is_attack():
             if settings.pause_for_attack_until_click:
@@ -363,17 +357,6 @@ class Controller(object):
             self.pause()
             self.view.draw_game(self.game)
             return
-
-    def save_game(self):
-        name = str(self.action_index) + ". " + self.game.current_player().color + ", " + str(self.game.turn) \
-                                      + "." + str(2 - self.game.gamestate.get_actions_remaining())
-
-        self.view.save_screenshot(name)
-
-        with open("./replay/" + name + ".gamestate", 'w') as gamestate_file:
-            gamestate_file.write(common.document_to_string(self.game.gamestate.to_document()))
-
-        self.action_index += 1
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))

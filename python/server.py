@@ -9,6 +9,7 @@ import socket
 from player import Player
 import setup
 from common import CustomJsonEncoder
+from outcome import Outcome
 
 
 @get('/games/view/<game_id>')
@@ -28,12 +29,12 @@ def view_actions(game_id):
     actions = get_actions_db()
     action_documents = list(actions.find({"game": ObjectId(game_id)}))
     actions_document = dict()
-    if action_documents.__len__() > 0:
-        actions_document["last_action"] = action_documents[-1]["action_number"]
+    if len(action_documents) > 0:
+        actions_document["last_action"] = action_documents[-1]["number"]
         actions_document["last_updated_at"] = action_documents[-1]["created_at"]
 
     for action in action_documents:
-        actions_document[action["action_number"]] = action
+        actions_document[action["number"]] = action
 
     return actions_document
 

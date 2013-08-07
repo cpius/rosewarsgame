@@ -12,7 +12,7 @@ class Action(object):
                  target_at=None,
                  move_with_attack=False,
                  ability=None,
-                 action_number=None,
+                 number=None,
                  outcome=None,
                  created_at=None):
 
@@ -28,7 +28,7 @@ class Action(object):
 
         self.move_with_attack = move_with_attack
         self.ability = ability
-        self.action_number = action_number
+        self.number = number
 
         self.created_at = created_at if created_at else datetime.utcnow()
 
@@ -70,11 +70,11 @@ class Action(object):
         if "created_at" in document_copy:
             created_at = document_copy["created_at"]
 
-        action_number = None
-        if "action_number" in document_copy:
-            action_number = int(document_copy["action_number"])
+        number = None
+        if "action" in document_copy:
+            number = int(document_copy["number"])
 
-        return cls(units, start_at, end_at, target_at, move_with_attack, ability, action_number=action_number, created_at=created_at)
+        return cls(units, start_at, end_at, target_at, move_with_attack, ability, number=number, created_at=created_at)
 
     def __repr__(self):
         return document_to_string(self.to_document_no_created_at())
@@ -90,11 +90,11 @@ class Action(object):
         return not self.__eq__(other)
 
     def to_document_no_created_at(self):
-        attrs = ["action_number", "start_at", "end_at", "target_at", "ability"]
+        attrs = ["number", "start_at", "end_at", "target_at", "ability"]
         return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
 
     def to_document(self):
-        attrs = ["action_number", "start_at", "end_at", "target_at", "ability", "created_at"]
+        attrs = ["number", "start_at", "end_at", "target_at", "ability", "created_at"]
         return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
 
     def ensure_outcome(self, outcome):

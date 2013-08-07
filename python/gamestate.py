@@ -19,7 +19,7 @@ class Gamestate:
         self.units = [player1_units, player2_units]
         self.actions_remaining = actions_remaining
         self.extra_action = extra_action
-        self.action_number = 0
+        self.action_count = 0
         self.created_at = created_at
 
     def all_units(self):
@@ -29,7 +29,7 @@ class Gamestate:
 
     def do_action(self, action, outcome):
         outcome = action_doer.do_action(self, action, outcome)
-        self.action_number += 1
+        self.action_count += 1
 
         if self.actions_remaining > 0:
             self.available_actions = action_getter.get_actions(self)
