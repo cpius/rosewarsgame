@@ -103,15 +103,6 @@ class Action(object):
 
         return document
 
-    def ensure_outcome(self, outcome):
-
-        if outcome:
-            self.rolls = (1, 6)
-        else:
-            self.rolls = (6, 1)
-
-        return self
-
     def is_attack(self):
         return bool(self.target_at) and not self.ability
 
