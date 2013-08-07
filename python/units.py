@@ -363,47 +363,7 @@ class Ballista(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    upgrades = ["Cannon", "Trebuchet"]
-
-
-class Trebuchet(Unit):
-
-    name = "Trebuchet"
-    image = "Ballista"
-    attack = 5
-    defence = 1
-    movement = 1
-    range = 3
-    attack_bonuses = {}
-    defence_bonuses = {}
-    type = Type.Siege_Weapon
-    upgrades = ["Trebuchet II_A", "Trebuchet II_A"]
-
-
-class Trebuchet_II_A(Unit):
-
-    name = "Trebuchet II_A"
-    image = "Ballista"
-    attack = 6
-    defence = 1
-    movement = 1
-    range = 3
-    attack_bonuses = {}
-    defence_bonuses = {}
-    type = Type.Siege_Weapon
-
-
-class Trebuchet_II_B(Unit):
-
-    name = "Trebuchet II_B"
-    image = "Ballista"
-    attack = 5
-    defence = 2
-    movement = 1
-    range = 3
-    attack_bonuses = {}
-    defence_bonuses = {}
-    type = Type.Siege_Weapon
+    upgrades = ["Cannon"]
 
 
 class Catapult(Unit):
@@ -895,6 +855,7 @@ class Crusader_II_B(Unit):
     type = Type.Cavalry
 
     constants = [Trait.crusading_II]
+
 
 class Berserker(Unit):
 
