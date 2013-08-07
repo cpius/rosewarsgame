@@ -86,11 +86,14 @@ def draw_line(screen, interface, start_position, end_position):
     pygame.draw.line(screen, colors["black"], start_coordinates, end_coordinates, 5)
 
 
-def shade_positions(screen, interface, positions):
+def shade_positions(screen, interface, positions, color=None):
     for position in positions:
         base = interface.coordinates["base"].get(position)
         dimensions = (interface.unit_width, interface.unit_height)
-        draw_rectangle(screen, dimensions, base, interface.selected_shading)
+        if color:
+            draw_rectangle(screen, dimensions, base, color)
+        else:
+            draw_rectangle(screen, dimensions, base, interface.selected_shading)
 
 
 def draw_counters(screen, interface, counters, color, position, counter_coordinates, font_coordinates):

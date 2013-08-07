@@ -1,0 +1,1 @@
+The Knight can move to the tiles marked blue, and is blocked by the Pikeman from moving to the tiles marked red.
