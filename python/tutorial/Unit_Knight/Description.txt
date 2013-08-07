@@ -1,0 +1,1 @@
+This is the Knight. It is a Cavalry, meaning it can move fast, and that it can be blocked by Pikemen.
