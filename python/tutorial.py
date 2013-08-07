@@ -7,7 +7,6 @@ from gamestate import Gamestate
 from game import Game
 from player import Player
 import os
-import units as units_module
 
 shading_blue = pygame.Color(*[0, 0, 100, 160])
 shading_red = pygame.Color(*[100, 0, 0, 160])
@@ -45,8 +44,9 @@ def draw_empty_gamestate():
 
 
 def draw_unit(path):
-    unit_name = open(path + "Unit.txt").readline()
-    unit = getattr(units_module, unit_name.replace(" ", "_"))()
+    gamestate = Gamestate.from_file(path + "Gamestate.json")
+    unit = gamestate.player_units.values()[0]
+
     view.show_unit_zoomed(unit)
     description = open(path + "Description.txt").readlines()
     view.draw_tutorial_message(description, 550)
@@ -73,7 +73,7 @@ def run_tutorial():
         elif scenarios[index][1].strip() == "Unit":
             path = "./tutorial/" + scenarios[index][0] + "/"
 
-            draw_empty_gamestate()
+            draw_gamestate(path)
             draw_unit(path)
 
         while True:
