@@ -9,8 +9,8 @@ from player import Player
 import os
 import units as units_module
 
-shading_blue = pygame.Color(0, 0, 100, 160)
-shading_red = pygame.Color(100, 0, 0, 160)
+shading_blue = pygame.Color(*[0, 0, 100, 160])
+shading_red = pygame.Color(*[100, 0, 0, 160])
 view = view_module.View()
 
 
@@ -100,11 +100,13 @@ def command_q_down(key):
 
 
 def move_forward_requested(event):
-    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT)
+    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or \
+           (event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT)
 
 
 def move_backward_requested(event):
-    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 6) or (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT)
+    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 6) or \
+           (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT)
 
 if __name__ == "__main__":
     use_list = True
