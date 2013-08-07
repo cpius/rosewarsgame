@@ -43,23 +43,29 @@ def run_tutorial():
             description = open(path + "Description.txt").readlines()
             view.draw_tutorial_message(description)
 
-            cont = True
-            while cont:
-                for event in pygame.event.get():
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if event.button == 1:
-                            cont = False
-                            break
-                        elif event.button == 3:
-                            cont = False
-                            index -= 2
-                            break
-                    elif event.type == QUIT:
-                        cont = False
-                        exit = True
+            while True:
+                event = pygame.event.wait()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
                         break
+                    elif event.button == 3:
+                        index -= 2
+                        break
+                elif quit_game_requested(event):
+                    exit = True
+                    break
 
         index += 1
+
+
+def quit_game_requested(event):
+    return event.type == QUIT or (event.type == KEYDOWN and command_q_down(event.key))
+
+
+def command_q_down(key):
+    return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
+
 
 if __name__ == "__main__":
     use_list = True
