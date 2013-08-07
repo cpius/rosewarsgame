@@ -176,3 +176,6 @@ class Action(object):
             return "Win"
 
         return "Defend"
+
+    def copy(self):
+        return copy(self)
