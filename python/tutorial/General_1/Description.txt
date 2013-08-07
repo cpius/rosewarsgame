@@ -1,0 +1,3 @@
+This is the beginning of a game. You are on the bottom half of the board, and your opponent is on the top half. Your goal is to fight and/or maneuver your way past his units to his back line. If you reach the back line with one of your units, you immediately win the game.
+
+Each turn you have two actions. You can use each of those to move one unit, or to attack with one unit.

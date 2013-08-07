@@ -63,10 +63,10 @@ def write_message(screen, interface, message):
 def split_lines(lines, line_length):
     new_lines = []
     for line in lines:
-        if line:
-            split_lines = textwrap.wrap(line, line_length)
-        else:
+        if line == "" or line == "\n":
             split_lines = [""]
+        else:
+            split_lines = textwrap.wrap(line, line_length)
         for split_line in split_lines:
             new_lines.append(split_line)
 

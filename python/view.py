@@ -78,7 +78,7 @@ class View(object):
         write_message(self.screen, self.interface, message)
         self.refresh()
 
-    def draw_tutorial_message(self, message, horisontal_position=50):
+    def draw_tutorial_message(self, message, horisontal_position=17):
         show_lines(self.screen, message, 50, self.interface.line_distances["small"], self.interface.fonts["small"],
                    400, horisontal_position)
         self.refresh()

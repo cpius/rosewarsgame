@@ -21,13 +21,14 @@ def draw_gamestate(path):
 
 
 def draw_marked(path):
-    marked_blue = [Position.from_string(position) for position in
-                   json.loads(open(path + "Marked_blue.marked").read())["tiles"]]
-    view.shade_positions(marked_blue, shading_blue)
+    if os.path.exists(path + "Blue.marked"):
+        marked_blue = [Position.from_string(position) for position in
+                       json.loads(open(path + "Blue.marked").read())["tiles"]]
+        view.shade_positions(marked_blue, shading_blue)
 
-    if os.path.exists(path + "Marked_red.marked"):
+    if os.path.exists(path + "Red.marked"):
         marked_red = [Position.from_string(position) for position in
-                      json.loads(open(path + "Marked_red.marked").read())["tiles"]]
+                      json.loads(open(path + "Red.marked").read())["tiles"]]
         view.shade_positions(marked_red, shading_red)
 
 

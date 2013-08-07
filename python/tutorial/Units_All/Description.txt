@@ -1,3 +1,5 @@
 1. Units.
 
 Your army consists of six different basic units. There are two Siege Weapons, two Cavalry, and two Infantry.
+
+A unit has four basic attributes: Attack, Defence, Range and Movement. 

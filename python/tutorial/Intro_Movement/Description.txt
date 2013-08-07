@@ -1,3 +1,0 @@
-2. Movement.
-
-This section explains how the units move.

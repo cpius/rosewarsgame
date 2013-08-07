@@ -41,6 +41,16 @@ def show_unit_zoomed(screen, interface, unit):
         lines.append("Zone of control against: " + ", ".join(Type.reverse_mapping[type] for type in unit.zoc))
         lines.append("")
 
+    if unit.attack_bonuses:
+        for type, value in unit.attack_bonuses.items():
+            lines.append("+" + str(value) + " Attack against " + Type.reverse_mapping[type])
+            lines.append("")
+
+    if unit.defence_bonuses:
+        for type, value in unit.attack_bonuses.items():
+            lines.append("+" + str(value) + " Defence against " + Type.reverse_mapping[type])
+            lines.append("")
+
     if hasattr(unit, "descriptions"):
         for attribute, description in unit.descriptions.items():
             if attribute in unit.abilities:
