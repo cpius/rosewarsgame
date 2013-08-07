@@ -1,1 +1,1 @@
-This is the Archer. It is an Infantry. It has a long ranged attack, but the attack is not as strong as that of Siege Weapons.
+The Archer. It is an Infantry. It has a long ranged attack, but the attack is not as strong as that of Siege Weapons.

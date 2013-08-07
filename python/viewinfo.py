@@ -5,6 +5,7 @@ import textwrap
 from viewcommon import *
 import settings
 import battle
+import common
 
 zoom = settings.zoom
 zoomed_unit_size = (int(236 * zoom), int(271 * zoom))
@@ -51,13 +52,8 @@ def show_unit_zoomed(screen, interface, unit):
             lines.append("+" + str(value) + " Defence against " + Type.reverse_mapping[type])
             lines.append("")
 
-    if hasattr(unit, "descriptions"):
-        for attribute, description in unit.descriptions.items():
-            if attribute in unit.abilities:
-                lines.append(attribute.replace("_", " ").title() + ": " + description)
-            else:
-                lines.append(description)
-            lines.append("")
+    for trait in unit.constants:
+        lines.append(common.trait_descriptions[Trait.reverse_mapping[trait]])
 
     for attribute in unit.variables:
         if unit.variables[attribute]:
