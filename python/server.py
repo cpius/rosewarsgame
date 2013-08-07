@@ -114,9 +114,9 @@ def get_current_gamestate(game_document, actions=None):
         actions = get_actions_db().find({"game": ObjectId(game_document["_id"])}).sort("action_number")
 
     for action_document in actions:
-        action_with_references = Action.from_document(gamestate.all_units(), action_document)
-        action_with_references.ensure_outcome(action_document["outcome"])
-        gamestate.do_action(action_with_references)
+        action = Action.from_document(gamestate.all_units(), action_document)
+        outcome = Outcome.from_document(action_document["outcome"])
+        gamestate.do_action(action, outcome)
         gamestate.shift_turn_if_done()
 
     return gamestate
