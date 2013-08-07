@@ -10,6 +10,8 @@ if __name__ == '__main__':
         game_id = sys.argv[2]
         player = sys.argv[3]
         controller = Controller.from_network(view, game_id, player)
+    elif len(sys.argv) >= 3 and sys.argv[1] == "replay":
+        controller = Controller.from_replay(view, sys.argv[2])
     else:
         controller = Controller.new_game(view)
 
