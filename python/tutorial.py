@@ -7,7 +7,6 @@ from gamestate import Gamestate
 from game import Game
 from player import Player
 import os
-import viewinfo
 
 shading_blue = pygame.Color(0, 0, 100, 160)
 shading_red = pygame.Color(100, 0, 0, 160)
@@ -21,9 +20,10 @@ def run_tutorial():
         scenarios = [["Moves_3", "Move"]]
 
     exit = False
-    for scenario in scenarios:
-        if scenario[1].strip() == "Move":
-            path = "./tutorial/" + scenario[0] + "/"
+    index = 0
+    while index < len(scenarios) and not exit:
+        if scenarios[index][1].strip() == "Move":
+            path = "./tutorial/" + scenarios[index][0] + "/"
 
             gamestate = Gamestate.from_file(path + "Gamestate.json")
             players = [Player("Green", "Human"), Player("Red", "Human")]
@@ -47,15 +47,19 @@ def run_tutorial():
             while cont:
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        cont = False
-                        break
+                        if event.button == 1:
+                            cont = False
+                            break
+                        elif event.button == 3:
+                            cont = False
+                            index -= 2
+                            break
                     elif event.type == QUIT:
                         cont = False
                         exit = True
                         break
 
-        if exit:
-            break
+        index += 1
 
 if __name__ == "__main__":
     use_list = True
