@@ -168,7 +168,7 @@ class Gamestate:
         self.initialize_turn()
 
     def update_final_position(self, action):
-        action_doer.update_unit_to_final_position(self, action)
+        action_doer.move_melee_unit_to_target_tile(self, action)
 
     def __str__(self):
         return document_to_string(self.to_document())
