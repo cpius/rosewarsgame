@@ -64,7 +64,6 @@ def split_lines(lines, line_length):
     new_lines = []
     for line in lines:
         if line:
-            print "split"
             split_lines = textwrap.wrap(line, line_length)
         else:
             split_lines = [""]
