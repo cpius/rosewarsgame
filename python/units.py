@@ -101,7 +101,7 @@ class Archer(Unit):
 
 class Longbowman(Unit):
     name = "Longbowman"
-    image = "Archer"
+    image = "Longbowman"
     attack = 2
     defence = 2
     movement = 1
@@ -114,7 +114,7 @@ class Longbowman(Unit):
 
 class Longbowman_II_A(Unit):
     name = "Longbowman II_A"
-    image = "Archer"
+    image = "Longbowman"
     attack = 3
     defence = 2
     movement = 1
@@ -128,7 +128,7 @@ class Longbowman_II_A(Unit):
 
 class Longbowman_II_B(Unit):
     name = "Longbowman II_B"
-    image = "Archer"
+    image = "Longbowman"
     attack = 2
     defence = 3
     movement = 1
@@ -142,7 +142,7 @@ class Longbowman_II_B(Unit):
 
 class Crossbow_Archer(Unit):
     name = "Crossbow Archer"
-    image = "Archer"
+    image = "Crossbow Archer"
     attack = 2
     defence = 3
     movement = 1
@@ -155,7 +155,7 @@ class Crossbow_Archer(Unit):
 
 class Crossbow_Archer_II_A(Unit):
     name = "Crossbow Archer II_A"
-    image = "Archer"
+    image = "Crossbow Archer"
     attack = 3
     defence = 3
     movement = 1
@@ -167,7 +167,7 @@ class Crossbow_Archer_II_A(Unit):
 
 class Crossbow_Archer_II_B(Unit):
     name = "Crossbow Archer II_B"
-    image = "Archer"
+    image = "Crossbow Archer"
     attack = 2
     defence = 4
     movement = 1
@@ -195,7 +195,7 @@ class Pikeman(Unit):
 
 class Halberdier(Unit):
     name = "Halberdier"
-    image = "Pikeman"
+    image = "Halberdier"
     attack = 4
     defence = 3
     movement = 1
@@ -206,8 +206,8 @@ class Halberdier(Unit):
 
 
 class Halberdier_II_A(Unit):
-    name = "Halberdier"
-    image = "Pikeman"
+    name = "Halberdier II_A"
+    image = "Halberdier"
     attack = 5
     defence = 3
     movement = 1
@@ -218,8 +218,8 @@ class Halberdier_II_A(Unit):
 
 
 class Halberdier_II_B(Unit):
-    name = "Halberdier"
-    image = "Pikeman"
+    name = "Halberdier II_B"
+    image = "Halberdier"
     attack = 4
     defence = 4
     movement = 1
@@ -247,7 +247,7 @@ class Light_Cavalry(Unit):
 class Dragoon(Unit):
 
     name = "Dragoon"
-    image = "Light Cavalry"
+    image = "Dragoon"
     attack = 2
     defence = 2
     movement = 4
@@ -262,8 +262,8 @@ class Dragoon(Unit):
 
 class Dragoon_II_A(Unit):
 
-    name = "Dragoon"
-    image = "Light Cavalry"
+    name = "Dragoon II_A"
+    image = "Dragoon"
     attack = 3
     defence = 2
     movement = 4
@@ -278,8 +278,8 @@ class Dragoon_II_A(Unit):
 
 class Dragoon_II_B(Unit):
 
-    name = "Dragoon"
-    image = "Light Cavalry"
+    name = "Dragoon II_B"
+    image = "Dragoon"
     attack = 2
     defence = 3
     movement = 4

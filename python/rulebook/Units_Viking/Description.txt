@@ -1,0 +1,1 @@
+Here, the Viking can attack either the Catapult or the Pikeman. If it defeats the Catapult it cant take the tile afterwards, but if it defeats the Pikeman it can.

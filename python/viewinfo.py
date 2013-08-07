@@ -55,6 +55,9 @@ def show_unit_zoomed(screen, interface, unit):
     for trait in unit.constants:
         lines.append(common.trait_descriptions[Trait.reverse_mapping[trait]])
 
+    for ability in unit.abilities:
+        lines.append(common.ability_descriptions[Ability.reverse_mapping[ability]])
+
     for attribute in unit.variables:
         if unit.variables[attribute]:
             lines.append(attribute + ": " + str(unit.variables[attribute]))

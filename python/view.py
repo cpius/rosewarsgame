@@ -83,7 +83,11 @@ class View(object):
                    400 * settings.zoom, horisontal_position * settings.zoom)
         self.refresh()
 
-    def draw_tutorial(self, game):
+    def draw_game_tutorial(self, game):
         viewgame.draw_game(self.screen, self.interface, game)
         self.clear_right()
+        self.refresh()
+
+    def draw_action_tutorial(self, action):
+        viewgame.draw_action(self.screen, self.interface, action)
         self.refresh()
