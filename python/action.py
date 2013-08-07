@@ -90,12 +90,18 @@ class Action(object):
         return not self.__eq__(other)
 
     def to_document_no_created_at(self):
-        attrs = ["number", "start_at", "end_at", "target_at", "ability"]
-        return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
+        document = self.to_document()
+        if "created_at" in document:
+            del document["created_at"]
+        return document
 
     def to_document(self):
         attrs = ["number", "start_at", "end_at", "target_at", "ability", "created_at"]
-        return dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
+        document = dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
+        if not self.move_with_attack is None:
+            document["move_with_attack"] = self.move_with_attack
+
+        return document
 
     def ensure_outcome(self, outcome):
 
