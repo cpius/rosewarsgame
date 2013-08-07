@@ -149,17 +149,18 @@ class Controller(object):
         self.view.shade_positions(end_positions)
 
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    position = self.view.get_position_from_mouse_click(event.pos)
+            event = pygame.event.wait()
 
-                    if event.button == 1:
-                        for action in possible_actions:
-                            if position == action.end_at:
-                                return action
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                position = self.view.get_position_from_mouse_click(event.pos)
 
-                elif event.type == QUIT:
-                    self.exit_game()
+                if event.button == 1:
+                    for action in possible_actions:
+                        if position == action.end_at:
+                            return action
+
+            elif self.quit_game_requested(event):
+                self.exit_game()
 
     def right_click(self, position):
         if not self.start_position:
@@ -178,107 +179,93 @@ class Controller(object):
         self.view.draw_game(self.game)
 
         while True:
-            for event in pygame.event.get():
+            event = pygame.event.wait()
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    position = self.view.get_position_from_mouse_click(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                position = self.view.get_position_from_mouse_click(event.pos)
 
-                    if event.button == 1:
-                        self.left_click(position)
-                    elif event.button == 3:
-                        self.right_click(position)
+                if event.button == 1:
+                    self.left_click(position)
+                elif event.button == 3:
+                    self.right_click(position)
 
-                if event.type == KEYDOWN and event.key == K_ESCAPE:
-                    self.clear_move()
-                    self.view.draw_game(self.game)
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
+                self.clear_move()
+                self.view.draw_game(self.game)
 
-                elif event.type == KEYDOWN and self.command_q_down(event.key):
-                    self.exit_game()
+            elif self.quit_game_requested(event):
+                self.exit_game()
 
-                elif event.type == QUIT:
-                    self.exit_game()
-
-                self.view.refresh()
+            self.view.refresh()
 
     def exit_game(self):
         sys.exit()
-
-    def get_input_counter(self, unit):
-        self.view.draw_ask_about_counter(unit.name)
-
-        while True:
-            for event in pygame.event.get():
-                if event.type == KEYDOWN and event.key == K_a:
-                    unit.attack_counters += 1
-                    return
-
-                if event.type == KEYDOWN and event.key == K_d:
-                    unit.defence_counters += 1
-                    return
-
-                elif event.type == QUIT:
-                    self.exit_game()
 
     def get_input_upgrade(self, unit):
         self.view.draw_upgrade_options(unit)
 
         while True:
-            for event in pygame.event.get():
-                if event.type == KEYDOWN and event.key == K_1:
-                    return 0
-                if event.type == KEYDOWN and event.key == K_2:
-                    return 1
+            event = pygame.event.wait()
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == KEYDOWN and event.key == K_1:
+                return 0
 
-                    if event.button == 1:
-                        if within(event.pos, self.view.interface.upgrade_1_area):
-                            return 0
-                        elif within(event.pos, self.view.interface.upgrade_2_area):
-                            return 1
+            if event.type == KEYDOWN and event.key == K_2:
+                return 1
 
-                elif event.type == QUIT:
-                    self.exit_game()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if within(event.pos, self.view.interface.upgrade_1_area):
+                        return 0
+                    elif within(event.pos, self.view.interface.upgrade_2_area):
+                        return 1
+
+            elif self.quit_game_requested(event):
+                self.exit_game()
 
     def get_input_abilities(self, unit):
         self.view.draw_ask_about_ability(unit)
 
         while True:
-            for event in pygame.event.get():
-                if event.type == KEYDOWN and event.key == K_1:
-                    return 0
+            event = pygame.event.wait()
 
-                if event.type == KEYDOWN and event.key == K_2:
-                    return 1
+            if event.type == KEYDOWN and event.key == K_1:
+                return 0
 
-                elif event.type == QUIT:
-                    self.exit_game()
+            if event.type == KEYDOWN and event.key == K_2:
+                return 1
+
+            elif self.quit_game_requested(event):
+                self.exit_game()
 
     def ask_about_move_with_attack(self, action):
 
         self.view.draw_ask_about_move_with_attack(action.target_at)
 
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    position = self.view.get_position_from_mouse_click(event.pos)
+            event = pygame.event.wait()
 
-                    if event.button == 1:
-                        if position == action.target_at:
-                            return True
-                        if position == action.end_at:
-                            return False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                position = self.view.get_position_from_mouse_click(event.pos)
 
-                elif event.type == QUIT:
-                    self.exit_game()
+                if event.button == 1:
+                    if position == action.target_at:
+                        return True
+                    if position == action.end_at:
+                        return False
+
+            elif self.quit_game_requested(event):
+                self.exit_game()
 
     def pause(self):
         while True:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    self.exit_game()
-                elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                    return
+            event = pygame.event.wait()
+
+            if self.quit_game_requested(event):
+                self.exit_game()
+
+            elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                return
 
     def upgrade_units(self, units):
         for pos, unit in units.items():
@@ -387,6 +374,9 @@ class Controller(object):
             gamestate_file.write(common.document_to_string(self.game.gamestate.to_document()))
 
         self.action_index += 1
+
+    def quit_game_requested(self, event):
+        return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
 
     def command_q_down(self, key):
         return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
