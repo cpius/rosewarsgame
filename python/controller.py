@@ -6,14 +6,13 @@ import setup
 from gamestate import Gamestate
 import os
 import settings
-import shutil
 from player import Player
 from action import Action
 import units as units_module
 from client import Client
 from game import Game
-import common
 from outcome import Outcome
+import json
 
 
 class Controller(object):
@@ -21,10 +20,12 @@ class Controller(object):
         self.view = view
         self.game = None
         self.client = None
-        self.action_index = 1
 
     @classmethod
     def new_game(cls, view):
+        if not os.path.exists("./replay"):
+            os.makedirs("./replay")
+
         controller = Controller(view)
 
         players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
@@ -37,11 +38,6 @@ class Controller(object):
         controller.game.gamestate.initialize_turn()
 
         controller.game.gamestate.actions_remaining = 1
-
-        if os.path.exists("./replay"):
-            shutil.rmtree('./replay')
-
-        os.makedirs("./replay")
 
         controller.clear_move()
 
@@ -56,7 +52,43 @@ class Controller(object):
 
         controller.gamestate = controller.client.get_gamestate()
         controller.gamestate.set_network_player(player)
-        controller.action_index = 1
+
+        controller.clear_move()
+
+        return controller
+
+    @classmethod
+    def from_replay(cls, view, savegame_file):
+        controller = cls(view)
+        savegame_document = json.loads(open(savegame_file).read())
+        gamestate_document = savegame_document["initial_gamestate"]
+        gamestate = Gamestate.from_document(gamestate_document)
+        action_count = int(savegame_document["action_count"])
+
+        for action_number in range(1, action_count + 1):
+
+            action_document = savegame_document[str(action_number)]
+
+            action = Action.from_document(gamestate.all_units(), action_document)
+
+            outcome = None
+            if action.is_attack():
+                outcome_document = savegame_document[str(action_number) + "_outcome"]
+                outcome = Outcome.from_document(outcome_document)
+                if str(action_number) + "_options" in savegame_document:
+                    options = savegame_document[str(action_number) + "_options"]
+                    if "move_with_attack" in options:
+                        action.move_with_attack = bool(options["move_with_attack"])
+
+            gamestate.do_action(action, outcome)
+
+            if gamestate.is_turn_done():
+                gamestate.shift_turn()
+
+        controller.gamestate = gamestate
+
+        players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
+        controller.game = Game(players, gamestate)
 
         controller.clear_move()
 
@@ -130,6 +162,9 @@ class Controller(object):
             else:
                 self.view.draw_game(self.game)
                 action = self.pick_action_end_position(possible_actions)
+
+            # Human actions always start out with unknown move_with_attack (they are asked later)
+            action.move_with_attack = None
 
             self.perform_action(action)
 
@@ -285,27 +320,31 @@ class Controller(object):
                 action.ensure_outcome(outcome)
 
             outcome = Outcome.determine_outcome(action, self.game.gamestate)
+
             self.game.do_action(action, outcome)
 
             self.view.draw_game(self.game)
             self.view.draw_action(action, outcome, self.game)
 
             if self.is_post_movement_possible(action, outcome):
-                action.move_with_attack = self.ask_about_move_with_attack(action)
+                move_with_attack = self.ask_about_move_with_attack(action)
 
-                if action.move_with_attack:
+                self.game.save_option("move_with_attack", move_with_attack)
+
+                if move_with_attack:
                     self.game.gamestate.update_final_position(action)
 
         else:
             if not outcome:
                 outcome = Outcome.determine_outcome(action, self.game.gamestate)
+
             self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
 
         if action.move_with_attack:
             self.view.draw_post_movement(action, self.game)
 
-        self.save_game()
+        self.game.save(self.view, action, outcome)
 
         if action.is_attack():
             if settings.pause_for_attack_until_click:
@@ -338,8 +377,13 @@ class Controller(object):
             self.trigger_network_player()
 
     def is_post_movement_possible(self, action, outcome):
-        successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)
-        return action.is_attack() and successful and action.unit.is_melee()
+        if not action.is_attack():
+            return False
+
+        is_successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)
+        is_destination_occupied = action.target_at in self.game.gamestate.enemy_units
+
+        return is_successful and action.unit.is_melee() and not is_destination_occupied
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
@@ -363,17 +407,6 @@ class Controller(object):
             self.pause()
             self.view.draw_game(self.game)
             return
-
-    def save_game(self):
-        name = str(self.action_index) + ". " + self.game.current_player().color + ", " + str(self.game.turn) \
-                                      + "." + str(2 - self.game.gamestate.get_actions_remaining())
-
-        self.view.save_screenshot(name)
-
-        with open("./replay/" + name + ".gamestate", 'w') as gamestate_file:
-            gamestate_file.write(common.document_to_string(self.game.gamestate.to_document()))
-
-        self.action_index += 1
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))

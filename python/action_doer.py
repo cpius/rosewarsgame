@@ -141,10 +141,10 @@ def do_action(gamestate, action, outcome):
         prepare_extra_actions(action)
 
     if action.is_attack() and action.move_with_attack and action.target_at not in enemy_units:
-        update_unit_to_final_position(gamestate, action)
+        move_melee_unit_to_target_tile(gamestate, action)
 
     gamestate.extra_action = unit.has(Trait.extra_action)
 
 
-def update_unit_to_final_position(gamestate, action):
+def move_melee_unit_to_target_tile(gamestate, action):
     gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)

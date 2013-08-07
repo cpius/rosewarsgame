@@ -60,24 +60,28 @@ def draw_post_movement(screen, interface, action):
 def draw_action(screen, interface, action, flip=False):
 
     if flip:
-        action = flip_action(action)
+        proper_action = flip_action(action)
+    else:
+        proper_action = action
+
+    print "drawing action", proper_action
 
     coordinates = interface.coordinates
 
-    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(action.start_at), 10)
-    draw_line(screen, interface, action.start_at, action.end_at)
+    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(proper_action.start_at), 10)
+    draw_line(screen, interface, proper_action.start_at, proper_action.end_at)
 
-    if action.is_attack():
-        draw_line(screen, interface, action.end_at, action.target_at)
+    if proper_action.is_attack():
+        draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
 
-    elif action.is_ability():
-        draw_line(screen, interface, action.end_at, action.target_at)
+    elif proper_action.is_ability():
+        draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
         pic = get_image(interface.ability_icon)
-        screen.blit(pic, coordinates["battle"].get(action.target_at))
+        screen.blit(pic, coordinates["battle"].get(proper_action.target_at))
 
     else:
         pic = get_image(interface.move_icon)
-        screen.blit(pic, coordinates["battle"].get(action.end_at))
+        screen.blit(pic, coordinates["battle"].get(proper_action.end_at))
 
 
 def draw_line(screen, interface, start_position, end_position):
@@ -175,14 +179,13 @@ def get_font_coordinates(interface, counters_drawn):
 
 def flip_action(action):
 
+    flipped_action = action.copy()
+
     for attribute in ["start_at", "end_at", "target_at"]:
-        if getattr(action, attribute):
-            setattr(action, attribute, getattr(action, attribute).flip())
+        if getattr(flipped_action, attribute):
+            setattr(flipped_action, attribute, getattr(flipped_action, attribute).flip())
 
-    if hasattr(action, "push"):
-        action.push_direction = flip_direction(action.push_direction)
-
-    return action
+    return flipped_action
 
 
 def flip_direction(direction):
