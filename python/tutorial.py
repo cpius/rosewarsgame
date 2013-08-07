@@ -14,9 +14,13 @@ shading_red = pygame.Color(100, 0, 0, 160)
 
 
 def run_tutorial():
-    with open("./tutorial/list.txt") as file:
-        scenarios = [line.split(": ") for line in file]
+    if use_list:
+        with open("./tutorial/list.txt") as file:
+            scenarios = [line.split(": ") for line in file]
+    else:
+        scenarios = [["Moves_3", "Move"]]
 
+    exit = False
     for scenario in scenarios:
         if scenario[1].strip() == "Move":
             path = "./tutorial/" + scenario[0] + "/"
@@ -37,7 +41,6 @@ def run_tutorial():
                 view.shade_positions(marked_red, shading_red)
 
             description = open(path + "Description.txt").readlines()
-            print "de", description
             view.draw_tutorial_message(description)
 
             cont = True
@@ -46,6 +49,14 @@ def run_tutorial():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         cont = False
                         break
+                    elif event.type == QUIT:
+                        cont = False
+                        exit = True
+                        break
+
+        if exit:
+            break
 
 if __name__ == "__main__":
+    use_list = True
     run_tutorial()
