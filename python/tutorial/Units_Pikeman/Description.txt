@@ -1,1 +1,1 @@
-This is the Pikeman. It can be used to block Cavalry, and prevent them from reaching the back line.
+This is the Pikeman. It is also of the Infantry type. It can be used to block Cavalry, and prevent them from reaching the back line.
