@@ -1,1 +1,1 @@
-Welcome to the tutorial. Left-click to see the next scenario. Right-click to see the previous scenario.
+Welcome to the tutorial. Left-click or right arrow to see the next scenario. Mouse back-button or left-arrow to see the previous scenario.

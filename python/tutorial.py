@@ -104,7 +104,7 @@ def move_forward_requested(event):
 
 
 def move_backward_requested(event):
-    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 3) or (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT)
+    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 6) or (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT)
 
 if __name__ == "__main__":
     use_list = True
