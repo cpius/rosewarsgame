@@ -9,6 +9,7 @@ import socket
 from player import Player
 import setup
 from common import CustomJsonEncoder
+from outcome import Outcome
 
 
 @get('/games/view/<game_id>')
@@ -28,12 +29,12 @@ def view_actions(game_id):
     actions = get_actions_db()
     action_documents = list(actions.find({"game": ObjectId(game_id)}))
     actions_document = dict()
-    if action_documents.__len__() > 0:
-        actions_document["last_action"] = action_documents[-1]["action_number"]
+    if len(action_documents) > 0:
+        actions_document["last_action"] = action_documents[-1]["number"]
         actions_document["last_updated_at"] = action_documents[-1]["created_at"]
 
     for action in action_documents:
-        actions_document[action["action_number"]] = action
+        actions_document[action["number"]] = action
 
     return actions_document
 
@@ -113,9 +114,9 @@ def get_current_gamestate(game_document, actions=None):
         actions = get_actions_db().find({"game": ObjectId(game_document["_id"])}).sort("action_number")
 
     for action_document in actions:
-        action_with_references = Action.from_document(gamestate.all_units(), action_document)
-        action_with_references.ensure_outcome(action_document["outcome"])
-        gamestate.do_action(action_with_references)
+        action = Action.from_document(gamestate.all_units(), action_document)
+        outcome = Outcome.from_document(action_document["outcome"])
+        gamestate.do_action(action, outcome)
         gamestate.shift_turn_if_done()
 
     return gamestate

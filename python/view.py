@@ -26,7 +26,7 @@ class View(object):
         self.refresh()
 
     def save_screenshot(self, name):
-        pygame.image.save(self.screen, "./replay/" + name + ".jpeg")
+        pygame.image.save(self.screen, name)
 
     def draw_game_end(self, color):
         write_message(self.screen, self.interface, color + " Wins")
