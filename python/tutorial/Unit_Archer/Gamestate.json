@@ -1,7 +1,9 @@
 {
     "actions_remaining": 1,
-    "player2_units": 
-	{}, 
     "player1_units": 
+	{
+        "E3": "Archer" 
+	}, 
+    "player2_units": 
 	{} 
 }

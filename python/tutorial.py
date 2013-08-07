@@ -63,18 +63,22 @@ def run_tutorial():
     index = 0
 
     while index < len(scenarios) and not exit:
-        if scenarios[index][1].strip() == "Move":
-            path = "./tutorial/" + scenarios[index][0] + "/"
+        type = scenarios[index][1].strip()
+        path = "./tutorial/" + scenarios[index][0] + "/"
 
+        if type == "Move":
             draw_gamestate(path)
             draw_marked(path)
             draw_description(path)
 
-        elif scenarios[index][1].strip() == "Unit":
-            path = "./tutorial/" + scenarios[index][0] + "/"
-
+        elif type == "Unit":
             draw_gamestate(path)
             draw_unit(path)
+
+        elif type == "Text":
+            draw_empty_gamestate()
+            draw_description(path)
+
 
         while True:
             event = pygame.event.wait()

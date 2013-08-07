@@ -38,7 +38,7 @@ def show_unit_zoomed(screen, interface, unit):
     lines.append("")
 
     if unit.zoc:
-        lines.append("Zone of control against: " + ", ".join(type for type in unit.zoc))
+        lines.append("Zone of control against: " + ", ".join(Type.reverse_mapping[type] for type in unit.zoc))
         lines.append("")
 
     if hasattr(unit, "descriptions"):
