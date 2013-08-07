@@ -66,8 +66,8 @@ class View(object):
         viewgame.draw_post_movement(self.screen, self.interface, action)
         self.refresh()
 
-    def shade_positions(self, positions):
-        viewgame.shade_positions(self.screen, self.interface, positions)
+    def shade_positions(self, positions, color=None):
+        viewgame.shade_positions(self.screen, self.interface, positions, color)
         self.refresh()
 
     def show_attack(self, gamestate, action, player_unit, opponent_unit):
@@ -78,6 +78,12 @@ class View(object):
         write_message(self.screen, self.interface, message)
         self.refresh()
 
+    def draw_tutorial_message(self, message):
+        show_lines(self.screen, message, 50, self.interface.line_distances["small"], self.interface.fonts["small"],
+                   400, 50)
+        self.refresh()
+
     def draw_tutorial(self, game):
         viewgame.draw_game(self.screen, self.interface, game)
+        self.clear_right()
         self.refresh()
