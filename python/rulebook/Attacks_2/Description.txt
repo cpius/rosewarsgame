@@ -1,0 +1,3 @@
+A ranged unit can attack any tile within its range. A ranged unit does not have the choice to move to the conquered tile if it wins the attack, even if it attacks an adjacent tile.
+
+Here, the Archer attacks the Catapult.

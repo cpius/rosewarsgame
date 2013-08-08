@@ -1,0 +1,3 @@
+For an attacker to kill the defending unit, the attack must succeed, and the defence must fail. If either the attack fails, or the defence succeeds, nothing happens.
+
+First, the Archer rolls a die for attack. If the roll is lower than or equal to its attack, the attack is successful.

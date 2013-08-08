@@ -57,7 +57,19 @@ def draw_post_movement(screen, interface, action):
     screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
 
 
-def draw_action(screen, interface, action, flip=False):
+def draw_action_dice(screen, interface, action, roll):
+
+    attack_dice = interface.dice[roll[0]]
+    pic = get_image(attack_dice)
+    screen.blit(pic, interface.coordinates["battle"].get(action.end_at))
+
+    if roll[1] != 0:
+        defence_dice = interface.dice[roll[1]]
+        pic = get_image(defence_dice)
+        screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
+
+
+def draw_action(screen, interface, action, flip=False, roll=None):
 
     if flip:
         proper_action = flip_action(action)
@@ -71,6 +83,9 @@ def draw_action(screen, interface, action, flip=False):
 
     if proper_action.is_attack():
         draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
+
+        if roll:
+            draw_action_dice(screen, interface, action, roll)
 
     elif proper_action.is_ability():
         draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
@@ -110,9 +125,6 @@ def draw_bordered_circle(screen, position, size, color):
     pygame.draw.circle(screen, color, position, size)
 
 
-
-
-
 def draw_symbols(screen, interface, unit, position):
 
     def find_base(index):
@@ -145,7 +157,6 @@ def draw_symbols(screen, interface, unit, position):
     if "II" in unit.name:
         pic = get_image(interface.star_icon, (12, 12))
         screen.blit(pic, interface.coordinates["top_left"].get(position))
-
 
 
 def draw_bribed(screen, interface, position):
