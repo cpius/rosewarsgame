@@ -1,1 +1,1 @@
-
+The Hobelar attacks the Archer on its first move. Afterwards it can move further in the same action. No matter what the result is, it can move to the blue tiles, and if the attack is succesful it can additionally move to the red tiles.

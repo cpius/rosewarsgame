@@ -1,1 +1,1 @@
-
+Here are illustrated two possibilities for attacks, either from the red tile or from the blue tile. Both of these attacks will hit both the enemy units. If you attack from the red tile, and you kill the Archer, then you can move forward to that tile if you choose. But you cannot move forward to the tile with the Ballista if you attack from the red tile.

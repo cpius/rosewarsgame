@@ -53,7 +53,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
             for direction in directions:
                 new_position = direction.move(position)
                 if new_position in enemy_units:
-                    if not zoc_block(position, direction, zoc_blocks):
+                    if not zoc_block(position, direction, zoc_blocks) and not enemy_units[new_position].has_extra_life():
                         yield {"end_at": position, "target_at": new_position, "move_with_attack": True}
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
 

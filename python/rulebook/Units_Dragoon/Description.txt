@@ -1,1 +1,1 @@
-
+Lets say you move the Dragoon one forward, and then attack the Light Cavalry. Then, the blue tiles are the tiles you can move to afterwards whether you win the attack or not, and the red tiles you can move to if you win the attack.

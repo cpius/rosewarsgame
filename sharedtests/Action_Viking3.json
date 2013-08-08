@@ -1,19 +1,20 @@
 {
     "type": "Does action exist",
+	"description": "You should not be able to order a move_with_attack if you are attacking a unit with an extra life",
     "result": false,
     "action": {
         "start_at": "C3",
         "end_at": "C4",
-        "target_at": "C5"
+        "target_at": "C5",
+		"move_with_attack": true
     },
     "gamestate": {
-        "actions_remaining": 0,
+        "actions_remaining": 1,
         "player1_units": {
-            "A1": "Flag Bearer",
-            "C3": "Viking"
+            "C3": "Knight"
         },
         "player2_units": {
-            "C5": "Longswordsman",
+            "C5": "Viking",
             "E4": "Knight"
         }
     }

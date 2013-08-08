@@ -88,6 +88,6 @@ class View(object):
         self.clear_right()
         self.refresh()
 
-    def draw_action_tutorial(self, action):
-        viewgame.draw_action(self.screen, self.interface, action)
+    def draw_action_tutorial(self, action, roll=None):
+        viewgame.draw_action(self.screen, self.interface, action, False, roll)
         self.refresh()

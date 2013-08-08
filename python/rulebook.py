@@ -7,9 +7,9 @@ from gamestate import Gamestate
 from game import Game
 from player import Player
 import os
-import settings
 from action import Action
 import units as units_module
+import settings
 
 shading_blue = pygame.Color(*[0, 0, 100, 160])
 shading_red = pygame.Color(*[100, 0, 0, 160])
@@ -17,7 +17,11 @@ view = view_module.View()
 
 
 def draw_gamestate(path):
-    gamestate = Gamestate.from_file(path + "Gamestate.json")
+    if os.path.exists(path + "Gamestate.json"):
+        gamestate = Gamestate.from_file(path + "Gamestate.json")
+    else:
+        gamestate = Gamestate({}, {}, 2)
+
     players = [Player("Green", "Human"), Player("Red", "Human")]
     game = Game(players, gamestate)
     view.draw_game_tutorial(game)
@@ -40,13 +44,6 @@ def draw_description(path):
     view.draw_tutorial_message(description)
 
 
-def draw_empty_gamestate():
-    gamestate = Gamestate({}, {}, 2)
-    players = [Player("Green", "Human"), Player("Red", "Human")]
-    game = Game(players, gamestate)
-    view.draw_game_tutorial(game)
-
-
 def draw_unit(path):
     if os.path.exists(path + "Unit.txt"):
         unit_name = open(path + "Unit.txt").readline()
@@ -57,16 +54,25 @@ def draw_unit(path):
 
     view.show_unit_zoomed(unit)
     description = open(path + "Description.txt").readlines()
-    view.draw_tutorial_message(description, 460 * settings.zoom)
+    view.draw_tutorial_message(description, 510)
 
     draw_marked(path)
 
 
 def draw_action(path):
+
+    if os.path.exists(path + "Roll.txt"):
+        roll = open(path + "Roll.txt").readline().split()
+        roll = (int(roll[0]), int(roll[1]))
+    else:
+        roll = None
+
+    print roll
+
     gamestate = Gamestate.from_file(path + "Gamestate.json")
     units = gamestate.all_units()
     action = Action.from_document(units, json.loads(open(path + "Action.json").read()))
-    view.draw_action_tutorial(action)
+    view.draw_action_tutorial(action, roll)
 
 
 def run_tutorial():
@@ -91,7 +97,7 @@ def run_tutorial():
             draw_unit(path)
 
         elif type == "Text":
-            draw_empty_gamestate()
+            draw_gamestate(path)
             draw_description(path)
 
         elif type == "Action":
@@ -99,6 +105,8 @@ def run_tutorial():
             draw_action(path)
             draw_description(path)
 
+        if save_pic:
+            view.save_screenshot("./rulebook/Pics/" + str(index) + ".png")
 
         while True:
             event = pygame.event.wait()
@@ -133,4 +141,5 @@ def move_backward_requested(event):
            (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT)
 
 if __name__ == "__main__":
+    save_pic = True
     run_tutorial()

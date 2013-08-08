@@ -1,9 +1,0 @@
-3. Battle.
-
-There are two types of attack, ranged and melee.
-
-A melee unit can attack any unit that is placed on a tile which they can move to. It first moves to a tile adjacent to the target tile, and then attacks. If the attack is successful and the opponents unit is defeated, the player can choose to move the unit to the conquered tile, or it can stay on the adjacent tile.
-
-A ranged unit can attack any tile within its range. A ranged unit does not have the choice to move to the conquered tile if the attack is successful, even if it attacks an adjacent tile.
-
-Here, the Archer attacks the Catapult.

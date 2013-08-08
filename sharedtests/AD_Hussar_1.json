@@ -1,7 +1,7 @@
 {
     "type": "Is attack and defence correct",
     "attack": 2,
-    "defence": 2,
+    "defence": 3,
     "action": {
         "start_at": "B2",
         "end_at": "B3",

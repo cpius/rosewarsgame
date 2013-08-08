@@ -5,5 +5,8 @@
 		"D3": "War Elephant"
 	}, 
     "player2_units": 
-	{} 
+	{
+		"B3": "Catapult",
+		"B4": "Archer",
+		"A4": "Pikeman"} 
 }
