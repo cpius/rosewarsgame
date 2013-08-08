@@ -1,1 +1,0 @@
-That you cant move past an opponents unit, means that if you are standing adjacent to it, you can only retreat directly backwards, or attack it. It does not matter which direction you are facing on the board. The Knight can move to the tiles marked blue, and is blocked by the Pikeman from moving to the tiles marked red.

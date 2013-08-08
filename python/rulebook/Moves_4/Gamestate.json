@@ -1,0 +1,11 @@
+{
+    "actions_remaining": 1,
+    "player1_units": 
+	{
+        "B4": "Knight" 
+	}, 
+    "player2_units": 
+	{
+		"C5": "Pikeman"
+	} 
+}

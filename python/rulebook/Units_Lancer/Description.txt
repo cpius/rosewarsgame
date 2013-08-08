@@ -1,0 +1,1 @@
+In the illustration, the Lancer will get the bonus if it attacks the Archer, but it will not the bonus if it attacks either Light Cavalry.

@@ -1,0 +1,13 @@
+{
+    "actions_remaining": 1,
+    "player1_units": 
+	{
+        "C2": "Lancer" 
+	}, 
+    "player2_units": 
+	{
+		"D2": "Light Cavalry",
+		"B3": "Light Cavalry",
+		"B4": "Archer"
+	} 
+}

@@ -78,12 +78,16 @@ class View(object):
         write_message(self.screen, self.interface, message)
         self.refresh()
 
-    def draw_tutorial_message(self, message):
-        show_lines(self.screen, message, 50, self.interface.line_distances["small"], self.interface.fonts["small"],
-                   400, 50)
+    def draw_tutorial_message(self, message, horizontal_position=17):
+        show_lines(self.screen, message, 47 * settings.zoom, self.interface.line_distances["small"], self.interface.fonts["small"],
+                   400 * settings.zoom, horizontal_position * settings.zoom)
         self.refresh()
 
-    def draw_tutorial(self, game):
+    def draw_game_tutorial(self, game):
         viewgame.draw_game(self.screen, self.interface, game)
         self.clear_right()
+        self.refresh()
+
+    def draw_action_tutorial(self, action):
+        viewgame.draw_action(self.screen, self.interface, action)
         self.refresh()
