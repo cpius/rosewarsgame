@@ -20,4 +20,4 @@ Units_Weaponsmith: Unit
 Units_Scout: Unit
 Units_Lancer: Unit
 Units_Viking: Unit
-End: Text
+Units_Longswordsman: Unit
