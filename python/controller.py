@@ -332,7 +332,7 @@ class Controller(object):
                 self.game.save_option("move_with_attack", move_with_attack)
 
                 if move_with_attack:
-                    self.game.gamestate.update_final_position(action)
+                    self.game.gamestate.move_melee_unit_to_target_tile(action)
 
         else:
             if not outcome:

@@ -167,7 +167,7 @@ class Gamestate:
         self.units = self.units[::-1]
         self.initialize_turn()
 
-    def update_final_position(self, action):
+    def move_melee_unit_to_target_tile(self, action):
         action_doer.move_melee_unit_to_target_tile(self, action)
 
     def __str__(self):
