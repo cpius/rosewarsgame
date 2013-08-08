@@ -10,6 +10,7 @@ class Interface(object):
 
         font_name = "arial"
         self.fonts = {"message": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "very_small": pygame.font.SysFont(font_name, int(11 * zoom), bold=True),
                       "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
                       "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "xp": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
