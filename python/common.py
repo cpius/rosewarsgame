@@ -177,6 +177,9 @@ if 1 == 2:
         Siege_Weapon = 3
         Specialist = 4
 
+        reverse_mapping = {}
+        write = {}
+
     class Trait:
         attack_cooldown = 1
         attack_frozen = 2
@@ -227,6 +230,7 @@ if 1 == 2:
         lost_extra_life = 47
 
         reverse_mapping = {}
+        write = {}
 
     class Ability:
         bribe = 1
@@ -240,6 +244,9 @@ if 1 == 2:
         sabotage_II = 9
         triple_attack = 10
         poison_II = 11
+
+        reverse_mapping = {}
+        write = {}
 
 board_height = 8
 board_width = 5
