@@ -64,8 +64,6 @@ def draw_action(screen, interface, action, flip=False):
     else:
         proper_action = action
 
-    print "drawing action", proper_action
-
     coordinates = interface.coordinates
 
     pygame.draw.circle(screen, colors["black"], coordinates["center"].get(proper_action.start_at), 10)
