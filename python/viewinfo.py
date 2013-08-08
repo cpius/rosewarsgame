@@ -90,7 +90,7 @@ def draw_upgrade_choice(screen, interface, index, unit):
     lines.append("")
 
     if unit.zoc:
-        lines.append("Zone of control against: " + ", ".join(type for type in unit.zoc))
+        lines.append("Zone of control against: " + ", ".join(Type.reverse_mapping[unit_type] for unit_type in unit.zoc))
         lines.append("")
 
     if hasattr(unit, "descriptions"):
