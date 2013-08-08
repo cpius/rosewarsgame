@@ -117,7 +117,7 @@ def draw_symbols(screen, interface, unit, position):
     if unit.is_bribed():
         draw_bribed(screen, interface, position)
 
-    if "_II" in unit.name:
+    if "II" in unit.name:
         pic = get_image(interface.star_icon, (12, 12))
         screen.blit(pic, interface.coordinates["top_left"].get(position))
 
