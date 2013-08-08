@@ -43,7 +43,7 @@ class Unit(object):
         self.variables[attribute] = 0
 
     def decrement(self, attribute):
-        self.variables[attribute] = max(0, self.variables["attribute"] - 1)
+        self.variables[attribute] = max(0, self.variables[attribute] - 1)
 
     def do(self, ability):
         if ability in self.apply_ability:
