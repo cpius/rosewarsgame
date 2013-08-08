@@ -1,0 +1,1 @@
+A frozen unit cannot take any actions, but still has a zone of control.

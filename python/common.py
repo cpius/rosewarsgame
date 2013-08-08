@@ -84,7 +84,9 @@ class Position:
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(1, len(sequential) + 1)), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
+    reverse_print = dict((value, key.replace("_", " ")) for key, value in enums.iteritems())
     enums['reverse_mapping'] = reverse
+    enums['write'] = reverse_print
     return type('Enum', (), enums)
 
 
@@ -99,6 +101,7 @@ trait_descriptions = {
     "bribed_II": "Whether a unit is currently bribed by a Diplomat_II_B.",
     "cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement",
     "combat_agility": "Can make an attack after its first action. (But not a second move.)",
+    "crossbow": "Can hit two adjacent targets at once.",
     "crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.",
     "crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A, "
                     "+1D.",
@@ -176,6 +179,9 @@ if 1 == 2:
         Specialist = 4
         reverse_mapping = dict()
 
+        reverse_mapping = {}
+        write = {}
+
     class Trait:
         attack_cooldown = 1
         attack_frozen = 2
@@ -226,6 +232,7 @@ if 1 == 2:
         lost_extra_life = 47
 
         reverse_mapping = {}
+        write = {}
 
     class Ability:
         bribe = 1
@@ -239,6 +246,9 @@ if 1 == 2:
         sabotage_II = 9
         triple_attack = 10
         poison_II = 11
+
+        reverse_mapping = {}
+        write = {}
 
 board_height = 8
 board_width = 5
