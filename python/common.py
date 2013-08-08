@@ -84,7 +84,9 @@ class Position:
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(1, len(sequential) + 1)), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
+    reverse_print = dict((value, key.replace("_", " ")) for key, value in enums.iteritems())
     enums['reverse_mapping'] = reverse
+    enums['write'] = reverse_print
     return type('Enum', (), enums)
 
 
