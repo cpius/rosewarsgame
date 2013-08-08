@@ -246,7 +246,7 @@ class Light_Cavalry(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
-    upgrades = ["Dragoon", "Cavalry Lieutenant"]
+    upgrades = ["Dragoon", "Hussar"]
     xp_to_upgrade = 3
 
 
@@ -1204,7 +1204,7 @@ class Hussar(Unit):
     image = "Hussar"
     attack = 2
     defence = 2
-    movement = 3
+    movement = 4
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
@@ -1212,7 +1212,7 @@ class Hussar(Unit):
     type = Type.Cavalry
     upgrades = ["Hussar II_A", "Hussar II_B"]
 
-    constants = [Trait.triple_attack, Trait.pikeman_specialist]
+    constants = [Trait.triple_attack]
 
 
 class Hussar_II_A(Unit):
@@ -1221,14 +1221,14 @@ class Hussar_II_A(Unit):
     image = "Hussar"
     attack = 3
     defence = 2
-    movement = 3
+    movement = 4
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
 
-    constants = [Trait.triple_attack, Trait.pikeman_specialist]
+    constants = [Trait.triple_attack]
 
 
 class Hussar_II_B(Unit):
@@ -1237,11 +1237,11 @@ class Hussar_II_B(Unit):
     image = "Hussar"
     attack = 2
     defence = 3
-    movement = 3
+    movement = 4
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
 
-    constants = [Trait.triple_attack, Trait.pikeman_specialist]
+    constants = [Trait.triple_attack]
