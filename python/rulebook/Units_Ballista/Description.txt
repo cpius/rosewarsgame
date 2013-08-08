@@ -1,1 +1,1 @@
-The Ballista. It has a strong attack, but very weak defence.
+The Ballista. It is a Siege Weapon, which means it has a strong ranged attack, but weak defence.

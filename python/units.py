@@ -152,6 +152,8 @@ class Crossbow_Archer(Unit):
     type = Type.Infantry
     upgrades = ["Crossbow Archer II_A", "Crossbow Archer II_B"]
 
+    constants = [Trait.crossbow]
+
 
 class Crossbow_Archer_II_A(Unit):
     name = "Crossbow Archer II_A"
@@ -164,6 +166,8 @@ class Crossbow_Archer_II_A(Unit):
     defence_bonuses = {}
     type = Type.Infantry
 
+    constants = [Trait.crossbow]
+
 
 class Crossbow_Archer_II_B(Unit):
     name = "Crossbow Archer II_B"
@@ -175,6 +179,8 @@ class Crossbow_Archer_II_B(Unit):
     attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     type = Type.Infantry
+
+    constants = [Trait.crossbow]
 
 
 class Pikeman(Unit):
