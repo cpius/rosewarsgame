@@ -67,7 +67,6 @@ def show_unit_zoomed(screen, interface, unit):
         if unit.variables[attribute]:
             lines.append(attribute + ": " + str(unit.variables[attribute]))
 
-    lines.append("")
     lines.append("---------------------------------------------")
     line_length = 45
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
