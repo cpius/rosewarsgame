@@ -1,5 +1,8 @@
 from common import *
 import random
+from collections import namedtuple
+
+rolls = namedtuple("rolls", ["attack", "defence"])
 
 
 class Outcome:
@@ -31,7 +34,7 @@ class Outcome:
         if not action.is_attack():
             return outcome
 
-        outcome.set_suboutcome(action.target_at, [random.randint(1, 6), random.randint(1, 6)])
+        outcome.set_suboutcome(action.target_at, rolls(random.randint(1, 6), random.randint(1, 6)))
 
         attack_direction = None
         if action.is_attack() and action.unit.is_melee():
@@ -40,12 +43,12 @@ class Outcome:
         if action.unit.has(Trait.triple_attack):
             for forward_position in action.end_at.two_forward_tiles(attack_direction):
                 if forward_position in gamestate.enemy_units:
-                    outcome.set_suboutcome(forward_position, [random.randint(1, 6), random.randint(1, 6)])
+                    outcome.set_suboutcome(forward_position, rolls(random.randint(1, 6), random.randint(1, 6)))
 
         if action.unit.has(Trait.longsword):
             for forward_position in action.end_at.four_forward_tiles(attack_direction):
                 if forward_position in gamestate.enemy_units:
-                    outcome.set_suboutcome(forward_position, [random.randint(1, 6), random.randint(1, 6)])
+                    outcome.set_suboutcome(forward_position, rolls(random.randint(1, 6), random.randint(1, 6)))
 
         return outcome
 
@@ -54,6 +57,6 @@ class Outcome:
     def from_document(cls, document):
         outcomes = dict()
         for outcome in document:
-            outcomes[Position.from_string(outcome)] = document[outcome]
+            outcomes[Position.from_string(outcome)] = rolls(*document[outcome])
 
         return cls(outcomes)
