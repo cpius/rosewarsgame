@@ -36,33 +36,40 @@ def show_unit_zoomed(screen, interface, unit):
             lines.append(attribute.title() + ": " + str(value))
         else:
             lines.append(attribute.title() + ": %")
+
+    type = Type.write[unit.type]
+    lines.append("Type: " + type)
     lines.append("")
 
     if unit.zoc:
-        lines.append("Zone of control against: " + ", ".join(Type.reverse_mapping[type] for type in unit.zoc))
+        lines.append("Zone of control against: " + ", ".join(Type.write[type] for type in unit.zoc))
         lines.append("")
 
     if unit.attack_bonuses:
         for type, value in unit.attack_bonuses.items():
-            lines.append("+" + str(value) + " Attack against " + Type.reverse_mapping[type])
+            lines.append("+" + str(value) + " Attack against " + Type.write[type])
             lines.append("")
 
     if unit.defence_bonuses:
         for type, value in unit.attack_bonuses.items():
-            lines.append("+" + str(value) + " Defence against " + Type.reverse_mapping[type])
+            lines.append("+" + str(value) + " Defence against " + Type.write[type])
             lines.append("")
 
     for trait in unit.constants:
         lines.append(common.trait_descriptions[Trait.reverse_mapping[trait]])
+        lines.append("")
 
     for ability in unit.abilities:
         lines.append(common.ability_descriptions[Ability.reverse_mapping[ability]])
+        lines.append("")
 
     for attribute in unit.variables:
         if unit.variables[attribute]:
             lines.append(attribute + ": " + str(unit.variables[attribute]))
 
-    line_length = 40
+    lines.append("")
+    lines.append("---------------------------------------------")
+    line_length = 45
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
