@@ -132,6 +132,17 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
     unit_pic = get_unit_pic(interface, unit.image)
     counters_drawn = 0
 
+    dimensions = (int(interface.unit_width), int(interface.unit_height))
+    pic = get_image(unit_pic, dimensions)
+
+    base_coordinates = Coordinates(interface.base_coordinates, interface)
+    base = base_coordinates.get(position)
+    screen.blit(pic, base)
+
+    if selected:
+        dimensions = (interface.unit_width, interface.unit_height)
+        draw_rectangle(screen, dimensions, base, interface.selected_shading)
+
     if get_blue_counters(unit):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
@@ -143,17 +154,6 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
         font_coordinates = get_font_coordinates(interface, counters_drawn)
         counters = get_yellow_counters(unit)
         draw_counters(screen, interface, counters, colors["yellow"], position, counter_coordinates, font_coordinates)
-
-    dimensions = (int(interface.unit_width), int(interface.unit_height))
-    pic = get_image(unit_pic, dimensions)
-
-    base_coordinates = Coordinates(interface.base_coordinates, interface)
-    base = base_coordinates.get(position)
-    screen.blit(pic, base)
-
-    if selected:
-        dimensions = (interface.unit_width, interface.unit_height)
-        draw_rectangle(screen, dimensions, base, interface.selected_shading)
 
     draw_unit_box(screen, interface, base, color)
     draw_symbols(screen, interface, unit, position)
@@ -191,7 +191,7 @@ def flip_direction(direction):
 
 
 def get_yellow_counters(unit):
-    return 1 if unit.has("extra_life") else 0
+    return 1 if unit.has_extra_life() else 0
 
 
 def get_blue_counters(unit):
