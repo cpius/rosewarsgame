@@ -1,6 +1,6 @@
 {
     "type": "Does action exist",
-	"description": "You should not be able to order a move_with_attack if you are attacking a unit with an extra life"
+	"description": "You should not be able to order a move_with_attack if you are attacking a unit with an extra life",
     "result": false,
     "action": {
         "start_at": "C3",
