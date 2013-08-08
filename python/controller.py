@@ -13,6 +13,7 @@ from client import Client
 from game import Game
 from outcome import Outcome
 import json
+from common import *
 
 
 class Controller(object):
@@ -302,11 +303,13 @@ class Controller(object):
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
-    def upgrade_units(self, units):
-        for pos, unit in units.items():
-            if unit.variables["xp"] == unit.xp_to_upgrade:
-                choice = self.get_input_upgrade(unit)
-                units[pos] = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
+    def upgrade_unit(self, position, unit):
+        if unit.get(Trait.xp) < unit.xp_to_upgrade:
+            return
+
+        choice = self.get_input_upgrade(unit)
+        upgraded_unit = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
+        self.game.gamestate.player_units[position] = upgraded_unit
 
     def perform_action(self, action, outcome=None):
         self.draw_action = True
@@ -332,7 +335,7 @@ class Controller(object):
                 self.game.save_option("move_with_attack", move_with_attack)
 
                 if move_with_attack:
-                    self.game.gamestate.update_final_position(action)
+                    self.game.gamestate.move_melee_unit_to_target_tile(action)
 
         else:
             if not outcome:
@@ -360,7 +363,10 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
             self.view.draw_game(self.game)
-            self.upgrade_units(self.game.gamestate.player_units)
+            if action.target_at in self.game.gamestate.player_units:
+                self.upgrade_unit(action.target_at, action.unit)
+            else:
+                self.upgrade_unit(action.end_at, action.unit)
 
         self.view.draw_game(self.game)
 
