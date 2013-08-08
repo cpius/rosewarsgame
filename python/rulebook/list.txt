@@ -14,10 +14,23 @@ Moves_4: Move
 Action_1: Action
 Action_2: Action
 Specials_1: Move
+Units_Berserker: Unit
 Units_Cannon: Unit
-Units_RoyalGuard: Unit
-Units_Weaponsmith: Unit
-Units_Scout: Unit
+Units_CrossbowArcher: Unit
+Units_Crusader: Unit
+Units_Diplomat: Unit
+Units_Dragoon: Unit
+Units_FlagBearer: Unit
+Units_Halberdier: Unit
+Units_Hobelar: Unit
+Units_Hussar: Unit
 Units_Lancer: Unit
+Units_Longbowman: Unit
+Units_RoyalGuard: Unit
+Units_Saboteur: Unit
+Units_Samurai: Unit
+Units_Scout: Unit
 Units_Viking: Unit
-Units_Longswordsman: Unit
+Units_WarElephant: Unit
+Units_Weaponsmith: Unit
+

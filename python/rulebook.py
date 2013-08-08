@@ -9,6 +9,7 @@ from player import Player
 import os
 import settings
 from action import Action
+import units as units_module
 
 shading_blue = pygame.Color(*[0, 0, 100, 160])
 shading_red = pygame.Color(*[100, 0, 0, 160])
@@ -47,12 +48,16 @@ def draw_empty_gamestate():
 
 
 def draw_unit(path):
-    gamestate = Gamestate.from_file(path + "Gamestate.json")
-    unit = gamestate.player_units.values()[0]
+    if os.path.exists(path + "Unit.txt"):
+        unit_name = open(path + "Unit.txt").readline()
+        unit = getattr(units_module, unit_name.replace(" ", "_"))()
+    else:
+        gamestate = Gamestate.from_file(path + "Gamestate.json")
+        unit = gamestate.player_units.values()[0]
 
     view.show_unit_zoomed(unit)
     description = open(path + "Description.txt").readlines()
-    view.draw_tutorial_message(description, 440 * settings.zoom)
+    view.draw_tutorial_message(description, 460 * settings.zoom)
 
     draw_marked(path)
 
