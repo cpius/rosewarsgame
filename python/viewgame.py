@@ -110,9 +110,34 @@ def draw_bordered_circle(screen, position, size, color):
     pygame.draw.circle(screen, color, position, size)
 
 
+
+
+
 def draw_symbols(screen, interface, unit, position):
-    if unit.get(Trait.xp):
-        write(screen, str(unit.get(Trait.xp)), interface.coordinates["flag"].get(position), interface.fonts["xp"])
+
+    def find_base(index):
+        base = interface.coordinates["bottom_left"].get(position)
+        return base[0] + index * 4, base[1]
+
+    def draw_box(index, color):
+        base = find_base(index)
+        width = 4
+        height = 7
+        corner1 = (base[0], base[1])
+        corner2 = (base[0] + width, base[1])
+        corner3 = (base[0] + width, base[1] + height)
+        corner4 = (base[0], base[1] + height)
+        base_corners = [corner1, corner2, corner3, corner4]
+        pygame.draw.lines(screen, colors["black"], True, base_corners)
+        draw_rectangle(screen, (3, 6), (base[0] + 1, base[1] + 1), color)
+
+    total_boxes = unit.xp_to_upgrade
+    blue_boxes = unit.get(Trait.xp)
+    for index in range(blue_boxes):
+        draw_box(index, colors["light_blue"])
+
+    for index in range(blue_boxes, total_boxes):
+        draw_box(index, colors["white"])
 
     if unit.is_bribed():
         draw_bribed(screen, interface, position)

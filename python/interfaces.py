@@ -25,7 +25,8 @@ class Interface(object):
                             "flag": Coordinates(self.first_symbol_coordinates, self),
                             "percentage": Coordinates(self.percentage_coordinates, self),
                             "percentage_sub": Coordinates(self.percentage_sub_coordinates, self),
-                            "top_left": Coordinates(self.top_left_coordinates, self)
+                            "top_left": Coordinates(self.top_left_coordinates, self),
+                            "bottom_left": Coordinates(self.bottom_left_coordinates, self)
                             }
 
 
@@ -69,7 +70,8 @@ class Rectangles(Interface):
         self.first_symbol_coordinates = (2 * zoom, counter_base_y + 58 * zoom)
         self.second_symbol_coordinates = (18 * zoom, counter_base_y + 58 * zoom)
 
-        self.top_left_coordinates = (-4, -4)
+        self.top_left_coordinates = (-4 * zoom, -4 * zoom)
+        self.bottom_left_coordinates = (-1 * zoom, 66 * zoom)
 
         self.first_counter_coordinates = (counter_base_x, counter_base_y + 58 * zoom)
         self.second_counter_coordinates = (counter_base_x, counter_base_y + 38 * zoom)
