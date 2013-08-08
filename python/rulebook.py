@@ -7,7 +7,6 @@ from gamestate import Gamestate
 from game import Game
 from player import Player
 import os
-import settings
 from action import Action
 import units as units_module
 
@@ -57,7 +56,7 @@ def draw_unit(path):
 
     view.show_unit_zoomed(unit)
     description = open(path + "Description.txt").readlines()
-    view.draw_tutorial_message(description, 460 * settings.zoom)
+    view.draw_tutorial_message(description, 510)
 
     draw_marked(path)
 
@@ -98,7 +97,6 @@ def run_tutorial():
             draw_gamestate(path)
             draw_action(path)
             draw_description(path)
-
 
         while True:
             event = pygame.event.wait()

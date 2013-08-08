@@ -5,5 +5,7 @@
 		"D3": "Hobelar"
 	}, 
     "player2_units": 
-	{} 
+	{
+		"D4": "Archer"
+	} 
 }
