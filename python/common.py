@@ -101,6 +101,7 @@ trait_descriptions = {
     "bribed_II": "Whether a unit is currently bribed by a Diplomat_II_B.",
     "cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement",
     "combat_agility": "Can make an attack after its first action. (But not a second move.)",
+    "crossbow": "Can hit two adjacent targets at once.",
     "crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.",
     "crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A, "
                     "+1D.",
