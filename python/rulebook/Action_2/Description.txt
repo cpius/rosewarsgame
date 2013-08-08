@@ -1,0 +1,5 @@
+The outcome of the attack is decided as follows:
+
+First the Archer rolls a die. If the roll is lower than or equal to its attack value, the attack is successful. If the attack is successful, the defender rolls a die. If the roll is lower than or equal to its defense value, the defense is successful, and nothing happens. If the roll is higher than the defence value, the defense is unsuccessful, and the unit is killed. 
+
+For example, say the attack roll is 1. The Archer has an attack value of 2, so the attack is succesful. Then the Catapult rolls a 2. This is equal to its defence value of 2, so nothing happens.

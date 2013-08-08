@@ -1,0 +1,1 @@
+The Light Cavalry can move to the marked tiles.

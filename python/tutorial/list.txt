@@ -1,3 +1,0 @@
-Moves_1: Move
-Moves_2: Move
-Moves_3: Move

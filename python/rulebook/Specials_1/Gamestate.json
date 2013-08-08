@@ -1,0 +1,28 @@
+{
+    "actions_remaining": 1,
+    "player1_units": 
+	{
+        "A2": "Crossbow Archer",
+		"B2": "Longbowman",
+		"C2": "Halberdier",
+		"D2": "Dragoon",
+		"E2": "Royal Guard",
+		"A3": "Scout",
+		"B3": "Viking",
+		"C3": "Cannon",
+		"D3": "Lancer",
+		"E3": "Flag Bearer",
+		"A4": "Longswordsman",
+		"B4": "Crusader",
+		"C4": "Berserker",
+		"D4": "Hobelar",
+		"E4": "War Elephant",
+		"A5": "Samurai",
+		"B5": "Saboteur",
+		"C5": "Diplomat",
+		"D5": "Weaponsmith",
+		"E5": "Hussar"
+	}, 
+    "player2_units": 
+	{} 
+}

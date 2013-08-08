@@ -96,7 +96,7 @@ class Rectangles(Interface):
 
         self.message_line_length = 40 * zoom
 
-        self.show_unit_location = (410 * zoom, 40 * zoom)
+        self.show_unit_location = (410 * zoom, 25 * zoom)
 
         self.upgrade_locations = [(410 * zoom, 370 * zoom), (600 * zoom, 370 * zoom)]
         self.show_attack_location = (410 * zoom, 230 * zoom)
