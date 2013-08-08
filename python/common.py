@@ -177,7 +177,6 @@ if 1 == 2:
         Infantry = 2
         Siege_Weapon = 3
         Specialist = 4
-        reverse_mapping = dict()
 
         reverse_mapping = {}
         write = {}
