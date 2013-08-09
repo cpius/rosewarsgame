@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "The Knight moves adjacent to the Flag Bearer and then attacks, with the bonus",
     "attack": 5,
     "defence": 1,
     "action": {

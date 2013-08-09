@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "Royal Guard does not prevent Pikeman from retreating directly backwards",
     "result": true,
     "action": {
         "start_at": "B5",
