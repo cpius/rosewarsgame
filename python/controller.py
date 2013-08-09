@@ -14,6 +14,7 @@ from game import Game
 from outcome import Outcome
 import json
 from common import *
+from copy import copy
 
 
 class Controller(object):
@@ -312,6 +313,9 @@ class Controller(object):
         self.game.gamestate.player_units[position] = upgraded_unit
 
     def perform_action(self, action, outcome=None):
+
+        possible_actions = self.game.gamestate.get_actions()
+
         self.draw_action = True
 
         self.view.draw_game(self.game)
@@ -329,7 +333,7 @@ class Controller(object):
             self.view.draw_game(self.game)
             self.view.draw_action(action, outcome, self.game)
 
-            if self.is_post_movement_possible(action, outcome):
+            if self.is_post_movement_possible(action, outcome, possible_actions):
                 move_with_attack = self.ask_about_move_with_attack(action)
 
                 self.game.save_option("move_with_attack", move_with_attack)
@@ -382,8 +386,14 @@ class Controller(object):
         elif self.game.current_player().intelligence == "Network":
             self.trigger_network_player()
 
-    def is_post_movement_possible(self, action, outcome):
+    def is_post_movement_possible(self, action, outcome, possible_actions):
         if not action.is_attack():
+            return False
+
+        action_copy = copy(action)
+        action_copy.move_with_attack = True
+
+        if action_copy not in possible_actions:
             return False
 
         is_successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)

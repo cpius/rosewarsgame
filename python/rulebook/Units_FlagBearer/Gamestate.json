@@ -2,8 +2,15 @@
     "actions_remaining": 1,
     "player1_units": 
 	{
-		"D3": "Flag Bearer"
+		"D2": "Knight",
+		"C2": "Flag Bearer",
+		"A1": "Light Cavalry",
+		"C1": "Archer",
+		"C3": "Pikeman"
 	}, 
     "player2_units": 
-	{} 
+	{
+		"B3": "Archer",
+		"D4": "Ballista"
+	} 
 }

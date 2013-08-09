@@ -16,20 +16,8 @@ def clear(screen, interface):
     pygame.draw.rect(screen, colors["light_grey"], interface.lower_right_rectangle)
 
 
-def show_unit_zoomed(screen, interface, unit):
-
-    unit_pic = get_unit_pic(interface, unit.image)
-    pic = get_image(unit_pic, zoomed_unit_size)
-
-    base = interface.show_unit_location
-    title_location = base
-    image_location = [base[0], base[1] + 20 * zoom]
-    text_location = [base[0], base[1] + 290 * zoom]
+def get_unit_lines(unit):
     lines = []
-
-    write(screen, unit.name, title_location, interface.fonts["normal"])
-    screen.blit(pic, image_location)
-
     for attribute in ["attack", "defence", "range", "movement"]:
         if getattr(unit, attribute):
             value = getattr(unit, attribute)
@@ -65,9 +53,25 @@ def show_unit_zoomed(screen, interface, unit):
 
     for attribute in unit.variables:
         if unit.variables[attribute]:
-            lines.append(attribute + ": " + str(unit.variables[attribute]))
+            lines.append(Trait.write[attribute] + ": " + str(unit.variables[attribute]))
 
-    lines.append("")
+    return lines
+
+
+def show_unit_zoomed(screen, interface, unit):
+
+    unit_pic = get_unit_pic(interface, unit.image)
+    pic = get_image(unit_pic, zoomed_unit_size)
+
+    base = interface.show_unit_location
+    title_location = base
+    image_location = [base[0], base[1] + 20 * zoom]
+    text_location = [base[0], base[1] + 290 * zoom]
+
+    write(screen, unit.name, title_location, interface.fonts["normal"])
+    screen.blit(pic, image_location)
+
+    lines = get_unit_lines(unit)
     lines.append("---------------------------------------------")
     line_length = 45
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
@@ -86,30 +90,10 @@ def draw_upgrade_choice(screen, interface, index, unit):
 
     write(screen, unit.name, title_location, interface.fonts["normal"])
 
-    lines = []
-
-    for attribute in ["attack", "defence", "range", "movement"]:
-        if getattr(unit, attribute):
-            value = getattr(unit, attribute)
-            lines.append(attribute.title() + ": " + str(value))
-        else:
-            lines.append(attribute.title() + ": %")
-    lines.append("")
-
-    if unit.zoc:
-        lines.append("Zone of control against: " + ", ".join(Type.reverse_mapping[unit_type] for unit_type in unit.zoc))
-        lines.append("")
-
-    if hasattr(unit, "descriptions"):
-        for attribute, description in unit.descriptions.items():
-            if attribute in unit.abilities:
-                lines.append(attribute.replace("_", " ").title() + ": " + description)
-            else:
-                lines.append(description)
-            lines.append("")
+    lines = get_unit_lines(unit)
 
     line_length = 30
-    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
+    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["very_small"], *text_location)
 
 
 def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate):

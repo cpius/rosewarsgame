@@ -8,5 +8,8 @@
 		"B4": "Pikeman"
 	}, 
     "player2_units": 
-	{} 
+	{
+		"B5": "Pikeman",
+		"E5": "Knight"
+	} 
 }

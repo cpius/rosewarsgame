@@ -1,1 +1,1 @@
-
+If it attacks the Light Cavalry, and both rolls are succesful, then the Light Cavalry is pushed back to the marked tile. The Halberdier can choose to move forward, or stay, as usual. If it attacks the Knight, and both rolls succeed, the Knight is pushed backwards. But as that tile is occupied, it is killed instead.

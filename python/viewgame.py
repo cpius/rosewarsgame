@@ -57,7 +57,19 @@ def draw_post_movement(screen, interface, action):
     screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
 
 
-def draw_action(screen, interface, action, flip=False):
+def draw_action_dice(screen, interface, action, roll):
+
+    attack_dice = interface.dice[roll[0]]
+    pic = get_image(attack_dice)
+    screen.blit(pic, interface.coordinates["battle"].get(action.end_at))
+
+    if roll[1] != 0:
+        defence_dice = interface.dice[roll[1]]
+        pic = get_image(defence_dice)
+        screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
+
+
+def draw_action(screen, interface, action, flip=False, roll=None):
 
     if flip:
         proper_action = flip_action(action)
@@ -71,6 +83,9 @@ def draw_action(screen, interface, action, flip=False):
 
     if proper_action.is_attack():
         draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
+
+        if roll:
+            draw_action_dice(screen, interface, action, roll)
 
     elif proper_action.is_ability():
         draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
@@ -111,11 +126,37 @@ def draw_bordered_circle(screen, position, size, color):
 
 
 def draw_symbols(screen, interface, unit, position):
-    if unit.get("xp"):
-        write(screen, str(unit.get("xp")), interface.coordinates["flag"].get(position), interface.fonts["xp"])
 
-    if unit.get("bribed"):
+    def find_base(index):
+        base = interface.coordinates["bottom_left"].get(position)
+        return base[0] + index * 4, base[1]
+
+    def draw_box(index, color):
+        base = find_base(index)
+        width = 4
+        height = 7
+        corner1 = (base[0], base[1])
+        corner2 = (base[0] + width, base[1])
+        corner3 = (base[0] + width, base[1] + height)
+        corner4 = (base[0], base[1] + height)
+        base_corners = [corner1, corner2, corner3, corner4]
+        pygame.draw.lines(screen, colors["black"], True, base_corners)
+        draw_rectangle(screen, (3, 6), (base[0] + 1, base[1] + 1), color)
+
+    total_boxes = unit.xp_to_upgrade
+    blue_boxes = unit.get(Trait.xp)
+    for index in range(blue_boxes):
+        draw_box(index, colors["light_blue"])
+
+    for index in range(blue_boxes, total_boxes):
+        draw_box(index, colors["white"])
+
+    if unit.is_bribed():
         draw_bribed(screen, interface, position)
+
+    if "II" in unit.name:
+        pic = get_image(interface.star_icon, (12, 12))
+        screen.blit(pic, interface.coordinates["top_left"].get(position))
 
 
 def draw_bribed(screen, interface, position):
@@ -132,6 +173,17 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
     unit_pic = get_unit_pic(interface, unit.image)
     counters_drawn = 0
 
+    dimensions = (int(interface.unit_width), int(interface.unit_height))
+    pic = get_image(unit_pic, dimensions)
+
+    base_coordinates = Coordinates(interface.base_coordinates, interface)
+    base = base_coordinates.get(position)
+    screen.blit(pic, base)
+
+    if selected:
+        dimensions = (interface.unit_width, interface.unit_height)
+        draw_rectangle(screen, dimensions, base, interface.selected_shading)
+
     if get_blue_counters(unit):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
@@ -143,17 +195,6 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
         font_coordinates = get_font_coordinates(interface, counters_drawn)
         counters = get_yellow_counters(unit)
         draw_counters(screen, interface, counters, colors["yellow"], position, counter_coordinates, font_coordinates)
-
-    dimensions = (int(interface.unit_width), int(interface.unit_height))
-    pic = get_image(unit_pic, dimensions)
-
-    base_coordinates = Coordinates(interface.base_coordinates, interface)
-    base = base_coordinates.get(position)
-    screen.blit(pic, base)
-
-    if selected:
-        dimensions = (interface.unit_width, interface.unit_height)
-        draw_rectangle(screen, dimensions, base, interface.selected_shading)
 
     draw_unit_box(screen, interface, base, color)
     draw_symbols(screen, interface, unit, position)
@@ -191,11 +232,11 @@ def flip_direction(direction):
 
 
 def get_yellow_counters(unit):
-    return 1 if unit.has("extra_life") else 0
+    return 1 if unit.has_extra_life() else 0
 
 
 def get_blue_counters(unit):
-    return max(unit.get("frozen"), unit.get("attack_frozen"), unit.has("recently_bribed"))
+    return max(unit.get(Trait.frozen), unit.get(Trait.attack_frozen), unit.has(Trait.recently_bribed))
 
 
 def draw_ask_about_move_with_attack(screen, interface, position):

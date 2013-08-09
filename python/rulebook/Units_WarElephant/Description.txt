@@ -1,1 +1,6 @@
 
+
+
+
+
+The elephant moves to the red tile and attacks the Catapult. It thereby also hits the Archer. If the attack roll succeeds, and the defence roll also succeeds, the units are pushed directly backwards. If this happens to the Catapult, it will be pushed to the blue tile. If it happens to the archer, the tile it should be pushed to is occupied by the Pikeman, so it will die instead. 

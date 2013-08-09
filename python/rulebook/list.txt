@@ -11,8 +11,11 @@ Moves_1: Move
 Moves_2: Move
 Moves_3: Move
 Moves_4: Move
-Action_1: Action
-Action_2: Action
+Attacks_1: Move
+Attacks_2: Action
+Attacks_3: Action
+Attacks_4: Action
+Attacks_5: Action
 Specials_1: Move
 Units_Berserker: Unit
 Units_Cannon: Unit
@@ -34,4 +37,3 @@ Units_Scout: Unit
 Units_Viking: Unit
 Units_WarElephant: Unit
 Units_Weaponsmith: Unit
-
