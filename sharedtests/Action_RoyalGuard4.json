@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "Royal Guard restricts the movement of Pikeman",
     "result": false,
     "action": {
         "start_at": "B5",

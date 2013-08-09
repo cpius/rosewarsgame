@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "Royal Guard cannot move two tiles forward",
     "result": false,
     "action": {
         "start_at": "B2",
