@@ -30,21 +30,21 @@ def draw_units(screen, interface, player_units, player_color, enemy_units, oppon
 
 
 def shade_actions(screen, interface, actions):
-    unit_dimensions = (interface.unit_width, interface.unit_height)
+    unit_dimensions = (interface.unit_box_width, interface.unit_box_height)
     drawn_tiles = set()
     for action in actions:
         if action.is_attack():
-            location = interface.coordinates["base"].get(action.target_at)
+            location = interface.coordinates["base_box"].get(action.target_at)
             if location not in drawn_tiles:
                 drawn_tiles.add(location)
                 draw_rectangle(screen, unit_dimensions, location, interface.attack_shading)
         elif action.is_ability():
-            location = interface.coordinates["base"].get(action.target_at)
+            location = interface.coordinates["base_box"].get(action.target_at)
             if location not in drawn_tiles:
                 drawn_tiles.add(location)
                 draw_rectangle(screen, unit_dimensions, location, interface.ability_shading)
         else:
-            location = interface.coordinates["base"].get(action.end_at)
+            location = interface.coordinates["base_box"].get(action.end_at)
             if location not in drawn_tiles:
                 drawn_tiles.add(location)
                 draw_rectangle(screen, unit_dimensions, location, interface.move_shading)

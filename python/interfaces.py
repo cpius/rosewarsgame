@@ -1,3 +1,4 @@
+from __future__ import division
 from viewcommon import colors
 import pygame
 from coordinates import Coordinates
@@ -20,6 +21,7 @@ class Interface(object):
         self.line_distances = {"small": 15 * zoom}
 
         self.coordinates = {"base": Coordinates(self.base_coordinates, self),
+                            "base_box": Coordinates(self.base_box_coordinates, self),
                             "center": Coordinates(self.center_coordinates, self),
                             "battle": Coordinates(self.battle_coordinates, self),
                             "flag": Coordinates(self.first_symbol_coordinates, self),
@@ -62,10 +64,15 @@ class Rectangles(Interface):
         counter_base_x = 45 * zoom
         counter_base_y = 0 * zoom
 
+        self.unit_box_width = self.unit_width + 10 * zoom
+        self.unit_box_height = self.unit_height + 10 * zoom
+
         self.percentage_coordinates = (self.unit_width / 4, 0)
         self.percentage_sub_coordinates = (self.unit_width / 4, 0)
         self.center_coordinates = (self.unit_width / 2, self.unit_height / 2)
         self.battle_coordinates = (self.unit_width / 2 - 15 * zoom, self.unit_height / 2 - 15 * zoom)
+
+        self.base_box_coordinates = (-5 * zoom, -5 * zoom)
 
         self.first_symbol_coordinates = (2 * zoom, counter_base_y + 58 * zoom)
         self.second_symbol_coordinates = (18 * zoom, counter_base_y + 58 * zoom)

@@ -53,7 +53,8 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
             for direction in directions:
                 new_position = direction.move(position)
                 if new_position in enemy_units:
-                    if not zoc_block(position, direction, zoc_blocks) and not enemy_units[new_position].has_extra_life():
+                    if not zoc_block(position, direction, zoc_blocks) and \
+                            (not enemy_units[new_position].has_extra_life() or unit.has(Trait.push)):
                         yield {"end_at": position, "target_at": new_position, "move_with_attack": True}
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
 
@@ -63,12 +64,18 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
             for direction in directions:
                 new_position = direction.move(position)
                 if new_position in enemy_units:
-                    yield {"end_at": position, "target_at": new_position}
+                    if enemy_units[new_position].has_extra_life() and not unit.has(Trait.push):
+                        yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
+                    else:
+                        yield {"end_at": position, "target_at": new_position}
+
 
     def rage():
-        attacks = [make_action(terms) for terms in attack_generator(moveset_with_leftover | {start_at})] + \
-                  [make_action(terms) for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
-        return moves, attacks
+        normal_attacks = [make_action(terms) for terms in attack_generator(moveset_with_leftover | {start_at})]
+        rage_attacks = [make_action(terms) for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
+        for attack in rage_attacks:
+            attack.move_with_attack = False
+        return moves, normal_attacks + rage_attacks
 
     def berserking():
         moveset_with_leftover, moveset_no_leftover = moves_sets(start_at, frozenset(units), zoc_blocks, 4, 4)
