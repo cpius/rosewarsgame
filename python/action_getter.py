@@ -79,12 +79,20 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         extended_moveset_no_leftover = set()
         for move_position in moveset_no_leftover:
             extended_moveset_no_leftover.add(move_position)
-            for direction in [directions.Right, directions.Left]:
+
+            additional_move_directions = [directions.Left, directions.Right]
+            direction = start_at.get_direction_to(move_position)
+            if direction in [directions.Left, directions.Right]:
+                additional_move_directions.append(directions.Up)
+                additional_move_directions.append(directions.Down)
+
+            for direction in additional_move_directions:
                 new_position = direction.move(move_position)
                 if new_position in board and new_position not in units:
                     extended_moveset_no_leftover.add(new_position)
 
         moves = move_actions(moveset_with_leftover | extended_moveset_no_leftover)
+        attacks = melee_attack_actions(extended_moveset_no_leftover | {start_at})
 
         return moves, attacks
 

@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "Royal Guard can move one tile sideways and one tile forward",
     "result": true,
     "action": {
         "start_at": "B2",

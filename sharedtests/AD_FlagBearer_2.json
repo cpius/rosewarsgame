@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "The Knight moves away to attack the Ballista, so it doesn't get any bonus",
     "attack": 3,
     "defence": 1,
     "action": {
@@ -17,8 +18,6 @@
         "player2_units": {
             "A8": "Archer",
             "E5": "Ballista"
-
         }
     }
 }
-

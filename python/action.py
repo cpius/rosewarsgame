@@ -77,7 +77,21 @@ class Action(object):
         return cls(units, start_at, end_at, target_at, move_with_attack, ability, number=number, created_at=created_at)
 
     def __repr__(self):
-        return document_to_string(self.to_document_no_created_at())
+        representation = self.unit.name + " on " + str(self.start_at)
+        if self.end_at != self.start_at:
+            representation += " move to " + str(self.end_at)
+        if self.ability:
+            representation += " ability on " + self.target_unit.name + " on " + str(self.target_at)
+        elif self.is_attack() and self.move_with_attack:
+            representation += " attack-move " + self.target_unit.name + " on " + str(self.target_at)
+        elif self.is_attack():
+            if hasattr(self, "target_unit"):
+                target = self.target_unit.name
+            else:
+                target = "unit"
+            representation += " attack " + target + " on " + str(self.target_at)
+
+        return representation
 
     def __eq__(self, other):
         basic_attributes = ["start_at", "end_at", "target_at", "move_with_attack", "ability"]
