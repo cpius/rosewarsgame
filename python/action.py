@@ -93,10 +93,11 @@ class Action(object):
 
         return representation
 
-    def __eq__(self, other):
+    def __eq__(self, other1):
+
         basic_attributes = ["start_at", "end_at", "target_at", "move_with_attack", "ability"]
-        original = dict((attr, self.__dict__[attr]) for attr in basic_attributes if self.__dict__[attr])
-        other = dict((attr, other.__dict__[attr]) for attr in basic_attributes if other.__dict__[attr])
+        original = dict((attr, self.__dict__[attr]) for attr in basic_attributes if self.__dict__[attr] is not None)
+        other = dict((attr, other1.__dict__[attr]) for attr in basic_attributes if other1.__dict__[attr] is not None)
 
         return original == other
 
