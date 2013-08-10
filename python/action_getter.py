@@ -181,9 +181,16 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     if unit.is_ranged():
         return ranged_actions()
 
-    for trait in [Trait.extra_action, Trait.rage, Trait.berserking, Trait.scouting, Trait.defence_maneuverability]:
-        if unit.has(trait):
-            moves, attacks = locals()[Trait.reverse_mapping[trait]]()
+    if unit.has(Trait.rage):
+        moves, attacks = rage()
+    elif unit.has(Trait.defence_maneuverability):
+        moves, attacks = defence_maneuverability(moves, attacks)
+    elif unit.has(Trait.extra_action):
+        moves, attacks = extra_action()
+    elif unit.has(Trait.scouting):
+        moves, attacks = scouting()
+    elif unit.has(Trait.berserking):
+        moves, attacks = berserking()
 
     return moves, attacks, []
 
