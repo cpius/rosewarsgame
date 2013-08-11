@@ -69,7 +69,6 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
                     else:
                         yield {"end_at": position, "target_at": new_position}
 
-
     def rage():
         normal_attacks = [make_action(terms) for terms in attack_generator(moveset_with_leftover | {start_at})]
         rage_attacks = [make_action(terms) for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
@@ -83,23 +82,14 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         return moves, attacks
 
     def defence_maneuverability():
-        extended_moveset_no_leftover = set()
-        for move_position in moveset_no_leftover:
-            extended_moveset_no_leftover.add(move_position)
 
-            additional_move_directions = [directions.Left, directions.Right]
-            direction = start_at.get_direction_to(move_position)
-            if direction in [directions.Left, directions.Right]:
-                additional_move_directions.append(directions.Up)
-                additional_move_directions.append(directions.Down)
+        moveset_with_leftover, moveset_no_leftover = generate_movesets(2)
+        moveset = moveset_with_leftover | moveset_no_leftover
+        attacks = melee_attack_actions(moveset_with_leftover | {start_at})
+        moves = move_actions(moveset)
 
-            for direction in additional_move_directions:
-                new_position = direction.move(move_position)
-                if new_position in board and new_position not in units:
-                    extended_moveset_no_leftover.add(new_position)
-
-        moves = move_actions(moveset_with_leftover | extended_moveset_no_leftover)
-        attacks = melee_attack_actions(extended_moveset_no_leftover | {start_at})
+        moves = [move for move in moves if abs(move.start_at.row - move.end_at.row) < 2]
+        attacks = [attack for attack in attacks if abs(attack.start_at.row - attack.target_at.row) < 2]
 
         return moves, attacks
 

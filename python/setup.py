@@ -71,7 +71,8 @@ units_info = {"Archer": Info({2, 3}, 3, False),
               "Viking": Info({4}, 1, False),
               "War Elephant": Info({4}, 1, False),
               "Weaponsmith": Info({2, 3}, 1, True),
-              "Longbowman": Info({2, 3}, 3, False)}
+              "Crossbow Archer": Info({2, 3}, 3, False),
+              "Fire Archer": Info({2, 3}, 3, False)}
 
 
 def test_column_blocks(units):
