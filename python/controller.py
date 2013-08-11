@@ -316,7 +316,12 @@ class Controller(object):
         else:
             upgrade = getattr(units_module, unit.name.replace(" ", "_"))()
             upgrade.constants = unit.constants.copy()
-            upgrade.constants = unit.upgrades[0][choice]
+            for upgrade_trait, value in unit.upgrades[0][choice].items():
+                upgrade.constants[upgrade_trait] = value
+            if Trait.level in upgrade.constants:
+                upgrade.constants[Trait.level] += 1
+            else:
+                upgrade.constants[Trait.level] = 2
 
         self.game.gamestate.player_units[position] = upgrade
 

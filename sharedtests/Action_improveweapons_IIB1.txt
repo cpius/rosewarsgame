@@ -16,7 +16,8 @@
             "A6": 
 			{
 				"name": "Weaponsmith",
-				"improve_weapons_II_B": 1
+				"improve_weapons_II_B": 1,
+				"level": 2
 			},
             "A4": {
                 "name": "Knight",

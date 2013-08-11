@@ -126,7 +126,13 @@ def draw_upgrade_options(screen, interface, unit):
         else:
             upgrade = getattr(unitsmodule, unit.name.replace(" ", "_"))()
             upgrade.constants = unit.constants.copy()
-            upgrade.constants = unit.upgrades[0][i]
+            for upgrade_trait, value in unit.upgrades[0][i].items():
+                upgrade.constants[upgrade_trait] = value
+            if Trait.level in upgrade.constants:
+                upgrade.constants[Trait.level] += 1
+            else:
+                upgrade.constants[Trait.level] = 2
+
             draw_upgrade_choice(screen, interface, i, upgrade)
 
 

@@ -131,7 +131,8 @@ constant_traits = {
     "fire_arrows": "+3A vs Siege Weapons",
     "cavalry_specialist": "+1A +1D vs Cavalry",
     "siege_weapon_specialist": "+1A +1D vs Siege Weapons",
-    "flanking": "+2A vs Infantry"
+    "flanking": "+2A vs Infantry",
+    "level": "The number of upgrades."
 }
 
 variable_traits = {
@@ -246,6 +247,7 @@ if 1 == 2:
         cavalry_specialist = 53
         siege_weapon_specialist = 55
         flanking = 54
+        level = 56
 
         reverse_mapping = {}
         write = {}
