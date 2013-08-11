@@ -60,6 +60,12 @@ def get_unit_lines(unit):
 
 def show_unit_zoomed(screen, interface, unit):
 
+    print unit
+    print "const"
+    for attr in unit.constants:
+        print Trait.write[attr]
+
+
     unit_pic = get_unit_pic(interface, unit.image)
     pic = get_image(unit_pic, zoomed_unit_size)
 
@@ -119,7 +125,7 @@ def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate
 def draw_upgrade_options(screen, interface, unit):
 
     for i in range(2):
-        if isinstance(unit.upgrades[i], str):
+        if isinstance(unit.upgrades[0], str):
             upgrade_choice = unit.upgrades[i]
             upgrade = getattr(unitsmodule, upgrade_choice.replace(" ", "_"))()
             draw_upgrade_choice(screen, interface, i, upgrade)

@@ -310,7 +310,7 @@ class Controller(object):
 
         choice = self.get_input_upgrade(unit)
 
-        if isinstance(unit.upgrades[choice], str):
+        if isinstance(unit.upgrades[0], str):
             upgrade_choice = unit.upgrades[choice]
             upgrade = getattr(units_module, upgrade_choice.replace(" ", "_"))()
         else:
