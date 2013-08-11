@@ -125,11 +125,8 @@ def draw_upgrade_options(screen, interface, unit):
             draw_upgrade_choice(screen, interface, i, upgrade)
         else:
             upgrade = getattr(unitsmodule, unit.name.replace(" ", "_"))()
-            print "i, constants", i, unit.constants
             upgrade.constants = unit.constants.copy()
-            print unit.upgrades
             upgrade.constants = unit.upgrades[0][i]
-            print "uc", upgrade.constants
             draw_upgrade_choice(screen, interface, i, upgrade)
 
 
