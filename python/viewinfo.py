@@ -43,8 +43,8 @@ def get_unit_lines(unit):
             lines.append("+" + str(value) + " Defence against " + Type.write[type])
             lines.append("")
 
-    for trait in unit.constants:
-        lines.append(common.trait_descriptions[Trait.reverse_mapping[trait]])
+    for trait in unit.constants.keys():
+        lines.append(common.constant_traits[Trait.reverse_mapping[trait]])
         lines.append("")
 
     for ability in unit.abilities:
