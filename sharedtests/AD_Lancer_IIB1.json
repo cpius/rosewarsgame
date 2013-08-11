@@ -1,7 +1,7 @@
 {
     "type": "Is attack and defence correct",
-    "attack": 4,
-    "defence": 3,
+    "attack": 2,
+    "defence": 2,
     "action": {
         "start_at": "B2",
         "end_at": "B4",
@@ -11,14 +11,15 @@
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
-            "B2": "Lancer",
+            "B2": {
+				"name": "Lancer",
+				"lancing_II": 1,
+				"movement_skill": 1
+				},
             "A3": "Archer"
         },
         "player2_units": {
-            "B5": {
-                "name": "Berserker",
-                "big_shield": 1
-            },
+            "B5": "Archer",
             "E5": "Ballista"
 
         }

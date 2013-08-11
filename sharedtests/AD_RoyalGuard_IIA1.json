@@ -3,23 +3,23 @@
     "attack": 4,
     "defence": 3,
     "action": {
-        "start_at": "B2",
+        "start_at": "B4",
         "end_at": "B4",
-        "target_at": "B5",
+        "target_at": "A4",
         "move_with_attack": true
     },
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
-            "B2": "Lancer",
-            "A3": "Archer"
+            "B4": {
+				"name": "Royal_Guard",
+				"melee_expert": 1
+			},
+            "C2": "Knight"
         },
         "player2_units": {
-            "B5": {
-                "name": "Berserker",
-                "big_shield": 1
-            },
-            "E5": "Ballista"
+            "A4": "Knight",
+            "B5": "Ballista"
 
         }
     }

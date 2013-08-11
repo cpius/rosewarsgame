@@ -1,24 +1,24 @@
 {
     "type": "Is attack and defence correct",
-    "attack": 4,
+    "attack": 6,
     "defence": 3,
     "action": {
         "start_at": "B2",
         "end_at": "B4",
-        "target_at": "B5",
-        "move_with_attack": true
+        "target_at": "A4",
+        "move_with_attack": false
     },
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
-            "B2": "Lancer",
+            "B2": {
+				"name":"Lancer",
+				"cavalry_specialist": 1
+			},
             "A3": "Archer"
         },
         "player2_units": {
-            "B5": {
-                "name": "Berserker",
-                "big_shield": 1
-            },
+            "A4": "Knight",
             "E5": "Ballista"
 
         }
