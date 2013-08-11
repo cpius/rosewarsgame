@@ -112,7 +112,7 @@ class Fire_Archer(Unit):
     movement = 1
     range = 4
     type = Type.Infantry
-    upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
 
     constants = {Trait.fire_arrows: 1}
 
