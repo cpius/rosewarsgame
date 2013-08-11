@@ -1,0 +1,21 @@
+{
+    "defence": 1,
+    "description": "Test if Crossbow Archer works",
+    "attack": 3,
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": "Crossbow Archer",
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    },
+    "action": {
+        "start_at": "C3",
+        "target_at": "D4",
+        "end_at": "C3"
+    },
+    "type": "Is attack and defence correct"
+}

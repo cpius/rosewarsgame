@@ -115,13 +115,51 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if isinstance(unit_document, basestring):
-                units[position] = getattr(units_module, unit_document.replace(" ", "_"))()
+                name = unit_document.replace(" ", "_")
+                unit_class = getattr(units_module, name)
+                unit = unit_class()
+                units[position] = unit
+                unit.constants = unit.constants.copy()
+
             else:
-                unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
+                unit_name = unit_document["name"].replace(" ", "_")
+                unit = getattr(units_module, unit_name)()
+                unit.constants = unit.constants.copy()
+
                 for attribute, value in unit_document.items():
+                    attribute = attribute.replace(" ", "_")
                     if attribute == "zoc":
                         unit.zoc = {getattr(Type, type) for type in unit_document["zoc"]}
+                    elif attribute in constant_traits:
+                        attr = getattr(Trait, attribute)
+                        unit.constants[attr] = value
+
+                        if attr == Trait.lancing_II:
+                            unit.constants.pop(Trait.lancing, 0)
+                        elif attr == Trait.rage_II:
+                            unit.constants.pop(Trait.rage, 0)
+                        elif attr == Trait.flag_bearing_II_A or attr == Trait.flag_bearing_II_B:
+                            unit.constants.pop(Trait.flag_bearing, 0)
+                        elif attr == Trait.crusading_II:
+                            unit.constants.pop(Trait.crusading, 0)
+                        elif attr == Trait.attack_skill:
+                            unit.attack += value
+                        elif attr == Trait.defence_skill:
+                            unit.defence += value
+                        elif attr == Trait.range_skill:
+                            unit.range += value
+                        elif attr == Trait.movement_skill:
+                            unit.movement += value
+
+                    elif attribute in ability_descriptions:
+                        attr = getattr(Ability, attribute)
+                        if hasattr(unit, "constants"):
+                            unit.constants[attr] = value
+                        else:
+                            unit.constants = {attr: value}
+
                     elif attribute != "name":
+
                         attr = getattr(Trait, attribute)
                         unit.variables[attr] = value
 
@@ -150,8 +188,16 @@ class Gamestate:
             position = str(unit_position)
 
             document_variables = [attribute for attribute, value in unit.variables.items() if value]
-            if document_variables:
-                unit_dict = {Trait.reverse_mapping[attribute]: unit.variables[attribute] for attribute in document_variables}
+
+            base_unit = getattr(units_module, unit.name.replace(" ", "_"))()
+            document_constants = [attribute for attribute in unit.constants if attribute not in base_unit.constants]
+
+            if document_variables or document_constants:
+                unit_dict = {}
+                for attribute in document_variables:
+                    unit_dict[Trait.write[attribute]] = unit.variables[attribute]
+                for attribute in document_constants:
+                    unit_dict[Trait.write[attribute]] = unit.constants[attribute]
                 unit_dict["name"] = unit.name
                 units_dict[position] = unit_dict
             else:

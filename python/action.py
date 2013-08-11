@@ -90,6 +90,8 @@ class Action(object):
             else:
                 target = "unit"
             representation += " attack " + target + " on " + str(self.target_at)
+            if self.move_with_attack is None:
+                representation += ", unknown if move with attack"
 
         return representation
 

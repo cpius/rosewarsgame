@@ -5,7 +5,8 @@
     "action": {
         "start_at": "B2",
         "end_at": "A2",
-        "target_at": "A3"
+        "target_at": "A3",
+		"move_with_attack": 1
     },
     "gamestate": {
         "actions_remaining": 1,
