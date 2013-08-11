@@ -238,6 +238,14 @@ if 1 == 2:
         xp = 45
         pikeman_specialist = 46
         lost_extra_life = 47
+        attack_skill = 48
+        defence_skill = 49
+        range_skill = 50
+        movement_skill = 51
+        fire_arrows = 52
+        cavalry_specialist = 53
+        siege_weapon_specialist = 55
+        flanking = 54
 
         reverse_mapping = {}
         write = {}
