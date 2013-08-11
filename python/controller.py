@@ -309,8 +309,16 @@ class Controller(object):
             return
 
         choice = self.get_input_upgrade(unit)
-        upgraded_unit = getattr(units_module, unit.upgrades[choice].replace(" ", "_"))()
-        self.game.gamestate.player_units[position] = upgraded_unit
+
+        if isinstance(unit.upgrades[choice], str):
+            upgrade_choice = unit.upgrades[choice]
+            upgrade = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+        else:
+            upgrade = getattr(units_module, unit.name.replace(" ", "_"))()
+            upgrade.constants = unit.constants.copy()
+            upgrade.constants = unit.upgrades[0][choice]
+
+        self.game.gamestate.player_units[position] = upgrade
 
     def perform_action(self, action, outcome=None):
 
