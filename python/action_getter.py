@@ -69,7 +69,6 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
                     else:
                         yield {"end_at": position, "target_at": new_position}
 
-
     def rage():
         normal_attacks = [make_action(terms) for terms in attack_generator(moveset_with_leftover | {start_at})]
         rage_attacks = [make_action(terms) for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
