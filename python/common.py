@@ -173,7 +173,7 @@ ability_descriptions = {
 
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
-Trait = enum(*(trait for trait in trait_descriptions))
+Trait = enum(*(trait for trait in dict(constant_traits, **variable_traits)))
 
 Ability = enum(*(ability for ability in ability_descriptions))
 
