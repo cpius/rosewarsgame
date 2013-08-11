@@ -502,20 +502,22 @@ class Royal_Guard_II_A(Unit):
     constants = [Trait.defence_maneuverability, Trait.melee_expert]
 
 
-class Royal_Guard_II_B(Unit):
+class Berserker(Unit):
 
-    name = "Royal Guard II_B"
-    image = "Royal Guard"
-    attack = 3
-    defence = 3
+    name = "Berserker"
+    image = "Berserker"
+    attack = 5
+    defence = 1
     movement = 1
     range = 1
     attack_bonuses = {}
     defence_bonuses = {}
+    zoc = []
     type = Type.Infantry
-    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
+    upgrades = [[{Trait.big_shield: 1}, {Trait.attack_skill: 2}],
+                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
 
-    constants = [Trait.defence_maneuverability, Trait.tall_shield, Trait.melee_freeze]
+    constants = {Trait.berserking: 1}
 
 
 class Scout(Unit):
