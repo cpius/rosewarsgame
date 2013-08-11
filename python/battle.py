@@ -48,13 +48,20 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
     def sabotaged(defence):
         return 0 if any(defending_unit.has(effect) for effect in [Trait.sabotaged, Trait.sabotaged_II]) else defence
 
+    def cavalry_specialist():
+        return int(defending_unit.has(Trait.cavalry_specialist) and attacking_unit.type == Type.Cavalry)
+
+    def siege_weapon_specialist():
+        return int(defending_unit.has(Trait.siege_weapon_specialist) and attacking_unit.type == Type.Siege_Weapon)
+
     def adjust_for_high_attack(defence):
         return defence - attack_rating + 6 if attack_rating > 6 else defence
 
     defence_adjusters = ["big_shield", "crusading_II_defence", "defence_bonuses", "improved_weapons", "melee_expert",
-                         "pikeman_specialist", "tall_shield"]
+                         "pikeman_specialist", "tall_shield", "cavalry_specialist", "siege_weapon_specialist"]
 
     defence_setters = ["sharpshooting", "sabotaged"]
+
 
     defence = defending_unit.defence
 
@@ -103,10 +110,16 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
     def far_sighted():
         return - int(attacking_unit.has(Trait.far_sighted) and distance(action.end_at, action.target_at) < 4)
 
+    def cavalry_specialist():
+        return int(attacking_unit.has(Trait.cavalry_specialist) and defending_unit.type == Type.Cavalry)
+
+    def siege_weapon_specialist():
+        return int(attacking_unit.has(Trait.siege_weapon_specialist) and defending_unit.type == Type.Siege_Weapon)
+
     attack = attacking_unit.attack
 
     attack_adjusters = ["lancing", "crusading", "high_morale", "bribed", "improved_weapons", "attack_bonuses",
-                        "pikeman_specialist", "melee_expert"]
+                        "pikeman_specialist", "melee_expert", "cavalry_specialist", "siege_weapon_specialist"]
 
     attack += sum([locals()[factor]() for factor in attack_adjusters])
 
