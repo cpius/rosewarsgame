@@ -118,9 +118,19 @@ def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate
 
 def draw_upgrade_options(screen, interface, unit):
 
-    for i, upgrade in enumerate(unit.upgrades):
-        upgrade = getattr(unitsmodule, unit.upgrades[i].replace(" ", "_"))()
-        draw_upgrade_choice(screen, interface, i, upgrade)
+    for i in range(2):
+        if isinstance(unit.upgrades[i], str):
+            upgrade_choice = unit.upgrades[i]
+            upgrade = getattr(unitsmodule, upgrade_choice.replace(" ", "_"))()
+            draw_upgrade_choice(screen, interface, i, upgrade)
+        else:
+            upgrade = getattr(unitsmodule, unit.name.replace(" ", "_"))()
+            print "i, constants", i, unit.constants
+            upgrade.constants = unit.constants.copy()
+            print unit.upgrades
+            upgrade.constants = unit.upgrades[0][i]
+            print "uc", upgrade.constants
+            draw_upgrade_choice(screen, interface, i, upgrade)
 
 
 def draw_ask_about_ability(screen, interface, unit):
