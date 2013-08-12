@@ -59,8 +59,9 @@ class TestAI(unittest.TestCase):
             {
                 "D6":
                 {
-                    "name": "Knight",
-                    "xp": 1
+                    "name": "Ballista",
+                    "xp": 1,
+                    "attack_skill": 1
                 }
             },
             "player2_units":
