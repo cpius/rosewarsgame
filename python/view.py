@@ -62,7 +62,7 @@ class View(object):
         viewgame.draw_action(self.screen, self.interface, action, flip)
         self.refresh()
 
-    def draw_post_movement(self, action, gamestate):
+    def draw_post_movement(self, action):
         viewgame.draw_post_movement(self.screen, self.interface, action)
         self.refresh()
 

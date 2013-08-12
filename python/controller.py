@@ -336,7 +336,7 @@ class Controller(object):
             self.view.draw_action(action, outcome, self.game, flip=True)
 
         if action.move_with_attack:
-            self.view.draw_post_movement(action, self.game)
+            self.view.draw_post_movement(action)
 
         self.game.save(self.view, action, outcome)
 
