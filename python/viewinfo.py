@@ -146,7 +146,8 @@ def draw_ask_about_ability(screen, interface, unit):
     clear(screen, interface)
     lines = ["Select ability:"]
     for i, ability in enumerate(unit.abilities):
-        description_string = str(i + 1) + ". " + ability.title() + ": " + unit.descriptions[ability]
+        ability_name = Ability.reverse_mapping[ability]
+        description_string = str(i + 1) + ". " + ability_name + ": " + ability_descriptions[ability_name]
         lines += textwrap.wrap(description_string, interface.message_line_length)
 
     base = interface.ask_about_ability_location
