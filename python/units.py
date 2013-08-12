@@ -335,18 +335,17 @@ class Hobelar(Unit):
 
 
 class Ballista(Unit):
-    def __init__(self):
-        super(Ballista, self).__init__()
  
     name = "Ballista"
     image = "Ballista"
+    attack = 4
     defence = 1
     movement = 1
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    special_upgrades = [{Trait.fire_arrows: 1}]
+    #special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
