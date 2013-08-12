@@ -1,6 +1,7 @@
 from collections import defaultdict
 import settings
 from common import *
+from copy import *
 
 
 class Unit(object):
@@ -88,6 +89,35 @@ class Unit(object):
 
     def is_bribed(self):
         return self.has(Trait.bribed) or self.has(Trait.bribed_II)
+
+    def get_upgrade_choice(self, choice_number):
+        print self
+        if getattr(self, "upgrades"):
+            upgrade_name = self.upgrades[choice_number].replace(" ", "_")
+            unit = globals()[upgrade_name]()
+            print unit.variables
+            return unit
+        else:
+            if getattr(self, "special_upgrades"):
+                if len(self.special_upgrades) == 1:
+                    choices = [self.special_upgrades[0], self.final_upgrades[0]]
+                else:
+                    choices = self.special_upgrades
+            else:
+                choices = self.final_upgrades
+
+            print choices
+            choice = choices[choice_number]
+            print choice
+
+            upgrade = globals()[self.name.replace(" ", "_")]()
+            print upgrade.variables
+            upgrade.constants = self.constants.copy()
+            print "choice", choice
+            for trait, value in choice.items():
+                upgrade.upgrade_trait(trait, value)
+
+            return upgrade
 
 
 class Archer(Unit):
