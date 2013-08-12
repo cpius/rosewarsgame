@@ -22,7 +22,6 @@ class Unit(object):
 
     @property
     def attack(self):
-        print "!"
         attack = self.base_attack
         if Trait.attack_skill in self.constants:
             return attack + self.constants[Trait.attack_skill]
