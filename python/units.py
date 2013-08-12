@@ -50,6 +50,8 @@ class Unit(object):
 
     def remove(self, attribute):
         self.variables[attribute] = 0
+        if attribute in self.constants:
+            del self.constants[attribute]
 
     def decrement(self, attribute):
         self.variables[attribute] = max(0, self.variables[attribute] - 1)
