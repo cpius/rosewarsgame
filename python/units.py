@@ -135,7 +135,11 @@ class Unit(object):
         upgrade = globals()[self.name.replace(" ", "_")]()
         upgrade.constants = self.constants.copy()
         for trait, value in choice.items():
-            upgrade.upgrade_trait(trait, value)
+            upgrade.upgrade_trait(trait)
+            if trait in upgrade.constants:
+                upgrade.constants[trait] += value
+            else:
+                upgrade.constants[trait] = value
 
         return upgrade
 
