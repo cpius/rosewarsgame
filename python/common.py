@@ -345,5 +345,9 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-def get_trait_names_dict(d):
-    return dict((Trait.name[key], value) for key, value in d.items())
+def get_trait_names_dict(dictionary):
+    return dict((Trait.name[key], value) for key, value in dictionary.items())
+
+
+def get_trait_enum_dict(dictionary):
+    return dict((getattr(Trait, key), value) for key, value in dictionary.items())
