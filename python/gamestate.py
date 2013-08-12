@@ -153,23 +153,6 @@ class Gamestate:
                         attr = getattr(Trait, attribute)
                         unit.constants[attr] = value
 
-                        if attr == Trait.lancing_II:
-                            unit.constants.pop(Trait.lancing, 0)
-                        elif attr == Trait.rage_II:
-                            unit.constants.pop(Trait.rage, 0)
-                        elif attr == Trait.flag_bearing_II_A or attr == Trait.flag_bearing_II_B:
-                            unit.constants.pop(Trait.flag_bearing, 0)
-                        elif attr == Trait.crusading_II:
-                            unit.constants.pop(Trait.crusading, 0)
-                        elif attr == Trait.attack_skill:
-                            unit.attack += value
-                        elif attr == Trait.defence_skill:
-                            unit.defence += value
-                        elif attr == Trait.range_skill:
-                            unit.range += value
-                        elif attr == Trait.movement_skill:
-                            unit.movement += value
-
                     elif attribute in ability_descriptions:
                         attr = getattr(Ability, attribute)
                         if hasattr(unit, "constants"):
