@@ -44,8 +44,10 @@ def get_unit_lines(unit):
             lines.append("")
 
     for trait in unit.constants.keys():
-        lines.append(common.constant_traits[Trait.name[trait]])
-        lines.append("")
+        if trait not in [Trait.level, Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
+            lines.append(common.constant_traits[Trait.name[trait]])
+            lines.append("")
+
 
     for ability in unit.abilities:
         lines.append(common.ability_descriptions[Ability.name[ability]])
@@ -126,21 +128,8 @@ def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate
 def draw_upgrade_options(screen, interface, unit):
 
     for i in range(2):
-        if isinstance(unit.upgrades[0], str):
-            upgrade_choice = unit.upgrades[i]
-            upgrade = getattr(unitsmodule, upgrade_choice.replace(" ", "_"))()
-            draw_upgrade_choice(screen, interface, i, upgrade)
-        else:
-            upgrade = getattr(unitsmodule, unit.name.replace(" ", "_"))()
-            upgrade.constants = unit.constants.copy()
-            for upgrade_trait, value in unit.upgrades[0][i].items():
-                upgrade.constants[upgrade_trait] = value
-            if Trait.level in upgrade.constants:
-                upgrade.constants[Trait.level] += 1
-            else:
-                upgrade.constants[Trait.level] = 2
-
-            draw_upgrade_choice(screen, interface, i, upgrade)
+        upgrade = unit.get_upgrade_choice(i)
+        draw_upgrade_choice(screen, interface, i, upgrade)
 
 
 def draw_ask_about_ability(screen, interface, unit):
