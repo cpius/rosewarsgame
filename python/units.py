@@ -22,6 +22,9 @@ class Unit(object):
     movement = None
     type = None
     level = 0
+    upgrades = []
+    special_upgrades = []
+    final_upgrades = []
     custom_ability = {Ability.poison: "poison",
                       Ability.poison_II: "poison_II",
                       Ability.improve_weapons_II_A: "improve_weapons_II_A",
