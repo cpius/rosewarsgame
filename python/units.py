@@ -335,11 +335,10 @@ class Hobelar(Unit):
 
 
 class Ballista(Unit):
-    def __init__(self):
-        super(Ballista, self).__init__()
  
     name = "Ballista"
     image = "Ballista"
+    attack = 4
     defence = 1
     movement = 1
     range = 3
