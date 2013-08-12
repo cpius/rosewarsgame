@@ -19,11 +19,13 @@ class TestAI(unittest.TestCase):
 
     def test_ActionDocument_WhenSavingAndLoading_ThenItShouldBeTheSame(self):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
-        action = action_getter.get_actions(gamestate)[3]
+        actions = action_getter.get_actions(gamestate)
+        action = actions[0]
         action_document = action.to_document()
-        same_action = Action.from_document(action_document)
+        same_action = Action.from_document(gamestate.all_units(), action_document)
         same_action_document = same_action.to_document()
 
+        action_document["created_at"] = same_action_document["created_at"]
         self.assertEquals(action, same_action)
         self.assertEquals(action_document, same_action_document)
 
@@ -57,8 +59,9 @@ class TestAI(unittest.TestCase):
             {
                 "D6":
                 {
-                    "name": "Knight",
-                    "xp": 1
+                    "name": "Ballista",
+                    "xp": 1,
+                    "attack_skill": 1
                 }
             },
             "player2_units":
