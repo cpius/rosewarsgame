@@ -107,6 +107,9 @@ class Controller(object):
             action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
             if action in self.game.gamestate.get_actions():
                 self.perform_action(action)
+            else:
+                self.clear_move()
+                self.view.draw_game(self.game)
 
         elif self.selecting_active_unit(position):
             self.start_at = position
@@ -145,6 +148,10 @@ class Controller(object):
             else:
                 self.clear_move()
                 self.view.draw_game(self.game)
+
+        elif self.start_at and self.start_at == position:
+            self.clear_move()
+            self.view.draw_game(self.game)
 
     def possible_melee_target(self, action, position):
         same_start = action.start_at == self.start_at
@@ -416,7 +423,11 @@ class Controller(object):
         self.exit_game()
 
     def selecting_active_unit(self, position):
-        return position in self.game.gamestate.player_units
+        selecting_player_unit = position in self.game.gamestate.player_units
+        if self.start_at is None:
+            return selecting_player_unit
+        else:
+            return self.start_at != position and selecting_player_unit
 
     def selecting_ability_target(self, position):
         if not self.start_at:
