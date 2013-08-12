@@ -28,32 +28,19 @@ class Gamestate:
         return all_units
 
     def do_action(self, action, outcome):
-        outcome = action_doer.do_action(self, action, outcome)
+        action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
-        if self.actions_remaining > 0:
+        if self.actions_remaining > 0 or self.extra_action:
             self.available_actions = action_getter.get_actions(self)
             if not self.available_actions:
                 self.actions_remaining = 0
-
-        return outcome
 
     def initialize_turn(self):
         initializer.initialize_turn(self)
 
     def get_actions(self):
-        if getattr(self, "extra_action"):
-            actions = action_getter.get_extra_actions(self)
-        elif self.actions_remaining == 1 and hasattr(self, "available_actions"):
-            actions = self.available_actions
-        else:
-            actions = action_getter.get_actions(self)
-
-        for action in actions:
-            if action.is_attack():
-                action.chance_of_win = ai_methods.chance_of_win(self, action.unit, action.target_unit, action)
-
-        return actions
+        return self.available_actions
 
     def copy(self):
         gamestate_document = self.to_document()
@@ -69,7 +56,7 @@ class Gamestate:
                 self.players[player].ai = "Network"
 
     def set_available_actions(self):
-        self.available_actions = self.get_actions()
+        self.available_actions = action_getter.get_actions(self)
 
     @property
     def player_units(self):
