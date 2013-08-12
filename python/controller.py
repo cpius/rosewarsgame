@@ -62,35 +62,9 @@ class Controller(object):
     def from_replay(cls, view, savegame_file):
         controller = cls(view)
         savegame_document = json.loads(open(savegame_file).read())
-        gamestate_document = savegame_document["initial_gamestate"]
-        gamestate = Gamestate.from_document(gamestate_document)
-        action_count = int(savegame_document["action_count"])
-
-        for action_number in range(1, action_count + 1):
-
-            action_document = savegame_document[str(action_number)]
-
-            action = Action.from_document(gamestate.all_units(), action_document)
-
-            outcome = None
-            if action.is_attack():
-                outcome_document = savegame_document[str(action_number) + "_outcome"]
-                outcome = Outcome.from_document(outcome_document)
-                if str(action_number) + "_options" in savegame_document:
-                    options = savegame_document[str(action_number) + "_options"]
-                    if "move_with_attack" in options:
-                        action.move_with_attack = bool(options["move_with_attack"])
-
-            gamestate.do_action(action, outcome)
-
-            if gamestate.is_turn_done():
-                gamestate.shift_turn()
-
-        controller.gamestate = gamestate
-
+        controller.gamestate = Gamestate.from_log_document(savegame_document)
         players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
-        controller.game = Game(players, gamestate)
-
+        controller.game = Game(players, controller.gamestate)
         controller.clear_move()
 
         return controller

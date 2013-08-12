@@ -6,6 +6,8 @@ import ai_module
 import units as units_module
 import json
 from common import *
+from action import Action
+from outcome import Outcome
 
 
 class Gamestate:
@@ -20,6 +22,34 @@ class Gamestate:
         self.extra_action = extra_action
         self.action_count = 0
         self.created_at = created_at
+
+    @classmethod
+    def from_log_document(cls, log_document):
+        gamestate_document = log_document["initial_gamestate"]
+        gamestate = cls.from_document(gamestate_document)
+        action_count = int(log_document["action_count"])
+
+        for action_number in range(1, action_count + 1):
+
+            action_document = log_document[str(action_number)]
+
+            action = Action.from_document(gamestate.all_units(), action_document)
+
+            outcome = None
+            if action.is_attack():
+                outcome_document = log_document[str(action_number) + "_outcome"]
+                outcome = Outcome.from_document(outcome_document)
+                if str(action_number) + "_options" in log_document:
+                    options = log_document[str(action_number) + "_options"]
+                    if "move_with_attack" in options:
+                        action.move_with_attack = bool(options["move_with_attack"])
+
+            gamestate.do_action(action, outcome)
+
+            if gamestate.is_turn_done():
+                gamestate.shift_turn()
+
+        return gamestate
 
     def all_units(self):
         all_units = self.units[0].copy()
