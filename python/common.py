@@ -343,3 +343,7 @@ class memoized(object):
 
     def __get__(self, obj):
         return functools.partial(self.__call__, obj)
+
+
+def get_trait_names_dict(d):
+    return dict((Trait.name[key], value) for key, value in d.items())
