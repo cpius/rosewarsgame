@@ -1,7 +1,6 @@
 from collections import defaultdict
 import settings
 from common import *
-from copy import *
 
 
 class Unit(object):
@@ -116,33 +115,29 @@ class Unit(object):
             self.remove(Trait.rage)
 
     def get_upgrade_choice(self, choice_number):
-        print self
         if getattr(self, "upgrades"):
-            upgrade_name = self.upgrades[choice_number].replace(" ", "_")
-            unit = globals()[upgrade_name]()
-            print unit.variables
-            return unit
-        else:
-            if getattr(self, "special_upgrades"):
-                if len(self.special_upgrades) == 1:
-                    choices = [self.special_upgrades[0], self.final_upgrades[0]]
-                else:
-                    choices = self.special_upgrades
+            return self.upgrades[choice_number].replace(" ", "_")
+
+        if getattr(self, "special_upgrades"):
+            if len(self.special_upgrades) == 1:
+                choices = [self.special_upgrades[0], self.final_upgrades[0]]
             else:
-                choices = self.final_upgrades
+                choices = self.special_upgrades
+        else:
+            choices = self.final_upgrades
 
-            print choices
-            choice = choices[choice_number]
-            print choice
+        return choices[choice_number]
 
-            upgrade = globals()[self.name.replace(" ", "_")]()
-            print upgrade.variables
-            upgrade.constants = self.constants.copy()
-            print "choice", choice
-            for trait, value in choice.items():
-                upgrade.upgrade_trait(trait, value)
+    def get_upgraded_unit(self, choice):
+        if getattr(self, "upgrades"):
+            return globals()[choice]()
 
-            return upgrade
+        upgrade = globals()[self.name.replace(" ", "_")]()
+        upgrade.constants = self.constants.copy()
+        for trait, value in choice.items():
+            upgrade.upgrade_trait(trait, value)
+
+        return upgrade
 
 
 class Archer(Unit):
