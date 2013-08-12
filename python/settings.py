@@ -42,4 +42,3 @@ if os.path.exists("settings_user.py"):
     import settings_user
     zoom = settings_user.zoom
     interface = interfaces.Rectangles(zoom)
-
