@@ -28,8 +28,7 @@ class Log():
             return player_color, 2
 
 
-def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
-
+def draw_log(logbook, screen, interface, game, action=None, outcome=None):
     if action:
         log = Log(action, outcome, game.gamestate.get_actions_remaining(), game.current_player().color)
         logbook.append(log)
@@ -106,10 +105,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
 
 
 def draw_attack(screen, interface, action, outcome, base, symbol_location, log, game):
-
-    outcome_string = ""
-    if game:
-        outcome_string = action.outcome_string(outcome.for_position(action.target_at), game.gamestate)
+    outcome_string = action.outcome_string(outcome.for_position(action.target_at), game.gamestate)
 
     draw_outcome(screen, interface, outcome_string, *base)
 
