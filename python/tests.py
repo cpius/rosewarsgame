@@ -10,7 +10,7 @@ import common
 
 class TestAI(unittest.TestCase):
 
-    def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
+    def test_GamestateDocument_WhenSavingAndLoading_ThenItShouldBeTheSame(self):
         document = self.get_test_gamestate_document()
         gamestate = Gamestate.from_document(document)
         same_document = gamestate.to_document()
@@ -20,22 +20,24 @@ class TestAI(unittest.TestCase):
     def test_ActionDocument_WhenSavingAndLoading_ThenItShouldBeTheSame(self):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
         actions = action_getter.get_actions(gamestate)
-        action = actions[0]
-        action_document = action.to_document()
-        same_action = Action.from_document(gamestate.all_units(), action_document)
-        same_action_document = same_action.to_document()
+        for action in actions:
+            action_document = action.to_document()
+            same_action = Action.from_document(gamestate.all_units(), action_document)
+            same_action.created_at = action.created_at
+            same_action_document = same_action.to_document()
 
-        action_document["created_at"] = same_action_document["created_at"]
-        self.assertEquals(action, same_action)
-        self.assertEquals(action_document, same_action_document)
+            self.assertEquals(action, same_action)
+            self.assertEquals(action_document, same_action_document)
 
     def test_IfBoardIsFlippedTwoTimes_ThenItShouldBeTheSame(self):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
         gamestate_copy = Gamestate.from_document(self.get_test_gamestate_document())
+        gamestate_copy.created_at = gamestate.created_at
         gamestate_copy.flip_units()
         gamestate_copy.flip_units()
 
-        self.assertEquals(gamestate, gamestate_copy)
+        self.assert_equal_documents(gamestate.to_document(), gamestate_copy.to_document())
+        self.assertEqual(gamestate, gamestate_copy)
 
     def test_pymongo_WhenAGameIsInTheDatabase_ThenWeShouldBeAbleToFindIt(self):
         client = MongoClient(host="server.rosewarsgame.com")
@@ -55,19 +57,16 @@ class TestAI(unittest.TestCase):
 
         return {
             "actions_remaining": 1,
-            "player1_units":
-            {
-                "D6":
-                {
+            "player1_units": {
+                "D6": {
                     "name": "Ballista",
                     "xp": 1,
                     "attack_skill": 1
-                }
+                },
+                "D8": "Saboteur"
             },
-            "player2_units":
-            {
-                "C7":
-                {
+            "player2_units": {
+                "C7": {
                     "name": "Royal Guard",
                     "xp": 3
                 },

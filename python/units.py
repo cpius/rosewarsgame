@@ -10,7 +10,7 @@ class Unit(object):
     name = ""
     zoc = []
     abilities = []
-    xp_to_upgrade = 1
+    xp_to_upgrade = 4
     upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}

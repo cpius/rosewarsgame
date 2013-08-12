@@ -41,16 +41,31 @@ class Gamestate:
 
             action = Action.from_document(gamestate.all_units(), action_document)
 
+            options = None
+            if str(action_number) + "_options" in log_document:
+                options = log_document[str(action_number) + "_options"]
+
             outcome = None
             if action.is_attack():
                 outcome_document = log_document[str(action_number) + "_outcome"]
                 outcome = Outcome.from_document(outcome_document)
-                if str(action_number) + "_options" in log_document:
-                    options = log_document[str(action_number) + "_options"]
-                    if "move_with_attack" in options:
-                        action.move_with_attack = bool(options["move_with_attack"])
+                if options and "move_with_attack" in options:
+                    action.move_with_attack = bool(options["move_with_attack"])
 
             gamestate.do_action(action, outcome)
+
+            if options and "upgrade" in options:
+                upgrade_choice = options["upgrade"]
+                if getattr(action.unit, "upgrades"):
+                    upgrade_choice = action.unit.upgrades[upgrade_choice]
+                    upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+                else:
+                    upgrade_choice = get_trait_enum_dict(upgrade_choice)
+                    upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
+                if action.target_at and action.target_at in gamestate.player_units:
+                    gamestate.player_units[action.target_at] = upgraded_unit
+                else:
+                    gamestate.player_units[action.end_at] = upgraded_unit
 
         return gamestate
 
