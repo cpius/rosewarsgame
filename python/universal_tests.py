@@ -28,7 +28,7 @@ class UniversalTestCase(TestCase):
                 expected = test_document["result"]
                 self.does_action_exist(gamestate, action, expected)
 
-            if test_document["type"] == "Is attack and defence correct":
+            elif test_document["type"] == "Is attack and defence correct":
                 gamestate = Gamestate.from_document(test_document["gamestate"])
                 action = Action.from_document(gamestate.all_units(), test_document["action"])
                 attack = test_document["attack"]
@@ -36,7 +36,7 @@ class UniversalTestCase(TestCase):
 
                 self.is_attack_and_defence_correct(gamestate, action, attack, defence)
 
-            if test_document["type"] == "Is outcome correct":
+            elif test_document["type"] == "Is outcome correct":
                 gamestate = Gamestate.from_document(test_document["pre_gamestate"])
                 expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
                 action = Action.from_document(gamestate.all_units(), test_document["action"])
@@ -45,8 +45,28 @@ class UniversalTestCase(TestCase):
                     outcome = Outcome.from_document(test_document["outcome"])
 
                 self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
+
+            elif test_document["type"] == "Does turn shift work":
+                gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+                expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+
+                self.is_turn_shift_correct(gamestate, expected_gamestate)
+
+            else:
+                self.assertFalse(True)
+
         except ValueError as error:
             self.assertTrue(False, "Failed to load test document: " + self.testcase_file + "\n\n" + error.message)
+
+    def is_turn_shift_correct(self, gamestate, expected_gamestate):
+
+        gamestate.shift_turn()
+        gamestate.flip_units()
+
+        actual_gamestate_document = gamestate.to_document()
+        expected_gamestate_document = expected_gamestate.to_document()
+
+        self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
 
     def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)
