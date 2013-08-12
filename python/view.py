@@ -35,10 +35,10 @@ class View(object):
     def clear_right(self):
         pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
 
-    def draw_game(self, game, start_position=None, actions=()):
-        viewgame.draw_game(self.screen, self.interface, game, start_position, actions)
+    def draw_game(self, game, start_at=None, actions=()):
+        viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
         self.clear_right()
-        self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface)
+        self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
         self.refresh()
 
     def show_unit_zoomed(self, unit):
@@ -58,11 +58,11 @@ class View(object):
         self.refresh()
 
     def draw_action(self, action, outcome, game, flip=False):
-        viewlog.draw_log(self.logbook, self.screen, self.interface, action, outcome, game)
+        viewlog.draw_log(self.logbook, self.screen, self.interface, game, action, outcome)
         viewgame.draw_action(self.screen, self.interface, action, flip)
         self.refresh()
 
-    def draw_post_movement(self, action, gamestate):
+    def draw_post_movement(self, action):
         viewgame.draw_post_movement(self.screen, self.interface, action)
         self.refresh()
 
@@ -79,8 +79,11 @@ class View(object):
         self.refresh()
 
     def draw_tutorial_message(self, message, horizontal_position=17):
-        show_lines(self.screen, message, 47 * settings.zoom, self.interface.line_distances["small"], self.interface.fonts["small"],
-                   400 * settings.zoom, horizontal_position * settings.zoom)
+        line_distances = self.interface.line_distances["small"]
+        fonts = self.interface.fonts["small"]
+        x_coordinate = 400 * settings.zoom
+        y_coordinate = horizontal_position * settings.zoom
+        show_lines(self.screen, message, 47 * settings.zoom, line_distances, fonts, x_coordinate, y_coordinate)
         self.refresh()
 
     def draw_game_tutorial(self, game):

@@ -298,6 +298,14 @@ def surrounding_friendly_units(position, units):
     return (units[pos] for pos in position.surrounding_tiles() if pos in units)
 
 
+def assert_equal_documents(testcase, expected, actual, testcase_file):
+    message = "Wrong document for " + testcase_file + "\n\n"
+    message += "Expected:\n" + document_to_string(expected)
+    message += "\nActual:\n" + document_to_string(actual)
+
+    testcase.assertEqual(expected, actual, message)
+
+
 class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
