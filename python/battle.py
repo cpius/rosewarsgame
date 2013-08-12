@@ -62,7 +62,6 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
 
     defence_setters = ["sharpshooting", "sabotaged"]
 
-
     defence = defending_unit.defence
 
     defence += sum([locals()[factor]() for factor in defence_adjusters])
