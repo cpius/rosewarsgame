@@ -134,19 +134,20 @@ class Controller(object):
             else:
                 ability = self.selected_unit.abilities[0]
 
-            action = Action(self.game.gamestate.all_units(), self.start_position, target_at=position, ability=ability)
-            self.perform_action(action)
+            action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
+            if action in self.game.gamestate.get_actions():
+                self.perform_action(action)
 
         elif self.selecting_active_unit(position):
-            self.start_position = position
-            self.selected_unit = self.game.gamestate.player_units[self.start_position]
-            illustrate_actions = [action for action in self.game.gamestate.get_actions() if
-                                  action.start_at == position]
+            self.start_at = position
+            self.selected_unit = self.game.gamestate.player_units[self.start_at]
+            illustrate_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
             self.view.draw_game(self.game, position, illustrate_actions)
 
         elif self.selecting_ranged_target(position):
-            action = Action(self.game.gamestate.all_units(), self.start_position, target_at=position)
-            self.perform_action(action)
+            action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position)
+            if action in self.game.gamestate.get_actions():
+                self.perform_action(action)
 
         elif self.selecting_melee_target(position):
             all_actions = self.game.gamestate.get_actions()
@@ -154,9 +155,6 @@ class Controller(object):
             possible_actions = [action for action in all_actions if self.possible_melee_target(action, position)]
 
             if not possible_actions:
-                self.view.draw_message("Action not possible")
-                self.clear_move()
-                self.view.draw_game(self.game)
                 return
 
             if len(possible_actions) == 1:
@@ -171,11 +169,12 @@ class Controller(object):
             self.perform_action(action)
 
         elif self.selecting_move(position):
-            action = Action(self.game.gamestate.all_units(), self.start_position, end_at=position)
-            self.perform_action(action)
+            action = Action(self.game.gamestate.all_units(), self.start_at, end_at=position)
+            if action in self.game.gamestate.get_actions():
+                self.perform_action(action)
 
     def possible_melee_target(self, action, position):
-        same_start = action.start_at == self.start_position
+        same_start = action.start_at == self.start_at
         same_target = action.target_at and action.target_at == position
         return same_start and same_target and not action.move_with_attack
 
@@ -200,14 +199,14 @@ class Controller(object):
                 self.exit_game()
 
     def right_click(self, position):
-        if not self.start_position:
+        if not self.start_at:
             self.show_unit(position)
         else:
             if position in self.game.gamestate.enemy_units:
                 self.show_attack(position)
 
     def clear_move(self):
-        self.start_position = self.end_position = self.selected_unit = None
+        self.start_at = self.end_position = self.selected_unit = None
 
     def run_game(self):
 
@@ -410,8 +409,8 @@ class Controller(object):
         return is_successful and action.unit.is_melee() and not is_destination_occupied
 
     def show_attack(self, attack_position):
-        action = Action(self.game.gamestate.all_units(), self.start_position, target_at=attack_position)
-        player_unit = self.game.gamestate.player_units[self.start_position]
+        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
+        player_unit = self.game.gamestate.player_units[self.start_at]
 
         opponent_unit = self.game.gamestate.enemy_units[attack_position]
         self.view.show_attack(self.game.gamestate, action, player_unit, opponent_unit)
@@ -447,7 +446,7 @@ class Controller(object):
         return position in self.game.gamestate.player_units
 
     def selecting_ability_target(self, position):
-        if not self.start_position:
+        if not self.start_at:
             return False
 
         return position in self.game.gamestate.all_units() and self.selected_unit.abilities
@@ -456,22 +455,22 @@ class Controller(object):
         pass
 
     def deselecting_active_unit(self, position):
-        return self.start_position and self.start_position == position
+        return self.start_at and (self.start_at == position or position not in self.game.gamestate.all_units())
 
     def selecting_ranged_target(self, position):
-        if not self.start_position:
+        if not self.start_at:
             return False
 
         return position in self.game.gamestate.enemy_units and self.selected_unit.is_ranged()
 
     def selecting_melee_target(self, position):
-        if not self.start_position:
+        if not self.start_at:
             return False
 
         return position in self.game.gamestate.enemy_units and self.selected_unit.is_melee()
 
     def selecting_move(self, position):
-        return self.start_position and position not in self.game.gamestate.all_units()
+        return self.start_at and position not in self.game.gamestate.all_units()
 
 
 def within(point, area):
