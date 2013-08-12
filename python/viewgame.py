@@ -70,31 +70,33 @@ def draw_action_dice(screen, interface, action, roll):
 
 
 def draw_action(screen, interface, action, flip=False, roll=None):
-
     if flip:
-        proper_action = flip_action(action)
+        aligned_action = flip_action(action)
     else:
-        proper_action = action
+        aligned_action = action
 
     coordinates = interface.coordinates
 
-    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(proper_action.start_at), 10)
-    draw_line(screen, interface, proper_action.start_at, proper_action.end_at)
+    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(aligned_action.start_at), 10)
+    draw_line(screen, interface, aligned_action.start_at, aligned_action.end_at)
 
-    if proper_action.is_attack():
-        draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
+    if aligned_action.is_attack():
+        draw_line(screen, interface, aligned_action.end_at, aligned_action.target_at)
 
         if roll:
-            draw_action_dice(screen, interface, action, roll)
+            draw_action_dice(screen, interface, aligned_action, roll)
+        else:
+            pic = get_image(interface.attack_icon)
+            screen.blit(pic, coordinates["battle"].get(aligned_action.target_at))
 
-    elif proper_action.is_ability():
-        draw_line(screen, interface, proper_action.end_at, proper_action.target_at)
+    elif aligned_action.is_ability():
+        draw_line(screen, interface, aligned_action.end_at, aligned_action.target_at)
         pic = get_image(interface.ability_icon)
-        screen.blit(pic, coordinates["battle"].get(proper_action.target_at))
+        screen.blit(pic, coordinates["battle"].get(aligned_action.target_at))
 
     else:
         pic = get_image(interface.move_icon)
-        screen.blit(pic, coordinates["battle"].get(proper_action.end_at))
+        screen.blit(pic, coordinates["battle"].get(aligned_action.end_at))
 
 
 def draw_line(screen, interface, start_position, end_position):
