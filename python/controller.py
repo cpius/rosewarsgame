@@ -305,9 +305,6 @@ class Controller(object):
         self.game.gamestate.player_units[position] = upgrade
 
     def perform_action(self, action, outcome=None):
-
-        self.draw_action = True
-
         self.view.draw_game(self.game)
 
         if self.game.current_player().intelligence == "Human":
