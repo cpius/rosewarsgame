@@ -55,19 +55,16 @@ class TestAI(unittest.TestCase):
 
         return {
             "actions_remaining": 1,
-            "player1_units":
-            {
-                "D6":
-                {
+            "player1_units": {
+                "D6": {
                     "name": "Ballista",
                     "xp": 1,
                     "attack_skill": 1
-                }
+                },
+                "D8": "Saboteur"
             },
-            "player2_units":
-            {
-                "C7":
-                {
+            "player2_units": {
+                "C7": {
                     "name": "Royal Guard",
                     "xp": 3
                 },
