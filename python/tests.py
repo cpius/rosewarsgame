@@ -10,7 +10,7 @@ import common
 
 class TestAI(unittest.TestCase):
 
-    def test_GamestateDocument_WhenSavingAndLoadingDocument_ThenItShouldBeTheSame(self):
+    def test_GamestateDocument_WhenSavingAndLoading_ThenItShouldBeTheSame(self):
         document = self.get_test_gamestate_document()
         gamestate = Gamestate.from_document(document)
         same_document = gamestate.to_document()
