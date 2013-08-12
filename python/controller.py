@@ -424,12 +424,6 @@ class Controller(object):
 
         return position in self.game.gamestate.all_units() and self.selected_unit.abilities
 
-    def selecting_attack_target_unit(self, position):
-        pass
-
-    def deselecting_active_unit(self, position):
-        return self.start_at and (self.start_at == position or position not in self.game.gamestate.all_units())
-
     def selecting_ranged_target(self, position):
         if not self.start_at:
             return False
