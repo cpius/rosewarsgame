@@ -18,12 +18,6 @@ class ReplayTestCase(TestCase):
         replay_document = json.loads(open(self.testcase_file).read())
         replay_gamestate = Gamestate.from_log_document(replay_document)
 
-        if replay_gamestate.is_turn_done():
-            print "turn is done"
-            replay_gamestate.shift_turn()
-        else:
-            print "turn is not done"
-
         gamestate_document = replay_gamestate.to_document()
 
         common.assert_equal_documents(self, gamestate_document, replay_document["gamestate"], self.testcase_file)
