@@ -345,7 +345,7 @@ class Ballista(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    special_upgrades = [{Trait.fire_arrows: 1}]
+    #special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
