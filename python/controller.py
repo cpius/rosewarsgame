@@ -122,11 +122,8 @@ class Controller(object):
             self.perform_action(extra_action)
 
     def left_click(self, position):
-        if self.deselecting_active_unit(position):
-            self.clear_move()
-            self.view.draw_game(self.game)
 
-        elif self.selecting_ability_target(position):
+        if self.selecting_ability_target(position):
             if len(self.selected_unit.abilities) > 1:
                 index = self.get_input_abilities(self.selected_unit)
 
@@ -172,6 +169,9 @@ class Controller(object):
             action = Action(self.game.gamestate.all_units(), self.start_at, end_at=position)
             if action in self.game.gamestate.get_actions():
                 self.perform_action(action)
+            else:
+                self.clear_move()
+                self.view.draw_game(self.game)
 
     def possible_melee_target(self, action, position):
         same_start = action.start_at == self.start_at
