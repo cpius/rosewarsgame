@@ -22,7 +22,6 @@ class Unit(object):
 
     @property
     def attack(self):
-        print "!"
         attack = self.base_attack
         if Trait.attack_skill in self.constants:
             return attack + self.constants[Trait.attack_skill]
@@ -370,8 +369,8 @@ class Ballista(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    #special_upgrades = [{Trait.fire_arrows: 1}]
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]
+    special_upgrades = [{Trait.fire_arrows: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
 class Catapult(Unit):
