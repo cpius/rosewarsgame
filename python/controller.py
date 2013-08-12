@@ -326,6 +326,7 @@ class Controller(object):
                 self.game.save_option("move_with_attack", move_with_attack)
 
                 if move_with_attack:
+                    self.view.draw_post_movement(action)
                     self.game.gamestate.move_melee_unit_to_target_tile(action)
 
         else:
@@ -334,9 +335,6 @@ class Controller(object):
 
             self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
-
-        if action.move_with_attack:
-            self.view.draw_post_movement(action)
 
         self.game.save(self.view, action, outcome)
 
