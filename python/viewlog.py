@@ -11,10 +11,9 @@ base_height = 48
 
 
 class Log():
-    def __init__(self, action, outcome, turn, action_number, player_color):
+    def __init__(self, action, outcome, action_number, player_color):
         self.action = action
         self.outcome = outcome
-        self.turn = turn
         self.action_number = action_number
         self.player_color = player_color
 
@@ -32,7 +31,7 @@ class Log():
 def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
 
     if action:
-        log = Log(action, outcome, game.turn, game.gamestate.get_actions_remaining(), game.current_player().color)
+        log = Log(action, outcome, game.gamestate.get_actions_remaining(), game.current_player().color)
         logbook.append(log)
 
     if len(logbook) > maximum_logs:
