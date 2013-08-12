@@ -90,6 +90,26 @@ class Unit(object):
     def is_bribed(self):
         return self.has(Trait.bribed) or self.has(Trait.bribed_II)
 
+    def upgrade_trait(self, trait, value):
+        if trait == Trait.attack_skill:
+            self.attack += value
+        elif trait == Trait.defence_skill:
+            self.defence += value
+        elif trait == Trait.range_skill:
+            self.range += value
+        elif trait == Trait.movement_skill:
+            self.movement += value
+        elif trait == Trait.attack_cooldown_II:
+            self.remove(Trait.attack_cooldown)
+        elif trait == Trait.crusading_II:
+            self.remove(Trait.crusading)
+        elif trait in [Trait.flag_bearing_II_A, Trait.flag_bearing_II_B]:
+            self.remove(Trait.flag_bearing)
+        elif trait == Trait.lancing_II:
+            self.remove(Trait.lancing)
+        elif trait == Trait.rage_II:
+            self.remove(Trait.rage)
+
     def get_upgrade_choice(self, choice_number):
         print self
         if getattr(self, "upgrades"):
