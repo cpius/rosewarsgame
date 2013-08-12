@@ -511,7 +511,7 @@ class Saboteur(Unit):
     upgrades = [[{Ability.sabotage_II: 1}, {Ability.poison_II: 1}],
                 [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]]
 
-    abilities = {Ability.sabotage: 1, Ability.poison: 1}
+    abilities = [Ability.sabotage, Ability.poison]
 
 
 class Diplomat(Unit):
@@ -545,5 +545,5 @@ class Weaponsmith(Unit):
     upgrades = [[{Trait.improved_weapons_II_A: 1}, {Trait.improved_weapons_II_B: 1}],
                 [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]]
 
-    abilities = {Ability.improve_weapons: 1}
+    abilities = [Ability.improve_weapons]
 
