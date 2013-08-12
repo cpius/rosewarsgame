@@ -1,5 +1,6 @@
 {
     "type": "Does turn shift work",
+	"description": "Test if the opponent gets his bribed units back",
     "pre_gamestate": {
         "actions_remaining": 0,
         "player1_units": {
