@@ -42,6 +42,7 @@ class Game:
         if self.players[0].color == "Green":
             self.turn += 1
         self.players = [self.players[1], self.players[0]]
+        self.gamestate.set_available_actions()
 
     def savegame_folder(self):
         return "./replay/" + str(self.created_at.strftime("%Y%m%d-%H%M%S"))

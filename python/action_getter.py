@@ -118,7 +118,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         abilities = []
 
         for ability in unit.abilities:
-            if ability in [Ability.sabotage, Ability.sabotage_II]:
+            if ability in [Ability.sabotage, Ability.sabotage_II, Ability.poison, Ability.poison_II]:
                 target_positions = enemy_units
 
             elif ability in [Ability.improve_weapons, Ability.improve_weapons_II_A, Ability.improve_weapons_II_B]:
