@@ -380,7 +380,7 @@ class Controller(object):
         if not action.is_attack():
             return False
 
-        if not action.move_with_attack:
+        if not action.move_with_attack is None and not action.move_with_attack:
             return False
 
         is_successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)
