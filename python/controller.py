@@ -296,7 +296,11 @@ class Controller(object):
             upgrade_choice = unit.get_upgrade_choice(choice)
             upgrade = unit.get_upgraded_unit(upgrade_choice)
 
-        self.game.save_option("upgrade", upgrade_choice)
+        if not isinstance(upgrade_choice, basestring):
+            upgrade_choice_to_save = dict((Trait.name[key], value) for key, value in upgrade_choice.items())
+            self.game.save_option("upgrade", upgrade_choice_to_save)
+        else:
+            self.game.save_option("upgrade", upgrade_choice)
 
         self.game.gamestate.player_units[position] = upgrade
 
