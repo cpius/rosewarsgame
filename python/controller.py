@@ -62,35 +62,9 @@ class Controller(object):
     def from_replay(cls, view, savegame_file):
         controller = cls(view)
         savegame_document = json.loads(open(savegame_file).read())
-        gamestate_document = savegame_document["initial_gamestate"]
-        gamestate = Gamestate.from_document(gamestate_document)
-        action_count = int(savegame_document["action_count"])
-
-        for action_number in range(1, action_count + 1):
-
-            action_document = savegame_document[str(action_number)]
-
-            action = Action.from_document(gamestate.all_units(), action_document)
-
-            outcome = None
-            if action.is_attack():
-                outcome_document = savegame_document[str(action_number) + "_outcome"]
-                outcome = Outcome.from_document(outcome_document)
-                if str(action_number) + "_options" in savegame_document:
-                    options = savegame_document[str(action_number) + "_options"]
-                    if "move_with_attack" in options:
-                        action.move_with_attack = bool(options["move_with_attack"])
-
-            gamestate.do_action(action, outcome)
-
-            if gamestate.is_turn_done():
-                gamestate.shift_turn()
-
-        controller.gamestate = gamestate
-
+        controller.gamestate = Gamestate.from_log_document(savegame_document)
         players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
-        controller.game = Game(players, gamestate)
-
+        controller.game = Game(players, controller.gamestate)
         controller.clear_move()
 
         return controller
@@ -133,6 +107,9 @@ class Controller(object):
             action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
             if action in self.game.gamestate.get_actions():
                 self.perform_action(action)
+            else:
+                self.clear_move()
+                self.view.draw_game(self.game)
 
         elif self.selecting_active_unit(position):
             self.start_at = position
@@ -171,6 +148,10 @@ class Controller(object):
             else:
                 self.clear_move()
                 self.view.draw_game(self.game)
+
+        elif self.start_at and self.start_at == position:
+            self.clear_move()
+            self.view.draw_game(self.game)
 
     def possible_melee_target(self, action, position):
         same_start = action.start_at == self.start_at
@@ -399,7 +380,7 @@ class Controller(object):
         if not action.is_attack():
             return False
 
-        if not action.move_with_attack:
+        if not action.move_with_attack is None and not action.move_with_attack:
             return False
 
         is_successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)
@@ -442,19 +423,17 @@ class Controller(object):
         self.exit_game()
 
     def selecting_active_unit(self, position):
-        return position in self.game.gamestate.player_units
+        selecting_player_unit = position in self.game.gamestate.player_units
+        if self.start_at is None:
+            return selecting_player_unit
+        else:
+            return self.start_at != position and selecting_player_unit
 
     def selecting_ability_target(self, position):
         if not self.start_at:
             return False
 
         return position in self.game.gamestate.all_units() and self.selected_unit.abilities
-
-    def selecting_attack_target_unit(self, position):
-        pass
-
-    def deselecting_active_unit(self, position):
-        return self.start_at and (self.start_at == position or position not in self.game.gamestate.all_units())
 
     def selecting_ranged_target(self, position):
         if not self.start_at:
