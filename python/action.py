@@ -114,8 +114,10 @@ class Action(object):
         return document
 
     def to_document(self):
-        attrs = ["number", "start_at", "end_at", "target_at", "ability", "created_at"]
+        attrs = ["number", "start_at", "end_at", "target_at", "created_at"]
         document = dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
+        if self.ability:
+            document["ability"] = Ability.name[self.ability]
         if not self.move_with_attack is None:
             document["move_with_attack"] = self.move_with_attack
 

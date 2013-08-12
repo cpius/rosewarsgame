@@ -291,10 +291,10 @@ class Controller(object):
 
         if getattr(unit, "upgrades"):
             upgrade_choice = unit.upgrades[choice]
-            upgrade = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+            upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
         else:
             upgrade_choice = unit.get_upgrade_choice(choice)
-            upgrade = unit.get_upgraded_unit(upgrade_choice)
+            upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
 
         if not isinstance(upgrade_choice, basestring):
             upgrade_choice_to_save = get_trait_names_dict(upgrade_choice)
@@ -302,7 +302,7 @@ class Controller(object):
         else:
             self.game.save_option("upgrade", upgrade_choice)
 
-        self.game.gamestate.player_units[position] = upgrade
+        self.game.gamestate.player_units[position] = upgraded_unit
 
     def perform_action(self, action, outcome=None):
         self.view.draw_game(self.game)
