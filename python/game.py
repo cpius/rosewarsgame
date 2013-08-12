@@ -17,9 +17,6 @@ class Game:
         self.outcomes = dict()
         self.options = dict()
 
-        if not os.path.exists(self.savegame_folder()):
-            os.makedirs(self.savegame_folder())
-
     def set_ais(self):
         for player in range(2):
             ai_name = self.players[player].ai_name
@@ -48,6 +45,9 @@ class Game:
         return "./replay/" + str(self.created_at.strftime("%Y%m%d-%H%M%S"))
 
     def save(self, view, action, outcome):
+        if not os.path.exists(self.savegame_folder()):
+            os.makedirs(self.savegame_folder())
+
         action_count = self.gamestate.action_count
 
         self.actions[action_count] = action.to_document()
