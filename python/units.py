@@ -1,6 +1,7 @@
 from collections import defaultdict
 import settings
 from common import *
+from copy import *
 
 
 class Unit(object):
@@ -21,6 +22,9 @@ class Unit(object):
     movement = None
     type = None
     level = 0
+    upgrades = []
+    special_upgrades = []
+    final_upgrades = []
     custom_ability = {Ability.poison: "poison",
                       Ability.poison_II: "poison_II",
                       Ability.improve_weapons_II_A: "improve_weapons_II_A",
@@ -46,6 +50,8 @@ class Unit(object):
 
     def remove(self, attribute):
         self.variables[attribute] = 0
+        if attribute in self.constants:
+            del self.constants[attribute]
 
     def decrement(self, attribute):
         self.variables[attribute] = max(0, self.variables[attribute] - 1)
@@ -89,6 +95,55 @@ class Unit(object):
     def is_bribed(self):
         return self.has(Trait.bribed) or self.has(Trait.bribed_II)
 
+    def upgrade_trait(self, trait, value):
+        if trait == Trait.attack_skill:
+            self.attack += value
+        elif trait == Trait.defence_skill:
+            self.defence += value
+        elif trait == Trait.range_skill:
+            self.range += value
+        elif trait == Trait.movement_skill:
+            self.movement += value
+        elif trait == Trait.attack_cooldown_II:
+            self.remove(Trait.attack_cooldown)
+        elif trait == Trait.crusading_II:
+            self.remove(Trait.crusading)
+        elif trait in [Trait.flag_bearing_II_A, Trait.flag_bearing_II_B]:
+            self.remove(Trait.flag_bearing)
+        elif trait == Trait.lancing_II:
+            self.remove(Trait.lancing)
+        elif trait == Trait.rage_II:
+            self.remove(Trait.rage)
+
+    def get_upgrade_choice(self, choice_number):
+        print self
+        if getattr(self, "upgrades"):
+            upgrade_name = self.upgrades[choice_number].replace(" ", "_")
+            unit = globals()[upgrade_name]()
+            print unit.variables
+            return unit
+        else:
+            if getattr(self, "special_upgrades"):
+                if len(self.special_upgrades) == 1:
+                    choices = [self.special_upgrades[0], self.final_upgrades[0]]
+                else:
+                    choices = self.special_upgrades
+            else:
+                choices = self.final_upgrades
+
+            print choices
+            choice = choices[choice_number]
+            print choice
+
+            upgrade = globals()[self.name.replace(" ", "_")]()
+            print upgrade.variables
+            upgrade.constants = self.constants.copy()
+            print "choice", choice
+            for trait, value in choice.items():
+                upgrade.upgrade_trait(trait, value)
+
+            return upgrade
+
 
 class Archer(Unit):
 
@@ -112,7 +167,7 @@ class Fire_Archer(Unit):
     movement = 1
     range = 4
     type = Type.Infantry
-    upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
     constants = {Trait.fire_arrows: 1}
 
@@ -127,8 +182,8 @@ class Crossbow_Archer(Unit):
     attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     type = Type.Infantry
-    upgrades = [[{Trait.attack_skill: 1}, {Trait.fire_arrows: 1}],
-                [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
+    special_upgrades = [{Trait.fire_arrows: 1}]
+    final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}, ]
 
     constants = {Trait.sharpshooting: 1}
 
@@ -159,7 +214,7 @@ class Halberdier(Unit):
     attack_bonuses = {Type.Cavalry: 1}
     defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
-    upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.push: 1}
 
@@ -190,8 +245,8 @@ class Dragoon(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
-    upgrades = [[{Trait.attack_skill: 1}, {Trait.flanking: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.flanking: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.swiftness: 1}
 
@@ -208,7 +263,7 @@ class Hussar(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    upgrades = [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]
 
     constants = {Trait.triple_attack: 1}
 
@@ -224,7 +279,7 @@ class Cavalry_Lieutenant(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
-    upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.cavalry_charging: 1}
 
@@ -255,8 +310,8 @@ class Lancer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    upgrades = [[{Trait.cavalry_specialist: 1}, {Trait.lancing_II: 1, Trait.movement_skill: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing_II: 1, Trait.movement_skill: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.lancing: 1}
 
@@ -273,8 +328,8 @@ class Hobelar(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    upgrades = [[{Trait.flanking: 1}, {Trait.movement_skill: 1}],
-                [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]]
+    special_upgrades = [{Trait.flanking: 1}]
+    final_upgrades = [{Trait.movement_skill: 1}, {Trait.attack_skill: 1}]
 
     constants = {Trait.swiftness: 1}
 
@@ -285,15 +340,14 @@ class Ballista(Unit):
  
     name = "Ballista"
     image = "Ballista"
-    attack = 4
     defence = 1
     movement = 1
     range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    upgrades = [[{Trait.attack_skill: 1}, {Trait.fire_arrows: 1}],
-                [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
+    special_upgrades = [{Trait.fire_arrows: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
 class Catapult(Unit):
@@ -308,7 +362,7 @@ class Catapult(Unit):
     defence_bonuses = {}
     type = Type.Siege_Weapon
     xp_to_upgrade = 2
-    upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
+    final_upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
 
     constants = {Trait.double_attack_cost: 1}
 
@@ -326,8 +380,8 @@ class Royal_Guard(Unit):
     type = Type.Infantry
     zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
     xp_to_upgrade = 3
-    upgrades = [[{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.defence_maneuverability: 1}
 
@@ -345,8 +399,8 @@ class Scout(Unit):
     zoc = []
     type = Type.Cavalry
     xp_to_upgrade = 2
-    upgrades = [[{Trait.attack_skill: 2}, {Trait.tall_shield}],
-                [{Trait.movement_skill: 2}, {Trait.defence_skill}]]
+    special_upgrades = [{Trait.tall_shield}, {Trait.attack_skill: 2}]
+    final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill}]
 
     constants = {Trait.scouting: 1}
 
@@ -363,8 +417,8 @@ class Viking(Unit):
     defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
     type = Type.Infantry
-    upgrades = [[{Trait.rage_II: 1}, {Trait.siege_weapon_specialist: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.rage_II: 1}, {Trait.siege_weapon_specialist: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.rage: 1, Trait.extra_life: 1}
 
@@ -382,8 +436,8 @@ class Cannon(Unit):
     zoc = []
     type = Type.Siege_Weapon
     xp_to_upgrade = 3
-    upgrades = [[{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}],
-                [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
+    special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
     constants = {Trait.attack_cooldown: 3}
 
@@ -400,8 +454,8 @@ class Flag_Bearer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    upgrades = [[{Trait.flag_bearing_II_A: 1}, {Trait.flag_bearing_II_B: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.flag_bearing_II_A: 1}, {Trait.flag_bearing_II_B: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.flag_bearing: 1}
 
@@ -418,8 +472,7 @@ class Longswordsman(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    upgrades = [[{Trait.attack_skill: 1}, {Trait.defence_skill: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.longsword: 1}
 
@@ -436,8 +489,8 @@ class Crusader(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    upgrades = [[{Trait.attack_skill: 1}, {Trait.crusading_II}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.crusading_II}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.crusading: 1}
 
@@ -454,8 +507,8 @@ class Berserker(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    upgrades = [[{Trait.big_shield: 1}, {Trait.attack_skill: 2}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.berserking: 1}
 
@@ -472,8 +525,7 @@ class War_Elephant(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    upgrades = [[{Trait.defence_skill: 1}, {Trait.attack_skill: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    final_upgrades = [{Trait.defence_skill: 1}, {Trait.attack_skill: 1}]
     xp_to_upgrade = 3
 
     constants = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
@@ -491,8 +543,8 @@ class Samurai(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    upgrades = [[{Trait.defence_skill: 1}, {Trait.bloodlust: 1}],
-                [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.bloodlust: 1}],
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     constants = {Trait.combat_agility: 1}
 
@@ -508,8 +560,8 @@ class Saboteur(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    upgrades = [[{Ability.sabotage_II: 1}, {Ability.poison_II: 1}],
-                [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Ability.sabotage_II: 1}, {Ability.poison_II: 1}]
+    final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
     abilities = [Ability.sabotage, Ability.poison]
 
@@ -525,8 +577,8 @@ class Diplomat(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    upgrades = [[{Trait.range_skill: 1}, {Trait.bribed_II}],
-                [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.bribed_II}]
+    final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
     abilities = [Ability.bribe]
 
@@ -542,8 +594,8 @@ class Weaponsmith(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    upgrades = [[{Trait.improved_weapons_II_A: 1}, {Trait.improved_weapons_II_B: 1}],
-                [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]]
+    special_upgrades = [{Trait.improved_weapons_II_A: 1}, {Trait.improved_weapons_II_B: 1}]
+    final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
     abilities = [Ability.improve_weapons]
 
