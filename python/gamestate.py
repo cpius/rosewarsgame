@@ -146,7 +146,6 @@ class Gamestate:
                 unit.constants = unit.constants.copy()
 
                 for attribute, value in unit_document.items():
-                    attribute = attribute.replace(" ", "_")
                     if attribute == "zoc":
                         unit.zoc = {getattr(Type, unit_type) for unit_type in unit_document["zoc"]}
                     elif attribute in constant_traits:
@@ -197,9 +196,9 @@ class Gamestate:
             if document_variables or document_constants:
                 unit_dict = {}
                 for attribute in document_variables:
-                    unit_dict[Trait.write[attribute]] = unit.variables[attribute]
+                    unit_dict[Trait.name[attribute]] = unit.variables[attribute]
                 for attribute in document_constants:
-                    unit_dict[Trait.write[attribute]] = unit.constants[attribute]
+                    unit_dict[Trait.name[attribute]] = unit.constants[attribute]
                 unit_dict["name"] = unit.name
                 units_dict[position] = unit_dict
             else:
