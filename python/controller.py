@@ -293,7 +293,10 @@ class Controller(object):
             upgrade_choice = unit.upgrades[choice]
             upgrade = getattr(units_module, upgrade_choice.replace(" ", "_"))()
         else:
-            upgrade = unit.get_upgrade_choice(choice)
+            upgrade_choice = unit.get_upgrade_choice(choice)
+            upgrade = unit.get_upgraded_unit(upgrade_choice)
+
+        self.game.save_option("upgrade", upgrade_choice)
 
         self.game.gamestate.player_units[position] = upgrade
 
@@ -329,8 +332,6 @@ class Controller(object):
             self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
 
-        self.game.save(self.view, action, outcome)
-
         if action.is_attack():
             if settings.pause_for_attack_until_click:
                 self.pause()
@@ -349,6 +350,8 @@ class Controller(object):
                 self.upgrade_unit(action.target_at, action.unit)
             else:
                 self.upgrade_unit(action.end_at, action.unit)
+
+        self.game.save(self.view, action, outcome)
 
         self.view.draw_game(self.game)
 

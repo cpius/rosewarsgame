@@ -126,10 +126,10 @@ def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate
 
 
 def draw_upgrade_options(screen, interface, unit):
-
     for i in range(2):
-        upgrade = unit.get_upgrade_choice(i)
-        draw_upgrade_choice(screen, interface, i, upgrade)
+        upgrade_choice = unit.get_upgrade_choice(i)
+        upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
+        draw_upgrade_choice(screen, interface, i, upgraded_unit)
 
 
 def draw_ask_about_ability(screen, interface, unit):
