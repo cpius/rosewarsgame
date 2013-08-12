@@ -25,22 +25,22 @@ def get_unit_lines(unit):
         else:
             lines.append(attribute.title() + ": %")
 
-    type = Type.write[unit.type]
-    lines.append("Type: " + type)
+    unit_type = Type.write[unit.type]
+    lines.append("Type: " + unit_type)
     lines.append("")
 
     if unit.zoc:
-        lines.append("Zone of control against: " + ", ".join(Type.write[type] for type in unit.zoc))
+        lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
         lines.append("")
 
     if unit.attack_bonuses:
-        for type, value in unit.attack_bonuses.items():
-            lines.append("+" + str(value) + " Attack against " + Type.write[type])
+        for unit_type, value in unit.attack_bonuses.items():
+            lines.append("+" + str(value) + " Attack against " + Type.write[unit_type])
             lines.append("")
 
     if unit.defence_bonuses:
-        for type, value in unit.attack_bonuses.items():
-            lines.append("+" + str(value) + " Defence against " + Type.write[type])
+        for unit_type, value in unit.attack_bonuses.items():
+            lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
             lines.append("")
 
     for trait in unit.constants.keys():
@@ -64,7 +64,6 @@ def show_unit_zoomed(screen, interface, unit):
     print "const"
     for attr in unit.constants:
         print Trait.write[attr]
-
 
     unit_pic = get_unit_pic(interface, unit.image)
     pic = get_image(unit_pic, zoomed_unit_size)
@@ -99,7 +98,9 @@ def draw_upgrade_choice(screen, interface, index, unit):
     lines = get_unit_lines(unit)
 
     line_length = 30
-    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["very_small"], *text_location)
+    line_distances = interface.line_distances["small"]
+    fonts = interface.fonts["very_small"]
+    show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
 
 
 def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate):
@@ -107,7 +108,7 @@ def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate
     clear(screen, interface)
 
     attack = battle.get_attack_rating(player_unit, opponent_unit, action, gamestate)
-    defence = battle.get_defence_rating(player_unit, opponent_unit, attack, gamestate)
+    defence = battle.get_defence_rating(player_unit, opponent_unit, attack, action, gamestate.enemy_units)
     attack = min(attack, 6)
     defence = min(defence, 6)
 
@@ -176,4 +177,3 @@ def draw_unit_lower_right(screen, interface, action, color, index, base_x, base_
     screen.blit(unit_image, location)
 
     draw_unit_box(screen, interface, location, color, resize)
-
