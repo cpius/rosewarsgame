@@ -44,11 +44,11 @@ def get_unit_lines(unit):
             lines.append("")
 
     for trait in unit.constants.keys():
-        lines.append(common.constant_traits[Trait.reverse_mapping[trait]])
+        lines.append(common.constant_traits[Trait.name[trait]])
         lines.append("")
 
     for ability in unit.abilities:
-        lines.append(common.ability_descriptions[Ability.reverse_mapping[ability]])
+        lines.append(common.ability_descriptions[Ability.name[ability]])
         lines.append("")
 
     for attribute in unit.variables:
@@ -147,7 +147,7 @@ def draw_ask_about_ability(screen, interface, unit):
     clear(screen, interface)
     lines = ["Select ability:"]
     for i, ability in enumerate(unit.abilities):
-        ability_name = Ability.reverse_mapping[ability]
+        ability_name = Ability.name[ability]
         description_string = str(i + 1) + ". " + ability_name + ": " + ability_descriptions[ability_name]
         lines += textwrap.wrap(description_string, interface.message_line_length)
 
