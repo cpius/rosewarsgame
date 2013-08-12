@@ -20,14 +20,14 @@ class TestAI(unittest.TestCase):
     def test_ActionDocument_WhenSavingAndLoading_ThenItShouldBeTheSame(self):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
         actions = action_getter.get_actions(gamestate)
-        action = actions[0]
-        action_document = action.to_document()
-        same_action = Action.from_document(gamestate.all_units(), action_document)
-        same_action_document = same_action.to_document()
+        for action in actions:
+            action_document = action.to_document()
+            same_action = Action.from_document(gamestate.all_units(), action_document)
+            same_action.created_at = action.created_at
+            same_action_document = same_action.to_document()
 
-        action_document["created_at"] = same_action_document["created_at"]
-        self.assertEquals(action, same_action)
-        self.assertEquals(action_document, same_action_document)
+            self.assertEquals(action, same_action)
+            self.assertEquals(action_document, same_action_document)
 
     def test_IfBoardIsFlippedTwoTimes_ThenItShouldBeTheSame(self):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
