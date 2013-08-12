@@ -11,10 +11,9 @@ base_height = 48
 
 
 class Log():
-    def __init__(self, action, outcome, turn, action_number, player_color):
+    def __init__(self, action, outcome, action_number, player_color):
         self.action = action
         self.outcome = outcome
-        self.turn = turn
         self.action_number = action_number
         self.player_color = player_color
 
@@ -29,10 +28,9 @@ class Log():
             return player_color, 2
 
 
-def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
-
+def draw_log(logbook, screen, interface, game, action=None, outcome=None):
     if action:
-        log = Log(action, outcome, game.turn, game.gamestate.get_actions_remaining(), game.current_player().color)
+        log = Log(action, outcome, game.gamestate.get_actions_remaining(), game.current_player().color)
         logbook.append(log)
 
     if len(logbook) > maximum_logs:
@@ -60,7 +58,7 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
         symbol_location = (base_x + 118 * zoom, base_y + 8 * zoom)
 
         if action.is_attack():
-            draw_attack(screen, interface, action, outcome, base, symbol_location, log, game)
+            draw_attack(screen, interface, action, outcome, base, symbol_location, log, game.gamestate)
 
         elif action.is_ability():
 
@@ -106,11 +104,8 @@ def draw_log(logbook, screen, interface, action=None, outcome=None, game=None):
     return logbook
 
 
-def draw_attack(screen, interface, action, outcome, base, symbol_location, log, game):
-
-    outcome_string = ""
-    if game:
-        outcome_string = action.outcome_string(outcome.for_position(action.target_at), game.gamestate)
+def draw_attack(screen, interface, action, outcome, base, symbol_location, log, gamestate):
+    outcome_string = action.outcome_string(outcome.for_position(action.target_at), gamestate)
 
     draw_outcome(screen, interface, outcome_string, *base)
 

@@ -51,7 +51,9 @@ class Game:
         action_count = self.gamestate.action_count
 
         self.actions[action_count] = action.to_document()
-        self.outcomes[action_count] = outcome.to_document()
+        outcome_document = outcome.to_document()
+        if outcome_document:
+            self.outcomes[action_count] = outcome_document
 
         filename = self.savegame_folder() + "/" + str(action_count)
 

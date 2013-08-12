@@ -5,12 +5,13 @@ import action_getter
 import battle
 from outcome import Outcome
 import glob
-import unittest
+from unittest import TestCase, TextTestRunner, TestSuite
 import common
 import sys
+from tests.replaytestcase import ReplayTestCase
 
 
-class UniversalTestCase(unittest.TestCase):
+class UniversalTestCase(TestCase):
     def __init__(self, testcase_file):
         super(UniversalTestCase, self).__init__()
         self.testcase_file = testcase_file
@@ -98,17 +99,25 @@ class UniversalTestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner()
+    runner = TextTestRunner()
 
-    suite = unittest.TestSuite()
+    suite = TestSuite()
 
+    testcase_files = list()
+    replay_files = list()
     if len(sys.argv) == 2:
-        testcase_files = [sys.argv[1]]
-
+        if "replay" in sys.argv[1]:
+            replay_files.append(sys.argv[1])
+        else:
+            testcase_files.append(sys.argv[1])
     else:
         testcase_files = glob.glob("./../sharedtests/*.json")
+        replay_files = glob.glob("replay/*/*.json")
 
     for testcase_file in testcase_files:
         suite.addTest(UniversalTestCase(testcase_file))
+
+    for replay_file in replay_files:
+        suite.addTest(ReplayTestCase(replay_file))
 
     runner.run(suite)
