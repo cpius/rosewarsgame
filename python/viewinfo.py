@@ -107,7 +107,7 @@ def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate
     clear(screen, interface)
 
     attack = battle.get_attack_rating(player_unit, opponent_unit, action, gamestate)
-    defence = battle.get_defence_rating(player_unit, opponent_unit, attack, gamestate)
+    defence = battle.get_defence_rating(player_unit, opponent_unit, attack, action, gamestate.enemy_units)
     attack = min(attack, 6)
     defence = min(defence, 6)
 
