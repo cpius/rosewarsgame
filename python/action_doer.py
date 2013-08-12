@@ -132,7 +132,7 @@ def do_action(gamestate, action, outcome):
 
         for trait in [Trait.triple_attack, Trait.longsword]:
             if unit.has(trait):
-                locals()[Trait.reverse_mapping[trait]]()
+                locals()[Trait.name[trait]]()
 
     elif action.is_ability():
         settle_ability(action)

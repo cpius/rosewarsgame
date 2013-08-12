@@ -85,7 +85,7 @@ def enum(*sequential, **named):
     enums = dict(zip(sequential, range(1, len(sequential) + 1)), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
     reverse_print = dict((value, key.replace("_", " ")) for key, value in enums.iteritems())
-    enums['reverse_mapping'] = reverse
+    enums['name'] = reverse
     enums['write'] = reverse_print
     return type('Enum', (), enums)
 
@@ -188,7 +188,7 @@ if 1 == 2:
         Siege_Weapon = None
         Specialist = None
 
-        reverse_mapping = {}
+        name = {}
         write = {}
 
     class Trait:
@@ -249,7 +249,7 @@ if 1 == 2:
         flanking = None
         level = None
 
-        reverse_mapping = {}
+        name = {}
         write = {}
 
     class Ability:
@@ -265,7 +265,7 @@ if 1 == 2:
         triple_attack = None
         poison_II = None
 
-        reverse_mapping = {}
+        name = {}
         write = {}
 
 board_height = 8
