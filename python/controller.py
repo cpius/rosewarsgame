@@ -14,7 +14,6 @@ from game import Game
 from outcome import Outcome
 import json
 from common import *
-from copy import copy
 
 
 class Controller(object):

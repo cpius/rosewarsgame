@@ -3,7 +3,6 @@ import action_doer
 import initializer
 import action_getter
 import ai_module
-import ai_methods
 import units as units_module
 import json
 from common import *
