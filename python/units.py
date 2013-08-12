@@ -10,15 +10,49 @@ class Unit(object):
     name = ""
     zoc = []
     abilities = []
-    xp_to_upgrade = 4
+    xp_to_upgrade = 1
     upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}
     constants = {}
-    attack = None
-    defence = None
-    range = None
-    movement = None
+    base_attack = None
+    base_defence = None
+    base_range = None
+    base_movement = None
+
+    @property
+    def attack(self):
+        print "!"
+        attack = self.base_attack
+        if Trait.attack_skill in self.constants:
+            return attack + self.constants[Trait.attack_skill]
+        else:
+            return attack
+
+    @property
+    def defence(self):
+        defence = self.base_defence
+        if Trait.defence_skill in self.constants:
+            return defence + self.constants[Trait.defence_skill]
+        else:
+            return defence
+
+    @property
+    def range(self):
+        range = self.base_range
+        if Trait.range_skill in self.constants:
+            return range + self.constants[Trait.range_skill]
+        else:
+            return range
+
+    @property
+    def movement(self):
+        movement = self.base_movement
+        if Trait.movement_skill in self.constants:
+            return movement + self.constants[Trait.movement_skill]
+        else:
+            return movement
+
     type = None
     level = 0
     upgrades = []
@@ -94,16 +128,8 @@ class Unit(object):
     def is_bribed(self):
         return self.has(Trait.bribed) or self.has(Trait.bribed_II)
 
-    def upgrade_trait(self, trait, value):
-        if trait == Trait.attack_skill:
-            self.attack += value
-        elif trait == Trait.defence_skill:
-            self.defence += value
-        elif trait == Trait.range_skill:
-            self.range += value
-        elif trait == Trait.movement_skill:
-            self.movement += value
-        elif trait == Trait.attack_cooldown_II:
+    def upgrade_trait(self, trait):
+        if trait == Trait.attack_cooldown_II:
             self.remove(Trait.attack_cooldown)
         elif trait == Trait.crusading_II:
             self.remove(Trait.crusading)
@@ -135,7 +161,11 @@ class Unit(object):
         upgrade = globals()[self.name.replace(" ", "_")]()
         upgrade.constants = self.constants.copy()
         for trait, value in choice.items():
-            upgrade.upgrade_trait(trait, value)
+            upgrade.upgrade_trait(trait)
+            if trait in upgrade.constants:
+                upgrade.constants[trait] += value
+            else:
+                upgrade.constants[trait] = value
 
         return upgrade
 
@@ -144,10 +174,10 @@ class Archer(Unit):
 
     name = "Archer"
     image = "Archer"
-    attack = 2
-    defence = 2
-    movement = 1
-    range = 4
+    base_attack = 2
+    base_defence = 2
+    base_movement = 1
+    base_range = 4
     attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     type = Type.Infantry
@@ -157,10 +187,10 @@ class Archer(Unit):
 class Fire_Archer(Unit):
     name = "Fire Archer"
     image = "Fire Archer"
-    attack = 2
-    defence = 2
-    movement = 1
-    range = 4
+    base_attack = 2
+    base_defence = 2
+    base_movement = 1
+    base_range = 4
     type = Type.Infantry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
@@ -170,10 +200,10 @@ class Fire_Archer(Unit):
 class Crossbow_Archer(Unit):
     name = "Crossbow Archer"
     image = "Crossbow Archer"
-    attack = 2
-    defence = 2
-    movement = 1
-    range = 4
+    base_attack = 2
+    base_defence = 2
+    base_movement = 1
+    base_range = 4
     attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     type = Type.Infantry
@@ -187,10 +217,10 @@ class Pikeman(Unit):
 
     name = "Pikeman"
     image = "Pikeman"
-    attack = 2
-    defence = 2
-    movement = 1
-    range = 1
+    base_attack = 2
+    base_defence = 2
+    base_movement = 1
+    base_range = 1
     attack_bonuses = {Type.Cavalry: 1}
     defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
@@ -202,10 +232,10 @@ class Pikeman(Unit):
 class Halberdier(Unit):
     name = "Halberdier"
     image = "Halberdier"
-    attack = 3
-    defence = 2
-    movement = 1
-    range = 1
+    base_attack = 3
+    base_defence = 2
+    base_movement = 1
+    base_range = 1
     attack_bonuses = {Type.Cavalry: 1}
     defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
@@ -218,10 +248,10 @@ class Light_Cavalry(Unit):
 
     name = "Light Cavalry"
     image = "Light Cavalry"
-    attack = 2
-    defence = 2
-    movement = 4
-    range = 1
+    base_attack = 2
+    base_defence = 2
+    base_movement = 4
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
@@ -233,10 +263,10 @@ class Dragoon(Unit):
 
     name = "Dragoon"
     image = "Dragoon"
-    attack = 2
-    defence = 2
-    movement = 4
-    range = 1
+    base_attack = 2
+    base_defence = 2
+    base_movement = 4
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
@@ -250,10 +280,10 @@ class Hussar(Unit):
 
     name = "Hussar"
     image = "Hussar"
-    attack = 2
-    defence = 2
-    movement = 4
-    range = 1
+    base_attack = 2
+    base_defence = 2
+    base_movement = 4
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -267,10 +297,10 @@ class Cavalry_Lieutenant(Unit):
 
     name = "Cavalry Lieutenant"
     image = "Light Cavalry"
-    attack = 3
-    defence = 2
-    movement = 3
-    range = 1
+    base_attack = 3
+    base_defence = 2
+    base_movement = 3
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
@@ -283,10 +313,10 @@ class Knight(Unit):
 
     name = "Knight"
     image = "Knight"
-    attack = 3
-    defence = 3
-    movement = 2
-    range = 1
+    base_attack = 3
+    base_defence = 3
+    base_movement = 2
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
@@ -297,10 +327,10 @@ class Lancer(Unit):
 
     name = "Lancer"
     image = "Lancer"
-    attack = 2
-    defence = 3
-    movement = 3
-    range = 1
+    base_attack = 2
+    base_defence = 3
+    base_movement = 3
+    base_range = 1
     attack_bonuses = {Type.Cavalry: 1}
     defence_bonuses = {}
     zoc = []
@@ -315,10 +345,10 @@ class Hobelar(Unit):
 
     name = "Hobelar"
     image = "Hobelar"
-    attack = 3
-    defence = 3
-    movement = 3
-    range = 1
+    base_attack = 3
+    base_defence = 3
+    base_movement = 3
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -333,25 +363,25 @@ class Ballista(Unit):
  
     name = "Ballista"
     image = "Ballista"
-    attack = 4
-    defence = 1
-    movement = 1
-    range = 3
+    base_attack = 4
+    base_defence = 1
+    base_movement = 1
+    base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
     #special_upgrades = [{Trait.fire_arrows: 1}]
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]
 
 
 class Catapult(Unit):
 
     name = "Catapult"
     image = "Catapult"
-    attack = 6
-    defence = 2
-    movement = 1
-    range = 3
+    base_attack = 6
+    base_defence = 2
+    base_movement = 1
+    base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
@@ -365,10 +395,10 @@ class Royal_Guard(Unit):
   
     name = "Royal Guard"
     image = "Royal Guard"
-    attack = 3
-    defence = 3
-    movement = 1
-    range = 1
+    base_attack = 3
+    base_defence = 3
+    base_movement = 1
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Infantry
@@ -384,10 +414,10 @@ class Scout(Unit):
     
     name = "Scout"
     image = "Scout"
-    attack = False
-    defence = 2
-    movement = 4
-    range = 1
+    base_attack = False
+    base_defence = 2
+    base_movement = 4
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -403,10 +433,10 @@ class Viking(Unit):
 
     name = "Viking"
     image = "Viking"
-    attack = 3
-    defence = 2
-    movement = 1
-    range = 1
+    base_attack = 3
+    base_defence = 2
+    base_movement = 1
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
@@ -421,10 +451,10 @@ class Cannon(Unit):
     
     name = "Cannon"
     image = "Cannon"
-    attack = 5
-    defence = 1
-    movement = 1
-    range = 4
+    base_attack = 5
+    base_defence = 1
+    base_movement = 1
+    base_range = 4
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -440,10 +470,10 @@ class Flag_Bearer(Unit):
    
     name = "Flag Bearer"
     image = "Flag Bearer"
-    attack = 2
-    defence = 3
-    movement = 3
-    range = 1
+    base_attack = 2
+    base_defence = 3
+    base_movement = 3
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -458,10 +488,10 @@ class Longswordsman(Unit):
 
     name = "Longswordsman"
     image = "Longswordsman"
-    attack = 3
-    defence = 3
-    movement = 1
-    range = 1
+    base_attack = 3
+    base_defence = 3
+    base_movement = 1
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -475,10 +505,10 @@ class Crusader(Unit):
 
     name = "Crusader"
     image = "Crusader"
-    attack = 3
-    defence = 3
-    movement = 3
-    range = 1
+    base_attack = 3
+    base_defence = 3
+    base_movement = 3
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -493,10 +523,10 @@ class Berserker(Unit):
 
     name = "Berserker"
     image = "Berserker"
-    attack = 5
-    defence = 1
-    movement = 1
-    range = 1
+    base_attack = 5
+    base_defence = 1
+    base_movement = 1
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -511,10 +541,10 @@ class War_Elephant(Unit):
 
     name = "War Elephant"
     image = "War Elephant"
-    attack = 3
-    defence = 3
-    movement = 2
-    range = 1
+    base_attack = 3
+    base_defence = 3
+    base_movement = 2
+    base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
@@ -529,10 +559,10 @@ class Samurai(Unit):
     
     name = "Samurai"
     image = "Samurai"
-    attack = 3
-    defence = 3
-    movement = 1
-    range = 1
+    base_attack = 3
+    base_defence = 3
+    base_movement = 1
+    base_range = 1
     attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     zoc = []
@@ -547,10 +577,10 @@ class Saboteur(Unit):
     
     name = "Saboteur"
     image = "Saboteur"
-    attack = False
-    defence = 2
-    movement = 1
-    range = 3
+    base_attack = None
+    base_defence = 2
+    base_movement = 1
+    base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
@@ -564,10 +594,10 @@ class Diplomat(Unit):
     
     name = "Diplomat"
     image = "Diplomat"
-    attack = False
-    defence = 2
-    movement = 1
-    range = 3
+    base_attack = None
+    base_defence = 2
+    base_movement = 1
+    base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
@@ -581,10 +611,10 @@ class Weaponsmith(Unit):
     
     name = "Weaponsmith"
     image = "Weaponsmith"
-    attack = False   
-    defence = 2
-    movement = 1
-    range = 4
+    base_attack = None
+    base_defence = 2
+    base_movement = 1
+    base_range = 4
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
