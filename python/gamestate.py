@@ -28,15 +28,13 @@ class Gamestate:
         return all_units
 
     def do_action(self, action, outcome):
-        outcome = action_doer.do_action(self, action, outcome)
+        action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
         if self.actions_remaining > 0:
             self.available_actions = action_getter.get_actions(self)
             if not self.available_actions:
                 self.actions_remaining = 0
-
-        return outcome
 
     def initialize_turn(self):
         initializer.initialize_turn(self)
