@@ -152,8 +152,12 @@ class Unit(object):
             return globals()[choice]()
 
         upgrade = globals()[self.name.replace(" ", "_")]()
+        for state, value in self.states.items():
+            upgrade.add(state, value)
+        for trait, value in self.traits.items():
+            upgrade.add(trait, value)
         for trait, value in choice.items():
-            upgrade.set(trait, value)
+            upgrade.add(trait, value)
 
         return upgrade
 
