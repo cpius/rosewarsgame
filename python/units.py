@@ -170,7 +170,8 @@ class Unit(object):
         traits = dict((trait, value) for trait, value in self.traits.items() if value)
         base_unit = globals()[self.name.replace(" ", "_")]()
         for trait in base_unit.traits:
-            del traits[trait]
+            if trait in traits:
+                del traits[trait]
 
         return traits
 
