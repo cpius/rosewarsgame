@@ -117,14 +117,14 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         abilities = []
 
-        for ability in unit.abilities:
-            if ability in [Ability.sabotage, Ability.sabotage_II, Ability.poison, Ability.poison_II]:
+        for ability, value in unit.abilities.items():
+            if ability in [Ability.sabotage, Ability.poison]:
                 target_positions = enemy_units
 
-            elif ability in [Ability.improve_weapons, Ability.improve_weapons_II_A]:
+            elif ability in [Ability.improve_weapons, Ability.improve_weapons_B]:
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
 
-            elif ability in [Ability.bribe, Ability.bribe_II]:
+            elif ability == Ability.bribe:
                 target_positions = [pos for pos, target in enemy_units.items() if not target.get(State.bribed) and not
                                     target.has(State.recently_bribed)]
             else:
@@ -171,9 +171,17 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     if unit.is_ranged():
         return ranged_actions()
 
-    for trait in [Trait.rage, Trait.berserking, Trait.scouting, Trait.defence_maneuverability]:
-        if unit.has(trait):
-            moves, attacks = locals()[Trait.name[trait]]()
+    if unit.has(Trait.rage, 1):
+        moves, attacks = rage()
+
+    if unit.has(Trait.berserking):
+        moves, attacks = berserking()
+
+    if unit.has(Trait.scouting):
+        moves, attacks = scouting()
+
+    if unit.has(Trait.defence_maneuverability):
+        moves, attacks = defence_maneuverability()
 
     if unit.has(State.extra_action):
         moves, attacks = extra_action()
