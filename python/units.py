@@ -44,34 +44,39 @@ class Unit(object):
     final_upgrades = []
     custom_ability = {Ability.poison: "poison",
                       Ability.poison_II: "poison_II",
-                      Ability.improve_weapons_II_A: "improve_weapons_II_A",
-                      Ability.improve_weapons_II_B: "improve_weapons_II_B"}
-    apply_ability = {Ability.sabotage: Trait.sabotaged,
-                     Ability.sabotage_II: Trait.sabotaged_II,
-                     Ability.improve_weapons: Trait.improved_weapons}
+                      Ability.improve_weapons_II_A: "improve_weapons_II_A"}
+    apply_ability = {Ability.sabotage: State.sabotaged,
+                     Ability.sabotage_II: State.sabotaged_II,
+                     Ability.improve_weapons: State.improved_weapons}
 
     def __repr__(self):
         return self.name
 
-    def set(self, attribute, n=1):
-        self.variables[attribute] = n
+    def set(self, attr, n=1):
+        if is_trait(attr):
+            self.traits[attr] = n
+            self.remove_lower_traits(attr)
+        else:
+            self.states[attr] = n
 
     def has(self, attribute):
-        return attribute in self.constants or self.variables[attribute]
+        return self.traits[attribute] or self.states[attribute]
 
     def get(self, attribute):
-        return self.variables[attribute]
+        if is_trait(attribute):
+            return self.traits[attribute]
+        else:
+            return self.states[attribute]
 
     def increment(self, attribute):
-        self.variables[attribute] += 1
+        self.states[attribute] += 1
 
     def remove(self, attribute):
-        self.variables[attribute] = 0
-        if attribute in self.constants:
-            del self.constants[attribute]
+        self.states[attribute] = 0
+        self.traits[attribute] = 0
 
     def decrement(self, attribute):
-        self.variables[attribute] = max(0, self.variables[attribute] - 1)
+        self.states[attribute] = max(0, self.states[attribute] - 1)
 
     def do(self, ability):
         if ability in self.apply_ability:
@@ -87,18 +92,17 @@ class Unit(object):
         self.freeze(3)
 
     def freeze(self, n):
-        self.set(Trait.frozen, max(self.get(Trait.frozen), n))
+        self.set(State.frozen, max(self.get(State.frozen), n))
 
     def gain_xp(self):
-        if not self.has(Trait.used) and not settings.beginner_mode:
-            self.increment(Trait.xp)
+        if not self.has(State.used) and not settings.beginner_mode:
+            self.increment(State.xp)
 
     def improve_weapons_II_A(self):
-        self.set(Trait.improved_weapons_II_A, 2)
-
+        self.set(State.improved_weapons_II_A, 2)
 
     def has_extra_life(self):
-        return self.has(Trait.extra_life) and not self.has(Trait.lost_extra_life)
+        return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
 
     def is_melee(self):
         return self.range == 1
@@ -107,9 +111,9 @@ class Unit(object):
         return self.range > 1
 
     def is_bribed(self):
-        return self.has(Trait.bribed) or self.has(Trait.bribed_II)
+        return self.has(State.bribed) or self.has(State.bribed_II)
 
-    def upgrade_trait(self, trait):
+    def remove_lower_traits(self, trait):
         if trait == Trait.attack_cooldown_II:
             self.remove(Trait.attack_cooldown)
         elif trait == Trait.crusading_II:
@@ -140,15 +144,21 @@ class Unit(object):
             return globals()[choice]()
 
         upgrade = globals()[self.name.replace(" ", "_")]()
-        upgrade.constants = self.constants.copy()
         for trait, value in choice.items():
-            upgrade.upgrade_trait(trait)
-            if trait in upgrade.constants:
-                upgrade.constants[trait] += value
-            else:
-                upgrade.constants[trait] = value
+            upgrade.set(trait, value)
 
         return upgrade
+
+    def get_traits_not_in_base(self):
+        traits = dict((trait, value) for trait, value in self.traits.items() if value)
+        base_unit = globals()[self.name.replace(" ", "_")]()
+        for trait in base_unit.traits:
+            del traits[trait]
+
+        return traits
+
+    def get_states(self):
+        return dict((state, value) for state, value in self.states.items() if value)
 
 
 class Archer(Unit):

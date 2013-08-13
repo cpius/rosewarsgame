@@ -149,37 +149,22 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if isinstance(unit_document, basestring):
-                name = unit_document.replace(" ", "_")
-                unit_class = getattr(units_module, name)
-                unit = unit_class()
-                units[position] = unit
-                unit.constants = unit.constants.copy()
+                unit = getattr(units_module, unit_document.replace(" ", "_"))()
 
             else:
-                unit_name = unit_document["name"].replace(" ", "_")
-                unit = getattr(units_module, unit_name)()
-                unit.constants = unit.constants.copy()
+                unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
 
-                for attribute, value in unit_document.items():
-                    if attribute == "zoc":
+                for attr, value in unit_document.items():
+                    if attr == "zoc":
                         unit.zoc = {getattr(Type, unit_type) for unit_type in unit_document["zoc"]}
-                    elif attribute in constant_traits:
-                        attr = getattr(Trait, attribute)
-                        unit.constants[attr] = value
+                    elif attr in state_descriptions:
+                        state = getattr(State, attr)
+                        unit.set(state, value)
+                    elif attr in trait_descriptions:
+                        trait = getattr(Trait, attr)
+                        unit.set(trait, value)
 
-                    elif attribute in ability_descriptions:
-                        attr = getattr(Ability, attribute)
-                        if hasattr(unit, "constants"):
-                            unit.constants[attr] = value
-                        else:
-                            unit.constants = {attr: value}
-
-                    elif attribute != "name":
-
-                        attr = getattr(Trait, attribute)
-                        unit.variables[attr] = value
-
-                units[position] = unit
+            units[position] = unit
 
         return units
 
@@ -203,17 +188,12 @@ class Gamestate:
         for unit_position, unit in units.items():
             position = str(unit_position)
 
-            document_variables = [attribute for attribute, value in unit.variables.items() if value]
+            states = unit.get_states()
+            traits = unit.get_traits_not_in_base()
+            attributes = merge(states, traits)
 
-            base_unit = getattr(units_module, unit.name.replace(" ", "_"))()
-            document_constants = [attribute for attribute in unit.constants if attribute not in base_unit.constants]
-
-            if document_variables or document_constants:
-                unit_dict = {}
-                for attribute in document_variables:
-                    unit_dict[Trait.name[attribute]] = unit.variables[attribute]
-                for attribute in document_constants:
-                    unit_dict[Trait.name[attribute]] = unit.constants[attribute]
+            if attributes:
+                unit_dict = readable_attributes(attributes)
                 unit_dict["name"] = unit.name
                 units_dict[position] = unit_dict
             else:
