@@ -144,8 +144,6 @@ state_descriptions = {
     "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
     "improved_weapons_II_A": "Whether a unit currently has been the target of an improve_weapons function by a "
                              "Weaponsmith_II_A",
-    "improved_weapons_II_B": "Whether a unit currently has been the target of an improve_weapons function by a "
-                             "Weaponsmith_II_B",
     "lost_extra_life": "Whether the unit has lost its extra life",
     "movement_remaining": "Movement points left for doing an extra action",
     "recently_bribed": "Whether a unit was bribed last turn.",
@@ -162,7 +160,6 @@ ability_descriptions = {
                 "bribe the same unit on your next turn. The unit gets +2A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
     "improve_weapons_II_A": "Give melee unit +2 attack, +1 defence for two turns.",
-    "improve_weapons_II_B": "Give melee unit +3 attack, +2 defence, and zoc against cavalry until your next turn",
     "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
     "poison": "Freezes a unit for 2 turns.",
     "poison_II": "Freezes a unit for 3 turns.",
@@ -264,7 +261,6 @@ if 1 == 2:
         bribe_II = None
         improve_weapons = None
         improve_weapons_II_A = None
-        improve_weapons_II_B = None
         pikeman_specialist = None
         poison = None
         sabotage = None
