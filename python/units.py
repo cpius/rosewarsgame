@@ -7,6 +7,7 @@ class Unit(object):
     def __init__(self):
         self.traits = defaultdict(int)
         self.states = defaultdict(int)
+        self.abilities = defaultdict(int)
 
     name = ""
     zoc = []
@@ -53,33 +54,37 @@ class Unit(object):
         return self.name
 
     def set(self, attr, n=1):
-        if is_trait(attr):
+        if attr in Trait.name:
             self.traits[attr] = n
             self.remove_lower_traits(attr)
+        elif attr in Ability.name:
+            self.abilities[attr] = n
         else:
             self.states[attr] = n
 
     def add(self, attr, n):
-        if is_trait(attr):
+        if attr in Trait.name:
             self.traits[attr] += n
             self.remove_lower_traits(attr)
-        else:
+        elif attr in Ability.name:
+            self.abilities[attr] += n
+        elif attr in State.name:
             self.states[attr] += n
 
     def has(self, attribute):
         return self.traits[attribute] or self.states[attribute]
 
-    def get(self, attribute):
-        if is_trait(attribute):
-            return self.traits[attribute]
+    def get(self, attr):
+        if attr in Trait.name:
+            return self.traits[attr]
         else:
-            return self.states[attribute]
+            return self.states[attr]
 
     def increment(self, attribute):
         self.states[attribute] += 1
 
     def remove(self, attr):
-        if is_trait(attr):
+        if attr in Trait.name:
             self.traits[attr] = 0
         else:
             self.states[attr] = 0
@@ -618,7 +623,10 @@ class Samurai(Unit):
 
 
 class Saboteur(Unit):
-    
+    def __init__(self):
+        super(Saboteur, self).__init__()
+        self.set(Ability.sabotage, 1)
+        self.set(Ability.poison, 1)
     name = "Saboteur"
     image = "Saboteur"
     base_attack = 0
@@ -628,14 +636,14 @@ class Saboteur(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Ability.sabotage_II: 1}, {Ability.poison_II: 1}]
+    special_upgrades = [{Ability.sabotage: 1}, {Ability.poison: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
-
-    abilities = [Ability.sabotage, Ability.poison]
 
 
 class Diplomat(Unit):
-    
+    def __init__(self):
+        super(Diplomat, self).__init__()
+        self.set(Ability.bribe, 1)
     name = "Diplomat"
     image = "Diplomat"
     base_attack = 0
@@ -645,14 +653,15 @@ class Diplomat(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Ability.bribe_II}]
+    special_upgrades = [{Ability.bribe: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
-
-    abilities = [Ability.bribe]
 
 
 class Weaponsmith(Unit):
-    
+    def __init__(self):
+        super(Weaponsmith, self).__init__()
+        self.set(Ability.improve_weapons, 1)
+
     name = "Weaponsmith"
     image = "Weaponsmith"
     base_attack = 0
@@ -662,8 +671,5 @@ class Weaponsmith(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{State.improved_weapons_II_A: 1}]
+    special_upgrades = [{Ability.improve_weapons: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
-
-    abilities = [Ability.improve_weapons]
-
