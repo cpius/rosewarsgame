@@ -138,10 +138,14 @@ class Unit(object):
             return self.upgrades[choice_number].replace(" ", "_")
 
         if getattr(self, "special_upgrades"):
-            if len(self.special_upgrades) == 1:
-                choices = [self.special_upgrades[0], self.final_upgrades[0]]
-            else:
-                choices = self.special_upgrades
+            available_special_upgrades = [upgrade for upgrade in self.special_upgrades if upgrade.keys()[0] not in self.traits]
+        else:
+            available_special_upgrades = []
+
+        if len(available_special_upgrades) == 1:
+            choices = [available_special_upgrades[0], self.final_upgrades[0]]
+        elif len(available_special_upgrades) == 2:
+            choices = available_special_upgrades
         else:
             choices = self.final_upgrades
 
