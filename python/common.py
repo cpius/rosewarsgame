@@ -106,13 +106,11 @@ trait_descriptions = {
     "extra_life": "It takes two successful hits to kill this unit.",
     "far_sighted": "-1A if target is less than 4 tiles away.",
     "flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer.",
-    "flag_bearing_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer.",
-    "flag_bearing_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer.",
+    "flag_bearing_B": "Friendly melee units receive +2A while surrounding Flag Bearer.",
     "melee_expert": "+1A, +1D vs melee units.",
     "melee_freeze": "Units adjacent to it can only attack it, not move.",
     "pikeman_specialist": "Pikemen do not get +1A/+1D against it.",
     "lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A.",
-    "lancing_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A.",
     "longsword": "Also hits the 4 nearby tiles in the attack direction.",
     "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
             "must retreat directly backwards or die.",
@@ -138,17 +136,14 @@ trait_descriptions = {
 state_descriptions = {
     "attack_frozen": "Unit cannot attack",
     "bribed": "Whether a unit is currently bribed by a Diplomat.",
-    "bribed_II": "Whether a unit is currently bribed by a Diplomat_II_B.",
     "extra_action": "Whether the unit is doing its extra action.",
     "frozen": "Unit cannot perform any actions.",
     "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
-    "improved_weapons_II_A": "Whether a unit currently has been the target of an improve_weapons function by a "
-                             "Weaponsmith_II_A",
+    "improved_weapons_B": "Whether a unit currently has been the target of an improve_weapons_B function",
     "lost_extra_life": "Whether the unit has lost its extra life",
     "movement_remaining": "Movement points left for doing an extra action",
     "recently_bribed": "Whether a unit was bribed last turn.",
     "sabotaged": "Whether a unit is currently sabotaged by a Saboteur.",
-    "sabotaged_II": "Whether a unit is currently sabotaged by a Saboteur_II_B.",
     "used": "Whether a unit has been used this round.",
     "xp": "Experience.",
 }
@@ -156,16 +151,15 @@ state_descriptions = {
 ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
-    "bribe_II": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't "
-                "bribe the same unit on your next turn. The unit gets +2A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
-    "improve_weapons_II_A": "Give melee unit +2 attack, +1 defence for two turns.",
+    "improve_weapons_B": "Give melee unit +2 attack, +1 defence for two turns.",
     "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
     "poison": "Freezes a unit for 2 turns.",
-    "poison_II": "Freezes a unit for 3 turns.",
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
-    "sabotage_II": "Reduces a units defence to -1 for 1 turn.",
-    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction."
+    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
+    "improve_weapons_II_A": "",
+    "sabotage_II": "",
+    "bribe_II": ""
 }
 
 
@@ -178,10 +172,6 @@ State = enum(1000, *(trait for trait in dict(state_descriptions)))
 Ability = enum(2000, *(ability for ability in ability_descriptions))
 
 Type = enum(3000, *types)
-
-
-def is_trait(n):
-    return n < 999
 
 
 if 1 == 2:
@@ -202,7 +192,7 @@ if 1 == 2:
         extra_action = None
         frozen = None
         improved_weapons = None
-        improved_weapons_II_A = None
+        improved_weapons_B = None
         movement_remaining = None
         lost_extra_life = None
         xp = None
@@ -239,8 +229,7 @@ if 1 == 2:
         far_sighted = None
         lancing_II = None
         flag_bearing = None
-        flag_bearing_II_A = None
-        flag_bearing_II_B = None
+        flag_bearing_B = None
         crusading = None
         crusading = None
         attack_cooldown_II = None
@@ -260,15 +249,13 @@ if 1 == 2:
 
     class Ability:
         bribe = None
-        bribe_II = None
         improve_weapons = None
-        improve_weapons_II_A = None
         pikeman_specialist = None
         poison = None
         sabotage = None
         sabotage_II = None
         triple_attack = None
-        poison_II = None
+        improve_weapons_B = None
 
         name = {}
         write = {}
@@ -299,7 +286,7 @@ def adjacent_friendly_positions(position, units):
     return (pos for pos in position.adjacent_tiles() if pos in units)
 
 
-def surrounding_friendly_units(position, units):
+def surrounding_units(position, units):
     return (units[pos] for pos in position.surrounding_tiles() if pos in units)
 
 
@@ -354,8 +341,10 @@ def readable_attributes(attributes):
     d = {}
     for key, value in attributes.items():
         if value:
-            if is_trait(key):
+            if key in Trait.name:
                 d[Trait.name[key]] = value
+            elif key in Ability.name:
+                d[Ability.name[key]] = value
             else:
                 d[State.name[key]] = value
     return d
@@ -369,3 +358,7 @@ def merge(d1, d2):
 
 def get_trait_enum_dict(dictionary):
     return dict((getattr(Trait, key), value) for key, value in dictionary.items())
+
+
+def get_ability_enum_dict(dictionary):
+    return dict((getattr(Ability, key), value) for key, value in dictionary.items())
