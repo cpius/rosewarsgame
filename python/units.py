@@ -222,15 +222,17 @@ class Crossbow_Archer(Unit):
 
 
 class Pikeman(Unit):
-
+    def __init__(self):
+        super(Pikeman, self).__init__()
+        self.set(Trait.cavalry_specialist, 1)
     name = "Pikeman"
     image = "Pikeman"
     base_attack = 2
     base_defence = 2
     base_movement = 1
     base_range = 1
-    attack_bonuses = {Type.Cavalry: 1}
-    defence_bonuses = {Type.Cavalry: 1}
+    #attack_bonuses = {Type.Cavalry: 1}
+    #defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
     zoc = [Type.Cavalry]
     upgrades = ["Halberdier", "Royal Guard"]
