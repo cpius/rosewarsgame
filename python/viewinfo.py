@@ -1,5 +1,4 @@
 from __future__ import division
-import units as unitsmodule
 import pygame
 import textwrap
 from viewcommon import *
