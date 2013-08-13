@@ -284,7 +284,7 @@ class Controller(object):
                 return
 
     def upgrade_unit(self, position, unit):
-        if unit.get(Trait.xp) < unit.xp_to_upgrade:
+        if unit.get(State.xp) < unit.xp_to_upgrade:
             return
 
         choice = self.get_input_upgrade(unit)
