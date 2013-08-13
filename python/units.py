@@ -166,6 +166,9 @@ class Archer(Unit):
 
 
 class Fire_Archer(Unit):
+    def __init__(self):
+        super(Fire_Archer, self).__init__()
+        self.set(Trait.fire_arrows, 1)
     name = "Fire Archer"
     image = "Fire Archer"
     base_attack = 2
@@ -175,10 +178,11 @@ class Fire_Archer(Unit):
     type = Type.Infantry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
-    constants = {Trait.fire_arrows: 1}
-
 
 class Crossbow_Archer(Unit):
+    def __init__(self):
+        super(Crossbow_Archer, self).__init__()
+        self.set(Trait.sharpshooting, 1)
     name = "Crossbow Archer"
     image = "Crossbow Archer"
     base_attack = 2
@@ -190,8 +194,6 @@ class Crossbow_Archer(Unit):
     type = Type.Infantry
     special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}, ]
-
-    constants = {Trait.sharpshooting: 1}
 
 
 class Pikeman(Unit):
@@ -211,6 +213,9 @@ class Pikeman(Unit):
 
 
 class Halberdier(Unit):
+    def __init__(self):
+        super(Halberdier, self).__init__()
+        self.set(Trait.push, 1)
     name = "Halberdier"
     image = "Halberdier"
     base_attack = 3
@@ -221,8 +226,6 @@ class Halberdier(Unit):
     defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.push: 1}
 
 
 class Light_Cavalry(Unit):
@@ -241,6 +244,9 @@ class Light_Cavalry(Unit):
 
 
 class Dragoon(Unit):
+    def __init__(self):
+        super(Dragoon, self).__init__()
+        self.set(Trait.swiftness, 1)
 
     name = "Dragoon"
     image = "Dragoon"
@@ -254,10 +260,13 @@ class Dragoon(Unit):
     special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.swiftness: 1}
+    traits = {Trait.swiftness: 1}
 
 
 class Hussar(Unit):
+    def __init__(self):
+        super(Hussar, self).__init__()
+        self.set(Trait.triple_attack, 1)
 
     name = "Hussar"
     image = "Hussar"
@@ -271,10 +280,11 @@ class Hussar(Unit):
     type = Type.Cavalry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]
 
-    constants = {Trait.triple_attack: 1}
-
 
 class Cavalry_Lieutenant(Unit):
+    def __init__(self):
+        super(Cavalry_Lieutenant, self).__init__()
+        self.set(Trait.cavalry_charging, 1)
 
     name = "Cavalry Lieutenant"
     image = "Light Cavalry"
@@ -286,8 +296,6 @@ class Cavalry_Lieutenant(Unit):
     defence_bonuses = {}
     type = Type.Cavalry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.cavalry_charging: 1}
 
 
 class Knight(Unit):
@@ -305,6 +313,9 @@ class Knight(Unit):
 
 
 class Lancer(Unit):
+    def __init__(self):
+        super(Lancer, self).__init__()
+        self.set(Trait.lancing, 1)
 
     name = "Lancer"
     image = "Lancer"
@@ -319,10 +330,11 @@ class Lancer(Unit):
     special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing_II: 1, Trait.movement_skill: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.lancing: 1}
-
 
 class Hobelar(Unit):
+    def __init__(self):
+        super(Hobelar, self).__init__()
+        self.set(Trait.swiftness, 1)
 
     name = "Hobelar"
     image = "Hobelar"
@@ -335,9 +347,6 @@ class Hobelar(Unit):
     zoc = []
     type = Type.Cavalry
     special_upgrades = [{Trait.flanking: 1}]
-    final_upgrades = [{Trait.movement_skill: 1}, {Trait.attack_skill: 1}]
-
-    constants = {Trait.swiftness: 1}
 
 
 class Ballista(Unit):
@@ -356,6 +365,9 @@ class Ballista(Unit):
 
 
 class Catapult(Unit):
+    def __init__(self):
+        super(Catapult, self).__init__()
+        self.set(Trait.double_attack_cost, 1)
 
     name = "Catapult"
     image = "Catapult"
@@ -369,10 +381,11 @@ class Catapult(Unit):
     xp_to_upgrade = 2
     final_upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
 
-    constants = {Trait.double_attack_cost: 1}
-
 
 class Royal_Guard(Unit):
+    def __init__(self):
+        super(Royal_Guard, self).__init__()
+        self.set(Trait.defence_maneuverability, 1)
   
     name = "Royal Guard"
     image = "Royal Guard"
@@ -388,10 +401,11 @@ class Royal_Guard(Unit):
     special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.defence_maneuverability: 1}
-
 
 class Scout(Unit):
+    def __init__(self):
+        super(Scout, self).__init__()
+        self.set(Trait.scouting, 1)
     
     name = "Scout"
     image = "Scout"
@@ -407,10 +421,12 @@ class Scout(Unit):
     special_upgrades = [{Trait.tall_shield}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill}]
 
-    constants = {Trait.scouting: 1}
-
 
 class Viking(Unit):
+    def __init__(self):
+        super(Viking, self).__init__()
+        self.set(Trait.rage, 1)
+        self.set(Trait.extra_life, 1)
 
     name = "Viking"
     image = "Viking"
@@ -425,10 +441,13 @@ class Viking(Unit):
     special_upgrades = [{Trait.rage_II: 1}, {Trait.siege_weapon_specialist: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.rage: 1, Trait.extra_life: 1}
+    traits = {Trait.rage: 1, Trait.extra_life: 1}
 
 
 class Cannon(Unit):
+    def __init__(self):
+        super(Cannon, self).__init__()
+        self.set(Trait.attack_cooldown, 1)
     
     name = "Cannon"
     image = "Cannon"
@@ -442,12 +461,12 @@ class Cannon(Unit):
     type = Type.Siege_Weapon
     xp_to_upgrade = 3
     special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
-
-    constants = {Trait.attack_cooldown: 3}
 
 
 class Flag_Bearer(Unit):
+    def __init__(self):
+        super(Flag_Bearer, self).__init__()
+        self.set(Trait.flag_bearing, 1)
    
     name = "Flag Bearer"
     image = "Flag Bearer"
@@ -462,10 +481,11 @@ class Flag_Bearer(Unit):
     special_upgrades = [{Trait.flag_bearing_II_A: 1}, {Trait.flag_bearing_II_B: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.flag_bearing: 1}
-
 
 class Longswordsman(Unit):
+    def __init__(self):
+        super(Longswordsman, self).__init__()
+        self.set(Trait.longsword, 1)
 
     name = "Longswordsman"
     image = "Longswordsman"
@@ -477,12 +497,14 @@ class Longswordsman(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
+    special_upgrades = [{Trait.rage: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.longsword: 1}
 
 
 class Crusader(Unit):
+    def __init__(self):
+        super(Crusader, self).__init__()
+        self.set(Trait.crusading, 1)
 
     name = "Crusader"
     image = "Crusader"
@@ -497,10 +519,11 @@ class Crusader(Unit):
     special_upgrades = [{Trait.crusading_II}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.crusading: 1}
-
 
 class Berserker(Unit):
+    def __init__(self):
+        super(Berserker, self).__init__()
+        self.set(Trait.berserking, 1)
 
     name = "Berserker"
     image = "Berserker"
@@ -515,10 +538,13 @@ class Berserker(Unit):
     special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.berserking: 1}
-
 
 class War_Elephant(Unit):
+    def __init__(self):
+        super(War_Elephant, self).__init__()
+        self.set(Trait.double_attack_cost, 1)
+        self.set(Trait.triple_attack, 1)
+        self.set(Trait.push, 1)
 
     name = "War Elephant"
     image = "War Elephant"
@@ -533,11 +559,14 @@ class War_Elephant(Unit):
     final_upgrades = [{Trait.defence_skill: 1}, {Trait.attack_skill: 1}]
     xp_to_upgrade = 3
 
-    constants = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
+    traits = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
 
 
 class Samurai(Unit):
-    
+    def __init__(self):
+        super(Samurai, self).__init__()
+        self.set(Trait.combat_agility, 1)
+
     name = "Samurai"
     image = "Samurai"
     base_attack = 3
@@ -551,7 +580,7 @@ class Samurai(Unit):
     special_upgrades = [{Trait.bloodlust: 1}],
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.combat_agility: 1}
+    traits = {Trait.combat_agility: 1}
 
 
 class Saboteur(Unit):
@@ -582,7 +611,7 @@ class Diplomat(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Trait.bribed_II}]
+    special_upgrades = [{Ability.bribe_II}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
     abilities = [Ability.bribe]
