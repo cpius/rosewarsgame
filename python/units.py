@@ -146,8 +146,8 @@ class Unit(object):
             upgrade.add(state, value)
         for trait, value in self.traits.items():
             upgrade.add(trait, value)
-        for trait, value in choice.items():
-            upgrade.add(trait, value)
+        for attr, value in choice.items():
+            upgrade.add(attr, value)
 
         return upgrade
 
