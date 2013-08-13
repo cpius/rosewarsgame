@@ -153,7 +153,7 @@ def draw_symbols(screen, interface, unit, position):
     for index in range(blue_boxes, total_boxes):
         draw_box(index, colors["white"])
 
-    if unit.is_bribed():
+    if unit.has(State.bribed):
         draw_bribed(screen, interface, position)
 
     #if "II" in unit.name:
