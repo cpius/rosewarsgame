@@ -59,6 +59,12 @@ class Unit(object):
         else:
             self.states[attr] = n
 
+    def add(self, attr, n):
+        if is_trait(attr):
+            self.traits[attr] += n
+        else:
+            self.states[attr] += n
+
     def has(self, attribute):
         return self.traits[attribute] or self.states[attribute]
 
