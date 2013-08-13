@@ -111,9 +111,6 @@ class Unit(object):
     def improve_weapons_II_A(self):
         self.set(Trait.improved_weapons_II_A, 2)
 
-    def improve_weapons_II_B(self):
-        self.variables[Trait.improved_weapons_II_B] = 1
-        self.zoc = {Type.Cavalry}
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(Trait.lost_extra_life)
@@ -617,7 +614,7 @@ class Weaponsmith(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Trait.improved_weapons_II_A: 1}, {Trait.improved_weapons_II_B: 1}]
+    special_upgrades = [{State.improved_weapons_II_A: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
     abilities = [Ability.improve_weapons]
