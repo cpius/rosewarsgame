@@ -357,3 +357,9 @@ def readable_attributes(attributes):
             else:
                 d[State.name[key]] = value
     return d
+
+
+def merge(d1, d2):
+    d = d1.copy()
+    d.update(d2)
+    return d
