@@ -13,7 +13,6 @@ class Unit(object):
     zoc = []
     abilities = []
     xp_to_upgrade = 4
-    upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}
     traits = {}
