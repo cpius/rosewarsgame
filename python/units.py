@@ -42,12 +42,6 @@ class Unit(object):
     upgrades = []
     special_upgrades = []
     final_upgrades = []
-    custom_ability = {Ability.poison: "poison",
-                      Ability.poison_II: "poison_II",
-                      Ability.improve_weapons_II_A: "improve_weapons_II_A"}
-    apply_ability = {Ability.sabotage: State.sabotaged,
-                     Ability.sabotage_II: State.sabotaged_II,
-                     Ability.improve_weapons: State.improved_weapons}
 
     def __repr__(self):
         return self.name
@@ -55,7 +49,6 @@ class Unit(object):
     def set(self, attr, n=1):
         if attr in Trait.name:
             self.traits[attr] = n
-            self.remove_lower_traits(attr)
         elif attr in Ability.name:
             self.abilities[attr] = n
         else:
@@ -64,14 +57,16 @@ class Unit(object):
     def add(self, attr, n):
         if attr in Trait.name:
             self.traits[attr] += n
-            self.remove_lower_traits(attr)
         elif attr in Ability.name:
             self.abilities[attr] += n
         elif attr in State.name:
             self.states[attr] += n
 
-    def has(self, attribute):
-        return self.traits[attribute] or self.states[attribute]
+    def has(self, attr, value=None):
+        if not value:
+            return self.traits[attr] or self.states[attr]
+        else:
+            return self.traits[attr] == value or self.states[attr] == value
 
     def get(self, attr):
         if attr in Trait.name:
@@ -91,18 +86,22 @@ class Unit(object):
     def decrement(self, attribute):
         self.states[attribute] = max(0, self.states[attribute] - 1)
 
-    def do(self, ability):
-        if ability in self.apply_ability:
-            self.set(self.apply_ability[ability])
-        if ability in self.custom_ability:
-            getattr(self, self.custom_ability[ability])()
+    def do(self, ability, value):
+        if ability == Ability.poison:
+            self.set(State.frozen, value + 1)
+
+        if ability == Ability.sabotage:
+            self.set(State.sabotaged, value)
+
+        if ability == Ability.improve_weapons:
+            self.set(State.improved_weapons)
+
+        if ability == Ability.improve_weapons_B:
+            self.set(State.improved_weapons_B)
 
     # custom functions
     def poison(self):
         self.freeze(2)
-
-    def poison_II(self):
-        self.freeze(3)
 
     def freeze(self, n):
         self.set(State.frozen, max(self.get(State.frozen), n))
@@ -110,9 +109,6 @@ class Unit(object):
     def gain_xp(self):
         if not self.has(State.used) and not settings.beginner_mode:
             self.increment(State.xp)
-
-    def improve_weapons_II_A(self):
-        self.set(State.improved_weapons_II_A, 2)
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
@@ -122,21 +118,6 @@ class Unit(object):
 
     def is_ranged(self):
         return self.range > 1
-
-    def is_bribed(self):
-        return self.has(State.bribed) or self.has(State.bribed_II)
-
-    def remove_lower_traits(self, trait):
-        if trait == Trait.attack_cooldown_II:
-            self.remove(Trait.attack_cooldown)
-        elif trait == Trait.crusading_II:
-            self.remove(Trait.crusading)
-        elif trait in [Trait.flag_bearing_II_A, Trait.flag_bearing_II_B]:
-            self.remove(Trait.flag_bearing)
-        elif trait == Trait.lancing_II:
-            self.remove(Trait.lancing)
-        elif trait == Trait.rage_II:
-            self.remove(Trait.rage)
 
     def get_upgrade_choice(self, choice_number):
         if getattr(self, "upgrades"):
@@ -364,7 +345,7 @@ class Lancer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing_II: 1, Trait.movement_skill: 1}]
+    special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -476,7 +457,7 @@ class Viking(Unit):
     defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
     type = Type.Infantry
-    special_upgrades = [{Trait.rage_II: 1}, {Trait.siege_weapon_specialist: 1}]
+    special_upgrades = [{Trait.rage: 1}, {Trait.siege_weapon_specialist: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     traits = {Trait.rage: 1, Trait.extra_life: 1}
@@ -516,7 +497,7 @@ class Flag_Bearer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.flag_bearing_II_A: 1}, {Trait.flag_bearing_II_B: 1}]
+    special_upgrades = [{Trait.flag_bearing_B: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -554,7 +535,7 @@ class Crusader(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.crusading_II}]
+    special_upgrades = [{Trait.crusading: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
