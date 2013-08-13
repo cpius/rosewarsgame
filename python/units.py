@@ -71,9 +71,11 @@ class Unit(object):
     def increment(self, attribute):
         self.states[attribute] += 1
 
-    def remove(self, attribute):
-        self.states[attribute] = 0
-        self.traits[attribute] = 0
+    def remove(self, attr):
+        if is_trait(attr):
+            self.traits[attr] = 0
+        else:
+            self.states[attr] = 0
 
     def decrement(self, attribute):
         self.states[attribute] = max(0, self.states[attribute] - 1)
