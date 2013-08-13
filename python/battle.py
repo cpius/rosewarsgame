@@ -29,8 +29,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
             attacking_unit.type in defending_unit.defence_bonuses else 0
 
     def improved_weapons():
-        improvements = {Trait.improved_weapons: 1, Trait.improved_weapons_II_A: 1,
-                        Trait.improved_weapons_II_B: 2}
+        improvements = {State.improved_weapons: 1, State.improved_weapons_II_A: 1}
         return sum(value for trait, value in improvements.items() if defending_unit.has(trait))
 
     def melee_expert():
@@ -46,7 +45,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
         return 1 if attacking_unit.has(Trait.sharpshooting) else defence
 
     def sabotaged(defence):
-        return 0 if any(defending_unit.has(effect) for effect in [Trait.sabotaged, Trait.sabotaged_II]) else defence
+        return 0 if any(defending_unit.has(effect) for effect in [State.sabotaged, State.sabotaged_II]) else defence
 
     def cavalry_specialist():
         return int(defending_unit.has(Trait.cavalry_specialist) and attacking_unit.type == Type.Cavalry)
@@ -88,12 +87,11 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
         return sum(value for effect, value in effects.items() if getattr(action, effect)(player_units))
 
     def bribed():
-        traits = {Trait.bribed: 1, Trait.bribed_II: 2}
-        return sum(value for trait, value in traits.items() if attacking_unit.has(trait))
+        states = {State.bribed: 1, State.bribed_II: 2}
+        return sum(value for state, value in states.items() if attacking_unit.has(state))
 
     def improved_weapons():
-        traits = {Trait.improved_weapons: 3, Trait.improved_weapons_II_A: 2,
-                  Trait.improved_weapons_II_B: 3}
+        traits = {State.improved_weapons: 3, State.improved_weapons_II_A: 2}
         return sum(value for trait, value in traits.items() if attacking_unit.has(trait))
 
     def attack_bonuses():
