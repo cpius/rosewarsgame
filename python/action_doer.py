@@ -51,7 +51,8 @@ def do_action(gamestate, action, outcome):
             action.target_unit.set(State.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         else:
-            action.target_unit.do(action.ability)
+            value = action.unit.abilities[action.ability]
+            action.target_unit.do(action.ability, value)
 
     def prepare_extra_actions(action):
 

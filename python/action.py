@@ -27,14 +27,16 @@ class Action(object):
         self.target_at = target_at
 
         self.move_with_attack = move_with_attack
-        self.ability = ability
         self.number = number
 
         self.created_at = created_at if created_at else datetime.utcnow()
 
-        self.unit = units[self.start_at]
         if self.target_at and self.target_at in units:
             self.target_unit = units[self.target_at]
+
+        self.unit = units[self.start_at]
+
+        self.ability = ability
 
         self.outcome = outcome
 
@@ -129,34 +131,27 @@ class Action(object):
     def is_ability(self):
         return bool(self.ability)
 
-    def is_lancing(self):
-        return self.unit.has(Trait.lancing) and self.is_attack() and self.distance_to_target() >= 3
-
-    def is_lancing_II(self):
-        return self.unit.has(Trait.lancing_II) and self.is_attack() and self.distance_to_target() >= 4
+    def lancing(self):
+        if self.unit.has(Trait.lancing, 1) and self.is_attack() and self.distance_to_target() >= 3:
+            return 2
+        elif self.unit.has(Trait.lancing, 2) and self.is_attack() and self.distance_to_target() >= 4:
+            return 3
+        else:
+            return 0
 
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack()
 
-    def is_crusading(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.start_at, units) if unit.has(Trait.crusading))
-
-    def is_crusading_II_attack(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.start_at, units) if unit.has(Trait.crusading_II))
-
-    def is_crusading_II_defence(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.target_at, units) if unit.has(Trait.crusading_II))
+    def is_crusading(self, units, n=1):
+        units7 = [unit for unit in surrounding_units(self.start_at, units)]
+        return any(unit for unit in surrounding_units(self.start_at, units) if unit.has(Trait.crusading, n))
 
     def has_high_morale(self, units):
         return any(pos for pos in adjacent_friendly_positions(self.end_at, units) if
-                   pos != self.start_at and units[pos].has(Trait.flag_bearing))
+                   pos != self.start_at and units[pos].has(Trait.flag_bearing) and not units[pos].has(Trait.flag_bearing_B))
 
-    def has_high_morale_II_A(self, units):
-        return any(unit for unit in surrounding_friendly_units(self.end_at, units)
-                   if unit.has(Trait.flag_bearing_II_A))
-
-    def has_high_morale_II_B(self, units):
-        return any(unit for unit in adjacent_friendly_units(self.end_at, units) if unit.has(Trait.flag_bearing_II_B))
+    def has_high_morale_B(self, units):
+        return any(unit for unit in surrounding_units(self.end_at, units) if unit.has(Trait.flag_bearing_B))
 
     def distance_to_target(self):
         return distance(self.start_at, self.target_at)
