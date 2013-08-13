@@ -162,6 +162,9 @@ class Unit(object):
     def get_states(self):
         return dict((state, value) for state, value in self.states.items() if value)
 
+    def has_xp_required_to_upgrade(self):
+        return self.get(State.xp) % self.xp_to_upgrade == 0
+
 
 class Archer(Unit):
 
