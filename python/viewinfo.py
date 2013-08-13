@@ -43,29 +43,24 @@ def get_unit_lines(unit):
             lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
             lines.append("")
 
-    for trait in unit.constants.keys():
-        if trait not in [Trait.level, Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
-            lines.append(common.constant_traits[Trait.name[trait]])
-            lines.append("")
-
+    for trait in unit.traits:
+        if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
+            if unit.has(trait):
+                lines.append(Trait.write[trait] + ": " + trait_descriptions[Trait.name[trait]])
+                lines.append("")
 
     for ability in unit.abilities:
         lines.append(common.ability_descriptions[Ability.name[ability]])
         lines.append("")
 
-    for attribute in unit.variables:
-        if unit.variables[attribute]:
-            lines.append(Trait.write[attribute] + ": " + str(unit.variables[attribute]))
+    for state in unit.states:
+        if unit.states[state]:
+            lines.append(State.name[state] + ": " + str(unit.states[state]))
 
     return lines
 
 
 def show_unit_zoomed(screen, interface, unit):
-
-    print unit
-    print "const"
-    for attr in unit.constants:
-        print Trait.write[attr]
 
     unit_pic = get_unit_pic(interface, unit.image)
     pic = get_image(unit_pic, zoomed_unit_size)
@@ -79,7 +74,6 @@ def show_unit_zoomed(screen, interface, unit):
     screen.blit(pic, image_location)
 
     lines = get_unit_lines(unit)
-    lines.append("---------------------------------------------")
     line_length = 45
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
