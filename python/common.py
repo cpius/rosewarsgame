@@ -363,3 +363,7 @@ def merge(d1, d2):
     d = d1.copy()
     d.update(d2)
     return d
+
+
+def get_trait_enum_dict(dictionary):
+    return dict((getattr(Trait, key), value) for key, value in dictionary.items())
