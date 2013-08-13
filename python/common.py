@@ -81,8 +81,8 @@ class Position:
         return self.column < 1 or self.column > board_width
 
 
-def enum(*sequential, **named):
-    enums = dict(zip(sequential, range(1, len(sequential) + 1)), **named)
+def enum(n, *sequential, **named):
+    enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
     reverse_print = dict((value, key.replace("_", " ")) for key, value in enums.iteritems())
     enums['name'] = reverse
@@ -90,7 +90,7 @@ def enum(*sequential, **named):
     return type('Enum', (), enums)
 
 
-constant_traits = {
+trait_descriptions = {
     "attack_cooldown": "Can only attack every third turn.",
     "attack_cooldown_II": "Can only attack every second turn.",
     "berserking": "Can move 4 tiles if movement ends with an attack.",
@@ -135,7 +135,7 @@ constant_traits = {
     "level": "The number of upgrades."
 }
 
-variable_traits = {
+state_descriptions = {
     "attack_frozen": "Unit cannot attack",
     "bribed": "Whether a unit is currently bribed by a Diplomat.",
     "bribed_II": "Whether a unit is currently bribed by a Diplomat_II_B.",
@@ -174,11 +174,17 @@ ability_descriptions = {
 
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
-Trait = enum(*(trait for trait in dict(constant_traits, **variable_traits)))
+Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
 
-Ability = enum(*(ability for ability in ability_descriptions))
+State = enum(1000, *(trait for trait in dict(state_descriptions)))
 
-Type = enum(*types)
+Ability = enum(2000, *(ability for ability in ability_descriptions))
+
+Type = enum(3000, *types)
+
+
+def is_trait(n):
+    return n < 999
 
 
 if 1 == 2:
@@ -191,40 +197,45 @@ if 1 == 2:
         name = {}
         write = {}
 
-    class Trait:
+    class State:
         attack_cooldown = None
         attack_frozen = None
+        bribed = None
+        bribed_II = None
+        extra_action = None
+        frozen = None
+        improved_weapons = None
+        improved_weapons_II_A = None
+        movement_remaining = None
+        lost_extra_life = None
+        xp = None
+        used = None
+        recently_bribed = None
+        sabotaged = None
+        sabotaged_II = None
+
+        name = None
+
+    class Trait:
         berserking = None
         big_shield = None
         bloodlust = None
-        bribed = None
-        bribed_II = None
         cavalry_charging = None
         combat_agility = None
         defence_maneuverability = None
         double_attack_cost = None
-        extra_action = None
         extra_life = None
-        frozen = None
-        improved_weapons = None
-        improved_weapons_II_A = None
-        improved_weapons_II_B = None
         melee_expert = None
         melee_freeze = None
-        movement_remaining = None
         longsword = None
         push = None
         rage = None
         rage_II = None
-        recently_bribed = None
-        sabotaged = None
-        sabotaged_II = None
         scouting = None
         sharpshooting = None
         swiftness = None
         tall_shield = None
         triple_attack = None
-        used = None
         lancing = None
         attack_cooldown = None
         far_sighted = None
@@ -236,9 +247,7 @@ if 1 == 2:
         crusading = None
         attack_cooldown_II = None
         crusading_II = None
-        xp = None
         pikeman_specialist = None
-        lost_extra_life = None
         attack_skill = None
         defence_skill = None
         range_skill = None
@@ -247,10 +256,8 @@ if 1 == 2:
         cavalry_specialist = None
         siege_weapon_specialist = None
         flanking = None
-        level = None
 
-        name = {}
-        write = {}
+        name = None
 
     class Ability:
         bribe = None
