@@ -62,6 +62,7 @@ class Unit(object):
     def add(self, attr, n):
         if is_trait(attr):
             self.traits[attr] += n
+            self.remove_lower_traits(attr)
         else:
             self.states[attr] += n
 
