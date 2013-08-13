@@ -379,6 +379,7 @@ class Hobelar(Unit):
     zoc = []
     type = Type.Cavalry
     special_upgrades = [{Trait.flanking: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
 class Ballista(Unit):
