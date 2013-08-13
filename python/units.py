@@ -5,7 +5,8 @@ from common import *
 
 class Unit(object):
     def __init__(self):
-        self.variables = defaultdict(int)
+        self.traits = defaultdict(int)
+        self.states = defaultdict(int)
 
     name = ""
     zoc = []
@@ -14,7 +15,7 @@ class Unit(object):
     upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}
-    constants = {}
+    traits = {}
     base_attack = 0
     base_defence = 0
     base_range = 0
@@ -22,35 +23,19 @@ class Unit(object):
 
     @property
     def attack(self):
-        attack = self.base_attack
-        if Trait.attack_skill in self.constants:
-            return attack + self.constants[Trait.attack_skill]
-        else:
-            return attack
+        return self.base_attack + self.get(Trait.attack_skill)
 
     @property
     def defence(self):
-        defence = self.base_defence
-        if Trait.defence_skill in self.constants:
-            return defence + self.constants[Trait.defence_skill]
-        else:
-            return defence
+        return self.base_defence + self.get(Trait.defence_skill)
 
     @property
     def range(self):
-        range = self.base_range
-        if Trait.range_skill in self.constants:
-            return range + self.constants[Trait.range_skill]
-        else:
-            return range
+        return self.base_range + self.get(Trait.range_skill)
 
     @property
     def movement(self):
-        movement = self.base_movement
-        if Trait.movement_skill in self.constants:
-            return movement + self.constants[Trait.movement_skill]
-        else:
-            return movement
+        return self.base_movement + self.get(Trait.movement_skill)
 
     type = None
     level = 0
