@@ -212,6 +212,7 @@ if 1 == 2:
         sabotaged_II = None
 
         name = None
+        write = None
 
     class Trait:
         berserking = None
@@ -255,6 +256,7 @@ if 1 == 2:
         flanking = None
 
         name = None
+        write = None
 
     class Ability:
         bribe = None
