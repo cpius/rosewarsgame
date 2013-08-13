@@ -15,10 +15,10 @@ class Unit(object):
     attack_bonuses = {}
     defence_bonuses = {}
     constants = {}
-    base_attack = None
-    base_defence = None
-    base_range = None
-    base_movement = None
+    base_attack = 0
+    base_defence = 0
+    base_range = 0
+    base_movement = 0
 
     @property
     def attack(self):
@@ -410,7 +410,7 @@ class Scout(Unit):
     
     name = "Scout"
     image = "Scout"
-    base_attack = False
+    base_attack = 0
     base_defence = 2
     base_movement = 4
     base_range = 1
@@ -573,7 +573,7 @@ class Saboteur(Unit):
     
     name = "Saboteur"
     image = "Saboteur"
-    base_attack = None
+    base_attack = 0
     base_defence = 2
     base_movement = 1
     base_range = 3
@@ -590,7 +590,7 @@ class Diplomat(Unit):
     
     name = "Diplomat"
     image = "Diplomat"
-    base_attack = None
+    base_attack = 0
     base_defence = 2
     base_movement = 1
     base_range = 3
@@ -607,7 +607,7 @@ class Weaponsmith(Unit):
     
     name = "Weaponsmith"
     image = "Weaponsmith"
-    base_attack = None
+    base_attack = 0
     base_defence = 2
     base_movement = 1
     base_range = 4
