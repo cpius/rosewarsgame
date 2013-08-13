@@ -297,7 +297,7 @@ class Controller(object):
             upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
 
         if not isinstance(upgrade_choice, basestring):
-            upgrade_choice_to_save = get_trait_names_dict(upgrade_choice)
+            upgrade_choice_to_save = readable_attributes(upgrade_choice)
             self.game.save_option("upgrade", upgrade_choice_to_save)
         else:
             self.game.save_option("upgrade", upgrade_choice)

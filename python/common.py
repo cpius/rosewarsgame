@@ -348,9 +348,12 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-def get_trait_names_dict(dictionary):
-    return dict((Trait.name[key], value) for key, value in dictionary.items())
-
-
-def get_trait_enum_dict(dictionary):
-    return dict((getattr(Trait, key), value) for key, value in dictionary.items())
+def readable_attributes(attributes):
+    d = {}
+    for key, value in attributes.items():
+        if value:
+            if is_trait(key):
+                d[Trait.name[key]] = value
+            else:
+                d[State.name[key]] = value
+    return d
