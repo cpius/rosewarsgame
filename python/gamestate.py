@@ -8,6 +8,7 @@ import json
 from common import *
 from action import Action
 from outcome import Outcome
+from copy import copy
 
 
 class Gamestate:
@@ -16,15 +17,17 @@ class Gamestate:
                  player2_units,
                  actions_remaining,
                  extra_action=False,
-                 created_at=None):
+                 created_at=None,
+                 game_id=None):
         self.units = [player1_units, player2_units]
         self.actions_remaining = actions_remaining
         self.extra_action = extra_action
         self.action_count = 0
         self.created_at = created_at
+        self.game_id = game_id
 
     @classmethod
-    def from_log_document(cls, log_document):
+    def from_log_document(cls, log_document, shift_turn=False):
         gamestate_document = log_document["initial_gamestate"]
         gamestate = cls.from_document(gamestate_document)
         action_count = int(log_document["action_count"])
@@ -69,6 +72,10 @@ class Gamestate:
                 else:
                     gamestate.player_units[action.end_at] = upgraded_unit
 
+        if shift_turn:
+            if gamestate.is_turn_done():
+                gamestate.shift_turn()
+
         return gamestate
 
     def all_units(self):
@@ -90,6 +97,15 @@ class Gamestate:
 
     def get_actions(self):
         return self.available_actions
+
+    def get_actions_with_none(self):
+        actions_with_none = copy(self.available_actions)
+        for action in self.available_actions:
+            if action.move_with_attack:
+                action_option = action.copy()
+                action_option.move_with_attack = None
+                actions_with_none.append(action_option)
+        return actions_with_none
 
     def copy(self):
         gamestate_document = self.to_document()
@@ -181,11 +197,17 @@ class Gamestate:
             return ai_module.AI(name)
 
     def to_document(self):
-        document = {attribute: getattr(self, attribute) for attribute in ["extra_action", "created_at",
-                                                                          "actions_remaining"]
-                    if hasattr(self, attribute) and (getattr(self, attribute) or attribute == "actions_remaining")}
+        document = {}
+        if self.extra_action:
+            document["extra_action"] = True
+        if self.created_at:
+            document["created_at"] = self.created_at
+        document["actions_remaining"] = self.actions_remaining
+        if self.game_id:
+            document["game"] = self.game_id
         document["player1_units"] = self.get_units_dict(self.units[0])
         document["player2_units"] = self.get_units_dict(self.units[1])
+
         return document
 
     def get_units_dict(self, units):

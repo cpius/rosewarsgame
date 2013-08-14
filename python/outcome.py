@@ -56,7 +56,7 @@ class Outcome:
     @classmethod
     def from_document(cls, document):
         outcomes = dict()
-        for outcome in document:
+        for outcome in [outcome for outcome in document if outcome[0] in "ABCDE" and outcome[1] in "12345679"]:
             outcomes[Position.from_string(outcome)] = rolls(*document[outcome])
 
         return cls(outcomes)

@@ -1,8 +1,7 @@
 from __future__ import division
 from viewcommon import *
 import pygame
-import battle
-import settings
+import interface_settings as settings
 
 
 zoom = settings.zoom

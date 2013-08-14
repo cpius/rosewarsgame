@@ -1,6 +1,6 @@
 from __future__ import division
 import pygame
-import settings
+import interface_settings as settings
 import viewlog
 import viewgame
 import viewinfo

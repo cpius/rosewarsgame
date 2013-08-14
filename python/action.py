@@ -10,7 +10,7 @@ class Action(object):
                  start_at,
                  end_at=None,
                  target_at=None,
-                 move_with_attack=None,
+                 move_with_attack=False,
                  ability=None,
                  number=None,
                  outcome=None,
@@ -60,7 +60,7 @@ class Action(object):
         if "target_at" in document_copy:
             target_at = document_copy["target_at"]
 
-        move_with_attack = None
+        move_with_attack = False
         if "move_with_attack" in document_copy:
             move_with_attack = bool(document["move_with_attack"])
 
@@ -73,7 +73,7 @@ class Action(object):
             created_at = document_copy["created_at"]
 
         number = None
-        if "action" in document_copy:
+        if "number" in document_copy:
             number = int(document_copy["number"])
 
         return cls(units, start_at, end_at, target_at, move_with_attack, ability, number=number, created_at=created_at)
@@ -161,6 +161,8 @@ class Action(object):
 
     def is_successful(self, rolls, gamestate):
         if not self.is_attack():
+            return True
+        if not self.target_at in gamestate.all_units():
             return True
         attack_successful = battle.attack_successful(self, rolls, gamestate)
         if not attack_successful:

@@ -9,7 +9,7 @@ from player import Player
 import os
 from action import Action
 import units as units_module
-import settings
+
 
 shading_blue = pygame.Color(*[0, 0, 100, 160])
 shading_red = pygame.Color(*[100, 0, 0, 160])

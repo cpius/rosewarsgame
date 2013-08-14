@@ -1,7 +1,7 @@
 from __future__ import division
 import random
 import units as units_module
-import settings
+import setup_settings as settings
 from collections import namedtuple
 from common import *
 
