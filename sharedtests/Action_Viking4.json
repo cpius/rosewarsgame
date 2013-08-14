@@ -1,10 +1,12 @@
 {
     "type": "Does action exist",
+    "description": "Viking can't move to the attacked tile if it uses rage attack",
     "result": false,
     "action": {
         "start_at": "C3",
         "end_at": "C4",
-        "target_at": "C5"
+        "target_at": "C5",
+        "move_with_attack": true
     },
     "gamestate": {
         "actions_remaining": 1,
