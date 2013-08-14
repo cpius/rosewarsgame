@@ -1,5 +1,5 @@
 from collections import defaultdict
-import settings
+import setup_settings as settings
 from common import *
 
 

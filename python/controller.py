@@ -5,7 +5,7 @@ from pygame.locals import *
 import setup
 from gamestate import Gamestate
 import os
-import settings
+import interface_settings as settings
 from player import Player
 from action import Action
 import units as units_module
