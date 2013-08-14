@@ -82,3 +82,12 @@ class Game:
             options = self.options[action_count]
         options[option] = option_value
         self.options[action_count] = options
+
+    def to_document(self):
+        return {
+            ""
+            "player1": self.players[0].to_document(),
+            "player2": self.players[1].to_document(),
+            "initial_gamestate": self.initial_gamestate.to_document(),
+            "created_at": self.created_at
+        }

@@ -125,21 +125,26 @@ class Controller(object):
         elif self.selecting_melee_target(position):
             all_actions = self.game.gamestate.get_actions()
 
-            possible_actions = [action for action in all_actions if self.possible_melee_target(action, position)]
+            matching_actions = [action for action in all_actions if self.is_same_start_and_target(action, position)]
 
-            if not possible_actions:
+            if not matching_actions:
                 return
 
-            if len(possible_actions) == 1:
-                action = possible_actions[0]
+            if len(matching_actions) == 1:
+                self.perform_action(matching_actions[0])
+                return
+
+            self.view.draw_game(self.game)
+            matching_actions = self.pick_actions_end_position(matching_actions)
+
+            if any(action.move_with_attack for action in matching_actions):
+                action = matching_actions[0]
+
+                # Human actions always start out with unknown move_with_attack (they are asked later)
+                action.move_with_attack = None
+                self.perform_action(action)
             else:
-                self.view.draw_game(self.game)
-                action = self.pick_action_end_position(possible_actions)
-
-            # Human actions always start out with unknown move_with_attack (they are asked later)
-            action.move_with_attack = None
-
-            self.perform_action(action)
+                self.perform_action(matching_actions[0])
 
         elif self.selecting_move(position):
             action = Action(self.game.gamestate.all_units(), self.start_at, end_at=position)
@@ -153,14 +158,14 @@ class Controller(object):
             self.clear_move()
             self.view.draw_game(self.game)
 
-    def possible_melee_target(self, action, position):
+    def is_same_start_and_target(self, action, position):
         same_start = action.start_at == self.start_at
         same_target = action.target_at and action.target_at == position
-        return same_start and same_target and not action.move_with_attack
+        return same_start and same_target
 
-    def pick_action_end_position(self, possible_actions):
+    def pick_actions_end_position(self, actions):
 
-        end_positions = [action.end_at for action in possible_actions]
+        end_positions = [action.end_at for action in actions]
 
         self.view.shade_positions(end_positions)
 
@@ -171,9 +176,9 @@ class Controller(object):
                 position = self.view.get_position_from_mouse_click(event.pos)
 
                 if event.button == 1:
-                    for action in possible_actions:
-                        if position == action.end_at:
-                            return action
+                    matching_actions = [action for action in actions if action.end_at == position]
+                    if matching_actions:
+                        return matching_actions
 
             elif self.quit_game_requested(event):
                 self.exit_game()
@@ -320,7 +325,7 @@ class Controller(object):
             self.view.draw_game(self.game)
             self.view.draw_action(action, outcome, self.game)
 
-            if self.is_post_movement_possible(action, outcome):
+            if action.move_with_attack is None:
                 move_with_attack = self.ask_about_move_with_attack(action)
 
                 self.game.save_option("move_with_attack", move_with_attack)
@@ -370,18 +375,6 @@ class Controller(object):
             self.trigger_artificial_intelligence()
         elif self.game.current_player().intelligence == "Network":
             self.trigger_network_player()
-
-    def is_post_movement_possible(self, action, outcome):
-        if not action.is_attack():
-            return False
-
-        if not action.move_with_attack is None and not action.move_with_attack:
-            return False
-
-        is_successful = action.is_successful(outcome.for_position(action.target_at), self.game.gamestate)
-        is_destination_occupied = action.target_at in self.game.gamestate.enemy_units
-
-        return is_successful and action.unit.is_melee() and not is_destination_occupied
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)

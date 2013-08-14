@@ -2,8 +2,8 @@ import ai_module
 
 
 class Player(object):
-    def __init__(self, color, intelligence, player_id=None):
-        self.player_id = player_id
+    def __init__(self, color, intelligence, profile=None):
+        self.profile = profile
         self.color = color
         self.intelligence = intelligence
         if intelligence not in ["Human", "Network"]:
@@ -15,3 +15,10 @@ class Player(object):
         else:
             self.backline = 1
             self.frontline = 4
+
+    def to_document(self):
+        return {
+            "color": self.color,
+            "intelligence": self.intelligence,
+            "profile": self.profile
+        }
