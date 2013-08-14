@@ -44,7 +44,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         return moves_sets(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def generate_extra_moveset():
-        movement = unit.get(Trait.movement_remaining)
+        movement = unit.get(State.movement_remaining)
         return moves_set(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def attack_generator(moveset):
@@ -98,7 +98,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         def get_actions_combat_agility():
             for terms in attack_generator(moveset | {start_at}):
                 if terms["move_with_attack"]:
-                    if unit.get(Trait.movement_remaining):
+                    if unit.get(State.movement_remaining):
                         attacks.append(Action(units, start_at, **terms))
                 else:
                     attacks.append(Action(units, start_at, **terms))
@@ -117,16 +117,16 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         abilities = []
 
-        for ability in unit.abilities:
-            if ability in [Ability.sabotage, Ability.sabotage_II, Ability.poison, Ability.poison_II]:
+        for ability, value in unit.abilities.items():
+            if ability in [Ability.sabotage, Ability.poison]:
                 target_positions = enemy_units
 
-            elif ability in [Ability.improve_weapons, Ability.improve_weapons_II_A, Ability.improve_weapons_II_B]:
+            elif ability in [Ability.improve_weapons, Ability.improve_weapons_B]:
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
 
-            elif ability in [Ability.bribe, Ability.bribe_II]:
-                target_positions = [pos for pos, target in enemy_units.items() if not target.get(Trait.bribed) and not
-                                    target.has(Trait.recently_bribed)]
+            elif ability == Ability.bribe:
+                target_positions = [pos for pos, target in enemy_units.items() if not target.get(State.bribed) and not
+                                    target.has(State.recently_bribed)]
             else:
                 target_positions = []
 
@@ -171,9 +171,20 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     if unit.is_ranged():
         return ranged_actions()
 
-    for trait in [Trait.extra_action, Trait.rage, Trait.berserking, Trait.scouting, Trait.defence_maneuverability]:
-        if unit.has(trait):
-            moves, attacks = locals()[Trait.name[trait]]()
+    if unit.has(Trait.rage, 1):
+        moves, attacks = rage()
+
+    if unit.has(Trait.berserking):
+        moves, attacks = berserking()
+
+    if unit.has(Trait.scouting):
+        moves, attacks = scouting()
+
+    if unit.has(Trait.defence_maneuverability):
+        moves, attacks = defence_maneuverability()
+
+    if unit.has(State.extra_action):
+        moves, attacks = extra_action()
 
     return moves, attacks, []
 
@@ -250,9 +261,9 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
 
 
 def can_use_unit(unit):
-    is_frozen = unit.has(Trait.frozen)
-    is_bribed = unit.has(Trait.recently_bribed)
-    is_used = unit.has(Trait.used) and not unit.has(Trait.extra_action)
+    is_frozen = unit.has(State.frozen)
+    is_bribed = unit.has(State.recently_bribed)
+    is_used = unit.has(State.used) and not unit.has(State.extra_action)
     return not is_frozen and not is_bribed and not is_used
 
 
@@ -262,7 +273,7 @@ def melee_frozen(enemy_units, start_at):
 
 def can_attack_with_unit(gamestate, unit):
     return not (gamestate.get_actions_remaining() == 1 and unit.has(Trait.double_attack_cost)) \
-        and not unit.has(Trait.attack_frozen)
+        and not unit.has(State.attack_frozen)
 
 
 def cavalry_charging(start_at, friendly_units):

@@ -5,118 +5,113 @@ from common import *
 
 class Unit(object):
     def __init__(self):
-        self.variables = defaultdict(int)
+        self.traits = defaultdict(int)
+        self.states = defaultdict(int)
+        self.abilities = defaultdict(int)
 
     name = ""
     zoc = []
     abilities = []
     xp_to_upgrade = 4
-    upgrades = []
     attack_bonuses = {}
     defence_bonuses = {}
-    constants = {}
-    base_attack = None
-    base_defence = None
-    base_range = None
-    base_movement = None
+    traits = {}
+    base_attack = 0
+    base_defence = 0
+    base_range = 0
+    base_movement = 0
 
     @property
     def attack(self):
-        attack = self.base_attack
-        if Trait.attack_skill in self.constants:
-            return attack + self.constants[Trait.attack_skill]
-        else:
-            return attack
+        return self.base_attack + self.get(Trait.attack_skill)
 
     @property
     def defence(self):
-        defence = self.base_defence
-        if Trait.defence_skill in self.constants:
-            return defence + self.constants[Trait.defence_skill]
-        else:
-            return defence
+        return self.base_defence + self.get(Trait.defence_skill)
 
     @property
     def range(self):
-        range = self.base_range
-        if Trait.range_skill in self.constants:
-            return range + self.constants[Trait.range_skill]
-        else:
-            return range
+        return self.base_range + self.get(Trait.range_skill)
 
     @property
     def movement(self):
-        movement = self.base_movement
-        if Trait.movement_skill in self.constants:
-            return movement + self.constants[Trait.movement_skill]
-        else:
-            return movement
+        return self.base_movement + self.get(Trait.movement_skill)
 
     type = None
     level = 0
     upgrades = []
     special_upgrades = []
     final_upgrades = []
-    custom_ability = {Ability.poison: "poison",
-                      Ability.poison_II: "poison_II",
-                      Ability.improve_weapons_II_A: "improve_weapons_II_A",
-                      Ability.improve_weapons_II_B: "improve_weapons_II_B"}
-    apply_ability = {Ability.sabotage: Trait.sabotaged,
-                     Ability.sabotage_II: Trait.sabotaged_II,
-                     Ability.improve_weapons: Trait.improved_weapons}
 
     def __repr__(self):
         return self.name
 
-    def set(self, attribute, n=1):
-        self.variables[attribute] = n
+    def set(self, attr, n=1):
+        if attr in Trait.name:
+            self.traits[attr] = n
+        elif attr in Ability.name:
+            self.abilities[attr] = n
+        else:
+            self.states[attr] = n
 
-    def has(self, attribute):
-        return attribute in self.constants or self.variables[attribute]
+    def add(self, attr, n):
+        if attr in Trait.name:
+            self.traits[attr] += n
+        elif attr in Ability.name:
+            self.abilities[attr] += n
+        elif attr in State.name:
+            self.states[attr] += n
 
-    def get(self, attribute):
-        return self.variables[attribute]
+    def has(self, attr, value=None):
+        if not value:
+            return self.traits[attr] or self.states[attr]
+        else:
+            return self.traits[attr] == value or self.states[attr] == value
+
+    def get(self, attr):
+        if attr in Trait.name:
+            return self.traits[attr]
+        else:
+            return self.states[attr]
 
     def increment(self, attribute):
-        self.variables[attribute] += 1
+        self.states[attribute] += 1
 
-    def remove(self, attribute):
-        self.variables[attribute] = 0
-        if attribute in self.constants:
-            del self.constants[attribute]
+    def remove(self, attr):
+        if attr in Trait.name:
+            self.traits[attr] = 0
+        else:
+            self.states[attr] = 0
 
     def decrement(self, attribute):
-        self.variables[attribute] = max(0, self.variables[attribute] - 1)
+        self.states[attribute] = max(0, self.states[attribute] - 1)
 
-    def do(self, ability):
-        if ability in self.apply_ability:
-            self.set(self.apply_ability[ability])
-        if ability in self.custom_ability:
-            getattr(self, self.custom_ability[ability])()
+    def do(self, ability, value):
+        if ability == Ability.poison:
+            self.set(State.frozen, value + 1)
+
+        if ability == Ability.sabotage:
+            self.set(State.sabotaged, value)
+
+        if ability == Ability.improve_weapons:
+            self.set(State.improved_weapons)
+
+        if ability == Ability.improve_weapons_B:
+            self.set(State.improved_weapons_B)
 
     # custom functions
     def poison(self):
         self.freeze(2)
 
-    def poison_II(self):
-        self.freeze(3)
-
     def freeze(self, n):
-        self.set(Trait.frozen, max(self.get(Trait.frozen), n))
+        self.set(State.frozen, max(self.get(State.frozen), n))
 
     def gain_xp(self):
-        if not self.has(Trait.used) and not settings.beginner_mode:
-            self.increment(Trait.xp)
-
-    def improve_weapons_II_A(self):
-        self.set(Trait.improved_weapons_II_A, 2)
-
-    def improve_weapons_II_B(self):
-        self.variables[Trait.improved_weapons_II_B] = 1
-        self.zoc = {Type.Cavalry}
+        if not self.has(State.used) and not settings.beginner_mode:
+            self.increment(State.xp)
 
     def has_extra_life(self):
-        return self.has(Trait.extra_life) and not self.has(Trait.lost_extra_life)
+        return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
 
     def is_melee(self):
         return self.range == 1
@@ -124,30 +119,19 @@ class Unit(object):
     def is_ranged(self):
         return self.range > 1
 
-    def is_bribed(self):
-        return self.has(Trait.bribed) or self.has(Trait.bribed_II)
-
-    def upgrade_trait(self, trait):
-        if trait == Trait.attack_cooldown_II:
-            self.remove(Trait.attack_cooldown)
-        elif trait == Trait.crusading_II:
-            self.remove(Trait.crusading)
-        elif trait in [Trait.flag_bearing_II_A, Trait.flag_bearing_II_B]:
-            self.remove(Trait.flag_bearing)
-        elif trait == Trait.lancing_II:
-            self.remove(Trait.lancing)
-        elif trait == Trait.rage_II:
-            self.remove(Trait.rage)
-
     def get_upgrade_choice(self, choice_number):
         if getattr(self, "upgrades"):
             return self.upgrades[choice_number].replace(" ", "_")
 
         if getattr(self, "special_upgrades"):
-            if len(self.special_upgrades) == 1:
-                choices = [self.special_upgrades[0], self.final_upgrades[0]]
-            else:
-                choices = self.special_upgrades
+            available_special_upgrades = [upgrade for upgrade in self.special_upgrades if upgrade.keys()[0] not in self.traits]
+        else:
+            available_special_upgrades = []
+
+        if len(available_special_upgrades) == 1:
+            choices = [available_special_upgrades[0], self.final_upgrades[0]]
+        elif len(available_special_upgrades) == 2:
+            choices = available_special_upgrades
         else:
             choices = self.final_upgrades
 
@@ -158,15 +142,29 @@ class Unit(object):
             return globals()[choice]()
 
         upgrade = globals()[self.name.replace(" ", "_")]()
-        upgrade.constants = self.constants.copy()
-        for trait, value in choice.items():
-            upgrade.upgrade_trait(trait)
-            if trait in upgrade.constants:
-                upgrade.constants[trait] += value
-            else:
-                upgrade.constants[trait] = value
+        for state, value in self.states.items():
+            upgrade.add(state, value)
+        for trait, value in self.traits.items():
+            upgrade.add(trait, value)
+        for attr, value in choice.items():
+            upgrade.add(attr, value)
 
         return upgrade
+
+    def get_traits_not_in_base(self):
+        traits = dict((trait, value) for trait, value in self.traits.items() if value)
+        base_unit = globals()[self.name.replace(" ", "_")]()
+        for trait in base_unit.traits:
+            if trait in traits:
+                del traits[trait]
+
+        return traits
+
+    def get_states(self):
+        return dict((state, value) for state, value in self.states.items() if value)
+
+    def is_milf(self):
+        return self.get(State.xp) % self.xp_to_upgrade == 0
 
 
 class Archer(Unit):
@@ -184,6 +182,9 @@ class Archer(Unit):
 
 
 class Fire_Archer(Unit):
+    def __init__(self):
+        super(Fire_Archer, self).__init__()
+        self.set(Trait.fire_arrows, 1)
     name = "Fire Archer"
     image = "Fire Archer"
     base_attack = 2
@@ -193,10 +194,11 @@ class Fire_Archer(Unit):
     type = Type.Infantry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
-    constants = {Trait.fire_arrows: 1}
-
 
 class Crossbow_Archer(Unit):
+    def __init__(self):
+        super(Crossbow_Archer, self).__init__()
+        self.set(Trait.sharpshooting, 1)
     name = "Crossbow Archer"
     image = "Crossbow Archer"
     base_attack = 2
@@ -209,19 +211,17 @@ class Crossbow_Archer(Unit):
     special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}, ]
 
-    constants = {Trait.sharpshooting: 1}
-
 
 class Pikeman(Unit):
-
+    def __init__(self):
+        super(Pikeman, self).__init__()
+        self.set(Trait.cavalry_specialist, 1)
     name = "Pikeman"
     image = "Pikeman"
     base_attack = 2
     base_defence = 2
     base_movement = 1
     base_range = 1
-    attack_bonuses = {Type.Cavalry: 1}
-    defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
     zoc = [Type.Cavalry]
     upgrades = ["Halberdier", "Royal Guard"]
@@ -229,6 +229,9 @@ class Pikeman(Unit):
 
 
 class Halberdier(Unit):
+    def __init__(self):
+        super(Halberdier, self).__init__()
+        self.set(Trait.push, 1)
     name = "Halberdier"
     image = "Halberdier"
     base_attack = 3
@@ -239,8 +242,6 @@ class Halberdier(Unit):
     defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.push: 1}
 
 
 class Light_Cavalry(Unit):
@@ -259,6 +260,9 @@ class Light_Cavalry(Unit):
 
 
 class Dragoon(Unit):
+    def __init__(self):
+        super(Dragoon, self).__init__()
+        self.set(Trait.swiftness, 1)
 
     name = "Dragoon"
     image = "Dragoon"
@@ -272,10 +276,13 @@ class Dragoon(Unit):
     special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.swiftness: 1}
+    traits = {Trait.swiftness: 1}
 
 
 class Hussar(Unit):
+    def __init__(self):
+        super(Hussar, self).__init__()
+        self.set(Trait.triple_attack, 1)
 
     name = "Hussar"
     image = "Hussar"
@@ -289,10 +296,11 @@ class Hussar(Unit):
     type = Type.Cavalry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]
 
-    constants = {Trait.triple_attack: 1}
-
 
 class Cavalry_Lieutenant(Unit):
+    def __init__(self):
+        super(Cavalry_Lieutenant, self).__init__()
+        self.set(Trait.cavalry_charging, 1)
 
     name = "Cavalry Lieutenant"
     image = "Light Cavalry"
@@ -304,8 +312,6 @@ class Cavalry_Lieutenant(Unit):
     defence_bonuses = {}
     type = Type.Cavalry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.cavalry_charging: 1}
 
 
 class Knight(Unit):
@@ -323,6 +329,9 @@ class Knight(Unit):
 
 
 class Lancer(Unit):
+    def __init__(self):
+        super(Lancer, self).__init__()
+        self.set(Trait.lancing, 1)
 
     name = "Lancer"
     image = "Lancer"
@@ -334,13 +343,14 @@ class Lancer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing_II: 1, Trait.movement_skill: 1}]
+    special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.lancing: 1}
 
 
 class Hobelar(Unit):
+    def __init__(self):
+        super(Hobelar, self).__init__()
+        self.set(Trait.swiftness, 1)
 
     name = "Hobelar"
     image = "Hobelar"
@@ -353,9 +363,7 @@ class Hobelar(Unit):
     zoc = []
     type = Type.Cavalry
     special_upgrades = [{Trait.flanking: 1}]
-    final_upgrades = [{Trait.movement_skill: 1}, {Trait.attack_skill: 1}]
-
-    constants = {Trait.swiftness: 1}
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
 class Ballista(Unit):
@@ -374,6 +382,9 @@ class Ballista(Unit):
 
 
 class Catapult(Unit):
+    def __init__(self):
+        super(Catapult, self).__init__()
+        self.set(Trait.double_attack_cost, 1)
 
     name = "Catapult"
     image = "Catapult"
@@ -387,10 +398,11 @@ class Catapult(Unit):
     xp_to_upgrade = 2
     final_upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
 
-    constants = {Trait.double_attack_cost: 1}
-
 
 class Royal_Guard(Unit):
+    def __init__(self):
+        super(Royal_Guard, self).__init__()
+        self.set(Trait.defence_maneuverability, 1)
   
     name = "Royal Guard"
     image = "Royal Guard"
@@ -406,14 +418,15 @@ class Royal_Guard(Unit):
     special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.defence_maneuverability: 1}
-
 
 class Scout(Unit):
+    def __init__(self):
+        super(Scout, self).__init__()
+        self.set(Trait.scouting, 1)
     
     name = "Scout"
     image = "Scout"
-    base_attack = False
+    base_attack = 0
     base_defence = 2
     base_movement = 4
     base_range = 1
@@ -425,10 +438,12 @@ class Scout(Unit):
     special_upgrades = [{Trait.tall_shield}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill}]
 
-    constants = {Trait.scouting: 1}
-
 
 class Viking(Unit):
+    def __init__(self):
+        super(Viking, self).__init__()
+        self.set(Trait.rage, 1)
+        self.set(Trait.extra_life, 1)
 
     name = "Viking"
     image = "Viking"
@@ -440,13 +455,16 @@ class Viking(Unit):
     defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
     type = Type.Infantry
-    special_upgrades = [{Trait.rage_II: 1}, {Trait.siege_weapon_specialist: 1}]
+    special_upgrades = [{Trait.rage: 1}, {Trait.siege_weapon_specialist: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.rage: 1, Trait.extra_life: 1}
+    traits = {Trait.rage: 1, Trait.extra_life: 1}
 
 
 class Cannon(Unit):
+    def __init__(self):
+        super(Cannon, self).__init__()
+        self.set(Trait.attack_cooldown, 1)
     
     name = "Cannon"
     image = "Cannon"
@@ -460,12 +478,12 @@ class Cannon(Unit):
     type = Type.Siege_Weapon
     xp_to_upgrade = 3
     special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
-
-    constants = {Trait.attack_cooldown: 3}
 
 
 class Flag_Bearer(Unit):
+    def __init__(self):
+        super(Flag_Bearer, self).__init__()
+        self.set(Trait.flag_bearing, 1)
    
     name = "Flag Bearer"
     image = "Flag Bearer"
@@ -477,13 +495,14 @@ class Flag_Bearer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.flag_bearing_II_A: 1}, {Trait.flag_bearing_II_B: 1}]
+    special_upgrades = [{Trait.flag_bearing_B: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.flag_bearing: 1}
 
 
 class Longswordsman(Unit):
+    def __init__(self):
+        super(Longswordsman, self).__init__()
+        self.set(Trait.longsword, 1)
 
     name = "Longswordsman"
     image = "Longswordsman"
@@ -495,12 +514,14 @@ class Longswordsman(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
+    special_upgrades = [{Trait.rage: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.longsword: 1}
 
 
 class Crusader(Unit):
+    def __init__(self):
+        super(Crusader, self).__init__()
+        self.set(Trait.crusading, 1)
 
     name = "Crusader"
     image = "Crusader"
@@ -512,13 +533,14 @@ class Crusader(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.crusading_II}]
+    special_upgrades = [{Trait.crusading: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-
-    constants = {Trait.crusading: 1}
 
 
 class Berserker(Unit):
+    def __init__(self):
+        super(Berserker, self).__init__()
+        self.set(Trait.berserking, 1)
 
     name = "Berserker"
     image = "Berserker"
@@ -533,10 +555,13 @@ class Berserker(Unit):
     special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.berserking: 1}
-
 
 class War_Elephant(Unit):
+    def __init__(self):
+        super(War_Elephant, self).__init__()
+        self.set(Trait.double_attack_cost, 1)
+        self.set(Trait.triple_attack, 1)
+        self.set(Trait.push, 1)
 
     name = "War Elephant"
     image = "War Elephant"
@@ -551,11 +576,14 @@ class War_Elephant(Unit):
     final_upgrades = [{Trait.defence_skill: 1}, {Trait.attack_skill: 1}]
     xp_to_upgrade = 3
 
-    constants = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
+    traits = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
 
 
 class Samurai(Unit):
-    
+    def __init__(self):
+        super(Samurai, self).__init__()
+        self.set(Trait.combat_agility, 1)
+
     name = "Samurai"
     image = "Samurai"
     base_attack = 3
@@ -569,56 +597,57 @@ class Samurai(Unit):
     special_upgrades = [{Trait.bloodlust: 1}],
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
-    constants = {Trait.combat_agility: 1}
+    traits = {Trait.combat_agility: 1}
 
 
 class Saboteur(Unit):
-    
+    def __init__(self):
+        super(Saboteur, self).__init__()
+        self.set(Ability.sabotage, 1)
+        self.set(Ability.poison, 1)
     name = "Saboteur"
     image = "Saboteur"
-    base_attack = None
+    base_attack = 0
     base_defence = 2
     base_movement = 1
     base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Ability.sabotage_II: 1}, {Ability.poison_II: 1}]
+    special_upgrades = [{Ability.sabotage: 1}, {Ability.poison: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
-
-    abilities = [Ability.sabotage, Ability.poison]
 
 
 class Diplomat(Unit):
-    
+    def __init__(self):
+        super(Diplomat, self).__init__()
+        self.set(Ability.bribe, 1)
     name = "Diplomat"
     image = "Diplomat"
-    base_attack = None
+    base_attack = 0
     base_defence = 2
     base_movement = 1
     base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Trait.bribed_II}]
+    special_upgrades = [{Ability.bribe: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
-
-    abilities = [Ability.bribe]
 
 
 class Weaponsmith(Unit):
-    
+    def __init__(self):
+        super(Weaponsmith, self).__init__()
+        self.set(Ability.improve_weapons, 1)
+
     name = "Weaponsmith"
     image = "Weaponsmith"
-    base_attack = None
+    base_attack = 0
     base_defence = 2
     base_movement = 1
     base_range = 4
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Trait.improved_weapons_II_A: 1}, {Trait.improved_weapons_II_B: 1}]
+    special_upgrades = [{Ability.improve_weapons: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
-
-    abilities = [Ability.improve_weapons]
-
