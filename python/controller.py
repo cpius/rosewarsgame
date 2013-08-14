@@ -284,7 +284,7 @@ class Controller(object):
                 return
 
     def upgrade_unit(self, position, unit):
-        if not unit.has_xp_required_to_upgrade():
+        if not unit.is_milf():
             return
 
         choice = self.get_input_upgrade(unit)
