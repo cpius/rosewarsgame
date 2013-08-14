@@ -7,7 +7,6 @@ class Player(object):
         self.color = color
         self.intelligence = intelligence
         if intelligence not in ["Human", "Network"]:
-            print intelligence
             self.ai = ai_module.AI(intelligence)
 
         if color == "Red":

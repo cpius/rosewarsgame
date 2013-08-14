@@ -1,25 +1,26 @@
 {
     "type": "Is attack and defence correct",
-    "attack": 5,
+    "attack": 4,
     "defence": 2,
     "action": {
         "start_at": "B2",
-        "end_at": "B3",
-        "target_at": "B4",
+        "end_at": "B4",
+        "target_at": "B5",
         "move_with_attack": "move"
     },
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
             "B2": {
-                "name": "Knight",
-                "improved_weapons_II_A": 1
+                "name": "Light Cavalry",
+                "bribed": 2
             },
-            "A3": "Weaponsmith"
+            "A3": "Archer"
         },
         "player2_units": {
-            "B4": "Archer",
+            "B5": "Archer",
             "E5": "Ballista"
+
         }
     }
 }

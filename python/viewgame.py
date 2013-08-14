@@ -146,14 +146,14 @@ def draw_symbols(screen, interface, unit, position):
         draw_rectangle(screen, (3, 6), (base[0] + 1, base[1] + 1), color)
 
     total_boxes = unit.xp_to_upgrade
-    blue_boxes = unit.get(Trait.xp)
+    blue_boxes = unit.get(State.xp) % unit.xp_to_upgrade
     for index in range(blue_boxes):
         draw_box(index, colors["light_blue"])
 
     for index in range(blue_boxes, total_boxes):
         draw_box(index, colors["white"])
 
-    if unit.is_bribed():
+    if unit.has(State.bribed):
         draw_bribed(screen, interface, position)
 
     #if "II" in unit.name:
@@ -238,7 +238,7 @@ def get_yellow_counters(unit):
 
 
 def get_blue_counters(unit):
-    return max(unit.get(Trait.frozen), unit.get(Trait.attack_frozen), unit.has(Trait.recently_bribed))
+    return max(unit.get(State.frozen), unit.get(State.attack_frozen), unit.has(State.recently_bribed))
 
 
 def draw_ask_about_move_with_attack(screen, interface, position):

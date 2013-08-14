@@ -81,16 +81,16 @@ class Position:
         return self.column < 1 or self.column > board_width
 
 
-def enum(*sequential, **named):
-    enums = dict(zip(sequential, range(1, len(sequential) + 1)), **named)
+def enum(n, *sequential, **named):
+    enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
-    reverse_print = dict((value, key.replace("_", " ")) for key, value in enums.iteritems())
+    reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.iteritems())
     enums['name'] = reverse
     enums['write'] = reverse_print
     return type('Enum', (), enums)
 
 
-constant_traits = {
+trait_descriptions = {
     "attack_cooldown": "Can only attack every third turn.",
     "attack_cooldown_II": "Can only attack every second turn.",
     "berserking": "Can move 4 tiles if movement ends with an attack.",
@@ -106,13 +106,11 @@ constant_traits = {
     "extra_life": "It takes two successful hits to kill this unit.",
     "far_sighted": "-1A if target is less than 4 tiles away.",
     "flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer.",
-    "flag_bearing_II_A": "Friendly melee units receive +2A while surrounding Flag Bearer.",
-    "flag_bearing_II_B": "Friendly melee units receive +3A while adjacent to Flag Bearer.",
+    "flag_bearing_B": "Friendly melee units receive +2A while surrounding Flag Bearer.",
     "melee_expert": "+1A, +1D vs melee units.",
     "melee_freeze": "Units adjacent to it can only attack it, not move.",
     "pikeman_specialist": "Pikemen do not get +1A/+1D against it.",
     "lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A.",
-    "lancing_II": "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A.",
     "longsword": "Also hits the 4 nearby tiles in the attack direction.",
     "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
             "must retreat directly backwards or die.",
@@ -135,22 +133,17 @@ constant_traits = {
     "level": "The number of upgrades."
 }
 
-variable_traits = {
+state_descriptions = {
     "attack_frozen": "Unit cannot attack",
     "bribed": "Whether a unit is currently bribed by a Diplomat.",
-    "bribed_II": "Whether a unit is currently bribed by a Diplomat_II_B.",
     "extra_action": "Whether the unit is doing its extra action.",
     "frozen": "Unit cannot perform any actions.",
     "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
-    "improved_weapons_II_A": "Whether a unit currently has been the target of an improve_weapons function by a "
-                             "Weaponsmith_II_A",
-    "improved_weapons_II_B": "Whether a unit currently has been the target of an improve_weapons function by a "
-                             "Weaponsmith_II_B",
+    "improved_weapons_B": "Whether a unit currently has been the target of an improve_weapons_B function",
     "lost_extra_life": "Whether the unit has lost its extra life",
     "movement_remaining": "Movement points left for doing an extra action",
     "recently_bribed": "Whether a unit was bribed last turn.",
     "sabotaged": "Whether a unit is currently sabotaged by a Saboteur.",
-    "sabotaged_II": "Whether a unit is currently sabotaged by a Saboteur_II_B.",
     "used": "Whether a unit has been used this round.",
     "xp": "Experience.",
 }
@@ -158,27 +151,27 @@ variable_traits = {
 ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
-    "bribe_II": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't "
-                "bribe the same unit on your next turn. The unit gets +2A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
-    "improve_weapons_II_A": "Give melee unit +2 attack, +1 defence for two turns.",
-    "improve_weapons_II_B": "Give melee unit +3 attack, +2 defence, and zoc against cavalry until your next turn",
+    "improve_weapons_B": "Give melee unit +2 attack, +1 defence for two turns.",
     "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
     "poison": "Freezes a unit for 2 turns.",
-    "poison_II": "Freezes a unit for 3 turns.",
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
-    "sabotage_II": "Reduces a units defence to -1 for 1 turn.",
-    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction."
+    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
+    "improve_weapons_II_A": "",
+    "sabotage_II": "",
+    "bribe_II": ""
 }
 
 
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
-Trait = enum(*(trait for trait in dict(constant_traits, **variable_traits)))
+Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
 
-Ability = enum(*(ability for ability in ability_descriptions))
+State = enum(1000, *(trait for trait in dict(state_descriptions)))
 
-Type = enum(*types)
+Ability = enum(2000, *(ability for ability in ability_descriptions))
+
+Type = enum(3000, *types)
 
 
 if 1 == 2:
@@ -191,54 +184,57 @@ if 1 == 2:
         name = {}
         write = {}
 
-    class Trait:
+    class State:
         attack_cooldown = None
         attack_frozen = None
+        bribed = None
+        bribed_II = None
+        extra_action = None
+        frozen = None
+        improved_weapons = None
+        improved_weapons_B = None
+        movement_remaining = None
+        lost_extra_life = None
+        xp = None
+        used = None
+        recently_bribed = None
+        sabotaged = None
+        sabotaged_II = None
+
+        name = None
+        write = None
+
+    class Trait:
         berserking = None
         big_shield = None
         bloodlust = None
-        bribed = None
-        bribed_II = None
         cavalry_charging = None
         combat_agility = None
         defence_maneuverability = None
         double_attack_cost = None
-        extra_action = None
         extra_life = None
-        frozen = None
-        improved_weapons = None
-        improved_weapons_II_A = None
-        improved_weapons_II_B = None
         melee_expert = None
         melee_freeze = None
-        movement_remaining = None
         longsword = None
         push = None
         rage = None
         rage_II = None
-        recently_bribed = None
-        sabotaged = None
-        sabotaged_II = None
         scouting = None
         sharpshooting = None
         swiftness = None
         tall_shield = None
         triple_attack = None
-        used = None
         lancing = None
         attack_cooldown = None
         far_sighted = None
         lancing_II = None
         flag_bearing = None
-        flag_bearing_II_A = None
-        flag_bearing_II_B = None
+        flag_bearing_B = None
         crusading = None
         crusading = None
         attack_cooldown_II = None
         crusading_II = None
-        xp = None
         pikeman_specialist = None
-        lost_extra_life = None
         attack_skill = None
         defence_skill = None
         range_skill = None
@@ -247,23 +243,19 @@ if 1 == 2:
         cavalry_specialist = None
         siege_weapon_specialist = None
         flanking = None
-        level = None
 
-        name = {}
-        write = {}
+        name = None
+        write = None
 
     class Ability:
         bribe = None
-        bribe_II = None
         improve_weapons = None
-        improve_weapons_II_A = None
-        improve_weapons_II_B = None
         pikeman_specialist = None
         poison = None
         sabotage = None
         sabotage_II = None
         triple_attack = None
-        poison_II = None
+        improve_weapons_B = None
 
         name = {}
         write = {}
@@ -294,7 +286,7 @@ def adjacent_friendly_positions(position, units):
     return (pos for pos in position.adjacent_tiles() if pos in units)
 
 
-def surrounding_friendly_units(position, units):
+def surrounding_units(position, units):
     return (units[pos] for pos in position.surrounding_tiles() if pos in units)
 
 
@@ -345,9 +337,28 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-def get_trait_names_dict(dictionary):
-    return dict((Trait.name[key], value) for key, value in dictionary.items())
+def readable_attributes(attributes):
+    d = {}
+    for key, value in attributes.items():
+        if value:
+            if key in Trait.name:
+                d[Trait.name[key]] = value
+            elif key in Ability.name:
+                d[Ability.name[key]] = value
+            else:
+                d[State.name[key]] = value
+    return d
+
+
+def merge(d1, d2):
+    d = d1.copy()
+    d.update(d2)
+    return d
 
 
 def get_trait_enum_dict(dictionary):
     return dict((getattr(Trait, key), value) for key, value in dictionary.items())
+
+
+def get_ability_enum_dict(dictionary):
+    return dict((getattr(Ability, key), value) for key, value in dictionary.items())

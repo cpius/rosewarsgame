@@ -131,7 +131,7 @@ if __name__ == "__main__":
         else:
             testcase_files.append(sys.argv[1])
     else:
-        testcase_files = glob.glob("./../sharedtests/*.json")
+        testcase_files = glob.glob("./../sharedtests/*.json") + glob.glob("./../sharedtests_development/*.json")
         replay_files = glob.glob("replay/*/*.json")
 
     for testcase_file in testcase_files:

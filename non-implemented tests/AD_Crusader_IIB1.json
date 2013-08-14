@@ -18,7 +18,7 @@
             "D6": "Archer",
             "C6": { 
 				"name": "Crusader",
-				"crusading_II": 1
+				"crusading": 2
 			}
         }
     }
