@@ -169,6 +169,16 @@ class Unit(object):
         to_upgrade = self.experience_to_upgrade
         return experience and experience % to_upgrade == 0 and not self.get(State.recently_upgraded)
 
+    def to_document(self):
+        attributes = merge(self.get_states(), self.get_traits_not_in_base())
+
+        if attributes:
+            unit_dict = readable_attributes(attributes)
+            unit_dict["name"] = self.name
+            return unit_dict
+        else:
+            return self.name
+
 
 class Archer(Unit):
 

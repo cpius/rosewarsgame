@@ -198,28 +198,11 @@ class Gamestate:
         document["actions_remaining"] = self.actions_remaining
         if self.game_id:
             document["game"] = self.game_id
-        document["player1_units"] = self.get_units_dict(self.units[0])
-        document["player2_units"] = self.get_units_dict(self.units[1])
+
+        document["player1_units"] = {str(position): unit.to_document() for (position, unit) in self.units[0].items()}
+        document["player2_units"] = {str(position): unit.to_document() for (position, unit) in self.units[1].items()}
 
         return document
-
-    def get_units_dict(self, units):
-        units_dict = dict()
-        for unit_position, unit in units.items():
-            position = str(unit_position)
-
-            states = unit.get_states()
-            traits = unit.get_traits_not_in_base()
-            attributes = merge(states, traits)
-
-            if attributes:
-                unit_dict = readable_attributes(attributes)
-                unit_dict["name"] = unit.name
-                units_dict[position] = unit_dict
-            else:
-                units_dict[position] = unit.name
-
-        return units_dict
 
     def is_turn_done(self):
         return self.actions_remaining < 1 and not self.is_extra_action()
