@@ -12,7 +12,7 @@ class Unit(object):
     name = ""
     zoc = []
     abilities = []
-    experience_to_upgrade = 4
+    experience_to_upgrade = settings.experience_to_upgrade
     attack_bonuses = {}
     defence_bonuses = {}
     traits = {}
