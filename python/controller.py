@@ -94,65 +94,87 @@ class Controller(object):
             extra_action = self.game.current_player().ai.select_action(self.game.gamestate)
             self.perform_action(extra_action)
 
-    def left_click(self, position):
+    def perform_extra_action(self, position):
+        print "performing extra action"
+        print "actions available", self.game.gamestate.get_actions()
+        if position == self.start_at:
+            self.selected_unit.remove(State.extra_action)
+            self.clear_move()
 
-        if self.selecting_ability_target(position):
-            if len(self.selected_unit.abilities) > 1:
-                index = self.get_input_abilities(self.selected_unit)
+    def perform_ability(self, position):
+        if len(self.selected_unit.abilities) > 1:
+            index = self.get_input_abilities(self.selected_unit)
 
-                ability = self.selected_unit.abilities[index]
-            else:
-                ability = self.selected_unit.abilities[0]
-
-            action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
-            if action in self.game.gamestate.get_actions():
-                self.perform_action(action)
-            else:
-                self.clear_move()
-                self.view.draw_game(self.game)
-
-        elif self.selecting_active_unit(position):
-            self.start_at = position
-            self.selected_unit = self.game.gamestate.player_units[self.start_at]
-            illustrate_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
-            self.view.draw_game(self.game, position, illustrate_actions)
-
-        elif self.selecting_ranged_target(position):
-            action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position)
-            if action in self.game.gamestate.get_actions():
-                self.perform_action(action)
-
-        elif self.selecting_melee_target(position):
-            all_actions = self.game.gamestate.get_actions()
-
-            matching_actions = [action for action in all_actions if self.is_same_start_and_target(action, position)]
-
-            if not matching_actions:
-                return
-
-            if len(matching_actions) == 1:
-                self.perform_action(matching_actions[0])
-                return
-
+            ability = self.selected_unit.abilities.keys()[index]
+        else:
+            ability = self.selected_unit.abilities.keys()[0]
+        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
+        if action in self.game.gamestate.get_actions():
+            self.perform_action(action)
+        else:
+            self.clear_move()
             self.view.draw_game(self.game)
+
+    def select_unit(self, position):
+        self.start_at = position
+        self.selected_unit = self.game.gamestate.player_units[self.start_at]
+        illustrate_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
+        self.view.draw_game(self.game, position, illustrate_actions)
+
+    def perform_ranged_attack(self, position):
+        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position)
+        if action in self.game.gamestate.get_actions():
+            self.perform_action(action)
+
+    def perform_melee_attack(self, position):
+        all_actions = self.game.gamestate.get_actions()
+
+        matching_actions = [action for action in all_actions if self.is_same_start_and_target(action, position)]
+
+        if not matching_actions:
+            return
+
+        if len(matching_actions) == 1:
+            self.perform_action(matching_actions[0])
+            return
+
+        self.view.draw_game(self.game)
+
+        if len(set([action.end_at for action in matching_actions])) > 1:
             matching_actions = self.pick_actions_end_position(matching_actions)
 
-            if any(action.move_with_attack for action in matching_actions):
-                action = matching_actions[0]
+        if any(action.move_with_attack for action in matching_actions):
+            # Human actions always start out with unknown move_with_attack (they are asked later)
+            matching_actions[0].move_with_attack = None
 
-                # Human actions always start out with unknown move_with_attack (they are asked later)
-                action.move_with_attack = None
-                self.perform_action(action)
-            else:
-                self.perform_action(matching_actions[0])
+        self.perform_action(matching_actions[0])
+
+    def perform_move(self, position):
+        action = Action(self.game.gamestate.all_units(), self.start_at, end_at=position)
+        if action in self.game.gamestate.get_actions():
+            self.perform_action(action)
+        else:
+            self.clear_move()
+            self.view.draw_game(self.game)
+
+    def left_click(self, position):
+        if self.selecting_extra_action():
+            self.perform_extra_action(position)
+
+        if self.selecting_ability_target(position):
+            self.perform_ability(position)
+
+        elif self.selecting_active_unit(position):
+            self.select_unit(position)
+
+        elif self.selecting_ranged_target(position):
+            self.perform_ranged_attack(position)
+
+        elif self.selecting_melee_target(position):
+            self.perform_melee_attack(position)
 
         elif self.selecting_move(position):
-            action = Action(self.game.gamestate.all_units(), self.start_at, end_at=position)
-            if action in self.game.gamestate.get_actions():
-                self.perform_action(action)
-            else:
-                self.clear_move()
-                self.view.draw_game(self.game)
+            self.perform_move(position)
 
         elif self.start_at and self.start_at == position:
             self.clear_move()
@@ -371,6 +393,12 @@ class Controller(object):
 
         self.clear_move()
 
+        if action.unit.has(State.extra_action):
+            position = action.end_at
+            if not position in self.game.gamestate.player_units:
+                position = action.target_at
+            self.select_unit(position)
+
         if self.game.current_player().intelligence not in ["Human", "Network"]:
             self.trigger_artificial_intelligence()
         elif self.game.current_player().intelligence == "Network":
@@ -409,6 +437,12 @@ class Controller(object):
         self.view.draw_game_end(player.color)
         self.pause()
         self.exit_game()
+
+    def selecting_extra_action(self):
+        if not self.selected_unit or not self.selected_unit.has(State.extra_action):
+            return False
+
+        return True
 
     def selecting_active_unit(self, position):
         selecting_player_unit = position in self.game.gamestate.player_units
