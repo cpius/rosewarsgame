@@ -32,8 +32,6 @@
                 "name": "Dragoon",
                 "used": 1,
                 "experience": 1
-                "movement_remaining": 0,
-                "extra_action": 0
             },
             "A2": "Pikeman"
         },
