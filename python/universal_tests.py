@@ -15,20 +15,20 @@ class UniversalTestCase(TestCase):
     def __init__(self, testcase_file):
         super(UniversalTestCase, self).__init__()
         self.testcase_file = testcase_file
+        self.description = None
 
     def runTest(self):
         try:
             test_document = json.loads(open(self.testcase_file).read())
-            description = None
+
             if "description" in test_document:
-                description = test_document["description"]
-            # print "\n\nTesting", self.testcase_file
+                self.description = test_document["description"]
 
             if test_document["type"] == "Does action exist":
                 gamestate = Gamestate.from_document(test_document["gamestate"])
                 action = Action.from_document(gamestate.all_units(), test_document["action"])
                 expected = test_document["result"]
-                self.does_action_exist(gamestate, action, expected, description)
+                self.does_action_exist(gamestate, action, expected)
 
             elif test_document["type"] == "Is attack and defence correct":
                 gamestate = Gamestate.from_document(test_document["gamestate"])
@@ -70,13 +70,13 @@ class UniversalTestCase(TestCase):
 
         self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
 
-    def does_action_exist(self, gamestate, action, expected, description):
+    def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)
         actual = (action in available_actions)
 
         message = "Wrong action existance for " + self.testcase_file + "\n\n"
-        if description:
-            message += "Description: " + description + "\n\n"
+        if self.description:
+            message += "Description: " + self.description + "\n\n"
         if expected:
             message += "Requested action: " + str(action) + "\n"
         else:
@@ -116,6 +116,10 @@ class UniversalTestCase(TestCase):
 
     def assert_equal_documents(self, expected, actual):
         message = "Wrong document for " + self.testcase_file + "\n\n"
+
+        if self.description:
+            message += "Description: " + self.description + "\n\n"
+
         message += "Expected:\n" + common.document_to_string(expected)
         message += "\nActual:\n" + common.document_to_string(actual)
 
