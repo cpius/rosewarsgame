@@ -40,7 +40,7 @@ def get_unit_lines(unit):
                 lines.append("")
 
     for ability in unit.abilities:
-        lines.append(common.ability_descriptions[Ability.name[ability]])
+        lines.append(Ability.write[ability] + ": " + common.ability_descriptions[Ability.name[ability]])
         lines.append("")
 
     for state in unit.states:
@@ -121,7 +121,7 @@ def draw_ask_about_ability(screen, interface, unit):
     lines = ["Select ability:"]
     for i, ability in enumerate(unit.abilities):
         ability_name = Ability.name[ability]
-        description_string = str(i + 1) + ". " + ability_name + ": " + ability_descriptions[ability_name]
+        description_string = str(i + 1) + ": " + Ability.write[ability] + ": " + ability_descriptions[ability_name]
         lines += textwrap.wrap(description_string, interface.message_line_length)
 
     base = interface.ask_about_ability_location
