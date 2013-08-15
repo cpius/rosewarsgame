@@ -12,8 +12,8 @@
         "player1_units": {
             "B2": {
                 "name": "Catapult",
-                "xp": 1,
-				"attack_skill": 1
+                "experience": 1,
+                "attack_skill": 1
             },
             "A3": "Saboteur"
         },

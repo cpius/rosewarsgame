@@ -12,7 +12,7 @@ class Unit(object):
     name = ""
     zoc = []
     abilities = []
-    xp_to_upgrade = 4
+    experience_to_upgrade = 4
     attack_bonuses = {}
     defence_bonuses = {}
     traits = {}
@@ -108,7 +108,7 @@ class Unit(object):
 
     def gain_xp(self):
         if not self.has(State.used) and not settings.beginner_mode:
-            self.increment(State.xp)
+            self.increment(State.experience)
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
@@ -164,7 +164,9 @@ class Unit(object):
         return dict((state, value) for state, value in self.states.items() if value)
 
     def is_milf(self):
-        return self.get(State.xp) % self.xp_to_upgrade == 0
+        experience = self.get(State.experience)
+        to_upgrade = self.experience_to_upgrade
+        return experience and experience % to_upgrade == 0 and not self.get(State.recently_upgraded)
 
 
 class Archer(Unit):
@@ -225,7 +227,7 @@ class Pikeman(Unit):
     type = Type.Infantry
     zoc = [Type.Cavalry]
     upgrades = ["Halberdier", "Royal Guard"]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
 
 
 class Halberdier(Unit):
@@ -256,7 +258,7 @@ class Light_Cavalry(Unit):
     defence_bonuses = {}
     type = Type.Cavalry
     upgrades = ["Dragoon", "Hussar"]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
 
 
 class Dragoon(Unit):
@@ -395,7 +397,7 @@ class Catapult(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    xp_to_upgrade = 2
+    experience_to_upgrade = 2
     final_upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
 
 
@@ -414,7 +416,7 @@ class Royal_Guard(Unit):
     defence_bonuses = {}
     type = Type.Infantry
     zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
     special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
@@ -434,7 +436,7 @@ class Scout(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    xp_to_upgrade = 2
+    experience_to_upgrade = 2
     special_upgrades = [{Trait.tall_shield}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill}]
 
@@ -476,7 +478,7 @@ class Cannon(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Siege_Weapon
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
     special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
 
 
@@ -574,7 +576,7 @@ class War_Elephant(Unit):
     zoc = []
     type = Type.Cavalry
     final_upgrades = [{Trait.defence_skill: 1}, {Trait.attack_skill: 1}]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
 
     traits = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
 

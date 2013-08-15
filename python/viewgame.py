@@ -145,8 +145,8 @@ def draw_symbols(screen, interface, unit, position):
         pygame.draw.lines(screen, colors["black"], True, base_corners)
         draw_rectangle(screen, (3, 6), (base[0] + 1, base[1] + 1), color)
 
-    total_boxes = unit.xp_to_upgrade
-    blue_boxes = unit.get(State.xp) % unit.xp_to_upgrade
+    total_boxes = unit.experience_to_upgrade
+    blue_boxes = unit.get(State.experience) % unit.experience_to_upgrade
     for index in range(blue_boxes):
         draw_box(index, colors["light_blue"])
 

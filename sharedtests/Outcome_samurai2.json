@@ -27,7 +27,7 @@
             "E4": {
                 "name": "Samurai",
                 "used": 1,
-                "xp": 1,
+                "experience": 1,
                 "movement_remaining": 0,
                 "extra_action": 1
             },

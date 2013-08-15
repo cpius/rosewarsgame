@@ -12,7 +12,7 @@
         "player1_units": {
             "B2": {
                 "name": "Crossbow Archer",
-                "xp": 1
+                "experience": 1
             },
             "A3": "Weaponsmith"
         },

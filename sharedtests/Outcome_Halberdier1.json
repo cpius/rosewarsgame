@@ -27,7 +27,7 @@
             "B5": {
                 "name": "Halberdier",
                 "used": true,
-                "xp": 1
+                "experience": 1
             }
         },
         "actions_remaining": 1,

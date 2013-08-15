@@ -11,7 +11,7 @@
             "C6": {
                 "name": "Knight",
                 "recently_bribed": true,
-                "xp": 1
+                "experience": 1
             }
         }
     },
@@ -24,7 +24,7 @@
         "player1_units": {
             "C6": {
                 "name": "Knight",
-                "xp": 1
+                "experience": 1
             },
             "A4": "Ballista"
 

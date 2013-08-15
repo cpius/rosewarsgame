@@ -14,7 +14,7 @@ class Interface(object):
                       "very_small": pygame.font.SysFont(font_name, int(11 * zoom), bold=True),
                       "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
                       "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
-                      "xp": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "experience": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)
                       }
 

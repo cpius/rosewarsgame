@@ -14,7 +14,7 @@
             "B6": {
                 "name": "Viking",
                 "used": 1,
-                "xp": 2
+                "experience": 2
             },
             "C4": "Knight",
             "D2": "Royal Guard",
@@ -26,14 +26,14 @@
         "player2_units": {
             "A4": {
                 "name": "Knight",
-                "xp": 1
+                "experience": 1
             },
             "A6": "Diplomat",
             "C5": "Crusader",
             "C7": "Berserker",
             "D4": {
                 "name": "Pikeman",
-                "xp": 1
+                "experience": 1
             },
             "E5": "Knight",
             "E6": "Pikeman"

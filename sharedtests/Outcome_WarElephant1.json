@@ -28,7 +28,7 @@
             "C2": {
                 "name": "War Elephant",
                 "used": true,
-                "xp": 1
+                "experience": 1
             }
         },
         "actions_remaining": 0,

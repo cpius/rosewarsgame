@@ -24,7 +24,7 @@
         "player1_units": {
             "C3": {
                 "attack_frozen": 3,
-                "xp": 1,
+                "experience": 1,
                 "used": 1,
                 "name": "Cannon"
             },

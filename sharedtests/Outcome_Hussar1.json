@@ -30,7 +30,7 @@
             "C1": {
                 "name": "Hussar",
                 "used": true,
-                "xp": 1
+                "experience": 1
             }
         },
         "actions_remaining": 1,

@@ -24,7 +24,7 @@
         "actions_remaining": 0,
         "player1_units": {
             "E4": {
-                "xp": 1,
+                "experience": 1,
                 "used": 1,
                 "name": "Pikeman"
             }

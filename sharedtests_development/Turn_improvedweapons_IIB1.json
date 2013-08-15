@@ -10,7 +10,7 @@
                 "zoc": {
                     "Cavalry": "true"
                 },
-                "xp": 1
+                "experience": 1
             }
         },
         "player1_units": {
@@ -24,7 +24,7 @@
         "player1_units": {
             "C3": {
                 "name": "Pikeman",
-                "xp": 1
+                "experience": 1
             }
         },
         "player2_units": {

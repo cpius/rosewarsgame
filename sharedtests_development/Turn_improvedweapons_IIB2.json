@@ -10,7 +10,7 @@
                 "zoc": {
                     "Cavalry": "true"
                 },
-                "xp": 1
+                "experience": 1
             },
             "E4": "Weaponsmith"
         },
@@ -25,7 +25,7 @@
         "player1_units": {
             "C3": {
                 "name": "Light Cavalry",
-                "xp": 1
+                "experience": 1
             },
             "E4": "Weaponsmith"
         },

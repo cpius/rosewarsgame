@@ -145,7 +145,8 @@ state_descriptions = {
     "recently_bribed": "Whether a unit was bribed last turn.",
     "sabotaged": "Whether a unit is currently sabotaged by a Saboteur.",
     "used": "Whether a unit has been used this turn.",
-    "xp": "Experience.",
+    "experience": "Experience.",
+    "recently_upgraded": "Whether a unit was upgraded this turn"
 }
 
 ability_descriptions = {
@@ -195,11 +196,12 @@ if 1 == 2:
         improved_weapons_B = None
         movement_remaining = None
         lost_extra_life = None
-        xp = None
+        experience = None
         used = None
         recently_bribed = None
         sabotaged = None
         sabotaged_II = None
+        recently_upgraded = None
 
         name = None
         write = None

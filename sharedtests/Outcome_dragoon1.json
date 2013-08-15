@@ -27,7 +27,7 @@
             "E3": {
                 "name": "Dragoon",
                 "used": 1,
-                "xp": 1,
+                "experience": 1,
                 "movement_remaining": 3,
                 "extra_action": 1
             },

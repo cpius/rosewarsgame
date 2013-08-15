@@ -25,7 +25,7 @@
         "actions_remaining": 1,
         "player1_units": {
             "C3": {
-                "xp": 1,
+                "experience": 1,
                 "used": 1,
                 "name": "Ballista"
             },

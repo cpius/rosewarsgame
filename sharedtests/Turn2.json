@@ -7,7 +7,7 @@
             "C3": {
                 "name": "Saboteur",
                 "used": 1,
-                "xp": 1
+                "experience": 1
             },
             "E4": "Light Cavalry"
         },
@@ -25,7 +25,7 @@
         "player2_units": {
             "C3": {
                 "name": "Saboteur",
-                "xp": 1
+                "experience": 1
             },
             "E4": "Light Cavalry"
         },

@@ -22,7 +22,7 @@
         "player1_units": {
             "A1": "Pikeman",
             "C3": {
-                "xp": 1,
+                "experience": 1,
                 "used": 1,
                 "name": "Saboteur"
             }

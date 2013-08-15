@@ -33,7 +33,7 @@
             "C2": {
                 "name": "Longswordsman",
                 "used": 1,
-                "xp": 1
+                "experience": 1
             }
         },
         "actions_remaining": 0,

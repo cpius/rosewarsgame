@@ -27,7 +27,7 @@
             "E4": {
                 "name": "Hobelar",
                 "used": 1,
-                "xp": 1,
+                "experience": 1,
                 "movement_remaining": 2,
                 "extra_action": 1
             },
