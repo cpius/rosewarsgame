@@ -20,6 +20,11 @@ class Unit(object):
     base_defence = 0
     base_range = 0
     base_movement = 0
+    type = None
+    level = 0
+    upgrades = []
+    special_upgrades = []
+    final_upgrades = []
 
     @property
     def attack(self):
@@ -36,12 +41,6 @@ class Unit(object):
     @property
     def movement(self):
         return self.base_movement + self.get(Trait.movement_skill)
-
-    type = None
-    level = 0
-    upgrades = []
-    special_upgrades = []
-    final_upgrades = []
 
     def __repr__(self):
         return self.name
