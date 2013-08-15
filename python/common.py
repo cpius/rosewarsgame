@@ -352,10 +352,14 @@ def readable_attributes(attributes):
     return dictionary
 
 
-def merge(d1, d2):
-    d = d1.copy()
-    d.update(d2)
-    return d
+def merge(first_dictionary, second_dictionary, third_dictionary=None):
+    merged_dictionary = first_dictionary.copy()
+    merged_dictionary.update(second_dictionary)
+
+    if third_dictionary:
+        merged_dictionary.update(third_dictionary)
+
+    return merged_dictionary
 
 
 def get_trait_enum_dict(dictionary):
