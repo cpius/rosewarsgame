@@ -150,8 +150,18 @@ class Unit(object):
 
         return upgraded_unit
 
+    def get_abilities_not_in_base(self):
+        abilities = self.abilities.copy()
+        base_unit = globals()[self.name.replace(" ", "_")]()
+        for ability, value in abilities.items():
+            if ability in base_unit.abilities and value == base_unit.abilities[ability]:
+                del abilities[ability]
+
+        return abilities
+
     def get_traits_not_in_base(self):
         traits = dict((trait, value) for trait, value in self.traits.items() if value)
+
         base_unit = globals()[self.name.replace(" ", "_")]()
         for trait in base_unit.traits:
             if trait in traits:
@@ -168,7 +178,7 @@ class Unit(object):
         return experience and experience % to_upgrade == 0 and not self.get(State.recently_upgraded)
 
     def to_document(self):
-        attributes = merge(self.get_states(), self.get_traits_not_in_base())
+        attributes = merge(self.get_states(), self.get_traits_not_in_base(), self.get_abilities_not_in_base())
 
         if attributes:
             unit_dict = readable_attributes(attributes)
