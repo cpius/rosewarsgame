@@ -16,17 +16,8 @@ def clear(screen, interface):
 
 
 def get_unit_lines(unit):
-    lines = []
-    for attribute in ["attack", "defence", "range", "movement"]:
-        if getattr(unit, attribute):
-            value = getattr(unit, attribute)
-            lines.append(attribute.title() + ": " + str(value))
-        else:
-            lines.append(attribute.title() + ": %")
-
-    unit_type = Type.write[unit.type]
-    lines.append("Type: " + unit_type)
-    lines.append("")
+    lines = ["A: " + str(unit.attack) + "  D: " + str(unit.defence)
+             + "  R: " + str(unit.range) + "  M: " + str(unit.movement)]
 
     if unit.zoc:
         lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
