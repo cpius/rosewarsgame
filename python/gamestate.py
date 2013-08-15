@@ -167,17 +167,17 @@ class Gamestate:
             else:
                 unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
 
-                for attr, value in unit_document.items():
-                    if attr == "zoc":
+                for attribute, value in unit_document.items():
+                    if attribute == "zoc":
                         unit.zoc = {getattr(Type, unit_type) for unit_type in unit_document["zoc"]}
-                    elif attr in state_descriptions:
-                        state = getattr(State, attr)
+                    elif attribute in state_descriptions:
+                        state = getattr(State, attribute)
                         unit.set(state, value)
-                    elif attr in trait_descriptions:
-                        trait = getattr(Trait, attr)
+                    elif attribute in trait_descriptions:
+                        trait = getattr(Trait, attribute)
                         unit.set(trait, value)
-                    elif attr in ability_descriptions:
-                        ability = getattr(Ability, attr)
+                    elif attribute in ability_descriptions:
+                        ability = getattr(Ability, attribute)
                         unit.set(ability, value)
 
             units[position] = unit

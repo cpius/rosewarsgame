@@ -45,13 +45,13 @@ class Unit(object):
     def __repr__(self):
         return self.name
 
-    def set(self, attr, n=1):
-        if attr in Trait.name:
-            self.traits[attr] = n
-        elif attr in Ability.name:
-            self.abilities[attr] = n
+    def set(self, attribute, n=1):
+        if attribute in Trait.name:
+            self.traits[attribute] = n
+        elif attribute in Ability.name:
+            self.abilities[attribute] = n
         else:
-            self.states[attr] = n
+            self.states[attribute] = n
 
     def add(self, attr, n):
         if attr in Trait.name:
@@ -76,11 +76,11 @@ class Unit(object):
     def increment(self, attribute):
         self.states[attribute] += 1
 
-    def remove(self, attr):
-        if attr in Trait.name:
-            self.traits[attr] = 0
+    def remove(self, attribute):
+        if attribute in Trait.name:
+            self.traits[attribute] = 0
         else:
-            self.states[attr] = 0
+            self.states[attribute] = 0
 
     def decrement(self, attribute):
         self.states[attribute] = max(0, self.states[attribute] - 1)
