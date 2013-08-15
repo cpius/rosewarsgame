@@ -144,7 +144,7 @@ state_descriptions = {
     "movement_remaining": "Movement points left for doing an extra action",
     "recently_bribed": "Whether a unit was bribed last turn.",
     "sabotaged": "Whether a unit is currently sabotaged by a Saboteur.",
-    "used": "Whether a unit has been used this round.",
+    "used": "Whether a unit has been used this turn.",
     "xp": "Experience.",
 }
 
