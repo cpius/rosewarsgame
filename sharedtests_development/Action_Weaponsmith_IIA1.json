@@ -14,7 +14,7 @@
         "player2_units": {
             "A4": {
                 "name": "Knight",
-                "improved_weapons_II_A": 1
+                "improved_weapons_II": 1
             }
         }
     }

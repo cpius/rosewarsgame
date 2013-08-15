@@ -139,7 +139,7 @@ state_descriptions = {
     "extra_action": "Whether the unit is doing its extra action.",
     "frozen": "Unit cannot perform any actions.",
     "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
-    "improved_weapons_B": "Whether a unit currently has been the target of an improve_weapons_B function",
+    "improved_weapons_II": "Whether a unit currently has been the target of an improve_weapons_II function",
     "lost_extra_life": "Whether the unit has lost its extra life",
     "movement_remaining": "Movement points left for doing an extra action",
     "recently_bribed": "Whether a unit was bribed last turn.",
@@ -153,12 +153,11 @@ ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
-    "improve_weapons_B": "Give melee unit +2 attack, +1 defence for two turns.",
+    "improve_weapons_II": "Give melee unit +2 attack, +1 defence for two turns.",
     "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
     "poison": "Freezes a unit for 2 turns.",
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
     "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-    "improve_weapons_II_A": "",
     "sabotage_II": "",
     "bribe_II": ""
 }
@@ -193,7 +192,7 @@ if 1 == 2:
         extra_action = None
         frozen = None
         improved_weapons = None
-        improved_weapons_B = None
+        improved_weapons_II = None
         movement_remaining = None
         lost_extra_life = None
         experience = None
@@ -257,7 +256,7 @@ if 1 == 2:
         sabotage = None
         sabotage_II = None
         triple_attack = None
-        improve_weapons_B = None
+        improve_weapons_II = None
 
         name = {}
         write = {}

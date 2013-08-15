@@ -121,7 +121,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
             if ability in [Ability.sabotage, Ability.poison]:
                 target_positions = enemy_units
 
-            elif ability in [Ability.improve_weapons, Ability.improve_weapons_B]:
+            elif ability in [Ability.improve_weapons, Ability.improve_weapons_II]:
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
 
             elif ability == Ability.bribe:

@@ -93,10 +93,13 @@ class Unit(object):
             self.set(State.sabotaged, value)
 
         if ability == Ability.improve_weapons:
-            self.set(State.improved_weapons)
+            if value == 2:
+                self.set(State.improved_weapons_II, value)
+            else:
+                self.set(State.improved_weapons)
 
-        if ability == Ability.improve_weapons_B:
-            self.set(State.improved_weapons_B)
+        if ability == Ability.improve_weapons_II:
+            self.set(State.improved_weapons_II, value)
 
     # custom functions
     def poison(self):

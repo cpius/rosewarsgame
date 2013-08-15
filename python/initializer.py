@@ -3,7 +3,7 @@ from common import *
 
 remove_states = [State.used, State.sabotaged, State.improved_weapons, State.recently_bribed, State.recently_upgraded]
 
-decrement_states = [State.frozen, State.attack_frozen, State.improved_weapons_B]
+decrement_states = [State.frozen, State.attack_frozen, State.improved_weapons_II]
 
 
 def initialize_turn(gamestate):
