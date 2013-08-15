@@ -40,7 +40,13 @@ def get_unit_lines(unit):
                 lines.append("")
 
     for ability in unit.abilities:
-        lines.append(Ability.write[ability] + ": " + common.ability_descriptions[Ability.name[ability]])
+        if unit.abilities[ability] > 1:
+            ability_friendly_name = Ability.name[ability] + "_"
+            for i in range(0, unit.abilities[ability]):
+                ability_friendly_name += "I"
+            lines.append(ability_friendly_name + ": " + common.ability_descriptions[ability_friendly_name])
+        else:
+            lines.append(Ability.write[ability] + ": " + common.ability_descriptions[Ability.name[ability]])
         lines.append("")
 
     for state in unit.states:
