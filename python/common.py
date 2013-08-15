@@ -340,16 +340,16 @@ class memoized(object):
 
 
 def readable_attributes(attributes):
-    d = {}
+    dictionary = {}
     for key, value in attributes.items():
         if value:
             if key in Trait.name:
-                d[Trait.name[key]] = value
+                dictionary[Trait.name[key]] = value
             elif key in Ability.name:
-                d[Ability.name[key]] = value
+                dictionary[Ability.name[key]] = value
             else:
-                d[State.name[key]] = value
-    return d
+                dictionary[State.name[key]] = value
+    return dictionary
 
 
 def merge(d1, d2):
