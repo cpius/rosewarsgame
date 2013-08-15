@@ -624,7 +624,7 @@ class Saboteur(Unit):
 class Diplomat(Unit):
     def __init__(self):
         super(Diplomat, self).__init__()
-        self.set(Ability.bribe, 1)
+        self.set(Ability.bribe)
     name = "Diplomat"
     image = "Diplomat"
     base_attack = 0
