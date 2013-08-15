@@ -28,7 +28,7 @@
         }
     },
     "post_gamestate": {
-        "actions_remaining": 1,
+        "actions_remaining": 0,
         "player1_units": {
             "E4": {
                 "name": "Samurai",
