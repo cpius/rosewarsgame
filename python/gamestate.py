@@ -242,6 +242,16 @@ class Gamestate:
 
         return False
 
+    def get_unit_from_action_document(self, action_document):
+        unit_position = Position.from_string(action_document["end_at"])
+        if not unit_position in self.player_units and not unit_position in self.enemy_units:
+            unit_position = Position.from_string(action_document["target_at"])
+
+        if unit_position in self.player_units:
+            return self.player_units[unit_position], unit_position
+        else:
+            return self.enemy_units[unit_position], unit_position
+
     def is_extra_action(self):
         for position, unit in self.player_units.items():
             if unit.has(State.extra_action):
