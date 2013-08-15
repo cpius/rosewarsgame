@@ -140,15 +140,17 @@ class Unit(object):
         if getattr(self, "upgrades"):
             return globals()[choice]()
 
-        upgrade = globals()[self.name.replace(" ", "_")]()
+        upgraded_unit = globals()[self.name.replace(" ", "_")]()
         for state, value in self.states.items():
-            upgrade.add(state, value)
+            upgraded_unit.add(state, value)
         for trait, value in self.traits.items():
-            upgrade.add(trait, value)
-        for attr, value in choice.items():
-            upgrade.add(attr, value)
+            upgraded_unit.add(trait, value)
+        for attribute, value in choice.items():
+            upgraded_unit.add(attribute, value)
 
-        return upgrade
+        upgraded_unit.set(State.recently_upgraded)
+
+        return upgraded_unit
 
     def get_traits_not_in_base(self):
         traits = dict((trait, value) for trait, value in self.traits.items() if value)
