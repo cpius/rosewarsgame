@@ -41,7 +41,6 @@
                 "name": "Crusader"
             }
         },
-        "player1_intelligence": "Evaluator",
-        "extra_action": false
+        "player1_intelligence": "Evaluator"
     }
 }

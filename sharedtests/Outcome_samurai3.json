@@ -11,7 +11,6 @@
         "move_with_attack": false
     },
     "pre_gamestate": {
-        "extra_action": true,
         "actions_remaining": 1,
         "player1_units": {
             "E3": {
@@ -29,7 +28,6 @@
         }
     },
     "post_gamestate": {
-        "extra_action": false,
         "actions_remaining": 1,
         "player1_units": {
             "E3": {

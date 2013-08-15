@@ -36,7 +36,6 @@
             "E3": "Light Cavalry",
             "E2": "Pikeman"
         },
-        "player1_intelligence": "Human",
-        "extra_action": false
+        "player1_intelligence": "Human"
     }
 }

@@ -56,8 +56,9 @@ def do_action(gamestate, action, outcome):
 
     def prepare_extra_actions(action):
 
-        if gamestate.extra_action:
+        if action.unit.has(State.extra_action):
             movement_remaining = 0
+            unit.remove(State.extra_action)
 
             if unit.has(Trait.bloodlust) and action.is_attack() and action.is_successful(rolls, gamestate):
                 movement_remaining = unit.get(State.movement_remaining) - int(action.move_with_attack)
@@ -76,7 +77,7 @@ def do_action(gamestate, action, outcome):
 
     def update_actions_remaining():
 
-        if gamestate.extra_action:
+        if unit.has(State.extra_action):
             return
 
         gamestate.decrement_actions_remaining()
@@ -120,8 +121,6 @@ def do_action(gamestate, action, outcome):
 
     update_actions_remaining()
 
-    unit.remove(State.extra_action)
-
     update_unit_position()
 
     if action.is_attack():
@@ -143,8 +142,6 @@ def do_action(gamestate, action, outcome):
 
     if action.is_attack() and action.move_with_attack and action.target_at not in enemy_units:
         move_melee_unit_to_target_tile(gamestate, action)
-
-    gamestate.extra_action = unit.has(State.extra_action)
 
 
 def move_melee_unit_to_target_tile(gamestate, action):

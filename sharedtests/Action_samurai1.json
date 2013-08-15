@@ -6,7 +6,6 @@
         "end_at": "E5"
     },
     "gamestate": {
-        "extra_action": true,
         "actions_remaining": 0,
         "player1_units": {
             "E4": {

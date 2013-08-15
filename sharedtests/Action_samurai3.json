@@ -8,7 +8,6 @@
         "move_with_attack": false
     },
     "gamestate": {
-        "extra_action": true,
         "actions_remaining": 0,
         "player1_units": {
             "E4": {

@@ -76,7 +76,7 @@ class Controller(object):
 
         self.perform_action(action, outcome)
 
-        if hasattr(self.game.gamestate.current_player(), "extra_action"):
+        if self.game.gamestate.is_extra_action():
             extra_action, extra_outcome = self.client.select_action(self.game.gamestate)
             self.perform_action(extra_action, extra_outcome)
 
@@ -90,7 +90,7 @@ class Controller(object):
             self.game.shift_turn()
             self.view.draw_game(self.game)
 
-        if getattr(self.game.gamestate, "extra_action"):
+        if self.game.gamestate.is_extra_action():
             extra_action = self.game.current_player().ai.select_action(self.game.gamestate)
             self.perform_action(extra_action)
 

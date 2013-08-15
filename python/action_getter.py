@@ -5,7 +5,7 @@ from common import *
 
 def get_actions(gamestate):
 
-    if not gamestate.get_actions_remaining() and not gamestate.extra_action:
+    if not gamestate.get_actions_remaining() and not gamestate.is_extra_action():
         return []
 
     actions = []
