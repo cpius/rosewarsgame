@@ -95,11 +95,10 @@ class Controller(object):
             self.perform_action(extra_action)
 
     def perform_extra_action(self, position):
-        print "performing extra action"
-        print "actions available", self.game.gamestate.get_actions()
-        if position == self.start_at:
-            self.selected_unit.remove(State.extra_action)
-            self.clear_move()
+        if position in self.game.gamestate.enemy_units:
+            self.perform_melee_attack(position)
+        elif position == self.start_at or position not in self.game.gamestate.player_units:
+            self.perform_move(position)
 
     def perform_ability(self, position):
         if len(self.selected_unit.abilities) > 1:
