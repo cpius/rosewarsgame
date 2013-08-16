@@ -129,10 +129,14 @@ class Unit(object):
         if getattr(self, "upgrades"):
             return self.upgrades[choice_number].replace(" ", "_")
 
+        available_upgrades = []
         if getattr(self, "special_upgrades"):
-            available_upgrades = [upgrade for upgrade in self.special_upgrades if upgrade.keys()[0] not in self.traits]
-        else:
-            available_upgrades = []
+            for upgrade in self.special_upgrades:
+                for attribute in upgrade:
+                    is_trait_already_upgraded = attribute in self.get_traits_not_in_base()
+                    is_ability_already_upgraded = attribute in self.get_abilities_not_in_base()
+                    if not is_trait_already_upgraded and not is_ability_already_upgraded:
+                        available_upgrades.append(upgrade)
 
         if len(available_upgrades) == 2:
             return available_upgrades[choice_number]
@@ -142,20 +146,48 @@ class Unit(object):
         return self.final_upgrades[choice_number]
 
     def get_upgraded_unit(self, choice):
+        simple_upgrade = False
         if getattr(self, "upgrades"):
-            return globals()[choice]()
-
-        upgraded_unit = globals()[self.name.replace(" ", "_")]()
-        for state, value in self.states.items():
-            upgraded_unit.add(state, value)
-        for trait, value in self.traits.items():
-            upgraded_unit.add(trait, value)
-        for attribute, value in choice.items():
-            upgraded_unit.add(attribute, value)
+            upgraded_unit = globals()[choice]()
+            simple_upgrade = True
+        else:
+            upgraded_unit = globals()[self.name.replace(" ", "_")]()
 
         upgraded_unit.set(State.recently_upgraded)
 
+        for state, value in self.states.items():
+            upgraded_unit.add(state, value)
+
+        if simple_upgrade:
+            return upgraded_unit
+
+        for trait, value in self.get_traits_not_in_base().items():
+            upgraded_unit.add(trait, value)
+        for ability, value in self.get_abilities_not_in_base().items():
+            upgraded_unit.set(ability, value)
+
+        for attribute, value in choice.items():
+            upgraded_unit.add(attribute, value)
+
+            if hasattr(upgraded_unit, "special_upgrades"):
+                chosen_index = None
+                for i, special_upgrade in enumerate(upgraded_unit.special_upgrades):
+                    if special_upgrade == choice:
+                        chosen_index = i
+                if chosen_index is int:
+                    del upgraded_unit.special_upgrades[chosen_index]
+
         return upgraded_unit
+
+    def is_allowed_upgrade_choice(self, upgrade_choice):
+        if not self.is_milf():
+            return False
+
+        # print "choice 0", self.get_upgrade_choice(0)
+        # print "choice 1", self.get_upgrade_choice(1)
+        # print "choice", upgrade_choice
+
+        return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
 
     def get_abilities_not_in_base(self):
         abilities = self.abilities.copy()
@@ -206,7 +238,7 @@ class Archer(Unit):
     attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     type = Type.Infantry
-    upgrades = ["Fire Archer", "Crossbow Archer"]
+    upgrades = ["Fire_Archer", "Crossbow_Archer"]
 
 
 class Fire_Archer(Unit):
@@ -237,7 +269,7 @@ class Crossbow_Archer(Unit):
     defence_bonuses = {}
     type = Type.Infantry
     special_upgrades = [{Trait.fire_arrows: 1}]
-    final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}, ]
+    final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}]
 
 
 class Pikeman(Unit):
