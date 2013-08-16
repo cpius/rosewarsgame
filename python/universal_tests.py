@@ -93,7 +93,7 @@ class UniversalTestCase(TestCase):
         else:
             message += "Not-allowed action: " + str(action) + "\n"
 
-        message += "Available actions:"
+        message += "Available actions:\n"
         for available_action in available_actions:
             message += str(available_action) + "\n"
 
