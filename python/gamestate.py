@@ -220,6 +220,8 @@ class Gamestate:
 
     def move_melee_unit_to_target_tile(self, action):
         action_doer.move_melee_unit_to_target_tile(self, action)
+        self.set_available_actions()
+        self.decrement_actions_if_none_available(action)
 
     def __str__(self):
         return document_to_string(self.to_document())
