@@ -50,7 +50,7 @@ def get_unit_lines(unit):
         lines.append("")
 
     for state in unit.states:
-        if unit.states[state]:
+        if unit.states[state] and state not in [State.used, State.recently_upgraded, State.experience]:
             lines.append(State.name[state] + ": " + str(unit.states[state]))
 
     return lines
