@@ -61,11 +61,15 @@ class Unit(object):
         elif attr in State.name:
             self.states[attr] += n
 
-    def has(self, attr, value=None):
-        if not value:
-            return self.traits[attr] or self.states[attr]
+    def has(self, attribute, value=None):
+        if not value and attribute in Trait.name:
+            return self.traits[attribute]
+        elif not value:
+            return self.states[attribute]
+        elif attribute in Trait.name:
+            return self.traits[attribute] == value
         else:
-            return self.traits[attr] == value or self.states[attr] == value
+            return self.states[attribute] == value
 
     def get(self, attr):
         if attr in Trait.name:
