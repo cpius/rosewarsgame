@@ -158,7 +158,7 @@ ability_descriptions = {
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
     "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
     "sabotage_II": "",
-    "bribe_II": ""
+    "bribe_II": "Not yet implemented"
 }
 
 
