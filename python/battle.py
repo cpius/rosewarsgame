@@ -25,7 +25,7 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
         if attacking_unit.type in defending_unit.defence_bonuses:
             defence += defending_unit.defence_bonuses[attacking_unit.type]
         defence += int(defending_unit.has(State.improved_weapons))
-        defence += int(defending_unit.has(State.improved_weapons_B))
+        defence += int(defending_unit.has(State.improved_weapons_II))
         defence += int(attacking_unit.is_melee() and defending_unit.has(Trait.melee_expert))
         defence -= int(attacking_unit.has(Trait.pikeman_specialist) and defending_unit.name == "Pikeman")
         defence += int(attacking_unit.is_ranged() and defending_unit.has(Trait.tall_shield))
@@ -68,7 +68,7 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
         attack += 2 * int(action.has_high_morale_B(player_units))
         attack += attacking_unit.get(State.bribed)
         attack += 3 * int(attacking_unit.has(State.improved_weapons))
-        attack += 2 * int(attacking_unit.has(State.improved_weapons_B))
+        attack += 2 * int(attacking_unit.has(State.improved_weapons_II))
         if defending_unit.type in attacking_unit.attack_bonuses:
             attack += attacking_unit.attack_bonuses[defending_unit.type]
         attack -= int(defending_unit.has(Trait.pikeman_specialist) and attacking_unit.name == "Pikeman")

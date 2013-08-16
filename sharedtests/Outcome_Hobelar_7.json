@@ -1,0 +1,39 @@
+{
+    "type": "Is outcome correct",
+    "description": "Hobelar attacks unsuccessfully on its last move",
+    "outcome": {
+        "D5": [6, 1]
+    },
+    "action": {
+        "start_at": "E3",
+        "end_at": "D4",
+        "target_at": "D5",
+        "move_with_attack": false
+    },
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E3": "Hobelar",
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D5": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "D4": {
+                "name": "Hobelar",
+                "used": 1,
+                "experience": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D5": "Ballista"
+        }
+    }
+}

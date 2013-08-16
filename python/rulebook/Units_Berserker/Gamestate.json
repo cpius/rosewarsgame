@@ -1,12 +1,10 @@
 {
     "actions_remaining": 1,
-    "player1_units": 
-	{
-		"D6": "Berserker"
-	}, 
-    "player2_units": 
-	{
-		"E7": "Pikeman",
-		"B7": "Catapult"
-	} 
+    "player1_units": {
+        "D6": "Berserker"
+    },
+    "player2_units": {
+        "E7": "Pikeman",
+        "B7": "Catapult"
+    }
 }

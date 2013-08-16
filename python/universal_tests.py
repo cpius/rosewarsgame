@@ -15,20 +15,20 @@ class UniversalTestCase(TestCase):
     def __init__(self, testcase_file):
         super(UniversalTestCase, self).__init__()
         self.testcase_file = testcase_file
+        self.description = None
 
     def runTest(self):
         try:
             test_document = json.loads(open(self.testcase_file).read())
-            description = None
+
             if "description" in test_document:
-                description = test_document["description"]
-            # print "\n\nTesting", self.testcase_file
+                self.description = test_document["description"]
 
             if test_document["type"] == "Does action exist":
                 gamestate = Gamestate.from_document(test_document["gamestate"])
                 action = Action.from_document(gamestate.all_units(), test_document["action"])
                 expected = test_document["result"]
-                self.does_action_exist(gamestate, action, expected, description)
+                self.does_action_exist(gamestate, action, expected)
 
             elif test_document["type"] == "Is attack and defence correct":
                 gamestate = Gamestate.from_document(test_document["gamestate"])
@@ -54,8 +54,19 @@ class UniversalTestCase(TestCase):
 
                 self.is_turn_shift_correct(gamestate, expected_gamestate)
 
+            elif test_document["type"] == "Upgrade":
+                gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+                expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+
+                if isinstance(test_document["upgrade"], basestring):
+                    upgrade_choice = test_document["upgrade"]
+                else:
+                    upgrade_choice = common.enum_attributes(test_document["upgrade"])
+
+                self.upgrade(gamestate, upgrade_choice, expected_gamestate)
+
             else:
-                self.assertFalse(True)
+                self.assertTrue(False, "Unknown test type: " + test_document["type"])
 
         except ValueError as error:
             self.assertTrue(False, "Failed to load test document: " + self.testcase_file + "\n\n" + error.message)
@@ -70,19 +81,19 @@ class UniversalTestCase(TestCase):
 
         self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
 
-    def does_action_exist(self, gamestate, action, expected, description):
+    def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)
         actual = (action in available_actions)
 
         message = "Wrong action existance for " + self.testcase_file + "\n\n"
-        if description:
-            message += "Description: " + description + "\n\n"
+        if self.description:
+            message += "Description: " + self.description + "\n\n"
         if expected:
             message += "Requested action: " + str(action) + "\n"
         else:
             message += "Not-allowed action: " + str(action) + "\n"
 
-        message += "Available actions:"
+        message += "Available actions:\n"
         for available_action in available_actions:
             message += str(available_action) + "\n"
 
@@ -116,10 +127,21 @@ class UniversalTestCase(TestCase):
 
     def assert_equal_documents(self, expected, actual):
         message = "Wrong document for " + self.testcase_file + "\n\n"
+
+        if self.description:
+            message += "Description: " + self.description + "\n\n"
+
         message += "Expected:\n" + common.document_to_string(expected)
         message += "\nActual:\n" + common.document_to_string(actual)
 
         self.assertEqual(expected, actual, message)
+
+    def upgrade(self, gamestate, upgrade_choice, expected_gamestate):
+        for position, unit in gamestate.player_units.items():
+            if unit.is_allowed_upgrade_choice(upgrade_choice):
+                gamestate.player_units[position] = unit.get_upgraded_unit(upgrade_choice)
+
+        self.assert_equal_documents(expected_gamestate.to_document(), gamestate.to_document())
 
 
 if __name__ == "__main__":

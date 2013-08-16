@@ -16,12 +16,10 @@ class Gamestate:
                  player1_units,
                  player2_units,
                  actions_remaining,
-                 extra_action=False,
                  created_at=None,
                  game_id=None):
         self.units = [player1_units, player2_units]
         self.actions_remaining = actions_remaining
-        self.extra_action = extra_action
         self.action_count = 0
         self.created_at = created_at
         self.game_id = game_id
@@ -62,12 +60,9 @@ class Gamestate:
                 if getattr(action.unit, "upgrades"):
                     upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
                 else:
-                    if hasattr(Ability, upgrade_choice.keys()[0]):
-                        upgrade_choice = get_ability_enum_dict(upgrade_choice)
-                    else:
-                        upgrade_choice = get_trait_enum_dict(upgrade_choice)
+                    upgrade_choice = enum_attributes(upgrade_choice)
                     upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
-                if action.target_at and action.target_at in gamestate.player_units:
+                if action.is_attack() and action.target_at and action.target_at in gamestate.player_units:
                     gamestate.player_units[action.target_at] = upgraded_unit
                 else:
                     gamestate.player_units[action.end_at] = upgraded_unit
@@ -87,9 +82,18 @@ class Gamestate:
         action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
-        if self.actions_remaining > 0 or self.extra_action:
-            self.available_actions = action_getter.get_actions(self)
-            if not self.available_actions:
+        if self.actions_remaining > 0 or action.unit.has(State.extra_action):
+            self.set_available_actions()
+
+            self.decrement_actions_if_none_available(action)
+
+    def decrement_actions_if_none_available(self, action):
+        if not self.available_actions:
+            if action.unit.has(State.extra_action):
+                action.unit.remove(State.extra_action)
+                action.unit.remove(State.movement_remaining)
+                self.set_available_actions()
+            else:
                 self.actions_remaining = 0
 
     def initialize_turn(self):
@@ -145,15 +149,12 @@ class Gamestate:
         player1_units = cls.units_from_document(document["player1_units"])
         player2_units = cls.units_from_document(document["player2_units"])
         actions_remaining = document["actions_remaining"]
-        if "extra_action" in document:
-            extra_action = document["extra_action"]
-        else:
-            extra_action = False
+
         if "created_at" in document:
             created_at = document["created_at"]
         else:
             created_at = None
-        return cls(player1_units, player2_units, actions_remaining, extra_action, created_at)
+        return cls(player1_units, player2_units, actions_remaining, created_at)
 
     @classmethod
     def from_file(cls, path):
@@ -172,17 +173,17 @@ class Gamestate:
             else:
                 unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
 
-                for attr, value in unit_document.items():
-                    if attr == "zoc":
+                for attribute, value in unit_document.items():
+                    if attribute == "zoc":
                         unit.zoc = {getattr(Type, unit_type) for unit_type in unit_document["zoc"]}
-                    elif attr in state_descriptions:
-                        state = getattr(State, attr)
+                    elif attribute in state_descriptions:
+                        state = getattr(State, attribute)
                         unit.set(state, value)
-                    elif attr in trait_descriptions:
-                        trait = getattr(Trait, attr)
+                    elif attribute in trait_descriptions:
+                        trait = getattr(Trait, attribute)
                         unit.set(trait, value)
-                    elif attr in ability_descriptions:
-                        ability = getattr(Ability, attr)
+                    elif attribute in ability_descriptions:
+                        ability = getattr(Ability, attribute)
                         unit.set(ability, value)
 
             units[position] = unit
@@ -198,38 +199,19 @@ class Gamestate:
 
     def to_document(self):
         document = {}
-        if self.extra_action:
-            document["extra_action"] = True
         if self.created_at:
             document["created_at"] = self.created_at
         document["actions_remaining"] = self.actions_remaining
         if self.game_id:
             document["game"] = self.game_id
-        document["player1_units"] = self.get_units_dict(self.units[0])
-        document["player2_units"] = self.get_units_dict(self.units[1])
+
+        document["player1_units"] = {str(position): unit.to_document() for (position, unit) in self.units[0].items()}
+        document["player2_units"] = {str(position): unit.to_document() for (position, unit) in self.units[1].items()}
 
         return document
 
-    def get_units_dict(self, units):
-        units_dict = dict()
-        for unit_position, unit in units.items():
-            position = str(unit_position)
-
-            states = unit.get_states()
-            traits = unit.get_traits_not_in_base()
-            attributes = merge(states, traits)
-
-            if attributes:
-                unit_dict = readable_attributes(attributes)
-                unit_dict["name"] = unit.name
-                units_dict[position] = unit_dict
-            else:
-                units_dict[position] = unit.name
-
-        return units_dict
-
     def is_turn_done(self):
-        return self.actions_remaining < 1 and not getattr(self, "extra_action")
+        return self.actions_remaining < 1 and not self.is_extra_action()
 
     def shift_turn(self):
         self.flip_units()
@@ -238,6 +220,8 @@ class Gamestate:
 
     def move_melee_unit_to_target_tile(self, action):
         action_doer.move_melee_unit_to_target_tile(self, action)
+        self.set_available_actions()
+        self.decrement_actions_if_none_available(action)
 
     def __str__(self):
         return document_to_string(self.to_document())
@@ -258,10 +242,27 @@ class Gamestate:
 
         if not self.enemy_units:
             at_least_one_bribed = False
-            for unit in self.player_units:
+            for position, unit in self.player_units:
                 if unit.is_bribed():
                     at_least_one_bribed = True
             if not at_least_one_bribed:
+                return True
+
+        return False
+
+    def get_unit_from_action_document(self, action_document):
+        unit_position = Position.from_string(action_document["end_at"])
+        if not unit_position in self.player_units and not unit_position in self.enemy_units:
+            unit_position = Position.from_string(action_document["target_at"])
+
+        if unit_position in self.player_units:
+            return self.player_units[unit_position], unit_position
+        else:
+            return self.enemy_units[unit_position], unit_position
+
+    def is_extra_action(self):
+        for position, unit in self.player_units.items():
+            if unit.has(State.extra_action):
                 return True
 
         return False

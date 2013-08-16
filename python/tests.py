@@ -60,7 +60,7 @@ class TestAI(unittest.TestCase):
             "player1_units": {
                 "D6": {
                     "name": "Ballista",
-                    "xp": 1,
+                    "experience": 1,
                     "attack_skill": 1
                 },
                 "D8": "Saboteur"
@@ -68,7 +68,7 @@ class TestAI(unittest.TestCase):
             "player2_units": {
                 "C7": {
                     "name": "Royal Guard",
-                    "xp": 3
+                    "experience": 3
                 },
                 "E7": "Archer"
             },

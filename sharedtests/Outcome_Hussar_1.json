@@ -1,0 +1,42 @@
+{
+    "type": "Is outcome correct",
+    "description": "Test Hussar triple attack",
+    "outcome": {
+        "B2": [1, 6],
+        "C2": [1, 1],
+        "D2": [6, 1]
+    },
+    "action": {
+        "start_at": "C1",
+        "end_at": "C1",
+        "target_at": "C2",
+        "move_with_attack": true
+    },
+    "pre_gamestate": {
+        "player1_units": {
+            "E1": "Pikeman",
+            "C1": "Hussar"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B2": "Longswordsman",
+            "C2": "Royal Guard",
+            "D2": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "player1_units": {
+            "E1": "Pikeman",
+            "C1": {
+                "name": "Hussar",
+                "used": true,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "C2": "Royal Guard",
+            "D2": "Ballista"
+        }
+    }
+}

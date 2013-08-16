@@ -143,7 +143,6 @@ class Action(object):
         return self.unit.has(Trait.push) and self.is_attack()
 
     def is_crusading(self, units, n=1):
-        units7 = [unit for unit in surrounding_units(self.start_at, units)]
         return any(unit for unit in surrounding_units(self.start_at, units) if unit.has(Trait.crusading, n))
 
     def has_high_morale(self, units):

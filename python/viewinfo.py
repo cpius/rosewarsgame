@@ -16,17 +16,8 @@ def clear(screen, interface):
 
 
 def get_unit_lines(unit):
-    lines = []
-    for attribute in ["attack", "defence", "range", "movement"]:
-        if getattr(unit, attribute):
-            value = getattr(unit, attribute)
-            lines.append(attribute.title() + ": " + str(value))
-        else:
-            lines.append(attribute.title() + ": %")
-
-    unit_type = Type.write[unit.type]
-    lines.append("Type: " + unit_type)
-    lines.append("")
+    lines = ["A: " + str(unit.attack) + "  D: " + str(unit.defence)
+             + "  R: " + str(unit.range) + "  M: " + str(unit.movement)]
 
     if unit.zoc:
         lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
@@ -45,15 +36,19 @@ def get_unit_lines(unit):
     for trait in unit.traits:
         if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
             if unit.has(trait):
-                lines.append(Trait.write[trait] + ": " + trait_descriptions[Trait.name[trait]])
+                trait_key = attribute_key(Trait.name[trait], unit.traits[trait])
+                lines.append(Trait.write[trait] + ":")
+                lines.append(trait_descriptions[trait_key])
                 lines.append("")
 
     for ability in unit.abilities:
-        lines.append(common.ability_descriptions[Ability.name[ability]])
+        ability_key = attribute_key(Ability.name[ability], unit.abilities[ability])
+        lines.append(Ability.write[ability] + ":")
+        lines.append(common.ability_descriptions[ability_key])
         lines.append("")
 
     for state in unit.states:
-        if unit.states[state]:
+        if unit.states[state] and state not in [State.used, State.recently_upgraded, State.experience]:
             lines.append(State.name[state] + ": " + str(unit.states[state]))
 
     return lines
@@ -130,7 +125,7 @@ def draw_ask_about_ability(screen, interface, unit):
     lines = ["Select ability:"]
     for i, ability in enumerate(unit.abilities):
         ability_name = Ability.name[ability]
-        description_string = str(i + 1) + ". " + ability_name + ": " + ability_descriptions[ability_name]
+        description_string = str(i + 1) + ": " + Ability.write[ability] + ": " + ability_descriptions[ability_name]
         lines += textwrap.wrap(description_string, interface.message_line_length)
 
     base = interface.ask_about_ability_location

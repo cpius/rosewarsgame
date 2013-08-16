@@ -1,0 +1,21 @@
+{
+    "type": "Does action exist",
+    "result": true,
+    "action": {
+        "start_at": "B4",
+        "end_at": "B5"
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B4": "Knight",
+            "B2": "Ballista"
+        },
+        "player2_units": {
+            "A4": {
+                "name": "Knight",
+                "improved_weapons_II": 1
+            }
+        }
+    }
+}

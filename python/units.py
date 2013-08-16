@@ -12,7 +12,7 @@ class Unit(object):
     name = ""
     zoc = []
     abilities = []
-    xp_to_upgrade = 4
+    experience_to_upgrade = settings.experience_to_upgrade
     attack_bonuses = {}
     defence_bonuses = {}
     traits = {}
@@ -20,6 +20,11 @@ class Unit(object):
     base_defence = 0
     base_range = 0
     base_movement = 0
+    type = None
+    level = 0
+    upgrades = []
+    special_upgrades = []
+    final_upgrades = []
 
     @property
     def attack(self):
@@ -37,22 +42,16 @@ class Unit(object):
     def movement(self):
         return self.base_movement + self.get(Trait.movement_skill)
 
-    type = None
-    level = 0
-    upgrades = []
-    special_upgrades = []
-    final_upgrades = []
-
     def __repr__(self):
         return self.name
 
-    def set(self, attr, n=1):
-        if attr in Trait.name:
-            self.traits[attr] = n
-        elif attr in Ability.name:
-            self.abilities[attr] = n
+    def set(self, attribute, n=1):
+        if attribute in Trait.name:
+            self.traits[attribute] = n
+        elif attribute in Ability.name:
+            self.abilities[attribute] = n
         else:
-            self.states[attr] = n
+            self.states[attribute] = n
 
     def add(self, attr, n):
         if attr in Trait.name:
@@ -62,26 +61,30 @@ class Unit(object):
         elif attr in State.name:
             self.states[attr] += n
 
-    def has(self, attr, value=None):
-        if not value:
-            return self.traits[attr] or self.states[attr]
+    def has(self, attribute, value=None):
+        if not value and attribute in Trait.name:
+            return self.traits[attribute]
+        elif not value:
+            return self.states[attribute]
+        elif attribute in Trait.name:
+            return self.traits[attribute] == value
         else:
-            return self.traits[attr] == value or self.states[attr] == value
+            return self.states[attribute] == value
 
-    def get(self, attr):
-        if attr in Trait.name:
-            return self.traits[attr]
+    def get(self, attribute):
+        if attribute in Trait.name:
+            return self.traits[attribute]
         else:
-            return self.states[attr]
+            return self.states[attribute]
 
     def increment(self, attribute):
         self.states[attribute] += 1
 
-    def remove(self, attr):
-        if attr in Trait.name:
-            self.traits[attr] = 0
+    def remove(self, attribute):
+        if attribute in Trait.name:
+            self.traits[attribute] = 0
         else:
-            self.states[attr] = 0
+            self.states[attribute] = 0
 
     def decrement(self, attribute):
         self.states[attribute] = max(0, self.states[attribute] - 1)
@@ -94,10 +97,13 @@ class Unit(object):
             self.set(State.sabotaged, value)
 
         if ability == Ability.improve_weapons:
-            self.set(State.improved_weapons)
+            if value == 2:
+                self.set(State.improved_weapons_II, value)
+            else:
+                self.set(State.improved_weapons)
 
-        if ability == Ability.improve_weapons_B:
-            self.set(State.improved_weapons_B)
+        if ability == Ability.improve_weapons_II:
+            self.set(State.improved_weapons_II, value)
 
     # custom functions
     def poison(self):
@@ -108,7 +114,7 @@ class Unit(object):
 
     def gain_xp(self):
         if not self.has(State.used) and not settings.beginner_mode:
-            self.increment(State.xp)
+            self.increment(State.experience)
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
@@ -123,36 +129,78 @@ class Unit(object):
         if getattr(self, "upgrades"):
             return self.upgrades[choice_number].replace(" ", "_")
 
+        available_upgrades = []
         if getattr(self, "special_upgrades"):
-            available_special_upgrades = [upgrade for upgrade in self.special_upgrades if upgrade.keys()[0] not in self.traits]
-        else:
-            available_special_upgrades = []
+            for upgrade in self.special_upgrades:
+                for attribute in upgrade:
+                    is_trait_already_upgraded = attribute in self.get_traits_not_in_base()
+                    is_ability_already_upgraded = attribute in self.get_abilities_not_in_base()
+                    if not is_trait_already_upgraded and not is_ability_already_upgraded:
+                        available_upgrades.append(upgrade)
 
-        if len(available_special_upgrades) == 1:
-            choices = [available_special_upgrades[0], self.final_upgrades[0]]
-        elif len(available_special_upgrades) == 2:
-            choices = available_special_upgrades
-        else:
-            choices = self.final_upgrades
+        if len(available_upgrades) == 2:
+            return available_upgrades[choice_number]
+        if len(available_upgrades) == 1:
+            return [available_upgrades[0], self.final_upgrades[0]][choice_number]
 
-        return choices[choice_number]
+        return self.final_upgrades[choice_number]
 
     def get_upgraded_unit(self, choice):
+        simple_upgrade = False
         if getattr(self, "upgrades"):
-            return globals()[choice]()
+            upgraded_unit = globals()[choice]()
+            simple_upgrade = True
+        else:
+            upgraded_unit = globals()[self.name.replace(" ", "_")]()
 
-        upgrade = globals()[self.name.replace(" ", "_")]()
+        upgraded_unit.set(State.recently_upgraded)
+
         for state, value in self.states.items():
-            upgrade.add(state, value)
-        for trait, value in self.traits.items():
-            upgrade.add(trait, value)
-        for attr, value in choice.items():
-            upgrade.add(attr, value)
+            upgraded_unit.add(state, value)
 
-        return upgrade
+        if simple_upgrade:
+            return upgraded_unit
+
+        for trait, value in self.get_traits_not_in_base().items():
+            upgraded_unit.add(trait, value)
+        for ability, value in self.get_abilities_not_in_base().items():
+            upgraded_unit.set(ability, value)
+
+        for attribute, value in choice.items():
+            upgraded_unit.add(attribute, value)
+
+            if hasattr(upgraded_unit, "special_upgrades"):
+                chosen_index = None
+                for i, special_upgrade in enumerate(upgraded_unit.special_upgrades):
+                    if special_upgrade == choice:
+                        chosen_index = i
+                if chosen_index is int:
+                    del upgraded_unit.special_upgrades[chosen_index]
+
+        return upgraded_unit
+
+    def is_allowed_upgrade_choice(self, upgrade_choice):
+        if not self.is_milf():
+            return False
+
+        # print "choice 0", self.get_upgrade_choice(0)
+        # print "choice 1", self.get_upgrade_choice(1)
+        # print "choice", upgrade_choice
+
+        return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
+
+    def get_abilities_not_in_base(self):
+        abilities = self.abilities.copy()
+        base_unit = globals()[self.name.replace(" ", "_")]()
+        for ability, value in abilities.items():
+            if ability in base_unit.abilities and value == base_unit.abilities[ability]:
+                del abilities[ability]
+
+        return abilities
 
     def get_traits_not_in_base(self):
         traits = dict((trait, value) for trait, value in self.traits.items() if value)
+
         base_unit = globals()[self.name.replace(" ", "_")]()
         for trait in base_unit.traits:
             if trait in traits:
@@ -164,7 +212,19 @@ class Unit(object):
         return dict((state, value) for state, value in self.states.items() if value)
 
     def is_milf(self):
-        return self.get(State.xp) % self.xp_to_upgrade == 0
+        experience = self.get(State.experience)
+        to_upgrade = self.experience_to_upgrade
+        return experience and experience % to_upgrade == 0 and not self.get(State.recently_upgraded)
+
+    def to_document(self):
+        attributes = merge(self.get_states(), self.get_traits_not_in_base(), self.get_abilities_not_in_base())
+
+        if attributes:
+            unit_dict = readable_attributes(attributes)
+            unit_dict["name"] = self.name
+            return unit_dict
+        else:
+            return self.name
 
 
 class Archer(Unit):
@@ -178,7 +238,7 @@ class Archer(Unit):
     attack_bonuses = {Type.Infantry: 1}
     defence_bonuses = {}
     type = Type.Infantry
-    upgrades = ["Fire Archer", "Crossbow Archer"]
+    upgrades = ["Fire_Archer", "Crossbow_Archer"]
 
 
 class Fire_Archer(Unit):
@@ -209,7 +269,7 @@ class Crossbow_Archer(Unit):
     defence_bonuses = {}
     type = Type.Infantry
     special_upgrades = [{Trait.fire_arrows: 1}]
-    final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}, ]
+    final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}]
 
 
 class Pikeman(Unit):
@@ -225,7 +285,7 @@ class Pikeman(Unit):
     type = Type.Infantry
     zoc = [Type.Cavalry]
     upgrades = ["Halberdier", "Royal Guard"]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
 
 
 class Halberdier(Unit):
@@ -256,7 +316,7 @@ class Light_Cavalry(Unit):
     defence_bonuses = {}
     type = Type.Cavalry
     upgrades = ["Dragoon", "Hussar"]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
 
 
 class Dragoon(Unit):
@@ -395,8 +455,8 @@ class Catapult(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    xp_to_upgrade = 2
-    final_upgrades = [[{Trait.attack_skill: 1}, {Trait.range_skill: 1}]]
+    experience_to_upgrade = 2
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
 class Royal_Guard(Unit):
@@ -414,7 +474,7 @@ class Royal_Guard(Unit):
     defence_bonuses = {}
     type = Type.Infantry
     zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
     special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
@@ -434,7 +494,7 @@ class Scout(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    xp_to_upgrade = 2
+    experience_to_upgrade = 2
     special_upgrades = [{Trait.tall_shield}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill}]
 
@@ -476,7 +536,7 @@ class Cannon(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Siege_Weapon
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
     special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
 
 
@@ -574,7 +634,7 @@ class War_Elephant(Unit):
     zoc = []
     type = Type.Cavalry
     final_upgrades = [{Trait.defence_skill: 1}, {Trait.attack_skill: 1}]
-    xp_to_upgrade = 3
+    experience_to_upgrade = 3
 
     traits = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
 
@@ -621,7 +681,7 @@ class Saboteur(Unit):
 class Diplomat(Unit):
     def __init__(self):
         super(Diplomat, self).__init__()
-        self.set(Ability.bribe, 1)
+        self.set(Ability.bribe)
     name = "Diplomat"
     image = "Diplomat"
     base_attack = 0

@@ -1,0 +1,28 @@
+{
+    "type": "Is attack and defence correct",
+    "attack": 5,
+    "defence": 2,
+    "action": {
+        "start_at": "B2",
+        "end_at": "B5",
+        "target_at": "A5",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B2": {
+                "name": "Lancer",
+                "lancing": 2,
+                "movement_skill": 1
+            },
+            "A3": "Archer"
+        },
+        "player2_units": {
+            "A5": "Archer",
+            "E5": "Ballista"
+
+        }
+    }
+}
+

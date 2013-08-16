@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "result": true,
+    "action": {
+        "start_at": "B5",
+        "end_at": "B4"
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B5": "Pikeman",
+            "B2": "Ballista"
+        },
+        "player2_units": {
+            "B6": {
+                "name": "Royal Guard",
+                "melee_expert": 1,
+                "tall_shield": 1
+            }
+        }
+    }
+}

@@ -1,11 +1,9 @@
 {
     "actions_remaining": 1,
-    "player1_units": 
-	{
-		"D3": "Dragoon"
-	}, 
-    "player2_units": 
-	{
-		"C4": "Light Cavalry"
-	} 
+    "player1_units": {
+        "D3": "Dragoon"
+    },
+    "player2_units": {
+        "C4": "Light Cavalry"
+    }
 }
