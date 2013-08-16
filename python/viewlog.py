@@ -60,7 +60,6 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
             draw_attack(screen, interface, action, outcome, base, symbol_location, log, game.gamestate)
 
         elif action.is_ability():
-
             pic = get_image(interface.ability_icon)
             screen.blit(pic, symbol_location)
 
@@ -121,7 +120,7 @@ def draw_attack(screen, interface, action, outcome, base, symbol_location, log, 
 
 def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
 
-    if not action.is_attack():
+    if not action.target_at:
         unit = action.unit
     elif index == 0:
         unit = action.unit
