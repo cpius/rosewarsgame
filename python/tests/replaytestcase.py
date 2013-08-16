@@ -20,4 +20,4 @@ class ReplayTestCase(TestCase):
 
         gamestate_document = replay_gamestate.to_document()
 
-        common.assert_equal_documents(self, gamestate_document, replay_document["gamestate"], self.testcase_file)
+        common.assert_equal_documents(self, replay_document["gamestate"], gamestate_document, self.testcase_file)
