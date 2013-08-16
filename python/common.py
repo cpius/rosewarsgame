@@ -374,3 +374,12 @@ def enum_attributes(attributes):
     return dictionary
 
 
+def attribute_key(attribute, value):
+    if value == 1:
+        return attribute
+    elif value > 1:
+        attribute_key = attribute + "_"
+        for i in range(0, value):
+            attribute_key += "I"
+
+        return attribute_key
