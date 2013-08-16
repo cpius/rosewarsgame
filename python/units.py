@@ -71,11 +71,11 @@ class Unit(object):
         else:
             return self.states[attribute] == value
 
-    def get(self, attr):
-        if attr in Trait.name:
-            return self.traits[attr]
+    def get(self, attribute):
+        if attribute in Trait.name:
+            return self.traits[attribute]
         else:
-            return self.states[attr]
+            return self.states[attribute]
 
     def increment(self, attribute):
         self.states[attribute] += 1
