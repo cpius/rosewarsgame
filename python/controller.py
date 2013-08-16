@@ -377,7 +377,7 @@ class Controller(object):
 
         if self.game.current_player().intelligence == "Human":
             self.view.draw_game(self.game)
-            if action.target_at in self.game.gamestate.player_units:
+            if action.is_attack() and action.target_at in self.game.gamestate.player_units:
                 self.upgrade_unit(action.target_at, action.unit)
             else:
                 self.upgrade_unit(action.end_at, action.unit)
@@ -414,7 +414,6 @@ class Controller(object):
         return
 
     def show_unit(self, position):
-
         unit = None
         if position in self.game.gamestate.player_units:
             unit = self.game.gamestate.player_units[position]

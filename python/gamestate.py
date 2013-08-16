@@ -62,7 +62,7 @@ class Gamestate:
                 else:
                     upgrade_choice = enum_attributes(upgrade_choice)
                     upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
-                if action.target_at and action.target_at in gamestate.player_units:
+                if action.is_attack() and action.target_at and action.target_at in gamestate.player_units:
                     gamestate.player_units[action.target_at] = upgraded_unit
                 else:
                     gamestate.player_units[action.end_at] = upgraded_unit
