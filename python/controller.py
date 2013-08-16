@@ -236,6 +236,9 @@ class Controller(object):
                 self.clear_move()
                 self.view.draw_game(self.game)
 
+            elif event.type == KEYDOWN and event.key == K_g:
+                print self.game.gamestate
+
             elif self.quit_game_requested(event):
                 self.exit_game()
 
