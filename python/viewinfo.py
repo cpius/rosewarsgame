@@ -36,17 +36,15 @@ def get_unit_lines(unit):
     for trait in unit.traits:
         if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
             if unit.has(trait):
-                lines.append(Trait.write[trait] + ": " + trait_descriptions[Trait.name[trait]])
+                trait_key = attribute_key(Trait.name[trait], unit.traits[trait])
+                lines.append(Trait.write[trait] + ":")
+                lines.append(trait_descriptions[trait_key])
                 lines.append("")
 
     for ability in unit.abilities:
-        if unit.abilities[ability] > 1:
-            ability_friendly_name = Ability.name[ability] + "_"
-            for i in range(0, unit.abilities[ability]):
-                ability_friendly_name += "I"
-            lines.append(ability_friendly_name + ": " + common.ability_descriptions[ability_friendly_name])
-        else:
-            lines.append(Ability.write[ability] + ": " + common.ability_descriptions[Ability.name[ability]])
+        ability_key = attribute_key(Ability.name[ability], unit.abilities[ability])
+        lines.append(Ability.write[ability] + ":")
+        lines.append(common.ability_descriptions[ability_key])
         lines.append("")
 
     for state in unit.states:
