@@ -441,17 +441,15 @@ class Controller(object):
         self.exit_game()
 
     def selecting_extra_action(self):
-        if not self.selected_unit or not self.selected_unit.has(State.extra_action):
-            return False
-
-        return True
+        return self.selected_unit and self.selected_unit.has(State.extra_action)
 
     def selecting_active_unit(self, position):
-        selecting_player_unit = position in self.game.gamestate.player_units
-        if self.start_at is None:
-            return selecting_player_unit
-        else:
-            return self.start_at != position and selecting_player_unit
+        if self.start_at and self.start_at == position:
+            return False
+
+        potential_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
+
+        return position in self.game.gamestate.player_units and potential_actions
 
     def selecting_ability_target(self, position):
         if not self.start_at:
