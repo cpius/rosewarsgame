@@ -82,7 +82,7 @@ class Gamestate:
         action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
-        if self.actions_remaining > 0 or self.is_extra_action():
+        if self.actions_remaining > 0 or action.unit.has(State.extra_action):
             self.available_actions = action_getter.get_actions(self)
             if not self.available_actions:
                 self.actions_remaining = 0
