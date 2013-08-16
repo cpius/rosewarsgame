@@ -10,8 +10,10 @@ def get_actions(gamestate):
 
     actions = []
 
+    is_extra_action = gamestate.is_extra_action()
+
     for position, unit in gamestate.player_units.items():
-        if can_use_unit(unit):
+        if can_use_unit(unit, is_extra_action):
 
             moves, attacks, abilities = get_unit_actions(unit, position, gamestate.enemy_units, gamestate.player_units)
 
@@ -260,10 +262,16 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
     return attackset
 
 
-def can_use_unit(unit):
+def can_use_unit(unit, is_extra_action):
     is_frozen = unit.has(State.frozen)
     is_bribed = unit.has(State.recently_bribed)
     is_used = unit.has(State.used) and not unit.has(State.extra_action)
+
+    if is_extra_action and unit.has(State.extra_action):
+        return not is_frozen and not is_bribed
+    elif is_extra_action:
+        return False
+
     return not is_frozen and not is_bribed and not is_used
 
 
