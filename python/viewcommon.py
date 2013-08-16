@@ -123,9 +123,10 @@ def draw_unit_box(screen, interface, base, color, resize=1):
     outer_corners = scale_rectangle(base_corners, thickness)
     pygame.draw.lines(screen, colors["black"], True, outer_corners)
 
+
 def get_position_from_mouseclick(interface, coordinates):
     x = int((coordinates[0] - interface.x_border) /
-        (interface.unit_width + interface.unit_padding_width)) + 1
+           (interface.unit_width + interface.unit_padding_width)) + 1
     if coordinates[1] > interface.board_size[1] / 2:
         y = 8 - int((coordinates[1] - interface.y_border_bottom) /
                     (interface.unit_height + interface.unit_padding_height))
