@@ -66,7 +66,7 @@ class UniversalTestCase(TestCase):
                 self.upgrade(gamestate, upgrade_choice, expected_gamestate)
 
             else:
-                self.assertFalse(True)
+                self.assertTrue(False, "Unknown test type: " + test_document["type"])
 
         except ValueError as error:
             self.assertTrue(False, "Failed to load test document: " + self.testcase_file + "\n\n" + error.message)
