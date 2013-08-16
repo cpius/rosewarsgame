@@ -108,6 +108,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         moveset = generate_extra_moveset()
         moves = move_actions(moveset)
+
         attacks = []
 
         if unit.has(Trait.combat_agility):
@@ -237,7 +238,7 @@ def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
 def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
     """Returns all the tiles a unit can move to. """
 
-    if not movement_remaining:
+    if movement_remaining <= 0:
         return {position}
     elif movement_remaining < total_movement:
         moveset = {position}
