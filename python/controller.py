@@ -152,7 +152,7 @@ class Controller(object):
         action = Action(self.game.gamestate.all_units(), self.start_at, end_at=position)
         if action in self.game.gamestate.get_actions():
             self.perform_action(action)
-        else:
+        elif not self.selecting_extra_action():
             self.clear_move()
             self.view.draw_game(self.game)
 
@@ -160,7 +160,7 @@ class Controller(object):
         if self.selecting_extra_action():
             self.perform_extra_action(position)
 
-        if self.selecting_ability_target(position):
+        elif self.selecting_ability_target(position):
             self.perform_ability(position)
 
         elif self.selecting_active_unit(position):
@@ -399,6 +399,7 @@ class Controller(object):
             position = action.end_at
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
+
             self.select_unit(position)
 
         if self.game.current_player().intelligence not in ["Human", "Network"]:
