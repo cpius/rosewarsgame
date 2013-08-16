@@ -13,10 +13,10 @@
         },
         "player2_units": {
             "B6": {
-				"name": "Royal Guard",
-				"melee_expert": 1,
-				"tall_shield": 1
-			}
+                "name": "Royal Guard",
+                "melee_expert": 1,
+                "tall_shield": 1
+            }
         }
     }
 }

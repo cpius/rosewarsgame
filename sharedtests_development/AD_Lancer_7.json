@@ -12,10 +12,10 @@
         "actions_remaining": 1,
         "player1_units": {
             "B2": {
-				"name": "Lancer",
-				"lancing": 2,
-				"movement_skill": 1
-				},
+                "name": "Lancer",
+                "lancing": 2,
+                "movement_skill": 1
+            },
             "A3": "Archer"
         },
         "player2_units": {

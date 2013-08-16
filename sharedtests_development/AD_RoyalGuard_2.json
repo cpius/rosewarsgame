@@ -12,9 +12,9 @@
         "actions_remaining": 1,
         "player1_units": {
             "B4": {
-				"name": "Royal_Guard",
-				"melee_expert": 1
-			},
+                "name": "Royal_Guard",
+                "melee_expert": 1
+            },
             "C2": "Knight"
         },
         "player2_units": {

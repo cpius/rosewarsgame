@@ -1,7 +1,9 @@
 {
     "type": "Upgrade",
     "description": "The weaponsmith upgrades its defence after already having upgraded its improve weapons",
-    "upgrade": {"defence_skill": 1},
+    "upgrade": {
+        "defence_skill": 1
+    },
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {

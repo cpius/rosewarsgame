@@ -17,9 +17,9 @@
         },
         "player2_units": {
             "B6": {
-				"name": "Viking",
-				"siege_weapon_specialist": 1
-			},
+                "name": "Viking",
+                "siege_weapon_specialist": 1
+            },
             "D5": "Ballista"
 
         }

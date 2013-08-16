@@ -1,12 +1,10 @@
 {
     "actions_remaining": 1,
-    "player1_units": 
-	{
-		"D3": "Hussar"
-	}, 
-    "player2_units": 
-	{
-		"C6": "Archer",
-		"D6": "Ballista"
-	} 
+    "player1_units": {
+        "D3": "Hussar"
+    },
+    "player2_units": {
+        "C6": "Archer",
+        "D6": "Ballista"
+    }
 }

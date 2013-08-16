@@ -13,9 +13,9 @@
         "actions_remaining": 1,
         "player1_units": {
             "C5": {
-				"name": "Flag Bearer",
-				"flag_bearing_B": 1
-			},
+                "name": "Flag Bearer",
+                "flag_bearing_B": 1
+            },
             "D4": "Knight"
         },
         "player2_units": {

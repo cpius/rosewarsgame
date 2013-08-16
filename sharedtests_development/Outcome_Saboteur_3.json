@@ -5,9 +5,9 @@
         "actions_remaining": 2,
         "player1_units": {
             "C3": {
-				"name": "Saboteur",
-				"sabotage_II": 1
-			},
+                "name": "Saboteur",
+                "sabotage_II": 1
+            },
             "A1": "Pikeman"
         },
         "player2_units": {
@@ -28,7 +28,7 @@
                 "experience": 1,
                 "used": 1,
                 "name": "Saboteur",
-				"sabotage_II": 1
+                "sabotage_II": 1
             }
         },
         "player2_units": {

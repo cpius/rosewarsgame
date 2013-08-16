@@ -16,9 +16,9 @@
         },
         "player2_units": {
             "B5": {
-				"name": "Berserker",
-				"big_shield": 1
-			},
+                "name": "Berserker",
+                "big_shield": 1
+            },
             "E5": "Ballista"
 
         }

@@ -1,12 +1,12 @@
 {
     "type": "Does action exist",
-	"description": "You should be able to order a move_with_attack if you are attacking with a push unit, even if the defending unit has an extra life",
+    "description": "You should be able to order a move_with_attack if you are attacking with a push unit, even if the defending unit has an extra life",
     "result": true,
     "action": {
         "start_at": "C3",
         "end_at": "C4",
         "target_at": "C5",
-		"move_with_attack": true
+        "move_with_attack": true
     },
     "gamestate": {
         "actions_remaining": 2,

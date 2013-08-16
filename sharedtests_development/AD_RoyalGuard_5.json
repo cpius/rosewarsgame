@@ -13,10 +13,10 @@
         "actions_remaining": 1,
         "player2_units": {
             "B4": {
-				"name":"Royal_Guard",
-				"tall_shield": 1,
-				"melee_freeze": 1
-			},
+                "name": "Royal_Guard",
+                "tall_shield": 1,
+                "melee_freeze": 1
+            },
             "C2": "Knight"
         },
         "player1_units": {

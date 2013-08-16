@@ -1,7 +1,9 @@
 {
     "type": "Upgrade",
     "description": "The weaponsmith upgrades its range",
-    "upgrade": {"range_skill": 1},
+    "upgrade": {
+        "range_skill": 1
+    },
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {

@@ -1,9 +1,7 @@
 {
     "actions_remaining": 1,
-    "player1_units": 
-	{
-        "C2": "Pikeman" 
-	}, 
-    "player2_units": 
-	{} 
+    "player1_units": {
+        "C2": "Pikeman"
+    },
+    "player2_units": {}
 }

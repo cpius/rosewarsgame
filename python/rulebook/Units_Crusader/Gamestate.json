@@ -1,15 +1,13 @@
 {
     "actions_remaining": 1,
-    "player1_units": 
-	{
+    "player1_units": {
         "C2": "Crusader",
-		"B2": "Archer",
-		"D3": "Light Cavalry",
-		"B4": "Pikeman"
-	}, 
-    "player2_units": 
-	{
-		"B5": "Pikeman",
-		"E5": "Knight"
-	} 
+        "B2": "Archer",
+        "D3": "Light Cavalry",
+        "B4": "Pikeman"
+    },
+    "player2_units": {
+        "B5": "Pikeman",
+        "E5": "Knight"
+    }
 }

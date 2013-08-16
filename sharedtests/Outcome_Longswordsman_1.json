@@ -25,7 +25,7 @@
             "C3": "Pikeman",
             "D3": "Pikeman",
             "D2": "Pikeman",
-			"B8": "Knight"
+            "B8": "Knight"
         }
     },
     "post_gamestate": {
@@ -38,7 +38,7 @@
         },
         "actions_remaining": 0,
         "player2_units": {
-			"B8": "Knight"
+            "B8": "Knight"
         }
     }
 }

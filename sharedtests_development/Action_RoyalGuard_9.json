@@ -13,9 +13,9 @@
         },
         "player2_units": {
             "B6": {
-				"name": "Royal Guard",
-				"melee_freeze": 1
-			}
+                "name": "Royal Guard",
+                "melee_freeze": 1
+            }
         }
     }
 }

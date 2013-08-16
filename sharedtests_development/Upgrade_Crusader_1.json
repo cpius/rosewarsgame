@@ -1,7 +1,9 @@
 {
     "type": "Upgrade",
     "description": "The crusader uses its special upgrade",
-    "upgrade": {"crusading": 1},
+    "upgrade": {
+        "crusading": 1
+    },
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {

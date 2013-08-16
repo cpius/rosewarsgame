@@ -1,7 +1,9 @@
 {
     "type": "Upgrade",
     "description": "The weaponsmith uses its special upgrade",
-    "upgrade": {"improve_weapons": 1},
+    "upgrade": {
+        "improve_weapons": 1
+    },
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
