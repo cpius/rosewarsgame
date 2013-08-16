@@ -54,6 +54,17 @@ class UniversalTestCase(TestCase):
 
                 self.is_turn_shift_correct(gamestate, expected_gamestate)
 
+            elif test_document["type"] == "Upgrade":
+                gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+                expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+
+                if isinstance(test_document["upgrade"], basestring):
+                    upgrade_choice = test_document["upgrade"]
+                else:
+                    upgrade_choice = common.enum_attributes(test_document["upgrade"])
+
+                self.upgrade(gamestate, upgrade_choice, expected_gamestate)
+
             else:
                 self.assertFalse(True)
 
@@ -124,6 +135,13 @@ class UniversalTestCase(TestCase):
         message += "\nActual:\n" + common.document_to_string(actual)
 
         self.assertEqual(expected, actual, message)
+
+    def upgrade(self, gamestate, upgrade_choice, expected_gamestate):
+        for position, unit in gamestate.player_units.items():
+            if unit.is_allowed_upgrade_choice(upgrade_choice):
+                gamestate.player_units[position] = unit.get_upgraded_unit(upgrade_choice)
+
+        self.assert_equal_documents(expected_gamestate.to_document(), gamestate.to_document())
 
 
 if __name__ == "__main__":
