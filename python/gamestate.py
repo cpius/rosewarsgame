@@ -84,7 +84,16 @@ class Gamestate:
 
         if self.actions_remaining > 0 or action.unit.has(State.extra_action):
             self.set_available_actions()
-            if not self.available_actions:
+
+            self.decrement_actions_if_none_available(action)
+
+    def decrement_actions_if_none_available(self, action):
+        if not self.available_actions:
+            if action.unit.has(State.extra_action):
+                action.unit.remove(State.extra_action)
+                action.unit.remove(State.movement_remaining)
+                self.set_available_actions()
+            else:
                 self.actions_remaining = 0
 
     def initialize_turn(self):
