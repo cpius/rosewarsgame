@@ -60,10 +60,7 @@ class Gamestate:
                 if getattr(action.unit, "upgrades"):
                     upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
                 else:
-                    if hasattr(Ability, upgrade_choice.keys()[0]):
-                        upgrade_choice = get_ability_enum_dict(upgrade_choice)
-                    else:
-                        upgrade_choice = get_trait_enum_dict(upgrade_choice)
+                    upgrade_choice = enum_attributes(upgrade_choice)
                     upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
                 if action.target_at and action.target_at in gamestate.player_units:
                     gamestate.player_units[action.target_at] = upgraded_unit

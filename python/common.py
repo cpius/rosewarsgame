@@ -360,9 +360,17 @@ def merge(first_dictionary, second_dictionary, third_dictionary=None):
     return merged_dictionary
 
 
-def get_trait_enum_dict(dictionary):
-    return dict((getattr(Trait, key), value) for key, value in dictionary.items())
+def enum_attributes(attributes):
+    dictionary = {}
+
+    for attribute, value in attributes.items():
+        if attribute in Trait.name.values():
+            dictionary[getattr(Trait, attribute)] = value
+        elif attribute in Ability.name.values():
+            dictionary[getattr(Ability, attribute)] = value
+        else:
+            dictionary[getattr(State, attribute)] = value
+
+    return dictionary
 
 
-def get_ability_enum_dict(dictionary):
-    return dict((getattr(Ability, key), value) for key, value in dictionary.items())
