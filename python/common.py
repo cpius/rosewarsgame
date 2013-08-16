@@ -129,8 +129,7 @@ trait_descriptions = {
     "fire_arrows": "+3A vs Siege Weapons",
     "cavalry_specialist": "+1A +1D vs Cavalry",
     "siege_weapon_specialist": "+1A +1D vs Siege Weapons",
-    "flanking": "+2A vs Infantry",
-    "level": "The number of upgrades."
+    "flanking": "+2A vs Infantry"
 }
 
 state_descriptions = {
