@@ -1,5 +1,6 @@
 {
     "type": "Is outcome correct",
+    "description": "Samurai fails its attack, but gets an extra action, with no movement remaing",
     "outcome": {
         "E4": [1, 1]
     },
@@ -27,7 +28,7 @@
                 "name": "Samurai",
                 "used": 1,
                 "experience": 1,
-                "movement_remaining": 1,
+                "movement_remaining": 0,
                 "extra_action": 1
             },
             "A2": "Pikeman"
