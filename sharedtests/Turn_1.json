@@ -9,7 +9,6 @@
         "player2_units": {
             "E3": "Archer",
             "A4": "Ballista"
-
         }
     },
     "post_gamestate": {
@@ -21,8 +20,6 @@
         "player1_units": {
             "E3": "Archer",
             "A4": "Ballista"
-
         }
     }
 }
-
