@@ -1,0 +1,36 @@
+{
+    "description": "When Fire Archer gain experience, it is no longer recently upgraded",
+    "type": "Is outcome correct",
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "A1": "Pikeman",
+            "C3": {
+                "experience": 4,
+                "name": "Fire Archer",
+                "recently_upgraded": 1
+            }
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    },
+    "action": {
+        "start_at": "C3",
+        "end_at": "C4"
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Pikeman",
+            "C4": {
+                "experience": 5,
+                "name": "Fire Archer",
+                "used": 1
+            }
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    }
+}

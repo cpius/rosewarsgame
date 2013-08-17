@@ -1,0 +1,34 @@
+{
+    "type": "Does turn shift work",
+    "description": "Recently upgraded is remembered across turn shift",
+    "pre_gamestate": {
+        "actions_remaining": 0,
+        "player1_units": {
+            "C3": {
+                "name": "Fire Archer",
+                "experience": 4,
+                "recently_upgraded": 1
+            },
+            "E4": "Light Cavalry"
+        },
+        "player2_units": {
+            "E3": "Archer",
+            "A4": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 2,
+        "player2_units": {
+            "C3": {
+                "name": "Fire Archer",
+                "experience": 4,
+                "recently_upgraded": 1
+            },
+            "E4": "Light Cavalry"
+        },
+        "player1_units": {
+            "E3": "Archer",
+            "A4": "Ballista"
+        }
+    }
+}
