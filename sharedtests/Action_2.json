@@ -8,7 +8,6 @@
     },
     "gamestate": {
         "turn": 1,
-        "player2_intelligence": "Evaluator",
         "player2_units": {
             "D5": "Flag Bearer",
             "B6": "Catapult",
@@ -35,7 +34,6 @@
             },
             "E3": "Light Cavalry",
             "E2": "Pikeman"
-        },
-        "player1_intelligence": "Human"
+        }
     }
 }

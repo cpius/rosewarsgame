@@ -118,12 +118,6 @@ class Gamestate:
     def __eq__(self, other):
         pass
 
-    def set_network_player(self, local_player):
-        for player in range(2):
-            if self.players[player].player_id != local_player:
-                self.players[player].ai_name = "Network"
-                self.players[player].ai = "Network"
-
     def set_available_actions(self):
         self.available_actions = action_getter.get_actions(self)
 
@@ -252,6 +246,7 @@ class Gamestate:
 
     def get_unit_from_action_document(self, action_document):
         unit_position = Position.from_string(action_document["end_at"])
+
         if not unit_position in self.player_units and not unit_position in self.enemy_units:
             unit_position = Position.from_string(action_document["target_at"])
 
@@ -266,3 +261,8 @@ class Gamestate:
                 return True
 
         return False
+
+    def get_upgradeable_unit(self):
+        for position, unit in self.player_units:
+            if unit.if_milf():
+                return position, unit

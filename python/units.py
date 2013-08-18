@@ -115,6 +115,7 @@ class Unit(object):
     def gain_xp(self):
         if not self.has(State.used) and not settings.beginner_mode:
             self.increment(State.experience)
+            self.remove(State.recently_upgraded)
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)

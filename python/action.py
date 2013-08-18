@@ -28,6 +28,8 @@ class Action(object):
 
         self.move_with_attack = move_with_attack
         self.number = number
+        self.ability = ability
+        self.outcome = outcome
 
         self.created_at = created_at if created_at else datetime.utcnow()
 
@@ -36,9 +38,8 @@ class Action(object):
 
         self.unit = units[self.start_at]
 
-        self.ability = ability
-
-        self.outcome = outcome
+        if self.move_with_attack is None and not self.is_attack():
+            self.move_with_attack = False
 
     @classmethod
     def from_document(cls, units, document):
@@ -60,7 +61,7 @@ class Action(object):
         if "target_at" in document_copy:
             target_at = document_copy["target_at"]
 
-        move_with_attack = False
+        move_with_attack = None
         if "move_with_attack" in document_copy:
             move_with_attack = bool(document["move_with_attack"])
 
@@ -116,12 +117,22 @@ class Action(object):
         return document
 
     def to_document(self):
-        attrs = ["number", "start_at", "end_at", "target_at", "created_at"]
-        document = dict((attr, str(getattr(self, attr))) for attr in attrs if getattr(self, attr))
+        attributes = ["start_at", "end_at", "target_at", "created_at"]
+        document = dict((attr, str(getattr(self, attr))) for attr in attributes if getattr(self, attr))
+        if self.number:
+            document["number"] = self.number
         if self.ability:
             document["ability"] = Ability.name[self.ability]
         if not self.move_with_attack is None:
             document["move_with_attack"] = self.move_with_attack
+
+        return document
+
+    def to_network(self, action_count):
+        if not self.number:
+            self.number = action_count + 1
+        document = self.to_document()
+        document["type"] = "action"
 
         return document
 

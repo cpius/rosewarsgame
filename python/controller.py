@@ -22,6 +22,8 @@ class Controller(object):
         self.game = None
         self.client = None
 
+    CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
+
     @classmethod
     def new_game(cls, view):
         if not os.path.exists("./replay"):
@@ -45,15 +47,29 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_network(cls, view, game_id, player):
+    def from_network(cls, view, game_id, player_profile):
         controller = cls(view)
 
         controller.game_id = game_id
         controller.client = Client(game_id)
 
-        controller.gamestate = controller.client.get_gamestate()
-        controller.gamestate.set_network_player(player)
+        log_document = controller.client.get_game()
 
+        player1 = Player.from_document(log_document["player1"])
+        player2 = Player.from_document(log_document["player2"])
+
+        if player1.profile == player_profile:
+            print "player 2 is network"
+            player2.intelligence = player2.ai = "Network"
+        elif player2.profile == player_profile:
+            print "player 1 is network"
+            player1.intelligence = player1.ai = "Network"
+        else:
+            print player_profile, "is not playing this game. The players are:", player1.profile, "and", player2.profile
+            return
+
+        controller.gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
+        controller.game = Game([player1, player2], controller.gamestate)
         controller.clear_move()
 
         return controller
@@ -70,15 +86,22 @@ class Controller(object):
         return controller
 
     def trigger_network_player(self):
-        action, outcome = self.client.select_action(self.game.gamestate.action_number)
+        print "waiting for action", self.game.gamestate.action_count + 1, "from network"
+        interval_in_milliseconds = 1000
+        pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, interval_in_milliseconds)
+
+        action, outcome = self.client.select_action(self.game.gamestate)
+
+        if action is None:
+            return
 
         print "received action from network: " + str(action)
 
         self.perform_action(action, outcome)
 
-        if self.game.gamestate.is_extra_action():
-            extra_action, extra_outcome = self.client.select_action(self.game.gamestate)
-            self.perform_action(extra_action, extra_outcome)
+        if self.game.is_player_human():
+            # The turn changed. Stop listening for network actions
+            pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, 0)
 
     def trigger_artificial_intelligence(self):
 
@@ -223,15 +246,18 @@ class Controller(object):
         while True:
             event = pygame.event.wait()
 
+            if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
+                self.trigger_network_player()
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 position = self.view.get_position_from_mouse_click(event.pos)
 
-                if event.button == 1:
+                if event.button == 1 and self.game.is_player_human():
                     self.left_click(position)
                 elif event.button == 3:
                     self.right_click(position)
 
-            if event.type == KEYDOWN and event.key == K_ESCAPE:
+            if event.type == KEYDOWN and event.key == K_ESCAPE and self.game.is_player_human():
                 self.clear_move()
                 self.view.draw_game(self.game)
 
@@ -313,9 +339,6 @@ class Controller(object):
                 return
 
     def upgrade_unit(self, position, unit):
-        if not unit.is_milf():
-            return
-
         choice = self.get_input_upgrade(unit)
 
         if getattr(unit, "upgrades"):
@@ -325,24 +348,25 @@ class Controller(object):
             upgrade_choice = unit.get_upgrade_choice(choice)
             upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
 
+        upgrade_choice_to_save = upgrade_choice
         if not isinstance(upgrade_choice, basestring):
             upgrade_choice_to_save = readable_attributes(upgrade_choice)
-            self.game.save_option("upgrade", upgrade_choice_to_save)
-        else:
-            self.game.save_option("upgrade", upgrade_choice)
+
+        self.game.save_option("upgrade", upgrade_choice_to_save)
+        if self.game.is_enemy_network():
+            self.client.send_upgrade_choice(upgrade_choice_to_save, self.game.gamestate.action_count)
 
         self.game.gamestate.player_units[position] = upgraded_unit
 
     def perform_action(self, action, outcome=None):
         self.view.draw_game(self.game)
 
-        if self.game.current_player().intelligence == "Human":
+        if self.game.is_player_human():
 
-            if self.game.opponent_player().intelligence == "Network":
-                outcome = self.client.send_action(action.to_document())
-                action.ensure_outcome(outcome)
-
-            outcome = Outcome.determine_outcome(action, self.game.gamestate)
+            if self.game.is_enemy_network():
+                outcome = self.client.send_action(action.to_network(self.game.gamestate.action_count))
+            else:
+                outcome = Outcome.determine_outcome(action, self.game.gamestate)
 
             self.game.do_action(action, outcome)
 
@@ -353,6 +377,8 @@ class Controller(object):
                 move_with_attack = self.ask_about_move_with_attack(action)
 
                 self.game.save_option("move_with_attack", move_with_attack)
+                if self.game.is_enemy_network():
+                    self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
 
                 if move_with_attack:
                     self.view.draw_post_movement(action)
@@ -374,15 +400,16 @@ class Controller(object):
             pygame.time.delay(settings.pause_for_animation)
 
         if self.game.gamestate.is_ended():
-            self.game_end(self.game.current_player())
+            self.game_end()
             return
 
-        if self.game.current_player().intelligence == "Human":
+        if self.game.is_player_human() and action.unit.is_milf():
             self.view.draw_game(self.game)
             if action.is_attack() and action.target_at in self.game.gamestate.player_units:
-                self.upgrade_unit(action.target_at, action.unit)
+                unit_position = action.target_at
             else:
-                self.upgrade_unit(action.end_at, action.unit)
+                unit_position = action.end_at
+            self.upgrade_unit(unit_position, action.unit)
 
         self.game.save(self.view, action, outcome)
 
@@ -395,17 +422,19 @@ class Controller(object):
 
         self.clear_move()
 
-        if action.unit.has(State.extra_action):
+        if action.unit.has(State.extra_action) and self.game.is_player_human():
             position = action.end_at
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
 
             self.select_unit(position)
 
-        if self.game.current_player().intelligence not in ["Human", "Network"]:
-            self.trigger_artificial_intelligence()
-        elif self.game.current_player().intelligence == "Network":
+        if self.game.is_player_human():
+            return
+        elif self.game.is_player_network():
             self.trigger_network_player()
+        else:
+            self.trigger_artificial_intelligence()
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
@@ -435,8 +464,8 @@ class Controller(object):
     def command_q_down(self, key):
         return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
 
-    def game_end(self, player):
-        self.view.draw_game_end(player.color)
+    def game_end(self):
+        self.view.draw_game_end(self.game.current_player().color)
         self.pause()
         self.exit_game()
 

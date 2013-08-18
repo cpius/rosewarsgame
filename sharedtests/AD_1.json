@@ -11,7 +11,6 @@
     },
     "gamestate": {
         "turn": 2,
-        "player2_intelligence": "Human",
         "player1_units": {
             "B4": "Pikeman",
             "A3": "Archer",
@@ -40,7 +39,6 @@
                 "used": true,
                 "name": "Crusader"
             }
-        },
-        "player1_intelligence": "Evaluator"
+        }
     }
 }
