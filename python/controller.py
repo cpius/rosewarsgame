@@ -53,6 +53,8 @@ class Controller(object):
 
         controller.gamestate = controller.client.get_gamestate()
         controller.gamestate.set_network_player(player)
+        player1 = Player.from_document(log_document["player1"])
+        player2 = Player.from_document(log_document["player2"])
 
         controller.clear_move()
 
