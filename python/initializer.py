@@ -1,7 +1,7 @@
 from __future__ import division
 from common import *
 
-remove_states = [State.used, State.sabotaged, State.improved_weapons, State.recently_bribed, State.recently_upgraded]
+remove_states = [State.used, State.sabotaged, State.improved_weapons, State.recently_bribed]
 
 decrement_states = [State.frozen, State.attack_frozen, State.improved_weapons_II]
 

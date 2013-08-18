@@ -15,4 +15,5 @@ if __name__ == '__main__':
     else:
         controller = Controller.new_game(view)
 
-    controller.run_game()
+    if controller:
+        controller.run_game()

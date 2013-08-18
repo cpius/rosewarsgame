@@ -35,10 +35,7 @@ def view(game_id):
     if not game_document:
         return {"Status": "Error", "Message": "Could not find game with id " + game_id}
 
-    log_document = construct_log_document(game_document)
-    gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
-
-    return gamestate.to_document()
+    return construct_log_document(game_document)
 
 
 @get("/actions/view/<game_id>")
@@ -47,8 +44,9 @@ def view_actions(game_id):
     action_documents = list(actions.find({"game": ObjectId(game_id)}))
     actions_document = dict()
     if len(action_documents) > 0:
-        actions_document["last_action"] = action_documents[-1]["number"]
-        actions_document["last_updated_at"] = action_documents[-1]["created_at"]
+        main_actions = [main_action for main_action in action_documents if main_action["type"] == "action"]
+        actions_document["last_action"] = main_actions[-1]["number"]
+        actions_document["last_updated_at"] = main_actions[-1]["created_at"]
 
     for action in action_documents:
         actions_document[action["number"]] = action
@@ -69,22 +67,35 @@ def do_action_post(game_id):
         return {"Status": "Error", "Message": "No JSON decoded. Request body: " + request.body.getvalue()}
 
     log_document = construct_log_document(game_document)
-    gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
+    gamestate = Gamestate.from_log_document(log_document)
 
-    validation_result = validate_input(log_document, gamestate, action_document)
-    if validation_result:
-        return validation_result
+    validation_errors = validate_input(log_document, gamestate, action_document)
+    if validation_errors:
+        return validation_errors
 
     if action_document["type"] == "options" and "move_with_attack" in action_document:
         return register_move_with_attack(action_document, game_id)
     elif action_document["type"] == "options" and "upgrade" in action_document:
         return register_upgrade(action_document, gamestate)
 
-    return register_move_attack_ability(action_document, game_id, gamestate)
+    # Initial validation is done with a non-shifted gamestate, because it is
+    # easier to find expected action from that
+    # The rest is done with the turn shifted (if relevant)
+    if gamestate.is_turn_done():
+        gamestate.shift_turn()
+
+    result = validate_action(gamestate, action_document)
+    if isinstance(result, dict):
+        return result
+    else:
+        action = result
+
+    return register_move_attack_ability(action_document, game_id, gamestate, action)
 
 
 def register_upgrade(action_document, gamestate):
-    unit, position = gamestate.get_unit_from_action_document(action_document)
+    unit, position = gamestate.get_upgradeable_unit()
+
     upgrade_options = [unit.get_upgrade_choice(0), unit.get_upgrade_choice(1)]
     if not action_document["upgrade"] in upgrade_options:
         message = "The upgrade must be one of "
@@ -114,42 +125,50 @@ def register_move_with_attack(action_document, game_id):
     return {"Status": "OK", "Message": "Options recorded"}
 
 
-def register_move_attack_ability(action_document, game_id, gamestate):
-    gamestate.set_available_actions()
-    available_actions = gamestate.get_actions_with_none()
-    if Position.from_string(action_document["start_at"]) not in gamestate.player_units:
-        return invalid_action(available_actions, request.json)
-    action = Action.from_document(gamestate.all_units(), action_document)
-    if not action:
-        return invalid_action(available_actions, request.json)
-    if not action in available_actions:
-        return invalid_action(available_actions, str(action))
-    gamestate_before = gamestate.copy()
+def register_move_attack_ability(action_document, game_id, gamestate, action):
+    # gamestate_before = gamestate.copy()
     outcome = None
+
     if action.is_attack():
         outcome = Outcome.determine_outcome(action, gamestate)
+
     gamestate.do_action(action, outcome)
+
+    if action.move_with_attack is None and action.target_at in gamestate.enemy_units:
+        # The outcome ruled out the possibility of move-with-attack
+        action.move_with_attack = False
+
     if gamestate.is_turn_done():
         gamestate.shift_turn()
 
     action_collection = get_collection("actions")
 
     action_document["game"] = ObjectId(game_id)
+
+    if not "move_with_attack" in action_document and action.move_with_attack in [True, False]:
+        # The client may send nothing rather than specify the default value (False)
+        # In that case, make sure the default is saved to the database
+        action_document["move_with_attack"] = action.move_with_attack
+
     action_collection.insert(action_document)
-    outcome_document = outcome.to_document()
-    outcome_document["game"] = ObjectId(game_id)
-    outcome_document["type"] = "outcome"
-    outcome_document["number"] = action.number
-    action_collection.insert(outcome_document)
+
     response = {
         "Status": "OK",
-        "Message": "Action recorded",
-        "Available actions": [str(action) for action in available_actions],
-        "Gamestate before": gamestate_before.to_document(),
-        "Gamestate after": gamestate.to_document()
+        "Message": "Action recorded"
+        # "Available actions": [str(available_action) for available_action in available_actions],
+        # "Gamestate before": gamestate_before.to_document(),
+        # "Gamestate after": gamestate.to_document()
     }
 
-    if action.is_attack():
+    if outcome:
+        outcome_document = outcome.to_document()
+        outcome_document["game"] = ObjectId(game_id)
+        outcome_document["type"] = "outcome"
+        outcome_document["number"] = action.number
+        outcome_document["created_at"] = datetime.utcnow()
+
+        action_collection.insert(outcome_document)
+
         response["Action outcome"] = outcome.to_document()
 
     return response
@@ -166,9 +185,28 @@ def validate_input(log_document, gamestate, action_document):
         action_type = "upgrade"
     else:
         raise Exception("Unknown action type " + document_to_string(action_document))
-    if action_type != expected_type or expected_number != action_document["number"]:
+    if action_type != expected_type or expected_number != int(action_document["number"]):
         message = "The next action must have type " + expected_type + " and have number " + str(expected_number)
         return {"Status": "Error", "Message": message}
+
+
+def validate_action(gamestate, action_document):
+
+    gamestate.set_available_actions()
+    available_actions = gamestate.get_actions_with_none()
+
+    if Position.from_string(action_document["start_at"]) not in gamestate.player_units:
+        return invalid_action(available_actions, request.json)
+
+    action = Action.from_document(gamestate.all_units(), action_document)
+
+    if not action:
+        return invalid_action(available_actions, request.json)
+
+    if not action in available_actions:
+        return invalid_action(available_actions, str(action))
+
+    return action
 
 
 def get_expected_action(log_document, gamestate):

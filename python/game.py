@@ -25,6 +25,12 @@ class Game:
             else:
                 self.players[player].ai = ai_module.AI(ai_name)
 
+    def set_network_player(self, local_player):
+        for player in range(2):
+            if self.players[player].profile != local_player:
+                self.players[player].ai_name = "Network"
+                self.players[player].ai = "Network"
+
     def current_player(self):
         return self.players[0]
 
@@ -51,8 +57,8 @@ class Game:
         action_count = self.gamestate.action_count
 
         self.actions[action_count] = action.to_document()
-        outcome_document = outcome.to_document()
-        if outcome_document:
+        if outcome:
+            outcome_document = outcome.to_document()
             self.outcomes[action_count] = outcome_document
 
         filename = self.savegame_folder() + "/" + str(action_count)
@@ -91,3 +97,12 @@ class Game:
             "initial_gamestate": self.initial_gamestate.to_document(),
             "created_at": self.created_at
         }
+
+    def is_player_human(self):
+        return self.current_player().intelligence == "Human"
+
+    def is_player_network(self):
+        return self.current_player().intelligence == "Network"
+
+    def is_enemy_network(self):
+        return self.opponent_player().intelligence == "Network"

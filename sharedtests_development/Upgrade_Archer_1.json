@@ -1,6 +1,6 @@
 {
     "type": "Upgrade",
-    "description": "The weaponsmith uses its special upgrade",
+    "description": "The archer upgrades to a Fire Archer",
     "upgrade": "Fire_Archer",
     "pre_gamestate": {
         "actions_remaining": 1,
