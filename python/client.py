@@ -53,4 +53,20 @@ class Client():
         else:
             raise Exception("Unexpected response: " + document_to_string(json_response))
 
+    def send_move_with_attack(self, move_with_attack, number):
+        move_with_attack_action = {
+            "number": number,
+            "created_at": datetime.utcnow(),
+            "type": "options",
+            "move_with_attack": move_with_attack
+        }
+        self.send_action(move_with_attack_action)
 
+    def send_upgrade_choice(self, upgrade_choice, number):
+        upgrade_action = {
+            "number": number,
+            "created_at": datetime.utcnow(),
+            "type": "options",
+            "upgrade": upgrade_choice
+        }
+        self.send_action(upgrade_action)
