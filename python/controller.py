@@ -346,11 +346,13 @@ class Controller(object):
             upgrade_choice = unit.get_upgrade_choice(choice)
             upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
 
+        upgrade_choice_to_save = upgrade_choice
         if not isinstance(upgrade_choice, basestring):
             upgrade_choice_to_save = readable_attributes(upgrade_choice)
-            self.game.save_option("upgrade", upgrade_choice_to_save)
-        else:
-            self.game.save_option("upgrade", upgrade_choice)
+
+        self.game.save_option("upgrade", upgrade_choice_to_save)
+        if self.game.is_enemy_network():
+            self.client.send_upgrade_choice(upgrade_choice_to_save, self.game.gamestate.action_count)
 
         self.game.gamestate.player_units[position] = upgraded_unit
 
