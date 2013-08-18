@@ -406,7 +406,7 @@ class Controller(object):
 
         self.clear_move()
 
-        if action.unit.has(State.extra_action):
+        if action.unit.has(State.extra_action) and self.game.is_player_human():
             position = action.end_at
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
