@@ -153,15 +153,24 @@ class Action(object):
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack() and self.move_with_attack
 
-    def is_crusading(self, units, n=1):
-        return any(unit for unit in surrounding_units(self.start_at, units) if unit.has(Trait.crusading, n))
+    def is_crusading(self, units, n=0):
+        if not n:
+            return self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 1) or \
+                self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 2)
+        else:
+            return self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n)
 
     def has_high_morale(self, units):
-        return any(pos for pos in adjacent_friendly_positions(self.end_at, units) if
-                   pos != self.start_at and units[pos].has(Trait.flag_bearing) and not units[pos].has(Trait.flag_bearing_B))
+        return self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or \
+            self.is_surrounding_unit_with(units, Trait.flag_bearing_B, self.end_at)
 
-    def has_high_morale_B(self, units):
-        return any(unit for unit in surrounding_units(self.end_at, units) if unit.has(Trait.flag_bearing_B))
+    def is_surrounding_unit_with(self, units, trait, position, n=1):
+        units_excluding_current = units_excluding_position(units, self.start_at)
+        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, n))
+
+    def is_adjacent_unit_with(self, units, trait, position, n=1):
+        units_excluding_current = units_excluding_position(units, self.start_at)
+        return any(unit for unit in adjacent_units(position, units_excluding_current) if unit.has(trait, n))
 
     def distance_to_target(self):
         return distance(self.start_at, self.target_at)

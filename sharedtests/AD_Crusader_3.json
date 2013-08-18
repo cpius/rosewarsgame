@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "The Light Cavalry should receive an attack bonus from the surrounding Crusader",
     "attack": 3,
     "defence": 2,
     "action": {

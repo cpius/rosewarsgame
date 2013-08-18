@@ -65,7 +65,6 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
         attack += action.lancing()
         attack += int(action.is_crusading(player_units))
         attack += 2 * int(action.has_high_morale(player_units))
-        attack += 2 * int(action.has_high_morale_B(player_units))
         attack += attacking_unit.get(State.bribed)
         attack += 3 * int(attacking_unit.has(State.improved_weapons))
         attack += 2 * int(attacking_unit.has(State.improved_weapons_II))

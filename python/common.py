@@ -218,7 +218,6 @@ if 1 == 2:
         longsword = None
         push = None
         rage = None
-        rage_II = None
         scouting = None
         sharpshooting = None
         swiftness = None
@@ -227,13 +226,10 @@ if 1 == 2:
         lancing = None
         attack_cooldown = None
         far_sighted = None
-        lancing_II = None
         flag_bearing = None
         flag_bearing_B = None
         crusading = None
         crusading = None
-        attack_cooldown_II = None
-        crusading_II = None
         pikeman_specialist = None
         attack_skill = None
         defence_skill = None
@@ -274,20 +270,16 @@ def distance(position1, position2):
     return position1.distance(position2)
 
 
-def find_all_friendly_units_except_current(current_unit_position, player_units):
-    return dict((pos, player_units[pos]) for pos in player_units if pos != current_unit_position)
+def units_excluding_position(player_units, position):
+    return dict((pos, player_units[pos]) for pos in player_units if pos != position)
 
 
-def adjacent_friendly_units(position, units):
-    return (units[pos] for pos in position.adjacent_tiles() if pos in units)
-
-
-def adjacent_friendly_positions(position, units):
-    return (pos for pos in position.adjacent_tiles() if pos in units)
+def adjacent_units(position, units):
+    return [units[pos] for pos in position.adjacent_tiles() if pos in units]
 
 
 def surrounding_units(position, units):
-    return (units[pos] for pos in position.surrounding_tiles() if pos in units)
+    return [units[pos] for pos in position.surrounding_tiles() if pos in units]
 
 
 def assert_equal_documents(testcase, expected, actual, testcase_file):
