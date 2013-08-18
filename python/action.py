@@ -151,7 +151,7 @@ class Action(object):
             return 0
 
     def is_push(self):
-        return self.unit.has(Trait.push) and self.is_attack()
+        return self.unit.has(Trait.push) and self.is_attack() and self.move_with_attack
 
     def is_crusading(self, units, n=1):
         return any(unit for unit in surrounding_units(self.start_at, units) if unit.has(Trait.crusading, n))

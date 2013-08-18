@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct",
-    "description": "Hobelar gets a singe extra move, after a move and a move-attack",
+    "description": "Hobelar gets a single extra move, after a move and a move-attack",
     "outcome": {
         "E5": [1, 6]
     },
