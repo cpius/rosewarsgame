@@ -182,7 +182,7 @@ def validate_input(log_document, gamestate, action_document):
         action_type = "upgrade"
     else:
         raise Exception("Unknown action type " + document_to_string(action_document))
-    if action_type != expected_type or expected_number != action_document["number"]:
+    if action_type != expected_type or expected_number != int(action_document["number"]):
         message = "The next action must have type " + expected_type + " and have number " + str(expected_number)
         return {"Status": "Error", "Message": message}
 
