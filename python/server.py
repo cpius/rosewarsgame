@@ -95,6 +95,7 @@ def do_action_post(game_id):
 
 def register_upgrade(action_document, gamestate):
     unit, position = gamestate.get_upgradeable_unit()
+
     upgrade_options = [unit.get_upgrade_choice(0), unit.get_upgrade_choice(1)]
     if not action_document["upgrade"] in upgrade_options:
         message = "The upgrade must be one of "
@@ -125,10 +126,12 @@ def register_move_with_attack(action_document, game_id):
 
 
 def register_move_attack_ability(action_document, game_id, gamestate, action):
-    gamestate_before = gamestate.copy()
+    # gamestate_before = gamestate.copy()
     outcome = None
+
     if action.is_attack():
         outcome = Outcome.determine_outcome(action, gamestate)
+
     gamestate.do_action(action, outcome)
 
     if action.move_with_attack is None and action.target_at in gamestate.enemy_units:
