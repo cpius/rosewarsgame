@@ -357,13 +357,12 @@ class Controller(object):
     def perform_action(self, action, outcome=None):
         self.view.draw_game(self.game)
 
-        if self.game.current_player().intelligence == "Human":
+        if self.game.is_player_human():
 
-            if self.game.opponent_player().intelligence == "Network":
-                outcome = self.client.send_action(action.to_document())
-                action.ensure_outcome(outcome)
-
-            outcome = Outcome.determine_outcome(action, self.game.gamestate)
+            if self.game.is_enemy_network():
+                outcome = self.client.send_action(action.to_network(self.game.gamestate.action_count))
+            else:
+                outcome = Outcome.determine_outcome(action, self.game.gamestate)
 
             self.game.do_action(action, outcome)
 
