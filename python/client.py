@@ -15,7 +15,7 @@ class Client():
         self.game_id = game_id
 
     def get_gamestate(self):
-        return Gamestate.from_document(
+        return Gamestate.from_log_document(
             json.load(
                 urllib2.urlopen(self.server + "/games/view/" + self.game_id)))
 
