@@ -28,6 +28,8 @@ class Action(object):
 
         self.move_with_attack = move_with_attack
         self.number = number
+        self.ability = ability
+        self.outcome = outcome
 
         self.created_at = created_at if created_at else datetime.utcnow()
 
@@ -36,9 +38,6 @@ class Action(object):
 
         self.unit = units[self.start_at]
 
-        self.ability = ability
-
-        self.outcome = outcome
 
     @classmethod
     def from_document(cls, units, document):
