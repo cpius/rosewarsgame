@@ -22,6 +22,8 @@ class Controller(object):
         self.game = None
         self.client = None
 
+    CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
+
     @classmethod
     def new_game(cls, view):
         if not os.path.exists("./replay"):
@@ -81,15 +83,22 @@ class Controller(object):
         return controller
 
     def trigger_network_player(self):
-        action, outcome = self.client.select_action(self.game.gamestate.action_number)
+        print "waiting for action", self.game.gamestate.action_count + 1, "from network"
+        interval_in_milliseconds = 1000
+        pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, interval_in_milliseconds)
+
+        action, outcome = self.client.select_action(self.game.gamestate)
+
+        if action is None:
+            return
 
         print "received action from network: " + str(action)
 
         self.perform_action(action, outcome)
 
-        if self.game.gamestate.is_extra_action():
-            extra_action, extra_outcome = self.client.select_action(self.game.gamestate)
-            self.perform_action(extra_action, extra_outcome)
+        if self.game.is_player_human():
+            # The turn changed. Stop listening for network actions
+            pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, 0)
 
     def trigger_artificial_intelligence(self):
 
@@ -234,15 +243,18 @@ class Controller(object):
         while True:
             event = pygame.event.wait()
 
+            if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
+                self.trigger_network_player()
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 position = self.view.get_position_from_mouse_click(event.pos)
 
-                if event.button == 1:
+                if event.button == 1 and self.game.is_player_human():
                     self.left_click(position)
                 elif event.button == 3:
                     self.right_click(position)
 
-            if event.type == KEYDOWN and event.key == K_ESCAPE:
+            if event.type == KEYDOWN and event.key == K_ESCAPE and self.game.is_player_human():
                 self.clear_move()
                 self.view.draw_game(self.game)
 
