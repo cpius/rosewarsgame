@@ -218,7 +218,6 @@ if 1 == 2:
         longsword = None
         push = None
         rage = None
-        rage_II = None
         scouting = None
         sharpshooting = None
         swiftness = None
@@ -227,13 +226,10 @@ if 1 == 2:
         lancing = None
         attack_cooldown = None
         far_sighted = None
-        lancing_II = None
         flag_bearing = None
         flag_bearing_B = None
         crusading = None
         crusading = None
-        attack_cooldown_II = None
-        crusading_II = None
         pikeman_specialist = None
         attack_skill = None
         defence_skill = None
