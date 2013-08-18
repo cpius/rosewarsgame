@@ -1,0 +1,38 @@
+{
+    "type": "Is outcome correct",
+    "description": "Hobelar passes on its extra action",
+    "action": {
+        "start_at": "E3",
+        "end_at": "E3"
+    },
+    "pre_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "E3": {
+                "name": "Hobelar",
+                "used": 1,
+                "movement_remaining": 2,
+                "extra_action": true
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D7": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "E3": {
+                "name": "Hobelar",
+                "used": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D7": "Ballista"
+        }
+    }
+}

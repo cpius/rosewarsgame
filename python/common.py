@@ -85,8 +85,8 @@ def enum(n, *sequential, **named):
     enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
     reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.iteritems())
-    enums['name'] = reverse
-    enums['write'] = reverse_print
+    enums["name"] = reverse
+    enums["write"] = reverse_print
     return type('Enum', (), enums)
 
 
@@ -129,8 +129,7 @@ trait_descriptions = {
     "fire_arrows": "+3A vs Siege Weapons",
     "cavalry_specialist": "+1A +1D vs Cavalry",
     "siege_weapon_specialist": "+1A +1D vs Siege Weapons",
-    "flanking": "+2A vs Infantry",
-    "level": "The number of upgrades."
+    "flanking": "+2A vs Infantry"
 }
 
 state_descriptions = {
@@ -139,27 +138,27 @@ state_descriptions = {
     "extra_action": "Whether the unit is doing its extra action.",
     "frozen": "Unit cannot perform any actions.",
     "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
-    "improved_weapons_B": "Whether a unit currently has been the target of an improve_weapons_B function",
+    "improved_weapons_II": "Whether a unit currently has been the target of an improve_weapons_II function",
     "lost_extra_life": "Whether the unit has lost its extra life",
     "movement_remaining": "Movement points left for doing an extra action",
     "recently_bribed": "Whether a unit was bribed last turn.",
     "sabotaged": "Whether a unit is currently sabotaged by a Saboteur.",
-    "used": "Whether a unit has been used this round.",
-    "xp": "Experience.",
+    "used": "Whether a unit has been used this turn.",
+    "experience": "Experience.",
+    "recently_upgraded": "Whether a unit was upgraded this turn"
 }
 
 ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
-    "improve_weapons_B": "Give melee unit +2 attack, +1 defence for two turns.",
+    "improve_weapons_II": "Give melee unit +2 attack, +1 defence for two turns.",
     "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
     "poison": "Freezes a unit for 2 turns.",
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
     "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-    "improve_weapons_II_A": "",
     "sabotage_II": "",
-    "bribe_II": ""
+    "bribe_II": "Not yet implemented"
 }
 
 
@@ -192,14 +191,15 @@ if 1 == 2:
         extra_action = None
         frozen = None
         improved_weapons = None
-        improved_weapons_B = None
+        improved_weapons_II = None
         movement_remaining = None
         lost_extra_life = None
-        xp = None
+        experience = None
         used = None
         recently_bribed = None
         sabotaged = None
         sabotaged_II = None
+        recently_upgraded = None
 
         name = None
         write = None
@@ -255,7 +255,7 @@ if 1 == 2:
         sabotage = None
         sabotage_II = None
         triple_attack = None
-        improve_weapons_B = None
+        improve_weapons_II = None
 
         name = {}
         write = {}
@@ -338,27 +338,48 @@ class memoized(object):
 
 
 def readable_attributes(attributes):
-    d = {}
+    dictionary = {}
     for key, value in attributes.items():
         if value:
             if key in Trait.name:
-                d[Trait.name[key]] = value
+                dictionary[Trait.name[key]] = value
             elif key in Ability.name:
-                d[Ability.name[key]] = value
+                dictionary[Ability.name[key]] = value
             else:
-                d[State.name[key]] = value
-    return d
+                dictionary[State.name[key]] = value
+    return dictionary
 
 
-def merge(d1, d2):
-    d = d1.copy()
-    d.update(d2)
-    return d
+def merge(first_dictionary, second_dictionary, third_dictionary=None):
+    merged_dictionary = first_dictionary.copy()
+    merged_dictionary.update(second_dictionary)
+
+    if third_dictionary:
+        merged_dictionary.update(third_dictionary)
+
+    return merged_dictionary
 
 
-def get_trait_enum_dict(dictionary):
-    return dict((getattr(Trait, key), value) for key, value in dictionary.items())
+def enum_attributes(attributes):
+    dictionary = {}
+
+    for attribute, value in attributes.items():
+        if attribute in Trait.name.values():
+            dictionary[getattr(Trait, attribute)] = value
+        elif attribute in Ability.name.values():
+            dictionary[getattr(Ability, attribute)] = value
+        else:
+            dictionary[getattr(State, attribute)] = value
+
+    return dictionary
 
 
-def get_ability_enum_dict(dictionary):
-    return dict((getattr(Ability, key), value) for key, value in dictionary.items())
+def attribute_key(attribute, value):
+    if value == 1:
+        return attribute
+    elif value > 1:
+        attribute_key = attribute + "_"
+        for i in range(0, value):
+            attribute_key += "I"
+
+        return attribute_key

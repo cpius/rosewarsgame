@@ -1,12 +1,11 @@
 {
     "actions_remaining": 1,
-    "player1_units": 
-	{
-		"D3": "Halberdier"
-	}, 
-    "player2_units": 
-	{
-		"D4": "Knight",
-		"D5": "Catapult",
-		"C3": "Light Cavalry"} 
+    "player1_units": {
+        "D3": "Halberdier"
+    },
+    "player2_units": {
+        "D4": "Knight",
+        "D5": "Catapult",
+        "C3": "Light Cavalry"
+    }
 }

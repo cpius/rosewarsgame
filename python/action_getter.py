@@ -5,13 +5,15 @@ from common import *
 
 def get_actions(gamestate):
 
-    if not gamestate.get_actions_remaining() and not gamestate.extra_action:
+    if not gamestate.get_actions_remaining() and not gamestate.is_extra_action():
         return []
 
     actions = []
 
+    is_extra_action = gamestate.is_extra_action()
+
     for position, unit in gamestate.player_units.items():
-        if can_use_unit(unit):
+        if can_use_unit(unit, is_extra_action):
 
             moves, attacks, abilities = get_unit_actions(unit, position, gamestate.enemy_units, gamestate.player_units)
 
@@ -106,10 +108,15 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         moveset = generate_extra_moveset()
         moves = move_actions(moveset)
+
         attacks = []
 
         if unit.has(Trait.combat_agility):
             attacks = get_actions_combat_agility()
+
+        if moves or attacks:
+            # Add an action for indicating pass on the extra action
+            moves.append(Action(units, start_at, start_at))
 
         return moves, attacks
 
@@ -121,7 +128,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
             if ability in [Ability.sabotage, Ability.poison]:
                 target_positions = enemy_units
 
-            elif ability in [Ability.improve_weapons, Ability.improve_weapons_B]:
+            elif ability in [Ability.improve_weapons, Ability.improve_weapons_II]:
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
 
             elif ability == Ability.bribe:
@@ -231,7 +238,7 @@ def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
 def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
     """Returns all the tiles a unit can move to. """
 
-    if not movement_remaining:
+    if movement_remaining <= 0:
         return {position}
     elif movement_remaining < total_movement:
         moveset = {position}
@@ -260,10 +267,16 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
     return attackset
 
 
-def can_use_unit(unit):
+def can_use_unit(unit, is_extra_action):
     is_frozen = unit.has(State.frozen)
     is_bribed = unit.has(State.recently_bribed)
     is_used = unit.has(State.used) and not unit.has(State.extra_action)
+
+    if is_extra_action and unit.has(State.extra_action):
+        return not is_frozen and not is_bribed
+    elif is_extra_action:
+        return False
+
     return not is_frozen and not is_bribed and not is_used
 
 

@@ -1,0 +1,48 @@
+{
+    "type": "Is outcome correct",
+    "description": "Test if bloodlust triggers",
+    "outcome": {
+        "E4": [1, 6]
+    },
+    "action": {
+        "start_at": "E3",
+        "end_at": "E3",
+        "target_at": "E4",
+        "move_with_attack": false
+    },
+    "pre_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "E3": {
+                "name": "Samurai",
+                "used": 1,
+                "experience": 1,
+                "movement_remaining": 1,
+                "extra_action": 1,
+                "bloodlust": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D7": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "E3": {
+                "name": "Samurai",
+                "used": 1,
+                "experience": 1,
+                "movement_remaining": 1,
+                "extra_action": 1,
+                "bloodlust": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "D7": "Ballista"
+        }
+    }
+}

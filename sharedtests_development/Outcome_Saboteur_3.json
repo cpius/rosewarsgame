@@ -1,0 +1,41 @@
+{
+    "description": "Test if sabotage_II effect is recorded",
+    "type": "Is outcome correct",
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": {
+                "name": "Saboteur",
+                "sabotage_II": 1
+            },
+            "A1": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    },
+    "action": {
+        "target_at": "D4",
+        "end_at": "C3",
+        "start_at": "C3",
+        "ability": "sabotage_II"
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Pikeman",
+            "C3": {
+                "experience": 1,
+                "used": 1,
+                "name": "Saboteur",
+                "sabotage_II": 1
+            }
+        },
+        "player2_units": {
+            "D4": {
+                "sabotaged_II": 1,
+                "name": "Archer"
+            }
+        }
+    }
+}

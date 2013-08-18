@@ -1,0 +1,30 @@
+{
+    "type": "Upgrade",
+    "description": "The weaponsmith uses its special upgrade",
+    "upgrade": "Fire_Archer",
+    "pre_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Archer",
+                "experience": 4
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Fire Archer",
+                "experience": 4,
+                "recently_upgraded": 1
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    }
+}

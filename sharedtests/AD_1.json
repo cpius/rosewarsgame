@@ -30,18 +30,17 @@
             "C5": "Flag Bearer",
             "D6": "Berserker",
             "E6": {
-                "xp": 1,
+                "experience": 1,
                 "used": true,
                 "name": "Ballista"
             },
             "C6": "Catapult",
             "E3": {
-                "xp": 1,
+                "experience": 1,
                 "used": true,
                 "name": "Crusader"
             }
         },
-        "player1_intelligence": "Evaluator",
-        "extra_action": false
+        "player1_intelligence": "Evaluator"
     }
 }

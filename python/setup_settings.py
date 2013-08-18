@@ -1,5 +1,7 @@
 beginner_mode = False
 
+experience_to_upgrade = 4
+
 unit_bag_size = 3
 if beginner_mode:
     basic_unit_count = 9

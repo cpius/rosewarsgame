@@ -10,7 +10,7 @@ def document_actions(actions, gamestate):
     else:
         current_action = "2"
         
-    if hasattr(gamestate.player_units, "extra_action"):
+    if gamestate.is_extra_action():
         current_action += ".extra"
     
     out = open("./replay/AI actions " + str(gamestate.action_number) + "." + current_action + ".txt", 'w')

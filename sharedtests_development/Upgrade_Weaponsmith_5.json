@@ -1,0 +1,31 @@
+{
+    "type": "Upgrade",
+    "description": "The weaponsmith tries unsuccessfully to upgrade its defence",
+    "upgrade": {
+        "defence_skill": 1
+    },
+    "pre_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Weaponsmith",
+                "experience": 4
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Weaponsmith",
+                "experience": 4
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    }
+}

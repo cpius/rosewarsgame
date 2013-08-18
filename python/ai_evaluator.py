@@ -20,7 +20,7 @@ def document_actions(actions, gamestate):
     else:
         current_action = "1"
 
-    if hasattr(gamestate.current_player(), "extra_action"):
+    if gamestate.is_extra_action():
         current_action += ".2"
 
     out = open("./replay/" + gamestate.current_player().color + " AI actions "

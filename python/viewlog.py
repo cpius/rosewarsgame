@@ -60,7 +60,6 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
             draw_attack(screen, interface, action, outcome, base, symbol_location, log, game.gamestate)
 
         elif action.is_ability():
-
             pic = get_image(interface.ability_icon)
             screen.blit(pic, symbol_location)
 
@@ -121,7 +120,7 @@ def draw_attack(screen, interface, action, outcome, base, symbol_location, log, 
 
 def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
 
-    if not action.is_attack():
+    if not action.target_at:
         unit = action.unit
     elif index == 0:
         unit = action.unit
@@ -137,7 +136,7 @@ def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
 
     screen.blit(unit_image, location)
 
-    draw_unit_box(screen, interface, location, color, unit_height, unit_width)
+    draw_unit_box_right(screen, interface, location, color, unit_height, unit_width)
 
 
 def draw_turn_box(screen, interface, color, action_number, base_x, base_y):
@@ -156,7 +155,7 @@ def draw_turn_box(screen, interface, color, action_number, base_x, base_y):
     write(screen, str(current_action), location, interface.fonts["big"])
 
 
-def draw_unit_box(screen, interface, base, color, height, width):
+def draw_unit_box_right(screen, interface, base, color, height, width):
 
     def scale_rectangle(corners, pixels):
 
@@ -197,4 +196,3 @@ def draw_unit_box(screen, interface, base, color, height, width):
 def draw_outcome(screen, interface, outcome, base_x, base_y):
     location = (base_x + 230 * zoom, base_y + 5 * zoom)
     write(screen, outcome, location, interface.fonts["big"])
-
