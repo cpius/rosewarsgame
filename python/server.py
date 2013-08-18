@@ -67,7 +67,7 @@ def do_action_post(game_id):
         return {"Status": "Error", "Message": "No JSON decoded. Request body: " + request.body.getvalue()}
 
     log_document = construct_log_document(game_document)
-    gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
+    gamestate = Gamestate.from_log_document(log_document)
 
     validation_errors = validate_input(log_document, gamestate, action_document)
     if validation_errors:
@@ -78,6 +78,11 @@ def do_action_post(game_id):
     elif action_document["type"] == "options" and "upgrade" in action_document:
         return register_upgrade(action_document, gamestate)
 
+    # Initial validation is done with a non-shifted gamestate, because it is
+    # easier to find expected action from that
+    # The rest is done with the turn shifted (if relevant)
+    if gamestate.is_turn_done():
+        gamestate.shift_turn()
     return register_move_attack_ability(action_document, game_id, gamestate)
 
 
