@@ -385,7 +385,7 @@ class Controller(object):
             pygame.time.delay(settings.pause_for_animation)
 
         if self.game.gamestate.is_ended():
-            self.game_end(self.game.current_player())
+            self.game_end()
             return
 
         if self.game.current_player().intelligence == "Human":
@@ -446,8 +446,8 @@ class Controller(object):
     def command_q_down(self, key):
         return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
 
-    def game_end(self, player):
-        self.view.draw_game_end(player.color)
+    def game_end(self):
+        self.view.draw_game_end(self.game.current_player().color)
         self.pause()
         self.exit_game()
 
