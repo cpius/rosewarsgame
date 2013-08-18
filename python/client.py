@@ -1,10 +1,10 @@
 import json
 import urllib2
 from gamestate import Gamestate
-from time import sleep
-from common import CustomJsonEncoder
+from common import document_to_string
 from action import Action
 from outcome import Outcome
+from datetime import datetime
 
 
 class Client():
@@ -18,6 +18,9 @@ class Client():
         return Gamestate.from_document(
             json.load(
                 urllib2.urlopen(self.server + "/games/view/" + self.game_id)))
+
+    def get_game(self):
+        return json.load(urllib2.urlopen(self.server + "/games/view/" + self.game_id))
 
     def select_action(self, gamestate):
         game = self.get_game()
