@@ -336,8 +336,6 @@ class Controller(object):
                 return
 
     def upgrade_unit(self, position, unit):
-        if not unit.is_milf():
-            return
 
         choice = self.get_input_upgrade(unit)
 
@@ -400,12 +398,13 @@ class Controller(object):
             self.game_end()
             return
 
-        if self.game.current_player().intelligence == "Human":
+        if self.game.is_player_human() and action.unit.is_milf():
             self.view.draw_game(self.game)
             if action.is_attack() and action.target_at in self.game.gamestate.player_units:
-                self.upgrade_unit(action.target_at, action.unit)
+                unit_position = action.target_at
             else:
-                self.upgrade_unit(action.end_at, action.unit)
+                unit_position = action.end_at
+            self.upgrade_unit(unit_position, action.unit)
 
         self.game.save(self.view, action, outcome)
 
