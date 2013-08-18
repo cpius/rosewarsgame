@@ -134,11 +134,6 @@ def register_move_attack_ability(action_document, game_id, gamestate):
 
     action_document["game"] = ObjectId(game_id)
     action_collection.insert(action_document)
-    outcome_document = outcome.to_document()
-    outcome_document["game"] = ObjectId(game_id)
-    outcome_document["type"] = "outcome"
-    outcome_document["number"] = action.number
-    action_collection.insert(outcome_document)
     response = {
         "Status": "OK",
         "Message": "Action recorded",
@@ -147,7 +142,15 @@ def register_move_attack_ability(action_document, game_id, gamestate):
         "Gamestate after": gamestate.to_document()
     }
 
-    if action.is_attack():
+    if outcome:
+        outcome_document = outcome.to_document()
+        outcome_document["game"] = ObjectId(game_id)
+        outcome_document["type"] = "outcome"
+        outcome_document["number"] = action.number
+        outcome_document["created_at"] = datetime.utcnow()
+
+        action_collection.insert(outcome_document)
+
         response["Action outcome"] = outcome.to_document()
 
     return response
