@@ -38,15 +38,19 @@ class Client():
         print "No new actions. Sleeping for one second"
         return None, None
 
+    def send_action(self, action):
         url = self.server + "/games/" + self.game_id + "/do_action"
-        print "sending json: " + json.dumps(action, cls=CustomJsonEncoder)
-        request = urllib2.Request(url, json.dumps(action, cls=CustomJsonEncoder), {"Content-Type": "application/json"})
+        print "sending json:", document_to_string(action)
+        request = urllib2.Request(url, document_to_string(action), {"Content-Type": "application/json"})
         response = urllib2.urlopen(request)
         response_string = response.read()
         print "received: " + response_string
         json_response = json.loads(response_string)
         response.close()
         if json_response["Status"] == "OK":
-            return json_response["Action outcome"] == "Success"
+            if "Action outcome" in json_response:
+                return Outcome.from_document(json_response["Action outcome"])
+        else:
+            raise Exception("Unexpected response: " + document_to_string(json_response))
 
 
