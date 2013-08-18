@@ -413,10 +413,12 @@ class Controller(object):
 
             self.select_unit(position)
 
-        if self.game.current_player().intelligence not in ["Human", "Network"]:
-            self.trigger_artificial_intelligence()
-        elif self.game.current_player().intelligence == "Network":
+        if self.game.is_player_human():
+            return
+        elif self.game.is_player_network():
             self.trigger_network_player()
+        else:
+            self.trigger_artificial_intelligence()
 
     def show_attack(self, attack_position):
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
