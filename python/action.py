@@ -119,6 +119,8 @@ class Action(object):
     def to_document(self):
         attributes = ["start_at", "end_at", "target_at", "created_at"]
         document = dict((attr, str(getattr(self, attr))) for attr in attributes if getattr(self, attr))
+        if self.number:
+            document["number"] = self.number
         if self.ability:
             document["ability"] = Ability.name[self.ability]
         if not self.move_with_attack is None:
