@@ -97,3 +97,12 @@ class Game:
             "initial_gamestate": self.initial_gamestate.to_document(),
             "created_at": self.created_at
         }
+
+    def is_player_human(self):
+        return self.current_player().intelligence == "Human"
+
+    def is_player_network(self):
+        return self.current_player().intelligence == "Network"
+
+    def is_enemy_network(self):
+        return self.opponent_player().intelligence == "Network"
