@@ -128,6 +128,14 @@ class Action(object):
 
         return document
 
+    def to_network(self, action_count):
+        if not self.number:
+            self.number = action_count + 1
+        document = self.to_document()
+        document["type"] = "action"
+
+        return document
+
     def is_attack(self):
         return bool(self.target_at) and not self.ability
 
