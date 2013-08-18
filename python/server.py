@@ -44,8 +44,9 @@ def view_actions(game_id):
     action_documents = list(actions.find({"game": ObjectId(game_id)}))
     actions_document = dict()
     if len(action_documents) > 0:
-        actions_document["last_action"] = action_documents[-1]["number"]
-        actions_document["last_updated_at"] = action_documents[-1]["created_at"]
+        main_actions = [main_action for main_action in action_documents if main_action["type"] == "action"]
+        actions_document["last_action"] = main_actions[-1]["number"]
+        actions_document["last_updated_at"] = main_actions[-1]["created_at"]
 
     for action in action_documents:
         actions_document[action["number"]] = action
