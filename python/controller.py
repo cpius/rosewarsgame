@@ -374,6 +374,8 @@ class Controller(object):
                 move_with_attack = self.ask_about_move_with_attack(action)
 
                 self.game.save_option("move_with_attack", move_with_attack)
+                if self.game.is_enemy_network():
+                    self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
 
                 if move_with_attack:
                     self.view.draw_post_movement(action)
