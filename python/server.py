@@ -35,10 +35,7 @@ def view(game_id):
     if not game_document:
         return {"Status": "Error", "Message": "Could not find game with id " + game_id}
 
-    log_document = construct_log_document(game_document)
-    gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
-
-    return gamestate.to_document()
+    return construct_log_document(game_document)
 
 
 @get("/actions/view/<game_id>")
