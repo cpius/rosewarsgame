@@ -53,7 +53,8 @@ class Controller(object):
         controller.game_id = game_id
         controller.client = Client(game_id)
 
-        controller.gamestate = controller.client.get_gamestate()
+        log_document = controller.client.get_game()
+
         player1 = Player.from_document(log_document["player1"])
         player2 = Player.from_document(log_document["player2"])
 
@@ -66,6 +67,8 @@ class Controller(object):
         else:
             print player_profile, "is not playing this game. The players are:", player1.profile, "and", player2.profile
             return
+
+        controller.gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
         controller.game = Game([player1, player2], controller.gamestate)
         controller.clear_move()
 
@@ -336,7 +339,6 @@ class Controller(object):
                 return
 
     def upgrade_unit(self, position, unit):
-
         choice = self.get_input_upgrade(unit)
 
         if getattr(unit, "upgrades"):
