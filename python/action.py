@@ -38,6 +38,8 @@ class Action(object):
 
         self.unit = units[self.start_at]
 
+        if self.move_with_attack is None and not self.is_attack():
+            self.move_with_attack = False
 
     @classmethod
     def from_document(cls, units, document):
@@ -59,7 +61,7 @@ class Action(object):
         if "target_at" in document_copy:
             target_at = document_copy["target_at"]
 
-        move_with_attack = False
+        move_with_attack = None
         if "move_with_attack" in document_copy:
             move_with_attack = bool(document["move_with_attack"])
 
