@@ -50,10 +50,3 @@ class Client():
             return json_response["Action outcome"] == "Success"
 
 
-# print "Polling for actions with number higher than 2"
-# client = Client()
-# all_actions = client.poll_actions("51ed68bad288595ed139d274", 2)
-# print "Found new action(s)!"
-# pp = PrettyPrinter()
-# print pp.pformat(all_actions)
-# print [pp.pformat(data) for data in all_actions if isinstance(data, dict)]
