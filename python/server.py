@@ -130,6 +130,11 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
     if action.is_attack():
         outcome = Outcome.determine_outcome(action, gamestate)
     gamestate.do_action(action, outcome)
+
+    if action.move_with_attack is None and action.target_at in gamestate.enemy_units:
+        # The outcome ruled out the possibility of move-with-attack
+        action.move_with_attack = False
+
     if gamestate.is_turn_done():
         gamestate.shift_turn()
 
