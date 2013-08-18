@@ -69,9 +69,9 @@ def do_action_post(game_id):
     log_document = construct_log_document(game_document)
     gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
 
-    validation_result = validate_input(log_document, gamestate, action_document)
-    if validation_result:
-        return validation_result
+    validation_errors = validate_input(log_document, gamestate, action_document)
+    if validation_errors:
+        return validation_errors
 
     if action_document["type"] == "options" and "move_with_attack" in action_document:
         return register_move_with_attack(action_document, game_id)
