@@ -25,6 +25,12 @@ class Game:
             else:
                 self.players[player].ai = ai_module.AI(ai_name)
 
+    def set_network_player(self, local_player):
+        for player in range(2):
+            if self.players[player].profile != local_player:
+                self.players[player].ai_name = "Network"
+                self.players[player].ai = "Network"
+
     def current_player(self):
         return self.players[0]
 

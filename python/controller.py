@@ -45,17 +45,26 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_network(cls, view, game_id, player):
+    def from_network(cls, view, game_id, player_profile):
         controller = cls(view)
 
         controller.game_id = game_id
         controller.client = Client(game_id)
 
         controller.gamestate = controller.client.get_gamestate()
-        controller.gamestate.set_network_player(player)
         player1 = Player.from_document(log_document["player1"])
         player2 = Player.from_document(log_document["player2"])
 
+        if player1.profile == player_profile:
+            print "player 2 is network"
+            player2.intelligence = player2.ai = "Network"
+        elif player2.profile == player_profile:
+            print "player 1 is network"
+            player1.intelligence = player1.ai = "Network"
+        else:
+            print player_profile, "is not playing this game. The players are:", player1.profile, "and", player2.profile
+            return
+        controller.game = Game([player1, player2], controller.gamestate)
         controller.clear_move()
 
         return controller

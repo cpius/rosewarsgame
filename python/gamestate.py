@@ -118,12 +118,6 @@ class Gamestate:
     def __eq__(self, other):
         pass
 
-    def set_network_player(self, local_player):
-        for player in range(2):
-            if self.players[player].player_id != local_player:
-                self.players[player].ai_name = "Network"
-                self.players[player].ai = "Network"
-
     def set_available_actions(self):
         self.available_actions = action_getter.get_actions(self)
 
