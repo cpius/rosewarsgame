@@ -252,6 +252,7 @@ class Gamestate:
 
     def get_unit_from_action_document(self, action_document):
         unit_position = Position.from_string(action_document["end_at"])
+
         if not unit_position in self.player_units and not unit_position in self.enemy_units:
             unit_position = Position.from_string(action_document["target_at"])
 
@@ -266,3 +267,8 @@ class Gamestate:
                 return True
 
         return False
+
+    def get_upgradeable_unit(self):
+        for position, unit in self.player_units:
+            if unit.if_milf():
+                return position, unit

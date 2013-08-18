@@ -94,7 +94,7 @@ def do_action_post(game_id):
 
 
 def register_upgrade(action_document, gamestate):
-    unit, position = gamestate.get_unit_from_action_document(action_document)
+    unit, position = gamestate.get_upgradeable_unit()
     upgrade_options = [unit.get_upgrade_choice(0), unit.get_upgrade_choice(1)]
     if not action_document["upgrade"] in upgrade_options:
         message = "The upgrade must be one of "
