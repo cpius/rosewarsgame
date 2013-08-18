@@ -159,7 +159,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
     zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
-    friendly_units = find_all_friendly_units_except_current(start_at, player_units)
+    friendly_units = units_excluding_position(player_units, start_at)
 
     movement = unit.movement
     if cavalry_charging(start_at, friendly_units):
