@@ -133,6 +133,11 @@ def register_move_attack_ability(action_document, game_id, gamestate):
     action_collection = get_collection("actions")
 
     action_document["game"] = ObjectId(game_id)
+    if not "move_with_attack" in action_document and action.move_with_attack in [True, False]:
+        # The client may send nothing rather than specify the default value (False)
+        # In that case, make sure the default is saved to the database
+        action_document["move_with_attack"] = action.move_with_attack
+
     action_collection.insert(action_document)
     response = {
         "Status": "OK",
