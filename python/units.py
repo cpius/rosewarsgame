@@ -227,6 +227,11 @@ class Unit(object):
         else:
             return self.name
 
+    @classmethod
+    def make(cls, name):
+        name = name.replace(" ", "_")
+        return globals()[name]()
+
 
 class Archer(Unit):
 
