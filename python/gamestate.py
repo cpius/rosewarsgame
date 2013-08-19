@@ -234,7 +234,7 @@ class Gamestate:
 
         if not self.enemy_units:
             at_least_one_bribed = False
-            for position, unit in self.player_units:
+            for position, unit in self.player_units.items():
                 if unit.is_bribed():
                     at_least_one_bribed = True
             if not at_least_one_bribed:
