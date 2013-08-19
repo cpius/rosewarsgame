@@ -1,9 +1,8 @@
 from __future__ import division
 import random
-import units as units_module
-import setup_settings as settings
-from collections import namedtuple
+from setup_settings import *
 from common import *
+from units import Unit
 
 
 class Tiles_bag(object):
