@@ -17,7 +17,7 @@ def clear(screen, interface):
 
 def get_unit_lines(unit):
     lines = ["A: " + str(unit.attack) + "  D: " + str(unit.defence)
-             + "  R: " + str(unit.range) + "  M: " + str(unit.movement)]
+             + "  R: " + str(unit.range) + "  M: " + str(unit.movement), ""]
 
     if unit.zoc:
         lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
