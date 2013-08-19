@@ -261,6 +261,6 @@ class Gamestate:
         return False
 
     def get_upgradeable_unit(self):
-        for position, unit in self.player_units:
-            if unit.if_milf():
+        for position, unit in self.player_units.items():
+            if unit.is_milf():
                 return position, unit
