@@ -9,7 +9,7 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
     screen.blit(get_image(interface.board_image), (0, 0))
 
     gamestate = game.gamestate.copy()
-    if game.current_player().color == "Red":
+    if not game.is_player_human():
         gamestate.flip_all_units()
 
     draw_units(screen, interface, gamestate.player_units, game.current_player().color, gamestate.enemy_units,
