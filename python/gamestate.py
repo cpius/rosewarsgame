@@ -211,8 +211,8 @@ class Gamestate:
         self.units = self.units[::-1]
         self.initialize_turn()
 
-    def move_melee_unit_to_target_tile(self, action):
-        action_doer.move_melee_unit_to_target_tile(self, action)
+    def move_melee_unit_to_target_tile(self, rolls, action):
+        action_doer.move_melee_unit_to_target_tile(self, rolls, action)
         self.set_available_actions()
         self.decrement_actions_if_none_available(action)
 

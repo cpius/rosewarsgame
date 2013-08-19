@@ -178,6 +178,9 @@ class Action(object):
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack()
 
+    def attack_successful(self, rolls, gamestate):
+        return battle.attack_successful(self, rolls, gamestate)
+
     def is_successful(self, rolls, gamestate):
         if not self.is_attack():
             return True
