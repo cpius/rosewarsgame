@@ -94,7 +94,6 @@ def do_action(gamestate, action, outcome):
         if unit.has(Trait.attack_cooldown_II) and action.is_attack():
             unit.set(State.attack_frozen, 2)
 
-        unit.gain_xp()
         unit.set(State.used)
 
     def update_unit_position():
@@ -126,6 +125,7 @@ def do_action(gamestate, action, outcome):
     update_unit_position()
 
     if action.is_attack():
+        unit.gain_xp()
         rolls = outcome.for_position(action.target_at)
         if action.is_push():
             settle_attack_push(action)
@@ -137,6 +137,7 @@ def do_action(gamestate, action, outcome):
                 locals()[Trait.name[trait]]()
 
     elif action.is_ability():
+        unit.gain_xp()
         settle_ability(action)
 
     if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility, Trait.bloodlust]):
