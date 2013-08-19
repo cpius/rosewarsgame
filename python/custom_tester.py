@@ -82,7 +82,8 @@ def run_test(file):
             expected_gamestate_document = expected_gamestate.to_document()
 
             if actual_gamestate_document == expected_gamestate_document:
-                return "pass"
+                if not action.is_attack():
+                    return "pass"
             else:
                 print "Wrong outcome for", file
                 if "description" in test_document:
@@ -92,6 +93,38 @@ def run_test(file):
                 print "Expected gamestate:"
                 print document_to_string(expected_gamestate_document)
                 return "wrong result"
+
+        if test_document["type"] == "Is outcome correct":
+            gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+            expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+            action = Action.from_document(gamestate.all_units(), test_document["action"])
+            if action.is_attack() and action.move_with_attack:
+                outcome = None
+                if "outcome" in test_document:
+                    outcome = Outcome.from_document(test_document["outcome"])
+
+                action.move_with_attack = None
+                gamestate.do_action(action, outcome)
+                action.move_with_attack = True
+                rolls = outcome.for_position(action.target_at)
+                gamestate.move_melee_unit_to_target_tile(rolls, action)
+
+                actual_gamestate_document = gamestate.to_document()
+                expected_gamestate_document = expected_gamestate.to_document()
+
+                if actual_gamestate_document == expected_gamestate_document:
+                    return "pass"
+                else:
+                    print "Wrong outcome for", file
+                    if "description" in test_document:
+                        print "Description:", test_document["description"]
+                    print "Actual gamestate:"
+                    print document_to_string(actual_gamestate_document)
+                    print "Expected gamestate:"
+                    print document_to_string(expected_gamestate_document)
+                    return "wrong result"
+            else:
+                return "pass"
 
         if test_document["type"] == "Does turn shift work":
             gamestate = Gamestate.from_document(test_document["pre_gamestate"])
