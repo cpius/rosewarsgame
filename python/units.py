@@ -287,7 +287,7 @@ class Pikeman(Unit):
     base_range = 1
     type = Type.Infantry
     zoc = [Type.Cavalry]
-    upgrades = ["Halberdier", "Royal Guard"]
+    upgrades = ["Halberdier", "Royal_Guard"]
     experience_to_upgrade = 3
 
 
