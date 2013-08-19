@@ -98,8 +98,6 @@ trait_descriptions = {
     "cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement",
     "combat_agility": "Can make an attack after its first action. (But not a second move.)",
     "crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.",
-    "crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A, "
-                    "+1D.",
     "defence_maneuverability": "Can move two tiles if one of them is sideways.",
     "double_attack_cost": "Attack takes two actions.",
     "extra_life": "It takes two successful hits to kill this unit.",
@@ -149,13 +147,10 @@ ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
-    "improve_weapons_II": "Give melee unit +2 attack, +1 defence for two turns.",
     "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
     "poison": "Freezes a unit for 2 turns.",
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
     "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-    "sabotage_II": "",
-    "bribe_II": "Not yet implemented"
 }
 
 
@@ -194,6 +189,7 @@ if 1 == 2:
         used = None
         recently_bribed = None
         sabotaged = None
+        sabotaged_II = None
         recently_upgraded = None
 
         name = None
@@ -244,9 +240,7 @@ if 1 == 2:
         pikeman_specialist = None
         poison = None
         sabotage = None
-        sabotage_II = None
         triple_attack = None
-        improve_weapons_II = None
 
         name = {}
         write = {}

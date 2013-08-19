@@ -102,9 +102,6 @@ class Unit(object):
             else:
                 self.set(State.improved_weapons)
 
-        if ability == Ability.improve_weapons_II:
-            self.set(State.improved_weapons_II, value)
-
     # custom functions
     def poison(self):
         self.freeze(2)

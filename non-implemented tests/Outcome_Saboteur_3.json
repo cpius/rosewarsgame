@@ -6,7 +6,7 @@
         "player1_units": {
             "C3": {
                 "name": "Saboteur",
-                "sabotage_II": 1
+                "sabotage": 2
             },
             "A1": "Pikeman"
         },
@@ -18,7 +18,7 @@
         "target_at": "D4",
         "end_at": "C3",
         "start_at": "C3",
-        "ability": "sabotage_II"
+        "ability": "sabotage"
     },
     "post_gamestate": {
         "actions_remaining": 1,
@@ -28,7 +28,7 @@
                 "experience": 1,
                 "used": 1,
                 "name": "Saboteur",
-                "sabotage_II": 1
+                "sabotage": 2
             }
         },
         "player2_units": {
