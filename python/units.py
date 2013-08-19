@@ -181,10 +181,6 @@ class Unit(object):
         if not self.is_milf():
             return False
 
-        # print "choice 0", self.get_upgrade_choice(0)
-        # print "choice 1", self.get_upgrade_choice(1)
-        # print "choice", upgrade_choice
-
         return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
 
     def get_abilities_not_in_base(self):
@@ -254,7 +250,9 @@ class Fire_Archer(Unit):
     base_defence = 2
     base_movement = 1
     base_range = 4
+    attack_bonuses = {Type.Infantry: 1}
     type = Type.Infantry
+    special_upgrades = [{Trait.sharpshooting: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
@@ -287,7 +285,7 @@ class Pikeman(Unit):
     base_range = 1
     type = Type.Infantry
     zoc = [Type.Cavalry]
-    upgrades = ["Halberdier", "Royal Guard"]
+    upgrades = ["Halberdier", "Royal_Guard"]
     experience_to_upgrade = 3
 
 

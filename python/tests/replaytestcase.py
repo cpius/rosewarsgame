@@ -1,7 +1,7 @@
 import json
 import common
 from unittest import TestCase
-from gamestate import Gamestate
+from game import Game
 
 
 class ReplayTestCase(TestCase):
@@ -16,8 +16,8 @@ class ReplayTestCase(TestCase):
 
     def runTest(self):
         replay_document = json.loads(open(self.testcase_file).read())
-        replay_gamestate = Gamestate.from_log_document(replay_document)
+        replay_game = Game.from_log_document(replay_document)
 
-        gamestate_document = replay_gamestate.to_document()
+        gamestate_document = replay_game.gamestate.to_document()
 
         common.assert_equal_documents(self, replay_document["gamestate"], gamestate_document, self.testcase_file)

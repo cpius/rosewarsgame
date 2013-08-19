@@ -6,8 +6,6 @@ import ai_module
 from units import Unit
 import json
 from common import *
-from action import Action
-from outcome import Outcome
 from copy import copy
 
 
@@ -23,55 +21,6 @@ class Gamestate:
         self.action_count = 0
         self.created_at = created_at
         self.game_id = game_id
-
-    @classmethod
-    def from_log_document(cls, log_document, shift_turn=False):
-        gamestate_document = log_document["initial_gamestate"]
-        gamestate = cls.from_document(gamestate_document)
-        action_count = int(log_document["action_count"])
-
-        for action_number in range(1, action_count + 1):
-            if gamestate.is_turn_done():
-                gamestate.shift_turn()
-
-            if not str(action_number) in log_document:
-                # This happens when loading replays that are continuations of other replays
-                continue
-
-            action_document = log_document[str(action_number)]
-
-            action = Action.from_document(gamestate.all_units(), action_document)
-
-            options = None
-            if str(action_number) + "_options" in log_document:
-                options = log_document[str(action_number) + "_options"]
-
-            outcome = None
-            if action.is_attack():
-                outcome_document = log_document[str(action_number) + "_outcome"]
-                outcome = Outcome.from_document(outcome_document)
-                if options and "move_with_attack" in options:
-                    action.move_with_attack = bool(options["move_with_attack"])
-
-            gamestate.do_action(action, outcome)
-
-            if options and "upgrade" in options:
-                upgrade_choice = options["upgrade"]
-                if getattr(action.unit, "upgrades"):
-                    upgraded_unit = Unit.make(upgrade_choice)
-                else:
-                    upgrade_choice = enum_attributes(upgrade_choice)
-                    upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
-                if action.is_attack() and action.target_at and action.target_at in gamestate.player_units:
-                    gamestate.player_units[action.target_at] = upgraded_unit
-                else:
-                    gamestate.player_units[action.end_at] = upgraded_unit
-
-        if shift_turn:
-            if gamestate.is_turn_done():
-                gamestate.shift_turn()
-
-        return gamestate
 
     def all_units(self):
         all_units = self.units[0].copy()
@@ -234,7 +183,7 @@ class Gamestate:
 
         if not self.enemy_units:
             at_least_one_bribed = False
-            for position, unit in self.player_units:
+            for position, unit in self.player_units.items():
                 if unit.is_bribed():
                     at_least_one_bribed = True
             if not at_least_one_bribed:
@@ -261,6 +210,6 @@ class Gamestate:
         return False
 
     def get_upgradeable_unit(self):
-        for position, unit in self.player_units:
-            if unit.if_milf():
+        for position, unit in self.player_units.items():
+            if unit.is_milf():
                 return position, unit

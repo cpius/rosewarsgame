@@ -4,16 +4,20 @@ from coordinates import Coordinates
 from common import *
 
 
-def draw_game(screen, interface, game, start_position=None, actions=()):
+def draw_game(screen, interface, game, start_at=None, actions=()):
 
     screen.blit(get_image(interface.board_image), (0, 0))
 
     gamestate = game.gamestate.copy()
-    if game.current_player().color == "Red":
+    if not game.is_player_human():
         gamestate.flip_all_units()
 
-    draw_units(screen, interface, gamestate.player_units, game.current_player().color, gamestate.enemy_units,
-               game.opponent_player().color, start_position, actions)
+    current_color = game.current_player().color
+    enemy_color = game.opponent_player().color
+    player_units = gamestate.player_units
+    enemy_units = gamestate.enemy_units
+
+    draw_units(screen, interface, player_units, current_color, enemy_units, enemy_color, start_at, actions)
 
     shade_actions(screen, interface, actions)
 
