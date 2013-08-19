@@ -184,7 +184,6 @@ if 1 == 2:
         attack_cooldown = None
         attack_frozen = None
         bribed = None
-        bribed_II = None
         extra_action = None
         frozen = None
         improved_weapons = None
@@ -195,7 +194,6 @@ if 1 == 2:
         used = None
         recently_bribed = None
         sabotaged = None
-        sabotaged_II = None
         recently_upgraded = None
 
         name = None
