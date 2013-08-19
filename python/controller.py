@@ -342,7 +342,8 @@ class Controller(object):
         choice = self.get_input_upgrade(unit)
 
         if getattr(unit, "upgrades"):
-            upgraded_units = Unit.make(unit.upgrades[choice])
+            upgrade_choice = unit.upgrades[choice]
+            upgraded_unit = Unit.make(unit.upgrades[choice])
         else:
             upgrade_choice = unit.get_upgrade_choice(choice)
             upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
