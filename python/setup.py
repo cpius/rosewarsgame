@@ -16,7 +16,8 @@ class Tiles_bag(object):
 
     def pick_protected_tile(self, rows):
         possible_tiles = [Position(column, row) for column in board_columns for
-                          row in [2, 3] if Position(column, row) in self.tiles and Position(column, row + 1) not in self.tiles]
+                          row in [2, 3] if Position(column, row) in self.tiles and
+                          Position(column, row + 1) not in self.tiles]
 
         pick = random.choice([tile for tile in possible_tiles if tile.row in rows])
         self.tiles.remove(pick)
@@ -25,7 +26,7 @@ class Tiles_bag(object):
 
 class Unit_bag(object):
     def __init__(self, units):
-        self.units = units
+        self.units = list(units)
     
     def pick(self):
         pick = random.choice(self.units)
@@ -47,124 +48,62 @@ board_columns = [1, 2, 3, 4, 5]
 
 siege_weapons = ["Ballista", "Catapult", "Cannon"]
 
-Info = namedtuple("Info", ["allowed_rows", "copies_in_bag", "protection_required"])
 
-units_info = {"Archer": Info({2, 3}, 3, False),
-              "Ballista": Info({2, 3}, 2, True),
-              "Catapult": Info({2, 3}, 2, False),
-              "Knight": Info({4}, 3, False),
-              "Light Cavalry": Info({2, 3}, 3, False),
-              "Pikeman": Info({2, 3, 4}, 3, False),
-              "Berserker": Info({2, 3}, 1, False),
-              "Cannon": Info({2}, 1, True),
-              "Hobelar": Info({3, 4}, 1, False),
-              "Crusader": Info({3, 4}, 1, False),
-              "Diplomat": Info({2, 3}, 1, False),
-              "Flag Bearer": Info({3, 4}, 1, False),
-              "Lancer": Info({3, 4}, 1, False),
-              "Longswordsman": Info({4}, 1, False),
-              "Royal Guard": Info({2, 3}, 1, False),
-              "Saboteur": Info({2, 3}, 1, True),
-              "Samurai": Info({4}, 1, False),
-              "Scout": Info({2, 3}, 1, False),
-              "Viking": Info({4}, 1, False),
-              "War Elephant": Info({4}, 1, False),
-              "Weaponsmith": Info({2, 3}, 1, True),
-              "Crossbow Archer": Info({2, 3}, 3, False),
-              "Fire Archer": Info({2, 3}, 3, False)}
-
-
-def test_column_blocks(units):
+def at_least_two_column_blocks(units):
     """ Tests whether there on each column are at least two 'blocks'.
     A block is either a unit, or a Pikeman zoc tile. """
     
-    columns = [position.column + x for x in [-1, +1] for position, unit in units.items() if unit.name == "Pikeman"]\
-        + [position.column for position in units]
+    columns = [position.column + x for x in [-1, +1] for position, unit in units.items() if unit.name == "Pikeman"] + \
+              [position.column for position in units]
 
     return not any(columns.count(column) < 2 for column in board_columns)
      
 
-def test_pikeman_column(units):
-    """ Tests whether there is more than one Pikeman on any column."""
-    
+def at_most_one_pikeman_per_column(units):
     columns = [position.column for position, unit in units.items() if unit.name == "Pikeman"]
     
     return not any(columns.count(column) > 1 for column in board_columns)
 
 
-def enforce_max_siege_weapons(units, unit_bag):
+def at_least_one_siege_weapon(units):
+    return any(unit.name in siege_weapons for unit in units.values())
 
-    siege_count = sum(1 for unit in units if unit.name in siege_weapons)
 
-    if siege_count >= 2:
-        unit_bag.remove_units(siege_weapons)
+def at_most_two_siege_weapons(units):
+    return sum(1 for unit in units.values() if unit.name in siege_weapons) <= 2
 
 
 def get_units():
     
     def select_basic_units(basic_units_bag):
+        return [Unit.make(basic_units_bag.pick()) for _ in range(basic_unit_count)]
 
-        units = []
+    def select_special_units(special_units_first_bag, special_units_second_bag):
 
-        if settings.at_least_one_siege_weapon:
-            unit_name = random.choice(["Ballista", "Catapult"])
-            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
-            basic_units_bag.remove_one_unit("Ballista")
-            basic_units_bag.remove_one_unit("Catapult")
+        special_units = []
+        while len(special_units) < special_unit_count and special_units_first_bag.has_units():
+            unit = Unit.make(special_units_first_bag.pick())
+            special_units.append(unit)
 
-        while len(units) < settings.basic_unit_count:
+        while len(special_units) < special_unit_count:
+            special_units.append(Unit.make(special_units_second_bag.pick()))
 
-            unit_name = basic_units_bag.pick()
-            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
-
-            if settings.max_two_siege_weapons:
-                enforce_max_siege_weapons(units, basic_units_bag)
-
-        random.shuffle(units)
-
-        return units
-
-    def select_special_units(special_units_first_bag, special_units_second_bag, units):
-
-        total_unit_count = settings.basic_unit_count + settings.special_unit_count
-
-        while len(units) < total_unit_count and special_units_first_bag.has_units():
-
-            if settings.max_two_siege_weapons:
-                enforce_max_siege_weapons(units, special_units_first_bag)
-
-            unit_name = special_units_first_bag.pick()
-            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
-
-        while len(units) < total_unit_count:
-
-            if settings.max_two_siege_weapons:
-                enforce_max_siege_weapons(units, special_units_second_bag)
-
-            unit_name = special_units_second_bag.pick()
-            units.append(getattr(units_module, unit_name.replace(" ", "_"))())
-
-        return units
+        return special_units
 
     def fill_bags():
         
-        basic_units_bag = Unit_bag([name for name in settings.basic_units for _ in
-                                    range(units_info[name].copies_in_bag)])
-        
-        special_units_first_bag = Unit_bag(list(settings.required_special_units))
-        
-        special_units_second_bag = Unit_bag(list(set(settings.allowed_special_units) -
-                                                 set(settings.required_special_units)))
-
+        basic_units_bag = Unit_bag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
+        special_units_first_bag = Unit_bag(required_special_units)
+        special_units_second_bag = Unit_bag(set(allowed_special_units) - set(required_special_units))
         tiles_bag = Tiles_bag()
         
         return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
 
-    def place_units_on_board(unitslist, tiles_bag):
+    def place_units_on_board(units_list, tiles_bag):
 
         units = {}
-        unprotected_units = [unit for unit in unitslist if not units_info[unit.name].protection_required]
-        protected_units = [unit for unit in unitslist if units_info[unit.name].protection_required]
+        unprotected_units = [unit for unit in units_list if not units_info[unit.name].protection_required]
+        protected_units = [unit for unit in units_list if units_info[unit.name].protection_required]
 
         for unit in unprotected_units:
             allowed_rows = units_info[unit.name].allowed_rows.copy()
@@ -178,19 +117,20 @@ def get_units():
         return units
 
     while True:
-        
+
         basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
         
         try:
-            unitslist = select_basic_units(basic_units_bag)
-            unitslist = select_special_units(special_units_first_bag, special_units_second_bag, unitslist)
+            basic_units = select_basic_units(basic_units_bag)
+            special_units = select_special_units(special_units_first_bag, special_units_second_bag)
 
-            units = place_units_on_board(unitslist, tiles_bag)
+            units = place_units_on_board(basic_units + special_units, tiles_bag)
 
+        # This happens if a unit is picked from the unit bag, but there isn't any tile it can be placed on
         except IndexError:
             continue
 
-        if any(not requirement(units) for requirement in [test_column_blocks, test_pikeman_column]):
+        if any(not globals()[requirement](units) for requirement in requirements):
             continue
              
         return units
