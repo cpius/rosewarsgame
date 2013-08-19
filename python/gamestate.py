@@ -3,7 +3,7 @@ import action_doer
 import initializer
 import action_getter
 import ai_module
-import units as units_module
+from units import Unit
 import json
 from common import *
 from action import Action
@@ -58,7 +58,7 @@ class Gamestate:
             if options and "upgrade" in options:
                 upgrade_choice = options["upgrade"]
                 if getattr(action.unit, "upgrades"):
-                    upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+                    upgraded_unit = Unit.make(upgrade_choice)
                 else:
                     upgrade_choice = enum_attributes(upgrade_choice)
                     upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
@@ -162,10 +162,9 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if isinstance(unit_document, basestring):
-                unit = getattr(units_module, unit_document.replace(" ", "_"))()
-
+                unit = Unit.make(unit_document)
             else:
-                unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
+                unit = Unit.make(unit_document["name"])
 
                 for attribute, value in unit_document.items():
                     if attribute == "zoc":

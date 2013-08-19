@@ -8,7 +8,7 @@ import os
 import interface_settings as settings
 from player import Player
 from action import Action
-import units as units_module
+from units import Unit
 from client import Client
 from game import Game
 from outcome import Outcome
@@ -342,8 +342,7 @@ class Controller(object):
         choice = self.get_input_upgrade(unit)
 
         if getattr(unit, "upgrades"):
-            upgrade_choice = unit.upgrades[choice]
-            upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+            upgraded_units = Unit.make(unit.upgrades[choice])
         else:
             upgrade_choice = unit.get_upgrade_choice(choice)
             upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
