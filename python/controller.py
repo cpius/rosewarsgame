@@ -404,11 +404,11 @@ class Controller(object):
             return
 
         if self.game.is_player_human() and action.unit.is_milf():
-            self.view.draw_game(self.game)
             if action.is_attack() and action.target_at in self.game.gamestate.player_units:
                 unit_position = action.target_at
             else:
                 unit_position = action.end_at
+            self.view.draw_game(self.game)
             self.upgrade_unit(unit_position, action.unit)
 
         self.game.save(self.view, action, outcome)
