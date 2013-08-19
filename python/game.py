@@ -91,7 +91,6 @@ class Game:
 
     def to_document(self):
         return {
-            ""
             "player1": self.players[0].to_document(),
             "player2": self.players[1].to_document(),
             "initial_gamestate": self.initial_gamestate.to_document(),
