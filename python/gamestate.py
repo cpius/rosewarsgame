@@ -208,7 +208,7 @@ class Gamestate:
         return self.actions_remaining < 1 and not self.is_extra_action()
 
     def shift_turn(self):
-        self.flip_units()
+        self.flip_all_units()
         self.units = self.units[::-1]
         self.initialize_turn()
 
@@ -220,9 +220,8 @@ class Gamestate:
     def __str__(self):
         return document_to_string(self.to_document())
 
-    def flip_units(self):
-        self.units = [dict((position.flip(), unit) for position, unit in self.units[0].items()),
-                      dict((position.flip(), unit) for position, unit in self.units[1].items())]
+    def flip_all_units(self):
+        self.units = [flip_units(self.player_units), flip_units(self.enemy_units)]
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()

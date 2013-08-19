@@ -375,3 +375,7 @@ def attribute_key(attribute, value):
             attribute_key += "I"
 
         return attribute_key
+
+
+def flip_units(units):
+    return dict((position.flip(), unit) for position, unit in units.items())

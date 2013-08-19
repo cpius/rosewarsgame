@@ -197,11 +197,6 @@ def get_units():
         return units
 
 
-def flip_units(units):
-
-    return dict((position.flip(), unit) for position, unit in units.items())
-
-
 def get_start_units():
 
     player1_units = get_units()
