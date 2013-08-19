@@ -17,13 +17,17 @@
     },
     "action": {
         "start_at": "C3",
-        "end_at": "C4"
+        "end_at": "C3",
+        "target_at": "D4"
+    },
+    "outcome": {
+        "D4": [6, 1]
     },
     "post_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
             "A1": "Pikeman",
-            "C4": {
+            "C3": {
                 "experience": 5,
                 "name": "Fire Archer",
                 "used": 1

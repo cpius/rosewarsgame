@@ -10,7 +10,7 @@ def draw_game(screen, interface, game, start_position=None, actions=()):
 
     gamestate = game.gamestate.copy()
     if game.current_player().color == "Red":
-        gamestate.flip_units()
+        gamestate.flip_all_units()
 
     draw_units(screen, interface, gamestate.player_units, game.current_player().color, gamestate.enemy_units,
                game.opponent_player().color, start_position, actions)
