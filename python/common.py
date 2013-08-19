@@ -1,6 +1,6 @@
 from json import JSONEncoder, dumps
 from datetime import datetime
-from bson import ObjectId
+from bson.objectid import ObjectId
 import collections
 import functools
 
@@ -92,7 +92,6 @@ def enum(n, *sequential, **named):
 
 trait_descriptions = {
     "attack_cooldown": "Can only attack every third turn.",
-    "attack_cooldown_II": "Can only attack every second turn.",
     "berserking": "Can move 4 tiles if movement ends with an attack.",
     "big_shield": "+2D v melee",
     "bloodlust": "Every kill gives it an extra attack",
@@ -115,8 +114,6 @@ trait_descriptions = {
     "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
             "must retreat directly backwards or die.",
     "rage": "Can make an attack after it's move. (But not a second move.)",
-    "rage_II": "Can move up to two tiles to make an attack. (But cannot take over the attacked tile if it's 3 tiles "
-               "away.)",
     "scouting": "Can move past all units.",
     "sharpshooting": "Targets have their defence reduced to 1 during the attack.",
     "swiftness": "Can use remaining moves after attacking.",

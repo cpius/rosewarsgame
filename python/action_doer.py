@@ -88,11 +88,11 @@ def do_action(gamestate, action, outcome):
             gamestate.decrement_actions_remaining()
 
     def apply_unit_effects():
-        if unit.has(Trait.attack_cooldown) and action.is_attack():
-            unit.set(State.attack_frozen, 3)
-
-        if unit.has(Trait.attack_cooldown_II) and action.is_attack():
-            unit.set(State.attack_frozen, 2)
+        if action.is_attack():
+            if unit.has(Trait.attack_cooldown, 1):
+                unit.set(State.attack_frozen, 3)
+            if unit.has(Trait.attack_cooldown, 2):
+                unit.set(State.attack_frozen, 2)
 
     def update_unit_position():
         player_units[action.end_at] = player_units.pop(action.start_at)
