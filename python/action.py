@@ -155,14 +155,14 @@ class Action(object):
 
     def is_crusading(self, units, n=0):
         if not n:
-            return self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 1) or \
-                self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 2)
+            return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 1) or
+                                             self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 2))
         else:
-            return self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n)
+            return self.unit.is_melee() and self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n)
 
     def has_high_morale(self, units):
-        return self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or \
-            self.is_surrounding_unit_with(units, Trait.flag_bearing_B, self.end_at)
+        return self.unit.is_melee() and (self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or
+                                         self.is_surrounding_unit_with(units, Trait.flag_bearing_B, self.end_at))
 
     def is_surrounding_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)
