@@ -47,29 +47,15 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_network(cls, view, game_id, player_profile):
+    def from_network(cls, view, game_id, player):
         controller = cls(view)
 
         controller.game_id = game_id
         controller.client = Client(game_id)
+        controller.game = Game.from_log_document(controller.client.get_game(), player, True)
 
-        log_document = controller.client.get_game()
-
-        player1 = Player.from_document(log_document["player1"])
-        player2 = Player.from_document(log_document["player2"])
-
-        if player1.profile == player_profile:
-            print "player 2 is network"
-            player2.intelligence = player2.ai = "Network"
-        elif player2.profile == player_profile:
-            print "player 1 is network"
-            player1.intelligence = player1.ai = "Network"
-        else:
-            print player_profile, "is not playing this game. The players are:", player1.profile, "and", player2.profile
-            return
-
-        controller.gamestate = Gamestate.from_log_document(log_document, shift_turn=True)
-        controller.game = Game([player1, player2], controller.gamestate)
+        player = controller.game.current_player()
+        print "current player is", player.color, player.intelligence, player.profile
         controller.clear_move()
 
         return controller
@@ -78,26 +64,23 @@ class Controller(object):
     def from_replay(cls, view, savegame_file):
         controller = cls(view)
         savegame_document = json.loads(open(savegame_file).read())
-        controller.gamestate = Gamestate.from_log_document(savegame_document)
-        players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
-        controller.game = Game(players, controller.gamestate)
+        controller.game = Game.from_log_document(savegame_document)
         controller.clear_move()
 
         return controller
 
     def trigger_network_player(self):
-        print "waiting for action", self.game.gamestate.action_count + 1, "from network"
         interval_in_milliseconds = 1000
         pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, interval_in_milliseconds)
 
-        action, outcome = self.client.select_action(self.game.gamestate)
+        action, outcome, upgrade = self.client.select_action(self.game.gamestate)
 
         if action is None:
             return
 
         print "received action from network: " + str(action)
 
-        self.perform_action(action, outcome)
+        self.perform_action(action, outcome, upgrade)
 
         if self.game.is_player_human():
             # The turn changed. Stop listening for network actions
@@ -243,6 +226,9 @@ class Controller(object):
 
         self.view.draw_game(self.game)
 
+        if self.game.is_player_network():
+            self.trigger_network_player()
+
         while True:
             event = pygame.event.wait()
 
@@ -358,7 +344,7 @@ class Controller(object):
 
         self.game.gamestate.player_units[position] = upgraded_unit
 
-    def perform_action(self, action, outcome=None):
+    def perform_action(self, action, outcome=None, upgrade=None):
         self.view.draw_game(self.game)
 
         if self.game.is_player_human():
@@ -410,12 +396,19 @@ class Controller(object):
                 unit_position = action.end_at
             self.view.draw_game(self.game)
             self.upgrade_unit(unit_position, action.unit)
+        elif self.game.is_player_network() and action.unit.is_milf():
+            position = action.end_at
+            if not position in self.game.gamestate.player_units:
+                position = action.target_at
+            upgraded_unit = action.unit.get_upgraded_unit(upgrade)
+            self.game.gamestate.player_units[position] = upgraded_unit
+            self.game.save_option("upgrade", upgrade)
 
         self.game.save(self.view, action, outcome)
 
         self.view.draw_game(self.game)
 
-        if self.game.gamestate.is_turn_done():
+        if self.game.is_turn_done():
             self.game.shift_turn()
 
         self.view.draw_game(self.game)
@@ -429,9 +422,12 @@ class Controller(object):
 
             self.select_unit(position)
 
+        print "Action performed. Expecting action from", self.game.current_player().intelligence
+
         if self.game.is_player_human():
             return
         elif self.game.is_player_network():
+            print "Waiting for network action from network with number", self.game.gamestate.action_count + 1
             self.trigger_network_player()
         else:
             self.trigger_artificial_intelligence()
@@ -481,7 +477,7 @@ class Controller(object):
         return position in self.game.gamestate.player_units and potential_actions
 
     def selecting_ability_target(self, position):
-        if not self.start_at:
+        if not self.start_at or position == self.start_at:
             return False
 
         return position in self.game.gamestate.all_units() and self.selected_unit.abilities

@@ -1,6 +1,5 @@
 import json
 import urllib2
-from gamestate import Gamestate
 from common import document_to_string
 from action import Action
 from outcome import Outcome
@@ -8,16 +7,11 @@ from datetime import datetime
 
 
 class Client():
-    # server = "http://localhost:8080"
-    server = "http://server.rosewarsgame.com:8080"
+    server = "http://localhost:8080"
+    # server = "http://server.rosewarsgame.com:8080"
 
     def __init__(self, game_id):
         self.game_id = game_id
-
-    def get_gamestate(self):
-        return Gamestate.from_log_document(
-            json.load(
-                urllib2.urlopen(self.server + "/games/view/" + self.game_id)))
 
     def get_game(self):
         return json.load(urllib2.urlopen(self.server + "/games/view/" + self.game_id))
@@ -29,14 +23,21 @@ class Client():
         if game["action_count"] > gamestate.action_count:
             print "received action", document_to_string(game[expected_action])
             action = Action.from_document(gamestate.all_units(), game[expected_action])
+            outcome = None
             if action.is_attack():
                 outcome = Outcome.from_document(game[expected_action + "_outcome"])
-                return action, outcome
 
-            return action, None
+            upgrade = None
+            if expected_action + "_options" in game:
+                options = game[expected_action + "_options"]
+                if "move_with_attack" in options:
+                    action.move_with_attack = bool(options["move_with_attack"])
+                if "upgrade" in options:
+                    upgrade = options["upgrade"]
 
-        print "No new actions. Sleeping for one second"
-        return None, None
+            return action, outcome, upgrade
+
+        return None, None, None
 
     def send_action(self, action):
         url = self.server + "/games/" + self.game_id + "/do_action"

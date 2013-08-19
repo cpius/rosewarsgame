@@ -1,7 +1,12 @@
 from datetime import datetime
 import ai_module
-import common
+from common import *
 import os
+from outcome import Outcome
+from gamestate import Gamestate
+from action import Action
+from player import Player
+import units as units_module
 
 
 class Game:
@@ -16,6 +21,82 @@ class Game:
         self.actions = dict()
         self.outcomes = dict()
         self.options = dict()
+
+    @classmethod
+    def from_log_document(cls, log_document, player_profile=None, shift_turn=False):
+
+        initial_gamestate_document = log_document["initial_gamestate"]
+        gamestate = Gamestate.from_document(initial_gamestate_document)
+        if "player1" in log_document:
+            player1 = Player.from_document(log_document["player1"])
+            player2 = Player.from_document(log_document["player2"])
+        else:
+            player1 = Player("Green", "Human")
+            player2 = Player("Red", "Human")
+
+        if player_profile:
+            if player1.profile == player_profile:
+                print "player 2 is network"
+                player2.intelligence = player2.ai = "Network"
+            elif player2.profile == player_profile:
+                print "player 1 is network"
+                player1.intelligence = player1.ai = "Network"
+            else:
+                print player_profile, "is not playing this game. The players are:", player1.profile, "and", player2.profile
+                return
+
+        if "created_at" in log_document:
+            created_at = log_document["created_at"]
+        else:
+            created_at = None
+
+        game = cls([player1, player2], gamestate, created_at)
+        game.gamestate = gamestate
+
+        action_count = int(log_document["action_count"])
+
+        for action_number in range(1, action_count + 1):
+            if game.is_turn_done():
+                game.shift_turn()
+
+            if not str(action_number) in log_document:
+                # This happens when loading replays that are continuations of other replays
+                continue
+
+            action_document = log_document[str(action_number)]
+
+            action = Action.from_document(gamestate.all_units(), action_document)
+
+            options = None
+            if str(action_number) + "_options" in log_document:
+                options = log_document[str(action_number) + "_options"]
+
+            outcome = None
+            if action.is_attack():
+                outcome_document = log_document[str(action_number) + "_outcome"]
+                outcome = Outcome.from_document(outcome_document)
+                if options and "move_with_attack" in options:
+                    action.move_with_attack = bool(options["move_with_attack"])
+
+            game.do_action(action, outcome)
+
+            if options and "upgrade" in options:
+                upgrade_choice = options["upgrade"]
+                if getattr(action.unit, "upgrades"):
+                    upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+                else:
+                    upgrade_choice = enum_attributes(upgrade_choice)
+                    upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
+                if action.is_attack() and action.target_at and action.target_at in gamestate.player_units:
+                    gamestate.player_units[action.target_at] = upgraded_unit
+                else:
+                    gamestate.player_units[action.end_at] = upgraded_unit
+
+        if shift_turn:
+            if game.is_turn_done():
+                game.shift_turn()
+
+        return game
 
     def set_ais(self):
         for player in range(2):
@@ -79,7 +160,7 @@ class Game:
             savegame_document[str(action_number) + "_options"] = options
 
         with open(filename + ".json", 'w') as gamestate_file:
-            gamestate_file.write(common.document_to_string(savegame_document))
+            gamestate_file.write(document_to_string(savegame_document))
 
     def save_option(self, option, option_value):
         action_count = self.gamestate.action_count
@@ -88,6 +169,9 @@ class Game:
             options = self.options[action_count]
         options[option] = option_value
         self.options[action_count] = options
+
+    def is_turn_done(self):
+        return self.gamestate.is_turn_done()
 
     def to_document(self):
         return {
