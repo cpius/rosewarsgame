@@ -94,8 +94,6 @@ def do_action(gamestate, action, outcome):
         if unit.has(Trait.attack_cooldown_II) and action.is_attack():
             unit.set(State.attack_frozen, 2)
 
-        unit.set(State.used)
-
     def update_unit_position():
         player_units[action.end_at] = player_units.pop(action.start_at)
 
@@ -145,6 +143,8 @@ def do_action(gamestate, action, outcome):
 
     if action.is_attack() and action.move_with_attack and action.target_at not in enemy_units:
         move_melee_unit_to_target_tile(gamestate, action)
+
+    unit.set(State.used)
 
 
 def move_melee_unit_to_target_tile(gamestate, action):

@@ -113,7 +113,7 @@ class Unit(object):
         self.set(State.frozen, max(self.get(State.frozen), n))
 
     def gain_xp(self):
-        if not settings.beginner_mode:
+        if not self.has(State.used) and not settings.beginner_mode:
             self.increment(State.experience)
             self.remove(State.recently_upgraded)
 
