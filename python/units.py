@@ -336,7 +336,7 @@ class Dragoon(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
-    special_upgrades = [{Trait.flanking: 1}]
+    #special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     traits = {Trait.swiftness: 1}
@@ -406,7 +406,7 @@ class Lancer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}]
+    #special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -425,7 +425,7 @@ class Hobelar(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.flanking: 1}]
+    #special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -440,7 +440,7 @@ class Ballista(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    special_upgrades = [{Trait.fire_arrows: 1}]
+    #special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
@@ -478,7 +478,7 @@ class Royal_Guard(Unit):
     type = Type.Infantry
     zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
     experience_to_upgrade = 3
-    special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
+    #special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -498,7 +498,7 @@ class Scout(Unit):
     zoc = []
     type = Type.Cavalry
     experience_to_upgrade = 2
-    special_upgrades = [{Trait.tall_shield}, {Trait.attack_skill: 2}]
+    #special_upgrades = [{Trait.tall_shield}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill}]
 
 
@@ -518,7 +518,7 @@ class Viking(Unit):
     defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
     type = Type.Infantry
-    special_upgrades = [{Trait.rage: 1}, {Trait.siege_weapon_specialist: 1}]
+    #special_upgrades = [{Trait.rage: 1}, {Trait.siege_weapon_specialist: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     traits = {Trait.rage: 1, Trait.extra_life: 1}
@@ -540,7 +540,8 @@ class Cannon(Unit):
     zoc = []
     type = Type.Siege_Weapon
     experience_to_upgrade = 3
-    special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
+    #special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 
 class Flag_Bearer(Unit):
@@ -558,7 +559,7 @@ class Flag_Bearer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.flag_bearing_B: 1}]
+    #special_upgrades = [{Trait.flag_bearing_B: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -577,7 +578,7 @@ class Longswordsman(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    special_upgrades = [{Trait.rage: 1}]
+    #special_upgrades = [{Trait.rage: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -596,7 +597,7 @@ class Crusader(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.crusading: 1}]
+    #special_upgrades = [{Trait.crusading: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -615,7 +616,7 @@ class Berserker(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
+    #special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -657,7 +658,7 @@ class Samurai(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    special_upgrades = [{Trait.bloodlust: 1}],
+    #special_upgrades = [{Trait.bloodlust: 1}],
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     traits = {Trait.combat_agility: 1}
@@ -677,7 +678,7 @@ class Saboteur(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Ability.sabotage: 1}, {Ability.poison: 1}]
+    #special_upgrades = [{Ability.sabotage: 1}, {Ability.poison: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -694,7 +695,7 @@ class Diplomat(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Ability.bribe: 1}]
+    #special_upgrades = [{Ability.bribe: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
 
@@ -712,5 +713,5 @@ class Weaponsmith(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    special_upgrades = [{Ability.improve_weapons: 1}]
+    #special_upgrades = [{Ability.improve_weapons: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
