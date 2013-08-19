@@ -1,0 +1,31 @@
+{
+    "type": "Is attack and defence correct",
+    "description": "Does the fire arrow bonus work",
+    "attack": 5,
+    "defence": 2,
+    "action": {
+        "start_at": "B4",
+        "end_at": "B4",
+        "target_at": "B6",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B4": {
+                "name": "Archer",
+                "fire_arrows": 1
+            },
+            "C2": "Knight"
+        },
+        "player2_units": {
+            "B6": {
+                "name": "Catapult",
+                "range_skill": 1
+            },
+            "D5": "Ballista"
+
+        }
+    }
+}
+

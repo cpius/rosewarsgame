@@ -75,6 +75,7 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
         attack -= - int(attacking_unit.has(Trait.far_sighted) and distance(action.end_at, action.target_at) < 4)
         attack += int(attacking_unit.has(Trait.cavalry_specialist) and defending_unit.type == Type.Cavalry)
         attack += int(attacking_unit.has(Trait.siege_weapon_specialist) and defending_unit.type == Type.Siege_Weapon)
+        attack += 3 * int(attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.Siege_Weapon)
 
         return attack
 

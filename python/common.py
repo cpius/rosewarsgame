@@ -154,6 +154,18 @@ ability_descriptions = {
 }
 
 
+def get_ability_description(ability, level):
+    if ability == Ability.bribe and level == 2:
+        return "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't " \
+               "bribe the same unit on your next turn. The unit gets +1A until end of turn."
+    elif ability == Ability.improve_weapons and level == 2:
+        return "Give melee unit +2 attack, +1 defence for two turns."
+    elif ability == Ability.poison and level == 2:
+        return "Freezes a unit for 3 turns"
+    elif ability == Ability.sabotage and level == 2:
+        return "Reduces a units defence to 0 for 1 turn."
+
+
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
