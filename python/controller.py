@@ -8,7 +8,7 @@ import os
 import interface_settings as settings
 from player import Player
 from action import Action
-import units as units_module
+from units import Unit
 from client import Client
 from game import Game
 from outcome import Outcome
@@ -343,7 +343,7 @@ class Controller(object):
 
         if getattr(unit, "upgrades"):
             upgrade_choice = unit.upgrades[choice]
-            upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+            upgraded_unit = Unit.make(unit.upgrades[choice])
         else:
             upgrade_choice = unit.get_upgrade_choice(choice)
             upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
@@ -373,7 +373,7 @@ class Controller(object):
             self.view.draw_game(self.game)
             self.view.draw_action(action, outcome, self.game)
 
-            if action.move_with_attack is None and not action.target_at in self.game.gamestate.enemy_units:
+            if action.move_with_attack is None and action.attack_successful(outcome.for_position(action.target_at), self.game.gamestate):
                 move_with_attack = self.ask_about_move_with_attack(action)
 
                 self.game.save_option("move_with_attack", move_with_attack)
@@ -382,7 +382,7 @@ class Controller(object):
 
                 if move_with_attack:
                     self.view.draw_post_movement(action)
-                    self.game.gamestate.move_melee_unit_to_target_tile(action)
+                    self.game.gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
 
         else:
             if not outcome:
@@ -404,11 +404,11 @@ class Controller(object):
             return
 
         if self.game.is_player_human() and action.unit.is_milf():
-            self.view.draw_game(self.game)
             if action.is_attack() and action.target_at in self.game.gamestate.player_units:
                 unit_position = action.target_at
             else:
                 unit_position = action.end_at
+            self.view.draw_game(self.game)
             self.upgrade_unit(unit_position, action.unit)
 
         self.game.save(self.view, action, outcome)

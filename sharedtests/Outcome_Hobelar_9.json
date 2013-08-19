@@ -16,7 +16,8 @@
             "A5": {
                 "experience": 2,
                 "name": "Hobelar"
-            }
+            },
+            "A8": "Ballista"
         },
         "player2_units": {
             "B5": {
@@ -34,7 +35,8 @@
                 "experience": 3,
                 "name": "Hobelar",
                 "used": 1
-            }
+            },
+            "A8": "Ballista"
         },
         "player2_units": {
             "B5": {

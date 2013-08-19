@@ -3,7 +3,7 @@ import action_doer
 import initializer
 import action_getter
 import ai_module
-import units as units_module
+from units import Unit
 import json
 from common import *
 from action import Action
@@ -58,7 +58,7 @@ class Gamestate:
             if options and "upgrade" in options:
                 upgrade_choice = options["upgrade"]
                 if getattr(action.unit, "upgrades"):
-                    upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
+                    upgraded_unit = Unit.make(upgrade_choice)
                 else:
                     upgrade_choice = enum_attributes(upgrade_choice)
                     upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
@@ -162,10 +162,9 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if isinstance(unit_document, basestring):
-                unit = getattr(units_module, unit_document.replace(" ", "_"))()
-
+                unit = Unit.make(unit_document)
             else:
-                unit = getattr(units_module, unit_document["name"].replace(" ", "_"))()
+                unit = Unit.make(unit_document["name"])
 
                 for attribute, value in unit_document.items():
                     if attribute == "zoc":
@@ -208,21 +207,20 @@ class Gamestate:
         return self.actions_remaining < 1 and not self.is_extra_action()
 
     def shift_turn(self):
-        self.flip_units()
+        self.flip_all_units()
         self.units = self.units[::-1]
         self.initialize_turn()
 
-    def move_melee_unit_to_target_tile(self, action):
-        action_doer.move_melee_unit_to_target_tile(self, action)
+    def move_melee_unit_to_target_tile(self, rolls, action):
+        action_doer.move_melee_unit_to_target_tile(self, rolls, action)
         self.set_available_actions()
         self.decrement_actions_if_none_available(action)
 
     def __str__(self):
         return document_to_string(self.to_document())
 
-    def flip_units(self):
-        self.units = [dict((position.flip(), unit) for position, unit in self.units[0].items()),
-                      dict((position.flip(), unit) for position, unit in self.units[1].items())]
+    def flip_all_units(self):
+        self.units = [flip_units(self.player_units), flip_units(self.enemy_units)]
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()

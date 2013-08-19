@@ -72,7 +72,7 @@ def utest(test_document):
         pre_gamestate = Gamestate.from_document(test_document["pre_gamestate"])
         post_gamestate = Gamestate.from_document(test_document["post_gamestate"])
         pre_gamestate.shift_turn()
-        pre_gamestate.flip_units()
+        pre_gamestate.flip_all_units()
 
         gamestate_document = pre_gamestate.to_document()
         expected_gamestate_document = post_gamestate.to_document()

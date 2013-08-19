@@ -74,7 +74,7 @@ class UniversalTestCase(TestCase):
     def is_turn_shift_correct(self, gamestate, expected_gamestate):
 
         gamestate.shift_turn()
-        gamestate.flip_units()
+        gamestate.flip_all_units()
 
         actual_gamestate_document = gamestate.to_document()
         expected_gamestate_document = expected_gamestate.to_document()

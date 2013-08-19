@@ -1,6 +1,6 @@
 from json import JSONEncoder, dumps
 from datetime import datetime
-from bson import ObjectId
+from bson.objectid import ObjectId
 import collections
 import functools
 
@@ -92,15 +92,12 @@ def enum(n, *sequential, **named):
 
 trait_descriptions = {
     "attack_cooldown": "Can only attack every third turn.",
-    "attack_cooldown_II": "Can only attack every second turn.",
     "berserking": "Can move 4 tiles if movement ends with an attack.",
     "big_shield": "+2D v melee",
     "bloodlust": "Every kill gives it an extra attack",
     "cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement",
     "combat_agility": "Can make an attack after its first action. (But not a second move.)",
     "crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.",
-    "crusading_II": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A, "
-                    "+1D.",
     "defence_maneuverability": "Can move two tiles if one of them is sideways.",
     "double_attack_cost": "Attack takes two actions.",
     "extra_life": "It takes two successful hits to kill this unit.",
@@ -115,8 +112,6 @@ trait_descriptions = {
     "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
             "must retreat directly backwards or die.",
     "rage": "Can make an attack after it's move. (But not a second move.)",
-    "rage_II": "Can move up to two tiles to make an attack. (But cannot take over the attacked tile if it's 3 tiles "
-               "away.)",
     "scouting": "Can move past all units.",
     "sharpshooting": "Targets have their defence reduced to 1 during the attack.",
     "swiftness": "Can use remaining moves after attacking.",
@@ -152,13 +147,10 @@ ability_descriptions = {
     "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
              "the same unit on your next turn. The unit gets +1A until end of turn.",
     "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
-    "improve_weapons_II": "Give melee unit +2 attack, +1 defence for two turns.",
     "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
     "poison": "Freezes a unit for 2 turns.",
     "sabotage": "Reduces a units defence to 0 for 1 turn.",
     "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-    "sabotage_II": "",
-    "bribe_II": "Not yet implemented"
 }
 
 
@@ -187,7 +179,6 @@ if 1 == 2:
         attack_cooldown = None
         attack_frozen = None
         bribed = None
-        bribed_II = None
         extra_action = None
         frozen = None
         improved_weapons = None
@@ -249,9 +240,7 @@ if 1 == 2:
         pikeman_specialist = None
         poison = None
         sabotage = None
-        sabotage_II = None
         triple_attack = None
-        improve_weapons_II = None
 
         name = {}
         write = {}
@@ -375,3 +364,7 @@ def attribute_key(attribute, value):
             attribute_key += "I"
 
         return attribute_key
+
+
+def flip_units(units):
+    return dict((position.flip(), unit) for position, unit in units.items())

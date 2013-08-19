@@ -33,8 +33,8 @@ class TestAI(unittest.TestCase):
         gamestate = Gamestate.from_document(self.get_test_gamestate_document())
         gamestate_copy = Gamestate.from_document(self.get_test_gamestate_document())
         gamestate_copy.created_at = gamestate.created_at
-        gamestate_copy.flip_units()
-        gamestate_copy.flip_units()
+        gamestate_copy.flip_all_units()
+        gamestate_copy.flip_all_units()
 
         self.assert_equal_documents(gamestate.to_document(), gamestate_copy.to_document())
         self.assertEqual(gamestate, gamestate_copy)
