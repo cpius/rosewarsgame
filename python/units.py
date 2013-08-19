@@ -251,6 +251,7 @@ class Fire_Archer(Unit):
     base_attack = 2
     base_defence = 2
     base_movement = 1
+    attack_bonuses = {Type.Infantry: 1}
     base_range = 4
     type = Type.Infantry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
