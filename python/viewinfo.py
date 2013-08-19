@@ -17,7 +17,7 @@ def clear(screen, interface):
 
 def get_unit_lines(unit):
     lines = ["A: " + str(unit.attack) + "  D: " + str(unit.defence)
-             + "  R: " + str(unit.range) + "  M: " + str(unit.movement)]
+             + "  R: " + str(unit.range) + "  M: " + str(unit.movement), ""]
 
     if unit.zoc:
         lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
@@ -41,11 +41,15 @@ def get_unit_lines(unit):
                 lines.append(trait_descriptions[trait_key])
                 lines.append("")
 
-    for ability in unit.abilities:
-        ability_key = attribute_key(Ability.name[ability], unit.abilities[ability])
-        lines.append(Ability.write[ability] + ":")
-        lines.append(common.ability_descriptions[ability_key])
-        lines.append("")
+    for ability, level in unit.abilities.items():
+        if level == 1:
+            lines.append(Ability.write[ability] + ":")
+            lines.append(ability_descriptions[Ability.name[ability]])
+            lines.append("")
+        else:
+            lines.append(Ability.write[ability] + ", " + "level " + str(level) + ":")
+            lines.append(get_ability_description(ability, level))
+            lines.append("")
 
     for state in unit.states:
         if unit.states[state] and state not in [State.used, State.recently_upgraded, State.experience]:
@@ -72,25 +76,39 @@ def show_unit_zoomed(screen, interface, unit):
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
-def draw_upgrade_choice(screen, interface, index, unit):
+def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
 
     base = interface.upgrade_locations[index]
     title_location = base
     image_location = [base[0], base[1] + 20 * zoom]
     text_location = [base[0], base[1] + 160 * zoom]
+    unit = unit.get_upgraded_unit(upgrade_choice)
 
     unit_pic = get_unit_pic(interface, unit.image)
     pic = get_image(unit_pic, upgrade_unit_size)
     screen.blit(pic, image_location)
-
     write(screen, unit.name, title_location, interface.fonts["normal"])
 
-    lines = get_unit_lines(unit)
+    if isinstance(upgrade_choice, basestring):
+        lines = get_unit_lines(unit)
+        line_length = 30
+        line_distances = interface.line_distances["small"]
+        fonts = interface.fonts["very_small"]
+        show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
 
-    line_length = 30
-    line_distances = interface.line_distances["small"]
-    fonts = interface.fonts["very_small"]
-    show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
+    else:
+        name = Trait.write[upgrade_choice.keys()[0]]
+        level = upgrade_choice.values()[0]
+        if level > 1:
+            lines = [name + ", level " + level]
+        else:
+            lines = [name]
+        line_length = 30
+        line_distances = interface.line_distances["small"]
+        fonts = interface.fonts["small"]
+        show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
+        print upgrade_choice
+
 
 
 def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate):
@@ -116,8 +134,7 @@ def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate
 def draw_upgrade_options(screen, interface, unit):
     for i in range(2):
         upgrade_choice = unit.get_upgrade_choice(i)
-        upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
-        draw_upgrade_choice(screen, interface, i, upgraded_unit)
+        draw_upgrade_choice(screen, interface, i, upgrade_choice, unit)
 
 
 def draw_ask_about_ability(screen, interface, unit):
