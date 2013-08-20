@@ -8,6 +8,7 @@ class Unit(object):
         self.traits = defaultdict(int)
         self.states = defaultdict(int)
         self.abilities = defaultdict(int)
+        self.effects = defaultdict(tuple)
 
     name = ""
     zoc = []
@@ -45,62 +46,66 @@ class Unit(object):
     def __repr__(self):
         return self.name
 
-    def set(self, attribute, n=1):
+    def get_dict(self, attribute):
         if attribute in Trait.name:
-            self.traits[attribute] = n
+            return self.traits
         elif attribute in Ability.name:
-            self.abilities[attribute] = n
-        else:
-            self.states[attribute] = n
+            return self.abilities
+        elif attribute in Effect.name:
+            return self.effects
+        elif attribute in State.name:
+            return self.states
 
-    def add(self, attr, n):
-        if attr in Trait.name:
-            self.traits[attr] += n
-        elif attr in Ability.name:
-            self.abilities[attr] += n
-        elif attr in State.name:
-            self.states[attr] += n
+    def set(self, attribute, n=1, level=1):
+        if attribute in Effect.name:
+            self.effects[attribute] = [level, n]
+        else:
+            self.get_dict(attribute)[attribute] = n
+
+    def add(self, attribute, n):
+        self.get_dict(attribute)[attribute] += n
 
     def has(self, attribute, value=None):
-        if not value and attribute in Trait.name:
-            return self.traits[attribute]
-        elif not value:
-            return self.states[attribute]
-        elif attribute in Trait.name:
-            return self.traits[attribute] == value
+        if not value:
+            return self.get(attribute)
         else:
-            return self.states[attribute] == value
+            return self.get(attribute) == value
 
     def get(self, attribute):
-        if attribute in Trait.name:
-            return self.traits[attribute]
+        if attribute in Effect.name:
+            tuple = self.effects[attribute]
+            if tuple:
+                return tuple[1]
+            else:
+                return 0
         else:
-            return self.states[attribute]
+            return self.get_dict(attribute)[attribute]
 
     def increment(self, attribute):
         self.states[attribute] += 1
 
     def remove(self, attribute):
-        if attribute in Trait.name:
-            self.traits[attribute] = 0
-        else:
-            self.states[attribute] = 0
+        self.get_dict(attribute).pop(attribute, 0)
 
     def decrement(self, attribute):
-        self.states[attribute] = max(0, self.states[attribute] - 1)
+        if attribute in Effect.name:
+            if self.effects[attribute]:
+                self.effects[attribute][0] = max(0, self.effects[attribute][0] - 1)
+        else:
+            self.states[attribute] = max(0, self.states[attribute] - 1)
 
     def do(self, ability, value):
         if ability == Ability.poison:
-            self.set(State.frozen, value + 1)
+            self.set(Effect.frozen, value + 1)
 
         if ability == Ability.sabotage:
-            self.set(State.sabotaged, value)
+            self.set(Effect.sabotaged, value)
 
         if ability == Ability.improve_weapons:
             if value == 2:
-                self.set(State.improved_weapons_II, value)
+                self.set(Effect.improved_weapons, 2, 2)
             else:
-                self.set(State.improved_weapons)
+                self.set(Effect.improved_weapons)
 
     # custom functions
     def poison(self):
