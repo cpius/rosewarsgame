@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Royal Guard shouldn't get the melee expert attack bonus when attacking ranged units",
     "attack": 3,
     "defence": 1,
     "action": {
