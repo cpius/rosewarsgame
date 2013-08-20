@@ -339,7 +339,7 @@ class Dragoon(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
-    #special_upgrades = [{Trait.flanking: 1}]
+    special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     traits = {Trait.swiftness: 1}
@@ -428,7 +428,7 @@ class Hobelar(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    #special_upgrades = [{Trait.flanking: 1}]
+    special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
