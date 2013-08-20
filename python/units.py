@@ -307,6 +307,7 @@ class Halberdier(Unit):
     attack_bonuses = {Type.Cavalry: 1}
     defence_bonuses = {Type.Cavalry: 1}
     type = Type.Infantry
+    zoc = [Type.Cavalry]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
