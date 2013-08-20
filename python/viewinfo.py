@@ -33,12 +33,15 @@ def get_unit_lines(unit):
             lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
             lines.append("")
 
-    for trait in unit.traits:
+    for trait, level in unit.traits.items():
         if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
-            if unit.has(trait):
-                trait_key = attribute_key(Trait.name[trait], unit.traits[trait])
+            if level == 1:
                 lines.append(Trait.write[trait] + ":")
-                lines.append(trait_descriptions[trait_key])
+                lines.append(trait_descriptions[Trait.name[trait]][1])
+                lines.append("")
+            elif level > 1:
+                lines.append(Trait.write[trait] + ", level " + str(level) + ":")
+                lines.append(trait_descriptions[Trait.name[trait]][level])
                 lines.append("")
 
     for ability, level in unit.abilities.items():
