@@ -91,66 +91,116 @@ def enum(n, *sequential, **named):
 
 
 trait_descriptions = {
-    "attack_cooldown": "Can only attack every third turn.",
-    "berserking": "Can move 4 tiles if movement ends with an attack.",
-    "big_shield": "+2D v melee",
-    "bloodlust": "Every kill gives it an extra attack",
-    "cavalry_charging": "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement",
-    "combat_agility": "Can make an attack after its first action. (But not a second move.)",
-    "crusading": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.",
-    "defence_maneuverability": "Can move two tiles if one of them is sideways.",
-    "double_attack_cost": "Attack takes two actions.",
-    "extra_life": "It takes two successful hits to kill this unit.",
-    "far_sighted": "-1A if target is less than 4 tiles away.",
-    "flag_bearing": "Friendly melee units receive +2A while adjacent to Flag Bearer.",
-    "flag_bearing_B": "Friendly melee units receive +2A while surrounding Flag Bearer.",
-    "melee_expert": "+1A, +1D vs melee units.",
-    "melee_freeze": "Units adjacent to it can only attack it, not move.",
-    "pikeman_specialist": "Pikemen do not get +1A/+1D against it.",
-    "lancing": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A.",
-    "longsword": "Also hits the 4 nearby tiles in the attack direction.",
-    "push": "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
-            "must retreat directly backwards or die.",
-    "rage": "Can make an attack after it's move. (But not a second move.)",
-    "scouting": "Can move past all units.",
-    "sharpshooting": "Targets have their defence reduced to 1 during the attack.",
-    "swiftness": "Can use remaining moves after attacking.",
-    "tall_shield": "+1D against ranged attacks.",
-    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
-    "attack_skill": "Is added to the units base attack",
-    "defence_skill": "Is added to the units base defence",
-    "range_skill": "Is added to the units base range",
-    "movement_skill": "Is added to the units base movement",
-    "fire_arrows": "+3A vs Siege Weapons",
-    "cavalry_specialist": "+1A +1D vs Cavalry",
-    "siege_weapon_specialist": "+1A +1D vs Siege Weapons",
-    "flanking": "+2A vs Infantry"
+    "attack_cooldown": {
+        1: "Can only attack every third turn.",
+        2: "Can only attack every second turn"},
+    "berserking": {
+        1: "Can move 4 tiles if movement ends with an attack."},
+    "big_shield": {
+        1: "+2D v melee"},
+    "bloodlust": {
+        1: "Every kill gives it an extra attack"},
+    "cavalry_charging": {
+        1: "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement"},
+    "combat_agility": {
+        1: "Can make an attack after its first action. (But not a second move.)"},
+    "crusading": {
+        1: "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.",
+        2: "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A, +1D"},
+    "defence_maneuverability": {
+        1: "Can move two tiles if one of them is sideways."},
+    "double_attack_cost": {
+        1: "Attack takes two actions."},
+    "extra_life": {
+        1: "It takes two successful hits to kill this unit."},
+    "far_sighted": {
+        1: "-1A if target is less than 4 tiles away."},
+    "flag_bearing": {
+        1: "Friendly melee units receive +2A while adjacent to Flag Bearer."},
+    "flag_bearing_B": {
+        1: "Friendly melee units receive +2A while surrounding Flag Bearer."},
+    "melee_expert": {
+        1: "+1A, +1D vs melee units."},
+    "melee_freeze": {
+        1: "Units adjacent to it can only attack it, not move."},
+    "pikeman_specialist": {
+        1: "Pikemen do not get +1A/+1D against it."},
+    "lancing": {
+        1: "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."},
+    "longsword": {
+        1: "Also hits the 4 nearby tiles in the attack direction."},
+    "push": {
+        1: "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
+        "must retreat directly backwards or die."},
+    "rage": {
+        1: "Can make an attack after it's move. (But not a second move.)"},
+    "scouting": {
+        1: "Can move past all units."},
+    "sharpshooting": {
+        1: "Targets have their defence reduced to 1 during the attack."},
+    "swiftness": {
+        1: "Can use remaining moves after attacking."},
+    "tall_shield": {
+        1: "+1D against ranged attacks."},
+    "triple_attack": {
+        1: "Also hits the two diagonally nearby tiles in the attack direction."},
+    "attack_skill": {
+        1: "Is added to the units base attack"},
+    "defence_skill": {
+        1: "Is added to the units base defence"},
+    "range_skill": {
+        1: "Is added to the units base range"},
+    "movement_skill": {
+        1: "Is added to the units base movement"},
+    "fire_arrows": {
+        1: "+3A vs Siege Weapons"},
+    "cavalry_specialist": {
+        1: "+1A +1D vs Cavalry"},
+    "siege_weapon_specialist": {
+        1: "+1A +1D vs Siege Weapons"},
+    "flanking": {
+        1: "+2A vs Infantry"}
 }
 
 state_descriptions = {
     "attack_frozen": "Unit cannot attack",
-    "bribed": "Whether a unit is currently bribed by a Diplomat.",
     "extra_action": "Whether the unit is doing its extra action.",
-    "frozen": "Unit cannot perform any actions.",
-    "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
-    "improved_weapons_II": "Whether a unit currently has been the target of an improve_weapons_II function",
     "lost_extra_life": "Whether the unit has lost its extra life",
     "movement_remaining": "Movement points left for doing an extra action",
     "recently_bribed": "Whether a unit was bribed last turn.",
-    "sabotaged": "Whether a unit is currently sabotaged by a Saboteur.",
     "used": "Whether a unit has been used this turn.",
     "experience": "Experience.",
     "recently_upgraded": "Whether a unit was upgraded this turn"
 }
 
+
+effect_descriptions = {
+    "bribed": {
+        1: "Whether a unit is currently bribed by a Diplomat."},
+    "frozen": {
+        1: "Unit cannot perform any actions."},
+    "improved_weapons": {
+        1: "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith."},
+    "improved_weapons_II": {
+        1: "Whether a unit currently has been the target of an improve_weapons_II function"},
+    "sabotaged": {
+        1: "Whether a unit is currently sabotaged by a Saboteur."},
+}
+
 ability_descriptions = {
-    "bribe": "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
-             "the same unit on your next turn. The unit gets +1A until end of turn.",
-    "improve_weapons": "Give melee unit +3 attack, +1 defence until your next turn.",
-    "pikeman_specialist": "Pikemen do not get +1D against Hussar.",
-    "poison": "Freezes a unit for 2 turns.",
-    "sabotage": "Reduces a units defence to 0 for 1 turn.",
-    "triple_attack": "Also hits the two diagonally nearby tiles in the attack direction.",
+    "bribe": {
+        1: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
+        "the same unit on your next turn. The unit gets +1A until end of turn."},
+    "improve_weapons": {
+        1: "Give melee unit +3 attack, +1 defence until your next turn."},
+    "pikeman_specialist": {
+        1: "Pikemen do not get +1D against Hussar."},
+    "poison": {
+        1: "Freezes a unit for 2 turns."},
+    "sabotage": {
+        1: "Reduces a units defence to 0 for 1 turn."},
+    "triple_attack": {
+        1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
 
 
@@ -172,9 +222,11 @@ Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
 
 State = enum(1000, *(trait for trait in dict(state_descriptions)))
 
-Ability = enum(2000, *(ability for ability in ability_descriptions))
+Effect = enum(2000, *(trait for trait in dict(effect_descriptions)))
 
-Type = enum(3000, *types)
+Ability = enum(3000, *(ability for ability in ability_descriptions))
+
+Type = enum(4000, *types)
 
 
 if 1 == 2:
@@ -249,13 +301,22 @@ if 1 == 2:
     class Ability:
         bribe = None
         improve_weapons = None
-        pikeman_specialist = None
         poison = None
         sabotage = None
         triple_attack = None
 
         name = {}
         write = {}
+
+    class Effect:
+        bribed = None
+        improved_weapons = None
+        frozen = None
+        sabotaged = None
+
+        name = {}
+        write = {}
+
 
 board_height = 8
 board_width = 5
