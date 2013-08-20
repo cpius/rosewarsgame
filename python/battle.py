@@ -24,8 +24,8 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
         defence += int(action.is_crusading(enemy_units, 2))
         if attacking_unit.type in defending_unit.defence_bonuses:
             defence += defending_unit.defence_bonuses[attacking_unit.type]
-        defence += int(defending_unit.has(State.improved_weapons))
-        defence += int(defending_unit.has(State.improved_weapons_II))
+        defence += int(defending_unit.has(Effect.improved_weapons))
+        defence += int(defending_unit.has(Effect.improved_weapons_II))
         defence += int(attacking_unit.is_melee() and defending_unit.has(Trait.melee_expert))
         defence -= int(attacking_unit.has(Trait.pikeman_specialist) and defending_unit.name == "Pikeman")
         defence += int(attacking_unit.is_ranged() and defending_unit.has(Trait.tall_shield))
@@ -38,10 +38,10 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
         if attacking_unit.has(Trait.sharpshooting):
             return 1
 
-        if defending_unit.has(State.sabotaged, 1):
+        if defending_unit.has(Effect.sabotaged, 1):
             return 0
 
-        if defending_unit.has(State.sabotaged, 2):
+        if defending_unit.has(Effect.sabotaged, 2):
             return -1
 
         return defence
@@ -64,10 +64,11 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
         attack = 0
         attack += action.lancing()
         attack += int(action.is_crusading(player_units))
+        attack += int(action.is_crusading(player_units, 2))
         attack += 2 * int(action.has_high_morale(player_units))
-        attack += attacking_unit.get(State.bribed)
-        attack += 3 * int(attacking_unit.has(State.improved_weapons))
-        attack += 2 * int(attacking_unit.has(State.improved_weapons_II))
+        attack += attacking_unit.get(Effect.bribed)
+        attack += 3 * int(attacking_unit.has(Effect.improved_weapons))
+        attack += 2 * int(attacking_unit.has(Effect.improved_weapons_II))
         if defending_unit.type in attacking_unit.attack_bonuses:
             attack += attacking_unit.attack_bonuses[defending_unit.type]
         attack -= int(defending_unit.has(Trait.pikeman_specialist) and attacking_unit.name == "Pikeman")
@@ -76,6 +77,7 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
         attack += int(attacking_unit.has(Trait.cavalry_specialist) and defending_unit.type == Type.Cavalry)
         attack += int(attacking_unit.has(Trait.siege_weapon_specialist) and defending_unit.type == Type.Siege_Weapon)
         attack += 3 * int(attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.Siege_Weapon)
+        attack += 2 * int(attacking_unit.has(Trait.flanking) and defending_unit.type == Type.Infantry)
 
         return attack
 

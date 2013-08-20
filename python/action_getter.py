@@ -132,7 +132,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
 
             elif ability == Ability.bribe:
-                target_positions = [pos for pos, target in enemy_units.items() if not target.get(State.bribed) and not
+                target_positions = [pos for pos, target in enemy_units.items() if not target.get(Effect.bribed) and not
                                     target.has(State.recently_bribed)]
             else:
                 target_positions = []
@@ -268,7 +268,7 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
 
 
 def can_use_unit(unit, is_extra_action):
-    is_frozen = unit.has(State.frozen)
+    is_frozen = unit.has(Effect.frozen)
     is_bribed = unit.has(State.recently_bribed)
     is_used = unit.has(State.used) and not unit.has(State.extra_action)
 

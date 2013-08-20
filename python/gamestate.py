@@ -127,6 +127,9 @@ class Gamestate:
                     elif attribute in ability_descriptions:
                         ability = getattr(Ability, attribute)
                         unit.set(ability, value)
+                    elif attribute in effect_descriptions:
+                        effect = getattr(Effect, attribute)
+                        unit.set(effect, value)
 
             units[position] = unit
 
@@ -177,7 +180,7 @@ class Gamestate:
     def is_ended(self):
         backline = 8
         for position, unit in self.player_units.items():
-            if not unit.has(State.bribed):
+            if not unit.has(Effect.bribed):
                 if position.row == backline:
                     return True
 
