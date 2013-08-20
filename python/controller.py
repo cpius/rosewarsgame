@@ -359,16 +359,19 @@ class Controller(object):
             self.view.draw_game(self.game)
             self.view.draw_action(action, outcome, self.game)
 
-            if action.move_with_attack is None and action.attack_successful(outcome.for_position(action.target_at), self.game.gamestate):
-                move_with_attack = self.ask_about_move_with_attack(action)
+            if action.move_with_attack is None:
+                rolls = outcome.for_position(action.target_at)
+                if (action.is_push() and action.attack_successful(rolls, self.game.gamestate)) or \
+                        action.is_successful(rolls, self.game.gamestate):
+                    move_with_attack = self.ask_about_move_with_attack(action)
+    
+                    self.game.save_option("move_with_attack", move_with_attack)
+                    if self.game.is_enemy_network():
+                        self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
 
-                self.game.save_option("move_with_attack", move_with_attack)
-                if self.game.is_enemy_network():
-                    self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
-
-                if move_with_attack:
-                    self.view.draw_post_movement(action)
-                    self.game.gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
+                    if move_with_attack:
+                        self.view.draw_post_movement(action)
+                        self.game.gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
 
         else:
             if not outcome:
