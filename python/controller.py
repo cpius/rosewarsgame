@@ -110,7 +110,12 @@ class Controller(object):
         if len(self.selected_unit.abilities) > 1:
             index = self.get_input_abilities(self.selected_unit)
 
+            if index == "escape":
+                self.clear_move()
+                return
+
             ability = self.selected_unit.abilities.keys()[index]
+
         else:
             ability = self.selected_unit.abilities.keys()[0]
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
@@ -207,6 +212,9 @@ class Controller(object):
                     if matching_actions:
                         return matching_actions
 
+            elif self.escape(event):
+                self.clear_move()
+
             elif self.quit_game_requested(event):
                 self.exit_game()
 
@@ -219,6 +227,7 @@ class Controller(object):
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
+        self.view.draw_game(self.game)
 
     def run_game(self):
 
@@ -289,8 +298,12 @@ class Controller(object):
             if event.type == KEYDOWN and event.key == K_1:
                 return 0
 
-            if event.type == KEYDOWN and event.key == K_2:
+            elif event.type == KEYDOWN and event.key == K_2:
                 return 1
+
+            elif self.escape(event):
+                self.clear_move()
+                return "escape"
 
             elif self.quit_game_requested(event):
                 self.exit_game()
@@ -463,6 +476,9 @@ class Controller(object):
 
     def command_q_down(self, key):
         return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
+
+    def escape(self, event):
+        return event.type == KEYDOWN and event.key == K_ESCAPE
 
     def game_end(self):
         self.view.draw_game_end(self.game.current_player().color)
