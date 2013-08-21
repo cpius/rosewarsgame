@@ -204,19 +204,6 @@ ability_descriptions = {
         1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
 
-
-def get_ability_description(ability, level):
-    if ability == Ability.bribe and level == 2:
-        return "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't " \
-               "bribe the same unit on your next turn. The unit gets +1A until end of turn."
-    elif ability == Ability.improve_weapons and level == 2:
-        return "Give melee unit +2 attack, +1 defence for two turns."
-    elif ability == Ability.poison and level == 2:
-        return "Freezes a unit for 3 turns"
-    elif ability == Ability.sabotage and level == 2:
-        return "Reduces a units defence to 0 for 1 turn."
-
-
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
@@ -327,6 +314,17 @@ eight_directions_namedtuple = collections.namedtuple("eight_directions", [name f
 eight_directions = eight_directions_namedtuple(*(Direction(name) for name in Direction.to_coordinates))
 four_directions_namedtuple = collections.namedtuple("directions", [name for name in ["Up", "Down", "Left", "Right"]])
 directions = four_directions_namedtuple(*(Direction(name) for name in ["Up", "Down", "Left", "Right"]))
+
+
+def get_description(attribute, level=1):
+    if attribute in Effect.name:
+        return effect_descriptions[Effect.name[attribute]][level]
+    elif attribute in State.name:
+        return state_descriptions[State.name[attribute]][level]
+    elif attribute in Ability.name:
+        return ability_descriptions[Ability.name[attribute]][level]
+    elif attribute in Trait.name:
+        return trait_descriptions[Trait.name[attribute]][level]
 
 
 def distance(position1, position2):
