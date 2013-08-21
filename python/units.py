@@ -1,14 +1,13 @@
-from collections import defaultdict
 import setup_settings as settings
 from common import *
 
 
 class Unit(object):
     def __init__(self):
-        self.traits = defaultdict(int)
-        self.states = defaultdict(int)
-        self.abilities = defaultdict(int)
-        self.effects = defaultdict(tuple)
+        self.traits = {}
+        self.states = {}
+        self.abilities = {}
+        self.effects = {}
 
     name = ""
     zoc = []
@@ -56,63 +55,77 @@ class Unit(object):
         elif attribute in State.name:
             return self.states
 
-    def set(self, attribute, n=1, level=1):
-        if attribute in Effect.name:
-            self.effects[attribute] = [level, n]
-        else:
-            self.get_dict(attribute)[attribute] = n
+    def set(self, attribute, value=1, level=1):
+        self.get_dict(attribute)[attribute] = [value, level]
 
-    def add(self, attribute, n):
-        self.get_dict(attribute)[attribute] += n
-
-    def has(self, attribute, value=None):
-        if not value:
-            return self.get(attribute)
+    def add(self, attribute, value, level=1):
+        assert isinstance(value, int)
+        dict = self.get_dict(attribute)
+        if attribute in dict:
+            dict[attribute][0] += value
         else:
-            return self.get(attribute) == value
+            dict[attribute] = [value, level]
+
+    def add_levels(self, attribute, levels=1):
+        dict = self.get_dict(attribute)
+        if attribute in dict:
+            dict[attribute][1] += levels
+        else:
+            dict[attribute] = [1, levels]
+
+    def has(self, attribute, value=None, level=None):
+        if value:
+            return self.get_value(attribute) == value
+        elif level:
+            return self.get_level(attribute) == level
+        else:
+            return self.get_value(attribute)
 
     def get(self, attribute):
-        if attribute in Effect.name:
-            tuple = self.effects[attribute]
-            if tuple:
-                return tuple[1]
-            else:
-                return 0
-        else:
-            return self.get_dict(attribute)[attribute]
+        return self.get_value(attribute)
 
-    def increment(self, attribute):
-        self.states[attribute] += 1
+    def get_value(self, attribute):
+        dict = self.get_dict(attribute)
+        if attribute in dict:
+            return dict[attribute][0]
+        else:
+            return 0
+
+    def get_level(self, attribute):
+        dict = self.get_dict(attribute)
+        if attribute in dict:
+            return dict[attribute][1]
+        else:
+            return 0
+
+    def set_value(self, attribute, value, level=1):
+        self.get_dict(attribute)[attribute] = [value, level]
 
     def remove(self, attribute):
-        self.get_dict(attribute).pop(attribute, 0)
+        dict = self.get_dict(attribute)
+        if attribute in dict:
+            del dict[attribute]
 
     def decrement(self, attribute):
-        if attribute in Effect.name:
-            if self.effects[attribute]:
-                self.effects[attribute][0] = max(0, self.effects[attribute][0] - 1)
-        else:
-            self.states[attribute] = max(0, self.states[attribute] - 1)
+        dict = self.get_dict(attribute)
+        if attribute in dict:
+            dict[attribute][0] = max(0, dict[attribute][0] - 1)
 
-    def do(self, ability, value):
+    def increment(self, attribute):
+        self.add(attribute, 1)
+
+    def do(self, ability, level):
         if ability == Ability.poison:
-            self.set(Effect.frozen, value + 1)
+            self.set(Effect.frozen, level + 1)
 
         if ability == Ability.sabotage:
-            self.set(Effect.sabotaged, value)
+            self.set(Effect.sabotaged, level)
 
         if ability == Ability.improve_weapons:
-            if value == 2:
+            if level == 2:
                 self.set(Effect.improved_weapons, 2, 2)
             else:
                 self.set(Effect.improved_weapons)
-
-    # custom functions
-    def poison(self):
-        self.freeze(2)
-
-    def freeze(self, n):
-        self.set(State.frozen, max(self.get(State.frozen), n))
 
     def gain_xp(self):
         if not self.has(State.used) and not settings.beginner_mode:
@@ -128,57 +141,55 @@ class Unit(object):
     def is_ranged(self):
         return self.range > 1
 
-    def get_upgrade_choice(self, choice_number):
+    def get_upgrade_choice(self, choice_index):
         if getattr(self, "upgrades"):
-            return self.upgrades[choice_number].replace(" ", "_")
+            return self.upgrades[choice_index].replace(" ", "_")
 
-        available_upgrades = []
+        upgrades = []
         if getattr(self, "special_upgrades"):
             for upgrade in self.special_upgrades:
-                for attribute in upgrade:
-                    is_trait_already_upgraded = attribute in self.get_traits_not_in_base()
-                    is_ability_already_upgraded = attribute in self.get_abilities_not_in_base()
-                    if not is_trait_already_upgraded and not is_ability_already_upgraded:
-                        available_upgrades.append(upgrade)
+                if not self.has_upgrade(upgrade):
+                    upgrades.append(upgrade)
 
-        if len(available_upgrades) == 2:
-            return available_upgrades[choice_number]
-        if len(available_upgrades) == 1:
-            return [available_upgrades[0], self.final_upgrades[0]][choice_number]
+        while len(upgrades) < 2:
+            upgrades.append(self.final_upgrades[1 - len(upgrades)])
 
-        return self.final_upgrades[choice_number]
+        return dict((key, [1, level]) for key, level in upgrades[choice_index].items())
+
+    def has_upgrade(self, upgrade):
+        attribute = upgrade.keys()[0]
+        base_unit_attributes = self.make(self.name).get_dict(attribute)
+        self_attributes = self.get_dict(attribute)
+
+
+        if attribute not in self_attributes:
+            return False
+        elif attribute not in base_unit_attributes and attribute in self_attributes:
+            return True
+        else:
+            return base_unit_attributes[attribute] != self_attributes[attribute]
 
     def get_upgraded_unit(self, choice):
-        simple_upgrade = False
-        if getattr(self, "upgrades"):
-            upgraded_unit = globals()[choice]()
-            simple_upgrade = True
+
+        if isinstance(choice, basestring):
+            upgraded_unit = self.make(choice)
+
         else:
-            upgraded_unit = globals()[self.name.replace(" ", "_")]()
+            upgraded_unit = self.make(self.name)
+
+            for trait, info in self.traits.items():
+                upgraded_unit.set(trait, *info)
+
+            for ability, info in self.abilities.items():
+                upgraded_unit.set(ability, *info)
+
+            for attribute, info in choice.items():
+                upgraded_unit.add_levels(attribute, info[1])
+
+        for state, info in self.states.items():
+            upgraded_unit.set(state, *info)
 
         upgraded_unit.set(State.recently_upgraded)
-
-        for state, value in self.states.items():
-            upgraded_unit.add(state, value)
-
-        if simple_upgrade:
-            return upgraded_unit
-
-        for trait, value in self.get_traits_not_in_base().items():
-            upgraded_unit.add(trait, value)
-        for ability, value in self.get_abilities_not_in_base().items():
-            upgraded_unit.set(ability, value)
-
-        for attribute, value in choice.items():
-            upgraded_unit.add(attribute, value)
-
-            if hasattr(upgraded_unit, "special_upgrades"):
-                chosen_index = None
-                for i, special_upgrade in enumerate(upgraded_unit.special_upgrades):
-                    if special_upgrade == choice:
-                        chosen_index = i
-                if chosen_index is int:
-                    del upgraded_unit.special_upgrades[chosen_index]
 
         return upgraded_unit
 
@@ -189,26 +200,12 @@ class Unit(object):
         return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
 
     def get_abilities_not_in_base(self):
-        abilities = self.abilities.copy()
-        base_unit = globals()[self.name.replace(" ", "_")]()
-        for ability, value in abilities.items():
-            if ability in base_unit.abilities and value == base_unit.abilities[ability]:
-                del abilities[ability]
-
-        return abilities
+        base_unit = self.make(self.name)
+        return dict((ability, info) for ability, info in self.abilities.items() if info[1] != base_unit.get_level(ability))
 
     def get_traits_not_in_base(self):
-        traits = dict((trait, value) for trait, value in self.traits.items() if value)
-
-        base_unit = globals()[self.name.replace(" ", "_")]()
-        for trait in base_unit.traits:
-            if trait in traits:
-                del traits[trait]
-
-        return traits
-
-    def get_states(self):
-        return dict((state, value) for state, value in self.states.items() if value)
+        base_unit = self.make(self.name)
+        return dict((trait, info) for trait, info in self.traits.items() if info[1] != base_unit.get_level(trait))
 
     def is_milf(self):
         experience = self.get(State.experience)
@@ -216,10 +213,10 @@ class Unit(object):
         return experience and experience % to_upgrade == 0 and not self.get(State.recently_upgraded)
 
     def to_document(self):
-        attributes = merge(self.get_states(), self.get_traits_not_in_base(), self.get_abilities_not_in_base())
+        attributes = merge(self.states, self.effects, self.get_traits_not_in_base(), self.get_abilities_not_in_base())
 
         if attributes:
-            unit_dict = readable_attributes(attributes)
+            unit_dict = readable(attributes)
             unit_dict["name"] = self.name
             return unit_dict
         else:

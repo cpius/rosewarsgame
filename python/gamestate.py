@@ -123,13 +123,16 @@ class Gamestate:
                         unit.set(state, value)
                     elif attribute in trait_descriptions:
                         trait = getattr(Trait, attribute)
-                        unit.set(trait, value)
+                        unit.set(trait, level=value)
                     elif attribute in ability_descriptions:
                         ability = getattr(Ability, attribute)
-                        unit.set(ability, value)
+                        unit.set(ability, level=value)
                     elif attribute in effect_descriptions:
                         effect = getattr(Effect, attribute)
-                        unit.set(effect, value)
+                        if isinstance(value, int):
+                            unit.set(effect, value)
+                        else:
+                            unit.set(effect, level=value[0], value=value[1])
 
             units[position] = unit
 

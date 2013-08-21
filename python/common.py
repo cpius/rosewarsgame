@@ -391,25 +391,36 @@ class memoized(object):
         return functools.partial(self.__call__, obj)
 
 
-def readable_attributes(attributes):
+def readable(attributes):
     dictionary = {}
-    for key, value in attributes.items():
-        if value:
-            if key in Trait.name:
-                dictionary[Trait.name[key]] = value
-            elif key in Ability.name:
-                dictionary[Ability.name[key]] = value
-            else:
-                dictionary[State.name[key]] = value
+    for key, info in attributes.items():
+        if key in Trait.name:
+            if info[1]:
+                dictionary[Trait.name[key]] = info[1]
+        elif key in Ability.name:
+            if info[1]:
+                dictionary[Ability.name[key]] = info[1]
+        elif key in State.name:
+            if info[0]:
+                dictionary[State.name[key]] = info[0]
+        elif key in Effect.name:
+            if info[1] == 1:
+                dictionary[Effect.name[key]] = info[0]
+            elif info[1]:
+                dictionary[Effect.name[key]] = info
+
     return dictionary
 
 
-def merge(first_dictionary, second_dictionary, third_dictionary=None):
+def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dictionary=None):
     merged_dictionary = first_dictionary.copy()
     merged_dictionary.update(second_dictionary)
 
     if third_dictionary:
         merged_dictionary.update(third_dictionary)
+
+    if fourth_dictionary:
+        merged_dictionary.update(fourth_dictionary)
 
     return merged_dictionary
 
