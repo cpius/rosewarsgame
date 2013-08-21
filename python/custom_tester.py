@@ -88,6 +88,8 @@ def run_test(file):
                 print "Wrong outcome for", file
                 if "description" in test_document:
                     print "Description:", test_document["description"]
+                print "Action:"
+                print action
                 print "Actual gamestate:"
                 print document_to_string(actual_gamestate_document)
                 print "Expected gamestate:"
@@ -118,6 +120,8 @@ def run_test(file):
                     print "Wrong outcome for", file
                     if "description" in test_document:
                         print "Description:", test_document["description"]
+                    print "Action:"
+                    print action
                     print "Actual gamestate:"
                     print document_to_string(actual_gamestate_document)
                     print "Expected gamestate:"
