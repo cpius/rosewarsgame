@@ -336,7 +336,7 @@ class Controller(object):
 
         upgrade_choice_to_save = upgrade_choice
         if not isinstance(upgrade_choice, basestring):
-            upgrade_choice_to_save = readable_attributes(upgrade_choice)
+            upgrade_choice_to_save = readable(upgrade_choice)
 
         self.game.save_option("upgrade", upgrade_choice_to_save)
         if self.game.is_enemy_network():
