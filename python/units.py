@@ -696,7 +696,7 @@ class Diplomat(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    #special_upgrades = [{Ability.bribe: 1}]
+    special_upgrades = [{Ability.bribe: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
 
