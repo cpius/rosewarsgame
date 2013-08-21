@@ -45,7 +45,7 @@ def get_unit_lines(unit):
                 lines.append("")
 
     for ability, info in unit.abilities.items():
-        level = info[0]
+        level = info[1]
         if level == 1:
             lines.append(Ability.write[ability] + ":")
             lines.append(get_description(ability, 1))
@@ -113,8 +113,11 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
     else:
         lines = []
         for attribute, info in upgrade_choice.items():
+            if attribute in unit.get_dict(attribute):
+                level = unit.get_dict(attribute)[attribute][1]
+            else:
+                level = info[1]
             name = readable(attribute)
-            level = info[1]
             if level > 1:
                 lines.append(name.replace("_", " ") + ", level " + str(level))
                 lines.append(get_description(attribute, level))
