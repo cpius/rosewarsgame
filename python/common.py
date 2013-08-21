@@ -126,7 +126,8 @@ trait_descriptions = {
     "pikeman_specialist": {
         1: "Pikemen do not get +1A/+1D against it."},
     "lancing": {
-        1: "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A."},
+        1: "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A.",
+        2: "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."},
     "longsword": {
         1: "Also hits the 4 nearby tiles in the attack direction."},
     "push": {
