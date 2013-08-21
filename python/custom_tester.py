@@ -15,6 +15,7 @@ def run_test(file):
         test_document = json.loads(open(file).read())
     except ValueError:
         print "Failed to load test document: " + file
+        print
         return "read error"
 
     try:
@@ -32,6 +33,7 @@ def run_test(file):
                 print "Wrong action existence for", file
                 if "description" in test_document:
                     print "Description:", test_document["description"]
+                print "Gamestate:", gamestate
                 if expected:
                     print "Requested action: " + str(action) + "\n"
                 else:
@@ -40,6 +42,7 @@ def run_test(file):
                 print "Available actions:"
                 for available_action in available_actions:
                     print str(available_action)
+                print
                 return "wrong result"
 
         if test_document["type"] == "Is attack and defence correct":
@@ -63,8 +66,10 @@ def run_test(file):
                 print "Wrong attack / defence for", file
                 if "description" in test_document:
                     print "Description:", test_document["description"]
+                print "Gamestate: ", gamestate
                 print "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence)
                 print "Actual attack / defence " + str(actual_attack) + "," + str(actual_defence)
+                print
                 return "wrong result"
 
         if test_document["type"] == "Is outcome correct":
@@ -93,6 +98,7 @@ def run_test(file):
                 print document_to_string(actual_gamestate_document)
                 print "Expected gamestate:"
                 print document_to_string(expected_gamestate_document)
+                print
                 return "wrong result"
 
         if test_document["type"] == "Is outcome correct":
@@ -125,6 +131,7 @@ def run_test(file):
                     print document_to_string(actual_gamestate_document)
                     print "Expected gamestate:"
                     print document_to_string(expected_gamestate_document)
+                    print
                     return "wrong result"
             else:
                 return "pass"
@@ -149,6 +156,7 @@ def run_test(file):
                 print document_to_string(actual_gamestate_document)
                 print "Expected gamestate:"
                 print document_to_string(expected_gamestate_document)
+                print
                 return "wrong result"
 
         if test_document["type"] == "Upgrade":
@@ -159,7 +167,7 @@ def run_test(file):
                 upgrade_choice = test_document["upgrade"]
             else:
                 upgrade_choice = enum_attributes(test_document["upgrade"])
-                upgrade_choice = dict((key, [level, 1]) for key, level in upgrade_choice.items())
+                upgrade_choice = dict((key, [1, level]) for key, level in upgrade_choice.items())
 
             for position, unit in gamestate.player_units.items():
                 if unit.is_allowed_upgrade_choice(upgrade_choice):
@@ -178,6 +186,7 @@ def run_test(file):
                 print document_to_string(actual_gamestate_document)
                 print "Expected gamestate:"
                 print document_to_string(expected_gamestate_document)
+                print
                 return "wrong result"
 
     except Exception as e:
