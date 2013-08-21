@@ -66,9 +66,9 @@ def get_attack_rating(attacking_unit, defending_unit, action, player_units):
         attack += int(action.is_crusading(player_units))
         attack += int(action.is_crusading(player_units, 2))
         attack += 2 * int(action.has_high_morale(player_units))
-        attack += attacking_unit.get(Effect.bribed)
-        attack += 3 * int(attacking_unit.has(Effect.improved_weapons))
-        attack += 2 * int(attacking_unit.has(Effect.improved_weapons_II))
+        attack += int(attacking_unit.has(Effect.bribed))
+        attack += 3 * int(attacking_unit.has(Effect.improved_weapons, level=1))
+        attack += 2 * int(attacking_unit.has(Effect.improved_weapons, level=2))
         if defending_unit.type in attacking_unit.attack_bonuses:
             attack += attacking_unit.attack_bonuses[defending_unit.type]
         attack -= int(defending_unit.has(Trait.pikeman_specialist) and attacking_unit.name == "Pikeman")
