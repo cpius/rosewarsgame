@@ -28,19 +28,19 @@ class Unit(object):
 
     @property
     def attack(self):
-        return self.base_attack + self.get(Trait.attack_skill)
+        return self.base_attack + self.get_level(Trait.attack_skill)
 
     @property
     def defence(self):
-        return self.base_defence + self.get(Trait.defence_skill)
+        return self.base_defence + self.get_level(Trait.defence_skill)
 
     @property
     def range(self):
-        return self.base_range + self.get(Trait.range_skill)
+        return self.base_range + self.get_level(Trait.range_skill)
 
     @property
     def movement(self):
-        return self.base_movement + self.get(Trait.movement_skill)
+        return self.base_movement + self.get_level(Trait.movement_skill)
 
     def __repr__(self):
         return self.name
