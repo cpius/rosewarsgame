@@ -113,7 +113,7 @@ def register_upgrade(action_document, gamestate, game_id):
             if upgrade_options[choice] == upgrade_options[choice]:
                 is_valid_choice = True
         else:
-            if action_document["upgrade"] == readable_attributes(upgrade_options[choice]):
+            if action_document["upgrade"] == readable(upgrade_options[choice]):
                 is_valid_choice = True
     if not is_valid_choice:
         message = "The upgrade must be one of "
@@ -121,7 +121,7 @@ def register_upgrade(action_document, gamestate, game_id):
             if isinstance(upgrade_options[choice], basestring):
                 message += upgrade_options[choice]
             else:
-                message += str(readable_attributes(upgrade_options[0]))
+                message += str(readable(upgrade_options[0]))
             if choice == 0:
                 message += " and "
 
