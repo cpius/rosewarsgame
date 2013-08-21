@@ -391,6 +391,16 @@ class memoized(object):
 
 
 def readable(attributes):
+    if isinstance(attributes, int):
+        if attributes in Trait.name:
+            return Trait.name[attributes].title()
+        if attributes in Ability.name:
+            return Ability.name[attributes].title()
+        if attributes in Effect.name:
+            return Effect.name[attributes].title()
+        if attributes in State.name:
+            return State.name[attributes].title()
+
     dictionary = {}
     for key, info in attributes.items():
         if key in Trait.name:
