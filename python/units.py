@@ -519,7 +519,7 @@ class Viking(Unit):
     defence_bonuses = {Type.Siege_Weapon: 1}
     zoc = []
     type = Type.Infantry
-    #special_upgrades = [{Trait.rage: 1}, {Trait.siege_weapon_specialist: 1}]
+    special_upgrades = [{Trait.siege_weapon_specialist: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     traits = {Trait.rage: 1, Trait.extra_life: 1}
