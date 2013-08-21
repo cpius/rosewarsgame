@@ -89,6 +89,9 @@ def do_action(gamestate, action, outcome):
 
     update_unit_position()
 
+    if unit.has(Trait.scouting):
+        unit.gain_xp()
+
     if action.is_attack():
         unit.gain_xp()
         rolls = outcome.for_position(action.target_at)

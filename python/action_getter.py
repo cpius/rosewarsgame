@@ -34,7 +34,10 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         return Action(units, start_at, **terms)
 
     def melee_attack_actions(moveset):
-        return [make_action(terms) for terms in attack_generator(moveset)]
+        if unit.attack > 0:
+            return [make_action(terms) for terms in attack_generator(moveset)]
+        else:
+            return []
 
     def ranged_attack_actions(attackset):
         return [Action(units, start_at, target_at=target_at) for target_at in attackset]
@@ -155,7 +158,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         moveset = moves_set(start_at, frozenset(units), frozenset([]), unit.movement, unit.movement)
         moves = move_actions(moveset)
 
-        return moves, []
+        return moves
 
     zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
@@ -185,7 +188,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         moves, attacks = berserking()
 
     if unit.has(Trait.scouting):
-        moves, attacks = scouting()
+        moves = scouting()
 
     if unit.has(Trait.defence_maneuverability):
         moves, attacks = defence_maneuverability()
