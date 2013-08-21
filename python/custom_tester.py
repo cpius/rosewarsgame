@@ -171,7 +171,14 @@ def run_test(file):
             if actual_gamestate_document == expected_gamestate_document:
                 return "pass"
             else:
-                print "Wrong turn shift for", file
+                print "wrong result upgrade for", file
+                if "description" in test_document:
+                    print "Description:", test_document["description"]
+                print "Actual gamestate:"
+                print document_to_string(actual_gamestate_document)
+                print "Expected gamestate:"
+                print document_to_string(expected_gamestate_document)
+                return "wrong result"
 
     except Exception as e:
         print file
