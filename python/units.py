@@ -541,7 +541,7 @@ class Cannon(Unit):
     zoc = []
     type = Type.Siege_Weapon
     experience_to_upgrade = 3
-    #special_upgrades = [{Trait.fire_arrows: 1}, {Trait.attack_cooldown: 2, Trait.far_sighted: 1}]
+    special_upgrades = [{Trait.attack_cooldown: 1, Trait.far_sighted: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 

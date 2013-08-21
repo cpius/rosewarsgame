@@ -58,7 +58,7 @@ def do_action(gamestate, action, outcome):
         if unit.has(Trait.attack_cooldown) and action.is_attack():
             unit.set(State.attack_frozen, 3)
 
-        if unit.has(Trait.attack_cooldown, 2) and action.is_attack():
+        if unit.has(Trait.attack_cooldown, level=2) and action.is_attack():
             unit.set(State.attack_frozen, 2)
 
     def update_unit_position():
