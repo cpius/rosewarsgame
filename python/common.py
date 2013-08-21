@@ -192,6 +192,8 @@ ability_descriptions = {
     "bribe": {
         1: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
         "the same unit on your next turn. The unit gets +1A until end of turn."},
+        2: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
+        "the same unit on your next turn. The unit gets +2A until end of turn."},
     "improve_weapons": {
         1: "Give melee unit +3 attack, +1 defence until your next turn."},
     "pikeman_specialist": {
