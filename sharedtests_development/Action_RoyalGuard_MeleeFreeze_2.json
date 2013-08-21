@@ -1,6 +1,7 @@
 {
     "type": "Does action exist",
-    "result": true,
+    "description": "Away movement is not allowed with melee_freeze",
+    "result": false,
     "action": {
         "start_at": "B5",
         "end_at": "B4"
@@ -14,8 +15,7 @@
         "player2_units": {
             "B6": {
                 "name": "Royal Guard",
-                "melee_expert": 1,
-                "tall_shield": 1
+                "melee_freeze": 1
             }
         }
     }

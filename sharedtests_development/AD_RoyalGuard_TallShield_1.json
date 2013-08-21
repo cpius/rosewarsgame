@@ -1,6 +1,6 @@
 {
     "type": "Is attack and defence correct",
-    "description": "Does Royal Guard_II_B get its tall shield bonus",
+    "description": "Royal Guard should get its tall shield bonus",
     "attack": 4,
     "defence": 4,
     "action": {

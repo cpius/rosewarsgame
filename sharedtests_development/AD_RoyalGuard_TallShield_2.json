@@ -1,16 +1,17 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Tall shield bonus doesnt apply against melee units",
     "attack": 3,
     "defence": 3,
     "action": {
-        "start_at": "B4",
-        "end_at": "B4",
-        "target_at": "A4",
+        "start_at": "A4",
+        "end_at": "A4",
+        "target_at": "B4",
         "move_with_attack": true
     },
     "gamestate": {
         "actions_remaining": 1,
-        "player1_units": {
+        "player2_units": {
             "B4": {
                 "name": "Royal_Guard",
                 "tall_shield": 1,
@@ -18,7 +19,7 @@
             },
             "C2": "Knight"
         },
-        "player2_units": {
+        "player1_units": {
             "A4": "Knight",
             "B5": "Ballista"
 
