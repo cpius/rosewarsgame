@@ -407,7 +407,7 @@ class Lancer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    #special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}]
+    special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
