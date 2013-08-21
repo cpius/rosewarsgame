@@ -143,9 +143,9 @@ class Action(object):
         return bool(self.ability)
 
     def lancing(self):
-        if self.unit.has(Trait.lancing, 1) and self.is_attack() and self.distance_to_target() >= 3:
+        if self.unit.has(Trait.lancing, level=1) and self.is_attack() and self.distance_to_target() >= 3:
             return 2
-        elif self.unit.has(Trait.lancing, 2) and self.is_attack() and self.distance_to_target() >= 4:
+        elif self.unit.has(Trait.lancing, level=2) and self.is_attack() and self.distance_to_target() >= 4:
             return 3
         else:
             return 0
