@@ -617,7 +617,7 @@ class Berserker(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    #special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
+    special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
