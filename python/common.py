@@ -324,6 +324,15 @@ def get_description(attribute, level=1):
     elif attribute in Ability.name:
         return ability_descriptions[Ability.name[attribute]][level]
     elif attribute in Trait.name:
+        if attribute == Trait.attack_skill:
+            return str(level) + " added to base attack"
+        if attribute == Trait.defence_skill:
+            return str(level) + " added to base defence"
+        if attribute == Trait.movement_skill:
+            return str(level) + " added to base movement"
+        if attribute == Trait.range_skill:
+            return str(level) + " added to base range"
+
         return trait_descriptions[Trait.name[attribute]][level]
 
 
