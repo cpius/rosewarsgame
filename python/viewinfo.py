@@ -111,14 +111,16 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
         show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
 
     else:
-        upgrade_choice = readable(upgrade_choice)
         lines = []
-        for name, level in upgrade_choice.items():
-            print name, level
+        for attribute, info in upgrade_choice.items():
+            name = readable(attribute)
+            level = info[1]
             if level > 1:
                 lines.append(name.replace("_", " ") + ", level " + str(level))
+                lines.append(get_description(attribute, level))
             else:
                 lines.append(name.replace("_", " "))
+                lines.append(get_description(attribute, 1))
             lines.append("")
         line_length = 30
         line_distances = interface.line_distances["small"]
