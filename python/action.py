@@ -181,22 +181,11 @@ class Action(object):
     def attack_successful(self, rolls, gamestate):
         return battle.attack_successful(self, rolls, gamestate)
 
-    def is_successful(self, rolls, gamestate):
-        if not self.is_attack():
-            return True
-        if not self.target_at in gamestate.all_units():
-            return True
-        attack_successful = battle.attack_successful(self, rolls, gamestate)
-        if not attack_successful:
-            return False
-        defence_successful = battle.defence_successful(self, rolls, gamestate)
-        return not defence_successful
+    def defence_successful(self, rolls, gamestate):
+        return battle.defence_successful(self, rolls, gamestate)
 
-    def is_failure(self, rolls, gamestate):
-        if not rolls:
-            return False
-
-        return not self.is_successful(rolls, gamestate)
+    def is_win(self, rolls, gamestate):
+        return self.attack_successful(rolls, gamestate) and not self.defence_successful(rolls, gamestate)
 
     def is_miss(self, rolls, gamestate):
         return not battle.attack_successful(self, rolls, gamestate)
@@ -208,7 +197,7 @@ class Action(object):
         if self.is_miss(rolls, gamestate):
             return "Miss"
 
-        if self.is_successful(rolls, gamestate):
+        if self.is_win(rolls, gamestate):
             return "Win"
 
         return "Defend"

@@ -8,7 +8,7 @@ def do_action(gamestate, action, outcome):
     def settle_attack(action):
         rolls = outcome.for_position(action.target_at)
 
-        if action.is_failure(rolls, gamestate):
+        if not action.is_win(rolls, gamestate):
             return
 
         if action.target_unit.has_extra_life():
@@ -28,7 +28,7 @@ def do_action(gamestate, action, outcome):
         if action.unit.has(State.extra_action):
             unit.remove(State.extra_action)
 
-            if unit.has(Trait.bloodlust) and action.is_attack() and action.is_successful(rolls, gamestate):
+            if unit.has(Trait.bloodlust) and action.is_attack() and action.is_win(rolls, gamestate):
                 unit.set(State.movement_remaining, unit.get(State.movement_remaining) - int(action.move_with_attack))
                 unit.set(State.extra_action)
             else:
@@ -114,7 +114,7 @@ def do_action(gamestate, action, outcome):
 
 def move_melee_unit_to_target_tile(gamestate, rolls, action):
 
-    if action.is_successful(rolls, gamestate):
+    if action.is_win(rolls, gamestate):
         if not action.target_unit.has_extra_life():
             gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
 
