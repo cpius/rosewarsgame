@@ -4,7 +4,6 @@ import textwrap
 from viewcommon import *
 import interface_settings as settings
 import battle
-import common
 
 zoom = settings.zoom
 zoomed_unit_size = (int(236 * zoom), int(271 * zoom))
