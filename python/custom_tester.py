@@ -1,4 +1,4 @@
-import glob
+import os
 import json
 from gamestate import Gamestate
 from action import Action
@@ -270,8 +270,12 @@ if file:
     print result
 
 else:
-
-    testcase_files = glob.glob("./../sharedtests/*.json") + glob.glob("./../sharedtests_development/*.json")
+    path1 = "./../sharedtests/"
+    path2 = "./../sharedtests_development/"
+    testcase_files = [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(path1)
+                      for f in files if f.endswith(".json")] + \
+                     [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(path2)
+                      for f in files if f.endswith(".json")]
 
     results = {"pass": 0, "read error": 0, "wrong result": 0, "run error": 0, "total": 0}
     for file in testcase_files:
