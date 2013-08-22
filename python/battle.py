@@ -25,7 +25,6 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
         if attacking_unit.type in defending_unit.defence_bonuses:
             defence += defending_unit.defence_bonuses[attacking_unit.type]
         defence += int(defending_unit.has(Effect.improved_weapons))
-        defence += int(defending_unit.has(Effect.improved_weapons_II))
         defence += int(attacking_unit.is_melee() and defending_unit.has(Trait.melee_expert))
         defence -= int(attacking_unit.has(Trait.pikeman_specialist) and defending_unit.name == "Pikeman")
         defence += int(attacking_unit.is_ranged() and defending_unit.has(Trait.tall_shield))
