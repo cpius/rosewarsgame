@@ -37,11 +37,8 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
         if attacking_unit.has(Trait.sharpshooting):
             return 1
 
-        if defending_unit.has(Effect.sabotaged, 1):
+        if defending_unit.has(Effect.sabotaged):
             return 0
-
-        if defending_unit.has(Effect.sabotaged, 2):
-            return -1
 
         return defence
 

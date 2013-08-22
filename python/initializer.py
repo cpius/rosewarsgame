@@ -1,9 +1,9 @@
 from __future__ import division
 from common import *
 
-remove_states = [State.used, Effect.sabotaged, State.recently_bribed]
+remove_states = [State.used, State.recently_bribed]
 
-decrement_states = [Effect.poisoned, State.attack_frozen, Effect.improved_weapons]
+decrement_states = [Effect.poisoned, State.attack_frozen, Effect.improved_weapons, Effect.sabotaged]
 
 
 def initialize_turn(gamestate):

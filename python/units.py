@@ -119,10 +119,10 @@ class Unit(object):
 
     def do(self, ability, level):
         if ability == Ability.poison:
-            self.set(Effect.poisoned, level + 1)
+            self.set(Effect.poisoned, value=level+1)
 
         if ability == Ability.sabotage:
-            self.set(Effect.sabotaged, level)
+            self.set(Effect.sabotaged, value=level+1)
 
         if ability == Ability.improve_weapons:
             if level == 2:
@@ -685,7 +685,7 @@ class Saboteur(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    #special_upgrades = [{Ability.sabotage: 1}, {Ability.poison: 1}]
+    special_upgrades = [{Ability.sabotage: 1}, {Ability.poison: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
 
 
