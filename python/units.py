@@ -664,7 +664,6 @@ class Samurai(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Infantry
-    #special_upgrades = [{Trait.bloodlust: 1}],
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
     traits = {Trait.combat_agility: 1}

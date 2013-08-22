@@ -98,8 +98,6 @@ trait_descriptions = {
         1: "Can move 4 tiles if movement ends with an attack."},
     "big_shield": {
         1: "+2D v melee"},
-    "bloodlust": {
-        1: "Every kill gives it an extra attack"},
     "cavalry_charging": {
         1: "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement"},
     "combat_agility": {
@@ -236,14 +234,12 @@ if 1 == 2:
         extra_action = None
         poisoned = None
         improved_weapons = None
-        improved_weapons_II = None
         movement_remaining = None
         lost_extra_life = None
         experience = None
         used = None
         recently_bribed = None
         sabotaged = None
-        sabotaged_II = None
         recently_upgraded = None
 
         name = None
@@ -252,7 +248,6 @@ if 1 == 2:
     class Trait:
         berserking = None
         big_shield = None
-        bloodlust = None
         cavalry_charging = None
         combat_agility = None
         defence_maneuverability = None

@@ -27,12 +27,7 @@ def do_action(gamestate, action, outcome):
     def prepare_extra_actions(action):
         if action.unit.has(State.extra_action):
             unit.remove(State.extra_action)
-
-            if unit.has(Trait.bloodlust) and action.is_attack() and action.is_win(rolls, gamestate):
-                unit.set(State.movement_remaining, unit.get(State.movement_remaining) - int(action.move_with_attack))
-                unit.set(State.extra_action)
-            else:
-                unit.remove(State.movement_remaining)
+            unit.remove(State.movement_remaining)
 
         elif action.is_attack():
             movement_remaining = unit.movement - distance(action.start_at, action.end_at) - 1
@@ -109,7 +104,7 @@ def do_action(gamestate, action, outcome):
         unit.gain_xp()
         settle_ability(action)
 
-    if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility, Trait.bloodlust]):
+    if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility]):
         prepare_extra_actions(action)
 
     if action.is_attack() and action.move_with_attack and action.attack_successful(rolls, gamestate):
