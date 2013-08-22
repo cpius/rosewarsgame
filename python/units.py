@@ -1,3 +1,4 @@
+from __future__ import division
 import setup_settings as settings
 from common import *
 
@@ -206,6 +207,11 @@ class Unit(object):
     def get_traits_not_in_base(self):
         base_unit = self.make(self.name)
         return dict((trait, info) for trait, info in self.traits.items() if info[1] != base_unit.get_level(trait))
+
+    def get_unit_level(self):
+        experience = self.get(State.experience)
+        to_upgrade = self.experience_to_upgrade
+        return experience // to_upgrade
 
     def is_milf(self):
         experience = self.get(State.experience)

@@ -18,6 +18,11 @@ def get_unit_lines(unit):
     lines = ["A: " + str(unit.attack) + "  D: " + str(unit.defence)
              + "  R: " + str(unit.range) + "  M: " + str(unit.movement), ""]
 
+    level = unit.get_unit_level()
+    if level:
+        lines.append("Level: " + str(level))
+        lines.append("")
+
     if unit.zoc:
         lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
         lines.append("")
