@@ -41,6 +41,7 @@ class Rectangles(Interface):
     crusading_icon = "./other/flag.gif"
     high_morale_icon = "./other/flag_black.gif"
     move_icon = "./other/move.gif"
+    level_icons = ["./other/level1.gif", "./other/level1.gif", "./other/level2.gif", "./other/level3.gif"]
     dice = [""]
     for i in range(1, 7):
         dice.append("./other/dice_" + str(i) + ".png")
