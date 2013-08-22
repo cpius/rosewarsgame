@@ -31,7 +31,8 @@ class Gamestate:
         action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
-        if self.actions_remaining > 0 or action.unit.has(State.extra_action):
+        if action.move_with_attack in [True, False] and \
+                (self.actions_remaining > 0 or action.unit.has(State.extra_action)):
             self.set_available_actions()
 
             self.decrement_actions_if_none_available(action)
