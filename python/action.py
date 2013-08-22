@@ -153,20 +153,16 @@ class Action(object):
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack() and self.move_with_attack
 
-    def is_crusading(self, units, n=0):
-        if not n:
-            return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 1) or
-                                             self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 2))
-        else:
-            return self.unit.is_melee() and self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n)
+    def is_crusading(self, units, n=None):
+        return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n))
 
     def has_high_morale(self, units):
         return self.unit.is_melee() and (self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or
                                          self.is_surrounding_unit_with(units, Trait.flag_bearing, self.end_at, 2))
 
-    def is_surrounding_unit_with(self, units, trait, position, n=1):
+    def is_surrounding_unit_with(self, units, trait, position, level=None):
         units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level=n))
+        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level=level))
 
     def is_adjacent_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)
