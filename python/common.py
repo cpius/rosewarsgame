@@ -66,7 +66,8 @@ class Position:
         return direction.perpendicular(self) + direction.forward_and_sideways(self)
 
     def surrounding_tiles(self):
-        return set(direction.move(self) for direction in eight_directions)
+        surrounding = set(direction.move(self) for direction in eight_directions)
+        return set(tile for tile in surrounding if tile in board)
 
     def adjacent_tiles(self):
         return set(direction.move(self) for direction in directions)
