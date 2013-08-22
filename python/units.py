@@ -162,7 +162,6 @@ class Unit(object):
         base_unit_attributes = self.make(self.name).get_dict(attribute)
         self_attributes = self.get_dict(attribute)
 
-
         if attribute not in self_attributes:
             return False
         elif attribute not in base_unit_attributes and attribute in self_attributes:
