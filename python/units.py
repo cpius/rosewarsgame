@@ -720,5 +720,5 @@ class Weaponsmith(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Specialist
-    #special_upgrades = [{Ability.improve_weapons: 1}]
+    special_upgrades = [{Ability.improve_weapons: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
