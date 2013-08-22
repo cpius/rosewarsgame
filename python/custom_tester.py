@@ -11,6 +11,88 @@ import traceback
 
 def run_test(file):
 
+    def write_message_action():
+        print "Wrong action existence for", file
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Gamestate:", gamestate
+        if expected:
+            print "Requested action: " + str(action) + "\n"
+        else:
+            print "Not-allowed action:" + str(action) + "\n"
+
+        print "Available actions:"
+        for available_action in available_actions:
+            print str(available_action)
+        print
+
+    def write_message_extra_action():
+        print "Wrong action existence for", file
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Gamestate:", gamestate
+        print "Requested action: " + str(extra_action) + "\n"
+
+        print "Available actions:"
+        for available_action in extra_actions:
+            print str(available_action)
+        print
+
+    def write_message_AD():
+        print "Wrong attack / defence for", file
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Gamestate: ", gamestate
+        print "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence)
+        print "Actual attack / defence " + str(actual_attack) + "," + str(actual_defence)
+        print
+
+    def write_message_outcome():
+        print "Wrong outcome for", file
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Action:"
+        print action
+        print "Actual gamestate:"
+        print document_to_string(actual_gamestate_document)
+        print "Expected gamestate:"
+        print document_to_string(expected_gamestate_document)
+        print
+
+    def write_message_extra_outcome():
+        print "Wrong outcome for", file
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Initial gamestate:"
+        print document_to_string(initial_gamestate)
+        print "Intermediate gamestate:"
+        print document_to_string(intermediate_gamestate)
+        print "Actual gamestate:"
+        print document_to_string(actual_gamestate_document)
+        print "Expected gamestate:"
+        print document_to_string(expected_gamestate_document)
+        print
+
+    def write_message_turn_shift():
+        print "Wrong turn shift for", file
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Actual gamestate:"
+        print document_to_string(actual_gamestate_document)
+        print "Expected gamestate:"
+        print document_to_string(expected_gamestate_document)
+        print
+
+    def write_message_upgrade():
+        print "wrong result upgrade for", file
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Actual gamestate:"
+        print document_to_string(actual_gamestate_document)
+        print "Expected gamestate:"
+        print document_to_string(expected_gamestate_document)
+        print
+
     try:
         test_document = json.loads(open(file).read())
     except ValueError:
@@ -30,19 +112,7 @@ def run_test(file):
             if actual == expected:
                 return "pass"
             else:
-                print "Wrong action existence for", file
-                if "description" in test_document:
-                    print "Description:", test_document["description"]
-                print "Gamestate:", gamestate
-                if expected:
-                    print "Requested action: " + str(action) + "\n"
-                else:
-                    print "Not-allowed action:" + str(action) + "\n"
-
-                print "Available actions:"
-                for available_action in available_actions:
-                    print str(available_action)
-                print
+                write_message_action()
                 return "wrong result"
 
         if test_document["type"] == "Is attack and defence correct":
@@ -63,13 +133,7 @@ def run_test(file):
             if actual_attack == expected_attack and actual_defence == expected_defence:
                 return "pass"
             else:
-                print "Wrong attack / defence for", file
-                if "description" in test_document:
-                    print "Description:", test_document["description"]
-                print "Gamestate: ", gamestate
-                print "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence)
-                print "Actual attack / defence " + str(actual_attack) + "," + str(actual_defence)
-                print
+                write_message_AD()
                 return "wrong result"
 
         if test_document["type"] == "Is outcome correct":
@@ -89,16 +153,39 @@ def run_test(file):
                 if not action.is_attack():
                     return "pass"
             else:
-                print "Wrong outcome for", file
-                if "description" in test_document:
-                    print "Description:", test_document["description"]
-                print "Action:"
-                print action
-                print "Actual gamestate:"
-                print document_to_string(actual_gamestate_document)
-                print "Expected gamestate:"
-                print document_to_string(expected_gamestate_document)
-                print
+                write_message_outcome()
+                return "wrong result"
+
+        if test_document["type"] == "Is outcome correct, extra action":
+            gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+            expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+            action = Action.from_document(gamestate.all_units(), test_document["action"])
+            extra_action = Action.from_document(gamestate.all_units(), test_document["extra_action"])
+            outcome1 = None
+            outcome2 = None
+            if "outcome1" in test_document:
+                outcome1 = Outcome.from_document(test_document["outcome1"])
+            if "outcome2" in test_document:
+                outcome2 = Outcome.from_document(test_document["outcome2"])
+
+            initial_gamestate = gamestate.to_document()
+            gamestate.do_action(action, outcome1)
+            intermediate_gamestate = gamestate.to_document()
+            extra_action.unit = gamestate.all_units()[extra_action.start_at]
+            extra_actions = gamestate.get_actions()
+
+            if not extra_action in extra_actions:
+                write_message_extra_action()
+                return "wrong result"
+
+            gamestate.do_action(extra_action, outcome2)
+            actual_gamestate_document = gamestate.to_document()
+            expected_gamestate_document = expected_gamestate.to_document()
+
+            if actual_gamestate_document == expected_gamestate_document:
+                return "pass"
+            else:
+                write_message_extra_outcome()
                 return "wrong result"
 
         if test_document["type"] == "Is outcome correct":
@@ -122,16 +209,7 @@ def run_test(file):
                 if actual_gamestate_document == expected_gamestate_document:
                     return "pass"
                 else:
-                    print "Wrong outcome for", file
-                    if "description" in test_document:
-                        print "Description:", test_document["description"]
-                    print "Action:"
-                    print action
-                    print "Actual gamestate:"
-                    print document_to_string(actual_gamestate_document)
-                    print "Expected gamestate:"
-                    print document_to_string(expected_gamestate_document)
-                    print
+                    write_message_outcome()
                     return "wrong result"
             else:
                 return "pass"
@@ -149,14 +227,7 @@ def run_test(file):
             if actual_gamestate_document == expected_gamestate_document:
                 return "pass"
             else:
-                print "Wrong turn shift for", file
-                if "description" in test_document:
-                    print "Description:", test_document["description"]
-                print "Actual gamestate:"
-                print document_to_string(actual_gamestate_document)
-                print "Expected gamestate:"
-                print document_to_string(expected_gamestate_document)
-                print
+                write_message_turn_shift()
                 return "wrong result"
 
         if test_document["type"] == "Upgrade":
@@ -179,14 +250,7 @@ def run_test(file):
             if actual_gamestate_document == expected_gamestate_document:
                 return "pass"
             else:
-                print "wrong result upgrade for", file
-                if "description" in test_document:
-                    print "Description:", test_document["description"]
-                print "Actual gamestate:"
-                print document_to_string(actual_gamestate_document)
-                print "Expected gamestate:"
-                print document_to_string(expected_gamestate_document)
-                print
+                write_message_upgrade()
                 return "wrong result"
 
     except Exception as e:
@@ -197,7 +261,7 @@ def run_test(file):
 
 
 break_at_error = False
-file = "./../sharedtests\AD_Archer_1.json"
+file = "./../sharedtests_development\OutcomeExtra_Samurai_2.json"
 file = ""
 
 if file:
