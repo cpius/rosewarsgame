@@ -117,7 +117,7 @@ class Unit(object):
 
     def do(self, ability, level):
         if ability == Ability.poison:
-            self.set(Effect.frozen, level + 1)
+            self.set(Effect.poisoned, level + 1)
 
         if ability == Ability.sabotage:
             self.set(Effect.sabotaged, level)

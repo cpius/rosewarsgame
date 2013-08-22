@@ -178,7 +178,7 @@ state_descriptions = {
 effect_descriptions = {
     "bribed": {
         1: "Whether a unit is currently bribed by a Diplomat."},
-    "frozen": {
+    "poisoned": {
         1: "Unit cannot perform any actions."},
     "improved_weapons": {
         1: "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith."},
@@ -234,7 +234,7 @@ if 1 == 2:
         attack_frozen = None
         bribed = None
         extra_action = None
-        frozen = None
+        poisoned = None
         improved_weapons = None
         improved_weapons_II = None
         movement_remaining = None
@@ -301,7 +301,7 @@ if 1 == 2:
     class Effect:
         bribed = None
         improved_weapons = None
-        frozen = None
+        poisoned = None
         sabotaged = None
 
         name = {}

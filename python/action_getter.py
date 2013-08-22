@@ -271,7 +271,7 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
 
 
 def can_use_unit(unit, is_extra_action):
-    is_frozen = unit.has(Effect.frozen)
+    is_frozen = unit.has(Effect.poisoned)
     is_bribed = unit.has(State.recently_bribed)
     is_used = unit.has(State.used) and not unit.has(State.extra_action)
 

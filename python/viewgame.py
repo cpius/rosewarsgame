@@ -242,7 +242,7 @@ def get_yellow_counters(unit):
 
 
 def get_blue_counters(unit):
-    return max(unit.get(Effect.frozen), unit.get(State.attack_frozen), unit.has(State.recently_bribed))
+    return max(unit.get(Effect.poisoned), unit.get(State.attack_frozen), unit.has(State.recently_bribed))
 
 
 def draw_ask_about_move_with_attack(screen, interface, position):
