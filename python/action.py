@@ -162,11 +162,11 @@ class Action(object):
 
     def has_high_morale(self, units):
         return self.unit.is_melee() and (self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or
-                                         self.is_surrounding_unit_with(units, Trait.flag_bearing_B, self.end_at))
+                                         self.is_surrounding_unit_with(units, Trait.flag_bearing, self.end_at, 2))
 
     def is_surrounding_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, n))
+        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level=n))
 
     def is_adjacent_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)

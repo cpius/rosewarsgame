@@ -114,9 +114,8 @@ trait_descriptions = {
     "far_sighted": {
         1: "-1A if target is less than 4 tiles away."},
     "flag_bearing": {
-        1: "Friendly melee units receive +2A while adjacent to Flag Bearer."},
-    "flag_bearing_B": {
-        1: "Friendly melee units receive +2A while surrounding Flag Bearer."},
+        1: "Friendly melee units receive +2A if attacking from a tile adjacent to Flag Bearer.",
+        2: "Friendly melee units receive +2A if attacking from a tile surrounding Flag Bearer."},
     "melee_expert": {
         1: "+1A, +1D vs melee units."},
     "melee_freeze": {
@@ -270,7 +269,6 @@ if 1 == 2:
         attack_cooldown = None
         far_sighted = None
         flag_bearing = None
-        flag_bearing_B = None
         crusading = None
         crusading = None
         pikeman_specialist = None

@@ -567,7 +567,7 @@ class Flag_Bearer(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    #special_upgrades = [{Trait.flag_bearing_B: 1}]
+    special_upgrades = [{Trait.flag_bearing: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
