@@ -159,9 +159,10 @@ def draw_symbols(screen, interface, unit, position):
     if unit.has(Effect.bribed):
         draw_bribed(screen, interface, position)
 
-    #if "II" in unit.name:
-    #    pic = get_image(interface.star_icon, (12, 12))
-    #    screen.blit(pic, interface.coordinates["top_left"].get(position))
+    level = unit.get_unit_level()
+    if not unit.is_milf() and level:
+        pic = get_image(interface.level_icons[level], (14, 14))
+        screen.blit(pic, interface.coordinates["top_left"].get(position))
 
 
 def draw_bribed(screen, interface, position):
