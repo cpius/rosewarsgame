@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "Samurai can always use its second action to attack if its not a move_with_attack",
     "result": true,
     "action": {
         "start_at": "E4",

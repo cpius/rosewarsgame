@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "Samurai can not do a move with attack if its movement remaining is 0",
     "result": false,
     "action": {
         "start_at": "E4",
