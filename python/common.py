@@ -193,13 +193,16 @@ ability_descriptions = {
         2: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
         "the same unit on your next turn. The unit gets +2A until end of turn."},
     "improve_weapons": {
-        1: "Give melee unit +3 attack, +1 defence until your next turn."},
+        1: "Give melee unit +3 attack, +1 defence until your next turn.",
+        2: "Give melee unit +2 attack, +1 defence for two turns."},
     "pikeman_specialist": {
         1: "Pikemen do not get +1D against Hussar."},
     "poison": {
-        1: "Freezes a unit for 2 turns."},
+        1: "Freezes a unit for 2 turns.",
+        2: "Freezes a unit for 3 turns."},
     "sabotage": {
-        1: "Reduces a units defence to 0 for 1 turn."},
+        1: "Reduces a units defence to 0 for 1 turn.",
+        2: "Reduces a units defence to 0 for 2 turns."},
     "triple_attack": {
         1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
