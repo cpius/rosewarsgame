@@ -4,7 +4,10 @@
     "pre_gamestate": {
         "actions_remaining": 2,
         "player1_units": {
-            "C3": "Saboteur",
+            "C3": {
+                "name": "Saboteur",
+                "poison": 2
+            },
             "A1": "Pikeman"
         },
         "player2_units": {
@@ -24,12 +27,13 @@
             "C3": {
                 "experience": 1,
                 "used": 1,
-                "name": "Saboteur"
+                "name": "Saboteur",
+                "poison": 2
             }
         },
         "player2_units": {
             "D4": {
-                "frozen": 2,
+                "poisoned": 3,
                 "name": "Archer"
             }
         }

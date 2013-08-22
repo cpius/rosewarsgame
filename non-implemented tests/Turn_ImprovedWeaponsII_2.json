@@ -1,0 +1,35 @@
+{
+    "type": "Does turn shift work",
+    "description": "Tests if improved_weapons level 2 is decreased by 1",
+    "pre_gamestate": {
+        "actions_remaining": 0,
+        "player2_units": {
+            "C3": {
+                "name": "Pikeman",
+                "improved_weapons": [2,2],
+                "experience": 1
+            }
+        },
+        "player1_units": {
+            "C5": "Catapult",
+            "A4": "Ballista"
+
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": {
+                "name": "Pikeman",
+                "experience": 1,
+                "improved_weapons": [1, 2]
+            }
+        },
+        "player2_units": {
+            "C5": "Catapult",
+            "A4": "Ballista"
+
+        }
+    }
+}
+

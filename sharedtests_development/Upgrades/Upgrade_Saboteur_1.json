@@ -1,15 +1,16 @@
 {
     "type": "Upgrade",
-    "description": "The weaponsmith uses its special upgrade",
+    "description": "A saboteur that has already upgraded poison, upgrades its sabotage",
     "upgrade": {
-        "improve_weapons": 1
+        "sabotage": 1
     },
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Weaponsmith",
-                "experience": 4
+                "name": "Saboteur",
+                "experience": 8,
+                "poison": 2
             }
         },
         "player2_units": {
@@ -20,10 +21,11 @@
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Weaponsmith",
-                "experience": 4,
-                "improve_weapons": 2,
-                "recently_upgraded": 1
+                "name": "Saboteur",
+                "experience": 8,
+                "poison": 2,
+                "recently_upgraded": 1,
+                "sabotage": 2
             }
         },
         "player2_units": {

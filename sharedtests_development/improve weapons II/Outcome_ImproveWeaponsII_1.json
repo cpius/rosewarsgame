@@ -1,5 +1,5 @@
 {
-    "description": "Test if improved_weapons_II effect is recorded",
+    "description": "Test if improved_weapons level 2 effect is recorded",
     "type": "Is outcome correct",
     "pre_gamestate": {
         "actions_remaining": 2,
@@ -32,7 +32,9 @@
             },
             "A3": {
                 "name": "Pikeman",
-                "improved_weapons": [2, 2]
+                "improved_weapons": {
+                    "level": 2,
+                    "value": 2}
             },
             "A1": "Knight"
         },

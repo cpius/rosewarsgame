@@ -14,7 +14,7 @@
         "player1_units": {
             "C5": {
                 "name": "Flag Bearer",
-                "flag_bearing_B": 1
+                "flag_bearing": 2
             },
             "D4": "Knight"
         },

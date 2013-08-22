@@ -1,13 +1,10 @@
 {
-    "description": "Test if poison_II effect is recorded",
+    "description": "Test if poison effect is recorded",
     "type": "Is outcome correct",
     "pre_gamestate": {
         "actions_remaining": 2,
         "player1_units": {
-            "C3": {
-                "name": "Saboteur",
-                "poison_II": 1
-            },
+            "C3": "Saboteur",
             "A1": "Pikeman"
         },
         "player2_units": {
@@ -27,13 +24,12 @@
             "C3": {
                 "experience": 1,
                 "used": 1,
-                "name": "Saboteur",
-                "poison_II": 1
+                "name": "Saboteur"
             }
         },
         "player2_units": {
             "D4": {
-                "frozen": 2,
+                "poisoned": 2,
                 "name": "Archer"
             }
         }

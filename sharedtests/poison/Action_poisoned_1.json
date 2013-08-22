@@ -1,7 +1,7 @@
 {
     "type": "Does action exist",
-    "description": "Test if a unit can make a move",
-    "result": true,
+    "description": "A unit can't move if it's poisoned",
+    "result": false,
     "action": {
         "start_at": "D3",
         "end_at": "D4"
@@ -10,7 +10,10 @@
         "actions_remaining": 1,
         "player1_units": {
             "B2": "Crusader",
-            "D3": "Knight"
+            "D3": {
+                "name": "Knight",
+                "poisoned": 1
+            }
         },
         "player2_units": {
             "E7": "Knight"

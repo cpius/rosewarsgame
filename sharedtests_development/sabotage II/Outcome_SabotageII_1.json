@@ -1,12 +1,12 @@
 {
-    "description": "Test if poison effect is recorded",
+    "description": "Test if sabotage level 2 effect is recorded",
     "type": "Is outcome correct",
     "pre_gamestate": {
         "actions_remaining": 2,
         "player1_units": {
             "C3": {
                 "name": "Saboteur",
-                "poison": 2
+                "sabotage": 2
             },
             "A1": "Pikeman"
         },
@@ -18,7 +18,7 @@
         "target_at": "D4",
         "end_at": "C3",
         "start_at": "C3",
-        "ability": "poison"
+        "ability": "sabotage"
     },
     "post_gamestate": {
         "actions_remaining": 1,
@@ -28,12 +28,14 @@
                 "experience": 1,
                 "used": 1,
                 "name": "Saboteur",
-                "poison": 2
+                "sabotage": 2
             }
         },
         "player2_units": {
             "D4": {
-                "frozen": 3,
+                "sabotaged": {
+                    "level": 1,
+                    "value": 2},
                 "name": "Archer"
             }
         }
