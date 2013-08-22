@@ -33,9 +33,7 @@
         },
         "player2_units": {
             "D4": {
-                "sabotaged": {
-                    "level": 1,
-                    "value": 2},
+                "sabotaged": 3,
                 "name": "Archer"
             }
         }
