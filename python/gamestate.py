@@ -132,7 +132,7 @@ class Gamestate:
                         if isinstance(value, int):
                             unit.set(effect, value)
                         else:
-                            unit.set(effect, level=value[0], value=value[1])
+                            unit.set(effect, level=value["level"], value=value["value"])
 
             units[position] = unit
 

@@ -422,7 +422,7 @@ def readable(attributes):
             if info[1] == 1:
                 dictionary[Effect.name[key]] = info[0]
             elif info[1]:
-                dictionary[Effect.name[key]] = info
+                dictionary[Effect.name[key]] = {"state": info[0], "level": info[1]}
 
     return dictionary
 
