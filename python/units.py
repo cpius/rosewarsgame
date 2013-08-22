@@ -605,7 +605,7 @@ class Crusader(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    #special_upgrades = [{Trait.crusading: 1}]
+    special_upgrades = [{Trait.crusading: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
 
 
