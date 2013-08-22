@@ -111,6 +111,8 @@ class Unit(object):
         dict = self.get_dict(attribute)
         if attribute in dict:
             dict[attribute][0] = max(0, dict[attribute][0] - 1)
+            if dict[attribute][0] == 0:
+                del dict[attribute]
 
     def increment(self, attribute):
         self.add(attribute, 1)
