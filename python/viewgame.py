@@ -1,7 +1,6 @@
 import pygame
 from viewcommon import *
 from coordinates import Coordinates
-from common import *
 
 
 def draw_game(screen, interface, game, start_at=None, actions=()):
