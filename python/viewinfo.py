@@ -105,7 +105,7 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
 
     if isinstance(upgrade_choice, basestring):
         lines = get_unit_lines(unit)
-        line_length = 25
+        line_length = 30
         line_distances = interface.line_distances["small"]
         fonts = interface.fonts["very_small"]
         show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
@@ -125,10 +125,9 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
                 lines.append(name.replace("_", " "))
                 lines.append(get_description(attribute, 1))
             lines.append("")
-        line_length = 25
+        line_length = 30
         line_distances = interface.line_distances["small"]
-        fonts = interface.fonts["small"]
-        print lines
+        fonts = interface.fonts["very_small"]
         show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
 
 
