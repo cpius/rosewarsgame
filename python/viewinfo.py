@@ -66,8 +66,8 @@ def get_unit_lines(unit):
             lines.append(State.name[state] + ": " + str(value))
 
     for effect, info in unit.effects.items():
-        level = info[0]
-        value = info[1]
+        value = info[0]
+        level = info[1]
         if level == 1:
             lines.append(Effect.write[effect] + ": " + str(value))
         else:

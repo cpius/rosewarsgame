@@ -161,6 +161,8 @@ def draw_symbols(screen, interface, unit, position):
 
     level = unit.get_unit_level()
     if not unit.is_milf() and level:
+        if level > 3:
+            level = 3
         pic = get_image(interface.level_icons[level], (14, 14))
         screen.blit(pic, interface.coordinates["top_left"].get(position))
 
