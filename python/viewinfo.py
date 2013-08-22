@@ -15,7 +15,10 @@ def clear(screen, interface):
 
 
 def get_unit_lines(unit):
-    lines = ["A: " + str(unit.attack) + "  D: " + str(unit.defence)
+    defence = unit.defence
+    if unit.has(Effect.sabotaged):
+        defence = 0
+    lines = ["A: " + str(unit.attack) + "  D: " + str(defence)
              + "  R: " + str(unit.range) + "  M: " + str(unit.movement), ""]
 
     level = unit.get_unit_level()
