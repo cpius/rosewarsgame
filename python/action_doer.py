@@ -37,9 +37,7 @@ def do_action(gamestate, action, outcome):
 
             unit.set(State.movement_remaining, movement_remaining)
 
-            if movement_remaining:
-                unit.set(State.extra_action)
-            elif unit.has(Trait.combat_agility):
+            if movement_remaining or unit.has(Trait.combat_agility):
                 unit.set(State.extra_action)
 
     def update_actions_remaining():
