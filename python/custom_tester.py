@@ -209,6 +209,8 @@ def run_test(file):
                 if actual_gamestate_document == expected_gamestate_document:
                     return "pass"
                 else:
+                    print
+                    print "Wrong outcome for post movement"
                     write_message_outcome()
                     return "wrong result"
             else:
