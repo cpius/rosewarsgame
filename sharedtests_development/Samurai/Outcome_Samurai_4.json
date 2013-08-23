@@ -1,5 +1,6 @@
 {
     "type": "Is outcome correct",
+    "description": "If Samurai can't do anything, automatically end its extra action",
     "outcome": {
         "E4": [1, 6]
     },
@@ -17,7 +18,7 @@
         },
         "player2_units": {
             "E4": "Archer",
-            "E5": "Ballista"
+            "A7": "Ballista"
         }
     },
     "post_gamestate": {
@@ -26,13 +27,12 @@
             "E4": {
                 "name": "Samurai",
                 "used": 1,
-                "experience": 1,
-                "extra_action": 1
+                "experience": 1
             },
             "A2": "Pikeman"
         },
         "player2_units": {
-            "E5": "Ballista"
+            "A7": "Ballista"
         }
     }
 }

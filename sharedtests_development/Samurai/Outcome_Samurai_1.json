@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct",
-    "description": "Samurai fails its attack, but gets an extra action, with 1 movement remaing",
+    "description": "Samurai fails its attack, but gets an extra action, with 1 movement remaining",
     "outcome": {
         "E4": [1, 1]
     },

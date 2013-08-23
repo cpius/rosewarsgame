@@ -1,24 +1,25 @@
 {
     "type": "Does action exist",
-    "description": "Samurai can never move on its second action, only attack",
+    "description": "Samurai can not do a move and attack on its first action",
     "result": false,
     "action": {
         "start_at": "E4",
-        "end_at": "E5"
+        "end_at": "E5",
+        "target_at": "D5",
+        "move_with_attack": false
     },
     "gamestate": {
-        "actions_remaining": 1,
+        "actions_remaining": 0,
         "player1_units": {
             "E4": {
                 "name": "Samurai",
                 "used": 1,
-                "experience": 1,
-                "movement_remaining": 1,
-                "extra_action": 1
+                "experience": 1
             },
             "A2": "Pikeman"
         },
         "player2_units": {
+            "D5": "Knight",
             "D7": "Ballista"
         }
     }
