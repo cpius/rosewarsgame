@@ -116,6 +116,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         if unit.has(Trait.combat_agility):
             attacks = get_actions_combat_agility()
+            moves = []
 
         if moves or attacks:
             # Add an action for indicating pass on the extra action
