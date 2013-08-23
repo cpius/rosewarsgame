@@ -101,7 +101,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     def extra_action():
 
         def get_actions_combat_agility():
-            for terms in attack_generator(moveset | {start_at}):
+            for terms in attack_generator({start_at}):
                 if terms["move_with_attack"]:
                     if unit.get(State.movement_remaining):
                         attacks.append(Action(units, start_at, **terms))
