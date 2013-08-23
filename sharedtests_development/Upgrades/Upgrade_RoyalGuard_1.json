@@ -1,0 +1,37 @@
+{
+    "type": "Upgrade",
+    "description": "The Royal Guard upgrades melee_freeze and tall_shield",
+    "upgrade": {
+        "melee_freeze": 1,
+        "tall_shield": 1
+    },
+    "pre_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Royal Guard",
+                "experience": 3,
+                "used": 1
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Royal Guard",
+                "experience": 3,
+                "tall_shield": 1,
+                "melee_freeze": 1,
+                "used": 1,
+                "recently_upgraded": 1
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    }
+}

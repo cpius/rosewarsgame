@@ -34,7 +34,10 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         return Action(units, start_at, **terms)
 
     def melee_attack_actions(moveset):
-        return [make_action(terms) for terms in attack_generator(moveset)]
+        if unit.attack > 0:
+            return [make_action(terms) for terms in attack_generator(moveset)]
+        else:
+            return []
 
     def ranged_attack_actions(attackset):
         return [Action(units, start_at, target_at=target_at) for target_at in attackset]
@@ -98,7 +101,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     def extra_action():
 
         def get_actions_combat_agility():
-            for terms in attack_generator(moveset | {start_at}):
+            for terms in attack_generator({start_at}):
                 if terms["move_with_attack"]:
                     if unit.get(State.movement_remaining):
                         attacks.append(Action(units, start_at, **terms))
@@ -113,6 +116,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         if unit.has(Trait.combat_agility):
             attacks = get_actions_combat_agility()
+            moves = []
 
         if moves or attacks:
             # Add an action for indicating pass on the extra action
@@ -132,7 +136,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
 
             elif ability == Ability.bribe:
-                target_positions = [pos for pos, target in enemy_units.items() if not target.get(State.bribed) and not
+                target_positions = [pos for pos, target in enemy_units.items() if not target.get(Effect.bribed) and not
                                     target.has(State.recently_bribed)]
             else:
                 target_positions = []
@@ -155,7 +159,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         moveset = moves_set(start_at, frozenset(units), frozenset([]), unit.movement, unit.movement)
         moves = move_actions(moveset)
 
-        return moves, []
+        return moves
 
     zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
@@ -185,7 +189,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
         moves, attacks = berserking()
 
     if unit.has(Trait.scouting):
-        moves, attacks = scouting()
+        moves = scouting()
 
     if unit.has(Trait.defence_maneuverability):
         moves, attacks = defence_maneuverability()
@@ -268,7 +272,7 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
 
 
 def can_use_unit(unit, is_extra_action):
-    is_frozen = unit.has(State.frozen)
+    is_frozen = unit.has(Effect.poisoned)
     is_bribed = unit.has(State.recently_bribed)
     is_used = unit.has(State.used) and not unit.has(State.extra_action)
 

@@ -4,7 +4,6 @@ import textwrap
 from viewcommon import *
 import interface_settings as settings
 import battle
-import common
 
 zoom = settings.zoom
 zoomed_unit_size = (int(236 * zoom), int(271 * zoom))
@@ -16,8 +15,16 @@ def clear(screen, interface):
 
 
 def get_unit_lines(unit):
-    lines = ["A: " + str(unit.attack) + "  D: " + str(unit.defence)
+    defence = unit.defence
+    if unit.has(Effect.sabotaged):
+        defence = 0
+    lines = ["A: " + str(unit.attack) + "  D: " + str(defence)
              + "  R: " + str(unit.range) + "  M: " + str(unit.movement), ""]
+
+    level = unit.get_unit_level()
+    if level:
+        lines.append("Level: " + str(level))
+        lines.append("")
 
     if unit.zoc:
         lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
@@ -33,27 +40,42 @@ def get_unit_lines(unit):
             lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
             lines.append("")
 
-    for trait in unit.traits:
+    for trait, info in unit.traits.items():
         if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
-            if unit.has(trait):
-                trait_key = attribute_key(Trait.name[trait], unit.traits[trait])
+            level = info[1]
+            if level == 1:
                 lines.append(Trait.write[trait] + ":")
-                lines.append(trait_descriptions[trait_key])
+                lines.append(get_description(trait, 1))
+                lines.append("")
+            elif level > 1:
+                lines.append(Trait.write[trait] + ", level " + str(level) + ":")
+                lines.append(get_description(trait, level))
                 lines.append("")
 
-    for ability, level in unit.abilities.items():
+    for ability, info in unit.abilities.items():
+        level = info[1]
         if level == 1:
             lines.append(Ability.write[ability] + ":")
-            lines.append(ability_descriptions[Ability.name[ability]])
+            lines.append(get_description(ability, 1))
             lines.append("")
         else:
             lines.append(Ability.write[ability] + ", " + "level " + str(level) + ":")
-            lines.append(get_ability_description(ability, level))
+            lines.append(get_description(ability, level))
             lines.append("")
 
-    for state in unit.states:
-        if unit.states[state] and state not in [State.used, State.recently_upgraded, State.experience]:
-            lines.append(State.name[state] + ": " + str(unit.states[state]))
+    for state, info in unit.states.items():
+        value = info[1]
+        if value and state not in [State.used, State.recently_upgraded, State.experience]:
+            lines.append(State.name[state] + ": " + str(value))
+
+    for effect, info in unit.effects.items():
+        value = info[0]
+        level = info[1]
+        if level == 1:
+            lines.append(Effect.write[effect] + ": " + str(value))
+        else:
+            lines.append(Effect.write[effect] + ", level " + str(level) + ": " + str(value))
+        lines.append("")
 
     return lines
 
@@ -97,18 +119,24 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
         show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
 
     else:
-        name = Trait.write[upgrade_choice.keys()[0]]
-        level = upgrade_choice.values()[0]
-        if level > 1:
-            lines = [name + ", level " + level]
-        else:
-            lines = [name]
+        lines = []
+        for attribute, info in upgrade_choice.items():
+            if attribute in unit.get_dict(attribute):
+                level = unit.get_dict(attribute)[attribute][1]
+            else:
+                level = info[1]
+            name = readable(attribute)
+            if level > 1:
+                lines.append(name.replace("_", " ") + ", level " + str(level))
+                lines.append(get_description(attribute, level))
+            else:
+                lines.append(name.replace("_", " "))
+                lines.append(get_description(attribute, 1))
+            lines.append("")
         line_length = 30
         line_distances = interface.line_distances["small"]
-        fonts = interface.fonts["small"]
+        fonts = interface.fonts["very_small"]
         show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
-        print upgrade_choice
-
 
 
 def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate):
@@ -141,8 +169,8 @@ def draw_ask_about_ability(screen, interface, unit):
     clear(screen, interface)
     lines = ["Select ability:"]
     for i, ability in enumerate(unit.abilities):
-        ability_name = Ability.name[ability]
-        description_string = str(i + 1) + ": " + Ability.write[ability] + ": " + ability_descriptions[ability_name]
+        level = unit.get_level(ability)
+        description_string = str(i + 1) + ": " + Ability.write[ability] + ": " + get_description(ability, level)
         lines += textwrap.wrap(description_string, interface.message_line_length)
 
     base = interface.ask_about_ability_location

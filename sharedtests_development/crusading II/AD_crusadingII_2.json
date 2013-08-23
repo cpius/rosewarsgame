@@ -1,0 +1,27 @@
+{
+    "type": "Is attack and defence correct",
+    "description": "Test if the attack bonus from crusading level 2 is correct",
+    "attack": 3,
+    "defence": 2,
+    "action": {
+        "start_at": "A3",
+        "end_at": "A3",
+        "target_at": "A4",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B2": {
+                "name": "Crusader",
+                "crusading": 2
+            },
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "A4": "Archer",
+            "B5": "Ballista"
+        }
+    }
+}
+
