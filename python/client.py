@@ -4,17 +4,15 @@ from common import document_to_string
 from action import Action
 from outcome import Outcome
 from datetime import datetime
+import setup_settings as settings
 
 
 class Client():
-    server = "http://localhost:8080"
-    # server = "http://server.rosewarsgame.com:8080"
-
     def __init__(self, game_id):
         self.game_id = game_id
 
     def get_game(self):
-        return json.load(urllib2.urlopen(self.server + "/games/view/" + self.game_id))
+        return json.load(urllib2.urlopen(settings.server + "/games/view/" + self.game_id))
 
     def select_action(self, gamestate):
         game = self.get_game()
@@ -40,7 +38,7 @@ class Client():
         return None, None, None
 
     def send_action(self, action):
-        url = self.server + "/games/" + self.game_id + "/do_action"
+        url = settings.server + "/games/" + self.game_id + "/do_action"
         print "sending json:", document_to_string(action)
         request = urllib2.Request(url, document_to_string(action), {"Content-Type": "application/json"})
         response = urllib2.urlopen(request)
