@@ -61,18 +61,18 @@ class Unit(object):
 
     def add(self, attribute, value, level=1):
         assert isinstance(value, int)
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            dict[attribute][0] += value
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            dictionary[attribute][0] += value
         else:
-            dict[attribute] = [value, level]
+            dictionary[attribute] = [value, level]
 
     def add_levels(self, attribute, levels=1):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            dict[attribute][1] += levels
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            dictionary[attribute][1] += levels
         else:
-            dict[attribute] = [1, levels]
+            dictionary[attribute] = [1, levels]
 
     def has(self, attribute, value=None, level=None):
         if value:
@@ -86,16 +86,16 @@ class Unit(object):
         return self.get_value(attribute)
 
     def get_value(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            return dict[attribute][0]
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            return dictionary[attribute][0]
         else:
             return 0
 
     def get_level(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            return dict[attribute][1]
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            return dictionary[attribute][1]
         else:
             return 0
 
@@ -103,16 +103,16 @@ class Unit(object):
         self.get_dict(attribute)[attribute] = [value, level]
 
     def remove(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            del dict[attribute]
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            del dictionary[attribute]
 
     def decrement(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            dict[attribute][0] = max(0, dict[attribute][0] - 1)
-            if dict[attribute][0] == 0:
-                del dict[attribute]
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            dictionary[attribute][0] = max(0, dictionary[attribute][0] - 1)
+            if dictionary[attribute][0] == 0:
+                del dictionary[attribute]
 
     def increment(self, attribute):
         self.add(attribute, 1)
