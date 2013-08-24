@@ -203,7 +203,8 @@ class Unit(object):
 
     def get_abilities_not_in_base(self):
         base_unit = self.make(self.name)
-        return dict((ability, info) for ability, info in self.abilities.items() if info[1] != base_unit.get_level(ability))
+        return dict((ability, info)
+                    for ability, info in self.abilities.items() if info[1] != base_unit.get_level(ability))
 
     def get_traits_not_in_base(self):
         base_unit = self.make(self.name)
