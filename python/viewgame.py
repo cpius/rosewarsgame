@@ -1,7 +1,6 @@
 import pygame
 from viewcommon import *
 from coordinates import Coordinates
-from common import *
 
 
 def draw_game(screen, interface, game, start_at=None, actions=()):
@@ -157,12 +156,15 @@ def draw_symbols(screen, interface, unit, position):
     for index in range(blue_boxes, total_boxes):
         draw_box(index, colors["white"])
 
-    if unit.has(State.bribed):
+    if unit.has(Effect.bribed):
         draw_bribed(screen, interface, position)
 
-    #if "II" in unit.name:
-    #    pic = get_image(interface.star_icon, (12, 12))
-    #    screen.blit(pic, interface.coordinates["top_left"].get(position))
+    level = unit.get_unit_level()
+    if not unit.is_milf() and level:
+        if level > 3:
+            level = 3
+        pic = get_image(interface.level_icons[level], (14, 14))
+        screen.blit(pic, interface.coordinates["top_left"].get(position))
 
 
 def draw_bribed(screen, interface, position):
@@ -242,7 +244,7 @@ def get_yellow_counters(unit):
 
 
 def get_blue_counters(unit):
-    return max(unit.get(State.frozen), unit.get(State.attack_frozen), unit.has(State.recently_bribed))
+    return max(unit.get(Effect.poisoned), unit.get(State.attack_frozen), unit.has(State.recently_bribed))
 
 
 def draw_ask_about_move_with_attack(screen, interface, position):

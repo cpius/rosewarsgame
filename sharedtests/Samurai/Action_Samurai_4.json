@@ -1,0 +1,28 @@
+{
+    "type": "Does action exist",
+    "description": "Samurai can not do a move with attack if its movement remaining is 0",
+    "result": false,
+    "action": {
+        "start_at": "E4",
+        "end_at": "E4",
+        "target_at": "E5",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 0,
+        "player1_units": {
+            "E4": {
+                "name": "Samurai",
+                "used": 1,
+                "experience": 1,
+                "movement_remaining": 0,
+                "extra_action": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E5": "Knight",
+            "D7": "Ballista"
+        }
+    }
+}

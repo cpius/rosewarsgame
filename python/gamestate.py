@@ -31,7 +31,8 @@ class Gamestate:
         action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
-        if self.actions_remaining > 0 or action.unit.has(State.extra_action):
+        if action.move_with_attack in [True, False] and \
+                (self.actions_remaining > 0 or action.unit.has(State.extra_action)):
             self.set_available_actions()
 
             self.decrement_actions_if_none_available(action)
@@ -123,10 +124,16 @@ class Gamestate:
                         unit.set(state, value)
                     elif attribute in trait_descriptions:
                         trait = getattr(Trait, attribute)
-                        unit.set(trait, value)
+                        unit.set(trait, level=value)
                     elif attribute in ability_descriptions:
                         ability = getattr(Ability, attribute)
-                        unit.set(ability, value)
+                        unit.set(ability, level=value)
+                    elif attribute in effect_descriptions:
+                        effect = getattr(Effect, attribute)
+                        if isinstance(value, int):
+                            unit.set(effect, value)
+                        else:
+                            unit.set(effect, level=value["level"], value=value["value"])
 
             units[position] = unit
 
@@ -177,7 +184,7 @@ class Gamestate:
     def is_ended(self):
         backline = 8
         for position, unit in self.player_units.items():
-            if not unit.has(State.bribed):
+            if not unit.has(Effect.bribed):
                 if position.row == backline:
                     return True
 

@@ -1,18 +1,18 @@
 from __future__ import division
 from common import *
 
-remove_states = [State.used, State.sabotaged, State.recently_bribed]
+remove_states = [State.used, State.recently_bribed]
 
-decrement_states = [State.frozen, State.attack_frozen, State.improved_weapons]
+decrement_states = [Effect.poisoned, State.attack_frozen, Effect.improved_weapons, Effect.sabotaged]
 
 
 def initialize_turn(gamestate):
 
     def resolve_bribe(unit):
-        if unit.has(State.bribed):
+        if unit.has(Effect.bribed):
             gamestate.player_units[position] = gamestate.enemy_units.pop(position)
             unit.set(State.recently_bribed)
-            gamestate.player_units[position].remove(State.bribed)
+            gamestate.player_units[position].remove(Effect.bribed)
 
     gamestate.set_actions_remaining(2)
 

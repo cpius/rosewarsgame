@@ -8,7 +8,7 @@ def do_action(gamestate, action, outcome):
     def settle_attack(action):
         rolls = outcome.for_position(action.target_at)
 
-        if action.is_failure(rolls, gamestate):
+        if not action.is_win(rolls, gamestate):
             return
 
         if action.target_unit.has_extra_life():
@@ -18,30 +18,26 @@ def do_action(gamestate, action, outcome):
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
-            action.target_unit.set(State.bribed)
+            action.target_unit.set(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         else:
-            value = action.unit.abilities[action.ability]
+            value = action.unit.get_level(action.ability)
             action.target_unit.do(action.ability, value)
 
     def prepare_extra_actions(action):
         if action.unit.has(State.extra_action):
             unit.remove(State.extra_action)
-
-            if unit.has(Trait.bloodlust) and action.is_attack() and action.is_successful(rolls, gamestate):
-                unit.set(State.movement_remaining, unit.get(State.movement_remaining) - int(action.move_with_attack))
-                unit.set(State.extra_action)
-            else:
-                unit.remove(State.movement_remaining)
+            unit.remove(State.movement_remaining)
 
         elif action.is_attack():
-            movement_remaining = unit.movement - distance(action.start_at, action.target_at)
+            movement_remaining = unit.movement - distance(action.start_at, action.end_at) - 1
+
+            if unit.has(Trait.combat_agility) and action.is_attack() and not action.is_win(rolls, gamestate):
+                movement_remaining += 1
 
             unit.set(State.movement_remaining, movement_remaining)
 
-            if movement_remaining:
-                unit.set(State.extra_action)
-            elif unit.has(Trait.combat_agility):
+            if movement_remaining or unit.has(Trait.combat_agility):
                 unit.set(State.extra_action)
 
     def update_actions_remaining():
@@ -58,7 +54,7 @@ def do_action(gamestate, action, outcome):
         if unit.has(Trait.attack_cooldown) and action.is_attack():
             unit.set(State.attack_frozen, 3)
 
-        if unit.has(Trait.attack_cooldown, 2) and action.is_attack():
+        if unit.has(Trait.attack_cooldown, level=2) and action.is_attack():
             unit.set(State.attack_frozen, 2)
 
     def update_unit_position():
@@ -89,6 +85,9 @@ def do_action(gamestate, action, outcome):
 
     update_unit_position()
 
+    if unit.has(Trait.scouting):
+        unit.gain_xp()
+
     if action.is_attack():
         unit.gain_xp()
         rolls = outcome.for_position(action.target_at)
@@ -103,7 +102,7 @@ def do_action(gamestate, action, outcome):
         unit.gain_xp()
         settle_ability(action)
 
-    if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility, Trait.bloodlust]):
+    if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility]):
         prepare_extra_actions(action)
 
     if action.is_attack() and action.move_with_attack and action.attack_successful(rolls, gamestate):
@@ -114,7 +113,7 @@ def do_action(gamestate, action, outcome):
 
 def move_melee_unit_to_target_tile(gamestate, rolls, action):
 
-    if action.is_successful(rolls, gamestate):
+    if action.is_win(rolls, gamestate):
         if not action.target_unit.has_extra_life():
             gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
 

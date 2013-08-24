@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "description": "A unit can't move if it's poisoned",
+    "result": false,
+    "action": {
+        "start_at": "D3",
+        "end_at": "D4"
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B2": "Crusader",
+            "D3": {
+                "name": "Knight",
+                "poisoned": 1
+            }
+        },
+        "player2_units": {
+            "E7": "Knight"
+        }
+    }
+}

@@ -143,9 +143,9 @@ class Action(object):
         return bool(self.ability)
 
     def lancing(self):
-        if self.unit.has(Trait.lancing, 1) and self.is_attack() and self.distance_to_target() >= 3:
+        if self.unit.has(Trait.lancing, level=1) and self.is_attack() and self.distance_to_target() >= 3:
             return 2
-        elif self.unit.has(Trait.lancing, 2) and self.is_attack() and self.distance_to_target() >= 4:
+        elif self.unit.has(Trait.lancing, level=2) and self.is_attack() and self.distance_to_target() >= 4:
             return 3
         else:
             return 0
@@ -153,20 +153,16 @@ class Action(object):
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack() and self.move_with_attack
 
-    def is_crusading(self, units, n=0):
-        if not n:
-            return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 1) or
-                                             self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, 2))
-        else:
-            return self.unit.is_melee() and self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n)
+    def is_crusading(self, units, n=None):
+        return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n))
 
     def has_high_morale(self, units):
         return self.unit.is_melee() and (self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or
-                                         self.is_surrounding_unit_with(units, Trait.flag_bearing_B, self.end_at))
+                                         self.is_surrounding_unit_with(units, Trait.flag_bearing, self.end_at, 2))
 
-    def is_surrounding_unit_with(self, units, trait, position, n=1):
+    def is_surrounding_unit_with(self, units, trait, position, level=None):
         units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, n))
+        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level=level))
 
     def is_adjacent_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)
@@ -181,22 +177,11 @@ class Action(object):
     def attack_successful(self, rolls, gamestate):
         return battle.attack_successful(self, rolls, gamestate)
 
-    def is_successful(self, rolls, gamestate):
-        if not self.is_attack():
-            return True
-        if not self.target_at in gamestate.all_units():
-            return True
-        attack_successful = battle.attack_successful(self, rolls, gamestate)
-        if not attack_successful:
-            return False
-        defence_successful = battle.defence_successful(self, rolls, gamestate)
-        return not defence_successful
+    def defence_successful(self, rolls, gamestate):
+        return battle.defence_successful(self, rolls, gamestate)
 
-    def is_failure(self, rolls, gamestate):
-        if not rolls:
-            return False
-
-        return not self.is_successful(rolls, gamestate)
+    def is_win(self, rolls, gamestate):
+        return self.attack_successful(rolls, gamestate) and not self.defence_successful(rolls, gamestate)
 
     def is_miss(self, rolls, gamestate):
         return not battle.attack_successful(self, rolls, gamestate)
@@ -208,7 +193,7 @@ class Action(object):
         if self.is_miss(rolls, gamestate):
             return "Miss"
 
-        if self.is_successful(rolls, gamestate):
+        if self.is_win(rolls, gamestate):
             return "Win"
 
         return "Defend"

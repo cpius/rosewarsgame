@@ -110,7 +110,12 @@ class Controller(object):
         if len(self.selected_unit.abilities) > 1:
             index = self.get_input_abilities(self.selected_unit)
 
+            if index == "escape":
+                self.clear_move()
+                return
+
             ability = self.selected_unit.abilities.keys()[index]
+
         else:
             ability = self.selected_unit.abilities.keys()[0]
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
@@ -207,6 +212,9 @@ class Controller(object):
                     if matching_actions:
                         return matching_actions
 
+            elif self.escape(event):
+                self.clear_move()
+
             elif self.quit_game_requested(event):
                 self.exit_game()
 
@@ -219,6 +227,7 @@ class Controller(object):
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
+        self.view.draw_game(self.game)
 
     def run_game(self):
 
@@ -289,8 +298,12 @@ class Controller(object):
             if event.type == KEYDOWN and event.key == K_1:
                 return 0
 
-            if event.type == KEYDOWN and event.key == K_2:
+            elif event.type == KEYDOWN and event.key == K_2:
                 return 1
+
+            elif self.escape(event):
+                self.clear_move()
+                return "escape"
 
             elif self.quit_game_requested(event):
                 self.exit_game()
@@ -336,7 +349,7 @@ class Controller(object):
 
         upgrade_choice_to_save = upgrade_choice
         if not isinstance(upgrade_choice, basestring):
-            upgrade_choice_to_save = readable_attributes(upgrade_choice)
+            upgrade_choice_to_save = readable(upgrade_choice)
 
         self.game.save_option("upgrade", upgrade_choice_to_save)
         if self.game.is_enemy_network():
@@ -359,16 +372,20 @@ class Controller(object):
             self.view.draw_game(self.game)
             self.view.draw_action(action, outcome, self.game)
 
-            if action.move_with_attack is None and action.attack_successful(outcome.for_position(action.target_at), self.game.gamestate):
-                move_with_attack = self.ask_about_move_with_attack(action)
+            if action.move_with_attack is None:
+                rolls = outcome.for_position(action.target_at)
+                gamestate = self.game.gamestate
+                push_possible = action.is_push() and action.attack_successful(rolls, gamestate)
+                if push_possible or action.is_win(rolls, gamestate):
+                    move_with_attack = self.ask_about_move_with_attack(action)
+    
+                    self.game.save_option("move_with_attack", move_with_attack)
+                    if self.game.is_enemy_network():
+                        self.client.send_move_with_attack(move_with_attack, gamestate.action_count)
 
-                self.game.save_option("move_with_attack", move_with_attack)
-                if self.game.is_enemy_network():
-                    self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
-
-                if move_with_attack:
-                    self.view.draw_post_movement(action)
-                    self.game.gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
+                    if move_with_attack:
+                        self.view.draw_post_movement(action)
+                        gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
 
         else:
             if not outcome:
@@ -389,14 +406,14 @@ class Controller(object):
             self.game_end()
             return
 
-        if self.game.is_player_human() and action.unit.is_milf():
+        if self.game.is_player_human() and action.unit.is_milf() and not action.unit.has(State.extra_action):
             if action.is_attack() and action.target_at in self.game.gamestate.player_units:
                 unit_position = action.target_at
             else:
                 unit_position = action.end_at
             self.view.draw_game(self.game)
             self.upgrade_unit(unit_position, action.unit)
-        elif self.game.is_player_network() and action.unit.is_milf():
+        elif self.game.is_player_network() and action.unit.is_milf() and not action.unit.has(State.extra_action):
             position = action.end_at
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
@@ -459,6 +476,9 @@ class Controller(object):
 
     def command_q_down(self, key):
         return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
+
+    def escape(self, event):
+        return event.type == KEYDOWN and event.key == K_ESCAPE
 
     def game_end(self):
         self.view.draw_game_end(self.game.current_player().color)

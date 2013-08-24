@@ -1,0 +1,26 @@
+{
+    "type": "Is attack and defence correct",
+    "description": "The Knight gets a bonus from Flag Bearer level 2",
+    "attack": 5,
+    "defence": 1,
+    "action": {
+        "start_at": "D5",
+        "end_at": "D6",
+        "target_at": "D7",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C5": {
+                "name": "Flag Bearer",
+                "flag_bearing": 2
+            },
+            "D5": "Knight"
+        },
+        "player2_units": {
+            "A8": "Archer",
+            "D7": "Ballista"
+        }
+    }
+}
