@@ -12,10 +12,7 @@
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
-            "B1": {
-                "name": "Dragoon",
-                "flanking": 1
-            },
+            "B1": "Dragoon",
             "A3": "Knight"
         },
         "player2_units": {
@@ -27,4 +24,3 @@
         }
     }
 }
-
