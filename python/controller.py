@@ -259,6 +259,9 @@ class Controller(object):
             elif event.type == KEYDOWN and event.key == K_g:
                 print self.game.gamestate
 
+            elif event.type == KEYDOWN and event.key == K_a:
+                print self.game.gamestate.available_actions
+
             elif self.quit_game_requested(event):
                 self.exit_game()
 
