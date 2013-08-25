@@ -31,10 +31,12 @@ class Gamestate:
         action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
-        if action.move_with_attack in [True, False] and \
-                (self.actions_remaining > 0 or action.unit.has(State.extra_action)):
-            self.set_available_actions()
+        has_available_actions = self.actions_remaining > 0 or action.unit.has(State.extra_action)
+        is_move_with_attack_possible = self.is_post_move_with_attack_possible(action, outcome)
+        is_move_attack_decided = action.move_with_attack in [True, False] or not is_move_with_attack_possible
 
+        if is_move_attack_decided and has_available_actions:
+            self.set_available_actions()
             self.decrement_actions_if_none_available(action)
 
     def decrement_actions_if_none_available(self, action):
@@ -220,3 +222,12 @@ class Gamestate:
         for position, unit in self.player_units.items():
             if unit.is_milf():
                 return position, unit
+
+    def is_post_move_with_attack_possible(self, action, outcome):
+        if not action.is_attack() or not action.unit.is_melee():
+            return False
+
+        rolls = outcome.for_position(action.target_at)
+        push_possible = action.is_push() and action.attack_successful(rolls, self)
+
+        return push_possible or action.is_win(rolls, self)

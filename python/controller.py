@@ -373,19 +373,19 @@ class Controller(object):
             self.view.draw_action(action, outcome, self.game)
 
             if action.move_with_attack is None:
-                rolls = outcome.for_position(action.target_at)
-                gamestate = self.game.gamestate
-                push_possible = action.is_push() and action.attack_successful(rolls, gamestate)
-                if push_possible or action.is_win(rolls, gamestate):
+                if self.game.gamestate.is_post_move_with_attack_possible(action, outcome):
                     move_with_attack = self.ask_about_move_with_attack(action)
     
                     self.game.save_option("move_with_attack", move_with_attack)
                     if self.game.is_enemy_network():
-                        self.client.send_move_with_attack(move_with_attack, gamestate.action_count)
+                        self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
 
                     if move_with_attack:
                         self.view.draw_post_movement(action)
-                        gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
+                        rolls = outcome.for_position(action.target_at)
+                        self.game.gamestate.move_melee_unit_to_target_tile(rolls, action)
+                else:
+                    self.game.gamestate.set_available_actions()
 
         else:
             if not outcome:
