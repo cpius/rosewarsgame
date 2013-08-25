@@ -35,7 +35,8 @@ def do_action(gamestate, action, outcome):
             if unit.has(Trait.combat_agility) and action.is_attack() and not action.is_win(rolls, gamestate):
                 movement_remaining += 1
 
-            unit.set(State.movement_remaining, movement_remaining)
+            if movement_remaining:
+                unit.set(State.movement_remaining, movement_remaining)
 
             if movement_remaining or unit.has(Trait.combat_agility):
                 unit.set(State.extra_action)
