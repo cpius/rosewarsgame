@@ -46,6 +46,15 @@ class UniversalTestCase(TestCase):
                 if "outcome" in test_document:
                     outcome = Outcome.from_document(test_document["outcome"])
 
+                if action.move_with_attack:
+                    # If move-with-attack is set, test both the situation where it
+                    # is registered right away, and the situation where it is registered
+                    # in a two-step process
+                    gamestate_delayed = gamestate.copy()
+                    action_delayed = Action.from_document(gamestate_delayed.all_units(), test_document["action"])
+                    action_delayed.move_with_attack = None
+                    self.is_outcome_correct(gamestate_delayed, action_delayed, outcome, expected_gamestate)
+
                 self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
 
             elif test_document["type"] == "Does turn shift work":
@@ -122,6 +131,10 @@ class UniversalTestCase(TestCase):
 
     def is_outcome_correct(self, gamestate, action, outcome, expected_gamestate):
         gamestate.do_action(action, outcome)
+
+        if action.move_with_attack is None:
+            action.move_with_attack = True
+            gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
 
         actual_gamestate_document = gamestate.to_document()
         expected_gamestate_document = expected_gamestate.to_document()
