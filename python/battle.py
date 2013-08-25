@@ -99,10 +99,10 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
     if attacking_unit.get(Effect.bribed):
         attack_adjusters["Bribed"] = attacking_unit.get(Effect.bribed)
 
-    if attacking_unit.has_effect(Effect.improved_weapons, level=1):
+    if attacking_unit.has(Effect.improved_weapons, level=1):
         attack_adjusters["Improved weapons, level 1"] = 3
 
-    if attacking_unit.has_effect(Effect.improved_weapons, level=2):
+    if attacking_unit.has(Effect.improved_weapons, level=2):
         attack_adjusters["Improved weapons, level 1"] = 2
 
     if defending_unit.type in attacking_unit.attack_bonuses:
