@@ -40,9 +40,8 @@ def get_unit_lines(unit):
             lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
             lines.append("")
 
-    for trait, info in unit.traits.items():
+    for trait, level in unit.traits.items():
         if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
-            level = info[1]
             if level == 1:
                 lines.append(Trait.write[trait] + ":")
                 lines.append(get_description(trait, 1))
@@ -52,8 +51,7 @@ def get_unit_lines(unit):
                 lines.append(get_description(trait, level))
                 lines.append("")
 
-    for ability, info in unit.abilities.items():
-        level = info[1]
+    for ability, level in unit.abilities.items():
         if level == 1:
             lines.append(Ability.write[ability] + ":")
             lines.append(get_description(ability, 1))
@@ -63,18 +61,17 @@ def get_unit_lines(unit):
             lines.append(get_description(ability, level))
             lines.append("")
 
-    for state, info in unit.states.items():
-        value = info[1]
+    for state, value in unit.states.items():
         if value and state not in [State.used, State.recently_upgraded, State.experience]:
             lines.append(State.name[state] + ": " + str(value))
 
     for effect, info in unit.effects.items():
-        value = info[0]
-        level = info[1]
+        level = info[0]
+        duration = info[1]
         if level == 1:
-            lines.append(Effect.write[effect] + ": " + str(value))
+            lines.append(Effect.write[effect] + ": " + str(duration))
         else:
-            lines.append(Effect.write[effect] + ", level " + str(level) + ": " + str(value))
+            lines.append(Effect.write[effect] + ", level " + str(level) + ": " + str(duration))
         lines.append("")
 
     return lines
@@ -120,11 +117,11 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
 
     else:
         lines = []
-        for attribute, info in upgrade_choice.items():
+        for attribute, amount in upgrade_choice.items():
             if attribute in unit.get_dict(attribute):
-                level = unit.get_dict(attribute)[attribute][1]
+                level = unit.get_dict(attribute)[attribute]
             else:
-                level = info[1]
+                level = amount
             name = readable(attribute)
             if level > 1:
                 lines.append(name.replace("_", " ") + ", level " + str(level))
@@ -169,7 +166,7 @@ def draw_ask_about_ability(screen, interface, unit):
     clear(screen, interface)
     lines = ["Select ability:"]
     for i, ability in enumerate(unit.abilities):
-        level = unit.get_level(ability)
+        level = unit.abilities[ability]
         description_string = str(i + 1) + ": " + Ability.write[ability] + ": " + get_description(ability, level)
         lines += textwrap.wrap(description_string, interface.message_line_length)
 

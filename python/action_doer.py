@@ -21,13 +21,13 @@ def do_action(gamestate, action, outcome):
             action.target_unit.set(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         else:
-            value = action.unit.get_level(action.ability)
+            value = action.unit.get(action.ability)
             action.target_unit.do(action.ability, value)
 
     def prepare_extra_actions(action):
         if action.unit.has(State.extra_action):
-            unit.remove(State.extra_action)
-            unit.remove(State.movement_remaining)
+            unit.remove_state(State.extra_action)
+            unit.remove_state(State.movement_remaining)
 
         elif action.is_attack():
             movement_remaining = unit.movement - distance(action.start_at, action.end_at) - 1
@@ -35,7 +35,8 @@ def do_action(gamestate, action, outcome):
             if unit.has(Trait.combat_agility) and action.is_attack() and not action.is_win(rolls, gamestate):
                 movement_remaining += 1
 
-            unit.set(State.movement_remaining, movement_remaining)
+            if movement_remaining:
+                unit.set(State.movement_remaining, movement_remaining)
 
             if movement_remaining or unit.has(Trait.combat_agility):
                 unit.set(State.extra_action)
@@ -52,10 +53,10 @@ def do_action(gamestate, action, outcome):
 
     def apply_unit_effects():
         if unit.has(Trait.attack_cooldown) and action.is_attack():
-            unit.set(State.attack_frozen, 3)
+            unit.set_effect(Effect.attack_frozen, duration=3)
 
-        if unit.has(Trait.attack_cooldown, level=2) and action.is_attack():
-            unit.set(State.attack_frozen, 2)
+        if unit.has(Trait.attack_cooldown, 2) and action.is_attack():
+            unit.set_effect(Effect.attack_frozen, duration=2)
 
     def update_unit_position():
         player_units[action.end_at] = player_units.pop(action.start_at)

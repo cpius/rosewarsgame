@@ -31,17 +31,19 @@ class Gamestate:
         action_doer.do_action(self, action, outcome)
         self.action_count += 1
 
-        if action.move_with_attack in [True, False] and \
-                (self.actions_remaining > 0 or action.unit.has(State.extra_action)):
-            self.set_available_actions()
+        has_available_actions = self.actions_remaining > 0 or action.unit.has(State.extra_action)
+        is_move_with_attack_possible = self.is_post_move_with_attack_possible(action, outcome)
+        is_move_attack_decided = action.move_with_attack in [True, False] or not is_move_with_attack_possible
 
+        if is_move_attack_decided and has_available_actions:
+            self.set_available_actions()
             self.decrement_actions_if_none_available(action)
 
     def decrement_actions_if_none_available(self, action):
         if not self.available_actions:
             if action.unit.has(State.extra_action):
-                action.unit.remove(State.extra_action)
-                action.unit.remove(State.movement_remaining)
+                action.unit.remove_state(State.extra_action)
+                action.unit.remove_state(State.movement_remaining)
                 self.set_available_actions()
             else:
                 self.actions_remaining = 0
@@ -124,16 +126,16 @@ class Gamestate:
                         unit.set(state, value)
                     elif attribute in trait_descriptions:
                         trait = getattr(Trait, attribute)
-                        unit.set(trait, level=value)
+                        unit.set(trait, value=value)
                     elif attribute in ability_descriptions:
                         ability = getattr(Ability, attribute)
-                        unit.set(ability, level=value)
+                        unit.set(ability, value=value)
                     elif attribute in effect_descriptions:
                         effect = getattr(Effect, attribute)
                         if isinstance(value, int):
-                            unit.set(effect, value)
+                            unit.set_effect(effect, 1, value)
                         else:
-                            unit.set(effect, level=value["level"], value=value["value"])
+                            unit.set_effect(effect, level=value[0], duration=value[1])
 
             units[position] = unit
 
@@ -220,3 +222,12 @@ class Gamestate:
         for position, unit in self.player_units.items():
             if unit.is_milf():
                 return position, unit
+
+    def is_post_move_with_attack_possible(self, action, outcome):
+        if not action.is_attack() or not action.unit.is_melee():
+            return False
+
+        rolls = outcome.for_position(action.target_at)
+        push_possible = action.is_push() and action.attack_successful(rolls, self)
+
+        return push_possible or action.is_win(rolls, self)

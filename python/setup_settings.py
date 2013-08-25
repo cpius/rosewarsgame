@@ -20,7 +20,8 @@ allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Long
                          "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat"]
 allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
-requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_siege_weapon", "at_most_two_siege_weapons"]
+requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_siege_weapon",
+                "at_most_two_siege_weapons"]
 
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])

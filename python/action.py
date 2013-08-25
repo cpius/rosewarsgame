@@ -38,7 +38,8 @@ class Action(object):
 
         self.unit = units[self.start_at]
 
-        if self.move_with_attack is None and not self.is_attack():
+        is_move_with_attack_feasible = self.is_attack() and self.unit.is_melee()
+        if self.move_with_attack is None and not is_move_with_attack_feasible:
             self.move_with_attack = False
 
     @classmethod
@@ -143,9 +144,9 @@ class Action(object):
         return bool(self.ability)
 
     def lancing(self):
-        if self.unit.has(Trait.lancing, level=1) and self.is_attack() and self.distance_to_target() >= 3:
+        if self.unit.has(Trait.lancing, 1) and self.is_attack() and self.distance_to_target() >= 3:
             return 2
-        elif self.unit.has(Trait.lancing, level=2) and self.is_attack() and self.distance_to_target() >= 4:
+        elif self.unit.has(Trait.lancing, 2) and self.is_attack() and self.distance_to_target() >= 4:
             return 3
         else:
             return 0
@@ -153,8 +154,11 @@ class Action(object):
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack() and self.move_with_attack
 
-    def is_crusading(self, units, level=None):
+    def is_crusading_attack(self, units, level=None):
         return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, level))
+
+    def is_crusading_defense(self, units, level=None):
+        return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.target_at, level))
 
     def has_high_morale(self, units):
         return self.unit.is_melee() and (self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or
@@ -162,7 +166,7 @@ class Action(object):
 
     def is_surrounding_unit_with(self, units, trait, position, level=None):
         units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level=level))
+        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level))
 
     def is_adjacent_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)

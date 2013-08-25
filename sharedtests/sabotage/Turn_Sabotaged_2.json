@@ -14,7 +14,7 @@
             "E3": {
                 "name": "Knight",
                 "sabotaged": 2
-                },
+            },
             "A4": "Ballista"
         }
     },
@@ -31,7 +31,7 @@
             "E3": {
                 "name": "Knight",
                 "sabotaged": 1
-                },
+            },
             "A4": "Ballista"
         }
     }
