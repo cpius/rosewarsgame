@@ -13,10 +13,7 @@
         "player1_units": {
             "E3": {
                 "name": "Knight",
-                "improved_weapons": {
-                    "level": 2,
-                    "value": 1
-                }
+                "improved_weapons": [2, 1]
             },
             "A4": "Ballista"
         }
@@ -33,10 +30,7 @@
         "player2_units": {
             "E3": {
                 "name": "Knight",
-                "improved_weapons": {
-                    "level": 2,
-                    "value": 1
-                }
+                "improved_weapons": [2, 1]
             },
             "A4": "Ballista"
         }

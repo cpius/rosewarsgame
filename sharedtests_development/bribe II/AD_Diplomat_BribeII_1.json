@@ -13,7 +13,7 @@
         "player1_units": {
             "B2": {
                 "name": "Light Cavalry",
-                "bribed": 2
+                "bribed": [2, 1]
             },
             "A3": "Archer"
         },

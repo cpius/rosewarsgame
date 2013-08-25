@@ -19,13 +19,9 @@
         "player2_units": {
             "B4": {
                 "name": "Archer",
-                "sabotaged": {
-                    "level": 2,
-                    "value": 2
-                }
-            },
-            "A5": "Weaponsmith"
-        }
+                "sabotaged": [2, 2]
+            }
+        },
+        "A5": "Weaponsmith"
     }
 }
-

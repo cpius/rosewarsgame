@@ -240,7 +240,6 @@ def run_test(test_file):
                 upgrade_choice = test_document["upgrade"]
             else:
                 upgrade_choice = enum_attributes(test_document["upgrade"])
-                upgrade_choice = dict((key, [1, level]) for key, level in upgrade_choice.items())
 
             for position, unit in gamestate.player_units.items():
                 if unit.is_allowed_upgrade_choice(upgrade_choice):

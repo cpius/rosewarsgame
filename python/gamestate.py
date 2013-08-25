@@ -40,8 +40,8 @@ class Gamestate:
     def decrement_actions_if_none_available(self, action):
         if not self.available_actions:
             if action.unit.has(State.extra_action):
-                action.unit.remove(State.extra_action)
-                action.unit.remove(State.movement_remaining)
+                action.unit.remove_state(State.extra_action)
+                action.unit.remove_state(State.movement_remaining)
                 self.set_available_actions()
             else:
                 self.actions_remaining = 0
@@ -124,16 +124,16 @@ class Gamestate:
                         unit.set(state, value)
                     elif attribute in trait_descriptions:
                         trait = getattr(Trait, attribute)
-                        unit.set(trait, level=value)
+                        unit.set(trait, value=value)
                     elif attribute in ability_descriptions:
                         ability = getattr(Ability, attribute)
-                        unit.set(ability, level=value)
+                        unit.set(ability, value=value)
                     elif attribute in effect_descriptions:
                         effect = getattr(Effect, attribute)
                         if isinstance(value, int):
-                            unit.set(effect, value)
+                            unit.set_effect(effect, 1, value)
                         else:
-                            unit.set(effect, level=value["level"], value=value["value"])
+                            unit.set_effect(effect, level=value[0], duration=value[1])
 
             units[position] = unit
 

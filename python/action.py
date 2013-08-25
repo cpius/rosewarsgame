@@ -143,9 +143,9 @@ class Action(object):
         return bool(self.ability)
 
     def lancing(self):
-        if self.unit.has(Trait.lancing, level=1) and self.is_attack() and self.distance_to_target() >= 3:
+        if self.unit.has(Trait.lancing, 1) and self.is_attack() and self.distance_to_target() >= 3:
             return 2
-        elif self.unit.has(Trait.lancing, level=2) and self.is_attack() and self.distance_to_target() >= 4:
+        elif self.unit.has(Trait.lancing, 2) and self.is_attack() and self.distance_to_target() >= 4:
             return 3
         else:
             return 0
@@ -162,7 +162,7 @@ class Action(object):
 
     def is_surrounding_unit_with(self, units, trait, position, level=None):
         units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level=level))
+        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level))
 
     def is_adjacent_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)

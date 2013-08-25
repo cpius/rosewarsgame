@@ -96,13 +96,13 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
     if action.has_high_morale(player_units):
         attack_adjusters["High morale"] = 2
 
-    if attacking_unit.has(Effect.bribed):
+    if attacking_unit.get(Effect.bribed):
         attack_adjusters["Bribed"] = 1
 
-    if attacking_unit.has(Effect.improved_weapons, level=1):
+    if attacking_unit.has_effect(Effect.improved_weapons, level=1):
         attack_adjusters["Improved weapons, level 1"] = 3
 
-    if attacking_unit.has(Effect.improved_weapons, level=2):
+    if attacking_unit.has_effect(Effect.improved_weapons, level=2):
         attack_adjusters["Improved weapons, level 1"] = 2
 
     if defending_unit.type in attacking_unit.attack_bonuses:
@@ -130,7 +130,6 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
         attack_adjusters["Flanking"] = 2
 
     return attack_adjusters
-
 
 
 def get_attack_rating(attacking_unit, defending_unit, action, player_units):
