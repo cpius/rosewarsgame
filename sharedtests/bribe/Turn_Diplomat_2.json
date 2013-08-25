@@ -7,7 +7,7 @@
             "E4": "Light Cavalry",
             "C6": {
                 "name": "Knight",
-                "bribed": true,
+                "bribed": 1,
                 "used": "true"
             }
         },
@@ -24,11 +24,9 @@
         "player1_units": {
             "C6": {
                 "name": "Knight",
-                "recently_bribed": true
+                "recently_bribed": 1
             },
             "A4": "Ballista"
-
         }
     }
 }
-
