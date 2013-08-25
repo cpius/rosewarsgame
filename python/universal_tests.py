@@ -65,6 +65,9 @@ class UniversalTestCase(TestCase):
 
                 self.upgrade(gamestate, upgrade_choice, expected_gamestate)
 
+            elif test_document["type"] == "Is outcome correct, extra action":
+                return
+
             else:
                 self.assertTrue(False, "Unknown test type: " + test_document["type"])
 
