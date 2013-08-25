@@ -23,7 +23,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, enemy_units):
     if attacking_unit.is_melee() and defending_unit.has(Trait.big_shield):
         defence_adjusters["Big shield"] = 2
 
-    if action.is_crusading(enemy_units, level=2):
+    if action.is_crusading_defense(enemy_units, level=2):
         defence_adjusters["Crusading, level 2"] = 1
 
     if attacking_unit.type in defending_unit.defence_bonuses:
@@ -90,7 +90,7 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
     if action.lancing():
         attack_adjusters["Lancing"] = action.lancing()
 
-    if action.is_crusading(player_units):
+    if action.is_crusading_attack(player_units):
         attack_adjusters["Crusading"] = 1
 
     if action.has_high_morale(player_units):
@@ -133,7 +133,6 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
 
 
 def get_attack_rating(attacking_unit, defending_unit, action, player_units):
-
     attack = attacking_unit.attack
 
     attack_adjusters = get_attack_adjusters(attacking_unit, defending_unit, action, player_units)
