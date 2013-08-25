@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Light Cavalry gets the big +2A bonus from being level-2 bribed",
     "attack": 4,
     "defence": 2,
     "action": {
