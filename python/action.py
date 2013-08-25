@@ -153,8 +153,8 @@ class Action(object):
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack() and self.move_with_attack
 
-    def is_crusading(self, units, n=None):
-        return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, n))
+    def is_crusading(self, units, level=None):
+        return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, level))
 
     def has_high_morale(self, units):
         return self.unit.is_melee() and (self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or
