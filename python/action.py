@@ -38,7 +38,8 @@ class Action(object):
 
         self.unit = units[self.start_at]
 
-        if self.move_with_attack is None and not self.is_attack():
+        is_move_with_attack_feasible = self.is_attack() and self.unit.is_melee()
+        if self.move_with_attack is None and not is_move_with_attack_feasible:
             self.move_with_attack = False
 
     @classmethod
