@@ -15,7 +15,6 @@
                 "name": "Samurai",
                 "used": 1,
                 "experience": 1,
-                "movement_remaining": 0,
                 "extra_action": 1
             },
             "A2": "Pikeman"

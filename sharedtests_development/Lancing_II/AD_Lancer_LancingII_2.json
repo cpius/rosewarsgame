@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Lancer uses its level 2 lancing trait to turboboost its attack",
     "attack": 5,
     "defence": 2,
     "action": {

@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Light Cavalry gets the big +2A bonus from being level-2 bribed",
     "attack": 4,
     "defence": 2,
     "action": {
@@ -13,15 +14,13 @@
         "player1_units": {
             "B2": {
                 "name": "Light Cavalry",
-                "bribed": 2
+                "bribed": [2, 1]
             },
             "A3": "Archer"
         },
         "player2_units": {
             "B5": "Archer",
             "E5": "Ballista"
-
         }
     }
 }
-

@@ -162,28 +162,22 @@ trait_descriptions = {
 }
 
 state_descriptions = {
-    "attack_frozen": "Unit cannot attack",
     "extra_action": "Whether the unit is doing its extra action.",
     "lost_extra_life": "Whether the unit has lost its extra life",
     "movement_remaining": "Movement points left for doing an extra action",
-    "recently_bribed": "Whether a unit was bribed last turn.",
     "used": "Whether a unit has been used this turn.",
     "experience": "Experience.",
-    "recently_upgraded": "Whether a unit was upgraded this turn"
+    "recently_upgraded": "Whether a unit was upgraded this turn",
+    "recently_bribed": "Whether a unit was bribed last turn."
 }
 
 
 effect_descriptions = {
-    "bribed": {
-        1: "Whether a unit is currently bribed by a Diplomat."},
-    "poisoned": {
-        1: "Unit cannot perform any actions."},
-    "improved_weapons": {
-        1: "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith."},
-    "improved_weapons_II": {
-        1: "Whether a unit currently has been the target of an improve_weapons_II function"},
-    "sabotaged": {
-        1: "Whether a unit is currently sabotaged by a Saboteur."},
+    "attack_frozen": "Unit cannot attack",
+    "bribed": "Whether a unit is bribed by a Diplomat.",
+    "poisoned": "Unit cannot perform any actions.",
+    "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
+    "sabotaged": "Whether a unit is sabotaged by a Saboteur."
 }
 
 ability_descriptions = {
@@ -232,7 +226,6 @@ if 1 == 2:
 
     class State:
         attack_cooldown = None
-        attack_frozen = None
         bribed = None
         extra_action = None
         poisoned = None
@@ -296,6 +289,7 @@ if 1 == 2:
         write = {}
 
     class Effect:
+        attack_frozen = None
         bribed = None
         improved_weapons = None
         poisoned = None
@@ -410,21 +404,15 @@ def readable(attributes):
             return State.name[attributes].title()
 
     dictionary = {}
-    for key, info in attributes.items():
-        if key in Trait.name:
-            if info[1]:
-                dictionary[Trait.name[key]] = info[1]
-        elif key in Ability.name:
-            if info[1]:
-                dictionary[Ability.name[key]] = info[1]
-        elif key in State.name:
-            if info[0]:
-                dictionary[State.name[key]] = info[0]
-        elif key in Effect.name:
-            if info[1] == 1:
-                dictionary[Effect.name[key]] = info[0]
-            elif info[1]:
-                dictionary[Effect.name[key]] = {"value": info[0], "level": info[1]}
+    for attribute, value in attributes.items():
+        if attribute in Trait.name:
+            dictionary[Trait.name[attribute]] = value
+        elif attribute in Ability.name:
+            dictionary[Ability.name[attribute]] = value
+        elif attribute in State.name:
+            dictionary[State.name[attribute]] = value
+        elif attribute in Effect.name:
+            dictionary[Effect.name[attribute]] = value
 
     return dictionary
 

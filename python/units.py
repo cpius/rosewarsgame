@@ -29,19 +29,19 @@ class Unit(object):
 
     @property
     def attack(self):
-        return self.base_attack + self.get_level(Trait.attack_skill)
+        return self.base_attack + self.get(Trait.attack_skill)
 
     @property
     def defence(self):
-        return self.base_defence + self.get_level(Trait.defence_skill)
+        return self.base_defence + self.get(Trait.defence_skill)
 
     @property
     def range(self):
-        return self.base_range + self.get_level(Trait.range_skill)
+        return self.base_range + self.get(Trait.range_skill)
 
     @property
     def movement(self):
-        return self.base_movement + self.get_level(Trait.movement_skill)
+        return self.base_movement + self.get(Trait.movement_skill)
 
     def __repr__(self):
         return self.name
@@ -56,73 +56,76 @@ class Unit(object):
         elif attribute in State.name:
             return self.states
 
-    def set(self, attribute, value=1, level=1):
-        self.get_dict(attribute)[attribute] = [value, level]
-
-    def add(self, attribute, value, level=1):
-        assert isinstance(value, int)
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            dict[attribute][0] += value
+    def set(self, attribute, value=1, duration=None):
+        if attribute in Effect.name:
+            if duration:
+                self.set_effect(attribute, value, duration)
+            else:
+                self.set_effect(attribute, value)
         else:
-            dict[attribute] = [value, level]
+            self.get_dict(attribute)[attribute] = value
 
-    def add_levels(self, attribute, levels=1):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            dict[attribute][1] += levels
+    def upgrade_attribute(self, attribute, amount):
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            dictionary[attribute] += amount
         else:
-            dict[attribute] = [1, levels]
+            dictionary[attribute] = amount
 
     def has(self, attribute, value=None, level=None):
+        if attribute in Effect.name:
+            return self.has_effect(attribute, level)
+
         if value:
-            return self.get_value(attribute) == value
-        elif level:
-            return self.get_level(attribute) == level
+            return self.get(attribute) == value
         else:
-            return self.get_value(attribute)
+            return self.get(attribute)
+
+    def has_effect(self, effect, level=None):
+        if not effect in self.effects:
+            return False
+
+        if not level:
+            return True
+
+        if isinstance(self.effects[effect], int):
+            return self.effects[effect] == level
+
+        return self.effects[effect][0] == level
 
     def get(self, attribute):
-        return self.get_value(attribute)
-
-    def get_value(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            return dict[attribute][0]
+        if attribute in Effect.name:
+            return self.get_effect(attribute)
         else:
-            return 0
+            dictionary = self.get_dict(attribute)
+            if attribute in dictionary:
+                return self.get_dict(attribute)[attribute]
+            else:
+                return 0
 
-    def get_level(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            return dict[attribute][1]
-        else:
-            return 0
-
-    def set_value(self, attribute, value, level=1):
-        self.get_dict(attribute)[attribute] = [value, level]
-
-    def remove(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            del dict[attribute]
+    def remove_state(self, state):
+        if state in self.states:
+            del self.states[state]
 
     def decrement(self, attribute):
-        dict = self.get_dict(attribute)
-        if attribute in dict:
-            dict[attribute][0] = max(0, dict[attribute][0] - 1)
-            if dict[attribute][0] == 0:
-                del dict[attribute]
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            dictionary[attribute][0] = max(0, dictionary[attribute][0] - 1)
+            if dictionary[attribute][0] == 0:
+                del dictionary[attribute]
 
-    def increment(self, attribute):
-        self.add(attribute, 1)
+    def increment_state(self, state):
+        if state in self.states:
+            self.states[state] += 1
+        else:
+            self.states[state] = 1
 
     def do(self, ability, level):
         if ability == Ability.poison:
-            self.set(Effect.poisoned, value=level+1)
+            self.set(Effect.poisoned, duration=level+1)
 
         if ability == Ability.sabotage:
-            self.set(Effect.sabotaged, value=level+1)
+            self.set_effect(Effect.sabotaged, duration=level+1)
 
         if ability == Ability.improve_weapons:
             if level == 2:
@@ -130,10 +133,34 @@ class Unit(object):
             else:
                 self.set(Effect.improved_weapons)
 
+    def set_effect(self, effect, level=1, duration=1):
+        self.effects[effect] = [level, duration]
+
+    def get_effect(self, effect):
+        if not effect in self.effects:
+            return 0
+        if isinstance(self.effects[effect], int):
+            return self.effects[effect]
+        else:
+            return self.effects[effect][0]
+
     def gain_xp(self):
         if not self.has(State.used) and not settings.beginner_mode:
-            self.increment(State.experience)
-            self.remove(State.recently_upgraded)
+            self.increment_state(State.experience)
+            self.remove_state(State.recently_upgraded)
+
+    def wear_off_effects(self):
+        for effect, value in self.effects.items():
+            if isinstance(value, int):
+                if self.effects[effect] <= 1:
+                    del self.effects[effect]
+                else:
+                    self.effects[effect] -= 1
+            else:
+                if self.effects[effect][1] <= 1:
+                    del self.effects[effect]
+                else:
+                    self.effects[effect][1] -= 1
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
@@ -157,7 +184,7 @@ class Unit(object):
         while len(upgrades) < 2:
             upgrades.append(self.final_upgrades[1 - len(upgrades)])
 
-        return dict((key, [1, level]) for key, level in upgrades[choice_index].items())
+        return upgrades[choice_index]
 
     def has_upgrade(self, upgrade):
         attribute = upgrade.keys()[0]
@@ -179,17 +206,17 @@ class Unit(object):
         else:
             upgraded_unit = self.make(self.name)
 
-            for trait, info in self.traits.items():
-                upgraded_unit.set(trait, *info)
+            for trait, level in self.traits.items():
+                upgraded_unit.set(trait, level)
 
-            for ability, info in self.abilities.items():
-                upgraded_unit.set(ability, *info)
+            for ability, level in self.abilities.items():
+                upgraded_unit.set(ability, level)
 
-            for attribute, info in choice.items():
-                upgraded_unit.add_levels(attribute, info[1])
+            for attribute, amount in choice.items():
+                upgraded_unit.upgrade_attribute(attribute, amount)
 
-        for state, info in self.states.items():
-            upgraded_unit.set(state, *info)
+        for state, level in self.states.items():
+            upgraded_unit.set(state, level)
 
         upgraded_unit.set(State.recently_upgraded)
 
@@ -203,11 +230,11 @@ class Unit(object):
 
     def get_abilities_not_in_base(self):
         base_unit = self.make(self.name)
-        return dict((ability, info) for ability, info in self.abilities.items() if info[1] != base_unit.get_level(ability))
+        return dict((ability, level) for ability, level in self.abilities.items() if level != base_unit.get(ability))
 
     def get_traits_not_in_base(self):
         base_unit = self.make(self.name)
-        return dict((trait, info) for trait, info in self.traits.items() if info[1] != base_unit.get_level(trait))
+        return dict((trait, level) for trait, level in self.traits.items() if level != base_unit.get(trait))
 
     def get_unit_level(self):
         experience = self.get(State.experience)
@@ -217,7 +244,7 @@ class Unit(object):
     def is_milf(self):
         experience = self.get(State.experience)
         to_upgrade = self.experience_to_upgrade
-        return experience and experience % to_upgrade == 0 and not self.get(State.recently_upgraded)
+        return experience and experience % to_upgrade == 0 and not self.has(State.recently_upgraded)
 
     def to_document(self):
         attributes = merge(self.states, self.effects, self.get_traits_not_in_base(), self.get_abilities_not_in_base())

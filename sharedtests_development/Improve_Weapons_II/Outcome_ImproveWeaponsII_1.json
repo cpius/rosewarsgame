@@ -32,9 +32,7 @@
             },
             "A3": {
                 "name": "Pikeman",
-                "improved_weapons": {
-                    "level": 2,
-                    "value": 2}
+                "improved_weapons": [2, 2]
             },
             "A1": "Knight"
         },

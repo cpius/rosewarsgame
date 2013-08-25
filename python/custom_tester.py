@@ -9,10 +9,10 @@ from common import *
 import traceback
 
 
-def run_test(file):
+def run_test(test_file):
 
     def write_message_action():
-        print "Wrong action existence for", file
+        print "Wrong action existence for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
         print "Gamestate:", gamestate
@@ -27,7 +27,7 @@ def run_test(file):
         print
 
     def write_message_extra_action():
-        print "Wrong action existence for", file
+        print "Wrong action existence for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
         print "Gamestate:", gamestate
@@ -39,7 +39,7 @@ def run_test(file):
         print
 
     def write_message_AD():
-        print "Wrong attack / defence for", file
+        print "Wrong attack / defence for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
         print "Gamestate: ", gamestate
@@ -48,7 +48,7 @@ def run_test(file):
         print
 
     def write_message_outcome():
-        print "Wrong outcome for", file
+        print "Wrong outcome for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
         print "Action:"
@@ -60,7 +60,7 @@ def run_test(file):
         print
 
     def write_message_extra_outcome():
-        print "Wrong outcome for", file
+        print "Wrong outcome for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
         print "Initial gamestate:"
@@ -74,7 +74,7 @@ def run_test(file):
         print
 
     def write_message_turn_shift():
-        print "Wrong turn shift for", file
+        print "Wrong turn shift for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
         print "Actual gamestate:"
@@ -84,7 +84,7 @@ def run_test(file):
         print
 
     def write_message_upgrade():
-        print "wrong result upgrade for", file
+        print "wrong result upgrade for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
         print "Actual gamestate:"
@@ -94,9 +94,9 @@ def run_test(file):
         print
 
     try:
-        test_document = json.loads(open(file).read())
+        test_document = json.loads(open(test_file).read())
     except ValueError:
-        print "Failed to load test document: " + file
+        print "Failed to load test document: " + test_file
         print
         return "read error"
 
@@ -240,7 +240,6 @@ def run_test(file):
                 upgrade_choice = test_document["upgrade"]
             else:
                 upgrade_choice = enum_attributes(test_document["upgrade"])
-                upgrade_choice = dict((key, [1, level]) for key, level in upgrade_choice.items())
 
             for position, unit in gamestate.player_units.items():
                 if unit.is_allowed_upgrade_choice(upgrade_choice):
@@ -256,19 +255,19 @@ def run_test(file):
                 return "wrong result"
 
     except Exception as e:
-        print file
+        print test_file
         print e
         print traceback.format_exc()
         return "run error"
 
 
 break_at_error = False
-file = "./../sharedtests_development\OutcomeExtra_Samurai_2.json"
-file = ""
+test_file = "./../sharedtests_development\OutcomeExtra_Samurai_2.json"
+test_file = ""
 
-if file:
+if test_file:
 
-    result = run_test(file)
+    result = run_test(test_file)
     print result
 
 else:
@@ -280,9 +279,9 @@ else:
                       for f in files if f.endswith(".json")]
 
     results = {"pass": 0, "read error": 0, "wrong result": 0, "run error": 0, "total": 0}
-    for file in testcase_files:
+    for test_file in testcase_files:
 
-        result = run_test(file)
+        result = run_test(test_file)
         results[result] += 1
         results["total"] += 1
         if break_at_error and result != "pass":

@@ -6,17 +6,13 @@
         "player2_units": {
             "C3": {
                 "name": "Pikeman",
-                "improved_weapons": {
-                    "level": 2,
-                    "value": 1
-            },
+                "improved_weapons": [2, 1],
                 "experience": 1
             }
         },
         "player1_units": {
             "C5": "Catapult",
             "A4": "Ballista"
-
         }
     },
     "post_gamestate": {
@@ -30,8 +26,6 @@
         "player2_units": {
             "C5": "Catapult",
             "A4": "Ballista"
-
         }
     }
 }
-
