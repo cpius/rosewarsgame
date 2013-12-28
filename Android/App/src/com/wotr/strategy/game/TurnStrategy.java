@@ -10,9 +10,9 @@ public interface TurnStrategy {
 	
 	boolean canMove(Unit attackingUnit);
 
-	void attack(Unit attackingUnit);
+	void attacked(Unit attackingUnit);
 
-	void move(Unit movingUnit);
+	void moved(Unit movingUnit);
 
 	int resetTurn();
 	

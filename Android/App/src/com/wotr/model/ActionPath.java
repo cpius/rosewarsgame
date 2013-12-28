@@ -9,5 +9,7 @@ public interface ActionPath extends Comparable<ActionPath> {
 	public List<Position> getPath();
 
 	public Position getPosition();
+	
+	public int getPathLength();
 
 }

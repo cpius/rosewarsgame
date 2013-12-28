@@ -24,5 +24,7 @@ public interface Game {
 	void move(Unit unit, Position newPosition) throws InvalidMoveException;
 
 	void setActionsResolver(ActionsResolverStrategy actionsResolver);
+	
+	ActionsResolverStrategy getActionsResolver();
 
 }

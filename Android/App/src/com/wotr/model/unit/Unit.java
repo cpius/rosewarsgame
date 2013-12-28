@@ -9,6 +9,7 @@ import com.wotr.strategy.action.UnitActionResolverStrategy;
 import com.wotr.strategy.battle.AttackEndpointResolverStrategy;
 import com.wotr.strategy.battle.AttackStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
+import com.wotr.strategy.game.Game;
 
 public abstract class Unit implements Cloneable {
 
@@ -122,5 +123,5 @@ public abstract class Unit implements Cloneable {
 		experiencePoints = 0;
 	}
 
-	public abstract AttackEndpointResolverStrategy getAttackEndpointResolverStrategy();
+	public abstract AttackEndpointResolverStrategy getAttackEndpointResolverStrategy(Game game);
 }

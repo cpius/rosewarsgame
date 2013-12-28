@@ -76,7 +76,6 @@ public class MultiplayerGame implements Game, AttackEnder {
 		Unit attackingUnit = action.getUnit();
 		validateAttack(attackingUnit, defendingUnit);
 
-		turnStrategy.attack(attackingUnit);
 		BattleStrategy bs = GameManager.getFactory().getBattleStrategy();
 		boolean success = bs.battle(attackingUnit, defendingUnit);
 
@@ -85,7 +84,7 @@ public class MultiplayerGame implements Game, AttackEnder {
 		Collection<BonusAward> awardProspects = new ArrayList<BonusAward>();
 
 		// Find out where attacking unit can go after attack
-		AttackEndpointResolverStrategy aers = attackingUnit.getAttackEndpointResolverStrategy();
+		AttackEndpointResolverStrategy aers = attackingUnit.getAttackEndpointResolverStrategy(this);
 		Collection<AttackEndPosition> endPoints = aers.getAttackEndpointPositions(this, success, action.getPath());
 
 		if (success) {
@@ -122,6 +121,8 @@ public class MultiplayerGame implements Game, AttackEnder {
 			getAttackingPlayer().getUnitMap().remove(attackingUnit.getPosition());
 			getAttackingPlayer().getUnitMap().put(endPosition, attackingUnit);
 		}
+		
+		turnStrategy.attacked(attackingUnit);
 		notifyGameActionListener();
 	}
 
@@ -134,7 +135,7 @@ public class MultiplayerGame implements Game, AttackEnder {
 			getAttackingPlayer().getUnitMap().put(newPosition, movedUnit);
 		}
 
-		turnStrategy.move(movedUnit);
+		turnStrategy.moved(movedUnit);
 		notifyGameActionListener();
 	}
 
@@ -192,5 +193,10 @@ public class MultiplayerGame implements Game, AttackEnder {
 		}
 
 		return false;
+	}
+
+	@Override
+	public ActionsResolverStrategy getActionsResolver() {
+		return actionsResolver;
 	}
 }

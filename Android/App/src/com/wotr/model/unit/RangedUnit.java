@@ -4,6 +4,7 @@ import com.wotr.strategy.action.UnitActionResolverStrategy;
 import com.wotr.strategy.battle.AttackEndpointResolverStrategy;
 import com.wotr.strategy.battle.unit.RangedAttackEndpointResolverStrategy;
 import com.wotr.strategy.factory.ActionResolverFactory;
+import com.wotr.strategy.game.Game;
 
 public abstract class RangedUnit extends Unit {
 
@@ -21,7 +22,7 @@ public abstract class RangedUnit extends Unit {
 	}	
 	
 	@Override
-	public AttackEndpointResolverStrategy getAttackEndpointResolverStrategy() {
+	public AttackEndpointResolverStrategy getAttackEndpointResolverStrategy(Game game) {
 		return new RangedAttackEndpointResolverStrategy(this);
 	}
 

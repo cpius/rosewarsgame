@@ -14,7 +14,7 @@ import com.wotr.strategy.game.AttackEnder;
 
 public class MeleeAttackEndpointResolverStrategy implements AttackEndpointResolverStrategy {
 
-	private MeleeUnit meleeUnit;
+	protected MeleeUnit meleeUnit;
 
 	public MeleeAttackEndpointResolverStrategy(MeleeUnit meleeUnit) {
 		this.meleeUnit = meleeUnit;
@@ -41,7 +41,7 @@ public class MeleeAttackEndpointResolverStrategy implements AttackEndpointResolv
 		return result;
 	}
 
-	private Position getPathEnd(MeleeUnit meleeUnit, ActionPath actionPath) {
+	protected Position getPathEnd(MeleeUnit meleeUnit, ActionPath actionPath) {
 		if (actionPath.getPreviousPath() != null) {
 			return actionPath.getPreviousPath().getPosition();
 		} else {

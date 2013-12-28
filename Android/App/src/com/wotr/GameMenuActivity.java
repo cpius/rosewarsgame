@@ -14,7 +14,7 @@ import android.view.WindowManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.plus.PlusClient.OnPersonLoadedListener;
+//import com.google.android.gms.plus.PlusClient.OnPersonLoadedListener;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.Person.Image;
 import com.google.example.games.basegameutils.GameHelper;
@@ -22,7 +22,7 @@ import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
 import com.wotr.cocos.GameMenuLayer;
 import com.wotr.cocos.SetupGameLayer;
 
-public class GameMenuActivity extends Activity implements GameMenuListener, GameHelperListener, OnPersonLoadedListener {
+public class GameMenuActivity extends Activity implements GameMenuListener, GameHelperListener/*, OnPersonLoadedListener*/ {
 
 	protected static final int REQUEST_ACHIEVEMENTS = 0;
 	protected static final int REQUEST_LEADERBOARD = 1;
@@ -90,7 +90,7 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 
 			ArrayList<String> invitees = data.getStringArrayListExtra(GamesClient.EXTRA_PLAYERS);
 			for (String string : invitees) {
-				mHelper.getPlusClient().loadPerson(this, string);
+				//mHelper.getPlusClient().loadPerson(this, string);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 
 				String id = mHelper.getGamesClient().getCurrentPlayer().getPlayerId();
 				
-				mHelper.getPlusClient().loadPerson(this_, id);
+				//mHelper.getPlusClient().loadPerson(this_, id);
 				
 				CCScene scene = SetupGameLayer.scene(mHelper);
 				CCDirector.sharedDirector().runWithScene(scene);
@@ -179,7 +179,7 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 
 	}
 
-	@Override
+	/*@Override
 	public void onPersonLoaded(ConnectionResult status, Person person) {
 
 		String name = person.getDisplayName();
@@ -188,5 +188,5 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 		Image image = person.getImage();
 		String url = image.getUrl();
 
-	}
+	}*/
 }

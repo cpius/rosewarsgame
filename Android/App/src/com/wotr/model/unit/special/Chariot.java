@@ -2,6 +2,9 @@ package com.wotr.model.unit.special;
 
 import com.wotr.model.UnitType;
 import com.wotr.model.unit.MeleeUnit;
+import com.wotr.strategy.battle.AttackEndpointResolverStrategy;
+import com.wotr.strategy.battle.unit.ChariotAttackEndpointResolverStrategy;
+import com.wotr.strategy.game.Game;
 
 public class Chariot extends MeleeUnit {
 
@@ -32,5 +35,10 @@ public class Chariot extends MeleeUnit {
 	@Override
 	public UnitType getType() {
 		return UnitType.CAVALRY;
+	}
+	
+	@Override
+	public AttackEndpointResolverStrategy getAttackEndpointResolverStrategy(Game game) {
+		return new ChariotAttackEndpointResolverStrategy(this, game);
 	}
 }
