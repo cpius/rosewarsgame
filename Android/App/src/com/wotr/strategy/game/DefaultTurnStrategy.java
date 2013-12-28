@@ -32,7 +32,7 @@ public class DefaultTurnStrategy implements TurnStrategy {
 	}
 
 	@Override
-	public void attack(Unit attackingUnit) {
+	public void attacked(Unit attackingUnit) {
 		hasAttacked.add(attackingUnit);
 
 		Collection<Unit> units = game.getAttackingPlayer().getUnitMap().values();
@@ -44,7 +44,7 @@ public class DefaultTurnStrategy implements TurnStrategy {
 	}
 
 	@Override
-	public void move(Unit movingUnit) {
+	public void moved(Unit movingUnit) {
 		hasMoved.add(movingUnit);
 		
 		Collection<Unit> units = game.getAttackingPlayer().getUnitMap().values();

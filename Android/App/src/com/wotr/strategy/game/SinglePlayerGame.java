@@ -51,4 +51,10 @@ public class SinglePlayerGame implements Game {
 
 	}
 
+	@Override
+	public ActionsResolverStrategy getActionsResolver() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

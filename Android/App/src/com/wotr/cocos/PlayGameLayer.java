@@ -3,7 +3,6 @@ package com.wotr.cocos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.cocos2d.actions.ease.CCEaseSineIn;
 import org.cocos2d.actions.instant.CCCallback;
@@ -75,7 +74,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 	private PathFinderStrategy pathFinderStrategy;
 	private ActionPathSprite actionPathSprite;
-	
+
 	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap, GameHelper mHelper) {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new PlayGameLayer(playerOneMap, playerTwoMap, mHelper);
@@ -89,15 +88,15 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		yCount = 8;
 
 		String playerOneName = "Player 1";
-		
-		if(mHelper.isSignedIn()) {
+
+		if (mHelper.isSignedIn()) {
 			com.google.android.gms.games.Player p = mHelper.getGamesClient().getCurrentPlayer();
-	        
-	        if (p != null) {       
-	        	playerOneName = p.getDisplayName();
-	        }
+
+			if (p != null) {
+				playerOneName = p.getDisplayName();
+			}
 		}
-		
+
 		playerOne = new HumanPlayer(playerOneMap, playerOneName, 0);
 		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2", yCount - 1);
 
@@ -127,13 +126,13 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		nameLabel.setPosition(winSize.getWidth() - 30f, winSize.getHeight() - 100f);
 		nameLabel.setAnchorPoint(0f, 0.5f);
 		nameLabel.setRotation(90f);
-		//nameLabel.setOpacity(150);
+		// nameLabel.setOpacity(150);
 		addChild(nameLabel, 10);
 
 		turnLabel = CCLabel.makeLabel("    ", "Arial", 60f);
 		turnLabel.setPosition(winSize.getWidth() - 30f, winSize.getHeight() - 80f);
 		turnLabel.setAnchorPoint(0.5f, 0f);
-		//turnLabel.setOpacity(150);
+		// turnLabel.setOpacity(150);
 		addChild(turnLabel, 10);
 
 		Game game = new MultiplayerGame(playerOne, playerTwo);
@@ -246,11 +245,10 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 			}
 
 			// If there is only one possible endposition after attack,
-			// automatically
-			// use it, otherwise ask the user
-			List<AttackEndPosition> endPositions = attackResult.getEndPositionProspects();
+			// automatically use it, otherwise ask the user
+			Collection<AttackEndPosition> endPositions = attackResult.getEndPositionProspects();
 			if (endPositions.size() == 1) {
-				AttackEndPosition endPosition = endPositions.get(0);
+				AttackEndPosition endPosition = attackResult.getAttackEndPosition();
 				endPosition.endAttack();
 				moveCardToPosition(card, endPosition.getPosition());
 				removeSelection(card);

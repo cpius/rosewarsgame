@@ -7,6 +7,7 @@ public class ActionPathLink implements ActionPath {
 
 	private final Position position;
 	private final ActionPath pathToPosition;
+	private List<Position> path = null;
 
 	public ActionPathLink(Position position, ActionPath pathToPosition) {
 		this.position = position;
@@ -16,15 +17,16 @@ public class ActionPathLink implements ActionPath {
 	@Override
 	public List<Position> getPath() {
 
-		List<Position> result = new ArrayList<Position>();
+		if (path == null) {
+			path = new ArrayList<Position>();
 
-		ActionPath previousPath = getPreviousPath();
-		while (previousPath != null) {
-			result.add(previousPath.getPosition());
-			previousPath = previousPath.getPreviousPath();
+			ActionPath previousPath = getPreviousPath();
+			while (previousPath != null) {
+				path.add(previousPath.getPosition());
+				previousPath = previousPath.getPreviousPath();
+			}
 		}
-
-		return result;
+		return path;
 	}
 
 	@Override
@@ -45,5 +47,10 @@ public class ActionPathLink implements ActionPath {
 	@Override
 	public int compareTo(ActionPath another) {
 		return Integer.valueOf(getPath().size()).compareTo(Integer.valueOf(another.getPath().size()));
+	}
+
+	@Override
+	public int getPathLength() {
+		return getPath().size();
 	}
 }

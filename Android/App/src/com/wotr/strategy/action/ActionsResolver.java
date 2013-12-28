@@ -38,6 +38,7 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 		game.addGameEventListener(this);
 	}
 
+	@Override
 	public ActionCollection<Action> getActions(Unit originalunit) {
 
 		ActionCollection<Action> actionCollection = actionCache.get(originalunit);
@@ -47,14 +48,25 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 			Map<Position, Unit> dUnits = game.getDefendingPlayer().getUnitMap();
 
 			UnitActionResolverStrategy actionResolverStrategy = originalunit.getActionResolverStrategy();
-			Collection<Action> actions = getActions(originalunit, originalunit.getPosition(), null, true, aUnits, dUnits, 0, actionResolverStrategy, turnStrategy);
+			Collection<Action> actions = getActions(originalunit, originalunit.getPosition(), null, true, aUnits, dUnits, 0, actionResolverStrategy, turnStrategy, true, true);
 			actionCollection = new ActionCollection<Action>(actions);
 			actionCache.put(originalunit, actionCollection);
 		}
 		return actionCollection;
 	}
 
-	private Collection<Action> getActions(Unit originalUnit, Position pos, ActionPath path, boolean moveable, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, UnitActionResolverStrategy ars, TurnStrategy turnStrategy) {
+	@Override
+	public Collection<Action> getRemainingMoveActions(Unit originalunit, Position position, int pathProgress) {
+		// TODO Do some generic work for the return type her
+		TurnStrategy turnStrategy = GameManager.getFactory().getTurnStrategy();
+		Map<Position, Unit> aUnits = game.getAttackingPlayer().getUnitMap();
+		Map<Position, Unit> dUnits = game.getDefendingPlayer().getUnitMap();
+
+		UnitActionResolverStrategy actionResolverStrategy = originalunit.getActionResolverStrategy();
+		return getActions(originalunit, position, null, true, aUnits, dUnits, pathProgress, actionResolverStrategy, turnStrategy, true, false);
+	}
+
+	private Collection<Action> getActions(Unit originalUnit, Position pos, ActionPath path, boolean moveable, Map<Position, Unit> aUnits, Map<Position, Unit> dUnits, int pathProgress, UnitActionResolverStrategy ars, TurnStrategy turnStrategy, boolean findMoves, boolean findAttacks) {
 
 		List<Action> moves = new ArrayList<Action>();
 
@@ -63,10 +75,10 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 
 			if (!originalUnit.getPosition().equals(pos)) {
 
-				if (ars.isAttackable(originalUnit, pos, path, aUnits, dUnits, pathProgress, turnStrategy)) {
+				if (findAttacks && ars.isAttackable(originalUnit, pos, path, aUnits, dUnits, pathProgress, turnStrategy)) {
 					Unit defendingUnit = dUnits.get(pos);
 					moves.add(new AttackAction(originalUnit, defendingUnit, path));
-				} else if (moveable = ars.isMoveable(originalUnit, pos, path, moveable, aUnits, dUnits, pathProgress, turnStrategy)) {
+				} else if (findMoves && (moveable = ars.isMoveable(originalUnit, pos, path, moveable, aUnits, dUnits, pathProgress, turnStrategy))) {
 					moves.add(new MoveAction(originalUnit, pos, path));
 				}
 			}
@@ -74,9 +86,9 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 			Collection<Direction> directions = ars.getDirections(originalUnit, pos, path, aUnits, dUnits, pathProgress);
 			for (Direction direction : directions) {
 				Position movePosition = pos.move(direction);
-				if (isInBoard(movePosition)) {					
+				if (isInBoard(movePosition)) {
 					ActionPath link = new ActionPathLink(movePosition, path);
-					moves.addAll(getActions(originalUnit, movePosition, link, moveable, aUnits, dUnits, pathProgress + 1, ars, turnStrategy));
+					moves.addAll(getActions(originalUnit, movePosition, link, moveable, aUnits, dUnits, pathProgress + 1, ars, turnStrategy, findMoves, findAttacks));
 				}
 			}
 		}

@@ -1,14 +1,14 @@
 package com.wotr.model.attack;
 
 import com.wotr.model.Position;
-import com.wotr.model.unit.Unit;
+import com.wotr.model.unit.RangedUnit;
 import com.wotr.strategy.game.AttackEnder;
 
 public class SuccessfulRangedAttackEndpoint extends AbstractAttackEndPosition implements AttackEndPosition {
 
 	private final AttackEnder ender;
 
-	public SuccessfulRangedAttackEndpoint(AttackEnder ender, Unit attackingUnit, Position position) {
+	public SuccessfulRangedAttackEndpoint(AttackEnder ender, RangedUnit attackingUnit, Position position) {
 		super(attackingUnit, position);
 		this.ender = ender;
 	}
@@ -17,5 +17,4 @@ public class SuccessfulRangedAttackEndpoint extends AbstractAttackEndPosition im
 	public void endAttack() {
 		ender.endAttack(attackingUnit, getPosition(), false);
 	}
-
 }
