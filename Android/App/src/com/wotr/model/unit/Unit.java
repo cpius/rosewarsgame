@@ -90,7 +90,7 @@ public abstract class Unit implements Cloneable {
 	}
 
 	public String getAttackSound() {
-		return "sounds/sword_sound.wav";
+		return "sounds/sword_sound.mp3";
 	}
 
 	public String getDefenceSound() {

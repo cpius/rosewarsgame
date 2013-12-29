@@ -39,6 +39,6 @@ public class Catapult extends RangedUnit {
 	}
 
 	public String getAttackSound() {
-		return "sounds/catapult_attack.wav";
+		return "sounds/catapult_attack.mp3";
 	}
 }

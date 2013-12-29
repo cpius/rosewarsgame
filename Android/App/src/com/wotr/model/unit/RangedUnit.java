@@ -27,6 +27,6 @@ public abstract class RangedUnit extends Unit {
 	}
 
 	public String getAttackSound() {
-		return "sounds/bow_attack.wav";
+		return "sounds/bow_attack.mp3";
 	}
 }

@@ -72,9 +72,6 @@ public class GameMenuLayer extends CCLayer {
 		loginMenu.setPosition(size.getWidth() / 2f, 10f);
 		addChild(loginMenu);
 
-		// logoutButton =
-		// CCMenuItemImage.item("google/Red-signout_Long_base_20dp.png",
-		// "google/Red-signout_Long_press_20dp.png", this, "doLogout");
 		logoutButton = CCMenuItemFont.item("Logout", this, "doLogout");
 		logoutButton.setIsEnabled(false);
 		logoutButton.setVisible(false);
