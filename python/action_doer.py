@@ -3,31 +3,15 @@ from common import *
 from action import Action
 
 
-def do_action(gamestate, action, outcome):
-
-    def settle_attack_push(action):
-
-        def apply_push():
-            if not push_destination.out_of_board_vertical():
-                if push_destination in all_units or push_destination.out_of_board_horizontal():
-                    del enemy_units[action.target_at]
-                else:
-                    enemy_units[push_destination] = enemy_units.pop(action.target_at)
-
-        rolls = outcome.for_position(action.target_at)
-        push_destination = attack_direction.move(action.target_at)
-
-        if action.is_miss(rolls, gamestate):
-            return
-
-        if action.is_successful(rolls, gamestate):
-            if action.target_unit.has_extra_life():
-                action.target_unit.set(State.lost_extra_life)
-                apply_push()
-            else:
-                del enemy_units[action.target_at]
+def apply_push(action, push_destination, enemy_units, all_units):
+    if not push_destination.out_of_board_vertical():
+        if push_destination in all_units or push_destination.out_of_board_horizontal():
+            del enemy_units[action.target_at]
         else:
-            apply_push()
+            enemy_units[push_destination] = enemy_units.pop(action.target_at)
+
+
+def do_action(gamestate, action, outcome):
 
     def settle_attack(action):
         rolls = outcome.for_position(action.target_at)
@@ -39,12 +23,6 @@ def do_action(gamestate, action, outcome):
             action.target_unit.set(State.lost_extra_life)
         else:
             del enemy_units[action.target_at]
-
-    def do_sub_action(action):
-        if action.is_push():
-            settle_attack_push(action)
-        else:
-            settle_attack(action)
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
@@ -99,18 +77,19 @@ def do_action(gamestate, action, outcome):
 
     def update_unit_position():
         player_units[action.end_at] = player_units.pop(action.start_at)
+        action.unit.place(action.end_at)
 
     def triple_attack():
         for position in action.end_at.two_forward_tiles(attack_direction):
             if position in enemy_units:
                 sub_action = Action(all_units, action.start_at, action.end_at, position)
-                do_sub_action(sub_action)
+                settle_attack(sub_action)
 
     def longsword():
         for position in action.end_at.four_forward_tiles(attack_direction):
             if position in enemy_units:
                 sub_action = Action(all_units, action.start_at, action.end_at, position)
-                do_sub_action(sub_action)
+                settle_attack(sub_action)
 
     unit = action.unit
     player_units = gamestate.player_units
@@ -124,13 +103,11 @@ def do_action(gamestate, action, outcome):
     update_actions_remaining()
 
     update_unit_position()
+    rolls = outcome.for_position(action.target_at)
 
     if action.is_attack():
-        rolls = outcome.for_position(action.target_at)
-        if action.is_push():
-            settle_attack_push(action)
-        else:
-            settle_attack(action)
+
+        settle_attack(action)
 
         for trait in [Trait.triple_attack, Trait.longsword]:
             if unit.has(trait):
@@ -142,9 +119,17 @@ def do_action(gamestate, action, outcome):
     if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility, Trait.bloodlust]):
         prepare_extra_actions(action)
 
-    if action.is_attack() and action.move_with_attack and action.target_at not in enemy_units:
+    if action.is_attack() and action.move_with_attack and action.attack_successful(rolls, gamestate):
         move_melee_unit_to_target_tile(gamestate, action)
 
 
 def move_melee_unit_to_target_tile(gamestate, action):
     gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
+    action.unit.place(action.target_at)
+    attack_direction = action.end_at.get_direction_to(action.target_at)
+    push_destination = attack_direction.move(action.target_at)
+
+    print "A"
+    if action.is_push():
+        print "B"
+        apply_push(action, push_destination, gamestate.enemy_units, gamestate.all_units)

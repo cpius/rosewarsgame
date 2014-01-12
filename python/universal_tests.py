@@ -45,8 +45,15 @@ class UniversalTestCase(TestCase):
                 outcome = None
                 if "outcome" in test_document:
                     outcome = Outcome.from_document(test_document["outcome"])
-
                 self.is_outcome_correct(gamestate, action, outcome, expected_gamestate)
+
+                gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+                expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+                action = Action.from_document(gamestate.all_units(), test_document["action"])
+                outcome = None
+                if "outcome" in test_document:
+                    outcome = Outcome.from_document(test_document["outcome"])
+                #self.is_outcome_correct_post_movement(gamestate, action, outcome, expected_gamestate)
 
             elif test_document["type"] == "Does turn shift work":
                 gamestate = Gamestate.from_document(test_document["pre_gamestate"])
@@ -119,6 +126,20 @@ class UniversalTestCase(TestCase):
 
     def is_outcome_correct(self, gamestate, action, outcome, expected_gamestate):
         gamestate.do_action(action, outcome)
+
+        actual_gamestate_document = gamestate.to_document()
+        expected_gamestate_document = expected_gamestate.to_document()
+
+        self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
+
+    def is_outcome_correct_post_movement(self, gamestate, action, outcome, expected_gamestate):
+        mwa = action.move_with_attack
+        action.move_with_attack = None
+        gamestate.do_action(action, outcome)
+
+        if mwa:
+            action.move_with_attack = True
+            gamestate.move_melee_unit_to_target_tile(action)
 
         actual_gamestate_document = gamestate.to_document()
         expected_gamestate_document = expected_gamestate.to_document()

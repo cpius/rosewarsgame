@@ -163,6 +163,10 @@ def get_units():
 
     def place_units_on_board(unitslist, tiles_bag):
 
+        def place(unit, position):
+            units[position] = unit
+            unit.place(position)
+
         units = {}
         unprotected_units = [unit for unit in unitslist if not units_info[unit.name].protection_required]
         protected_units = [unit for unit in unitslist if units_info[unit.name].protection_required]
@@ -170,11 +174,11 @@ def get_units():
         for unit in unprotected_units:
             allowed_rows = units_info[unit.name].allowed_rows.copy()
             position = tiles_bag.pick_from_row(allowed_rows)
-            units[position] = unit
+            place(unit, position)
 
         for unit in protected_units:
             position = tiles_bag.pick_protected_tile(units_info[unit.name].allowed_rows)
-            units[position] = unit
+            place(unit, position)
 
         return units
 

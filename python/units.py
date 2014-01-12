@@ -25,6 +25,7 @@ class Unit(object):
     upgrades = []
     special_upgrades = []
     final_upgrades = []
+    position = None
 
     @property
     def attack(self):
@@ -226,6 +227,9 @@ class Unit(object):
             return unit_dict
         else:
             return self.name
+
+    def place(self, position):
+        self.position = position
 
 
 class Archer(Unit):

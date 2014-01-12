@@ -63,15 +63,21 @@ class Gamestate:
                     upgrade_choice = enum_attributes(upgrade_choice)
                     upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
                 if action.is_attack() and action.target_at and action.target_at in gamestate.player_units:
-                    gamestate.player_units[action.target_at] = upgraded_unit
+                    gamestate.place(upgraded_unit, action.target_at)
+                    #gamestate.player_units[action.target_at] = upgraded_unit
                 else:
-                    gamestate.player_units[action.end_at] = upgraded_unit
+                    gamestate.place(upgraded_unit, action.end_at)
+                    #gamestate.player_units[action.end_at] = upgraded_unit
 
         if shift_turn:
             if gamestate.is_turn_done():
                 gamestate.shift_turn()
 
         return gamestate
+
+    def place(self, unit, position):
+        self.player_units[position] = unit
+        unit.place(position)
 
     def all_units(self):
         all_units = self.units[0].copy()
