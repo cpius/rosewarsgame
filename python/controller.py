@@ -78,7 +78,11 @@ class Controller(object):
         if action is None:
             return
 
-        print "received action from network: " + str(action)
+        print "received action from network: ", action
+        if outcome:
+            print "with outcome: ", outcome
+        if upgrade:
+            print "with upgrade: ", upgrade
 
         self.perform_action(action, outcome, upgrade)
 
