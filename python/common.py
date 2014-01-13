@@ -205,9 +205,9 @@ types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
 
-State = enum(1000, *(trait for trait in dict(state_descriptions)))
+State = enum(1000, *(state for state in dict(state_descriptions)))
 
-Effect = enum(2000, *(trait for trait in dict(effect_descriptions)))
+Effect = enum(2000, *(effect for effect in dict(effect_descriptions)))
 
 Ability = enum(3000, *(ability for ability in ability_descriptions))
 
