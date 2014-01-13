@@ -38,7 +38,7 @@ class Client():
                             if hasattr(Trait, key):
                                 enumified_upgrade[getattr(Trait, key)] = value
                             elif hasattr(Ability, key):
-                                enumified_upgrade[getattr(Trait, key)] = value
+                                enumified_upgrade[getattr(Ability, key)] = value
                         upgrade = enumified_upgrade
 
             return action, outcome, upgrade
