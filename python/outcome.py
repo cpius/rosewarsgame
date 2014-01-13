@@ -12,6 +12,13 @@ class Outcome:
         else:
             self.outcomes = outcomes
 
+    def __repr__(self):
+        representation = ""
+        for position in self.outcomes:
+            representation += str(position) + ": " + str(self.outcomes[position])
+
+        return representation
+
     def set_suboutcome(self, position, sub_outcome):
         self.outcomes[position] = sub_outcome
 
