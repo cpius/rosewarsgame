@@ -12,6 +12,13 @@ class Outcome:
         else:
             self.outcomes = outcomes
 
+    def __repr__(self):
+        representation = ""
+        for position in self.outcomes:
+            representation += str(position) + ": " + str(self.outcomes[position])
+
+        return representation
+
     def set_suboutcome(self, position, sub_outcome):
         self.outcomes[position] = sub_outcome
 
@@ -56,7 +63,7 @@ class Outcome:
     @classmethod
     def from_document(cls, document):
         outcomes = dict()
-        for outcome in [outcome for outcome in document if outcome[0] in "ABCDE" and outcome[1] in "12345679"]:
+        for outcome in [outcome for outcome in document if outcome[0] in "ABCDE" and outcome[1] in "12345678"]:
             outcomes[Position.from_string(outcome)] = rolls(*document[outcome])
 
         return cls(outcomes)

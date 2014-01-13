@@ -45,6 +45,18 @@ def view(game_id):
     return log_document
 
 
+@get('/games/view_log/<game_id>')
+def view_log(game_id):
+    games = get_collection("games")
+    game_document = games.find_one({"_id": ObjectId(game_id)})
+    if not game_document:
+        return {"Status": "Error", "Message": "Could not find game with id " + game_id}
+
+    log_document = construct_log_document(game_document)
+
+    return log_document
+
+
 @get("/actions/view/<game_id>")
 def view_actions(game_id):
     actions = get_collection("actions")
