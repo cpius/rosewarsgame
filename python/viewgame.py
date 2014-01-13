@@ -62,8 +62,8 @@ def draw_post_movement(screen, interface, action):
 
 def draw_action_dice(screen, interface, action, rolls):
 
-    pygame.draw.circle(screen, colors["black"], interface.coordinates["battle"].get(action.end_at), 20, 3)
-    
+    pass
+
 
 def draw_action(screen, interface, action, outcome, flip=False):
     if flip:
