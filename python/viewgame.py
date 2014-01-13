@@ -60,19 +60,12 @@ def draw_post_movement(screen, interface, action):
     screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
 
 
-def draw_action_dice(screen, interface, action, roll):
+def draw_action_dice(screen, interface, action, rolls):
 
-    attack_dice = interface.dice[roll[0]]
-    pic = get_image(attack_dice)
-    screen.blit(pic, interface.coordinates["battle"].get(action.end_at))
+    pygame.draw.circle(screen, colors["black"], interface.coordinates["battle"].get(action.end_at), 20, 3)
+    
 
-    if roll[1] != 0:
-        defence_dice = interface.dice[roll[1]]
-        pic = get_image(defence_dice)
-        screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
-
-
-def draw_action(screen, interface, action, flip=False, roll=None):
+def draw_action(screen, interface, action, outcome, flip=False):
     if flip:
         aligned_action = flip_action(action)
     else:
@@ -86,8 +79,9 @@ def draw_action(screen, interface, action, flip=False, roll=None):
     if aligned_action.is_attack():
         draw_line(screen, interface, aligned_action.end_at, aligned_action.target_at)
 
-        if roll:
-            draw_action_dice(screen, interface, aligned_action, roll)
+        rolls = outcome.for_position(action.target_at)
+        if rolls:
+            draw_action_dice(screen, interface, aligned_action, rolls)
         else:
             pic = get_image(interface.attack_icon)
             screen.blit(pic, coordinates["battle"].get(aligned_action.target_at))
