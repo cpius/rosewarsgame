@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Test if a sabotaged unit has defence 0",
     "attack": 3,
     "defence": 0,
     "action": {

@@ -71,7 +71,7 @@ class View(object):
 
     def draw_action(self, action, outcome, game, flip=False):
         viewlog.draw_log(self.logbook, self.screen, self.interface, game, action, outcome)
-        viewgame.draw_action(self.screen, self.interface, action, flip)
+        viewgame.draw_action(self.screen, self.interface, action, outcome, flip)
         self.refresh()
 
     def draw_post_movement(self, action):
