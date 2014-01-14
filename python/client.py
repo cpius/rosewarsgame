@@ -33,13 +33,7 @@ class Client():
                 if "upgrade" in options:
                     upgrade = options["upgrade"]
                     if not isinstance(upgrade, basestring):
-                        enumified_upgrade = {}
-                        for key, value in upgrade.iteritems():
-                            if hasattr(Trait, key):
-                                enumified_upgrade[getattr(Trait, key)] = value
-                            elif hasattr(Ability, key):
-                                enumified_upgrade[getattr(Ability, key)] = value
-                        upgrade = enumified_upgrade
+                        upgrade = enum_attributes(upgrade)
 
             return action, outcome, upgrade
 

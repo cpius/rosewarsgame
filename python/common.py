@@ -438,6 +438,8 @@ def enum_attributes(attributes):
             dictionary[getattr(Trait, attribute)] = value
         elif attribute in Ability.name.values():
             dictionary[getattr(Ability, attribute)] = value
+        elif attribute in Effect.name.values():
+            dictionary[getattr(Effect, attribute)] = value
         else:
             dictionary[getattr(State, attribute)] = value
 
