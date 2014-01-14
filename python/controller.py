@@ -21,6 +21,9 @@ class Controller(object):
         self.view = view
         self.game = None
         self.client = None
+        self.start_at = None
+        self.selected_unit = None
+        self.end_position = None
 
     CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
 
@@ -271,7 +274,8 @@ class Controller(object):
 
             self.view.refresh()
 
-    def exit_game(self):
+    @staticmethod
+    def exit_game():
         sys.exit()
 
     def get_input_upgrade(self, unit):
@@ -481,10 +485,12 @@ class Controller(object):
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
 
-    def command_q_down(self, key):
+    @staticmethod
+    def command_q_down(key):
         return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
 
-    def escape(self, event):
+    @staticmethod
+    def escape(event):
         return event.type == KEYDOWN and event.key == K_ESCAPE
 
     def game_end(self):
