@@ -24,3 +24,7 @@ def get_action(actions, gamestate):
         ai_methods.document_actions(actions, gamestate)
 
     return actions[0]
+
+
+def get_upgrade(game):
+    return random.randint(0, 1)

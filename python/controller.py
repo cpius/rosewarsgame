@@ -349,9 +349,8 @@ class Controller(object):
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
-    def get_upgrade_choice(self, unit):
-        choice = self.get_input_upgrade(unit)
-
+    @staticmethod
+    def get_upgrade(unit, choice):
         if getattr(unit, "upgrades"):
             return unit.upgrades[choice]
         else:
@@ -406,8 +405,12 @@ class Controller(object):
             self.game_end()
             return
 
-        if action.unit.is_milf() and self.game.is_player_human() and not action.unit.has(State.extra_action):
-            upgrade = self.get_upgrade_choice(action.unit)
+        if action.unit.is_milf() and not self.game.is_player_network() and not action.unit.has(State.extra_action):
+            if self.game.is_player_human():
+                choice = self.get_input_upgrade(action.unit)
+            else:
+                choice = self.game.current_player().ai.select_upgrade(self.game)
+            upgrade = self.get_upgrade(action.unit, choice)
 
         if upgrade:
             position = action.end_at

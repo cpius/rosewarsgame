@@ -189,3 +189,6 @@ class Game:
 
     def is_enemy_network(self):
         return self.opponent_player().intelligence == "Network"
+
+    def is_player_ai(self):
+        return not (self.is_player_network() or self.is_player_human())
