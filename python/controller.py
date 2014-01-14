@@ -349,25 +349,13 @@ class Controller(object):
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
-    def upgrade_unit(self, position, unit):
+    def get_upgrade_choice(self, unit):
         choice = self.get_input_upgrade(unit)
 
         if getattr(unit, "upgrades"):
-            upgrade_choice = unit.upgrades[choice]
-            upgraded_unit = Unit.make(unit.upgrades[choice])
+            return unit.upgrades[choice]
         else:
-            upgrade_choice = unit.get_upgrade_choice(choice)
-            upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
-
-        upgrade_choice_to_save = upgrade_choice
-        if not isinstance(upgrade_choice, basestring):
-            upgrade_choice_to_save = readable(upgrade_choice)
-
-        self.game.save_option("upgrade", upgrade_choice_to_save)
-        if self.game.is_enemy_network():
-            self.client.send_upgrade_choice(upgrade_choice_to_save, self.game.gamestate.action_count)
-
-        self.game.gamestate.player_units[position] = upgraded_unit
+            return unit.get_upgrade_choice(choice)
 
     def perform_action(self, action, outcome=None, upgrade=None):
         self.view.draw_game(self.game)
@@ -418,20 +406,24 @@ class Controller(object):
             self.game_end()
             return
 
-        if self.game.is_player_human() and action.unit.is_milf() and not action.unit.has(State.extra_action):
-            if action.is_attack() and action.target_at in self.game.gamestate.player_units:
-                unit_position = action.target_at
-            else:
-                unit_position = action.end_at
-            self.view.draw_game(self.game)
-            self.upgrade_unit(unit_position, action.unit)
-        elif self.game.is_player_network() and action.unit.is_milf() and not action.unit.has(State.extra_action):
+        if action.unit.is_milf() and self.game.is_player_human() and not action.unit.has(State.extra_action):
+            upgrade = self.get_upgrade_choice(action.unit)
+
+        if upgrade:
             position = action.end_at
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
+
             upgraded_unit = action.unit.get_upgraded_unit(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
-            self.game.save_option("upgrade", upgrade)
+
+            readable_upgrade = upgrade
+            if not isinstance(upgrade, basestring):
+                readable_upgrade = readable(upgrade)
+            self.game.save_option("upgrade", readable_upgrade)
+
+            if self.game.is_enemy_network():
+                self.client.send_upgrade_choice(readable_upgrade, self.game.gamestate.action_count)
 
         self.game.save(self.view, action, outcome)
 
