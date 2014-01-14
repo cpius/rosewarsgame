@@ -57,7 +57,8 @@ class View(object):
         viewinfo.show_unit_zoomed(self.screen, self.interface, unit)
         self.refresh()
 
-    def refresh(self):
+    @staticmethod
+    def refresh():
         pygame.display.flip()
 
     def draw_upgrade_options(self, unit):
