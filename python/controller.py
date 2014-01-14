@@ -70,6 +70,12 @@ class Controller(object):
         controller.game = Game.from_log_document(savegame_document)
         controller.clear_move()
 
+        if controller.game.is_turn_done():
+            controller.game.shift_turn()
+
+        player = controller.game.current_player()
+        print "current player is", player.color, player.intelligence
+
         return controller
 
     def trigger_network_player(self):
