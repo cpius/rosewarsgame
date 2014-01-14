@@ -92,6 +92,7 @@ class Controller(object):
         if self.game.is_player_human():
             # The turn changed. Stop listening for network actions
             pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, 0)
+            self.view.play_sound("your_turn")
 
     def trigger_artificial_intelligence(self):
 

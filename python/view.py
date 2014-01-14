@@ -10,12 +10,23 @@ from viewcommon import *
 class View(object):
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
 
         self.interface = settings.interface
         self.zoom = settings.zoom
         self.screen = pygame.display.set_mode(self.interface.board_size)
         self.logbook = []
         self.counter_size = self.interface.counter_size
+
+        self.sounds = {
+            "sword": "sword_sound.wav",
+            "War_Elephant": "Elephant.wav",
+            "Archer": "bow_fired.wav",
+            "Fire_Archer": "bow_fired.wav",
+            "Catapult": "catapult_attacksound.wav",
+            "unit_defeated": "infantry_defeated_sound.wav",
+            "your_turn": "fanfare.wav"
+        }
 
     def get_position_from_mouse_click(self, coordinates):
         return get_position_from_mouseclick(self.interface, coordinates)
@@ -94,3 +105,7 @@ class View(object):
     def draw_action_tutorial(self, action, roll=None):
         viewgame.draw_action(self.screen, self.interface, action, False, roll)
         self.refresh()
+
+    def play_sound(self, sound):
+        sound = pygame.mixer.Sound("./../sounds/" + self.sounds[sound])
+        sound.play()
