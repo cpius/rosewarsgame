@@ -1,5 +1,5 @@
 {
-    "description": "Test if poison effect is recorded",
+    "description": "Test if poison II effect is recorded",
     "type": "Is outcome correct",
     "pre_gamestate": {
         "actions_remaining": 2,
@@ -33,7 +33,7 @@
         },
         "player2_units": {
             "D4": {
-                "poisoned": 3,
+                "poisoned": 2,
                 "name": "Archer"
             }
         }
