@@ -201,7 +201,7 @@ class Unit(object):
     def get_upgraded_unit(self, choice):
 
         if isinstance(choice, basestring):
-            self.set(State.experience, 0)
+            self.remove_state(State.experience)
             upgraded_unit = self.make(choice)
 
         else:
