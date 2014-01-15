@@ -122,7 +122,7 @@ class Unit(object):
 
     def do(self, ability, level):
         if ability == Ability.poison:
-            self.set(Effect.poisoned, duration=level)
+            self.set(Effect.poisoned, duration=level+1)
 
         if ability == Ability.sabotage:
             self.set_effect(Effect.sabotaged, duration=level)
