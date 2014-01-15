@@ -72,6 +72,8 @@ class Game:
             if str(action_number) + "_options" in log_document:
                 options = log_document[str(action_number) + "_options"]
 
+            game.options[str(action_number)] = options
+
             outcome = None
             outcome_document = None
             if action.is_attack():
