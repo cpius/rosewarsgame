@@ -55,6 +55,9 @@ class Game:
 
         action_count = int(log_document["action_count"])
 
+        game.actions = {}
+        game.outcomes = {}
+
         for action_number in range(1, action_count + 1):
             if game.is_turn_done():
                 game.shift_turn()
@@ -65,6 +68,8 @@ class Game:
 
             action_document = log_document[str(action_number)]
 
+            game.actions[str(action_number)] = action_document
+
             action = Action.from_document(gamestate.all_units(), action_document)
 
             options = None
@@ -72,12 +77,14 @@ class Game:
                 options = log_document[str(action_number) + "_options"]
 
             outcome = None
+            outcome_document = None
             if action.is_attack():
                 outcome_document = log_document[str(action_number) + "_outcome"]
                 outcome = Outcome.from_document(outcome_document)
                 if options and "move_with_attack" in options:
                     action.move_with_attack = bool(options["move_with_attack"])
 
+            game.outcomes[str(action_number)] = outcome_document
             game.do_action(action, outcome)
 
             if options and "upgrade" in options:
