@@ -62,10 +62,6 @@ class Game:
             if game.is_turn_done():
                 game.shift_turn()
 
-            if not str(action_number) in log_document:
-                # This happens when loading replays that are continuations of other replays
-                continue
-
             action_document = log_document[str(action_number)]
 
             game.actions[str(action_number)] = action_document
