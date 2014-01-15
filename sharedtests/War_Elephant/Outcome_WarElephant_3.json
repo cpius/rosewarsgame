@@ -2,7 +2,6 @@
     "type": "Is outcome correct",
     "description": "If a unit is pushed over the edge, it dies",
     "outcome": {
-        "D5": [1, 6],
         "E5": [1, 1]
     },
     "action": {
