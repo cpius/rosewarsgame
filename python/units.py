@@ -206,21 +206,20 @@ class Unit(object):
 
         else:
             upgraded_unit = self.make(self.name)
-
             for trait, level in self.traits.items():
                 upgraded_unit.set(trait, level)
 
             for ability, level in self.abilities.items():
                 upgraded_unit.set(ability, level)
 
-            for effect, info in self.effects.items():
-                upgraded_unit.set(effect, info[0], info[1])
-
             for attribute, amount in choice.items():
                 upgraded_unit.upgrade_attribute(attribute, amount)
 
         for state, level in self.states.items():
             upgraded_unit.set(state, level)
+
+        for effect, info in self.effects.items():
+            upgraded_unit.set(effect, info[0], info[1])
 
         upgraded_unit.set(State.recently_upgraded)
 
