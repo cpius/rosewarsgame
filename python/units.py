@@ -213,6 +213,9 @@ class Unit(object):
             for ability, level in self.abilities.items():
                 upgraded_unit.set(ability, level)
 
+            for effect, info in self.effects.items():
+                upgraded_unit.set(effect, info[0], info[1])
+
             for attribute, amount in choice.items():
                 upgraded_unit.upgrade_attribute(attribute, amount)
 
