@@ -19,7 +19,6 @@
         "player1_units": {
             "A3": {
                 "name": "Fire Archer",
-                "experience": 0,
                 "recently_upgraded": 1
             }
         },

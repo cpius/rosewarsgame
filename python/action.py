@@ -152,7 +152,7 @@ class Action(object):
             return 0
 
     def is_push(self):
-        return self.unit.has(Trait.push) and self.is_attack() and self.move_with_attack
+        return self.unit.has(Trait.push) and self.is_attack()
 
     def is_crusading_attack(self, units, level=None):
         return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, level))

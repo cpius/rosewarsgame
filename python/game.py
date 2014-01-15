@@ -55,15 +55,16 @@ class Game:
 
         action_count = int(log_document["action_count"])
 
+        game.actions = {}
+        game.outcomes = {}
+
         for action_number in range(1, action_count + 1):
             if game.is_turn_done():
                 game.shift_turn()
 
-            if not str(action_number) in log_document:
-                # This happens when loading replays that are continuations of other replays
-                continue
-
             action_document = log_document[str(action_number)]
+
+            game.actions[str(action_number)] = action_document
 
             action = Action.from_document(gamestate.all_units(), action_document)
 
@@ -71,13 +72,17 @@ class Game:
             if str(action_number) + "_options" in log_document:
                 options = log_document[str(action_number) + "_options"]
 
+            game.options[str(action_number)] = options
+
             outcome = None
+            outcome_document = None
             if action.is_attack():
                 outcome_document = log_document[str(action_number) + "_outcome"]
                 outcome = Outcome.from_document(outcome_document)
                 if options and "move_with_attack" in options:
                     action.move_with_attack = bool(options["move_with_attack"])
 
+            game.outcomes[str(action_number)] = outcome_document
             game.do_action(action, outcome)
 
             if options and "upgrade" in options:
