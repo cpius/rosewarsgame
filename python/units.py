@@ -125,7 +125,7 @@ class Unit(object):
             self.set(Effect.poisoned, duration=level)
 
         if ability == Ability.sabotage:
-            self.set_effect(Effect.sabotaged, duration=level+1)
+            self.set_effect(Effect.sabotaged, duration=level)
 
         if ability == Ability.improve_weapons:
             if level == 2:
