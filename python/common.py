@@ -75,12 +75,6 @@ class Position:
     def two_forward_tiles(self, direction):
         return direction.forward_and_sideways(self)
 
-    def out_of_board_vertical(self):
-        return self.row < 1 or self.row > board_height
-
-    def out_of_board_horizontal(self):
-        return self.column < 1 or self.column > board_width
-
 
 def enum(n, *sequential, **named):
     enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
