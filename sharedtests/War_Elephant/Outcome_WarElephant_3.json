@@ -1,0 +1,37 @@
+{
+    "type": "Is outcome correct",
+    "description": "If a unit is pushed over the edge, it dies",
+    "outcome": {
+        "D5": [1, 6],
+        "E5": [1, 1]
+    },
+    "action": {
+        "start_at": "D5",
+        "end_at": "D5",
+        "target_at": "E5",
+        "move_with_attack": true
+    },
+    "pre_gamestate": {
+        "player1_units": {
+            "D5": "War Elephant"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B2": "Longswordsman",
+            "E5": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "player1_units": {
+            "E5": {
+                "name": "War Elephant",
+                "used": true,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 0,
+        "player2_units": {
+            "B2": "Longswordsman"
+        }
+    }
+}

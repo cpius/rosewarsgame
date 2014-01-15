@@ -125,7 +125,7 @@ class Unit(object):
             self.set(Effect.poisoned, duration=level)
 
         if ability == Ability.sabotage:
-            self.set_effect(Effect.sabotaged, duration=level+1)
+            self.set_effect(Effect.sabotaged, duration=level)
 
         if ability == Ability.improve_weapons:
             if level == 2:
@@ -206,7 +206,6 @@ class Unit(object):
 
         else:
             upgraded_unit = self.make(self.name)
-
             for trait, level in self.traits.items():
                 upgraded_unit.set(trait, level)
 
@@ -218,6 +217,9 @@ class Unit(object):
 
         for state, level in self.states.items():
             upgraded_unit.set(state, level)
+
+        for effect, info in self.effects.items():
+            upgraded_unit.set(effect, info[0], info[1])
 
         upgraded_unit.set(State.recently_upgraded)
 
