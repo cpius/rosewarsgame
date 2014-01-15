@@ -372,10 +372,11 @@ class Controller(object):
             else:
                 outcome = Outcome.determine_outcome(action, self.game.gamestate)
 
+            self.view.draw_action(action, outcome, self.game)
+
             self.game.do_action(action, outcome)
 
             self.view.draw_game(self.game)
-            self.view.draw_action(action, outcome, self.game)
 
             if action.move_with_attack is None:
                 if self.game.gamestate.is_post_move_with_attack_possible(action, outcome):
