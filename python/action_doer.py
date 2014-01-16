@@ -30,7 +30,7 @@ def do_action(gamestate, action, outcome):
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
-            action.target_unit.set(Effect.bribed)
+            action.target_unit.set_effect(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         else:
             value = action.unit.get(action.ability)
