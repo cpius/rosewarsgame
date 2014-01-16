@@ -28,7 +28,6 @@ class Log():
 
 
 def draw_log(logbook, screen, interface, game, action=None, outcome=None):
-    print "Drawing log with action", action
     player_color = game.current_player().color
     action_number = 3 - game.gamestate.get_actions_remaining()
     if action:
@@ -96,14 +95,7 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
     base_y = int(len(logbook) * log_heights)
     base = (base_x, base_y)
 
-    # if logbook and len(logbook) > 1:
-    #     color, action_number = logbook[-1].get_next()
-    # elif len(logbook) == 1:
-    #     color, action_number = "Red", 1
-    # else:
-    #     color, action_number = "Green", 1
     if not action:
-        print "Drawing next turn box"
         draw_turn_box(screen, interface, player_color, action_number, *base)
 
     return logbook
