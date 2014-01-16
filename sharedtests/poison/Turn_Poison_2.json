@@ -1,0 +1,42 @@
+{
+    "type": "Does turn shift work",
+    "description": "Poisoned only increases in your turns",
+    "pre_gamestate": {
+        "actions_remaining": 0,
+        "player1_units": {
+            "C3": {
+                "name": "Saboteur",
+                "used": 1,
+                "experience": 1
+            },
+            "E4": "Light Cavalry"
+        },
+        "player2_units": {
+            "C5": {
+                "name": "Archer",
+                "poisoned": 1
+            },
+            "A4": "Ballista"
+
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 2,
+        "player2_units": {
+            "C3": {
+                "name": "Saboteur",
+                "experience": 1
+            },
+            "E4": "Light Cavalry"
+        },
+        "player1_units": {
+            "C5": {
+                "name": "Archer",
+                "poisoned": 1
+            },
+            "A4": "Ballista"
+
+        }
+    }
+}
+

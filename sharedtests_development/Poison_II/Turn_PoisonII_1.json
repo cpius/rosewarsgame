@@ -3,31 +3,31 @@
     "description": "Poison is reduced by 1 after 1 turn",
     "pre_gamestate": {
         "actions_remaining": 0,
-        "player1_units": {
+        "player2_units": {
             "C3": {
                 "name": "Fire Archer",
                 "experience": 4
             },
             "E4": "Light Cavalry"
         },
-        "player2_units": {
+        "player1_units": {
             "E3": {
                 "name": "Knight",
-                "poisoned": 2
+                "poisoned": [1, 2]
             },
             "A4": "Ballista"
         }
     },
     "post_gamestate": {
         "actions_remaining": 2,
-        "player2_units": {
+        "player1_units": {
             "C3": {
                 "name": "Fire Archer",
                 "experience": 4
             },
             "E4": "Light Cavalry"
         },
-        "player1_units": {
+        "player2_units": {
             "E3": {
                 "name": "Knight",
                 "poisoned": 1
