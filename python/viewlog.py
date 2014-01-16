@@ -89,16 +89,6 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
         color, action_number = "Green", 1
     draw_turn_box(screen, interface, color, action_number - 1, *base)
 
-    base_x = int(391 * zoom)
-    base_y = int(len(logbook) * log_heights)
-    base = (base_x, base_y)
-
-    if logbook:
-        color, action_number = logbook[-1].get_next()
-    else:
-        color, action_number = "Green", 1
-    draw_turn_box(screen, interface, color, action_number - 1, *base)
-
     return logbook
 
 
