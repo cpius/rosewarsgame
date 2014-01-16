@@ -186,11 +186,11 @@ ability_descriptions = {
     "pikeman_specialist": {
         1: "Pikemen do not get +1D against Hussar."},
     "poison": {
-        1: "Freezes a unit for 1 turns.",
-        2: "Freezes a unit for 2 turns."},
+        1: "Makes a unit unable to perform actions until your next turn.",
+        2: "Makes a unit unable to perform actions for two turns."},
     "sabotage": {
-        1: "Reduces a units defence to 0 for 1 turn.",
-        2: "Reduces a units defence to 0 for 2 turns."},
+        1: "Reduces a units defence to 0 this turn.",
+        2: "Reduces a units defence to 0 for two turns."},
     "triple_attack": {
         1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
