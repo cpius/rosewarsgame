@@ -46,10 +46,11 @@ class View(object):
     def clear_right(self):
         pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
 
-    def draw_game(self, game, start_at=None, actions=()):
+    def draw_game(self, game, start_at=None, actions=(), update_log=False):
         viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
-        self.clear_right()
-        self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
+        if update_log:
+            self.clear_right()
+            self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
         self.refresh()
 
     def show_unit_zoomed(self, unit):

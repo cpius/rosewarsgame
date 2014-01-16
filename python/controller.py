@@ -8,7 +8,6 @@ import os
 import interface_settings as settings
 from player import Player
 from action import Action
-from units import Unit
 from client import Client
 from game import Game
 from outcome import Outcome
@@ -247,7 +246,7 @@ class Controller(object):
 
         self.game.gamestate.set_available_actions()
 
-        self.view.draw_game(self.game)
+        self.view.draw_game(self.game, None, (), True)
 
         if self.game.is_player_network():
             self.trigger_network_player()
@@ -442,7 +441,7 @@ class Controller(object):
         if self.game.is_turn_done():
             self.game.shift_turn()
 
-        self.view.draw_game(self.game)
+        self.view.draw_game(self.game, None, (), True)
 
         self.clear_move()
 

@@ -28,9 +28,10 @@ class Log():
 
 
 def draw_log(logbook, screen, interface, game, action=None, outcome=None):
+    print "Drawing log with action", action
+    player_color = game.current_player().color
+    action_number = 3 - game.gamestate.get_actions_remaining()
     if action:
-        player_color = game.current_player().color
-        action_number = 3 - game.gamestate.get_actions_remaining()
         if game.gamestate.action_count == 0:
             action_number -= 1
 
@@ -55,7 +56,6 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
 
     for index, log in enumerate(logbook):
 
-        action = log.action
         base_x = int(391 * zoom)
         base_y = int(index * log_heights)
         base = (base_x, base_y)
@@ -69,40 +69,42 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
 
         symbol_location = (base_x + 118 * zoom, base_y + 8 * zoom)
 
-        if action.is_attack():
-            draw_attack(screen, interface, action, log.outcome_string, base, symbol_location, log)
+        if log.action.is_attack():
+            draw_attack(screen, interface, log.action, log.outcome_string, base, symbol_location, log)
 
-        elif action.is_ability():
+        elif log.action.is_ability():
             pic = get_image(interface.ability_icon)
             screen.blit(pic, symbol_location)
 
             if log.player_color == "Green":
-                draw_unit_right(screen, interface, action, "Green", 0, *base)
-                draw_unit_right(screen, interface, action, "Red", 1, *base)
+                draw_unit_right(screen, interface, log.action, "Green", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Red", 1, *base)
             elif log.player_color == "Red":
-                draw_unit_right(screen, interface, action, "Red", 0, *base)
-                draw_unit_right(screen, interface, action, "Green", 1, *base)
+                draw_unit_right(screen, interface, log.action, "Red", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Green", 1, *base)
 
         else:
             pic = get_image(interface.move_icon)
             screen.blit(pic, symbol_location)
 
             if log.player_color == "Green":
-                draw_unit_right(screen, interface, action, "Green", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Green", 0, *base)
             elif log.player_color == "Red":
-                draw_unit_right(screen, interface, action, "Red", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Red", 0, *base)
 
     base_x = int(391 * zoom)
     base_y = int(len(logbook) * log_heights)
     base = (base_x, base_y)
 
-    if logbook and len(logbook) > 1:
-        color, action_number = logbook[-1].get_next()
-    elif len(logbook) == 1:
-        color, action_number = "Red", 1
-    else:
-        color, action_number = "Green", 1
-    draw_turn_box(screen, interface, color, action_number, *base)
+    # if logbook and len(logbook) > 1:
+    #     color, action_number = logbook[-1].get_next()
+    # elif len(logbook) == 1:
+    #     color, action_number = "Red", 1
+    # else:
+    #     color, action_number = "Green", 1
+    if not action:
+        print "Drawing next turn box"
+        draw_turn_box(screen, interface, player_color, action_number, *base)
 
     return logbook
 
