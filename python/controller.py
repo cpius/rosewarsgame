@@ -397,8 +397,8 @@ class Controller(object):
             if not outcome:
                 outcome = Outcome.determine_outcome(action, self.game.gamestate)
 
-            self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
+            self.game.do_action(action, outcome)
 
         if action.is_attack():
             if settings.pause_for_attack_until_click:
