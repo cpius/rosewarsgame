@@ -1,6 +1,7 @@
 {
     "type": "Does action exist",
-    "result": false,
+    "description": "Diplomat can bribe units that were recently bribed",
+    "result": true,
     "action": {
         "start_at": "C3",
         "target_at": "C6",
