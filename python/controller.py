@@ -201,7 +201,6 @@ class Controller(object):
 
         elif self.start_at and self.start_at == position:
             self.clear_move()
-            self.view.draw_game(self.game)
 
     def is_same_start_and_target(self, action, position):
         same_start = action.start_at == self.start_at
