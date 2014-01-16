@@ -142,7 +142,7 @@ class Controller(object):
         self.start_at = position
         self.selected_unit = self.game.gamestate.player_units[self.start_at]
         illustrate_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
-        self.view.draw_game(self.game, position, illustrate_actions)
+        self.view.draw_game(self.game, position, illustrate_actions, True)
 
     def perform_ranged_attack(self, position):
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position)
@@ -239,7 +239,7 @@ class Controller(object):
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
-        self.view.draw_game(self.game)
+        self.view.draw_game(self.game, None, (), True)
 
     def run_game(self):
 
