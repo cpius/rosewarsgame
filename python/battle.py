@@ -96,7 +96,7 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
     if action.has_high_morale(player_units):
         attack_adjusters["High morale"] = 2
 
-    if attacking_unit.get(Effect.bribed):
+    if attacking_unit.has(Effect.bribed):
         attack_adjusters["Bribed"] = attacking_unit.get(Effect.bribed)
 
     if attacking_unit.has(Effect.improved_weapons, level=1):
