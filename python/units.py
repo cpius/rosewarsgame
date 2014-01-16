@@ -132,7 +132,6 @@ class Unit(object):
 
     def set_effect(self, effect, level=1, duration=1):
         self.effects[effect] = Effect_tuple(level, duration)
-        print self.effects[effect]
 
     def get_effect_level(self, effect):
         if not effect in self.effects:
