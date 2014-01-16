@@ -8,7 +8,6 @@ import os
 import interface_settings as settings
 from player import Player
 from action import Action
-from units import Unit
 from client import Client
 from game import Game
 from outcome import Outcome
