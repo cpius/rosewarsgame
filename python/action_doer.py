@@ -5,7 +5,7 @@ from action import Action
 
 def do_action(gamestate, action, outcome):
 
-    def settle_attack(action):
+    def settle_attack(action, attack_direction=None):
         rolls = outcome.for_position(action.target_at)
 
         if action.is_win(rolls, gamestate):
@@ -15,9 +15,7 @@ def do_action(gamestate, action, outcome):
                 del gamestate.enemy_units[action.target_at]
 
         elif action.is_push() and action.attack_successful(rolls, gamestate):
-            if hasattr(action, "direction"):
-                attack_direction = action.direction
-            else:
+            if not attack_direction:
                 attack_direction = action.end_at.get_direction_to(action.target_at)
             push_destination = attack_direction.move(action.target_at)
             enemy_units = gamestate.enemy_units
@@ -26,7 +24,6 @@ def do_action(gamestate, action, outcome):
                 del enemy_units[action.target_at]
             else:
                 enemy_units[push_destination] = enemy_units.pop(action.target_at)
-
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
@@ -77,8 +74,7 @@ def do_action(gamestate, action, outcome):
         for position in action.end_at.two_forward_tiles(attack_direction):
             if position in enemy_units:
                 sub_action = Action(all_units, action.start_at, action.end_at, position)
-                sub_action.direction = action.end_at.get_direction_to(action.target_at)
-                settle_attack(sub_action)
+                settle_attack(sub_action, attack_direction)
 
     def longsword():
         for position in action.end_at.four_forward_tiles(attack_direction):
