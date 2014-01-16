@@ -15,7 +15,10 @@ def do_action(gamestate, action, outcome):
                 del gamestate.enemy_units[action.target_at]
 
         elif action.is_push() and action.attack_successful(rolls, gamestate):
-            attack_direction = action.end_at.get_direction_to(action.target_at)
+            if hasattr(action, "direction"):
+                attack_direction = action.direction
+            else:
+                attack_direction = action.end_at.get_direction_to(action.target_at)
             push_destination = attack_direction.move(action.target_at)
             enemy_units = gamestate.enemy_units
 
@@ -74,6 +77,7 @@ def do_action(gamestate, action, outcome):
         for position in action.end_at.two_forward_tiles(attack_direction):
             if position in enemy_units:
                 sub_action = Action(all_units, action.start_at, action.end_at, position)
+                sub_action.direction = action.end_at.get_direction_to(action.target_at)
                 settle_attack(sub_action)
 
     def longsword():
