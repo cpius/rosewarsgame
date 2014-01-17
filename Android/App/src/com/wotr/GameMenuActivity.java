@@ -51,7 +51,7 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 		CCDirector.sharedDirector().setDisplayFPS(true);
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
-		gameMenuLayer = new GameMenuLayer(this, mHelper);
+		gameMenuLayer = new GameMenuLayer(getApplicationContext(), this, mHelper);
 
 		CCScene scene = CCScene.node();
 		scene.addChild(gameMenuLayer);
@@ -176,7 +176,7 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 
 				// mHelper.getPlusClient().loadPerson(this_, id);
 
-				CCScene scene = SetupGameLayer.scene(mHelper);
+				CCScene scene = SetupGameLayer.scene(getApplicationContext(), mHelper);
 				CCDirector.sharedDirector().runWithScene(scene);
 
 				/*

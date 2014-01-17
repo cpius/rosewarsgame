@@ -11,8 +11,11 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import android.content.Context;
+
 import com.google.example.games.basegameutils.GameHelper;
 import com.wotr.GameMenuListener;
+import com.wotr.R;
 
 public class GameMenuLayer extends CCLayer {
 
@@ -23,12 +26,10 @@ public class GameMenuLayer extends CCLayer {
 	private CCMenuItem multiPlayerOnlineMenuItem;
 	private CCMenuItem leaderBoardMenuItem;
 	private CCMenuItem achievementsMenuItem;
-	private GameHelper mHelper;
 
-	public GameMenuLayer(GameMenuListener listener, GameHelper mHelper) {
+	public GameMenuLayer(Context context, GameMenuListener listener, GameHelper mHelper) {
 
 		this.listener = listener;
-		this.mHelper = mHelper;
 		setIsTouchEnabled(true);
 
 		CGSize size = CCDirector.sharedDirector().displaySize();
@@ -38,7 +39,7 @@ public class GameMenuLayer extends CCLayer {
 		back.setPosition(size.getWidth() / 2, size.getHeight() / 2);
 		addChild(back);
 
-		CCLabel headLine = CCLabel.makeLabel("War Of The Roses", "Arial", 32f);
+		CCLabel headLine = CCLabel.makeLabel(context.getString(R.string.app_name), "Arial", 32f);
 		headLine.setAnchorPoint(CGPoint.ccp(0.5f, 1));
 		headLine.setPosition(CGPoint.ccp(size.width / 2f, size.height - 25f));
 		addChild(headLine);
@@ -46,11 +47,11 @@ public class GameMenuLayer extends CCLayer {
 		CCMenuItemFont.setFontSize(28);
 		CCMenuItemFont.setFontName("Arial");
 
-		CCMenuItem singlePlayerMenuItem = CCMenuItemFont.item("Single player", this, "single");
-		multiPlayerLocalMenuItem = CCMenuItemFont.item("Multiplayer - Local", this, "multiPlayeLocal");
-		multiPlayerOnlineMenuItem = CCMenuItemFont.item("Multiplayer - Online", this, "multiplayerOnline");
-		leaderBoardMenuItem = CCMenuItemFont.item("Leaderboard", this, "showLeaderboard");
-		achievementsMenuItem = CCMenuItemFont.item("Achivements", this, "showAchievements");
+		CCMenuItem singlePlayerMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_start_singleplayer), this, "single");
+		multiPlayerLocalMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_start_multiplayer_local), this, "multiPlayeLocal");
+		multiPlayerOnlineMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_start_multiplayer_online), this, "multiplayerOnline");
+		leaderBoardMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_leaderboard), this, "showLeaderboard");
+		achievementsMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_achivements), this, "showAchievements");
 
 		multiPlayerOnlineMenuItem.setIsEnabled(false);
 		leaderBoardMenuItem.setIsEnabled(false);
@@ -72,7 +73,7 @@ public class GameMenuLayer extends CCLayer {
 		loginMenu.setPosition(size.getWidth() / 2f, 10f);
 		addChild(loginMenu);
 
-		logoutButton = CCMenuItemFont.item("Logout", this, "doLogout");
+		logoutButton = CCMenuItemFont.item(context.getString(R.string.menu_logout), this, "doLogout");
 		logoutButton.setIsEnabled(false);
 		logoutButton.setVisible(false);
 		logoutButton.setAnchorPoint(CGPoint.ccp(0.5f, 0));
@@ -117,7 +118,7 @@ public class GameMenuLayer extends CCLayer {
 	}
 
 	public void multiPlayeLocal(Object source) {
-		listener.onMultiplayerLocalClicked();		
+		listener.onMultiplayerLocalClicked();
 	}
 
 	public void multiplayerOnline(Object source) {

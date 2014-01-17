@@ -17,6 +17,8 @@ import org.cocos2d.particlesystem.CCQuadParticleSystem;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import android.content.Context;
+
 import com.google.example.games.basegameutils.GameHelper;
 import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
@@ -40,16 +42,18 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	private int xCount;
 	private int yCount;
 	private GameHelper mHelper;
+	private Context context;
 
-	public static CCScene scene(GameHelper mHelper) {
+	public static CCScene scene(Context context, GameHelper mHelper) {
 		CCScene scene = CCScene.node();
-		CCLayer layer = new SetupGameLayer(mHelper);
+		CCLayer layer = new SetupGameLayer(context, mHelper);
 		scene.addChild(layer);
 		return scene;
 	}
 
-	protected SetupGameLayer(GameHelper mHelper) {
+	protected SetupGameLayer(Context context, GameHelper mHelper) {
 
+		this.context = context;
 		this.mHelper = mHelper;
 		setIsTouchEnabled(true);
 
