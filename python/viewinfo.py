@@ -23,7 +23,7 @@ def get_unit_lines(unit):
 
     level = unit.get_unit_level()
     if level:
-        lines.append("Level: " + str(level))
+        lines.append("Level: " + str(level + 1))
         lines.append("")
 
     if unit.zoc:
