@@ -12,17 +12,15 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.games.GamesClient;
-//import com.google.android.gms.plus.PlusClient.OnPersonLoadedListener;
-import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.Person.Image;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
 import com.wotr.cocos.GameMenuLayer;
 import com.wotr.cocos.SetupGameLayer;
+import com.wotr.gpgs.RoomConnector;
+import com.wotr.gpgs.RoomCreator;
 
-public class GameMenuActivity extends Activity implements GameMenuListener, GameHelperListener/*, OnPersonLoadedListener*/ {
+public class GameMenuActivity extends Activity implements GameMenuListener, GameHelperListener {
 
 	protected static final int REQUEST_ACHIEVEMENTS = 0;
 	protected static final int REQUEST_LEADERBOARD = 1;
@@ -90,7 +88,10 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 
 			ArrayList<String> invitees = data.getStringArrayListExtra(GamesClient.EXTRA_PLAYERS);
 			for (String string : invitees) {
-				//mHelper.getPlusClient().loadPerson(this, string);
+				RoomCreator roomHandler = new RoomCreator(data, mHelper);
+				roomHandler.createRoom();
+
+				getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 			}
 		}
 	}
@@ -123,6 +124,15 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 	@Override
 	public void onSignInSucceeded() {
 		gameMenuLayer.enableLogin(false);
+
+		RoomConnector connector = new RoomConnector(mHelper);
+		if(connector.connect()) {
+			
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			
+			
+		}
+
 	}
 
 	@Override
@@ -158,14 +168,14 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 	public void onMultiplayerLocalClicked() {
 
 		final GameMenuActivity this_ = this;
-		
+
 		runOnUiThread(new Runnable() {
 			public void run() {
 
 				String id = mHelper.getGamesClient().getCurrentPlayer().getPlayerId();
-				
-				//mHelper.getPlusClient().loadPerson(this_, id);
-				
+
+				// mHelper.getPlusClient().loadPerson(this_, id);
+
 				CCScene scene = SetupGameLayer.scene(mHelper);
 				CCDirector.sharedDirector().runWithScene(scene);
 
@@ -179,14 +189,14 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 
 	}
 
-	/*@Override
-	public void onPersonLoaded(ConnectionResult status, Person person) {
-
-		String name = person.getDisplayName();
-		System.out.println(name);
-
-		Image image = person.getImage();
-		String url = image.getUrl();
-
-	}*/
+	/*
+	 * @Override public void onPersonLoaded(ConnectionResult status, Person
+	 * person) {
+	 * 
+	 * String name = person.getDisplayName(); System.out.println(name);
+	 * 
+	 * Image image = person.getImage(); String url = image.getUrl();
+	 * 
+	 * }
+	 */
 }
