@@ -6,6 +6,7 @@ import setup
 from gamestate import Gamestate
 import os
 import interface_settings as settings
+import setup_settings
 from player import Player
 from action import Action
 from client import Client
@@ -33,7 +34,7 @@ class Controller(object):
 
         controller = Controller(view)
 
-        players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
+        players = [Player("Green", setup_settings.player1_ai), Player("Red", setup_settings.player2_ai)]
 
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
@@ -249,6 +250,9 @@ class Controller(object):
 
         if self.game.is_player_network():
             self.trigger_network_player()
+
+        if self.game.is_player_ai():
+            self.trigger_artificial_intelligence()
 
         while True:
             event = pygame.event.wait()
