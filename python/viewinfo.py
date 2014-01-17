@@ -2,7 +2,7 @@ from __future__ import division
 import pygame
 import textwrap
 from viewcommon import *
-import interface_settings as settings
+import settings
 import battle
 
 zoom = settings.zoom

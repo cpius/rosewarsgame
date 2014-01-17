@@ -2,7 +2,7 @@ from __future__ import division
 from operator import attrgetter
 import ai_methods as m
 import random as rnd
-import interface_settings as settings
+import settings
 
 
 def get_action(actions, gamestate):
