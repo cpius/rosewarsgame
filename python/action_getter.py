@@ -136,8 +136,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
 
             elif ability == Ability.bribe:
-                target_positions = [pos for pos, target in enemy_units.items() if not target.get(Effect.bribed) and not
-                                    target.has(State.recently_bribed)]
+                target_positions = [pos for pos, target in enemy_units.items() if not target.has(Effect.bribed)]
             else:
                 target_positions = []
 

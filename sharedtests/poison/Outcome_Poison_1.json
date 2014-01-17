@@ -29,7 +29,7 @@
         },
         "player2_units": {
             "D4": {
-                "poisoned": 2,
+                "poisoned": 1,
                 "name": "Archer"
             }
         }

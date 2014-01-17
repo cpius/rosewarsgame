@@ -1,13 +1,17 @@
 {
     "type": "Upgrade",
-    "description": "The archer upgrades to a Fire Archer",
-    "upgrade": "Fire_Archer",
+    "description": "The Cannon should keep attack_frozen during upgrade",
+    "upgrade": {
+        "attack_cooldown": 1,
+        "far_sighted": 1
+    },
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Archer",
-                "experience": 4
+                "name": "Cannon",
+                "attack_frozen": [1,2],
+                "experience": 3
             }
         },
         "player2_units": {
@@ -18,8 +22,11 @@
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Fire Archer",
-                "experience": 4,
+                "name": "Cannon",
+                "attack_cooldown": 2,
+                "far_sighted": 1,
+                "attack_frozen": [1, 2],
+                "experience": 3,
                 "recently_upgraded": 1
             }
         },

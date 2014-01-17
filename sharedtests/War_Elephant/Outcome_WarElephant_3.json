@@ -1,29 +1,28 @@
 {
     "type": "Is outcome correct",
-    "description": "Push works even if move with attack is false",
+    "description": "If a unit is pushed over the edge, it dies",
     "outcome": {
-        "B2": [1, 6],
-        "C2": [1, 1]
+        "E5": [1, 1]
     },
     "action": {
-        "start_at": "C1",
-        "end_at": "C1",
-        "target_at": "C2",
-        "move_with_attack": false
+        "start_at": "D5",
+        "end_at": "D5",
+        "target_at": "E5",
+        "move_with_attack": true
     },
     "pre_gamestate": {
         "player1_units": {
-            "C1": "War Elephant"
+            "D5": "War Elephant"
         },
         "actions_remaining": 2,
         "player2_units": {
             "B2": "Longswordsman",
-            "C2": "Ballista"
+            "E5": "Ballista"
         }
     },
     "post_gamestate": {
         "player1_units": {
-            "C1": {
+            "E5": {
                 "name": "War Elephant",
                 "used": true,
                 "experience": 1
@@ -31,7 +30,7 @@
         },
         "actions_remaining": 0,
         "player2_units": {
-            "C3": "Ballista"
+            "B2": "Longswordsman"
         }
     }
 }

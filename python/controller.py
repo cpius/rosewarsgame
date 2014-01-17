@@ -8,7 +8,6 @@ import os
 import interface_settings as settings
 from player import Player
 from action import Action
-from units import Unit
 from client import Client
 from game import Game
 from outcome import Outcome
@@ -21,6 +20,9 @@ class Controller(object):
         self.view = view
         self.game = None
         self.client = None
+        self.start_at = None
+        self.selected_unit = None
+        self.end_position = None
 
     CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
 
@@ -67,6 +69,12 @@ class Controller(object):
         controller.game = Game.from_log_document(savegame_document)
         controller.clear_move()
 
+        if controller.game.is_turn_done():
+            controller.game.shift_turn()
+
+        player = controller.game.current_player()
+        print "current player is", player.color, player.intelligence
+
         return controller
 
     def trigger_network_player(self):
@@ -78,13 +86,18 @@ class Controller(object):
         if action is None:
             return
 
-        print "received action from network: " + str(action)
+        print "received action from network: ", action
+        if outcome:
+            print "with outcome: ", outcome
+        if upgrade:
+            print "with upgrade: ", upgrade
 
         self.perform_action(action, outcome, upgrade)
 
         if self.game.is_player_human():
             # The turn changed. Stop listening for network actions
             pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, 0)
+            self.view.play_sound("your_turn")
 
     def trigger_artificial_intelligence(self):
 
@@ -129,7 +142,7 @@ class Controller(object):
         self.start_at = position
         self.selected_unit = self.game.gamestate.player_units[self.start_at]
         illustrate_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
-        self.view.draw_game(self.game, position, illustrate_actions)
+        self.view.draw_game(self.game, position, illustrate_actions, True)
 
     def perform_ranged_attack(self, position):
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position)
@@ -188,7 +201,6 @@ class Controller(object):
 
         elif self.start_at and self.start_at == position:
             self.clear_move()
-            self.view.draw_game(self.game)
 
     def is_same_start_and_target(self, action, position):
         same_start = action.start_at == self.start_at
@@ -227,13 +239,13 @@ class Controller(object):
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
-        self.view.draw_game(self.game)
+        self.view.draw_game(self.game, None, (), True)
 
     def run_game(self):
 
         self.game.gamestate.set_available_actions()
 
-        self.view.draw_game(self.game)
+        self.view.draw_game(self.game, None, (), True)
 
         if self.game.is_player_network():
             self.trigger_network_player()
@@ -267,7 +279,8 @@ class Controller(object):
 
             self.view.refresh()
 
-    def exit_game(self):
+    @staticmethod
+    def exit_game():
         sys.exit()
 
     def get_input_upgrade(self, unit):
@@ -340,25 +353,12 @@ class Controller(object):
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
-    def upgrade_unit(self, position, unit):
-        choice = self.get_input_upgrade(unit)
-
+    @staticmethod
+    def get_upgrade(unit, choice):
         if getattr(unit, "upgrades"):
-            upgrade_choice = unit.upgrades[choice]
-            upgraded_unit = Unit.make(unit.upgrades[choice])
+            return unit.upgrades[choice]
         else:
-            upgrade_choice = unit.get_upgrade_choice(choice)
-            upgraded_unit = unit.get_upgraded_unit(upgrade_choice)
-
-        upgrade_choice_to_save = upgrade_choice
-        if not isinstance(upgrade_choice, basestring):
-            upgrade_choice_to_save = readable(upgrade_choice)
-
-        self.game.save_option("upgrade", upgrade_choice_to_save)
-        if self.game.is_enemy_network():
-            self.client.send_upgrade_choice(upgrade_choice_to_save, self.game.gamestate.action_count)
-
-        self.game.gamestate.player_units[position] = upgraded_unit
+            return unit.get_upgrade_choice(choice)
 
     def perform_action(self, action, outcome=None, upgrade=None):
         self.view.draw_game(self.game)
@@ -370,10 +370,11 @@ class Controller(object):
             else:
                 outcome = Outcome.determine_outcome(action, self.game.gamestate)
 
+            self.view.draw_action(action, outcome, self.game)
+
             self.game.do_action(action, outcome)
 
             self.view.draw_game(self.game)
-            self.view.draw_action(action, outcome, self.game)
 
             if action.move_with_attack is None:
                 if self.game.gamestate.is_post_move_with_attack_possible(action, outcome):
@@ -394,8 +395,8 @@ class Controller(object):
             if not outcome:
                 outcome = Outcome.determine_outcome(action, self.game.gamestate)
 
-            self.game.do_action(action, outcome)
             self.view.draw_action(action, outcome, self.game, flip=True)
+            self.game.do_action(action, outcome)
 
         if action.is_attack():
             if settings.pause_for_attack_until_click:
@@ -409,20 +410,28 @@ class Controller(object):
             self.game_end()
             return
 
-        if self.game.is_player_human() and action.unit.is_milf() and not action.unit.has(State.extra_action):
-            if action.is_attack() and action.target_at in self.game.gamestate.player_units:
-                unit_position = action.target_at
+        if action.unit.is_milf() and not self.game.is_player_network() and not action.unit.has(State.extra_action):
+            if self.game.is_player_human():
+                choice = self.get_input_upgrade(action.unit)
             else:
-                unit_position = action.end_at
-            self.view.draw_game(self.game)
-            self.upgrade_unit(unit_position, action.unit)
-        elif self.game.is_player_network() and action.unit.is_milf() and not action.unit.has(State.extra_action):
+                choice = self.game.current_player().ai.select_upgrade(self.game)
+            upgrade = self.get_upgrade(action.unit, choice)
+
+        if upgrade:
             position = action.end_at
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
+
             upgraded_unit = action.unit.get_upgraded_unit(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
-            self.game.save_option("upgrade", upgrade)
+
+            readable_upgrade = upgrade
+            if not isinstance(upgrade, basestring):
+                readable_upgrade = readable(upgrade)
+            self.game.save_option("upgrade", readable_upgrade)
+
+            if self.game.is_enemy_network():
+                self.client.send_upgrade_choice(readable_upgrade, self.game.gamestate.action_count)
 
         self.game.save(self.view, action, outcome)
 
@@ -431,7 +440,7 @@ class Controller(object):
         if self.game.is_turn_done():
             self.game.shift_turn()
 
-        self.view.draw_game(self.game)
+        self.view.draw_game(self.game, None, (), True)
 
         self.clear_move()
 
@@ -477,10 +486,12 @@ class Controller(object):
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
 
-    def command_q_down(self, key):
+    @staticmethod
+    def command_q_down(key):
         return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
 
-    def escape(self, event):
+    @staticmethod
+    def escape(event):
         return event.type == KEYDOWN and event.key == K_ESCAPE
 
     def game_end(self):

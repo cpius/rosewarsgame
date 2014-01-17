@@ -1,6 +1,9 @@
 from __future__ import division
 import setup_settings as settings
 from common import *
+from collections import namedtuple
+
+Effect_tuple = namedtuple('Effect_tuple', ['level', 'duration'])
 
 
 class Unit(object):
@@ -58,10 +61,7 @@ class Unit(object):
 
     def set(self, attribute, value=1, duration=None):
         if attribute in Effect.name:
-            if duration:
-                self.set_effect(attribute, value, duration)
-            else:
-                self.set_effect(attribute, value)
+            self.set_effect(attribute, value, duration)
         else:
             self.get_dict(attribute)[attribute] = value
 
@@ -88,14 +88,11 @@ class Unit(object):
         if not level:
             return True
 
-        if isinstance(self.effects[effect], int):
-            return self.effects[effect] == level
-
-        return self.effects[effect][0] == level
+        return self.effects[effect].level == level
 
     def get(self, attribute):
         if attribute in Effect.name:
-            return self.get_effect(attribute)
+            return self.get_effect_level(attribute)
         else:
             dictionary = self.get_dict(attribute)
             if attribute in dictionary:
@@ -122,45 +119,36 @@ class Unit(object):
 
     def do(self, ability, level):
         if ability == Ability.poison:
-            self.set(Effect.poisoned, duration=level+1)
+            self.set(Effect.poisoned, duration=level)
 
         if ability == Ability.sabotage:
-            self.set_effect(Effect.sabotaged, duration=level+1)
+            self.set_effect(Effect.sabotaged, duration=level)
 
         if ability == Ability.improve_weapons:
             if level == 2:
-                self.set(Effect.improved_weapons, 2, 2)
+                self.set_effect(Effect.improved_weapons, 2, 2)
             else:
-                self.set(Effect.improved_weapons)
+                self.set_effect(Effect.improved_weapons)
 
     def set_effect(self, effect, level=1, duration=1):
-        self.effects[effect] = [level, duration]
+        self.effects[effect] = Effect_tuple(level, duration)
 
-    def get_effect(self, effect):
+    def get_effect_level(self, effect):
         if not effect in self.effects:
             return 0
-        if isinstance(self.effects[effect], int):
-            return self.effects[effect]
         else:
-            return self.effects[effect][0]
+            return self.effects[effect].level
 
     def gain_xp(self):
         if not self.has(State.used) and not settings.beginner_mode:
             self.increment_state(State.experience)
             self.remove_state(State.recently_upgraded)
 
-    def wear_off_effects(self):
-        for effect, value in self.effects.items():
-            if isinstance(value, int):
-                if self.effects[effect] <= 1:
-                    del self.effects[effect]
-                else:
-                    self.effects[effect] -= 1
-            else:
-                if self.effects[effect][1] <= 1:
-                    del self.effects[effect]
-                else:
-                    self.effects[effect][1] -= 1
+    def reduce_effect(self, effect):
+        if self.effects[effect].duration <= 1:
+            del self.effects[effect]
+        else:
+            self.effects[effect] = Effect_tuple(self.effects[effect].level, self.effects[effect].duration -1)
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
@@ -201,11 +189,11 @@ class Unit(object):
     def get_upgraded_unit(self, choice):
 
         if isinstance(choice, basestring):
+            self.remove_state(State.experience)
             upgraded_unit = self.make(choice)
 
         else:
             upgraded_unit = self.make(self.name)
-
             for trait, level in self.traits.items():
                 upgraded_unit.set(trait, level)
 
@@ -217,6 +205,9 @@ class Unit(object):
 
         for state, level in self.states.items():
             upgraded_unit.set(state, level)
+
+        for effect, info in self.effects.items():
+            upgraded_unit.set(effect, info[0], info[1])
 
         upgraded_unit.set(State.recently_upgraded)
 
@@ -493,7 +484,7 @@ class Catapult(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    experience_to_upgrade = 2
+    experience_to_upgrade = 3
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
 
 

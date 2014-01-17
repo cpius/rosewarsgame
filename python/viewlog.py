@@ -10,27 +10,41 @@ base_height = 48
 
 
 class Log():
-    def __init__(self, action, outcome, action_number, player_color):
+    def __init__(self, action, outcome_string, action_number, player_color):
         self.action = action
-        self.outcome = outcome
+        self.outcome_string = outcome_string
         self.action_number = action_number
         self.player_color = player_color
 
     def get_next(self):
         if self.action_number == 1:
-            return self.player_color, 1
+            return self.player_color, 2
         else:
             if self.player_color == "Red":
                 player_color = "Green"
             else:
                 player_color = "Red"
-            return player_color, 2
+            return player_color, 1
 
 
 def draw_log(logbook, screen, interface, game, action=None, outcome=None):
+    player_color = game.current_player().color
+    action_number = 3 - game.gamestate.get_actions_remaining()
     if action:
-        log = Log(action, outcome, game.gamestate.get_actions_remaining(), game.current_player().color)
-        logbook.append(log)
+        if game.gamestate.action_count == 0:
+            action_number -= 1
+
+        if action.is_attack():
+            for position in outcome.outcomes:
+                outcome_string = action.outcome_string(outcome.for_position(position), game.gamestate)
+                modified_action = action.copy()
+                modified_action.target_at = position
+                modified_action.target_unit = game.gamestate.enemy_units[position]
+                log = Log(modified_action, outcome_string, action_number, player_color)
+                logbook.append(log)
+        else:
+            log = Log(action, None, action_number, player_color)
+            logbook.append(log)
 
     if len(logbook) > maximum_logs:
         logbook.pop(0)
@@ -41,8 +55,6 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
 
     for index, log in enumerate(logbook):
 
-        action = log.action
-        outcome = log.outcome
         base_x = int(391 * zoom)
         base_y = int(index * log_heights)
         base = (base_x, base_y)
@@ -56,55 +68,40 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
 
         symbol_location = (base_x + 118 * zoom, base_y + 8 * zoom)
 
-        if action.is_attack():
-            draw_attack(screen, interface, action, outcome, base, symbol_location, log, game.gamestate)
+        if log.action.is_attack():
+            draw_attack(screen, interface, log.action, log.outcome_string, base, symbol_location, log)
 
-        elif action.is_ability():
+        elif log.action.is_ability():
             pic = get_image(interface.ability_icon)
             screen.blit(pic, symbol_location)
 
             if log.player_color == "Green":
-                draw_unit_right(screen, interface, action, "Green", 0, *base)
-                draw_unit_right(screen, interface, action, "Red", 1, *base)
+                draw_unit_right(screen, interface, log.action, "Green", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Red", 1, *base)
             elif log.player_color == "Red":
-                draw_unit_right(screen, interface, action, "Red", 0, *base)
-                draw_unit_right(screen, interface, action, "Green", 1, *base)
+                draw_unit_right(screen, interface, log.action, "Red", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Green", 1, *base)
 
         else:
             pic = get_image(interface.move_icon)
             screen.blit(pic, symbol_location)
 
             if log.player_color == "Green":
-                draw_unit_right(screen, interface, action, "Green", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Green", 0, *base)
             elif log.player_color == "Red":
-                draw_unit_right(screen, interface, action, "Red", 0, *base)
+                draw_unit_right(screen, interface, log.action, "Red", 0, *base)
 
     base_x = int(391 * zoom)
     base_y = int(len(logbook) * log_heights)
     base = (base_x, base_y)
 
-    if logbook:
-        color, action_number = logbook[-1].get_next()
-    else:
-        color, action_number = "Green", 1
-    draw_turn_box(screen, interface, color, action_number - 1, *base)
-
-    base_x = int(391 * zoom)
-    base_y = int(len(logbook) * log_heights)
-    base = (base_x, base_y)
-
-    if logbook:
-        color, action_number = logbook[-1].get_next()
-    else:
-        color, action_number = "Green", 1
-    draw_turn_box(screen, interface, color, action_number - 1, *base)
+    if not action:
+        draw_turn_box(screen, interface, player_color, action_number, *base)
 
     return logbook
 
 
-def draw_attack(screen, interface, action, outcome, base, symbol_location, log, gamestate):
-    outcome_string = action.outcome_string(outcome.for_position(action.target_at), gamestate)
-
+def draw_attack(screen, interface, action, outcome_string, base, symbol_location, log):
     draw_outcome(screen, interface, outcome_string, *base)
 
     pic = get_image(interface.attack_icon)
@@ -150,9 +147,8 @@ def draw_turn_box(screen, interface, color, action_number, base_x, base_y):
 
     pygame.draw.rect(screen, border_color, position_and_size)
 
-    current_action = 2 - action_number
     location = (base_x + 7 * zoom, base_y)
-    write(screen, str(current_action), location, interface.fonts["big"])
+    write(screen, str(action_number), location, interface.fonts["big"])
 
 
 def draw_unit_box_right(screen, interface, base, color, height, width):

@@ -1,6 +1,6 @@
 import json
 import urllib2
-from common import document_to_string
+from common import *
 from action import Action
 from outcome import Outcome
 from datetime import datetime
@@ -32,6 +32,8 @@ class Client():
                     action.move_with_attack = bool(options["move_with_attack"])
                 if "upgrade" in options:
                     upgrade = options["upgrade"]
+                    if not isinstance(upgrade, basestring):
+                        upgrade = enum_attributes(upgrade)
 
             return action, outcome, upgrade
 

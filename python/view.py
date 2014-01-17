@@ -10,12 +10,23 @@ from viewcommon import *
 class View(object):
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
 
         self.interface = settings.interface
         self.zoom = settings.zoom
         self.screen = pygame.display.set_mode(self.interface.board_size)
         self.logbook = []
         self.counter_size = self.interface.counter_size
+
+        self.sounds = {
+            "sword": "sword_sound.wav",
+            "War_Elephant": "Elephant.wav",
+            "Archer": "bow_fired.wav",
+            "Fire_Archer": "bow_fired.wav",
+            "Catapult": "catapult_attacksound.wav",
+            "unit_defeated": "infantry_defeated_sound.wav",
+            "your_turn": "fanfare.wav"
+        }
 
     def get_position_from_mouse_click(self, coordinates):
         return get_position_from_mouseclick(self.interface, coordinates)
@@ -35,10 +46,11 @@ class View(object):
     def clear_right(self):
         pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
 
-    def draw_game(self, game, start_at=None, actions=()):
+    def draw_game(self, game, start_at=None, actions=(), update_log=False):
         viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
-        self.clear_right()
-        self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
+        if update_log:
+            self.clear_right()
+            self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
         self.refresh()
 
     def show_unit_zoomed(self, unit):
@@ -46,7 +58,8 @@ class View(object):
         viewinfo.show_unit_zoomed(self.screen, self.interface, unit)
         self.refresh()
 
-    def refresh(self):
+    @staticmethod
+    def refresh():
         pygame.display.flip()
 
     def draw_upgrade_options(self, unit):
@@ -59,7 +72,7 @@ class View(object):
 
     def draw_action(self, action, outcome, game, flip=False):
         viewlog.draw_log(self.logbook, self.screen, self.interface, game, action, outcome)
-        viewgame.draw_action(self.screen, self.interface, action, flip)
+        viewgame.draw_action(self.screen, self.interface, action, outcome, flip)
         self.refresh()
 
     def draw_post_movement(self, action):
@@ -94,3 +107,7 @@ class View(object):
     def draw_action_tutorial(self, action, roll=None):
         viewgame.draw_action(self.screen, self.interface, action, False, roll)
         self.refresh()
+
+    def play_sound(self, sound):
+        sound = pygame.mixer.Sound("./../sounds/" + self.sounds[sound])
+        sound.play()

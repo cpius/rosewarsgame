@@ -75,12 +75,6 @@ class Position:
     def two_forward_tiles(self, direction):
         return direction.forward_and_sideways(self)
 
-    def out_of_board_vertical(self):
-        return self.row < 1 or self.row > board_height
-
-    def out_of_board_horizontal(self):
-        return self.column < 1 or self.column > board_width
-
 
 def enum(n, *sequential, **named):
     enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
@@ -182,21 +176,21 @@ effect_descriptions = {
 
 ability_descriptions = {
     "bribe": {
-        1: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
-        "the same unit on your next turn. The unit gets +1A until end of turn.",
-        2: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. You can't bribe "
-        "the same unit on your next turn. The unit gets +2A until end of turn."},
+        1: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. The unit gets +1A "
+           "until end of turn.",
+        2: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. The unit gets +2A "
+           "until end of turn."},
     "improve_weapons": {
         1: "Give melee unit +3 attack, +1 defence until your next turn.",
         2: "Give melee unit +2 attack, +1 defence for two turns."},
     "pikeman_specialist": {
         1: "Pikemen do not get +1D against Hussar."},
     "poison": {
-        1: "Freezes a unit for 2 turns.",
-        2: "Freezes a unit for 3 turns."},
+        1: "Makes a unit unable to perform actions until your next turn.",
+        2: "Makes a unit unable to perform actions for two turns."},
     "sabotage": {
-        1: "Reduces a units defence to 0 for 1 turn.",
-        2: "Reduces a units defence to 0 for 2 turns."},
+        1: "Reduces a units defence to 0 this turn.",
+        2: "Reduces a units defence to 0 for two turns."},
     "triple_attack": {
         1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
@@ -205,9 +199,9 @@ types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
 
-State = enum(1000, *(trait for trait in dict(state_descriptions)))
+State = enum(1000, *(state for state in dict(state_descriptions)))
 
-Effect = enum(2000, *(trait for trait in dict(effect_descriptions)))
+Effect = enum(2000, *(effect for effect in dict(effect_descriptions)))
 
 Ability = enum(3000, *(ability for ability in ability_descriptions))
 
@@ -438,6 +432,8 @@ def enum_attributes(attributes):
             dictionary[getattr(Trait, attribute)] = value
         elif attribute in Ability.name.values():
             dictionary[getattr(Ability, attribute)] = value
+        elif attribute in Effect.name.values():
+            dictionary[getattr(Effect, attribute)] = value
         else:
             dictionary[getattr(State, attribute)] = value
 

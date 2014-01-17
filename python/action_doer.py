@@ -5,20 +5,29 @@ from action import Action
 
 def do_action(gamestate, action, outcome):
 
-    def settle_attack(action):
+    def settle_attack(action, attack_direction=None):
         rolls = outcome.for_position(action.target_at)
 
-        if not action.is_win(rolls, gamestate):
-            return
+        if action.is_win(rolls, gamestate):
+            if action.target_unit.has_extra_life():
+                action.target_unit.set(State.lost_extra_life)
+            else:
+                del gamestate.enemy_units[action.target_at]
 
-        if action.target_unit.has_extra_life():
-            action.target_unit.set(State.lost_extra_life)
-        else:
-            del enemy_units[action.target_at]
+        elif action.is_push() and action.attack_successful(rolls, gamestate):
+            if not attack_direction:
+                attack_direction = action.end_at.get_direction_to(action.target_at)
+            push_destination = attack_direction.move(action.target_at)
+            enemy_units = gamestate.enemy_units
+
+            if push_destination in gamestate.all_units() or push_destination not in board:
+                del enemy_units[action.target_at]
+            else:
+                enemy_units[push_destination] = enemy_units.pop(action.target_at)
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
-            action.target_unit.set(Effect.bribed)
+            action.target_unit.set_effect(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         else:
             value = action.unit.get(action.ability)
@@ -65,7 +74,7 @@ def do_action(gamestate, action, outcome):
         for position in action.end_at.two_forward_tiles(attack_direction):
             if position in enemy_units:
                 sub_action = Action(all_units, action.start_at, action.end_at, position)
-                settle_attack(sub_action)
+                settle_attack(sub_action, attack_direction)
 
     def longsword():
         for position in action.end_at.four_forward_tiles(attack_direction):
@@ -119,14 +128,4 @@ def move_melee_unit_to_target_tile(gamestate, rolls, action):
             gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
 
     elif action.is_push() and action.attack_successful(rolls, gamestate):
-        attack_direction = action.end_at.get_direction_to(action.target_at)
-        push_destination = attack_direction.move(action.target_at)
-        enemy_units = gamestate.enemy_units
-
-        if not push_destination.out_of_board_vertical():
-            if push_destination in gamestate.all_units() or push_destination.out_of_board_horizontal():
-                del enemy_units[action.target_at]
-            else:
-                enemy_units[push_destination] = enemy_units.pop(action.target_at)
-
-            gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
+        gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)

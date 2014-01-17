@@ -184,16 +184,20 @@ class Gamestate:
         return self.to_document() == other.to_document()
 
     def is_ended(self):
-        backline = 8
         for position, unit in self.player_units.items():
             if not unit.has(Effect.bribed):
-                if position.row == backline:
+                if position.row == 8:
+                    return True
+
+        for position, unit in self.enemy_units.items():
+            if not unit.has(Effect.bribed):
+                if position.row == 1:
                     return True
 
         if not self.enemy_units:
             at_least_one_bribed = False
             for position, unit in self.player_units.items():
-                if unit.is_bribed():
+                if unit.has(Effect.bribed):
                     at_least_one_bribed = True
             if not at_least_one_bribed:
                 return True

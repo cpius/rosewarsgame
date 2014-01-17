@@ -1,6 +1,6 @@
 {
     "type": "Does turn shift work",
-    "description": "Tests if 'poisoned' decreases by 1",
+    "description": "Poisoned only increases in your turns",
     "pre_gamestate": {
         "actions_remaining": 0,
         "player1_units": {
@@ -14,7 +14,7 @@
         "player2_units": {
             "C5": {
                 "name": "Archer",
-                "poisoned": 2
+                "poisoned": 1
             },
             "A4": "Ballista"
 
