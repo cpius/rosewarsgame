@@ -488,7 +488,6 @@ class Controller(object):
 
         if unit:
             self.view.show_unit_zoomed(unit, attack_hint)
-            self.pause()
             self.view.draw_game(self.game)
             return
 
