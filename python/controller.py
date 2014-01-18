@@ -13,6 +13,7 @@ from game import Game
 from outcome import Outcome
 import json
 from common import *
+import battle
 
 
 class Controller(object):
@@ -181,6 +182,8 @@ class Controller(object):
             self.view.draw_game(self.game)
 
     def left_click(self, position):
+        self.view.hide_unit_zoomed(self.game)
+
         if self.selecting_extra_action():
             self.perform_extra_action(position)
 
@@ -262,7 +265,7 @@ class Controller(object):
             if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
                 self.trigger_network_player()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONUP:
                 position = self.view.get_position_from_mouse_click(event.pos)
 
                 if event.button == 1 and self.game.is_player_human():

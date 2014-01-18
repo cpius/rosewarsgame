@@ -17,6 +17,7 @@ class View(object):
         self.screen = pygame.display.set_mode(self.interface.board_size)
         self.logbook = []
         self.counter_size = self.interface.counter_size
+        self.showing_unit_info = False
 
         self.sounds = {
             "sword": "sword_sound.wav",
@@ -45,6 +46,7 @@ class View(object):
 
     def clear_right(self):
         pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
+        self.showing_unit_info = False
 
     def draw_game(self, game, start_at=None, actions=(), update_log=False):
         viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
@@ -58,6 +60,11 @@ class View(object):
         viewinfo.show_unit_zoomed(self.screen, self.interface, unit, attack_hint)
         self.showing_unit_info = True
         self.refresh()
+
+    def hide_unit_zoomed(self, game):
+        if self.showing_unit_info:
+            self.clear_right()
+            self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
 
     @staticmethod
     def refresh():
