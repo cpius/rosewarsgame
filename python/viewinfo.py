@@ -1,7 +1,6 @@
 from __future__ import division
 from viewcommon import *
-import settings
-
+import interface_settings as settings
 
 zoom = settings.zoom
 zoomed_unit_size = (int(236 * zoom), int(271 * zoom))

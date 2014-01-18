@@ -1,7 +1,7 @@
 from __future__ import division
+import setup_settings as settings
 from common import *
 from collections import namedtuple
-import settings
 
 Effect_tuple = namedtuple('Effect_tuple', ['level', 'duration'])
 
@@ -16,7 +16,7 @@ class Unit(object):
     name = ""
     zoc = []
     abilities = []
-    experience_to_upgrade = 4
+    experience_to_upgrade = settings.experience_to_upgrade
     attack_bonuses = {}
     defence_bonuses = {}
     traits = {}
