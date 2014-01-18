@@ -517,7 +517,10 @@ class Controller(object):
         if not self.start_at or position == self.start_at:
             return False
 
-        return position in self.game.gamestate.all_units() and self.selected_unit.abilities
+        potential_actions = [action for action in self.game.gamestate.get_actions()
+                             if action.start_at == self.start_at and action.target_at and action.target_at == position]
+
+        return position in self.game.gamestate.all_units() and self.selected_unit.abilities and potential_actions
 
     def selecting_ranged_target(self, position):
         if not self.start_at:
