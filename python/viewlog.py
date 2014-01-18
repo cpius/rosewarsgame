@@ -1,7 +1,7 @@
 from __future__ import division
 from viewcommon import *
 import pygame
-import interface_settings as settings
+import settings
 
 
 zoom = settings.zoom

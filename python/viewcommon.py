@@ -1,7 +1,7 @@
 from __future__ import division
 import pygame
 import textwrap
-import interface_settings as settings
+import settings
 from common import *
 
 colors = {"black": (0, 0, 0),

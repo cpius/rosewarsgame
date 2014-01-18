@@ -5,7 +5,7 @@ from pygame.locals import *
 import setup
 from gamestate import Gamestate
 import os
-import interface_settings as settings
+import settings
 from player import Player
 from action import Action
 from client import Client
@@ -249,6 +249,9 @@ class Controller(object):
 
         if self.game.is_player_network():
             self.trigger_network_player()
+
+        if self.game.is_player_ai():
+            self.trigger_artificial_intelligence()
 
         while True:
             event = pygame.event.wait()

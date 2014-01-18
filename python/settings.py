@@ -1,6 +1,14 @@
 import interfaces
 import os
 
+# server = "http://localhost:8080"
+server = "http://server.rosewarsgame.com:8080"
+
+player1_ai = "Human"
+player2_ai = "Human"
+
+beginner_mode = False
+
 
 pause_for_animation_attack = 100
 pause_for_animation = 200
@@ -13,9 +21,6 @@ pause_for_attack_until_click = False
 
 zoom = 1.3
 interface = interfaces.Rectangles(zoom)
-
-player1_ai = "Human"
-player2_ai = "Advancer"
 
 document_ai_actions = False
 

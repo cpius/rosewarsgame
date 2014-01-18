@@ -7,6 +7,7 @@ from gamestate import Gamestate
 from action import Action
 from player import Player
 import units as units_module
+import settings
 
 
 class Game:
@@ -31,8 +32,8 @@ class Game:
             player1 = Player.from_document(log_document["player1"])
             player2 = Player.from_document(log_document["player2"])
         else:
-            player1 = Player("Green", "Human")
-            player2 = Player("Red", "Human")
+            player1 = Player("Green", settings.player1_ai)
+            player2 = Player("Red", settings.player2_ai)
 
         if player_profile:
             if player1.profile == player_profile:
