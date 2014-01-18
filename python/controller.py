@@ -29,13 +29,13 @@ class Controller(object):
     CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
 
     @classmethod
-    def new_game(cls, view):
+    def new_game(cls, view, green_intelligence, red_intelligence):
         if not os.path.exists("./replay"):
             os.makedirs("./replay")
 
         controller = Controller(view)
 
-        players = [Player("Green", setup_settings.player1_ai), Player("Red", setup_settings.player2_ai)]
+        players = [Player("Green", green_intelligence), Player("Red", red_intelligence)]
 
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
@@ -51,11 +51,11 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_network(cls, view, game_id, player):
+    def from_network(cls, view, player):
         controller = cls(view)
 
-        controller.game_id = game_id
-        controller.client = Client(game_id)
+        controller.client = Client(player)
+        controller.game_id = controller.client.game_id
         controller.game = Game.from_log_document(controller.client.get_game(), player, True)
 
         player = controller.game.current_player()

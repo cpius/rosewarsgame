@@ -37,10 +37,8 @@ class Game:
 
         if player_profile:
             if player1.profile == player_profile:
-                print "player 2 is network"
                 player2.intelligence = player2.ai = "Network"
             elif player2.profile == player_profile:
-                print "player 1 is network"
                 player1.intelligence = player1.ai = "Network"
             else:
                 print player_profile, "is not playing this game. The players are:", player1.profile, "and", player2.profile
