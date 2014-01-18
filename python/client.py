@@ -4,7 +4,7 @@ from common import *
 from action import Action
 from outcome import Outcome
 from datetime import datetime
-import settings
+import setup_settings as settings
 
 
 class Client():

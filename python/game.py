@@ -7,7 +7,7 @@ from gamestate import Gamestate
 from action import Action
 from player import Player
 import units as units_module
-import settings
+import setup_settings as settings
 
 
 class Game:

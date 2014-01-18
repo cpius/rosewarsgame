@@ -1,7 +1,7 @@
 from operator import attrgetter
 import ai_methods
 import random
-import settings
+import interface_settings as settings
 
 
 def get_action(actions, gamestate):
