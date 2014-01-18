@@ -73,16 +73,9 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private ActionsResolverStrategy actionsResolver;
 
 	private PathFinderStrategy pathFinderStrategy;
-	private ActionPathSprite actionPathSprite;
+	private ActionPathSprite actionPathSprite;	
 
-	public static CCScene scene(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap, GameHelper mHelper) {
-		CCScene scene = CCScene.node();
-		CCLayer layer = new PlayGameLayer(playerOneMap, playerTwoMap, mHelper);
-		scene.addChild(layer);
-		return scene;
-	}
-
-	protected PlayGameLayer(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap, GameHelper mHelper) {
+	public PlayGameLayer(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap, GameHelper mHelper) {
 
 		xCount = 5;
 		yCount = 8;

@@ -42,18 +42,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	private int xCount;
 	private int yCount;
 	private GameHelper mHelper;
-	private Context context;
 
-	public static CCScene scene(Context context, GameHelper mHelper) {
-		CCScene scene = CCScene.node();
-		CCLayer layer = new SetupGameLayer(context, mHelper);
-		scene.addChild(layer);
-		return scene;
-	}
+	public SetupGameLayer(Context context, GameHelper mHelper) {
 
-	protected SetupGameLayer(Context context, GameHelper mHelper) {
-
-		this.context = context;
 		this.mHelper = mHelper;
 		setIsTouchEnabled(true);
 
@@ -127,7 +118,9 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		UnitMap<Position, Unit> playerTwoMap = playerOnemap.getMirrored(xCount, yCount * 2);
 
-		CCScene scene = PlayGameLayer.scene(playerOnemap, playerTwoMap, mHelper);
+		CCScene scene = CCScene.node();
+		CCLayer layer = new PlayGameLayer(playerOnemap, playerTwoMap, mHelper);
+		scene.addChild(layer);
 		CCDirector.sharedDirector().runWithScene(scene);
 	}
 

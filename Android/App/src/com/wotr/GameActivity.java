@@ -2,6 +2,7 @@ package com.wotr;
 
 import java.util.ArrayList;
 
+import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
@@ -9,6 +10,7 @@ import org.cocos2d.opengl.CCGLSurfaceView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -20,7 +22,7 @@ import com.wotr.cocos.SetupGameLayer;
 import com.wotr.gpgs.RoomConnector;
 import com.wotr.gpgs.RoomCreator;
 
-public class GameMenuActivity extends Activity implements GameMenuListener, GameHelperListener {
+public class GameActivity extends Activity implements GameMenuListener, GameHelperListener {
 
 	protected static final int REQUEST_ACHIEVEMENTS = 0;
 	protected static final int REQUEST_LEADERBOARD = 1;
@@ -126,11 +128,10 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 		gameMenuLayer.enableLogin(false);
 
 		RoomConnector connector = new RoomConnector(mHelper);
-		if(connector.connect()) {
-			
+		if (connector.connect()) {
+
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-			
-			
+
 		}
 
 	}
@@ -167,26 +168,34 @@ public class GameMenuActivity extends Activity implements GameMenuListener, Game
 	@Override
 	public void onMultiplayerLocalClicked() {
 
-		final GameMenuActivity this_ = this;
-
 		runOnUiThread(new Runnable() {
 			public void run() {
 
-				String id = mHelper.getGamesClient().getCurrentPlayer().getPlayerId();
+				// String id =
+				// mHelper.getGamesClient().getCurrentPlayer().getPlayerId();
 
 				// mHelper.getPlusClient().loadPerson(this_, id);
 
-				CCScene scene = SetupGameLayer.scene(getApplicationContext(), mHelper);
+				CCScene scene = CCScene.node();
+				CCLayer layer = new SetupGameLayer(getApplicationContext(), mHelper);
+				scene.addChild(layer);
 				CCDirector.sharedDirector().runWithScene(scene);
 
-				/*
-				 * Intent myIntent = new Intent(getApplicationContext(),
-				 * SetupGameActivity.class); startActivityForResult(myIntent,
-				 * 0);
-				 */
 			}
 		});
 
+	}
+	
+	@Override
+	public boolean onKeyDown(int keycode, KeyEvent e) {
+		switch (keycode) {
+		case KeyEvent.KEYCODE_BACK:
+			/*if (!CCDirector.sharedDirector().getRunningScene().equals(scene)) {
+				CCDirector.sharedDirector().runWithScene(scene);
+				return true;
+			}*/
+		}
+		return super.onKeyDown(keycode, e);
 	}
 
 	/*
