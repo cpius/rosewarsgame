@@ -53,9 +53,10 @@ class View(object):
             self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
         self.refresh()
 
-    def show_unit_zoomed(self, unit):
+    def show_unit_zoomed(self, unit, attack_hint):
         self.clear_right()
-        viewinfo.show_unit_zoomed(self.screen, self.interface, unit)
+        viewinfo.show_unit_zoomed(self.screen, self.interface, unit, attack_hint)
+        self.showing_unit_info = True
         self.refresh()
 
     @staticmethod

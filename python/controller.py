@@ -231,11 +231,14 @@ class Controller(object):
                 self.exit_game()
 
     def right_click(self, position):
-        if not self.start_at:
-            self.show_unit(position)
-        else:
-            if position in self.game.gamestate.enemy_units:
-                self.show_attack(position)
+        attack_hint = []
+        if self.start_at and position in self.game.gamestate.enemy_units:
+            potential_actions = [action for action in self.game.gamestate.get_actions() if
+                                 action.start_at == self.start_at and action.target_at and action.target_at == position]
+            if potential_actions:
+                attack_hint = self.get_attack_hint(position)
+
+        self.show_unit(position, attack_hint)
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
@@ -473,7 +476,7 @@ class Controller(object):
 
         return
 
-    def show_unit(self, position):
+    def show_unit(self, position, attack_hint):
         unit = None
         if position in self.game.gamestate.player_units:
             unit = self.game.gamestate.player_units[position]
@@ -481,10 +484,26 @@ class Controller(object):
             unit = self.game.gamestate.enemy_units[position]
 
         if unit:
-            self.view.show_unit_zoomed(unit)
+            self.view.show_unit_zoomed(unit, attack_hint)
             self.pause()
             self.view.draw_game(self.game)
             return
+
+    def get_attack_hint(self, attack_position):
+        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
+        player_unit = self.game.gamestate.player_units[self.start_at]
+        opponent_unit = self.game.gamestate.enemy_units[attack_position]
+
+        attack = battle.get_attack_rating(player_unit, opponent_unit, action, self.game.gamestate.player_units)
+        defence = battle.get_defence_rating(player_unit, opponent_unit, attack, action, self.game.gamestate.enemy_units)
+        attack = min(attack, 6)
+        defence = min(defence, 6)
+
+        return ["Attack hint:",
+                "Attack: " + str(attack),
+                "Defence: " + str(defence),
+                "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
