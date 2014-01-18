@@ -234,14 +234,24 @@ class Controller(object):
                 self.exit_game()
 
     def right_click(self, position):
-        attack_hint = []
-        if self.start_at and position in self.game.gamestate.enemy_units:
-            potential_actions = [action for action in self.game.gamestate.get_actions() if
-                                 action.start_at == self.start_at and action.target_at and action.target_at == position]
-            if potential_actions:
-                attack_hint = self.get_attack_hint(position)
+        start_at = position
+        if self.start_at:
+            attack_hint = []
+            target_at = None
 
-        self.show_unit(position, attack_hint)
+            illustrate_actions = [action for action in self.game.gamestate.get_actions()
+                                  if action.start_at == self.start_at]
+
+            if position in self.game.gamestate.enemy_units:
+                potential_actions = [action for action in illustrate_actions
+                                     if action.target_at and action.target_at == position]
+                if potential_actions:
+                    attack_hint = self.get_attack_hint(position)
+                    start_at = self.start_at
+                    target_at = position
+            self.show_unit(start_at, target_at, attack_hint, illustrate_actions)
+        else:
+            self.show_unit(start_at)
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
@@ -479,16 +489,20 @@ class Controller(object):
 
         return
 
-    def show_unit(self, position, attack_hint):
+    def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
         unit = None
+        position = start_at
+        if target_at:
+            position = target_at
+
         if position in self.game.gamestate.player_units:
             unit = self.game.gamestate.player_units[position]
-        if position in self.game.gamestate.enemy_units:
+        elif position in self.game.gamestate.enemy_units:
             unit = self.game.gamestate.enemy_units[position]
 
         if unit:
             self.view.show_unit_zoomed(unit, attack_hint)
-            self.view.draw_game(self.game)
+            self.view.draw_game(self.game, start_at, illustrate_actions)
             return
 
     def get_attack_hint(self, attack_position):
