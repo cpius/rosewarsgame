@@ -3,7 +3,6 @@ from pymongo import MongoClient
 from bson import ObjectId
 import socket
 import time
-from datetime import datetime
 from gamestate import Gamestate
 from game import Game
 from action import Action
@@ -11,6 +10,7 @@ from player import Player
 import setup
 from common import *
 from outcome import Outcome
+import random
 
 
 @get('/games/new/<player1>/vs/<player2>')
@@ -25,7 +25,7 @@ def new_game(player1, player2):
     game = Game(players, gamestate)
     game_id = games.insert(game.to_document())
 
-    return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time()}
+    return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time(), "Message": "New game created"}
 
 
 @get('/games/view/<game_id>')
@@ -71,6 +71,57 @@ def view_actions(game_id):
         actions_document[action["number"]] = action
 
     return actions_document
+
+# db.games.update({}, { "$set": { "finished_at": finished_at } }, {"multi": true} );
+@get("/games/join_or_create/<profile>")
+def join_or_create(profile):
+    games = get_collection("games")
+
+    ongoing_games = list(games.find(
+        {
+            "$and": [
+                {"finished_at": None},
+                {"$or": [{"player1.profile": profile}, {"player2.profile": profile}]}]
+        }))
+    if ongoing_games:
+        return {
+            "Status": "OK",
+            "ID": ongoing_games[0]["_id"],
+            "ServerTime:": time.time(),
+            "Message": "Joined ongoing game"
+        }
+
+    open_games = list(games.find(
+        {
+            "$and": [
+                {
+                    "$and": [
+                        {"player1.profile": {"$ne": profile}},
+                        {"player2.profile": {"$ne": profile}}
+                    ]
+                },
+                {
+                    "$or": [
+                        {"player1.profile": "OPEN"},
+                        {"player2.profile": "OPEN"}
+                    ]
+                }
+            ]
+        }))
+    if open_games:
+        game_to_join = open_games[0]
+        if game_to_join["player1"]["profile"] == "OPEN":
+            game_to_join["player1"]["profile"] = profile
+        else:
+            game_to_join["player2"]["profile"] = profile
+        games.save(game_to_join)
+
+        return {"Status": "OK", "ID": game_to_join["_id"], "ServerTime": time.time(), "Message": "Joined existing game"}
+
+    if random.randint(0, 1) == 0:
+        return new_game(profile, "OPEN")
+    else:
+        return new_game("OPEN", profile)
 
 
 @post('/games/<game_id>/do_action')

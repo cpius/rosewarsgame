@@ -195,6 +195,13 @@ ability_descriptions = {
         1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
 
+opponent_descriptions = {
+    "HotSeat": "Start a new hot seat game on this machine",
+    "Advancer": "Start a new game against an artificial intelligence on this machine",
+    "Internet": "Start a new game against an opponent from the internet",
+    "Load": "Load a saved game"
+}
+
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
@@ -207,6 +214,7 @@ Ability = enum(3000, *(ability for ability in ability_descriptions))
 
 Type = enum(4000, *types)
 
+Opponent = enum(1, *(opponent for opponent in dict(opponent_descriptions)))
 
 if 1 == 2:
     class Type:
@@ -288,6 +296,15 @@ if 1 == 2:
         improved_weapons = None
         poisoned = None
         sabotaged = None
+
+        name = {}
+        write = {}
+
+    class Opponent:
+        HotSeat = None
+        Advancer = None
+        Internet = None
+        Load = None
 
         name = {}
         write = {}

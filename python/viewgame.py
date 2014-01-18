@@ -1,4 +1,3 @@
-import pygame
 from viewcommon import *
 from coordinates import Coordinates
 

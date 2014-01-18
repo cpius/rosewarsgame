@@ -8,11 +8,21 @@ import setup_settings as settings
 
 
 class Client():
-    def __init__(self, game_id):
+    def __init__(self, profilename, game_id=None):
+        self.profilename = profilename
         self.game_id = game_id
 
     def get_game(self):
-        return json.load(urllib2.urlopen(settings.server + "/games/view/" + self.game_id))
+        if self.game_id:
+            return json.load(urllib2.urlopen(settings.server + "/games/view/" + self.game_id))
+
+        else:
+            response = json.load(urllib2.urlopen(settings.server + "/games/join_or_create/" + self.profilename))
+            self.game_id = response["ID"]
+
+            print response["Message"], self.game_id
+
+            return self.get_game()
 
     def select_action(self, gamestate):
         game = self.get_game()
