@@ -18,7 +18,8 @@ def draw_game(screen, interface, game, start_at=None, actions=()):
 
     draw_units(screen, interface, player_units, current_color, enemy_units, enemy_color, start_at, actions)
 
-    shade_actions(screen, interface, actions)
+    if actions:
+        shade_actions(screen, interface, actions)
 
 
 def draw_units(screen, interface, player_units, player_color, enemy_units, opponent_color, start_position, actions):
