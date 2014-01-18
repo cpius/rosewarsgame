@@ -1,6 +1,4 @@
 from __future__ import division
-import pygame
-import textwrap
 from viewcommon import *
 import settings
 import battle
