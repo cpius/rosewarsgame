@@ -183,8 +183,6 @@ class Controller(object):
             self.view.draw_game(self.game)
 
     def left_click(self, position):
-        self.view.hide_unit_zoomed(self.game)
-
         if self.selecting_extra_action():
             self.perform_extra_action(position)
 
@@ -279,8 +277,10 @@ class Controller(object):
             if event.type == pygame.MOUSEBUTTONUP:
                 position = self.view.get_position_from_mouse_click(event.pos)
 
-                if event.button == 1 and self.game.is_player_human():
-                    self.left_click(position)
+                if event.button == 1:
+                    self.view.hide_unit_zoomed(self.game)
+                    if self.game.is_player_human():
+                        self.left_click(position)
                 elif event.button == 3:
                     self.right_click(position)
 
