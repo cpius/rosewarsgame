@@ -87,7 +87,9 @@ def show_unit_zoomed(screen, interface, unit, attack_hint):
     write(screen, unit.name, title_location, interface.fonts["normal"])
     screen.blit(pic, image_location)
 
-    lines = get_unit_lines(unit) + attack_hint
+    lines = get_unit_lines(unit)
+    if attack_hint:
+        lines += attack_hint
     line_length = 45
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
