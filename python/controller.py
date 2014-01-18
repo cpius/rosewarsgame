@@ -276,6 +276,8 @@ class Controller(object):
 
             if event.type == pygame.MOUSEBUTTONUP:
                 position = self.view.get_position_from_mouse_click(event.pos)
+                if not self.game.is_player_human():
+                    position = position.flip()
 
                 if event.button == 1:
                     self.view.hide_unit_zoomed(self.game)
