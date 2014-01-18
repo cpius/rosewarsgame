@@ -9,14 +9,7 @@ class Interface(object):
 
     def __init__(self, zoom):
 
-        font_name = "arial"
-        self.fonts = {"message": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
-                      "very_small": pygame.font.SysFont(font_name, int(11 * zoom), bold=True),
-                      "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
-                      "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
-                      "experience": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
-                      "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)
-                      }
+        self.fonts = {}
 
         self.line_distances = {"small": 15 * zoom}
 
@@ -30,6 +23,16 @@ class Interface(object):
                             "top_left": Coordinates(self.top_left_coordinates, self),
                             "bottom_left": Coordinates(self.bottom_left_coordinates, self)
                             }
+
+    def load_fonts(self, zoom):
+        font_name = "arial"
+        self.fonts = {"message": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "very_small": pygame.font.SysFont(font_name, int(11 * zoom), bold=True),
+                      "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
+                      "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "experience": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)
+                      }
 
 
 class Rectangles(Interface):
@@ -119,8 +122,6 @@ class Rectangles(Interface):
         self.upgrade_text_locations = [(410 * zoom, 510 * zoom), (600 * zoom, 510 * zoom)]
 
         self.small_line_distance = 18 * zoom
-
-        pygame.init()
 
         super(Rectangles, self).__init__(zoom)
 

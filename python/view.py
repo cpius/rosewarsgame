@@ -12,8 +12,9 @@ class View(object):
         pygame.init()
         pygame.mixer.init()
 
-        self.interface = settings.interface
         self.zoom = settings.zoom
+        self.interface = settings.interface
+        self.interface.load_fonts(self.zoom)
         self.screen = pygame.display.set_mode(self.interface.board_size)
         self.logbook = []
         self.counter_size = self.interface.counter_size
