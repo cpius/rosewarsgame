@@ -13,6 +13,7 @@ from game import Game
 from outcome import Outcome
 import json
 from common import *
+import battle
 
 
 class Controller(object):
@@ -181,6 +182,8 @@ class Controller(object):
             self.view.draw_game(self.game)
 
     def left_click(self, position):
+        self.view.hide_unit_zoomed(self.game)
+
         if self.selecting_extra_action():
             self.perform_extra_action(position)
 
@@ -231,11 +234,24 @@ class Controller(object):
                 self.exit_game()
 
     def right_click(self, position):
-        if not self.start_at:
-            self.show_unit(position)
-        else:
+        start_at = position
+        if self.start_at:
+            attack_hint = []
+            target_at = None
+
+            illustrate_actions = [action for action in self.game.gamestate.get_actions()
+                                  if action.start_at == self.start_at]
+
             if position in self.game.gamestate.enemy_units:
-                self.show_attack(position)
+                potential_actions = [action for action in illustrate_actions
+                                     if action.target_at and action.target_at == position]
+                if potential_actions:
+                    attack_hint = self.get_attack_hint(position)
+                    start_at = self.start_at
+                    target_at = position
+            self.show_unit(start_at, target_at, attack_hint, illustrate_actions)
+        else:
+            self.show_unit(start_at)
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
@@ -259,7 +275,7 @@ class Controller(object):
             if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
                 self.trigger_network_player()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONUP:
                 position = self.view.get_position_from_mouse_click(event.pos)
 
                 if event.button == 1 and self.game.is_player_human():
@@ -473,18 +489,37 @@ class Controller(object):
 
         return
 
-    def show_unit(self, position):
+    def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
         unit = None
+        position = start_at
+        if target_at:
+            position = target_at
+
         if position in self.game.gamestate.player_units:
             unit = self.game.gamestate.player_units[position]
-        if position in self.game.gamestate.enemy_units:
+        elif position in self.game.gamestate.enemy_units:
             unit = self.game.gamestate.enemy_units[position]
 
         if unit:
-            self.view.show_unit_zoomed(unit)
-            self.pause()
-            self.view.draw_game(self.game)
+            self.view.show_unit_zoomed(unit, attack_hint)
+            self.view.draw_game(self.game, start_at, illustrate_actions)
             return
+
+    def get_attack_hint(self, attack_position):
+        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
+        player_unit = self.game.gamestate.player_units[self.start_at]
+        opponent_unit = self.game.gamestate.enemy_units[attack_position]
+
+        attack = battle.get_attack_rating(player_unit, opponent_unit, action, self.game.gamestate.player_units)
+        defence = battle.get_defence_rating(player_unit, opponent_unit, attack, action, self.game.gamestate.enemy_units)
+        attack = min(attack, 6)
+        defence = min(defence, 6)
+
+        return ["Attack hint:",
+                "Attack: " + str(attack),
+                "Defence: " + str(defence),
+                "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
@@ -517,7 +552,10 @@ class Controller(object):
         if not self.start_at or position == self.start_at:
             return False
 
-        return position in self.game.gamestate.all_units() and self.selected_unit.abilities
+        potential_actions = [action for action in self.game.gamestate.get_actions()
+                             if action.start_at == self.start_at and action.target_at and action.target_at == position]
+
+        return position in self.game.gamestate.all_units() and self.selected_unit.abilities and potential_actions
 
     def selecting_ranged_target(self, position):
         if not self.start_at:
