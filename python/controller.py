@@ -55,12 +55,14 @@ class Controller(object):
 
         controller.client = Client(player)
         controller.game_id = controller.client.game_id
-        controller.game = Game.from_log_document(controller.client.get_game(), player, True)
+        game = controller.client.get_game()
+        controller.game = Game.from_log_document(game, player, True)
 
         player = controller.game.current_player()
         print "current player is", player.color, player.intelligence, player.profile
         controller.clear_move()
 
+        view.play_sound("your_turn")
         return controller
 
     @classmethod

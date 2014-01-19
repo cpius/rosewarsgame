@@ -5,6 +5,7 @@ from action import Action
 from outcome import Outcome
 from datetime import datetime
 import setup_settings as settings
+from time import sleep
 
 
 class Client():
@@ -48,6 +49,25 @@ class Client():
             return action, outcome, upgrade
 
         return None, None, None
+
+    def wait_for_opponent(self):
+        while True:
+            opponent = self.look_for_opponent()
+            if opponent:
+                print "Opponent found:", opponent_descriptions
+            print "Waiting for opponent..."
+            sleep(1000)
+
+    def look_for_opponent(self):
+        game = self.get_game()
+        player1 = game["player1"]["profile"]
+        player2 = game["player2"]["profile"]
+        if player1 != self.profilename and player1 != "OPEN":
+            return player1
+        elif player2 != self.profilename and player2 != "OPEN":
+            return player2
+
+        return
 
     def send_action(self, action):
         url = settings.server + "/games/" + self.game_id + "/do_action"
