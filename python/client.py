@@ -23,7 +23,10 @@ class Client():
 
             print response["Message"], self.game_id
 
-            return self.get_game()
+            if response["Message"] == "New game created":
+                return self.wait_for_opponent()
+            else:
+                return self.get_game()
 
     def select_action(self, gamestate):
         game = self.get_game()
@@ -52,14 +55,15 @@ class Client():
 
     def wait_for_opponent(self):
         while True:
-            opponent = self.look_for_opponent()
+            game = self.get_game()
+            opponent = self.look_for_opponent(game)
             if opponent:
-                print "Opponent found:", opponent_descriptions
+                print "Opponent found:", opponent
+                return game
             print "Waiting for opponent..."
-            sleep(1000)
+            sleep(3)
 
-    def look_for_opponent(self):
-        game = self.get_game()
+    def look_for_opponent(self, game):
         player1 = game["player1"]["profile"]
         player2 = game["player2"]["profile"]
         if player1 != self.profilename and player1 != "OPEN":
