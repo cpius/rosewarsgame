@@ -229,6 +229,10 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
 
     gamestate.do_action(action, outcome)
 
+    if gamestate.is_ended():
+        games = get_collection("games")
+        games.update({"_id": ObjectId(game_id)}, {"$set": {"finished_at": datetime.utcnow()}})
+
     if action.move_with_attack is None and action.target_at in gamestate.enemy_units:
         # The outcome ruled out the possibility of move-with-attack
         action.move_with_attack = False
