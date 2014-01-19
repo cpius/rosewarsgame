@@ -6,7 +6,6 @@ import setup
 from gamestate import Gamestate
 import os
 import interface_settings as settings
-import setup_settings
 from player import Player
 from action import Action
 from client import Client
