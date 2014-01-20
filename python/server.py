@@ -13,7 +13,7 @@ from outcome import Outcome
 import random
 
 
-@get('/games/new/<player1>/vs/<player2>')
+@get("/games/new/<player1>/vs/<player2>")
 def new_game(player1, player2):
     games = get_collection("games")
     players = [Player("Green", "Human", player1), Player("Red", "Human", player2)]
@@ -28,7 +28,7 @@ def new_game(player1, player2):
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time(), "Message": "New game created"}
 
 
-@get('/games/view/<game_id>')
+@get("/games/view/<game_id>")
 def view(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -45,7 +45,7 @@ def view(game_id):
     return log_document
 
 
-@get('/games/view_log/<game_id>')
+@get("/games/view_log/<game_id>")
 def view_log(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -124,7 +124,7 @@ def join_or_create(profile):
         return new_game("OPEN", profile)
 
 
-@post('/games/<game_id>/do_action')
+@post("/games/<game_id>/do_action")
 def do_action_post(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
