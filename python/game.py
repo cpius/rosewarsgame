@@ -41,7 +41,8 @@ class Game:
             elif player2.profile == player_profile:
                 player1.intelligence = player1.ai = "Network"
             else:
-                print player_profile, "is not playing this game. The players are:", player1.profile, "and", player2.profile
+                print player_profile, "is not playing this game."
+                print "The players are:",player1.profile, "and", player2.profile
                 return
 
         if "created_at" in log_document:
