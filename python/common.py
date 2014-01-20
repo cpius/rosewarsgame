@@ -433,7 +433,7 @@ def readable(attributes):
         elif attribute in State.name:
             dictionary[State.name[attribute]] = value
         elif attribute in Effect.name:
-            dictionary[Effect.name[attribute]] = value
+            dictionary[Effect.name[attribute]] = list(value)
 
     return dictionary
 
