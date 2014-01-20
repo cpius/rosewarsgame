@@ -1,6 +1,5 @@
 from bottle import run, get, post, install, JSONPlugin, request
 from pymongo import MongoClient
-from bson import ObjectId
 import socket
 import time
 from gamestate import Gamestate
