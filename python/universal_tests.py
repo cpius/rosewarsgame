@@ -6,7 +6,7 @@ import battle
 from outcome import Outcome
 import glob
 from unittest import TestCase, TextTestRunner, TestSuite
-import common
+from common import assert_equal_documents, enum_attributes
 import sys
 from tests.replaytestcase import ReplayTestCase
 
@@ -70,7 +70,7 @@ class UniversalTestCase(TestCase):
                 if isinstance(test_document["upgrade"], basestring):
                     upgrade_choice = test_document["upgrade"]
                 else:
-                    upgrade_choice = common.enum_attributes(test_document["upgrade"])
+                    upgrade_choice = enum_attributes(test_document["upgrade"])
 
                 self.upgrade(gamestate, upgrade_choice, expected_gamestate)
 
@@ -91,7 +91,7 @@ class UniversalTestCase(TestCase):
         actual_gamestate_document = gamestate.to_document()
         expected_gamestate_document = expected_gamestate.to_document()
 
-        self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
+        assert_equal_documents(self, expected_gamestate_document, actual_gamestate_document, self.testcase_file)
 
     def does_action_exist(self, gamestate, action, expected):
         available_actions = action_getter.get_actions(gamestate)
@@ -157,7 +157,7 @@ class UniversalTestCase(TestCase):
             if unit.is_allowed_upgrade_choice(upgrade_choice):
                 gamestate.player_units[position] = unit.get_upgraded_unit(upgrade_choice)
 
-        self.assert_equal_documents(expected_gamestate.to_document(), gamestate.to_document())
+        assert_equal_documents(self, expected_gamestate.to_document(), gamestate.to_document(), self.testcase_file)
 
 
 if __name__ == "__main__":
