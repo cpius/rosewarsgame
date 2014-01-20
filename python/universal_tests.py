@@ -139,18 +139,7 @@ class UniversalTestCase(TestCase):
         actual_gamestate_document = gamestate.to_document()
         expected_gamestate_document = expected_gamestate.to_document()
 
-        self.assert_equal_documents(expected_gamestate_document, actual_gamestate_document)
-
-    def assert_equal_documents(self, expected, actual):
-        message = "Wrong document for " + self.testcase_file + "\n\n"
-
-        if self.description:
-            message += "Description: " + self.description + "\n\n"
-
-        message += "Expected:\n" + common.document_to_string(expected)
-        message += "\nActual:\n" + common.document_to_string(actual)
-
-        self.assertEqual(expected, actual, message)
+        assert_equal_documents(self, expected_gamestate_document, actual_gamestate_document, self.testcase_file)
 
     def upgrade(self, gamestate, upgrade_choice, expected_gamestate):
         for position, unit in gamestate.player_units.items():
