@@ -1,6 +1,5 @@
 from bottle import run, get, post, install, JSONPlugin, request
 from pymongo import MongoClient
-from bson import ObjectId
 import socket
 import time
 from gamestate import Gamestate
@@ -13,7 +12,7 @@ from outcome import Outcome
 import random
 
 
-@get('/games/new/<player1>/vs/<player2>')
+@get("/games/new/<player1>/vs/<player2>")
 def new_game(player1, player2):
     games = get_collection("games")
     players = [Player("Green", "Human", player1), Player("Red", "Human", player2)]
@@ -28,7 +27,7 @@ def new_game(player1, player2):
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time(), "Message": "New game created"}
 
 
-@get('/games/view/<game_id>')
+@get("/games/view/<game_id>")
 def view(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -45,7 +44,7 @@ def view(game_id):
     return log_document
 
 
-@get('/games/view_log/<game_id>')
+@get("/games/view_log/<game_id>")
 def view_log(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -124,7 +123,7 @@ def join_or_create(profile):
         return new_game("OPEN", profile)
 
 
-@post('/games/<game_id>/do_action')
+@post("/games/<game_id>/do_action")
 def do_action_post(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -161,6 +160,67 @@ def do_action_post(game_id):
         action = result
 
     return register_move_attack_ability(action_document, game_id, game.gamestate, action)
+
+@get("/ranking/calculate")
+def calculate_ratings():
+    games = list(get_collection("games").find({}).sort("finished_at", 1))
+
+    # return games[0]
+
+    debug_lines = ["Rating calculation debug output:"]
+    # debug_lines.append("Games count: " + str(len(games)))
+
+    # return debug_lines
+
+    ranking = {}
+
+    try:
+        for game_document in games:
+            debug_lines.append("game: " + str(game_document["_id"]))
+            log_document = construct_log_document(game_document)
+            game = Game.from_log_document(log_document)
+            if game.gamestate.is_ended():
+                winner = game.current_player().profile
+                loser = game.opponent_player().profile
+                if not winner in ranking:
+                    ranking[winner] = 1000
+                if not loser in ranking:
+                    ranking[loser] = 1000
+
+                rating_difference = ranking[loser] - ranking[winner]
+
+                # "skill_factor" is an expression I came up with. I'm not sure what it's really called.
+                # Arpad Elo came up with the value 400. It means that a player with 400 higher rating
+                # than another player has a 90% probability of winning. At a difference of 200 the
+                # probability is 75%
+                skill_factor = float(400)
+
+                expected_outcome_for_winner = 1 / (1 + pow(10, (rating_difference / skill_factor)))
+
+                # The k value determines the volatility in the ratings. 32 is pretty high. It's what ICC uses
+                # It means that the most points that can be won in one game is 32
+                k_value = 32
+
+                rating_points_won_and_lost = int(k_value * (1 - expected_outcome_for_winner))
+
+                debug_lines.append(winner + " beat " + loser)
+                debug_lines.append("Expected outcome was " + str(expected_outcome_for_winner))
+                debug_lines.append(winner + " had a rating of " + str(ranking[winner]))
+                debug_lines.append(loser + " had a rating of " + str(ranking[loser]))
+                debug_lines.append(str(rating_points_won_and_lost) + " rating points were traded")
+
+                ranking[winner] += rating_points_won_and_lost
+                ranking[loser] -= rating_points_won_and_lost
+    except Exception as e:
+        debug_lines.append(str(e))
+        for index, line in enumerate(debug_lines):
+            ranking["debug_" + str(index)] = line
+
+        return ranking
+
+    ranking["debug"] = "<br />".join(x for x in debug_lines)
+
+    return ranking
 
 
 def register_upgrade(action_document, gamestate, game_id):
@@ -228,6 +288,10 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
         outcome = Outcome.determine_outcome(action, gamestate)
 
     gamestate.do_action(action, outcome)
+
+    if gamestate.is_ended():
+        games = get_collection("games")
+        games.update({"_id": ObjectId(game_id)}, {"$set": {"finished_at": datetime.utcnow()}})
 
     if action.move_with_attack is None and action.target_at in gamestate.enemy_units:
         # The outcome ruled out the possibility of move-with-attack

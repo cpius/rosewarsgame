@@ -1,10 +1,8 @@
 import sys
-from view import View
 from controller import Controller
 import imp
 from common import *
 import random
-import client
 
 
 def figure_out_player_profile():
@@ -44,18 +42,17 @@ if __name__ == '__main__':
     controller = None
     if opponent_choice == Opponent.Internet:
         player_profile = figure_out_player_profile()
-        controller = Controller.from_network(View(), player_profile)
+        controller = Controller.from_network(player_profile)
     elif opponent_choice == Opponent.Load:
-        view = View()
-        controller = Controller.from_replay(view, sys.argv[1])
+        controller = Controller.from_replay(sys.argv[1])
     elif opponent_choice == Opponent.HotSeat:
-        controller = Controller.new_game(View(), "Human", "Human")
+        controller = Controller.new_game("Human", "Human")
     elif opponent_choice == Opponent.Advancer:
         coinflip = random.randint(0, 1)
         if coinflip == 0:
-            controller = Controller.new_game(View(), "Human", Opponent.write[opponent_choice])
+            controller = Controller.new_game("Human", Opponent.write[opponent_choice])
         else:
-            controller = Controller.new_game(View(), Opponent.write[opponent_choice], "Human")
+            controller = Controller.new_game(Opponent.write[opponent_choice], "Human")
 
     if controller:
         controller.run_game()

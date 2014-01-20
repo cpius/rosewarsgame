@@ -6,7 +6,6 @@ import setup
 from gamestate import Gamestate
 import os
 import interface_settings as settings
-import setup_settings
 from player import Player
 from action import Action
 from client import Client
@@ -15,6 +14,7 @@ from outcome import Outcome
 import json
 from common import *
 import battle
+from view import View
 
 
 class Controller(object):
@@ -29,11 +29,11 @@ class Controller(object):
     CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
 
     @classmethod
-    def new_game(cls, view, green_intelligence, red_intelligence):
+    def new_game(cls, green_intelligence, red_intelligence):
         if not os.path.exists("./replay"):
             os.makedirs("./replay")
 
-        controller = Controller(view)
+        controller = Controller(View())
 
         players = [Player("Green", green_intelligence), Player("Red", red_intelligence)]
 
@@ -51,22 +51,25 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_network(cls, view, player):
-        controller = cls(view)
+    def from_network(cls, player):
 
-        controller.client = Client(player)
-        controller.game_id = controller.client.game_id
-        controller.game = Game.from_log_document(controller.client.get_game(), player, True)
+        client = Client(player)
+        game_document = client.get_game()
+
+        controller = cls(View())
+        controller.game = Game.from_log_document(game_document, player, True)
+        controller.client = client
 
         player = controller.game.current_player()
         print "current player is", player.color, player.intelligence, player.profile
         controller.clear_move()
 
+        controller.view.play_sound("your_turn")
         return controller
 
     @classmethod
-    def from_replay(cls, view, savegame_file):
-        controller = cls(view)
+    def from_replay(cls, savegame_file):
+        controller = cls(View())
         savegame_document = json.loads(open(savegame_file).read())
         controller.game = Game.from_log_document(savegame_document)
         controller.clear_move()
