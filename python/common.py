@@ -3,6 +3,7 @@ from datetime import datetime
 from bson.objectid import ObjectId
 import collections
 import functools
+from dictdiffer import DictDiffer
 
 
 class Direction:
@@ -358,8 +359,17 @@ def surrounding_units(position, units):
 
 def assert_equal_documents(testcase, expected, actual, testcase_file):
     message = "Wrong document for " + testcase_file + "\n\n"
+
     message += "Expected:\n" + document_to_string(expected)
-    message += "\nActual:\n" + document_to_string(actual)
+    message += "\nActual:\n" + document_to_string(actual) + "\n"
+
+    difference = DictDiffer(actual, expected)
+    if difference.added():
+        message += "Added " + str(difference.added())
+    if difference.removed():
+        message += "Removed " + str(difference.removed())
+    if difference.changed():
+        message += "Changed " + str(difference.changed())
 
     testcase.assertEqual(expected, actual, message)
 
