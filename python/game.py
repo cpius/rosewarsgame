@@ -86,16 +86,14 @@ class Game:
             game.do_action(action, outcome)
 
             if options and "upgrade" in options:
-                upgrade_choice = options["upgrade"]
-                if getattr(action.unit, "upgrades"):
-                    upgraded_unit = getattr(units_module, upgrade_choice.replace(" ", "_"))()
-                else:
-                    upgrade_choice = enum_attributes(upgrade_choice)
-                    upgraded_unit = action.unit.get_upgraded_unit(upgrade_choice)
-                if action.is_attack() and action.target_at and action.target_at in gamestate.player_units:
-                    gamestate.player_units[action.target_at] = upgraded_unit
-                else:
-                    gamestate.player_units[action.end_at] = upgraded_unit
+                upgrade = options["upgrade"]
+                if not isinstance(upgrade, basestring):
+                    upgrade = enum_attributes(upgrade)
+                position = action.end_at
+                if not position in game.gamestate.player_units:
+                    position = action.target_at
+                upgraded_unit = action.unit.get_upgraded_unit(upgrade)
+                game.gamestate.player_units[position] = upgraded_unit
 
         if shift_turn:
             if game.is_turn_done():
