@@ -4,18 +4,60 @@ from common import *
 from action import Action
 from outcome import Outcome
 from datetime import datetime
+from time import mktime
+from wsgiref.handlers import format_date_time
+from email.utils import parsedate
 import setup_settings as settings
 from time import sleep
+
+
+class DefaultErrorHandler(urllib2.HTTPDefaultErrorHandler):
+    def http_error_default(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPError(req.get_full_url(), code, msg, headers, fp)
+        result.status = code
+
+        return result
 
 
 class Client():
     def __init__(self, profilename, game_id=None):
         self.profilename = profilename
         self.game_id = game_id
+        self.last_modified = datetime(1970, 1, 1)
 
     def get_game(self):
         if self.game_id:
-            return json.load(urllib2.urlopen(settings.server + "/games/view/" + self.game_id))
+            print "getting game from server"
+            request = urllib2.Request(settings.server + "/games/view/" + self.game_id)
+
+            stamp = mktime(self.last_modified.timetuple())
+            formatted_time = format_date_time(stamp)
+            if self.last_modified > datetime(1970, 1, 1):
+                print "setting If-Modified-Since", formatted_time
+                request.add_header("If-Modified-Since", formatted_time)
+
+            opener = urllib2.build_opener(DefaultErrorHandler())
+            response = opener.open(request)
+            if response.getcode() == 304:
+                print "no new data on the server"
+                return
+
+            last_modified_header = response.info().getheader("Last-Modified")
+            if last_modified_header:
+                last_modified_tuple = parsedate(last_modified_header)
+                last_modified_timestamp = mktime(last_modified_tuple)
+                last_modified = datetime.fromtimestamp(last_modified_timestamp)
+
+                print "response Last-Modified: ", last_modified
+
+                if last_modified > self.last_modified:
+                    print "new data was found on the server"
+                    self.last_modified = last_modified
+                else:
+                    print "no new data on the server"
+                    return
+
+            return json.load(response)
 
         else:
             response = json.load(urllib2.urlopen(settings.server + "/games/join_or_create/" + self.profilename))
@@ -30,6 +72,9 @@ class Client():
 
     def select_action(self, gamestate):
         game = self.get_game()
+        if not game:
+            # No new data on the server
+            return None, None, None
         expected_action = str(gamestate.action_count + 1)
 
         if game["action_count"] > gamestate.action_count:
