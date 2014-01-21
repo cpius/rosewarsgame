@@ -213,12 +213,9 @@ def calculate_ratings():
                 ranking[loser] -= rating_points_won_and_lost
     except Exception as e:
         debug_lines.append(str(e))
-        for index, line in enumerate(debug_lines):
-            ranking["debug_" + str(index)] = line
 
-        return ranking
-
-    ranking["debug"] = "<br />".join(x for x in debug_lines)
+    for index, line in enumerate(debug_lines):
+        ranking["debug_{0:03d}".format(index)] = line
 
     return ranking
 
