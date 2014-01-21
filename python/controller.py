@@ -413,8 +413,8 @@ class Controller(object):
                         self.view.draw_post_movement(action)
                         rolls = outcome.for_position(action.target_at)
                         self.game.gamestate.move_melee_unit_to_target_tile(rolls, action)
-                else:
-                    self.game.gamestate.set_available_actions()
+
+                self.game.gamestate.set_available_actions()
 
         else:
             if not outcome:
