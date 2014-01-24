@@ -12,8 +12,9 @@ import setup
 from common import *
 from outcome import Outcome
 import random
+import memcache
 
-cache = {}
+cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
 
 @get("/games/new/<player1>/vs/<player2>")
@@ -33,13 +34,16 @@ def new_game(player1, player2):
 
 @get("/games/view/<game_id>")
 def view(game_id):
-    if game_id in cache:
+    last_modified_cache = cache.get(game_id)
+    if last_modified_cache:
         if_modified_since_header = request.get_header("If-Modified-Since")
         if if_modified_since_header:
             if_modified_since_tuple = parsedate(if_modified_since_header)
             if_modified_since_timestamp = mktime(if_modified_since_tuple)
             if_modified_since = datetime.fromtimestamp(if_modified_since_timestamp)
-            if cache[game_id] >= if_modified_since:
+            if last_modified_cache <= if_modified_since:
+                # If our latest update is earlier than the client's latest update,
+                # let the client know that nothing new is afoot
                 response.status = 304
                 return
 
@@ -60,9 +64,14 @@ def view(game_id):
         stamp = mktime(last_modified.timetuple())
         formatted_time = format_date_time(stamp)
         response.set_header("Last-Modified", formatted_time)
-        cache[game_id] = last_modified
+        cache.set(game_id, last_modified.replace(microsecond=0))
 
     return log_document
+
+
+@get("/cache/get/<game_id>")
+def getcache(game_id):
+    return str(cache.get(game_id))
 
 
 @get("/games/view_log/<game_id>")
@@ -163,6 +172,8 @@ def do_action_post(game_id):
     validation_errors = validate_input(log_document, game.gamestate, action_document)
     if validation_errors:
         return validation_errors
+
+    cache.set(game_id, datetime.utcnow().replace(microsecond=0))
 
     if action_document["type"] == "options" and "move_with_attack" in action_document:
         return register_move_with_attack(action_document, game_id)

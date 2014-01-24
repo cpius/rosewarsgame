@@ -5,7 +5,6 @@ from action import Action
 from outcome import Outcome
 from datetime import datetime
 from time import mktime
-from wsgiref.handlers import format_date_time
 from email.utils import parsedate
 import setup_settings as settings
 from time import sleep
@@ -30,8 +29,7 @@ class Client():
             print "getting game from server"
             request = urllib2.Request(settings.server + "/games/view/" + self.game_id)
 
-            stamp = mktime(self.last_modified.timetuple())
-            formatted_time = format_date_time(stamp)
+            formatted_time = httpdate(self.last_modified)
             if self.last_modified > datetime(1970, 1, 1):
                 print "setting If-Modified-Since", formatted_time
                 request.add_header("If-Modified-Since", formatted_time)
@@ -150,3 +148,17 @@ class Client():
             "upgrade": upgrade_choice
         }
         self.send_action(upgrade_action)
+
+
+def httpdate(dt):
+    """Return a string representation of a date according to RFC 1123
+    (HTTP/1.1).
+
+    The supplied date must be in UTC.
+
+    """
+    weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][dt.weekday()]
+    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+             "Oct", "Nov", "Dec"][dt.month - 1]
+    return "%s, %02d %s %04d %02d:%02d:%02d GMT" % (weekday, dt.day, month,
+        dt.year, dt.hour, dt.minute, dt.second)
