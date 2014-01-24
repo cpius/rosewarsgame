@@ -13,6 +13,7 @@ from common import *
 from outcome import Outcome
 import random
 import memcache
+import traceback
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
@@ -244,8 +245,8 @@ def calculate_ratings():
 
                 ranking[winner] += rating_points_won_and_lost
                 ranking[loser] -= rating_points_won_and_lost
-    except Exception as e:
-        debug_lines.append(str(e))
+    except Exception:
+        debug_lines.append(traceback.format_exc())
 
     for index, line in enumerate(debug_lines):
         ranking["debug_{0:03d}".format(index)] = line
