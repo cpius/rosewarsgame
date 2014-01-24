@@ -450,16 +450,18 @@ def construct_log_document(game_document):
         if int(key) > action_count:
             action_count = int(key)
 
-        created_at = action_document["created_at"]
-        if isinstance(created_at, unicode):
-            try:
-                created_at = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
-            except ValueError:
-                only_seconds = created_at[0:created_at.index(".")]
-                created_at = datetime.strptime(only_seconds, "%Y-%m-%d %H:%M:%S")
+        if "created_at" in action_document:
+            created_at = action_document["created_at"]
+            if isinstance(created_at, unicode):
+                try:
+                    created_at = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
+                except ValueError:
+                    if "." in created_at:
+                        created_at = created_at[0:created_at.index(".")]
+                    created_at = datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
 
-        if created_at > last_modified:
-            last_modified = created_at
+            if created_at > last_modified:
+                last_modified = created_at
 
         if action_document["type"] == "outcome":
             key += "_outcome"
