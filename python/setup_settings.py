@@ -21,7 +21,7 @@ else:
 required_special_units = []
 allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
                          "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon",
-                         "Hussar", "Cavalry_Lieutenant", "Hobelar"]
+                         "Hussar", "Cavalry Lieutenant", "Hobelar"]
 allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
 requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_siege_weapon",
