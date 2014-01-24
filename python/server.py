@@ -173,12 +173,14 @@ def do_action_post(game_id):
     if validation_errors:
         return validation_errors
 
-    cache.set(game_id, datetime.utcnow().replace(microsecond=0))
-
     if action_document["type"] == "options" and "move_with_attack" in action_document:
-        return register_move_with_attack(action_document, game_id)
+        response_document = register_move_with_attack(action_document, game_id)
+        cache.set(game_id, datetime.utcnow().replace(microsecond=0))
+        return response_document
     elif action_document["type"] == "options" and "upgrade" in action_document:
-        return register_upgrade(action_document, game.gamestate, game_id)
+        response_document = register_upgrade(action_document, game.gamestate, game_id)
+        cache.set(game_id, datetime.utcnow().replace(microsecond=0))
+        return response_document
 
     # Initial validation is done with a non-shifted gamestate, because it is
     # easier to find expected action from that
@@ -192,7 +194,9 @@ def do_action_post(game_id):
     else:
         action = result
 
-    return register_move_attack_ability(action_document, game_id, game.gamestate, action)
+    response_document = register_move_attack_ability(action_document, game_id, game.gamestate, action)
+    cache.set(game_id, datetime.utcnow().replace(microsecond=0))
+    return response_document
 
 
 @get("/ranking/calculate")
