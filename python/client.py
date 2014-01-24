@@ -75,6 +75,15 @@ class Client():
             return None, None, None
         expected_action = str(gamestate.action_count + 1)
 
+        print "received action count:", game["action_count"]
+        print "our current action count:", gamestate.action_count
+
+        if game["action_count"] > gamestate.action_count + 1:
+            # Several new things happened on the server
+            # Handle this one now, but clear last_modified to make
+            # sure we hear about the other stuff
+            self.last_modified = datetime(1970, 1, 1)
+
         if game["action_count"] > gamestate.action_count:
             print "received action", document_to_string(game[expected_action])
             action = Action.from_document(gamestate.all_units(), game[expected_action])
