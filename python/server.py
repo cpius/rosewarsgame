@@ -167,6 +167,7 @@ def do_action_post(game_id):
     except ValueError:
         return {"Status": "Error", "Message": "No JSON decoded. Request body: " + request.body.getvalue()}
 
+    action_document["created_at"] = datetime.utcnow()
     log_document = construct_log_document(game_document)
     game = Game.from_log_document(log_document)
 
@@ -355,7 +356,7 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
         outcome_document["game"] = ObjectId(game_id)
         outcome_document["type"] = "outcome"
         outcome_document["number"] = action.number
-        outcome_document["created_at"] = datetime.utcnow()
+        outcome_document["created_at"] = action_document["created_at"]
 
         action_collection.insert(outcome_document)
 
