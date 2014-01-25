@@ -485,7 +485,7 @@ class Catapult(Unit):
     defence_bonuses = {}
     type = Type.Siege_Weapon
     experience_to_upgrade = 3
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1, Trait.attack_skill: -1}]
 
 
 class Royal_Guard(Unit):
