@@ -3,7 +3,7 @@ import imp
 
 class AI(object):
     def __init__(self, name):
-        ai_type = imp.load_source(name, "ai_" + name.lower() + ".py")
+        ai_type = imp.load_source(name, name.lower() + ".py")
         self.get_action = ai_type.get_action
         self.get_upgrade = ai_type.get_upgrade
         self.name = name

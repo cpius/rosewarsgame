@@ -1,5 +1,5 @@
 from datetime import datetime
-from copy import copy
+from copy import copy, deepcopy
 from common import *
 import battle
 
@@ -203,4 +203,4 @@ class Action(object):
         return "Defend"
 
     def copy(self):
-        return copy(self)
+        return deepcopy(self)
