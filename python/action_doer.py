@@ -12,15 +12,14 @@ def do_action(gamestate, action, outcome):
             if action.target_unit.has_extra_life():
                 action.target_unit.set(State.lost_extra_life)
             else:
-                del gamestate.enemy_units[action.target_at]
+                del enemy_units[action.target_at]
 
         elif action.is_push() and action.attack_successful(rolls, gamestate):
             if not attack_direction:
                 attack_direction = action.end_at.get_direction_to(action.target_at)
             push_destination = attack_direction.move(action.target_at)
-            enemy_units = gamestate.enemy_units
 
-            if push_destination in gamestate.all_units() or push_destination not in board:
+            if push_destination in all_units or push_destination not in board:
                 del enemy_units[action.target_at]
             else:
                 enemy_units[push_destination] = enemy_units.pop(action.target_at)
@@ -71,16 +70,14 @@ def do_action(gamestate, action, outcome):
         player_units[action.end_at] = player_units.pop(action.start_at)
 
     def triple_attack():
-        for position in action.end_at.two_forward_tiles(attack_direction):
-            if position in enemy_units:
-                sub_action = Action(all_units, action.start_at, action.end_at, position)
-                settle_attack(sub_action, attack_direction)
+        for position in set(action.end_at.two_forward_tiles(attack_direction)) & set(enemy_units):
+            sub_action = Action(all_units, action.start_at, action.end_at, position)
+            settle_attack(sub_action, attack_direction)
 
     def longsword():
-        for position in action.end_at.four_forward_tiles(attack_direction):
-            if position in enemy_units:
-                sub_action = Action(all_units, action.start_at, action.end_at, position)
-                settle_attack(sub_action)
+        for position in set(action.end_at.four_forward_tiles(attack_direction)) & set(enemy_units):
+            sub_action = Action(all_units, action.start_at, action.end_at, position)
+            settle_attack(sub_action)
 
     unit = action.unit
     player_units = gamestate.player_units
@@ -123,9 +120,8 @@ def do_action(gamestate, action, outcome):
 
 def move_melee_unit_to_target_tile(gamestate, rolls, action):
 
-    if action.is_win(rolls, gamestate):
-        if not action.target_unit.has_extra_life():
-            gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
+    if action.is_win(rolls, gamestate) and not action.target_unit.has_extra_life():
+        gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
 
     elif action.is_push() and action.attack_successful(rolls, gamestate):
         gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
