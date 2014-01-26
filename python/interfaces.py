@@ -37,25 +37,22 @@ class Interface(object):
 
 class Rectangles(Interface):
 
-    move_attack_icon = "./other/attack.gif"
-    attack_icon = "./other/attack.gif"
-    star_icon = "./other/star.gif"
-    ability_icon = "./other/ability.gif"
-    crusading_icon = "./other/flag.gif"
-    high_morale_icon = "./other/flag_black.gif"
-    move_icon = "./other/move.gif"
-    level_icons = ["./other/level1.gif", "./other/level1.gif", "./other/level2.gif", "./other/level3.gif"]
-    dice = [""]
-    for i in range(1, 7):
-        dice.append("./other/dice_" + str(i) + ".png")
+    move_attack_icon = "./graphics/attack.gif"
+    attack_icon = "./graphics/attack.gif"
+    star_icon = "./graphics/star.gif"
+    ability_icon = "./graphics/ability.gif"
+    crusading_icon = "./graphics/flag.gif"
+    high_morale_icon = "./graphics/flag_black.gif"
+    move_icon = "./graphics/move.gif"
+    level_icons = ["./graphics/level1.gif", "./graphics/level1.gif", "./graphics/level2.gif", "./graphics/level3.gif"]
     base_coordinates = (0, 0)
 
     def __init__(self, zoom):
 
         self.zoom = zoom
 
-        self.board_image = "./rectangles/board.gif"
-        self.unit_folder = "./rectangles/"
+        self.board_image = "./graphics/board.gif"
+        self.unit_folder = "./graphics/units"
 
         self.unit_padding_width = 17 * zoom
         self.unit_padding_height = 15.13 * zoom
