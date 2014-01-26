@@ -525,7 +525,7 @@ class Scout(Unit):
     type = Type.Cavalry
     experience_to_upgrade = 2
     special_upgrades = [{Trait.tall_shield: 1}, {Trait.attack_skill: 2}]
-    final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill: 1}]
+    final_upgrades = [{Trait.movement_skill: 1}, {Trait.defence_skill: 1}]
 
 
 class Viking(Unit):
