@@ -12,6 +12,7 @@ public class DefenceAttribute extends Attribute {
 
 	public void addBonus(RawBonus bonus) {
 		super.addBonus(bonus);
-		listener.defenceBonusChanged(getBonusValue());
+		if(listener != null)
+			listener.defenceBonusChanged(getBonusValue());
 	}
 }

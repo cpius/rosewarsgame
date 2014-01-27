@@ -13,7 +13,6 @@ import org.cocos2d.types.CGSize;
 
 import android.content.Context;
 
-import com.google.example.games.basegameutils.GameHelper;
 import com.wotr.GameMenuListener;
 import com.wotr.R;
 
@@ -26,8 +25,10 @@ public class GameMenuLayer extends CCLayer {
 	private CCMenuItem multiPlayerOnlineMenuItem;
 	private CCMenuItem leaderBoardMenuItem;
 	private CCMenuItem achievementsMenuItem;
+	private CCMenuItem multiPlayerInvitesMenuItem;
+	private CCMenuItem aiGameMenuItem;
 
-	public GameMenuLayer(Context context, GameMenuListener listener, GameHelper mHelper) {
+	public GameMenuLayer(Context context, GameMenuListener listener) {
 
 		this.listener = listener;
 		setIsTouchEnabled(true);
@@ -50,14 +51,17 @@ public class GameMenuLayer extends CCLayer {
 		CCMenuItem singlePlayerMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_start_singleplayer), this, "single");
 		multiPlayerLocalMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_start_multiplayer_local), this, "multiPlayeLocal");
 		multiPlayerOnlineMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_start_multiplayer_online), this, "multiplayerOnline");
+		multiPlayerInvitesMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_show_matches), this, "multiplayerMatches");
+		aiGameMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_start_ai), this, "startaiGame");
 		leaderBoardMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_leaderboard), this, "showLeaderboard");
 		achievementsMenuItem = CCMenuItemFont.item(context.getString(R.string.menu_achivements), this, "showAchievements");
 
 		multiPlayerOnlineMenuItem.setIsEnabled(false);
+		multiPlayerInvitesMenuItem.setIsEnabled(false);
 		leaderBoardMenuItem.setIsEnabled(false);
 		achievementsMenuItem.setIsEnabled(false);
 
-		CCMenu menu = CCMenu.menu(singlePlayerMenuItem, multiPlayerLocalMenuItem, multiPlayerOnlineMenuItem, leaderBoardMenuItem, achievementsMenuItem);
+		CCMenu menu = CCMenu.menu(singlePlayerMenuItem, multiPlayerLocalMenuItem, multiPlayerOnlineMenuItem, multiPlayerInvitesMenuItem, leaderBoardMenuItem, achievementsMenuItem, aiGameMenuItem);
 
 		menu.alignItemsVertically(20f);
 		menu.setPosition(size.width / 2f, size.height / 2f + 25f);
@@ -109,6 +113,7 @@ public class GameMenuLayer extends CCLayer {
 		logoutButton.setVisible(!enable);
 
 		multiPlayerOnlineMenuItem.setIsEnabled(!enable);
+		multiPlayerInvitesMenuItem.setIsEnabled(!enable);
 		leaderBoardMenuItem.setIsEnabled(!enable);
 		achievementsMenuItem.setIsEnabled(!enable);
 	}
@@ -123,6 +128,14 @@ public class GameMenuLayer extends CCLayer {
 
 	public void multiplayerOnline(Object source) {
 		listener.onMultiplayerOnlineClicked();
+	}
+
+	public void startaiGame(Object source) {
+		listener.onBotvsBotClicked();
+	}
+
+	public void multiplayerMatches(Object source) {
+		listener.onShowMachesClicked();
 	}
 
 	public void showLeaderboard(Object source) {
@@ -140,5 +153,4 @@ public class GameMenuLayer extends CCLayer {
 	public void doLogout(Object source) {
 		listener.onSignOutButtonClicked();
 	}
-
 }

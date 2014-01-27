@@ -18,4 +18,6 @@ public interface Player {
 
 	int getStartLine();
 
+	boolean canAttack();
+
 }

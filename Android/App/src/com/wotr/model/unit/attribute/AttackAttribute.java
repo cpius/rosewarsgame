@@ -1,6 +1,8 @@
 package com.wotr.model.unit.attribute;
 
-public class AttackAttribute extends Attribute {
+import java.io.Serializable;
+
+public class AttackAttribute extends Attribute implements Serializable {
 
 	public AttackAttribute(int baseValue) {
 		super(baseValue);
@@ -12,6 +14,7 @@ public class AttackAttribute extends Attribute {
 
 	public void addBonus(RawBonus bonus) {
 		super.addBonus(bonus);
-		listener.attackBonusChanged(getBonusValue());
-	}	
+		if (listener != null)
+			listener.attackBonusChanged(getBonusValue());
+	}
 }

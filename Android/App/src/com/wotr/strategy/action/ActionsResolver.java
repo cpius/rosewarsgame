@@ -107,7 +107,7 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 
 	@Override
 	public void startTurn(Player player, int remainingActions) {
-		actionCache.clear();
+		// Do nothing.
 	}
 
 	@Override
@@ -116,7 +116,12 @@ public class ActionsResolver implements ActionsResolverStrategy, GameEventListen
 	}
 
 	@Override
-	public void gameEnded(Player winner) {
+	public void gameEnded(Player winner, Player looser) {
+		actionCache.clear();
+	}
+
+	@Override
+	public void endTurn(Player player) {
 		actionCache.clear();
 	}
 }

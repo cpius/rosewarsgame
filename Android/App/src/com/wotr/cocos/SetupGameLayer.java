@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.cocos2d.layers.CCLayer;
-import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
@@ -19,20 +17,17 @@ import org.cocos2d.types.CGSize;
 
 import android.content.Context;
 
-import com.google.example.games.basegameutils.GameHelper;
+import com.wotr.BackListener;
+import com.wotr.SceneManager;
 import com.wotr.cocos.nodes.CardSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
-import com.wotr.model.unit.attribute.RawBonus;
-import com.wotr.strategy.DeckDrawStrategy;
-import com.wotr.strategy.DeckLayoutStrategy;
-import com.wotr.strategy.impl.FixedDeckDrawStrategy;
-import com.wotr.strategy.impl.RandomDeckLayoutStrategy;
+import com.wotr.strategy.game.Game;
 import com.wotr.touch.CardTouchGridDecorator;
 import com.wotr.touch.CardTouchListener;
 
-public class SetupGameLayer extends AbstractGameLayer implements CardTouchListener {
+public class SetupGameLayer extends AbstractGameLayer implements CardTouchListener, BackListener {
 
 	// private CCSprite sparkCard;
 
@@ -41,33 +36,38 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 	private int xCount;
 	private int yCount;
-	private GameHelper mHelper;
+	private SceneManager sceneManager;
+	private Game game;
 
-	public SetupGameLayer(Context context, GameHelper mHelper) {
+	public SetupGameLayer(Context context, SceneManager sceneManager, Game game) {
 
-		this.mHelper = mHelper;
+		this.sceneManager = sceneManager;
+		this.game = game;
 		setIsTouchEnabled(true);
 
 		winSize = CCDirector.sharedDirector().displaySize();
 
-		xCount = 5;
-		yCount = 4;
+		xCount = game.getXTileCount();
+		yCount = game.getYTileCount();
 
-		CCSprite back = new CCSprite("woddenbackground.png");
+		//CCSprite back = new CCSprite("woddenbackground.png");
 
-		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
-		addChild(back);
+		//back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
+		//addChild(back);
 
-		CCSprite prototype = new CCSprite("unit/archergreen.jpg");
+		String imagePath = getImagePath(winSize);
+		
+		CCSprite prototype = new CCSprite(imagePath + "unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
+		prototype = null;
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
 
 		bordframe = new Boardframe(xCount, yCount, winSize.width, winSize.height, 0f, orientationScale, 0.7f);
 
-		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;
-
-		addBackGroundCards(xCount, yCount, false);
+		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;		
+		
+		addBackGroundCards(imagePath, xCount, yCount, false);
 
 		CCMenuItem battleButton = CCMenuItemImage.item("battle.png", "right_arrow.png", this, "startBattle");
 		battleButton.setIsEnabled(true);
@@ -75,7 +75,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		CGSize battleButtonSize = battleButton.getContentSizeRef();
 
-		addCards();
+		addCards(imagePath, game);
 
 		CCMenu battleButtonMenu = CCMenu.menu(battleButton);
 		battleButtonMenu.setPosition(CGPoint.zero());
@@ -83,21 +83,18 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		battleButton.setPosition(winSize.getWidth() - battleButtonSize.getWidth() / 2 - 5f, battleButtonSize.getHeight() / 2 + 5f);
 
 		addChild(battleButtonMenu);
-	}
+	}	
 
-	private void addCards() {
-		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
-		List<Unit> deck = deckStrategy.drawDeck();
+	private void addCards(String imagePath, Game game) {
 
-		DeckLayoutStrategy layoutStrategy = new RandomDeckLayoutStrategy(xCount, yCount);
-		UnitMap<Position, Unit> layoutDeck = layoutStrategy.layoutDeck(deck);
+		UnitMap<Position, Unit> layoutDeck = game.getAttackingPlayer().getUnitMap();
 
 		CardTouchGridDecorator gridDecorator = new CardTouchGridDecorator(bordframe);
 		gridDecorator.addCardTouchListener(this);
 
 		for (Unit unit : layoutDeck.values()) {
 
-			CardSprite card = new CardSprite(unit, sizeScale, bordframe);
+			CardSprite card = new CardSprite(imagePath, unit, sizeScale, bordframe);
 			card.addListener(gridDecorator);
 			addChild(card);
 
@@ -105,23 +102,11 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 			modelMap.put(card, unit);
 		}
 
-		deck.get(0).getAttackAttribute().addBonus(new RawBonus(1));
-		deck.get(1).getDefenceAttribute().addBonus(new RawBonus(1));
 	}
 
 	public void startBattle(Object obj) {
-
-		UnitMap<Position, Unit> playerOnemap = new UnitMap<Position, Unit>();
-		for (Unit unit : modelMap.values()) {
-			playerOnemap.put(unit.getPosition(), unit);
-		}
-
-		UnitMap<Position, Unit> playerTwoMap = playerOnemap.getMirrored(xCount, yCount * 2);
-
-		CCScene scene = CCScene.node();
-		CCLayer layer = new PlayGameLayer(playerOnemap, playerTwoMap, mHelper);
-		scene.addChild(layer);
-		CCDirector.sharedDirector().runWithScene(scene);
+		game.setupDone(game.getAttackingPlayer());
+		sceneManager.showMatch(game);
 	}
 
 	public void spark(Object source) {
@@ -184,5 +169,14 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	@Override
 	public void cardDeSelected(CardSprite card, float x, float y) {
 		moveCardToOriginalPosition(card);
+	}
+
+	@Override
+	public boolean backPressed(SceneManager manager) {
+
+		// TODO Handle boolean
+		manager.showMainMenu(true);
+		return true;
+
 	}
 }

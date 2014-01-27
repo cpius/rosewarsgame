@@ -30,9 +30,16 @@ public class GameEventListenerCollection extends ArrayList<GameEventListener> im
 	}
 
 	@Override
-	public void gameEnded(Player winner) {
+	public void gameEnded(Player winner, Player looser) {
 		for (GameEventListener listener : this) {
-			listener.gameEnded(winner);
+			listener.gameEnded(winner, looser);
 		}		
+	}
+
+	public void endTurn(Player player) {
+		for (GameEventListener listener : this) {
+			listener.endTurn(player);
+		}
+		
 	}
 }

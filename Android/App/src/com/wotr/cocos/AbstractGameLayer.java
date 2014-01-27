@@ -50,11 +50,7 @@ public abstract class AbstractGameLayer extends CCLayer {
 	 * selectCardForMove(selectedCard); } break; } }
 	 * 
 	 * return super.ccTouchesBegan(event); }
-	 */
-
-	protected boolean isTurn(Unit unit) {
-		return true;
-	}
+	 */	
 
 	protected void selectCardForMove(CCSprite selectedCard) {
 		CCScaleTo action = CCScaleTo.action(0.2f, sizeScale * 1.5f);
@@ -113,11 +109,13 @@ public abstract class AbstractGameLayer extends CCLayer {
 	/**
 	 * Add the backgound board cards to the board
 	 * 
+	 * @param imagePath
+	 * 
 	 * @param xCount
 	 * @param yCount
 	 * @param playBoard
 	 */
-	protected void addBackGroundCards(int xCount, int yCount, boolean playBoard) {
+	protected void addBackGroundCards(String imagePath, int xCount, int yCount, boolean playBoard) {
 
 		for (int x = 0; x < xCount; x++) {
 			for (int y = 0; y < yCount; y++) {
@@ -126,10 +124,18 @@ public abstract class AbstractGameLayer extends CCLayer {
 
 				String imageName = playBoard && y >= yCount / 2 ? "redback.png" : "greenback.png";
 
-				CCSprite cardBackground = new CardBackgroundSprite(imageName, pos, sizeScale, bordframe);
+				CCSprite cardBackground = new CardBackgroundSprite(imagePath + imageName, pos, sizeScale, bordframe);
 				addChild(cardBackground);
 				cardBackgroundList.add(cardBackground);
 			}
 		}
+	}
+	
+	protected String getImagePath(CGSize winSize) {
+		
+		if(winSize.getHeight() + winSize.getWidth() < 850f) {
+			return "small/";
+		}
+		return "";
 	}
 }

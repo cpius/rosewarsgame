@@ -2,34 +2,32 @@ package com.wotr;
 
 import java.util.ArrayList;
 
-import org.cocos2d.layers.CCLayer;
-import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.android.gms.games.GamesClient;
+import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
+import com.google.android.gms.games.multiplayer.turnbased.OnTurnBasedMatchInitiatedListener;
+import com.google.android.gms.games.multiplayer.turnbased.OnTurnBasedMatchUpdatedListener;
+import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
+import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchConfig;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
-import com.wotr.cocos.GameMenuLayer;
-import com.wotr.cocos.SetupGameLayer;
-import com.wotr.gpgs.RoomConnector;
-import com.wotr.gpgs.RoomCreator;
 
-public class GameActivity extends Activity implements GameMenuListener, GameHelperListener {
+public class GameActivity extends Activity implements GameHelperListener, OnTurnBasedMatchInitiatedListener, OnTurnBasedMatchUpdatedListener {
 
-	protected static final int REQUEST_ACHIEVEMENTS = 0;
-	protected static final int REQUEST_LEADERBOARD = 1;
-	protected static final int REQUEST_SELECTPLAYERS = 2;
 	private CCGLSurfaceView _glSurfaceView;
 	private GameHelper mHelper;
-	private GameMenuLayer gameMenuLayer;
+
+	private SceneManager sceneManager = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +41,21 @@ public class GameActivity extends Activity implements GameMenuListener, GameHelp
 		setContentView(_glSurfaceView);
 
 		mHelper = new GameHelper(this);
+		mHelper.enableDebugLog(true, getClass().getName());
 		mHelper.setup(this, GameHelper.CLIENT_GAMES | GameHelper.CLIENT_PLUS);
+
+		sceneManager = new SceneManagerImpl(this, mHelper);
+
 	}
 
 	@Override
 	public void onStart() {
+		Log.i(getClass().getName(), "OnStart called");
+
 		super.onStart();
 		CCDirector.sharedDirector().attachInView(_glSurfaceView);
 		CCDirector.sharedDirector().setDisplayFPS(true);
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
-
-		gameMenuLayer = new GameMenuLayer(getApplicationContext(), this, mHelper);
-
-		CCScene scene = CCScene.node();
-		scene.addChild(gameMenuLayer);
-		CCDirector.sharedDirector().runWithScene(scene);
 
 		mHelper.onStart(this);
 	}
@@ -83,129 +81,104 @@ public class GameActivity extends Activity implements GameMenuListener, GameHelp
 
 	@Override
 	protected void onActivityResult(int request, int response, Intent data) {
+
+		Log.i(getClass().getName(), "onActivityResult");
+
 		super.onActivityResult(request, response, data);
 		mHelper.onActivityResult(request, response, data);
 
-		if (request == REQUEST_SELECTPLAYERS && response == RESULT_OK) {
+		if (request == SceneManager.REQUEST_SELECTPLAYERS && response == RESULT_OK) {
 
 			ArrayList<String> invitees = data.getStringArrayListExtra(GamesClient.EXTRA_PLAYERS);
-			for (String string : invitees) {
-				RoomCreator roomHandler = new RoomCreator(data, mHelper);
-				roomHandler.createRoom();
 
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			// get auto-match criteria
+			Bundle autoMatchCriteria = null;
+			int minAutoMatchPlayers = data.getIntExtra(GamesClient.EXTRA_MIN_AUTOMATCH_PLAYERS, 0);
+			int maxAutoMatchPlayers = data.getIntExtra(GamesClient.EXTRA_MAX_AUTOMATCH_PLAYERS, 0);
+			if (minAutoMatchPlayers > 0) {
+				autoMatchCriteria = RoomConfig.createAutoMatchCriteria(minAutoMatchPlayers, maxAutoMatchPlayers, 0);
+			} else {
+				autoMatchCriteria = null;
+			}
+
+			TurnBasedMatchConfig tbmc = TurnBasedMatchConfig.builder().addInvitedPlayers(invitees).setAutoMatchCriteria(autoMatchCriteria).build();
+
+			// kick the match off
+			mHelper.getGamesClient().createTurnBasedMatch(this, tbmc);
+
+		} else if (request == SceneManager.REQUEST_MATCHINBOX) {
+
+			Log.i(getClass().getName(), "Result from Match inbox");
+
+			if (response == RESULT_OK) {
+
+				TurnBasedMatch match = data.getParcelableExtra(GamesClient.EXTRA_TURN_BASED_MATCH);
+				if (match != null) {
+					sceneManager.showGoogleTurnbasedMatchGame(match);
+				}
 			}
 		}
-	}
-
-	@Override
-	public void onSignInButtonClicked() {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				mHelper.beginUserInitiatedSignIn();
-			}
-		});
-	}
-
-	@Override
-	public void onSignOutButtonClicked() {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				mHelper.signOut();
-				gameMenuLayer.enableLogin(true);
-			}
-		});
-
 	}
 
 	@Override
 	public void onSignInFailed() {
-		gameMenuLayer.enableLogin(true);
+		sceneManager.showMainMenu(false);
 	}
 
 	@Override
 	public void onSignInSucceeded() {
-		gameMenuLayer.enableLogin(false);
+		Log.i(getClass().getName(), "onSignInSucceeded");
 
-		RoomConnector connector = new RoomConnector(mHelper);
-		if (connector.connect()) {
+		TurnBasedMatch match = mHelper.getTurnBasedMatch();
+		if (match != null) {
+			Log.i(getClass().getName(), "onSignInSucceeded - Notification match was found - Status=" + match.getStatus());
 
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			sceneManager.showGoogleTurnbasedMatchGame(match);
 
+		} else {
+			sceneManager.showMainMenu(true);
 		}
 
-	}
-
-	@Override
-	public void onAchievementsClicked() {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				startActivityForResult(mHelper.getGamesClient().getAchievementsIntent(), REQUEST_ACHIEVEMENTS);
-			}
-		});
-	}
-
-	@Override
-	public void onLeaderboardButtonClicked() {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				startActivityForResult(mHelper.getGamesClient().getAllLeaderboardsIntent(), REQUEST_LEADERBOARD);
-			}
-		});
+		/*
+		 * String invitation = mHelper.getInvitationId(); if (invitation !=
+		 * null) { Log.i(getClass().getName(),
+		 * "onSignInSucceeded - Invitation match was found - Id=" + invitation);
+		 * 
+		 * }
+		 */
 
 	}
 
-	@Override
-	public void onMultiplayerOnlineClicked() {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				Intent selectPlayersIntent = mHelper.getGamesClient().getSelectPlayersIntent(1, 1);
-				startActivityForResult(selectPlayersIntent, REQUEST_SELECTPLAYERS);
-			}
-		});
-	}
-
-	@Override
-	public void onMultiplayerLocalClicked() {
-
-		runOnUiThread(new Runnable() {
-			public void run() {
-
-				// String id =
-				// mHelper.getGamesClient().getCurrentPlayer().getPlayerId();
-
-				// mHelper.getPlusClient().loadPerson(this_, id);
-
-				CCScene scene = CCScene.node();
-				CCLayer layer = new SetupGameLayer(getApplicationContext(), mHelper);
-				scene.addChild(layer);
-				CCDirector.sharedDirector().runWithScene(scene);
-
-			}
-		});
-
-	}
-	
 	@Override
 	public boolean onKeyDown(int keycode, KeyEvent e) {
 		switch (keycode) {
 		case KeyEvent.KEYCODE_BACK:
-			/*if (!CCDirector.sharedDirector().getRunningScene().equals(scene)) {
-				CCDirector.sharedDirector().runWithScene(scene);
+			if(sceneManager.backPressed()) {
 				return true;
-			}*/
+			}
 		}
 		return super.onKeyDown(keycode, e);
 	}
 
-	/*
-	 * @Override public void onPersonLoaded(ConnectionResult status, Person
-	 * person) {
-	 * 
-	 * String name = person.getDisplayName(); System.out.println(name);
-	 * 
-	 * Image image = person.getImage(); String url = image.getUrl();
-	 * 
-	 * }
-	 */
+	@Override
+	public void onTurnBasedMatchInitiated(int statusCode, TurnBasedMatch match) {
+
+		int status = match.getStatus();
+		int turnStatus = match.getTurnStatus();
+
+		Log.i(getClass().getName(), "onTurnBasedMatchInitiated. Status=" + status + ", Turnstatus=" + turnStatus);
+
+		// match.getData();
+		//mHelper.getGamesClient().takeTurn(this, match.getMatchId(), null, getNextParticipantId(match));
+		
+		sceneManager.showGoogleTurnbasedMatchGame(match);
+	}
+
+	@Override
+	public void onTurnBasedMatchUpdated(int statusCode, TurnBasedMatch match) {
+
+		Log.i(getClass().getName(), "onTurnBasedMatchUpdated");
+		// TODO Auto-generated method stub
+
+	}	
 }

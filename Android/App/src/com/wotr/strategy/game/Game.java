@@ -27,4 +27,14 @@ public interface Game {
 	
 	ActionsResolverStrategy getActionsResolver();
 
+	boolean isSetup();
+
+	int getXTileCount();
+
+	int getYTileCount();
+
+	void endAttack(Unit attackingUnit, Position endPosition, boolean moved);
+
+	void setupDone(Player player);
+
 }

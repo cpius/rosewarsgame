@@ -35,8 +35,8 @@ public class CardSprite extends CCSprite implements BonusListener, CCTouchDelega
 
 	private long startTime;
 
-	public CardSprite(Unit unit, float scale, Boardframe bordframe) {
-		super(unit.getImage());
+	public CardSprite(String imagePath, Unit unit, float scale, Boardframe bordframe) {
+		super(imagePath + unit.getImage());
 
 		Position pos = unit.getPosition();
 		CGPoint point = bordframe.getPosition(pos.getX(), pos.getY());
@@ -145,7 +145,7 @@ public class CardSprite extends CCSprite implements BonusListener, CCTouchDelega
 					listener.cardSelected(this, originalCardPosition.x, originalCardPosition.y);
 				}
 
-			} else if (!detailed){
+			} else if (!detailed) {
 				CCDirector sd = CCDirector.sharedDirector();
 				CGSize displaySize = sd.displaySize();
 				listener.cardDragedEnded(this, event.getX(), displaySize.getHeight() - event.getY());

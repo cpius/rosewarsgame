@@ -14,4 +14,7 @@ public interface GameMenuListener {
 
 	public void onMultiplayerLocalClicked();
 
+	public void onShowMachesClicked();
+	
+	public void onBotvsBotClicked();
 }

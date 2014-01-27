@@ -13,7 +13,7 @@ public abstract class AbstractPlayer implements Player {
 	
 	@Override
 	public String getName() {
-		return "PlayerName";
+		return name;
 	}
 	
 	public UnitMap<Position, Unit> getUnitMap() {
@@ -35,8 +35,16 @@ public abstract class AbstractPlayer implements Player {
 		return getUnitMap().containsValue(unit);
 	}	
 
+	@Override
 	public int getStartLine() {
 		return startLine;
 	}
+	
+	@Override
+	public boolean canAttack() {
+		return false;
+	}
+	
+	
 
 }

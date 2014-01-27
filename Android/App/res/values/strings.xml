@@ -8,6 +8,8 @@
     <string name="menu_start_singleplayer">Single player</string>
     <string name="menu_start_multiplayer_local">Multiplayer - Local</string>
     <string name="menu_start_multiplayer_online">Multiplayer - Online</string>
+    <string name="menu_start_ai">Bot vs. Bot</string>
+    <string name="menu_show_matches">Active matches</string>
     <string name="menu_leaderboard">Leaderboard</string>
     <string name="menu_achivements">Achievements</string>
     

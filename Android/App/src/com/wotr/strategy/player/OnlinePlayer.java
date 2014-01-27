@@ -1,5 +1,15 @@
 package com.wotr.strategy.player;
 
+import com.wotr.model.Position;
+import com.wotr.model.unit.Unit;
+import com.wotr.model.unit.UnitMap;
+
 public class OnlinePlayer extends AbstractPlayer implements Player {
+
+	public OnlinePlayer(UnitMap<Position, Unit> unitMap, String name, int startLine) {
+		this.unitMap = unitMap;
+		this.name = name;
+		this.startLine = startLine;
+	}
 
 }

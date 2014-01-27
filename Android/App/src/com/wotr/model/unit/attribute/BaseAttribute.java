@@ -1,6 +1,8 @@
 package com.wotr.model.unit.attribute;
 
-public abstract class BaseAttribute {
+import java.io.Serializable;
+
+public abstract class BaseAttribute implements Serializable {
 
 	private final int baseValue;
 	private Attribute parent;
@@ -19,5 +21,5 @@ public abstract class BaseAttribute {
 
 	public Attribute getParent() {
 		return parent;
-	}	
+	}
 }

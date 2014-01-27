@@ -1,5 +1,7 @@
 package com.wotr.model.unit;
 
+import java.io.Serializable;
+
 import com.wotr.GameManager;
 import com.wotr.model.Position;
 import com.wotr.model.UnitType;
@@ -11,7 +13,9 @@ import com.wotr.strategy.battle.AttackStrategy;
 import com.wotr.strategy.battle.DefenceStrategy;
 import com.wotr.strategy.game.Game;
 
-public abstract class Unit implements Cloneable {
+public abstract class Unit implements Cloneable, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final String image;
 	private Position position;
@@ -23,6 +27,7 @@ public abstract class Unit implements Cloneable {
 	private DefenceAttribute defenceAttribute;
 
 	public String getImage() {
+		// TODO Remove this logic from model
 		return "unit/" + image + (enemy ? "red" : "green") + ".jpg";
 	}
 

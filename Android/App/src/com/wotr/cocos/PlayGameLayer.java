@@ -13,8 +13,6 @@ import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.actions.interval.CCTintTo;
-import org.cocos2d.layers.CCLayer;
-import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
@@ -24,12 +22,14 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 
-import com.google.example.games.basegameutils.GameHelper;
+import com.wotr.BackListener;
 import com.wotr.GameManager;
 import com.wotr.R;
+import com.wotr.SceneManager;
 import com.wotr.cocos.action.RemoveNodeCallBackAction;
 import com.wotr.cocos.nodes.ActionPathSprite;
 import com.wotr.cocos.nodes.BonusSelectionActionListener;
@@ -52,16 +52,14 @@ import com.wotr.strategy.action.ShortestPathFinderStrategy;
 import com.wotr.strategy.battle.BattleListener;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GameEventListener;
-import com.wotr.strategy.game.MultiplayerGame;
 import com.wotr.strategy.game.exceptions.InvalidActionException;
 import com.wotr.strategy.game.exceptions.InvalidAttackException;
 import com.wotr.strategy.game.exceptions.InvalidMoveException;
-import com.wotr.strategy.player.HumanPlayer;
 import com.wotr.strategy.player.Player;
 import com.wotr.touch.CardTouchGridDecorator;
 import com.wotr.touch.CardTouchListener;
 
-public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener, EndPositionSelectionActionListener, BonusSelectionActionListener {
+public class PlayGameLayer extends AbstractGameLayer implements CardTouchListener, GameEventListener, BattleListener, EndPositionSelectionActionListener, BonusSelectionActionListener, BackListener {
 
 	private Collection<CardSprite> unitList = new ArrayList<CardSprite>();
 	private int xCount;
@@ -73,36 +71,27 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	private ActionsResolverStrategy actionsResolver;
 
 	private PathFinderStrategy pathFinderStrategy;
-	private ActionPathSprite actionPathSprite;	
+	private ActionPathSprite actionPathSprite;
 
-	public PlayGameLayer(UnitMap<Position, Unit> playerOneMap, UnitMap<Position, Unit> playerTwoMap, GameHelper mHelper) {
+	public PlayGameLayer(Context context, SceneManager sceneManagerImpl, Game game) {
 
-		xCount = 5;
-		yCount = 8;
+		playerOne = game.getAttackingPlayer();
 
-		String playerOneName = "Player 1";
-
-		if (mHelper.isSignedIn()) {
-			com.google.android.gms.games.Player p = mHelper.getGamesClient().getCurrentPlayer();
-
-			if (p != null) {
-				playerOneName = p.getDisplayName();
-			}
-		}
-
-		playerOne = new HumanPlayer(playerOneMap, playerOneName, 0);
-		Player playerTwo = new HumanPlayer(playerTwoMap, "Player 2", yCount - 1);
+		xCount = game.getXTileCount();
+		yCount = (game.getYTileCount() * 2);
 
 		setIsTouchEnabled(true);
 
 		winSize = CCDirector.sharedDirector().displaySize();
 
-		CCSprite back = new CCSprite("woddenbackground.png");
+		// CCSprite back = new CCSprite("woddenbackground.png");
 
-		back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
-		addChild(back);
+		// back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
+		// addChild(back);
 
-		CCSprite prototype = new CCSprite("unit/archergreen.jpg");
+		String imagePath = getImagePath(winSize);
+
+		CCSprite prototype = new CCSprite(imagePath + "unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
@@ -111,9 +100,10 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 
 		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;
 
-		addBackGroundCards(xCount, yCount, true);
-		addCards(playerOneMap);
-		addCards(playerTwoMap);
+		addBackGroundCards(imagePath, xCount, yCount, true);
+
+		addCards(imagePath, game.getAttackingPlayer().getUnitMap());
+		addCards(imagePath, game.getDefendingPlayer().getUnitMap());
 
 		nameLabel = CCLabel.makeLabel("    ", "Arial", 50f);
 		nameLabel.setPosition(winSize.getWidth() - 30f, winSize.getHeight() - 100f);
@@ -128,7 +118,6 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		// turnLabel.setOpacity(150);
 		addChild(turnLabel, 10);
 
-		Game game = new MultiplayerGame(playerOne, playerTwo);
 		game.addGameEventListener(this);
 		GameManager.setGame(game);
 		GameManager.getFactory().getBattleStrategy().addBattleListener(this);
@@ -137,6 +126,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		game.setActionsResolver(actionsResolver);
 
 		game.startGame();
+
 	}
 
 	protected void dropCardToPosition(CardSprite card) {
@@ -144,13 +134,17 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		card.runAction(scaleAction);
 	}
 
-	private void addCards(UnitMap<Position, Unit> playerCards) {
+	private void addCards(String imagePath, UnitMap<Position, Unit> playerCards) {
+
+		if (playerCards == null) {
+			return;
+		}
 
 		CardTouchGridDecorator gridDecorator = new CardTouchGridDecorator(bordframe);
 		gridDecorator.addCardTouchListener(this);
 
 		for (Unit card : playerCards.values()) {
-			CardSprite cardSpite = new CardSprite(card, sizeScale, bordframe);
+			CardSprite cardSpite = new CardSprite(imagePath, card, sizeScale, bordframe);
 			addChild(cardSpite);
 			cardSpite.addListener(gridDecorator);
 			unitList.add(cardSpite);
@@ -162,7 +156,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	@Override
 	public boolean cardDragedStarted(CardSprite card) {
 
-		boolean cardTouchStarted = isTurn((Unit) card.getUserData());
+		boolean cardTouchStarted = isActionAllowed((Unit) card.getUserData());
 		if (cardTouchStarted) {
 
 			/*
@@ -403,9 +397,9 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		startTurn(player, remainingActions);
 	}
 
-	@Override
-	protected boolean isTurn(Unit unit) {
-		return GameManager.getGame().getAttackingPlayer().hasUnit(unit);
+	protected boolean isActionAllowed(Unit unit) {
+		Player attackingPlayer = GameManager.getGame().getAttackingPlayer();
+		return attackingPlayer.canAttack() && attackingPlayer.hasUnit(unit);
 	}
 
 	private void removeCCSprite(Unit defendingUnit) {
@@ -530,7 +524,7 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 	}
 
 	@Override
-	public void gameEnded(Player winner) {
+	public void gameEnded(Player winner, Player looser) {
 
 		CCLabel winnerLabel = CCLabel.makeLabel("Winner: " + winner.getName(), "Arial", 40f);
 		winnerLabel.setPosition(winSize.width / 2, winSize.height - winSize.height / 3f);
@@ -553,5 +547,19 @@ public class PlayGameLayer extends AbstractGameLayer implements CardTouchListene
 		endPosition.endAttack();
 		moveCardToPosition(card, position);
 		awardBonus(endPosition.getAttackResult());
+	}
+
+	@Override
+	public boolean backPressed(SceneManager manager) {
+
+		// TODO Handle boolean
+		manager.showMainMenu(true);
+		return true;
+
+	}
+
+	@Override
+	public void endTurn(Player player) {
+		
 	}
 }

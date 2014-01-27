@@ -1,12 +1,14 @@
 package com.wotr.model.unit.attribute;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class Attribute extends BaseAttribute {
+public abstract class Attribute extends BaseAttribute implements Serializable {
 
-	Collection<RawBonus> bonusCollection = new ArrayList<RawBonus>();
-	protected BonusListener listener;
+	private Collection<RawBonus> bonusCollection = new ArrayList<RawBonus>();
+
+	protected transient BonusListener listener;
 
 	public Attribute(int baseValue) {
 		super(baseValue);
