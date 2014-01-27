@@ -9,6 +9,13 @@
 #import "Samurai.h"
 #import "MeleeAttackAction.h"
 
+@interface Samurai()
+
+@property (nonatomic, readwrite) NSInteger numberOfAttacksUsed;
+@property (nonatomic, readwrite) BOOL hasPerformedMove;
+
+@end
+
 @implementation Samurai
 
 -(id)init {
@@ -52,9 +59,9 @@
     
     [super resetAfterNewRound];
     
-    _numberOfAttacksUsed = 0;
+    self.numberOfAttacksUsed = 0;
     self.attackActionCost = 1;
-    _hasPerformedMove = NO;
+    self.hasPerformedMove = NO;
 }
 
 - (BOOL)allowAction:(Action *)action allLocations:(NSDictionary *)allLocations {

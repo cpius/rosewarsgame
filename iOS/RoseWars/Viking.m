@@ -10,6 +10,12 @@
 #import "Action.h"
 #import "MeleeAttackAction.h"
 
+@interface Viking()
+
+@property (nonatomic, strong) RawBonus *bonusAgainstSiege;
+
+@end
+
 @implementation Viking
 
 -(id)init {
@@ -67,8 +73,8 @@
         NSLog(@"Viking gets +1D against siege");
         
         // +1D against siege
-        _bonusAgainstSiege = [[RawBonus alloc] initWithValue:1];
-        [self.defence addRawBonus:_bonusAgainstSiege];
+        self.bonusAgainstSiege = [[RawBonus alloc] initWithValue:1];
+        [self.defence addRawBonus:self.bonusAgainstSiege];
     }
 }
 
@@ -76,7 +82,7 @@
     
     if (attacker.unitType == kSiege) {
         
-        [self.defence removeRawBonus:_bonusAgainstSiege];
+        [self.defence removeRawBonus:self.bonusAgainstSiege];
     }
 }
 

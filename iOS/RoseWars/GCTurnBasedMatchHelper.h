@@ -23,7 +23,7 @@
 
 @end
 
-@interface GCTurnBasedMatchHelper : NSObject <GKTurnBasedMatchmakerViewControllerDelegate,GKGameCenterControllerDelegate> {
+@interface GCTurnBasedMatchHelper : NSObject <GKLocalPlayerListener, GKTurnBasedMatchmakerViewControllerDelegate,GKGameCenterControllerDelegate> {
     
     BOOL _userAuthenticated;
     UIViewController *_presentingViewController;

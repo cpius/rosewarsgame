@@ -8,11 +8,10 @@
 
 #import "Card.h"
 
-@interface Samurai : Card {
-    
-    NSUInteger _numberOfAttacksUsed;
-    BOOL _hasPerformedMove;
-}
+@interface Samurai : Card
+
+@property (nonatomic, readonly) NSInteger numberOfAttacksUsed;
+@property (nonatomic, readonly) BOOL hasPerformedMove;
 
 + (id)card;
 

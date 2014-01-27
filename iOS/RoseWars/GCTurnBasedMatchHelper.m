@@ -61,6 +61,11 @@
     [_presentingViewController presentViewController:viewController animated:YES completion:nil];
 }
 
+- (void)player:(GKPlayer *)player didRequestMatchWithPlayers:(NSArray *)playerIDsToInvite {
+
+    NSLog(@"didRequestMatch - invite players: %@", playerIDsToInvite);
+}
+
 - (NSArray *)currentPlayerIds {
     
     NSMutableArray *participants = [NSMutableArray array];
@@ -72,13 +77,13 @@
     return [NSArray arrayWithArray:participants];
 }
 
-- (void)handleTurnEventForMatch:(GKTurnBasedMatch *)match {
+- (void)player:(GKPlayer *)player receivedTurnEventForMatch:(GKTurnBasedMatch *)match didBecomeActive:(BOOL)didBecomeActive {
     
     NSLog(@"Turn has happened in match: %@", match);
     
     if ([match.matchID isEqualToString:_currentMatch.matchID]) {
         if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
-                        
+            
             // It's the current match, and it's our turn now
             _currentMatch = match;
             [_delegate takeTurn:match];
@@ -104,18 +109,25 @@
     }
 }
 
+/*- (void)handleTurnEventForMatch:(GKTurnBasedMatch *)match {
+    
+}
+*/
 - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
     
     [gameCenterViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-- (void)handleMatchEnded:(GKTurnBasedMatch *)match {
+- (void)player:(GKPlayer *)player matchEnded:(GKTurnBasedMatch *)match {
     
     NSLog(@"Game has ended: %@", match);
     [_delegate takeTurn:match];
 }
 
+/*- (void)handleMatchEnded:(GKTurnBasedMatch *)match {
+    
+}
+*/
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController didFailWithError:(NSError *)error {
     
     [viewController dismissViewControllerAnimated:YES completion:nil];

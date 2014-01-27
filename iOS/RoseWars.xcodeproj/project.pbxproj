@@ -433,6 +433,8 @@
 		614D42D317B4EB4B00B9889C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				61C47D5117BE9F7A00D644D1 /* PlayerIndicator.h */,
+				61C47D5217BE9F7A00D644D1 /* PlayerIndicator.m */,
 				61C47D1C17BE9F5300D644D1 /* BonusSprite.h */,
 				61C47D1D17BE9F5300D644D1 /* BonusSprite.m */,
 				61C47D2617BE9F5C00D644D1 /* CardSprite.h */,
@@ -491,19 +493,22 @@
 			name = Font;
 			sourceTree = "<group>";
 		};
-		61C47CF317BE9DB500D644D1 /* Domain */ = {
+		6178BA9A1893C51500FA8C6F /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				61C47D3E17BE9F7A00D644D1 /* MeleeAttackAction.h */,
+				61C47D3F17BE9F7A00D644D1 /* MeleeAttackAction.m */,
 				61C47D0317BE9F3F00D644D1 /* AbilityAction.h */,
-				61C47D0417BE9F3F00D644D1 /* AbilityAction.m */,
-				61C47D0517BE9F3F00D644D1 /* AbilityFactory.h */,
-				61C47D0617BE9F3F00D644D1 /* AbilityFactory.m */,
 				61C47D0717BE9F3F00D644D1 /* Action.h */,
 				61C47D0817BE9F3F00D644D1 /* Action.m */,
-				61C47D0917BE9F3F00D644D1 /* ActionCostLess.h */,
-				61C47D0A17BE9F3F00D644D1 /* ActionCostLess.m */,
-				61C47CF817BE9E0F00D644D1 /* AIPlayer.h */,
-				61C47CF917BE9E0F00D644D1 /* AIPlayer.m */,
+				61C47D0417BE9F3F00D644D1 /* AbilityAction.m */,
+			);
+			name = Actions;
+			sourceTree = "<group>";
+		};
+		6178BA9B1893C52F00FA8C6F /* AI */ = {
+			isa = PBXGroup;
+			children = (
 				61C47D0B17BE9F3F00D644D1 /* AIStrategy.h */,
 				61C47D0C17BE9F3F00D644D1 /* AIStrategyAdvancer.h */,
 				61C47D0D17BE9F3F00D644D1 /* AIStrategyAdvancer.m */,
@@ -511,12 +516,115 @@
 				61C47D0F17BE9F3F00D644D1 /* AIStrategyCatapulter.m */,
 				61C47D1017BE9F3F00D644D1 /* AIStrategyDestroyer.h */,
 				61C47D1117BE9F3F00D644D1 /* AIStrategyDestroyer.m */,
-				61C47CFB17BE9E2A00D644D1 /* BaseBattleStrategy.h */,
-				61C47CFC17BE9E2A00D644D1 /* BaseBattleStrategy.m */,
+			);
+			name = AI;
+			sourceTree = "<group>";
+		};
+		6178BA9C1893C54200FA8C6F /* Bonus */ = {
+			isa = PBXGroup;
+			children = (
 				61C47D1217BE9F4900D644D1 /* BaseBonus.h */,
 				61C47D1317BE9F4900D644D1 /* BaseBonus.m */,
+			);
+			name = Bonus;
+			sourceTree = "<group>";
+		};
+		6178BA9D1893C54D00FA8C6F /* DeckStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				61C47D4417BE9F7A00D644D1 /* MinimumRequirementDeckStrategy.h */,
+				61C47D4517BE9F7A00D644D1 /* MinimumRequirementDeckStrategy.m */,
+				61C47D2D17BE9F6700D644D1 /* FixedDeckStrategy.h */,
+				61C47D2E17BE9F6700D644D1 /* FixedDeckStrategy.m */,
+				61C47CFA17BE9E0F00D644D1 /* DeckStrategy.h */,
 				61C47D1417BE9F4900D644D1 /* BaseDeckStrategy.h */,
 				61C47D1517BE9F4900D644D1 /* BaseDeckStrategy.m */,
+			);
+			name = DeckStrategy;
+			sourceTree = "<group>";
+		};
+		6178BA9E1893C55D00FA8C6F /* BattleStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				61C47E5C17C6380E00D644D1 /* JuggernautBattleStrategy.h */,
+				61C47E5D17C6380E00D644D1 /* JuggernautBattleStrategy.m */,
+				61C47D0117BE9E2A00D644D1 /* BattleStrategy.h */,
+				61C47CFB17BE9E2A00D644D1 /* BaseBattleStrategy.h */,
+				61C47CFC17BE9E2A00D644D1 /* BaseBattleStrategy.m */,
+			);
+			name = BattleStrategy;
+			sourceTree = "<group>";
+		};
+		6178BA9F1893C57000FA8C6F /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				61C47D3317BE9F6700D644D1 /* GameSerializer.h */,
+				61C47D3417BE9F6700D644D1 /* GameSerializer.m */,
+				61C47D2217BE9F5300D644D1 /* CardForSerialization.h */,
+				61C47D2317BE9F5300D644D1 /* CardForSerialization.m */,
+			);
+			name = Serialization;
+			sourceTree = "<group>";
+		};
+		6178BAA01893C58F00FA8C6F /* Abilities */ = {
+			isa = PBXGroup;
+			children = (
+				61C47D3B17BE9F7A00D644D1 /* ImproveWeapons.h */,
+				61C47D3C17BE9F7A00D644D1 /* ImproveWeapons.m */,
+				61C47D0917BE9F3F00D644D1 /* ActionCostLess.h */,
+				61C47D0A17BE9F3F00D644D1 /* ActionCostLess.m */,
+				61C47D0517BE9F3F00D644D1 /* AbilityFactory.h */,
+				61C47D0617BE9F3F00D644D1 /* AbilityFactory.m */,
+				61C47D2817BE9F5C00D644D1 /* CoolDown.h */,
+				61C47D2917BE9F5C00D644D1 /* CoolDown.m */,
+				61C47D1E17BE9F5300D644D1 /* Bribe.h */,
+				61C47D1F17BE9F5300D644D1 /* Bribe.m */,
+			);
+			name = Abilities;
+			sourceTree = "<group>";
+		};
+		6178BAA11893C5BE00FA8C6F /* DiceStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				61C47D2C17BE9F5C00D644D1 /* DiceStrategy.h */,
+				61C47D2F17BE9F6700D644D1 /* FixedDiceStrategy.h */,
+				61C47D3017BE9F6700D644D1 /* FixedDiceStrategy.m */,
+			);
+			name = DiceStrategy;
+			sourceTree = "<group>";
+		};
+		6178BAA21893C60500FA8C6F /* Strategies */ = {
+			isa = PBXGroup;
+			children = (
+				6178BAA31893C61300FA8C6F /* LevelIncreaseStrategy */,
+				6178BA9D1893C54D00FA8C6F /* DeckStrategy */,
+				6178BAA11893C5BE00FA8C6F /* DiceStrategy */,
+			);
+			name = Strategies;
+			sourceTree = "<group>";
+		};
+		6178BAA31893C61300FA8C6F /* LevelIncreaseStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				61C47D3D17BE9F7A00D644D1 /* LevelIncreaseStrategy.h */,
+				61C47D3117BE9F6700D644D1 /* FixedLevelIncreaseStrategy.h */,
+				61C47D3217BE9F6700D644D1 /* FixedLevelIncreaseStrategy.m */,
+			);
+			name = LevelIncreaseStrategy;
+			sourceTree = "<group>";
+		};
+		61C47CF317BE9DB500D644D1 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				6178BAA21893C60500FA8C6F /* Strategies */,
+				6178BAA01893C58F00FA8C6F /* Abilities */,
+				6178BA9F1893C57000FA8C6F /* Serialization */,
+				6178BA9E1893C55D00FA8C6F /* BattleStrategy */,
+				6178BA9C1893C54200FA8C6F /* Bonus */,
+				6178BA9B1893C52F00FA8C6F /* AI */,
+				6178BA9A1893C51500FA8C6F /* Actions */,
+				61C47CF817BE9E0F00D644D1 /* AIPlayer.h */,
+				61C47CF917BE9E0F00D644D1 /* AIPlayer.m */,
 				61C47D1617BE9F4900D644D1 /* BasePathFinderStrategy.h */,
 				61C47D1717BE9F4900D644D1 /* BasePathFinderStrategy.m */,
 				61C47D1817BE9F4900D644D1 /* BaseRangedAttribute.h */,
@@ -527,53 +635,27 @@
 				61C47CFE17BE9E2A00D644D1 /* BattleReport.m */,
 				61C47CFF17BE9E2A00D644D1 /* BattleResult.h */,
 				61C47D0017BE9E2A00D644D1 /* BattleResult.m */,
-				61C47D0117BE9E2A00D644D1 /* BattleStrategy.h */,
-				61C47D1E17BE9F5300D644D1 /* Bribe.h */,
-				61C47D1F17BE9F5300D644D1 /* Bribe.m */,
 				61C47D2017BE9F5300D644D1 /* Card.h */,
 				61C47D2117BE9F5300D644D1 /* Card.m */,
-				61C47D2217BE9F5300D644D1 /* CardForSerialization.h */,
-				61C47D2317BE9F5300D644D1 /* CardForSerialization.m */,
 				61C47D2417BE9F5300D644D1 /* CardPool.h */,
 				61C47D2517BE9F5300D644D1 /* CardPool.m */,
-				61C47D2817BE9F5C00D644D1 /* CoolDown.h */,
-				61C47D2917BE9F5C00D644D1 /* CoolDown.m */,
 				61C47D2A17BE9F5C00D644D1 /* Deck.h */,
 				61C47D2B17BE9F5C00D644D1 /* Deck.m */,
-				61C47CFA17BE9E0F00D644D1 /* DeckStrategy.h */,
 				61C47D0217BE9E4200D644D1 /* Definitions.h */,
-				61C47D2C17BE9F5C00D644D1 /* DiceStrategy.h */,
-				61C47D2D17BE9F6700D644D1 /* FixedDeckStrategy.h */,
-				61C47D2E17BE9F6700D644D1 /* FixedDeckStrategy.m */,
-				61C47D2F17BE9F6700D644D1 /* FixedDiceStrategy.h */,
-				61C47D3017BE9F6700D644D1 /* FixedDiceStrategy.m */,
-				61C47D3117BE9F6700D644D1 /* FixedLevelIncreaseStrategy.h */,
-				61C47D3217BE9F6700D644D1 /* FixedLevelIncreaseStrategy.m */,
 				61C47CF617BE9DF000D644D1 /* Game.h */,
 				61C47CF717BE9DF000D644D1 /* Game.m */,
 				61C47CF417BE9DCE00D644D1 /* GameManager.h */,
 				61C47CF517BE9DCE00D644D1 /* GameManager.m */,
-				61C47D3317BE9F6700D644D1 /* GameSerializer.h */,
-				61C47D3417BE9F6700D644D1 /* GameSerializer.m */,
 				61C47D3517BE9F6700D644D1 /* GCTurnBasedMatchHelper.h */,
 				61C47D3617BE9F6700D644D1 /* GCTurnBasedMatchHelper.m */,
 				61C47D3717BE9F6700D644D1 /* GridlLayoutManager.h */,
 				61C47D3817BE9F6700D644D1 /* GridlLayoutManager.m */,
 				61C47D3917BE9F6700D644D1 /* GridLocation.h */,
 				61C47D3A17BE9F6700D644D1 /* GridLocation.m */,
-				61C47D3B17BE9F7A00D644D1 /* ImproveWeapons.h */,
-				61C47D3C17BE9F7A00D644D1 /* ImproveWeapons.m */,
-				61C47E5C17C6380E00D644D1 /* JuggernautBattleStrategy.h */,
-				61C47E5D17C6380E00D644D1 /* JuggernautBattleStrategy.m */,
-				61C47D3D17BE9F7A00D644D1 /* LevelIncreaseStrategy.h */,
-				61C47D3E17BE9F7A00D644D1 /* MeleeAttackAction.h */,
-				61C47D3F17BE9F7A00D644D1 /* MeleeAttackAction.m */,
 				61C47D4017BE9F7A00D644D1 /* MeleeAttackPathFinderStrategy.h */,
 				61C47D4117BE9F7A00D644D1 /* MeleeAttackPathFinderStrategy.m */,
 				61C47D4217BE9F7A00D644D1 /* MeleeAttackPlaybackAction.h */,
 				61C47D4317BE9F7A00D644D1 /* MeleeAttackPlaybackAction.m */,
-				61C47D4417BE9F7A00D644D1 /* MinimumRequirementDeckStrategy.h */,
-				61C47D4517BE9F7A00D644D1 /* MinimumRequirementDeckStrategy.m */,
 				61C47D4617BE9F7A00D644D1 /* MoveAction.h */,
 				61C47D4717BE9F7A00D644D1 /* MoveAction.m */,
 				61C47D4817BE9F7A00D644D1 /* MovePathFinderStrategy.h */,
@@ -585,8 +667,6 @@
 				61C47D4E17BE9F7A00D644D1 /* PathFinderStrategy.h */,
 				61C47D4F17BE9F7A00D644D1 /* PathFinderStrategyFactory.h */,
 				61C47D5017BE9F7A00D644D1 /* PathFinderStrategyFactory.m */,
-				61C47D5117BE9F7A00D644D1 /* PlayerIndicator.h */,
-				61C47D5217BE9F7A00D644D1 /* PlayerIndicator.m */,
 				61C47D5317BE9F7A00D644D1 /* PromptLevelIncreaseStrategy.h */,
 				61C47D5417BE9F7A00D644D1 /* PromptLevelIncreaseStrategy.m */,
 				61C47D5517BE9F7A00D644D1 /* PushAction.h */,

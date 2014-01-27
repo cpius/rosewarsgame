@@ -9,10 +9,7 @@
 #import "Card.h"
 #import "RawBonus.h"
 
-@interface Viking : Card {
-    
-    RawBonus *_bonusAgainstSiege;
-}
+@interface Viking : Card
 
 + (id)card;
 
