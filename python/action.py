@@ -118,8 +118,11 @@ class Action(object):
         return document
 
     def to_document(self):
-        attributes = ["start_at", "end_at", "target_at", "created_at"]
-        document = dict((attr, str(getattr(self, attr))) for attr in attributes if getattr(self, attr))
+        attributes = ["start_at", "end_at", "target_at"]
+        document = dict((attribute, str(getattr(self, attribute)))
+                        for attribute in attributes if getattr(self, attribute))
+        if self.created_at:
+            document["created_at"] = self.created_at
         if self.number:
             document["number"] = self.number
         if self.ability:

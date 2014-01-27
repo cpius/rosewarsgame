@@ -13,6 +13,8 @@ from game import Game
 from outcome import Outcome
 import json
 from common import *
+import battle
+from view import View
 
 
 class Controller(object):
@@ -27,13 +29,13 @@ class Controller(object):
     CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
 
     @classmethod
-    def new_game(cls, view):
+    def new_game(cls, green_intelligence, red_intelligence):
         if not os.path.exists("./replay"):
             os.makedirs("./replay")
 
-        controller = Controller(view)
+        controller = Controller(View())
 
-        players = [Player("Green", settings.player1_ai), Player("Red", settings.player2_ai)]
+        players = [Player("Green", green_intelligence), Player("Red", red_intelligence)]
 
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
@@ -49,22 +51,25 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_network(cls, view, game_id, player):
-        controller = cls(view)
+    def from_network(cls, player):
 
-        controller.game_id = game_id
-        controller.client = Client(game_id)
-        controller.game = Game.from_log_document(controller.client.get_game(), player, True)
+        client = Client(player)
+        game_document = client.get_game()
+
+        controller = cls(View())
+        controller.game = Game.from_log_document(game_document, player, True)
+        controller.client = client
 
         player = controller.game.current_player()
         print "current player is", player.color, player.intelligence, player.profile
         controller.clear_move()
 
+        controller.view.play_sound("your_turn")
         return controller
 
     @classmethod
-    def from_replay(cls, view, savegame_file):
-        controller = cls(view)
+    def from_replay(cls, savegame_file):
+        controller = cls(View())
         savegame_document = json.loads(open(savegame_file).read())
         controller.game = Game.from_log_document(savegame_document)
         controller.clear_move()
@@ -231,11 +236,24 @@ class Controller(object):
                 self.exit_game()
 
     def right_click(self, position):
-        if not self.start_at:
-            self.show_unit(position)
-        else:
+        start_at = position
+        if self.start_at:
+            attack_hint = []
+            target_at = None
+
+            illustrate_actions = [action for action in self.game.gamestate.get_actions()
+                                  if action.start_at == self.start_at]
+
             if position in self.game.gamestate.enemy_units:
-                self.show_attack(position)
+                potential_actions = [action for action in illustrate_actions
+                                     if action.target_at and action.target_at == position]
+                if potential_actions:
+                    attack_hint = self.get_attack_hint(position)
+                    start_at = self.start_at
+                    target_at = position
+            self.show_unit(start_at, target_at, attack_hint, illustrate_actions)
+        else:
+            self.show_unit(start_at)
 
     def clear_move(self):
         self.start_at = self.end_position = self.selected_unit = None
@@ -250,17 +268,24 @@ class Controller(object):
         if self.game.is_player_network():
             self.trigger_network_player()
 
+        if self.game.is_player_ai():
+            self.trigger_artificial_intelligence()
+
         while True:
             event = pygame.event.wait()
 
             if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
                 self.trigger_network_player()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONUP:
                 position = self.view.get_position_from_mouse_click(event.pos)
+                if not self.game.is_player_human():
+                    position = position.flip()
 
-                if event.button == 1 and self.game.is_player_human():
-                    self.left_click(position)
+                if event.button == 1:
+                    self.view.hide_unit_zoomed(self.game)
+                    if self.game.is_player_human():
+                        self.left_click(position)
                 elif event.button == 3:
                     self.right_click(position)
 
@@ -388,8 +413,8 @@ class Controller(object):
                         self.view.draw_post_movement(action)
                         rolls = outcome.for_position(action.target_at)
                         self.game.gamestate.move_melee_unit_to_target_tile(rolls, action)
-                else:
-                    self.game.gamestate.set_available_actions()
+
+                self.game.gamestate.set_available_actions()
 
         else:
             if not outcome:
@@ -470,18 +495,37 @@ class Controller(object):
 
         return
 
-    def show_unit(self, position):
+    def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
         unit = None
+        position = start_at
+        if target_at:
+            position = target_at
+
         if position in self.game.gamestate.player_units:
             unit = self.game.gamestate.player_units[position]
-        if position in self.game.gamestate.enemy_units:
+        elif position in self.game.gamestate.enemy_units:
             unit = self.game.gamestate.enemy_units[position]
 
         if unit:
-            self.view.show_unit_zoomed(unit)
-            self.pause()
-            self.view.draw_game(self.game)
+            self.view.show_unit_zoomed(unit, attack_hint)
+            self.view.draw_game(self.game, start_at, illustrate_actions)
             return
+
+    def get_attack_hint(self, attack_position):
+        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
+        player_unit = self.game.gamestate.player_units[self.start_at]
+        opponent_unit = self.game.gamestate.enemy_units[attack_position]
+
+        attack = battle.get_attack_rating(player_unit, opponent_unit, action, self.game.gamestate.player_units)
+        defence = battle.get_defence_rating(player_unit, opponent_unit, attack, action, self.game.gamestate.enemy_units)
+        attack = min(attack, 6)
+        defence = min(defence, 6)
+
+        return ["Attack hint:",
+                "Attack: " + str(attack),
+                "Defence: " + str(defence),
+                "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
@@ -514,7 +558,10 @@ class Controller(object):
         if not self.start_at or position == self.start_at:
             return False
 
-        return position in self.game.gamestate.all_units() and self.selected_unit.abilities
+        potential_actions = [action for action in self.game.gamestate.get_actions()
+                             if action.start_at == self.start_at and action.target_at and action.target_at == position]
+
+        return position in self.game.gamestate.all_units() and self.selected_unit.abilities and potential_actions
 
     def selecting_ranged_target(self, position):
         if not self.start_at:

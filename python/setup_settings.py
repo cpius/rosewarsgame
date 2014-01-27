@@ -3,6 +3,9 @@ from collections import namedtuple
 # server = "http://localhost:8080"
 server = "http://server.rosewarsgame.com:8080"
 
+player1_ai = "Human"
+player2_ai = "Human"
+
 beginner_mode = False
 
 experience_to_upgrade = 4

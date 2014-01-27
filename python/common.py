@@ -3,6 +3,7 @@ from datetime import datetime
 from bson.objectid import ObjectId
 import collections
 import functools
+from dictdiffer import DictDiffer
 
 
 class Direction:
@@ -195,6 +196,13 @@ ability_descriptions = {
         1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
 
+opponent_descriptions = {
+    "HotSeat": "Start a new hot seat game on this machine",
+    "Advancer": "Start a new game against an artificial intelligence on this machine",
+    "Internet": "Start a new game against an opponent from the internet",
+    "Load": "Load a saved game"
+}
+
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
@@ -207,6 +215,7 @@ Ability = enum(3000, *(ability for ability in ability_descriptions))
 
 Type = enum(4000, *types)
 
+Opponent = enum(1, *(opponent for opponent in dict(opponent_descriptions)))
 
 if 1 == 2:
     class Type:
@@ -292,6 +301,15 @@ if 1 == 2:
         name = {}
         write = {}
 
+    class Opponent:
+        HotSeat = None
+        Advancer = None
+        Internet = None
+        Load = None
+
+        name = {}
+        write = {}
+
 
 board_height = 8
 board_width = 5
@@ -341,8 +359,17 @@ def surrounding_units(position, units):
 
 def assert_equal_documents(testcase, expected, actual, testcase_file):
     message = "Wrong document for " + testcase_file + "\n\n"
+
     message += "Expected:\n" + document_to_string(expected)
-    message += "\nActual:\n" + document_to_string(actual)
+    message += "\nActual:\n" + document_to_string(actual) + "\n"
+
+    difference = DictDiffer(actual, expected)
+    if difference.added():
+        message += "Added " + str(difference.added())
+    if difference.removed():
+        message += "Removed " + str(difference.removed())
+    if difference.changed():
+        message += "Changed " + str(difference.changed())
 
     testcase.assertEqual(expected, actual, message)
 
@@ -406,7 +433,7 @@ def readable(attributes):
         elif attribute in State.name:
             dictionary[State.name[attribute]] = value
         elif attribute in Effect.name:
-            dictionary[Effect.name[attribute]] = value
+            dictionary[Effect.name[attribute]] = list(value)
 
     return dictionary
 

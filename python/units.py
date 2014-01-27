@@ -148,7 +148,7 @@ class Unit(object):
         if self.effects[effect].duration <= 1:
             del self.effects[effect]
         else:
-            self.effects[effect] = Effect_tuple(self.effects[effect].level, self.effects[effect].duration -1)
+            self.effects[effect] = Effect_tuple(self.effects[effect].level, self.effects[effect].duration - 1)
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)

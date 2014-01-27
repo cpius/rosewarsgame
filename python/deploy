@@ -1,0 +1,1 @@
+scp *.py rosewars:~

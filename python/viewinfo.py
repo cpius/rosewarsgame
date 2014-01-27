@@ -1,9 +1,6 @@
 from __future__ import division
-import pygame
-import textwrap
 from viewcommon import *
 import interface_settings as settings
-import battle
 
 zoom = settings.zoom
 zoomed_unit_size = (int(236 * zoom), int(271 * zoom))
@@ -23,7 +20,7 @@ def get_unit_lines(unit):
 
     level = unit.get_unit_level()
     if level:
-        lines.append("Level: " + str(level))
+        lines.append("Level: " + str(level + 1))
         lines.append("")
 
     if unit.zoc:
@@ -77,7 +74,7 @@ def get_unit_lines(unit):
     return lines
 
 
-def show_unit_zoomed(screen, interface, unit):
+def show_unit_zoomed(screen, interface, unit, attack_hint):
 
     unit_pic = get_unit_pic(interface, unit.image)
     pic = get_image(unit_pic, zoomed_unit_size)
@@ -91,6 +88,8 @@ def show_unit_zoomed(screen, interface, unit):
     screen.blit(pic, image_location)
 
     lines = get_unit_lines(unit)
+    if attack_hint:
+        lines += attack_hint
     line_length = 45
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
@@ -134,26 +133,6 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
         line_distances = interface.line_distances["small"]
         fonts = interface.fonts["very_small"]
         show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
-
-
-def show_attack(screen, interface, action, player_unit, opponent_unit, gamestate):
-
-    clear(screen, interface)
-
-    attack = battle.get_attack_rating(player_unit, opponent_unit, action, gamestate.player_units)
-    defence = battle.get_defence_rating(player_unit, opponent_unit, attack, action, gamestate.enemy_units)
-    attack = min(attack, 6)
-    defence = min(defence, 6)
-
-    lines = ["Attack: " + str(attack),
-             "Defence: " + str(defence),
-             "Chance of win = " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
-             str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
-
-    base = interface.show_attack_location
-    text_location = [base[0], base[1] + 160 * zoom]
-    line_length = 80
-    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
 def draw_upgrade_options(screen, interface, unit):
