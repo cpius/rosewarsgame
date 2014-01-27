@@ -13,6 +13,7 @@ from common import *
 from outcome import Outcome
 import random
 import memcache
+import traceback
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
@@ -166,6 +167,7 @@ def do_action_post(game_id):
     except ValueError:
         return {"Status": "Error", "Message": "No JSON decoded. Request body: " + request.body.getvalue()}
 
+    action_document["created_at"] = datetime.utcnow()
     log_document = construct_log_document(game_document)
     game = Game.from_log_document(log_document)
 
@@ -173,12 +175,14 @@ def do_action_post(game_id):
     if validation_errors:
         return validation_errors
 
-    cache.set(game_id, datetime.utcnow().replace(microsecond=0))
-
     if action_document["type"] == "options" and "move_with_attack" in action_document:
-        return register_move_with_attack(action_document, game_id)
+        response_document = register_move_with_attack(action_document, game_id)
+        cache.set(game_id, datetime.utcnow().replace(microsecond=0))
+        return response_document
     elif action_document["type"] == "options" and "upgrade" in action_document:
-        return register_upgrade(action_document, game.gamestate, game_id)
+        response_document = register_upgrade(action_document, game.gamestate, game_id)
+        cache.set(game_id, datetime.utcnow().replace(microsecond=0))
+        return response_document
 
     # Initial validation is done with a non-shifted gamestate, because it is
     # easier to find expected action from that
@@ -192,7 +196,9 @@ def do_action_post(game_id):
     else:
         action = result
 
-    return register_move_attack_ability(action_document, game_id, game.gamestate, action)
+    response_document = register_move_attack_ability(action_document, game_id, game.gamestate, action)
+    cache.set(game_id, datetime.utcnow().replace(microsecond=0))
+    return response_document
 
 
 @get("/ranking/calculate")
@@ -240,8 +246,8 @@ def calculate_ratings():
 
                 ranking[winner] += rating_points_won_and_lost
                 ranking[loser] -= rating_points_won_and_lost
-    except Exception as e:
-        debug_lines.append(str(e))
+    except Exception:
+        debug_lines.append(traceback.format_exc())
 
     for index, line in enumerate(debug_lines):
         ranking["debug_{0:03d}".format(index)] = line
@@ -350,7 +356,7 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
         outcome_document["game"] = ObjectId(game_id)
         outcome_document["type"] = "outcome"
         outcome_document["number"] = action.number
-        outcome_document["created_at"] = datetime.utcnow()
+        outcome_document["created_at"] = action_document["created_at"]
 
         action_collection.insert(outcome_document)
 
@@ -445,16 +451,18 @@ def construct_log_document(game_document):
         if int(key) > action_count:
             action_count = int(key)
 
-        created_at = action_document["created_at"]
-        if isinstance(created_at, unicode):
-            try:
-                created_at = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
-            except ValueError:
-                only_seconds = created_at[0:created_at.index(".")]
-                created_at = datetime.strptime(only_seconds, "%Y-%m-%d %H:%M:%S")
+        if "created_at" in action_document:
+            created_at = action_document["created_at"]
+            if isinstance(created_at, unicode):
+                try:
+                    created_at = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
+                except ValueError:
+                    if "." in created_at:
+                        created_at = created_at[0:created_at.index(".")]
+                    created_at = datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
 
-        if created_at > last_modified:
-            last_modified = created_at
+            if created_at > last_modified:
+                last_modified = created_at
 
         if action_document["type"] == "outcome":
             key += "_outcome"
