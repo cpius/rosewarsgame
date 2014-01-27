@@ -4,18 +4,58 @@ from common import *
 from action import Action
 from outcome import Outcome
 from datetime import datetime
+from time import mktime
+from email.utils import parsedate
 import setup_settings as settings
 from time import sleep
+
+
+class DefaultErrorHandler(urllib2.HTTPDefaultErrorHandler):
+    def http_error_default(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPError(req.get_full_url(), code, msg, headers, fp)
+        result.status = code
+
+        return result
 
 
 class Client():
     def __init__(self, profilename, game_id=None):
         self.profilename = profilename
         self.game_id = game_id
+        self.last_modified = datetime(1970, 1, 1)
 
     def get_game(self):
         if self.game_id:
-            return json.load(urllib2.urlopen(settings.server + "/games/view/" + self.game_id))
+            print "getting game from server"
+            request = urllib2.Request(settings.server + "/games/view/" + self.game_id)
+
+            formatted_time = httpdate(self.last_modified)
+            if self.last_modified > datetime(1970, 1, 1):
+                print "setting If-Modified-Since", formatted_time
+                request.add_header("If-Modified-Since", formatted_time)
+
+            opener = urllib2.build_opener(DefaultErrorHandler())
+            response = opener.open(request)
+            if response.getcode() == 304:
+                print "no new data on the server"
+                return
+
+            last_modified_header = response.info().getheader("Last-Modified")
+            if last_modified_header:
+                last_modified_tuple = parsedate(last_modified_header)
+                last_modified_timestamp = mktime(last_modified_tuple)
+                last_modified = datetime.fromtimestamp(last_modified_timestamp)
+
+                print "response Last-Modified: ", last_modified
+
+                if last_modified > self.last_modified:
+                    print "new data was found on the server"
+                    self.last_modified = last_modified
+                else:
+                    print "no new data on the server"
+                    return
+
+            return json.load(response)
 
         else:
             response = json.load(urllib2.urlopen(settings.server + "/games/join_or_create/" + self.profilename))
@@ -30,7 +70,19 @@ class Client():
 
     def select_action(self, gamestate):
         game = self.get_game()
+        if not game:
+            # No new data on the server
+            return None, None, None
         expected_action = str(gamestate.action_count + 1)
+
+        print "received action count:", game["action_count"]
+        print "our current action count:", gamestate.action_count
+
+        if game["action_count"] > gamestate.action_count + 1:
+            # Several new things happened on the server
+            # Handle this one now, but clear last_modified to make
+            # sure we hear about the other stuff
+            self.last_modified = datetime(1970, 1, 1)
 
         if game["action_count"] > gamestate.action_count:
             print "received action", document_to_string(game[expected_action])
@@ -105,3 +157,17 @@ class Client():
             "upgrade": upgrade_choice
         }
         self.send_action(upgrade_action)
+
+
+def httpdate(dt):
+    """Return a string representation of a date according to RFC 1123
+    (HTTP/1.1).
+
+    The supplied date must be in UTC.
+
+    """
+    weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][dt.weekday()]
+    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+             "Oct", "Nov", "Dec"][dt.month - 1]
+    return "%s, %02d %s %04d %02d:%02d:%02d GMT" % (weekday, dt.day, month,
+        dt.year, dt.hour, dt.minute, dt.second)

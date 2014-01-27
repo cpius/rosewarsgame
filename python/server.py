@@ -1,7 +1,9 @@
-from bottle import run, get, post, install, JSONPlugin, request
+from bottle import run, get, post, install, JSONPlugin, request, response
 from pymongo import MongoClient
 import socket
-import time
+from time import mktime, time
+from wsgiref.handlers import format_date_time
+from email.utils import parsedate
 from gamestate import Gamestate
 from game import Game
 from action import Action
@@ -10,6 +12,9 @@ import setup
 from common import *
 from outcome import Outcome
 import random
+import memcache
+
+cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
 
 @get("/games/new/<player1>/vs/<player2>")
@@ -24,11 +29,24 @@ def new_game(player1, player2):
     game = Game(players, gamestate)
     game_id = games.insert(game.to_document())
 
-    return {"Status": "OK", "ID": str(game_id), "ServerTime": time.time(), "Message": "New game created"}
+    return {"Status": "OK", "ID": str(game_id), "ServerTime": time(), "Message": "New game created"}
 
 
 @get("/games/view/<game_id>")
 def view(game_id):
+    last_modified_cache = cache.get(game_id)
+    if last_modified_cache:
+        if_modified_since_header = request.get_header("If-Modified-Since")
+        if if_modified_since_header:
+            if_modified_since_tuple = parsedate(if_modified_since_header)
+            if_modified_since_timestamp = mktime(if_modified_since_tuple)
+            if_modified_since = datetime.fromtimestamp(if_modified_since_timestamp)
+            if last_modified_cache <= if_modified_since:
+                # If our latest update is earlier than the client's latest update,
+                # let the client know that nothing new is afoot
+                response.status = 304
+                return
+
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
     if not game_document:
@@ -41,7 +59,19 @@ def view(game_id):
         # Action isn't completed yet
         log_document["action_count"] = number - 1
 
+    last_modified = log_document["last_modified"]
+    if last_modified > datetime(1970, 1, 1):
+        stamp = mktime(last_modified.timetuple())
+        formatted_time = format_date_time(stamp)
+        response.set_header("Last-Modified", formatted_time)
+        cache.set(game_id, last_modified.replace(microsecond=0))
+
     return log_document
+
+
+@get("/cache/get/<game_id>")
+def getcache(game_id):
+    return str(cache.get(game_id))
 
 
 @get("/games/view_log/<game_id>")
@@ -71,6 +101,7 @@ def view_actions(game_id):
 
     return actions_document
 
+
 # db.games.update({}, { "$set": { "finished_at": finished_at } }, {"multi": true} );
 @get("/games/join_or_create/<profile>")
 def join_or_create(profile):
@@ -86,7 +117,7 @@ def join_or_create(profile):
         return {
             "Status": "OK",
             "ID": ongoing_games[0]["_id"],
-            "ServerTime:": time.time(),
+            "ServerTime:": time(),
             "Message": "Joined ongoing game"
         }
 
@@ -115,7 +146,7 @@ def join_or_create(profile):
             game_to_join["player2"]["profile"] = profile
         games.save(game_to_join)
 
-        return {"Status": "OK", "ID": game_to_join["_id"], "ServerTime": time.time(), "Message": "Joined existing game"}
+        return {"Status": "OK", "ID": game_to_join["_id"], "ServerTime": time(), "Message": "Joined existing game"}
 
     if random.randint(0, 1) == 0:
         return new_game(profile, "OPEN")
@@ -142,6 +173,8 @@ def do_action_post(game_id):
     if validation_errors:
         return validation_errors
 
+    cache.set(game_id, datetime.utcnow().replace(microsecond=0))
+
     if action_document["type"] == "options" and "move_with_attack" in action_document:
         return register_move_with_attack(action_document, game_id)
     elif action_document["type"] == "options" and "upgrade" in action_document:
@@ -161,22 +194,16 @@ def do_action_post(game_id):
 
     return register_move_attack_ability(action_document, game_id, game.gamestate, action)
 
+
 @get("/ranking/calculate")
 def calculate_ratings():
     games = list(get_collection("games").find({}).sort("finished_at", 1))
 
-    # return games[0]
-
-    debug_lines = ["Rating calculation debug output:"]
-    # debug_lines.append("Games count: " + str(len(games)))
-
-    # return debug_lines
-
+    debug_lines = []
     ranking = {}
 
     try:
         for game_document in games:
-            debug_lines.append("game: " + str(game_document["_id"]))
             log_document = construct_log_document(game_document)
             game = Game.from_log_document(log_document)
             if game.gamestate.is_ended():
@@ -193,7 +220,7 @@ def calculate_ratings():
                 # Arpad Elo came up with the value 400. It means that a player with 400 higher rating
                 # than another player has a 90% probability of winning. At a difference of 200 the
                 # probability is 75%
-                skill_factor = float(400)
+                skill_factor = float(2000)
 
                 expected_outcome_for_winner = 1 / (1 + pow(10, (rating_difference / skill_factor)))
 
@@ -203,11 +230,13 @@ def calculate_ratings():
 
                 rating_points_won_and_lost = int(k_value * (1 - expected_outcome_for_winner))
 
-                debug_lines.append(winner + " beat " + loser)
-                debug_lines.append("Expected outcome was " + str(expected_outcome_for_winner))
-                debug_lines.append(winner + " had a rating of " + str(ranking[winner]))
-                debug_lines.append(loser + " had a rating of " + str(ranking[loser]))
-                debug_lines.append(str(rating_points_won_and_lost) + " rating points were traded")
+                debug_line = str(game_document["_id"]) + ": " + winner + " beat " + loser
+                debug_line += " (probability: " + "{0:.2f}".format(expected_outcome_for_winner) + "). "
+                debug_line += winner + ": " + str(ranking[winner])
+                debug_line += " => " + str(ranking[winner] + rating_points_won_and_lost) + ", "
+                debug_line += loser + ": " + str(ranking[loser])
+                debug_line += " => " + str(ranking[loser] - rating_points_won_and_lost)
+                debug_lines.append(debug_line)
 
                 ranking[winner] += rating_points_won_and_lost
                 ranking[loser] -= rating_points_won_and_lost
@@ -308,7 +337,7 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
 
     action_collection.insert(action_document)
 
-    response = {
+    response_document = {
         "Status": "OK",
         "Message": "Action recorded"
         # "Available actions": [str(available_action) for available_action in available_actions],
@@ -325,9 +354,9 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
 
         action_collection.insert(outcome_document)
 
-        response["Action outcome"] = outcome.to_document()
+        response_document["Action outcome"] = outcome.to_document()
 
-    return response
+    return response_document
 
 
 def validate_input(log_document, gamestate, action_document):
@@ -409,10 +438,24 @@ def construct_log_document(game_document):
 
     replay_document = game_document.copy()
     action_count = 0
+    last_modified = datetime(1970, 1, 1)
     for action_document in action_documents:
         key = str(action_document["number"])
+
         if int(key) > action_count:
             action_count = int(key)
+
+        created_at = action_document["created_at"]
+        if isinstance(created_at, unicode):
+            try:
+                created_at = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
+            except ValueError:
+                only_seconds = created_at[0:created_at.index(".")]
+                created_at = datetime.strptime(only_seconds, "%Y-%m-%d %H:%M:%S")
+
+        if created_at > last_modified:
+            last_modified = created_at
+
         if action_document["type"] == "outcome":
             key += "_outcome"
         elif action_document["type"] == "options":
@@ -421,7 +464,9 @@ def construct_log_document(game_document):
         del action_log["number"]
         del action_log["type"]
         replay_document[key] = action_log
+
     replay_document["action_count"] = action_count
+    replay_document["last_modified"] = last_modified
 
     return replay_document
 
