@@ -207,3 +207,9 @@ class Action(object):
 
     def copy(self):
         return deepcopy(self)
+
+    def update_references(self, gamestate):
+        units = merge_units(gamestate.player_units, gamestate.enemy_units)
+        self.unit = units[self.start_at]
+        if self.target_at and self.target_at in units:
+            self.target_unit = units[self.target_at]
