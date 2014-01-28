@@ -374,8 +374,8 @@ def assert_equal_documents(testcase, expected, actual, testcase_file):
         message += "Added " + str(difference.added())
     if difference.removed():
         message += "Removed " + str(difference.removed())
-    if difference.changed():
-        message += "Changed " + str(difference.changed())
+    if difference.changed_recursive():
+        message += "Changed " + str(difference.changed_recursive())
 
     testcase.assertEqual(expected, actual, message)
 
