@@ -180,7 +180,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     if unit.is_ranged():
         return ranged_actions()
 
-    if unit.has(Trait.rage, 1):
+    if unit.has(Trait.rage):
         moves, attacks = rage()
 
     if unit.has(Trait.berserking):
