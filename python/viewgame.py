@@ -234,7 +234,7 @@ def flip_direction(direction):
 
 
 def get_yellow_counters(unit):
-    return 1 if unit.has_extra_life() else 0
+    return 1 if (unit.has_extra_life() or unit.has(Effect.improved_weapons)) else 0
 
 
 def get_blue_counters(unit):

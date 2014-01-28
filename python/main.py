@@ -35,6 +35,15 @@ def decide_opponent():
     return int(sys.stdin.readline().rstrip())
 
 
+def decide_AI_strength():
+    global j
+    print "Choose AI strength level"
+    for j in range(1, 3):
+        print str(j) + ":", ai_descriptions[AI.name[j]]
+    print "> ",
+    return AI.name[int(sys.stdin.readline().rstrip())]
+
+
 if __name__ == '__main__':
 
     opponent_choice = decide_opponent()
@@ -47,12 +56,13 @@ if __name__ == '__main__':
         controller = Controller.from_replay(sys.argv[1])
     elif opponent_choice == Opponent.HotSeat:
         controller = Controller.new_game("Human", "Human")
-    elif opponent_choice == Opponent.Advancer:
+    elif opponent_choice == Opponent.AI:
+        ai_strength = decide_AI_strength()
         coinflip = random.randint(0, 1)
         if coinflip == 0:
-            controller = Controller.new_game("Human", Opponent.write[opponent_choice])
+            controller = Controller.new_game("Human", ai_strength)
         else:
-            controller = Controller.new_game(Opponent.write[opponent_choice], "Human")
+            controller = Controller.new_game(ai_strength, "Human")
 
     if controller:
         controller.run_game()

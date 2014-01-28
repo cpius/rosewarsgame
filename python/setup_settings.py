@@ -20,7 +20,8 @@ else:
 
 required_special_units = []
 allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
-                         "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat"]
+                         "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon",
+                         "Hussar", "Cavalry Lieutenant", "Hobelar"]
 allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
 requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_siege_weapon",
@@ -37,9 +38,13 @@ units_info = {"Archer": Info({2, 3}, 3, False),
               "Pikeman": Info({2, 3, 4}, 3, False),
               "Berserker": Info({2, 3}, 1, False),
               "Cannon": Info({2}, 1, True),
+              "Cavalry Lieutenant": Info({3, 4}, 1, False),
+              "Halberdier": Info({4}, 1, False),
               "Hobelar": Info({3, 4}, 1, False),
+              "Hussar": Info({3, 4}, 1, False),
               "Crusader": Info({3, 4}, 1, False),
               "Diplomat": Info({2, 3}, 1, False),
+              "Dragoon": Info({3, 4}, 1, False),
               "Flag Bearer": Info({3, 4}, 1, False),
               "Lancer": Info({3, 4}, 1, False),
               "Longswordsman": Info({4}, 1, False),

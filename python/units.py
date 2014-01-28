@@ -49,6 +49,12 @@ class Unit(object):
     def __repr__(self):
         return self.name
 
+    def __eq__(self, other):
+        return self.to_document() == other.to_document()
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def get_dict(self, attribute):
         if attribute in Trait.name:
             return self.traits
@@ -485,7 +491,7 @@ class Catapult(Unit):
     defence_bonuses = {}
     type = Type.Siege_Weapon
     experience_to_upgrade = 3
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1, Trait.attack_skill: -1}]
 
 
 class Royal_Guard(Unit):
@@ -525,7 +531,7 @@ class Scout(Unit):
     type = Type.Cavalry
     experience_to_upgrade = 2
     special_upgrades = [{Trait.tall_shield: 1}, {Trait.attack_skill: 2}]
-    final_upgrades = [{Trait.movement_skill: 2}, {Trait.defence_skill: 1}]
+    final_upgrades = [{Trait.movement_skill: 1}, {Trait.defence_skill: 1}]
 
 
 class Viking(Unit):
@@ -581,6 +587,7 @@ class Flag_Bearer(Unit):
     base_defence = 3
     base_movement = 3
     base_range = 1
+    experience_to_upgrade = 3
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []

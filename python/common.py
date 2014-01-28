@@ -198,9 +198,14 @@ ability_descriptions = {
 
 opponent_descriptions = {
     "HotSeat": "Start a new hot seat game on this machine",
-    "Advancer": "Start a new game against an artificial intelligence on this machine",
+    "AI": "Start a new game against an artificial intelligence on this machine",
     "Internet": "Start a new game against an opponent from the internet",
     "Load": "Load a saved game"
+}
+
+ai_descriptions = {
+    "ai_advancer": "Advancer",
+    "ai_level2": "AI level 2 (under construction)"
 }
 
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
@@ -216,6 +221,7 @@ Ability = enum(3000, *(ability for ability in ability_descriptions))
 Type = enum(4000, *types)
 
 Opponent = enum(1, *(opponent for opponent in dict(opponent_descriptions)))
+AI = enum(1, *(ai for ai in dict(ai_descriptions)))
 
 if 1 == 2:
     class Type:
@@ -303,7 +309,7 @@ if 1 == 2:
 
     class Opponent:
         HotSeat = None
-        Advancer = None
+        AI = None
         Internet = None
         Load = None
 
