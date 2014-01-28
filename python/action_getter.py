@@ -296,11 +296,5 @@ def cavalry_charging(start_at, friendly_units):
                unit_with_trait_at(pos, Trait.cavalry_charging, friendly_units))
 
 
-def merge_units(units1, units2):
-    units = units1.copy()
-    units.update(units2)
-    return units
-
-
 def unit_with_trait_at(pos, trait, units):
     return pos in units and units[pos].has(trait)

@@ -486,3 +486,9 @@ def attribute_key(attribute, value):
 
 def flip_units(units):
     return dict((position.flip(), unit) for position, unit in units.items())
+
+
+def merge_units(units1, units2):
+    units = units1.copy()
+    units.update(units2)
+    return units
