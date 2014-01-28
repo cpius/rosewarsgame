@@ -49,6 +49,12 @@ class Unit(object):
     def __repr__(self):
         return self.name
 
+    def __eq__(self, other):
+        return self.to_document() == other.to_document()
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def get_dict(self, attribute):
         if attribute in Trait.name:
             return self.traits
