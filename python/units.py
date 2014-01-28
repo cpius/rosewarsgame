@@ -587,6 +587,7 @@ class Flag_Bearer(Unit):
     base_defence = 3
     base_movement = 3
     base_range = 1
+    experience_to_upgrade = 3
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
