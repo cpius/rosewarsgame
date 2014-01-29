@@ -4,9 +4,11 @@ from collections import namedtuple
 server = "http://server.rosewarsgame.com:8080"
 
 player1_ai = "Human"
-player2_ai = "Human"
+ai_level = 3
 
 beginner_mode = False
+
+document_actions = True
 
 experience_to_upgrade = 4
 

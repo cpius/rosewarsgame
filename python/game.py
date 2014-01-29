@@ -1,5 +1,4 @@
 from datetime import datetime
-import ai_module
 from common import *
 import os
 from outcome import Outcome
@@ -32,8 +31,8 @@ class Game:
             player1 = Player.from_document(log_document["player1"])
             player2 = Player.from_document(log_document["player2"])
         else:
-            player1 = Player("Green", settings.player1_ai)
-            player2 = Player("Red", settings.player2_ai)
+            player1 = Player("Green", "Human")
+            player2 = Player("Red", "AI")
 
         if player_profile:
             if player1.profile == player_profile:
@@ -42,7 +41,7 @@ class Game:
                 player1.intelligence = player1.ai = "Network"
             else:
                 print player_profile, "is not playing this game."
-                print "The players are:",player1.profile, "and", player2.profile
+                print "The players are:", player1.profile, "and", player2.profile
                 return
 
         if "created_at" in log_document:
@@ -100,14 +99,6 @@ class Game:
                 game.shift_turn()
 
         return game
-
-    def set_ais(self):
-        for player in range(2):
-            ai_name = self.players[player].ai_name
-            if ai_name in ["Human", "Network"]:
-                self.players[player].ai = ai_name
-            else:
-                self.players[player].ai = ai_module.AI(ai_name)
 
     def set_network_player(self, local_player):
         for player in range(2):

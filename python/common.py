@@ -204,8 +204,9 @@ opponent_descriptions = {
 }
 
 ai_descriptions = {
-    "ai_advancer": "Advancer",
-    "ai_level2": "AI level 2 (under construction)"
+    "1": "Easy",
+    "2": "Medium",
+    "3": "Hard"
 }
 
 types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
