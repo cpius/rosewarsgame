@@ -1,5 +1,4 @@
 from __future__ import division
-import setup_settings as settings
 from common import *
 from collections import namedtuple
 
@@ -16,7 +15,7 @@ class Unit(object):
     name = ""
     zoc = []
     abilities = []
-    experience_to_upgrade = settings.experience_to_upgrade
+    experience_to_upgrade = 4
     attack_bonuses = {}
     defence_bonuses = {}
     traits = {}
@@ -146,7 +145,7 @@ class Unit(object):
             return self.effects[effect].level
 
     def gain_xp(self):
-        if not self.has(State.used) and not settings.beginner_mode:
+        if not self.has(State.used) and not get_setting("Beginner_mode"):
             self.increment_state(State.experience)
             self.remove_state(State.recently_upgraded)
 
@@ -271,6 +270,7 @@ class Archer(Unit):
     defence_bonuses = {}
     type = Type.Infantry
     upgrades = ["Fire_Archer", "Crossbow_Archer"]
+    experience_to_upgrade = 4
 
 
 class Fire_Archer(Unit):
@@ -287,6 +287,7 @@ class Fire_Archer(Unit):
     type = Type.Infantry
     special_upgrades = [{Trait.sharpshooting: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Crossbow_Archer(Unit):
@@ -304,6 +305,7 @@ class Crossbow_Archer(Unit):
     type = Type.Infantry
     special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.attack_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Pikeman(Unit):
@@ -337,6 +339,7 @@ class Halberdier(Unit):
     type = Type.Infantry
     zoc = [Type.Cavalry]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Light_Cavalry(Unit):
@@ -370,6 +373,7 @@ class Dragoon(Unit):
     type = Type.Cavalry
     special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
     traits = {Trait.swiftness: 1}
 
@@ -390,6 +394,7 @@ class Hussar(Unit):
     zoc = []
     type = Type.Cavalry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.movement_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Cavalry_Lieutenant(Unit):
@@ -407,6 +412,7 @@ class Cavalry_Lieutenant(Unit):
     defence_bonuses = {}
     type = Type.Cavalry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Knight(Unit):
@@ -421,6 +427,7 @@ class Knight(Unit):
     defence_bonuses = {}
     type = Type.Cavalry
     upgrades = ["Lancer", "Hobelar"]
+    experience_to_upgrade = 4
 
 
 class Lancer(Unit):
@@ -440,6 +447,7 @@ class Lancer(Unit):
     type = Type.Cavalry
     special_upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Hobelar(Unit):
@@ -459,6 +467,7 @@ class Hobelar(Unit):
     type = Type.Cavalry
     special_upgrades = [{Trait.flanking: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Ballista(Unit):
@@ -474,6 +483,7 @@ class Ballista(Unit):
     type = Type.Siege_Weapon
     special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Catapult(Unit):
@@ -490,8 +500,8 @@ class Catapult(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Siege_Weapon
-    experience_to_upgrade = 3
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1, Trait.attack_skill: -1}]
+    experience_to_upgrade = 3
 
 
 class Royal_Guard(Unit):
@@ -509,9 +519,9 @@ class Royal_Guard(Unit):
     defence_bonuses = {}
     type = Type.Infantry
     zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
-    experience_to_upgrade = 3
     special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 3
 
 
 class Scout(Unit):
@@ -529,9 +539,9 @@ class Scout(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
-    experience_to_upgrade = 2
     special_upgrades = [{Trait.tall_shield: 1}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.movement_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 2
 
 
 class Viking(Unit):
@@ -552,6 +562,7 @@ class Viking(Unit):
     type = Type.Infantry
     special_upgrades = [{Trait.siege_weapon_specialist: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
     traits = {Trait.rage: 1, Trait.extra_life: 1}
 
@@ -571,9 +582,9 @@ class Cannon(Unit):
     defence_bonuses = {}
     zoc = []
     type = Type.Siege_Weapon
-    experience_to_upgrade = 3
     special_upgrades = [{Trait.attack_cooldown: 1, Trait.far_sighted: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    experience_to_upgrade = 3
 
 
 class Flag_Bearer(Unit):
@@ -587,13 +598,13 @@ class Flag_Bearer(Unit):
     base_defence = 3
     base_movement = 3
     base_range = 1
-    experience_to_upgrade = 3
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
     type = Type.Cavalry
     special_upgrades = [{Trait.flag_bearing: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 3
 
 
 class Longswordsman(Unit):
@@ -613,6 +624,7 @@ class Longswordsman(Unit):
     type = Type.Infantry
     special_upgrades = [{Trait.rage: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Crusader(Unit):
@@ -632,6 +644,7 @@ class Crusader(Unit):
     type = Type.Cavalry
     special_upgrades = [{Trait.crusading: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Berserker(Unit):
@@ -651,6 +664,7 @@ class Berserker(Unit):
     type = Type.Infantry
     special_upgrades = [{Trait.big_shield: 1}, {Trait.attack_skill: 2}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class War_Elephant(Unit):
@@ -692,6 +706,7 @@ class Samurai(Unit):
     zoc = []
     type = Type.Infantry
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
     traits = {Trait.combat_agility: 1}
 
@@ -712,6 +727,7 @@ class Saboteur(Unit):
     type = Type.Specialist
     special_upgrades = [{Ability.sabotage: 1}, {Ability.poison: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Diplomat(Unit):
@@ -729,6 +745,7 @@ class Diplomat(Unit):
     type = Type.Specialist
     special_upgrades = [{Ability.bribe: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Weaponsmith(Unit):
@@ -747,3 +764,4 @@ class Weaponsmith(Unit):
     type = Type.Specialist
     special_upgrades = [{Ability.improve_weapons: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4

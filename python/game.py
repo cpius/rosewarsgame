@@ -5,8 +5,6 @@ from outcome import Outcome
 from gamestate import Gamestate
 from action import Action
 from player import Player
-import units as units_module
-import setup_settings as settings
 
 
 class Game:

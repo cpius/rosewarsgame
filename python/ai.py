@@ -7,13 +7,12 @@ from outcome import Outcome, rolls
 import math
 from itertools import product
 from dictdiffer import DictDiffer
-import setup_settings
 import battle
 
 
 class AI():
     def __init__(self):
-        level = setup_settings.ai_level
+        level = get_setting("AI_level")
         if level == 1:
             self.select_action = get_select_action_function(score_actions_simple)
             self.select_upgrade = select_upgrade
@@ -337,12 +336,13 @@ def score_actions_simple(g):
 
 
 def get_select_action_function(score_function):
+
     def select_action(gamestate):
         gamestate_copy = gamestate.copy()
         gamestate_copy.set_available_actions()
         actions_copy = score_function(gamestate_copy)
         actions_copy.sort(key=attrgetter("score"), reverse=True)
-        if setup_settings.document_actions and setup_settings.ai_level > 1:
+        if get_setting("Document_AI_actions") and get_setting("AI_level") > 1:
             document_actions(actions_copy, gamestate)
         return next(action for action in gamestate.get_actions() if action == actions_copy[0])
     return select_action
