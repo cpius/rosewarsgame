@@ -6,12 +6,12 @@ from itertools import product
 
 def get_actions(gamestate):
 
-    if not gamestate.get_actions_remaining() and not gamestate.is_extra_action():
+    is_extra_action = gamestate.is_extra_action()
+
+    if not gamestate.get_actions_remaining() and not is_extra_action:
         return []
 
     actions = []
-
-    is_extra_action = gamestate.is_extra_action()
 
     for position, unit in gamestate.player_units.items():
         if can_use_unit(unit, is_extra_action):
@@ -118,8 +118,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
             moves = []
 
         if moves or attacks:
-            # Add an action for indicating pass on the extra action
-            moves.append(Action(units, start_at, start_at))
+            moves.append(Action(units, start_at, start_at))  # Add an action for indicating pass on the extra action
 
         return moves, attacks
 
