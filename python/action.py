@@ -168,11 +168,12 @@ class Action(object):
                                          self.is_surrounding_unit_with(units, Trait.flag_bearing, self.end_at, 2))
 
     def is_surrounding_unit_with(self, units, trait, position, level=None):
-        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.surrounding_tiles())
+        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.surrounding_tiles() if
+                   pos != self.start_at)
 
-    def is_adjacent_unit_with(self, units, trait, position, n=1):
-        units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in adjacent_units(position, units_excluding_current) if unit.has(trait, n))
+    def is_adjacent_unit_with(self, units, trait, position, level=None):
+        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.adjacent_tiles() if
+                   pos != self.start_at)
 
     def distance_to_target(self):
         return distance(self.start_at, self.target_at)
