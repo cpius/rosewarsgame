@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Starting next to Crusader, the Knight should receive the bonus.",
     "attack": 4,
     "defence": 2,
     "action": {
