@@ -83,8 +83,6 @@ def do_action(gamestate, action, outcome):
     player_units = gamestate.player_units
     enemy_units = gamestate.enemy_units
     all_units = gamestate.all_units()
-    if action.is_attack() and action.unit.is_melee():
-        attack_direction = action.end_at.get_direction_to(action.target_at)
 
     apply_unit_effects()
 
@@ -97,6 +95,8 @@ def do_action(gamestate, action, outcome):
 
     if action.is_attack():
         unit.gain_experience()
+        if action.unit.is_melee():
+            attack_direction = action.end_at.get_direction_to(action.target_at)
         rolls = outcome.for_position(action.target_at)
         settle_attack(action)
 
@@ -105,15 +105,15 @@ def do_action(gamestate, action, outcome):
         elif unit.has(Trait.longsword):
             longsword()
 
+        if action.move_with_attack and action.attack_successful(rolls, gamestate):
+            move_melee_unit_to_target_tile(gamestate, rolls, action)
+
     elif action.is_ability():
         unit.gain_experience()
         settle_ability(action)
 
     if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility]):
         prepare_extra_actions(action)
-
-    if action.is_attack() and action.move_with_attack and action.attack_successful(rolls, gamestate):
-        move_melee_unit_to_target_tile(gamestate, rolls, action)
 
     unit.set(State.used)
 
