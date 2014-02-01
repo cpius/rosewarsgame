@@ -3,6 +3,6 @@ server = "http://server.rosewarsgame.com:8080"
 
 AI_level = 2
 
-Beginner_mode = yes
+Beginner_mode = no
 
 Document_ai_decision = yes
