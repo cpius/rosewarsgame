@@ -168,8 +168,7 @@ class Action(object):
                                          self.is_surrounding_unit_with(units, Trait.flag_bearing, self.end_at, 2))
 
     def is_surrounding_unit_with(self, units, trait, position, level=None):
-        units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level))
+        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.surrounding_tiles())
 
     def is_adjacent_unit_with(self, units, trait, position, n=1):
         units_excluding_current = units_excluding_position(units, self.start_at)
@@ -196,14 +195,12 @@ class Action(object):
     def outcome_string(self, rolls, gamestate):
         if not self.is_attack() or not rolls:
             return ""
-
-        if self.is_miss(rolls, gamestate):
+        elif self.is_miss(rolls, gamestate):
             return "Miss"
-
-        if self.is_win(rolls, gamestate):
+        elif self.is_win(rolls, gamestate):
             return "Win"
-
-        return "Defend"
+        else:
+            return "Defend"
 
     def copy(self):
         return deepcopy(self)

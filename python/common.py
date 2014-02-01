@@ -509,5 +509,5 @@ def get_setting(name):
                     return setting
 
 
-def unit_with_trait_at(pos, trait, units):
-    return pos in units and units[pos].has(trait)
+def unit_with_trait_at(pos, trait, units, level=None):
+    return pos in units and units[pos].has(trait, level)
