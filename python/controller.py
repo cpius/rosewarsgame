@@ -435,7 +435,8 @@ class Controller(object):
             self.game_end()
             return
 
-        if action.unit.is_milf() and not self.game.is_player_network() and not action.unit.has(State.extra_action):
+        if action.unit.should_be_upgraded() and not self.game.is_player_network() and not \
+                action.unit.has(State.extra_action):
             if self.game.is_player_human():
                 choice = self.get_input_upgrade(action.unit)
             else:

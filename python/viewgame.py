@@ -154,7 +154,7 @@ def draw_symbols(screen, interface, unit, position):
         draw_bribed(screen, interface, position)
 
     level = unit.get_unit_level()
-    if not unit.is_milf() and level:
+    if not unit.should_be_upgraded() and level:
         if level > 3:
             level = 3
         pic = get_image(interface.level_icons[level], (14, 14))

@@ -219,7 +219,7 @@ class Unit(object):
         return upgraded_unit
 
     def is_allowed_upgrade_choice(self, upgrade_choice):
-        if not self.is_milf():
+        if not self.should_be_upgraded():
             return False
 
         return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
@@ -237,7 +237,7 @@ class Unit(object):
         to_upgrade = self.experience_to_upgrade
         return experience // to_upgrade
 
-    def is_milf(self):
+    def should_be_upgraded(self):
         experience = self.get(State.experience)
         to_upgrade = self.experience_to_upgrade
         return experience and experience % to_upgrade == 0 and not self.has(State.recently_upgraded)

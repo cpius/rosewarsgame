@@ -224,7 +224,7 @@ class Gamestate:
 
     def get_upgradeable_unit(self):
         for position, unit in self.player_units.items():
-            if unit.is_milf():
+            if unit.should_be_upgraded():
                 return position, unit
 
     def is_post_move_with_attack_possible(self, action, outcome):
