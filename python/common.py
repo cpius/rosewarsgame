@@ -507,3 +507,7 @@ def get_setting(name):
                     return int(setting)
                 else:
                     return setting
+
+
+def unit_with_trait_at(pos, trait, units):
+    return pos in units and units[pos].has(trait)
