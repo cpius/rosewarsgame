@@ -70,12 +70,12 @@ def do_action(gamestate, action, outcome):
         player_units[action.end_at] = player_units.pop(action.start_at)
 
     def triple_attack():
-        for position in set(action.end_at.two_forward_tiles(attack_direction)) & set(enemy_units):
+        for position in action.end_at.two_forward_tiles(attack_direction) & set(enemy_units):
             sub_action = Action(all_units, action.start_at, action.end_at, position)
             settle_attack(sub_action, attack_direction)
 
     def longsword():
-        for position in set(action.end_at.four_forward_tiles(attack_direction)) & set(enemy_units):
+        for position in action.end_at.four_forward_tiles(attack_direction) & set(enemy_units):
             sub_action = Action(all_units, action.start_at, action.end_at, position)
             settle_attack(sub_action)
 

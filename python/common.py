@@ -64,17 +64,16 @@ class Position:
         return Position(self.column, board_height - self.row + 1)
 
     def four_forward_tiles(self, direction):
-        return direction.perpendicular(self) + direction.forward_and_sideways(self)
+        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board)
 
     def surrounding_tiles(self):
-        surrounding = set(direction.move(self) for direction in eight_directions)
-        return set(tile for tile in surrounding if tile in board)
+        return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board)
 
     def adjacent_tiles(self):
-        return set(direction.move(self) for direction in directions)
+        return set(pos for pos in [direction.move(self) for direction in directions] if pos in board)
 
     def two_forward_tiles(self, direction):
-        return direction.forward_and_sideways(self)
+        return set(pos for pos in direction.forward_and_sideways(self) if pos in board)
 
 
 def enum(n, *sequential, **named):
