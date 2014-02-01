@@ -12,13 +12,11 @@ def get_actions(gamestate):
         return []
 
     actions = []
-
     for position, unit in gamestate.player_units.items():
         if can_use_unit(unit, is_extra_action):
-
             moves, attacks, abilities = get_unit_actions(unit, position, gamestate.enemy_units, gamestate.player_units)
 
-            if not can_attack_with_unit(gamestate, unit):
+            if not can_attack_with_unit(gamestate, unit) or unit.attack == 0:
                 attacks = []
 
             if melee_frozen(gamestate.enemy_units, position):
@@ -31,17 +29,14 @@ def get_actions(gamestate):
 
 def get_unit_actions(unit, start_at, enemy_units, player_units):
 
-    def make_action(terms):
-        return Action(units, start_at, **terms)
-
     def melee_attack_actions(moveset):
-        if unit.attack > 0:
-            return [make_action(terms) for terms in attack_generator(moveset)]
-        else:
-            return []
+        return [Action(units, start_at, **terms) for terms in attack_generator(moveset)]
 
     def ranged_attack_actions(attackset):
         return [Action(units, start_at, target_at=target_at) for target_at in attackset]
+
+    def ability_actions(abilityset, ability):
+        return [Action(units, start_at, target_at=position, ability=ability) for position in abilityset]
 
     def move_actions(moveset):
         return [Action(units, start_at, end_at=end_at) for end_at in moveset]
@@ -73,19 +68,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
                 else:
                     yield {"end_at": position, "target_at": new_position}
 
-    def rage():
-        normal_attacks = [make_action(terms) for terms in attack_generator(moveset_with_leftover | {start_at})]
-        rage_attacks = [make_action(terms) for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
-        for attack in rage_attacks:
-            attack.move_with_attack = False
-        return moves, normal_attacks + rage_attacks
-
-    def berserking():
-        moveset_with_leftover, moveset_no_leftover = moves_sets(start_at, frozenset(units), zoc_blocks, 4, 4)
-        attacks = [make_action(terms) for terms in attack_generator(moveset_with_leftover | {start_at})]
-        return moves, attacks
-
-    def defence_maneuverability():
+    def get_defence_maneuverability_actions():
 
         moveset_with_leftover, moveset_no_leftover = generate_movesets(2)
         moveset = moveset_with_leftover | moveset_no_leftover
@@ -97,7 +80,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         return moves, attacks
 
-    def extra_action():
+    def get_extra_actions():
 
         def get_actions_combat_agility():
             for terms in attack_generator({start_at}):
@@ -122,17 +105,13 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         return moves, attacks
 
-    def specialist_actions():
-
+    def get_abilities():
         abilities = []
-
         for ability, value in unit.abilities.items():
             if ability in [Ability.sabotage, Ability.poison]:
                 target_positions = enemy_units
-
             elif ability in [Ability.improve_weapons]:
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
-
             elif ability == Ability.bribe:
                 target_positions = [pos for pos, target in enemy_units.items() if not target.has(Effect.bribed)]
             else:
@@ -141,60 +120,44 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
             abilityset = ranged_attacks_set(start_at, frozenset(target_positions), unit.range)
             abilities += ability_actions(abilityset, ability)
 
-        return moves, [], abilities
-
-    def ranged_actions():
-        attackset = ranged_attacks_set(start_at, frozenset(enemy_units), unit.range)
-        attacks = ranged_attack_actions(attackset)
-
-        return moves, attacks, []
-
-    def ability_actions(abilityset, ability):
-        return [Action(units, start_at, target_at=position, ability=ability) for position in abilityset]
-
-    def scouting():
-        moveset = moves_set(start_at, frozenset(units), frozenset([]), unit.movement, unit.movement)
-        moves = move_actions(moveset)
-
-        return moves
+        return abilities
 
     zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
     friendly_units = units_excluding_position(player_units, start_at)
+    units = merge_units(player_units, enemy_units)
 
     movement = unit.movement
     if cavalry_charging(start_at, friendly_units):
         movement += 1
 
-    units = merge_units(player_units, enemy_units)
-
     moveset_with_leftover, moveset_no_leftover = generate_movesets(movement)
     moveset = moveset_with_leftover | moveset_no_leftover
-    attacks = melee_attack_actions(moveset_with_leftover | {start_at})
     moves = move_actions(moveset)
-
-    if unit.type == Type.Specialist:
-        return specialist_actions()
-
     if unit.is_ranged():
-        return ranged_actions()
+        attacks = ranged_attack_actions(ranged_attacks_set(start_at, frozenset(enemy_units), unit.range))
+    else:
+        attacks = melee_attack_actions(moveset_with_leftover | {start_at})
+    abilities = get_abilities()
 
     if unit.has(Trait.rage):
-        moves, attacks = rage()
+        attacks = [Action(units, start_at, end_at=terms["end_at"], target_at=terms["target_at"], move_with_attack=False)
+                   for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
 
     if unit.has(Trait.berserking):
-        moves, attacks = berserking()
+        moveset_with_leftover, moveset_no_leftover = moves_sets(start_at, frozenset(units), zoc_blocks, 4, 4)
+        attacks = melee_attack_actions(moveset_with_leftover | {start_at})
 
     if unit.has(Trait.scouting):
-        moves = scouting()
+        moves = move_actions(moves_set(start_at, frozenset(units), frozenset([]), unit.movement, unit.movement))
 
     if unit.has(Trait.defence_maneuverability):
-        moves, attacks = defence_maneuverability()
+        moves, attacks = get_defence_maneuverability_actions()
 
     if unit.has(State.extra_action):
-        moves, attacks = extra_action()
+        moves, attacks = get_extra_actions()
 
-    return moves, attacks, []
+    return moves, attacks, abilities
 
 
 def zoc_block(position, direction, zoc_blocks):
@@ -273,12 +236,10 @@ def can_use_unit(unit, is_extra_action):
     is_bribed = unit.has(State.recently_bribed)
     is_used = unit.has(State.used) and not unit.has(State.extra_action)
 
-    if is_extra_action and unit.has(State.extra_action):
-        return not is_frozen and not is_bribed
-    elif is_extra_action:
-        return False
-
-    return not is_frozen and not is_bribed and not is_used
+    if is_extra_action:
+        return unit.has(State.extra_action) and not is_frozen and not is_bribed
+    else:
+        return not is_frozen and not is_bribed and not is_used
 
 
 def melee_frozen(enemy_units, start_at):
@@ -294,6 +255,3 @@ def cavalry_charging(start_at, friendly_units):
     return any(pos for pos in start_at.surrounding_tiles() if
                unit_with_trait_at(pos, Trait.cavalry_charging, friendly_units))
 
-
-def unit_with_trait_at(pos, trait, units):
-    return pos in units and units[pos].has(trait)
