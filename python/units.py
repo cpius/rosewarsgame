@@ -144,7 +144,7 @@ class Unit(object):
         else:
             return self.effects[effect].level
 
-    def gain_xp(self):
+    def gain_experience(self):
         if not self.has(State.used) and not get_setting("Beginner_mode"):
             self.increment_state(State.experience)
             self.remove_state(State.recently_upgraded)

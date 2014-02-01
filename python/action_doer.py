@@ -93,10 +93,10 @@ def do_action(gamestate, action, outcome):
     update_unit_position()
 
     if unit.has(Trait.scouting):
-        unit.gain_xp()
+        unit.gain_experience()
 
     if action.is_attack():
-        unit.gain_xp()
+        unit.gain_experience()
         rolls = outcome.for_position(action.target_at)
         settle_attack(action)
 
@@ -106,7 +106,7 @@ def do_action(gamestate, action, outcome):
             longsword()
 
     elif action.is_ability():
-        unit.gain_xp()
+        unit.gain_experience()
         settle_ability(action)
 
     if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility]):
