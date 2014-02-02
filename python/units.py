@@ -364,7 +364,7 @@ class Dragoon(Unit):
 
     name = "Dragoon"
     image = "Dragoon"
-    base_attack = 2
+    base_attack = 3
     base_defence = 2
     base_movement = 4
     base_range = 1

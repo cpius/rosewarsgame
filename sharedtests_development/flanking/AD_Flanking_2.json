@@ -1,7 +1,7 @@
 {
     "type": "Is attack and defence correct",
     "description": "The flanking bonus should not apply against Siege Weapons",
-    "attack": 2,
+    "attack": 3,
     "defence": 2,
     "action": {
         "start_at": "B1",
