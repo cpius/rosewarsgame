@@ -108,7 +108,7 @@ def get_units():
     if get_setting("Beginner_mode"):
         basic_unit_count, special_unit_count = 9, 0
     else:
-        basic_unit_count, special_unit_count = 3, 6
+        basic_unit_count, special_unit_count = 6, 3
     
     def select_basic_units(basic_units_bag):
         return [basic_units_bag.pick() for _ in range(basic_unit_count)]
