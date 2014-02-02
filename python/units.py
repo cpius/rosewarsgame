@@ -403,7 +403,7 @@ class Cavalry_Lieutenant(Unit):
         self.set(Trait.cavalry_charging, 1)
 
     name = "Cavalry Lieutenant"
-    image = "Light Cavalry"
+    image = "Cavalry Lieutenant"
     base_attack = 3
     base_defence = 2
     base_movement = 3
