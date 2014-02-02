@@ -127,7 +127,7 @@ def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
                 lines.append(get_description(attribute, level))
             else:
                 lines.append(name.replace("_", " "))
-                lines.append(get_description(attribute, 1))
+                lines.append(get_description(attribute, level))
             lines.append("")
         line_length = 30
         line_distances = interface.line_distances["small"]
