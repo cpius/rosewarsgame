@@ -9,6 +9,9 @@ from player import Player
 import os
 from action import Action
 import units as units_module
+import outcome
+from glob import glob
+from viewcommon import *
 
 
 shading_blue = pygame.Color(*[0, 0, 100, 160])
@@ -17,6 +20,7 @@ view = view_module.View()
 
 
 def draw_gamestate(path):
+    print path
     if os.path.exists(path + "Gamestate.json"):
         gamestate = Gamestate.from_file(path + "Gamestate.json")
     else:
@@ -26,8 +30,6 @@ def draw_gamestate(path):
     game = Game(players, gamestate)
     view.draw_game_tutorial(game)
 
-
-def draw_marked(path):
     if os.path.exists(path + "Blue.marked"):
         marked_blue = [Position.from_string(position) for position in
                        json.loads(open(path + "Blue.marked").read())["tiles"]]
@@ -38,89 +40,92 @@ def draw_marked(path):
                       json.loads(open(path + "Red.marked").read())["tiles"]]
         view.shade_positions(marked_red, shading_red)
 
-
-def draw_description(path):
-    description = open(path + "Description.txt").readlines()
-    view.draw_tutorial_message(description)
-
-
-def draw_unit(path):
     if os.path.exists(path + "Unit.txt"):
         unit_name = open(path + "Unit.txt").readline()
         unit = getattr(units_module, unit_name.replace(" ", "_"))()
+        view.show_unit_zoomed_tutorial(unit, None)
+        draw_unit = True
     else:
-        gamestate = Gamestate.from_file(path + "Gamestate.json")
-        unit = gamestate.player_units.values()[0]
+        draw_unit = False
 
-    view.show_unit_zoomed(unit)
-    description = open(path + "Description.txt").readlines()
-    view.draw_tutorial_message(description, 510)
-
-    draw_marked(path)
+    if os.path.exists(path + "Description.txt"):
+        description = open(path + "Description.txt").readlines()
+        view.draw_tutorial_message(description, draw_unit)
 
 
 def draw_action(path):
 
-    if os.path.exists(path + "Roll.txt"):
-        roll = open(path + "Roll.txt").readline().split()
-        roll = (int(roll[0]), int(roll[1]))
-    else:
-        roll = None
-
-    print roll
+    rolls = outcome.Outcome()
+    rolls.set_suboutcome(Position(3, 7), outcome.rolls(2, 1))
 
     gamestate = Gamestate.from_file(path + "Gamestate.json")
     units = gamestate.all_units()
     action = Action.from_document(units, json.loads(open(path + "Action.json").read()))
-    view.draw_action_tutorial(action, roll)
+    view.draw_action_tutorial(action, rolls)
+
+
+def menu_choice(menu):
+
+    view.draw_help_menu(menu)
+
+    while 1:
+        event = pygame.event.wait()
+
+        if quit_game_requested(event):
+            break
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if within(event.pos, view.interface.help_area):
+                break
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for i in range(len(menu)):
+                if within(event.pos, view.interface.help_menu[i]):
+                    index = i
+                    return index
 
 
 def run_tutorial():
 
-    with open("./rulebook/list.txt") as file:
-        scenarios = [line.split(": ") for line in file]
+    menu = ["General", "Movement", "Battle"]
+    for path in glob("./rulebook/*"):
+        item = path.split("\\")[1]
+        if item not in menu:
+            menu.append(item)
 
-    exit = False
-    index = 0
+    index = menu_choice(menu)
 
-    while index < len(scenarios) and not exit:
-        type = scenarios[index][1].strip()
-        path = "./rulebook/" + scenarios[index][0] + "/"
+    if index:
 
-        if type == "Move":
-            draw_gamestate(path)
-            draw_marked(path)
-            draw_description(path)
-
-        elif type == "Unit":
-            draw_gamestate(path)
-            draw_unit(path)
-
-        elif type == "Text":
-            draw_gamestate(path)
-            draw_description(path)
-
-        elif type == "Action":
-            draw_gamestate(path)
-            draw_action(path)
-            draw_description(path)
-
-        if save_pic:
-            view.save_screenshot("./rulebook/Pics/" + str(index) + ".png")
-
-        while True:
+        path = "./rulebook/" + menu[index]
+        scenarios = [walk[0] + "/" for walk in os.walk(path)][1:]
+        print scenarios
+        index = 0
+        draw_gamestate(scenarios[index])
+        while 1:
             event = pygame.event.wait()
 
-            if move_forward_requested(event):
-                break
-            elif move_backward_requested(event):
-                index -= 2
-                break
-            elif quit_game_requested(event):
-                exit = True
-                break
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if within(event.pos, view.interface.help_area):
+                    break
 
-        index += 1
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if within(event.pos, view.interface.to_help_menu_area):
+                    run_tutorial()
+                    break
+
+            if quit_game_requested(event):
+                return True
+
+            if move_forward_requested(event) and len(scenarios) > index + 1:
+                index += 1
+                draw_gamestate(scenarios[index])
+
+            if move_backward_requested(event) and index > 0:
+                index -= 1
+                draw_gamestate(scenarios[index])
+
+    return False
 
 
 def quit_game_requested(event):
@@ -137,9 +142,10 @@ def move_forward_requested(event):
 
 
 def move_backward_requested(event):
-    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 6) or \
+    return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 3) or \
            (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT)
 
 if __name__ == "__main__":
     save_pic = True
     run_tutorial()
+

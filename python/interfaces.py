@@ -11,7 +11,8 @@ class Interface(object):
 
         self.fonts = {}
 
-        self.line_distances = {"small": 15 * zoom}
+        self.line_distances = {"small": 15 * zoom,
+                               "normal": 25 * zoom}
 
         self.coordinates = {"base": Coordinates(self.base_coordinates, self),
                             "base_box": Coordinates(self.base_box_coordinates, self),
@@ -125,3 +126,12 @@ class Rectangles(Interface):
         Point = namedtuple('Point', ['x', 'y'])
         self.upgrade_1_area = [Point(410 * zoom, 370 * zoom), Point((410 + 118) * zoom, (370 + 165.5) * zoom)]
         self.upgrade_2_area = [Point(600 * zoom, 370 * zoom), Point((600 + 118) * zoom, (370 + 165.5) * zoom)]
+
+        self.help_area = [Point(715 * zoom, 720 * zoom), Point(780 * zoom, 740 * zoom)]
+
+        self.to_help_menu_area = [Point(395 * zoom, 720 * zoom), Point(490 * zoom, 740 * zoom)]
+
+        self.help_menu = [[Point(200 * zoom, (40 + 40 * i) * zoom), Point(310 * zoom, (70 + 40 * i) * zoom)]
+                          for i in range(15)] + \
+                         [[Point(500 * zoom, (40 + 40 * i) * zoom), Point(610 * zoom, (70 + 40 * i) * zoom)]
+                          for i in range(15)]

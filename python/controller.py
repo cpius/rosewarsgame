@@ -15,6 +15,8 @@ import json
 from common import *
 import battle
 from view import View
+import rulebook
+from viewcommon import *
 
 
 class Controller(object):
@@ -277,7 +279,12 @@ class Controller(object):
             if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
                 self.trigger_network_player()
 
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if within(event.pos, self.view.interface.help_area):
+                    exit = self.open_rulebook()
+                    if exit:
+                        self.exit_game()
+                    self.view.draw_game(self.game, None, (), True)
                 position = self.view.get_position_from_mouse_click(event.pos)
                 if not self.game.is_player_human():
                     position = position.flip()
@@ -579,6 +586,5 @@ class Controller(object):
     def selecting_move(self, position):
         return self.start_at and position not in self.game.gamestate.all_units()
 
-
-def within(point, area):
-    return area[0].y <= point[1] <= area[1].y and area[0].x <= point[0] <= area[1].x
+    def open_rulebook(self):
+        rulebook.run_tutorial()
