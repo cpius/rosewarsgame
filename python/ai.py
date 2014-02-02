@@ -53,7 +53,7 @@ def document_actions(actions, game):
         if not os.path.exists(game.savegame_folder()):
             os.makedirs(game.savegame_folder())
 
-        return game.savegame_folder() + "/" + str(game.gamestate.action_count) + ".txt"
+        return game.savegame_folder() + "/" + str(game.gamestate.action_count + 1) + ".txt"
 
     def write_factors(factors):
         for player, aspect in product(["player", "opponent"], ["gain", "loss"]):
