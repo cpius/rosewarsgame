@@ -108,7 +108,7 @@ class Controller(object):
 
     def trigger_artificial_intelligence(self):
 
-        action = self.game.current_player().ai.select_action(self.game.gamestate)
+        action = self.game.current_player().ai.select_action(self.game)
 
         if action:
             self.perform_action(action)
@@ -117,7 +117,7 @@ class Controller(object):
             self.view.draw_game(self.game)
 
         if self.game.gamestate.is_extra_action():
-            extra_action = self.game.current_player().ai.select_action(self.game.gamestate)
+            extra_action = self.game.current_player().ai.select_action(self.game)
             self.perform_action(extra_action)
 
     def perform_extra_action(self, position):

@@ -8,6 +8,7 @@ import math
 from itertools import product
 from dictdiffer import DictDiffer
 import battle
+import os
 
 
 class AI():
@@ -47,13 +48,12 @@ values = {"Backline": [10000, 10000],
           }
 
 
-def document_actions(actions, gamestate):
-
+def document_actions(actions, game):
     def get_path():
-        current_action = str(3 - gamestate.get_actions_remaining())
-        if gamestate.is_extra_action():
-            current_action += ".2"
-        return str(current_action) + ".txt"
+        if not os.path.exists(game.savegame_folder()):
+            os.makedirs(game.savegame_folder())
+
+        return game.savegame_folder() + "/" + str(game.gamestate.action_count) + ".txt"
 
     def write_factors(factors):
         for player, aspect in product(["player", "opponent"], ["gain", "loss"]):
@@ -337,14 +337,14 @@ def score_actions_simple(g):
 
 def get_select_action_function(score_function):
 
-    def select_action(gamestate):
-        gamestate_copy = gamestate.copy()
+    def select_action(game):
+        gamestate_copy = game.gamestate.copy()
         gamestate_copy.set_available_actions()
         actions_copy = score_function(gamestate_copy)
         actions_copy.sort(key=attrgetter("score"), reverse=True)
-        if get_setting("Document_AI_actions") and get_setting("AI_level") > 1:
-            document_actions(actions_copy, gamestate)
-        return next(action for action in gamestate.get_actions() if action == actions_copy[0])
+        if get_setting("Document_AI_decisions") and get_setting("AI_level") > 1:
+            document_actions(actions_copy, game)
+        return next(action for action in game.gamestate.get_actions() if action == actions_copy[0])
     return select_action
 
 
