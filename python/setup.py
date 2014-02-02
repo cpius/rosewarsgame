@@ -11,9 +11,8 @@ allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Long
 allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
 requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_siege_weapon",
-                "at_most_two_siege_weapons"]
-
-siege_weapons = ["Cannon", "Ballista", "Catapult"]
+                "at_most_two_siege_weapons", "at_least_five_melee_with_weaponsmith",
+                "at_least_three_cavalry_with_cavalry_lieutenant"]
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
@@ -84,7 +83,7 @@ def at_least_two_column_blocks(units):
     """ Tests whether there on each column are at least two 'blocks'.
     A block is either a unit, or a Pikeman zoc tile. """
     
-    blocks = [pos.column + n for n in [-1, 0, +1] for pos, unit in units.items() if unit == "Pikeman"] + \
+    blocks = [pos.column + n for n in [-1, 0, +1] for pos, unit in units.items() if unit.zoc] + \
              [pos.column for pos in units]
 
     return all(blocks.count(column) >= 2 for column in board_columns)
@@ -92,15 +91,25 @@ def at_least_two_column_blocks(units):
 
 def at_most_one_pikeman_per_column(units):
     return not any(column for column in board_columns if sum(1 for pos, unit in units.items() if
-                                                             pos.column == column and unit == "Pikeman") > 1)
+                                                             pos.column == column and unit.zoc) > 1)
 
 
 def at_least_one_siege_weapon(units):
-    return any(unit in siege_weapons for unit in units.values())
+    return any(unit.type == Type.Siege_Weapon for unit in units.values())
 
 
 def at_most_two_siege_weapons(units):
-    return sum(1 for unit in units.values() if unit in siege_weapons) <= 2
+    return sum(1 for unit in units.values() if unit.type == Type.Siege_Weapon) <= 2
+
+
+def at_least_five_melee_with_weaponsmith(units):
+    return not any(unit.name == "Weaponsmith" for unit in units.values()) or \
+        sum(1 for unit in units.values() if unit.range == 1) >=5
+
+
+def at_least_three_cavalry_with_cavalry_lieutenant(units):
+    return not any(unit.name == "Cavalry Lieutenant" for unit in units.values()) or \
+        sum(1 for unit in units.values() if unit.type == Type.Cavalry) >= 3
 
 
 def get_units():
@@ -162,11 +171,11 @@ def get_units():
         except IndexError:
             continue
 
-        if any(not globals()[requirement](units) for requirement in requirements):
-            continue
-
         for position, unit in units.items():
             units[position] = Unit.make(unit)
+
+        if any(not globals()[requirement](units) for requirement in requirements):
+            continue
 
         return units
 
