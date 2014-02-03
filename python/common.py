@@ -510,3 +510,8 @@ def get_setting(name):
 
 def unit_with_trait_at(pos, trait, units, level=None):
     return pos in units and units[pos].has(trait, level)
+
+allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
+                         "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon",
+                         "Hussar", "Cavalry Lieutenant", "Hobelar"]
+allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
