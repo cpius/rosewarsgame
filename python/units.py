@@ -225,12 +225,12 @@ class Unit(object):
         return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
 
     def get_abilities_not_in_base(self):
-        base_unit = self.make(self.name)
-        return dict((ability, level) for ability, level in self.abilities.items() if level != base_unit.get(ability))
+        return dict((ability, level) for ability, level in self.abilities.items() if
+                    level != base_units[self.name].get(ability))
 
     def get_traits_not_in_base(self):
-        base_unit = self.make(self.name)
-        return dict((trait, level) for trait, level in self.traits.items() if level != base_unit.get(trait))
+        return dict((trait, level) for trait, level in self.traits.items() if
+                    level != base_units[self.name].get(trait))
 
     def get_unit_level(self):
         experience = self.get(State.experience)
@@ -765,3 +765,6 @@ class Weaponsmith(Unit):
     special_upgrades = [{Ability.improve_weapons: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
+
+
+base_units = {name: Unit.make(name) for name in allowed_basic_units + allowed_special_units}
