@@ -149,6 +149,12 @@ def score_actions_considering_one_more_action(g0, g1):
 
 
 def score_actions_considering_two_actions(g0):
+    g0.ai_factors = {}
+    if not any(unit.name == "Crusader" for unit in g0.player_units.values()):
+        g0.ai_factors["No_player_Crusader"] = 1
+    if not any(unit.name == "Flag Bearer" for unit in g0.player_units.values()):
+        g0.ai_factors["No_FlagBearer"] = 1
+
     actions = g0.get_actions()
     for a in actions:
         if a.is_attack():
@@ -286,8 +292,8 @@ def get_score(factors):
 
 def chance_of_win(gamestate, attacking_unit, defending_unit, action):
 
-    attack_rating = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate.player_units)
-    defence_rating = battle.get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate.enemy_units)
+    attack_rating = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
+    defence_rating = battle.get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate)
 
     if attack_rating < 0:
         attack_rating = 0

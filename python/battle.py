@@ -2,24 +2,24 @@ from common import *
 
 
 def attack_successful(action, rolls, gamestate):
-    attack = get_attack_rating(action.unit, action.target_unit, action, gamestate.player_units)
+    attack = get_attack_rating(action.unit, action.target_unit, action, gamestate)
     return rolls.attack <= attack
 
 
 def defence_successful(action, rolls, gamestate):
     attack_rating = get_attack_rating(action.unit, action.target_unit, action, gamestate.player_units)
-    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating, action, gamestate.enemy_units)
+    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating, action, gamestate)
     return rolls.defence <= defence_rating
     
 
-def get_defence_adjusters(attacking_unit, defending_unit, action, enemy_units):
+def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
 
     defence_adjusters = 0
 
     if attacking_unit.is_melee() and defending_unit.has(Trait.big_shield):
         defence_adjusters += 2
 
-    if action.is_crusading_defense(enemy_units, level=2):
+    if "No_Crusader" not in gamestate.ai_factors and action.is_crusading_defense(gamestate.enemy_units, level=2):
         defence_adjusters += 1
 
     if attacking_unit.type in defending_unit.defence_bonuses:
@@ -58,14 +58,14 @@ def get_defence_setters(attacking_unit, defending_unit):
     return defence_setters
 
 
-def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, enemy_units):
+def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate):
 
     defence_setters = get_defence_setters(attacking_unit, defending_unit)
 
     if defence_setters:
         defence = min(defence_setters)
     else:
-        defence = defending_unit.defence + get_defence_adjusters(attacking_unit, defending_unit, action, enemy_units)
+        defence = defending_unit.defence + get_defence_adjusters(attacking_unit, defending_unit, action, gamestate)
 
     if attack_rating > 6:
         defence = defence - attack_rating + 6
@@ -73,17 +73,17 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, en
     return defence
 
 
-def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
+def get_attack_adjusters(attacking_unit, defending_unit, action, gamestate):
 
     attack_adjusters = 0
 
     if action.lancing():
         attack_adjusters += action.lancing()
 
-    if action.is_crusading_attack(player_units):
+    if "No_player_Crusader" not in gamestate.ai_factors and action.is_crusading_attack(gamestate.player_units):
         attack_adjusters += 1
 
-    if action.has_high_morale(player_units):
+    if "No_FlagBearer" not in gamestate.ai_factors and action.has_high_morale(gamestate.player_units):
         attack_adjusters += 2
 
     if attacking_unit.has(Effect.bribed):
@@ -122,5 +122,5 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, player_units):
     return attack_adjusters
 
 
-def get_attack_rating(attacking_unit, defending_unit, action, player_units):
-    return attacking_unit.attack + get_attack_adjusters(attacking_unit, defending_unit, action, player_units)
+def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
+    return attacking_unit.attack + get_attack_adjusters(attacking_unit, defending_unit, action, gamestate)

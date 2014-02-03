@@ -2,7 +2,6 @@ from __future__ import division
 import action_doer
 import initializer
 import action_getter
-import ai_module
 from units import Unit
 import json
 from common import *
@@ -15,12 +14,17 @@ class Gamestate:
                  player2_units,
                  actions_remaining,
                  created_at=None,
-                 game_id=None):
+                 game_id=None,
+                 ai_factors=None):
         self.units = [player1_units, player2_units]
         self.actions_remaining = actions_remaining
         self.action_count = 0
         self.created_at = created_at
         self.game_id = game_id
+        if ai_factors:
+            self.ai_factors = ai_factors
+        else:
+            self.ai_factors = {}
 
     def all_units(self):
         all_units = self.units[0].copy()
@@ -95,12 +99,16 @@ class Gamestate:
         player1_units = cls.units_from_document(document["player1_units"])
         player2_units = cls.units_from_document(document["player2_units"])
         actions_remaining = document["actions_remaining"]
+        if "ai_factors" in document:
+            ai_factors = document["ai_factors"]
+        else:
+            ai_factors = None
 
         if "created_at" in document:
             created_at = document["created_at"]
         else:
             created_at = None
-        return cls(player1_units, player2_units, actions_remaining, created_at)
+        return cls(player1_units, player2_units, actions_remaining, created_at, ai_factors=ai_factors)
 
     @classmethod
     def from_file(cls, path):
@@ -155,6 +163,8 @@ class Gamestate:
         document["actions_remaining"] = self.actions_remaining
         if self.game_id:
             document["game"] = self.game_id
+        if self.ai_factors:
+            document["ai_factors"] = self.ai_factors
 
         document["player1_units"] = {str(position): unit.to_document() for (position, unit) in self.units[0].items()}
         document["player2_units"] = {str(position): unit.to_document() for (position, unit) in self.units[1].items()}
