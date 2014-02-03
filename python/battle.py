@@ -3,11 +3,15 @@ from common import *
 
 def attack_successful(action, rolls, gamestate):
     attack = get_attack_rating(action.unit, action.target_unit, action, gamestate)
+    gamestate.ai_factors["attack"] = attack
     return rolls.attack <= attack
 
 
 def defence_successful(action, rolls, gamestate):
-    attack_rating = get_attack_rating(action.unit, action.target_unit, action, gamestate.player_units)
+    if "attack" in gamestate.ai_factors:
+        attack_rating = gamestate.ai_factors["attack"]
+    else:
+        attack_rating = get_attack_rating(action.unit, action.target_unit, action, gamestate)
     defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating, action, gamestate)
     return rolls.defence <= defence_rating
     
