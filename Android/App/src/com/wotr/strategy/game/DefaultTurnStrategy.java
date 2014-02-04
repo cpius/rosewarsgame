@@ -14,6 +14,7 @@ public class DefaultTurnStrategy implements TurnStrategy {
 
 	public DefaultTurnStrategy(Game game) {
 		this.game = game;
+		remainingActions = game.getRemainingActions();
 	}
 
 	@Override
@@ -61,12 +62,6 @@ public class DefaultTurnStrategy implements TurnStrategy {
 		hasAttacked.clear();
 		hasMoved.clear();
 		return remainingActions;
-	}
-
-	@Override
-	public void resetGame() {
-		resetTurn();
-		remainingActions = 1;
 	}
 
 	boolean hasUsedTurn(Unit unit) {

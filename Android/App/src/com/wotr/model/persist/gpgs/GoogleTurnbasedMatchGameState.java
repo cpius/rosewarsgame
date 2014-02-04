@@ -17,7 +17,7 @@ public class GoogleTurnbasedMatchGameState implements GameState, Serializable {
 	private String playerTwoId;
 	private boolean playerOneSetup;
 	private boolean playerTwoSetup;
-	private int turnCount;
+	private int remainingActions;
 
 	public UnitMap<Position, Unit> getPlayerOneUnits() {
 		return playerOneUnits;
@@ -33,10 +33,6 @@ public class GoogleTurnbasedMatchGameState implements GameState, Serializable {
 
 	public String getPlayerTwoId() {
 		return playerTwoId;
-	}
-
-	public int getTurnCount() {
-		return turnCount;
 	}
 
 	public void setPlayerOneUnits(UnitMap<Position, Unit> playerOneUnits) {
@@ -56,8 +52,12 @@ public class GoogleTurnbasedMatchGameState implements GameState, Serializable {
 
 	}
 
-	public void setTurnCount(int turnCount) {
-		this.turnCount = turnCount;
+	public void setRemainingActions(int remainingActions) {
+		this.remainingActions = remainingActions;
+	}
+	
+	public int getRemainingActions() {
+		return remainingActions;
 	}
 
 	public boolean isPlayerOneSetup() {

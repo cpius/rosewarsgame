@@ -15,9 +15,4 @@ public interface TurnStrategy {
 	void moved(Unit movingUnit);
 
 	int resetTurn();
-	
-	void resetGame();
-
-	
-
 }

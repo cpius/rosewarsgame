@@ -46,7 +46,7 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 
 		String currentParticipantId = match.getParticipantId(mHelper.getGamesClient().getCurrentPlayerId());
 
-		// If data is nul, initialize game state
+		// If data is null, initialize game state
 		if (match.getData() == null) {
 
 			state = createGameState(match);
@@ -82,11 +82,6 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 			}
 		}
 
-		// set current player
-		/*
-		 * if (state.isGameInititiator(currentParticipantId)) { currentPlayer =
-		 * playerOne; } else { currentPlayer = playerTwo; }
-		 */
 		currentPlayer = getCurrentPlayer(match, currentParticipantId);
 
 		addGameEventListener(this);
@@ -140,7 +135,7 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 		// If player one has setup game. Send turn to player two for setup
 		if (player.equals(playerOne)) {
 			state.setPlayerOneSetup(true);
-			
+
 			String nextPlayer = getNextParticipantId(match);
 			currentPlayer = getCurrentPlayer(match, nextPlayer);
 			byte[] stateArray = serializer.serialize(state);
@@ -151,6 +146,9 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 			// positions
 			state.getPlayerTwoUnits().mirrorUnits(getXTileCount(), getYTileCount() * 2);
 			state.setPlayerTwoSetup(true);
+
+			// The first user has only one move
+			state.setRemainingActions(1);
 
 			// Player two has setup game. Decide who is going to take first
 			// turn.
@@ -185,12 +183,10 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 		ArrayList<String> participantIds = match.getParticipantIds();
 
 		for (String participantId : participantIds) {
-
 			if (!myParticipantId.equals(participantId)) {
 				return participantId;
 			}
 		}
-
 		throw new IllegalStateException();
 	}
 
@@ -220,14 +216,26 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 	@Override
 	public void actionPerformed(Player player, int remainingActions) {
 
+		// Action has been performed by user but turn has not yet ended. Persist
+		// the action
+		state.setRemainingActions(remainingActions);
+		byte[] stateArray = serializer.serialize(state);
+		mHelper.getGamesClient().takeTurn(this, match.getMatchId(), stateArray, playerMap.get(player));
 	}
 
 	@Override
 	public void endTurn(Player player) {
 
-		// String playerMap.get(player);
+		// At end of turn two new actions i assigned to the next player
+		state.setRemainingActions(2);
+
 		byte[] stateArray = serializer.serialize(state);
 		mHelper.getGamesClient().takeTurn(this, match.getMatchId(), stateArray, getNextParticipantId(match));
-
 	}
+
+	@Override
+	public int getRemainingActions() {
+		return state.getRemainingActions();
+	}
+
 }

@@ -22,6 +22,7 @@ public class GameManager {
 	}
 
 	public static void setGame(Game game) {
+		factory = null;
 		GameManager.game = game;
 	}
 

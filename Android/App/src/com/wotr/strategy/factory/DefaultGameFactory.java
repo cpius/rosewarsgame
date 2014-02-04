@@ -26,7 +26,6 @@ public class DefaultGameFactory implements GameFactory {
 
 	@Override
 	public BattleStrategy getBattleStrategy() {
-
 		if (battleStrategy == null) {
 			battleStrategy = new DefaultBattleStrategy();
 		}

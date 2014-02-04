@@ -36,5 +36,7 @@ public interface Game {
 	void endAttack(Unit attackingUnit, Position endPosition, boolean moved);
 
 	void setupDone(Player player);
+	
+	int getRemainingActions();
 
 }
