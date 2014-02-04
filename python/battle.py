@@ -2,11 +2,13 @@ from common import *
 
 
 def attack_successful(action, rolls, gamestate):
+    attack = get_attack_rating(action, gamestate)
     return rolls.attack <= attack
 
 
 def defence_successful(action, rolls, gamestate):
-    defence_rating = get_defence_rating(action.unit, action.target_unit, attack_rating, action, gamestate)
+    attack_rating = get_attack_rating(action, gamestate)
+    defence_rating = get_defence_rating(attack_rating, action, gamestate)
     return rolls.defence <= defence_rating
     
 
@@ -56,7 +58,10 @@ def get_defence_setters(attacking_unit, defending_unit):
     return defence_setters
 
 
-def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate):
+def get_defence_rating(attack_rating, action, gamestate):
+
+    attacking_unit = action.unit
+    defending_unit = action.target_unit
 
     defence_setters = get_defence_setters(attacking_unit, defending_unit)
 
@@ -71,9 +76,12 @@ def get_defence_rating(attacking_unit, defending_unit, attack_rating, action, ga
     return defence
 
 
-def get_attack_adjusters(attacking_unit, defending_unit, action, gamestate):
+def get_attack_rating(action, gamestate):
 
-    attack_adjusters = 0
+    attacking_unit = action.unit
+    defending_unit = action.target_unit
+
+    attack_adjusters = attacking_unit.attack
 
     if action.lancing():
         attack_adjusters += action.lancing()
@@ -118,7 +126,3 @@ def get_attack_adjusters(attacking_unit, defending_unit, action, gamestate):
         attack_adjusters += 2
 
     return attack_adjusters
-
-
-def get_attack_rating(attacking_unit, defending_unit, action, gamestate):
-    return attacking_unit.attack + get_attack_adjusters(attacking_unit, defending_unit, action, gamestate)
