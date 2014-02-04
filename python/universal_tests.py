@@ -112,14 +112,8 @@ class UniversalTestCase(TestCase):
         self.assertEqual(actual, expected, message)
 
     def is_attack_and_defence_correct(self, gamestate, action, expected_attack, expected_defence):
-        all_units = gamestate.all_units()
-
-        attacking_unit = all_units[action.start_at]
-        defending_unit = all_units[action.target_at]
-
-        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate.player_units)
-        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action,
-                                                   gamestate.enemy_units)
+        actual_attack = action.get_attack(gamestate)
+        actual_defence = action.get_defence(gamestate)
 
         error_string = "Filename" + self.testcase_file + "\n" + \
                        "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence) + "\n" + \

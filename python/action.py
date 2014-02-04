@@ -181,17 +181,28 @@ class Action(object):
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack()
 
+    def get_attack(self, gamestate):
+        if not hasattr(self, "attack"):
+            self.attack = battle.get_attack(self, gamestate)
+        return self.attack
+
+    def get_defence(self, gamestate):
+        if not hasattr(self, "defence"):
+            attack = self.get_attack(gamestate)
+            self.defence = battle.get_defence(self, attack, gamestate)
+        return self.defence
+
     def attack_successful(self, rolls, gamestate):
-        return battle.attack_successful(self, rolls, gamestate)
+        return rolls.attack <= self.get_attack(gamestate)
 
     def defence_successful(self, rolls, gamestate):
-        return battle.defence_successful(self, rolls, gamestate)
+        return rolls.defence <= self.get_defence(gamestate)
 
     def is_win(self, rolls, gamestate):
         return self.attack_successful(rolls, gamestate) and not self.defence_successful(rolls, gamestate)
 
     def is_miss(self, rolls, gamestate):
-        return not battle.attack_successful(self, rolls, gamestate)
+        return not self.attack_successful(rolls, gamestate)
 
     def outcome_string(self, rolls, gamestate):
         if not self.is_attack() or not rolls:

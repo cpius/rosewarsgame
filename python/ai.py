@@ -287,20 +287,20 @@ def get_score(factors):
 
 def chance_of_win(gamestate, action):
 
-    attack_rating = battle.get_attack_rating(action, gamestate)
-    defence_rating = battle.get_defence_rating(attack_rating, action, gamestate)
+    attack = action.get_attack(gamestate)
+    defence = action.get_defence(gamestate)
 
-    if attack_rating < 0:
-        attack_rating = 0
-    if attack_rating > 6:
-        attack_rating = 6
-    if defence_rating < 0:
-        defence_rating = 0
-    if defence_rating > 6:
-        defence_rating = 6
+    if attack < 0:
+        attack = 0
+    if attack > 6:
+        attack = 6
+    if defence < 0:
+        defence = 0
+    if defence > 6:
+        defence = 6
 
-    chance_of_attack_successful = attack_rating / 6
-    chance_of_defence_unsuccessful = (6 - defence_rating) / 6
+    chance_of_attack_successful = attack / 6
+    chance_of_defence_unsuccessful = (6 - defence) / 6
 
     return chance_of_attack_successful * chance_of_defence_unsuccessful
 

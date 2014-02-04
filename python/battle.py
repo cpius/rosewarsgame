@@ -1,17 +1,6 @@
 from common import *
 
 
-def attack_successful(action, rolls, gamestate):
-    attack = get_attack_rating(action, gamestate)
-    return rolls.attack <= attack
-
-
-def defence_successful(action, rolls, gamestate):
-    attack_rating = get_attack_rating(action, gamestate)
-    defence_rating = get_defence_rating(attack_rating, action, gamestate)
-    return rolls.defence <= defence_rating
-    
-
 def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
 
     defence_adjusters = 0
@@ -58,7 +47,7 @@ def get_defence_setters(attacking_unit, defending_unit):
     return defence_setters
 
 
-def get_defence_rating(attack_rating, action, gamestate):
+def get_defence(action, attack, gamestate):
 
     attacking_unit = action.unit
     defending_unit = action.target_unit
@@ -70,59 +59,59 @@ def get_defence_rating(attack_rating, action, gamestate):
     else:
         defence = defending_unit.defence + get_defence_adjusters(attacking_unit, defending_unit, action, gamestate)
 
-    if attack_rating > 6:
-        defence = defence - attack_rating + 6
+    if attack > 6:
+        defence = defence - attack + 6
 
     return defence
 
 
-def get_attack_rating(action, gamestate):
+def get_attack(action, gamestate):
 
     attacking_unit = action.unit
     defending_unit = action.target_unit
 
-    attack_adjusters = attacking_unit.attack
+    attack = attacking_unit.attack
 
     if action.lancing():
-        attack_adjusters += action.lancing()
+        attack += action.lancing()
 
     if "No_player_Crusader" not in gamestate.ai_factors and action.is_crusading_attack(gamestate.player_units):
-        attack_adjusters += 1
+        attack += 1
 
     if "No_FlagBearer" not in gamestate.ai_factors and action.has_high_morale(gamestate.player_units):
-        attack_adjusters += 2
+        attack += 2
 
     if attacking_unit.has(Effect.bribed):
-        attack_adjusters += attacking_unit.get(Effect.bribed)
+        attack += attacking_unit.get(Effect.bribed)
 
     if attacking_unit.has(Effect.improved_weapons, level=1):
-        attack_adjusters += 3
+        attack += 3
 
     if attacking_unit.has(Effect.improved_weapons, level=2):
-        attack_adjusters += 2
+        attack += 2
 
     if defending_unit.type in attacking_unit.attack_bonuses:
-        attack_adjusters += attacking_unit.attack_bonuses[defending_unit.type]
+        attack += attacking_unit.attack_bonuses[defending_unit.type]
 
     if defending_unit.has(Trait.pikeman_specialist) and attacking_unit.name == "Pikeman":
-        attack_adjusters += 1
+        attack += 1
 
     if defending_unit.is_melee() and attacking_unit.has(Trait.melee_expert):
-        attack_adjusters += 1
+        attack += 1
 
     if attacking_unit.has(Trait.far_sighted) and distance(action.end_at, action.target_at) < 4:
-        attack_adjusters -= 1
+        attack -= 1
 
     if attacking_unit.has(Trait.cavalry_specialist) and defending_unit.type == Type.Cavalry:
-        attack_adjusters += 1
+        attack += 1
 
     if attacking_unit.has(Trait.siege_weapon_specialist) and defending_unit.type == Type.Siege_Weapon:
-        attack_adjusters += 1
+        attack += 1
 
     if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.Siege_Weapon:
-        attack_adjusters += 3
+        attack += 3
 
     if attacking_unit.has(Trait.flanking) and defending_unit.type == Type.Infantry:
-        attack_adjusters += 2
+        attack += 2
 
-    return attack_adjusters
+    return attack
