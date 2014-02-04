@@ -6,7 +6,7 @@ from gamestate import Gamestate
 from outcome import Outcome, rolls
 import math
 from itertools import product
-from dictdiffer import DictDiffer
+from collections import Counter
 import battle
 import os
 
@@ -16,13 +16,12 @@ class AI():
         level = get_setting("AI_level")
         if level == 1:
             self.select_action = get_select_action_function(score_actions_simple)
-            self.select_upgrade = select_upgrade
         elif level == 2:
             self.select_action = get_select_action_function(score_actions_considering_one_action)
-            self.select_upgrade = select_upgrade
         elif level == 3:
             self.select_action = get_select_action_function(score_actions_considering_two_actions)
-            self.select_upgrade = select_upgrade
+
+        self.select_upgrade = select_upgrade
 
 success = Outcome(dict((key, rolls(1, 6)) for key in board))
 failure = Outcome(dict((key, rolls(6, 1)) for key in board))
@@ -131,21 +130,31 @@ def score_actions_considering_one_action(g0):
     return score_actions_considering_one_more_action(g0, g0)
 
 
-def score_actions_considering_one_more_action(g0, g1):
+def score_actions_considering_one_more_action(g1, g0_factors):
     actions = g1.get_actions()
     for a in actions:
         if a.is_attack():
             g2_win = one_action_forward(a, g1, success)
             g2_loss = one_action_forward(a, g1, failure)
-            a.chance = chance_of_win(g0, a.unit, a.target_unit, a)
-            a.factors_if_win = get_differences(g0, g2_win)
-            a.factors_if_loss = get_differences(g0, g2_loss)
+            a.chance = chance_of_win(g1, a)
+            a.factors_if_win = get_differences(g0_factors, g2_win)
+            a.factors_if_loss = get_differences(g0_factors, g2_loss)
             a.score = a.chance * get_score(a.factors_if_win) + (1 - a.chance) * get_score(a.factors_if_loss)
         else:
             g2 = one_action_forward(a, g1)
-            a.factors = get_differences(g0, g2)
+            a.factors = get_differences(g0_factors, g2)
             a.score = get_score(a.factors)
     return actions
+
+
+def get_gamestate_factors(g):
+    factors = {"player": Counter(), "opponent": Counter()}
+    for pos, unit in g.player_units.items():
+        factors["player"] += get_unit_factors(unit, pos, g, 8)
+    for pos, unit in g.enemy_units.items():
+        factors["opponent"] += get_unit_factors(unit, pos, g, 1)
+
+    return factors
 
 
 def score_actions_considering_two_actions(g0):
@@ -155,160 +164,142 @@ def score_actions_considering_two_actions(g0):
     if not any(unit.name == "Flag Bearer" for unit in g0.player_units.values()):
         g0.ai_factors["No_FlagBearer"] = 1
 
+    g0_factors = get_gamestate_factors(g0)
+
     actions = g0.get_actions()
     for a in actions:
         if a.is_attack():
             g1_if_win = one_action_forward(a, g0, success)
             g1_if_loss = one_action_forward(a, g0, failure)
-            a.chance = chance_of_win(g0, a.unit, a.target_unit, a)
+            a.chance = chance_of_win(g0, a)
             if g1_if_win.actions_remaining:
-                a.a2_if_win = max(score_actions_considering_one_more_action(g0, g1_if_win), key=attrgetter("score"))
-                a.a2_if_loss = max(score_actions_considering_one_more_action(g0, g1_if_loss), key=attrgetter("score"))
+                a.a2_if_win = max(score_actions_considering_one_more_action(g1_if_win, g0_factors), key=attrgetter("score"))
+                a.a2_if_loss = max(score_actions_considering_one_more_action(g1_if_loss, g0_factors), key=attrgetter("score"))
                 a.score = a.chance * a.a2_if_win.score + (1 - a.chance) * a.a2_if_loss.score
             else:
-                a.factors_if_win = get_differences(g0, g1_if_win)
-                a.factors_if_loss = get_differences(g0, g1_if_loss)
+                a.factors_if_win = get_differences(g0_factors, g1_if_win)
+                a.factors_if_loss = get_differences(g0_factors, g1_if_loss)
                 a.score = a.chance * get_score(a.factors_if_win) + (1 - a.chance) * get_score(a.factors_if_loss)
         else:
             g1 = one_action_forward(a, g0)
             if g1.actions_remaining:
-                a.a2 = max(score_actions_considering_one_more_action(g0, g1), key=attrgetter("score"))
+                a.a2 = max(score_actions_considering_one_more_action(g1, g0_factors), key=attrgetter("score"))
                 a.score = a.a2.score
             else:
-                a.factors = get_differences(g0, g1)
+                a.factors = get_differences(g0_factors, g1)
                 a.score = get_score(a.factors)
     return actions
 
 
-def get_differences(g0, g1):
-    def get_unit_factors(unit, position, gamestate, backline):
-        def get_backline_value():
-            def get_coloumn_blocks():
-                columns = [position.column + i for i in [-1, 0, 1] if position.column + i in [1, 2, 3, 4, 5]]
-                coloumn_blocks = []
-                for column in columns:
-                    blocks = 0
-                    for enemy_position, enemy_unit in gamestate.enemy_units.items():
-                        if (enemy_position.column == column and enemy_position.row > position.row) or \
-                            ((enemy_position.column == column - 1 or enemy_position.column == column + 1) and
-                             enemy_position.row >= position.row and enemy_unit.zoc and unit.type in enemy_unit.zoc):
-                            blocks += 1
-                    coloumn_blocks.append(blocks)
-                return coloumn_blocks
+def get_unit_factors(unit, position, gamestate, backline):
+    def get_backline_value():
+        def get_coloumn_blocks():
+            columns = [position.column + i for i in [-1, 0, 1] if position.column + i in [1, 2, 3, 4, 5]]
+            coloumn_blocks = []
+            for column in columns:
+                blocks = 0
+                for enemy_position, enemy_unit in gamestate.enemy_units.items():
+                    if (enemy_position.column == column and enemy_position.row > position.row) or \
+                        ((enemy_position.column == column - 1 or enemy_position.column == column + 1) and
+                         enemy_position.row >= position.row and enemy_unit.zoc and unit.type in enemy_unit.zoc):
+                        blocks += 1
+                coloumn_blocks.append(blocks)
+            return coloumn_blocks
 
-            def get_moves_to_backline(unit, position):
-                if backline == 8:
-                    return math.ceil((8 - position.row) / unit.movement)
-                else:
-                    return math.ceil(position.row / unit.movement)
+        moves_to_backline = get_moves_to_backline(unit, position, backline)
+        coloumn_blocks = get_coloumn_blocks()
 
-            moves_to_backline = get_moves_to_backline(unit, position)
-            coloumn_blocks = get_coloumn_blocks()
+        if moves_to_backline == 0:
+            return "Backline"
 
-            if moves_to_backline == 0:
-                return "Backline"
+        if unit.has_extra_life():
+            if moves_to_backline < 4:
+                return str(int(moves_to_backline)) + " move(s) from backline, extra life"
 
-            if unit.has_extra_life():
-                if moves_to_backline < 4:
-                    return str(int(moves_to_backline)) + " move(s) from backline, extra life"
+        if moves_to_backline == 1 and coloumn_blocks[1] <= 1:
+            defence = unit.defence
+            if defence > 3:
+                defence = 4
+            return "1 move(s) from backline, defence " + str(defence)
 
-            if moves_to_backline == 1 and coloumn_blocks[1] <= 1:
-                defence = unit.defence
-                if defence > 3:
-                    defence = 4
-                return "1 move(s) from backline, defence " + str(defence)
+        if moves_to_backline == 2:
+            defence = unit.defence
+            if defence > 3:
+                defence = 4
+            return "2 move(s) from backline, defence " + str(defence)
 
-            if moves_to_backline == 2:
-                defence = unit.defence
-                if defence > 3:
-                    defence = 4
-                return "2 move(s) from backline, defence " + str(defence)
+    def get_unit_value():
+        if unit.name in ["Archer", "Pikeman", "Catapult", "Ballista", "Knight", "Light Cavalry"]:
+            return "Basic unit"
+        else:
+            return "Special unit"
 
-        def get_unit_value():
-            if unit.name in ["Archer", "Pikeman", "Catapult", "Ballista", "Knight", "Light Cavalry"]:
-                return "Basic unit"
-            else:
-                return "Special unit"
+    factors = Counter()
+    for function in [get_backline_value, get_unit_value]:
+        factor = function()
+        if factor:
+            factors[factor] += 1
+    return factors
 
-        factors = []
-        for function in [get_backline_value, get_unit_value]:
-            factor = function()
-            if factor:
-                factors.append(factor)
-        return factors
+
+def get_moves_to_backline(unit, position, backline):
+    if backline == 8:
+        return math.ceil((8 - position.row) / unit.movement)
+    else:
+        return math.ceil(position.row / unit.movement)
+
+
+def get_differences(g0_factors, g1):
 
     def give_back_bribed_units():
         for position, unit in g1.enemy_units.items():
             if hasattr(unit, "bribed"):
                 g1.player_units[position] = g1.enemy_units.pop(position)
 
-    def fill_values():
-
-        player_difference = DictDiffer(g1.player_units, g0.player_units)
-        opponent_difference = DictDiffer(g1.enemy_units, g0.enemy_units)
-
-        for pos in player_difference.added():
-            factors["player"]["gain"] += get_unit_factors(g1.player_units[pos], pos, g1, 8)
-        for pos in player_difference.changed():
-            pass
-        for pos in player_difference.removed():
-            factors["player"]["loss"] += get_unit_factors(g0.player_units[pos], pos, g1, 8)
-
-        for pos in opponent_difference.added():
-            factors["opponent"]["gain"] += get_unit_factors(g1.enemy_units[pos], pos, g1, 1)
-        for pos in opponent_difference.changed():
-            pass
-        for pos in opponent_difference.removed():
-            factors["opponent"]["loss"] += get_unit_factors(g0.enemy_units[pos], pos, g1, 1)
-
-    def remove_duplicates(player_factors):
-
-        rmlist = []
-        for factor in player_factors["loss"]:
-            if factor in player_factors["gain"]:
-                player_factors["gain"].remove(factor)
-                rmlist.append(factor)
-
-        for element in rmlist:
-            player_factors["loss"].remove(element)
-
-    factors = {"player": {"gain": [], "loss": []}, "opponent": {"gain": [], "loss": []}}
+    g1_factors = {"player": Counter(), "opponent": Counter()}
 
     give_back_bribed_units()
 
-    fill_values()
+    for pos, unit in g1.player_units.items():
+        g1_factors["player"] += get_unit_factors(g1.player_units[pos], pos, g1, 8)
 
-    remove_duplicates(factors["player"])
+    for pos, unit in g1.enemy_units.items():
+        g1_factors["opponent"] += get_unit_factors(g1.enemy_units[pos], pos, g1, 8)
+
+    factors = {"player": {"gain": {}, "loss": {}}, "opponent": {"gain": {}, "loss": {}}}
+    player_intersection = g0_factors["player"] & g1_factors["player"]
+    factors["player"]["gain"] = g1_factors["player"] - player_intersection
+    factors["player"]["loss"] = g0_factors["player"] - player_intersection
+
+    opponent_intersection = g0_factors["opponent"] & g1_factors["opponent"]
+    factors["opponent"]["gain"] = g1_factors["opponent"] - opponent_intersection
+    factors["opponent"]["loss"] = g0_factors["opponent"] - opponent_intersection
 
     return factors
 
 
 def get_score(factors):
-    return sum(values[e][0] for e in factors["player"]["gain"]) - \
-        sum(values[e][0] for e in factors["player"]["loss"]) - \
-        sum(values[e][1] for e in factors["opponent"]["gain"]) + \
-        sum(values[e][1] for e in factors["opponent"]["loss"])
+    return sum(values[key][0] * value for key, value in factors["player"]["gain"].items()) -\
+        sum(values[key][0] * value for key, value in factors["player"]["loss"].items()) -\
+        sum(values[key][0] * value for key, value in factors["opponent"]["gain"].items()) +\
+        sum(values[key][0] * value for key, value in factors["opponent"]["loss"].items())
 
 
-def chance_of_win(gamestate, attacking_unit, defending_unit, action):
+def chance_of_win(gamestate, action):
 
-    attack_rating = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate)
-    defence_rating = battle.get_defence_rating(attacking_unit, defending_unit, attack_rating, action, gamestate)
+    attack_rating = battle.get_attack_rating(action, gamestate)
+    defence_rating = battle.get_defence_rating(attack_rating, action, gamestate)
 
     if attack_rating < 0:
         attack_rating = 0
-
     if attack_rating > 6:
         attack_rating = 6
-
     if defence_rating < 0:
         defence_rating = 0
-
     if defence_rating > 6:
         defence_rating = 6
 
     chance_of_attack_successful = attack_rating / 6
-
     chance_of_defence_unsuccessful = (6 - defence_rating) / 6
 
     return chance_of_attack_successful * chance_of_defence_unsuccessful
@@ -322,7 +313,7 @@ def score_actions_simple(g):
     if go_for == "attack":
         for a in actions:
             if a.is_attack():
-                a.score = chance_of_win(g, a.unit, a.target_unit, a)
+                a.score = chance_of_win(g, a)
                 if a.double_cost:
                     a.score /= 2
             else:
