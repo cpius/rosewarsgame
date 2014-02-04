@@ -767,4 +767,4 @@ class Weaponsmith(Unit):
     experience_to_upgrade = 4
 
 
-base_units = {name: Unit.make(name) for name in allowed_basic_units + allowed_special_units}
+base_units = {name: Unit.make(name) for name in all_units}
