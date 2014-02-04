@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "Viking can use its rage attack",
     "result": true,
     "action": {
         "start_at": "C3",
