@@ -141,8 +141,8 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     abilities = get_abilities()
 
     if unit.has(Trait.rage):
-        attacks = [Action(units, start_at, end_at=terms["end_at"], target_at=terms["target_at"], move_with_attack=False)
-                   for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
+        attacks += [Action(units, start_at, end_at=terms["end_at"], target_at=terms["target_at"], move_with_attack=False)
+                    for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
 
     if unit.has(Trait.berserking):
         moveset_with_leftover, moveset_no_leftover = moves_sets(start_at, frozenset(units), zoc_blocks, 4, 4)
