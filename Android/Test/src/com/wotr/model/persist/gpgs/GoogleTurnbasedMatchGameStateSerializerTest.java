@@ -46,11 +46,11 @@ public class GoogleTurnbasedMatchGameStateSerializerTest {
 		String playerOneId = "One";
 		String playerTwoId = "Two";
 
-		int turnCount = 1;
+		int remainingActions = 1;
 
 		serializedState.setPlayerOneId(playerOneId);
 		serializedState.setPlayerTwoId(playerTwoId);
-		serializedState.setTurnCount(turnCount);
+		serializedState.setRemainingActions(remainingActions);
 
 		byte[] serielizationOutput = serializer.serialize(serializedState);
 
@@ -61,7 +61,7 @@ public class GoogleTurnbasedMatchGameStateSerializerTest {
 		Assert.assertNotNull(deserializedState);
 		Assert.assertEquals(playerOneId, deserializedState.getPlayerOneId());
 		Assert.assertEquals(playerTwoId, deserializedState.getPlayerTwoId());
-		Assert.assertEquals(turnCount, deserializedState.getTurnCount());
+		Assert.assertEquals(remainingActions, deserializedState.getRemainingActions());
 
 		Assert.assertEquals(playerOneUnits.values().size(), deserializedState.getPlayerOneUnits().values().size());
 		Assert.assertEquals(playerTwoUnits.values().size(), deserializedState.getPlayerTwoUnits().values().size());

@@ -43,7 +43,6 @@ public abstract class AbstractGame implements Game, AttackEnder {
 	public void startGame() {
 
 		turnStrategy = GameManager.getFactory().getTurnStrategy();
-		turnStrategy.resetGame();
 		listeners.gameStarted();
 
 		listeners.startTurn(currentPlayer, turnStrategy.getRemainingActions());
@@ -195,5 +194,10 @@ public abstract class AbstractGame implements Game, AttackEnder {
 
 	@Override
 	public void setupDone(Player player) {
+	}
+	
+	@Override
+	public int getRemainingActions() {
+		return 0;
 	}
 }
