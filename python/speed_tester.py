@@ -21,5 +21,5 @@ def a():
         game.current_player().ai.select_action(game)
 
 
-profile.run('print a(); print')
+profile.run('a()')
 
