@@ -5,4 +5,4 @@ AI_level = 2
 
 Beginner_mode = no
 
-Document_AI_decisions = yes
+Document_ai_decisions = yes

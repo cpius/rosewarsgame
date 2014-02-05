@@ -338,7 +338,7 @@ def get_select_action_function(score_function):
         gamestate_copy.set_available_actions()
         actions_copy = score_function(gamestate_copy)
         actions_copy.sort(key=attrgetter("score"), reverse=True)
-        if get_setting("Document_AI_decisions") and get_setting("AI_level") > 1:
+        if get_setting("Document_ai_decisions") and get_setting("AI_level") > 1:
             document_actions(actions_copy, game)
         return next(action for action in game.gamestate.get_actions() if action == actions_copy[0])
     return select_action
