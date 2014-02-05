@@ -7,7 +7,6 @@ from outcome import Outcome, rolls
 import math
 from itertools import product
 from collections import Counter
-import battle
 import os
 
 
