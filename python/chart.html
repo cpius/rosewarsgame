@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rose Wars Ranking</title>
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        var options = {
+            chart: {
+                renderTo: 'container',
+                type: 'line'
+            },
+            title: {
+                text: 'Rose Wars Ranking'
+            },
+            yAxis: {
+                title: {
+                    text: 'Rating'
+                }
+            },
+            series: [{}]
+        };
+
+        $.getJSON('calculate', function(data) {
+
+            options.series = _.map(data, function(value, key) { return {'name': key, 'data': value}});
+            var chart = new Highcharts.Chart(options);
+        });
+
+    });
+    </script>
+</head>
+<body>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+    <img src="http://sierrafire.cr.usgs.gov/images/loading.gif" />
+</div>
+
+</body>
+</html>
