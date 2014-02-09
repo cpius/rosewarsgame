@@ -208,19 +208,21 @@ def calculate_ratings():
     debug_lines = []
     ranking = {}
 
-    try:
-        for game_document in games:
+    for game_document in games:
+        try:
             log_document = construct_log_document(game_document)
             game = Game.from_log_document(log_document)
             if game.gamestate.is_ended():
                 winner = game.current_player().profile
                 loser = game.opponent_player().profile
                 if not winner in ranking:
-                    ranking[winner] = 1000
+                    ranking[winner] = [1000]
                 if not loser in ranking:
-                    ranking[loser] = 1000
+                    ranking[loser] = [1000]
 
-                rating_difference = ranking[loser] - ranking[winner]
+                ranking_winner = ranking[winner][-1]
+                ranking_loser = ranking[loser][-1]
+                rating_difference = ranking_loser - ranking_winner
 
                 # "skill_factor" is an expression I came up with. I'm not sure what it's really called.
                 # Arpad Elo came up with the value 400. It means that a player with 400 higher rating
@@ -245,10 +247,10 @@ def calculate_ratings():
                 # debug_line += " => " + str(ranking_loser - rating_points_won_and_lost)
                 # debug_lines.append(debug_line)
 
-                ranking[winner] += rating_points_won_and_lost
-                ranking[loser] -= rating_points_won_and_lost
-    except Exception:
-        debug_lines.append(traceback.format_exc())
+                ranking[winner].append(ranking_winner + rating_points_won_and_lost)
+                ranking[loser].append(ranking_loser - rating_points_won_and_lost)
+        except Exception:
+            debug_lines.append(str(game_document["_id"]) + ": " + traceback.format_exc())
 
     #for index, line in enumerate(debug_lines):
     #    ranking["debug_{0:03d}".format(index)] = line
