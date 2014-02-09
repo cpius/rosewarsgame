@@ -1,4 +1,4 @@
-from bottle import run, get, post, install, JSONPlugin, request, response
+from bottle import run, get, post, install, JSONPlugin, request, response, static_file
 from pymongo import MongoClient
 import socket
 from time import mktime, time
@@ -256,6 +256,11 @@ def calculate_ratings():
     #    ranking["debug_{0:03d}".format(index)] = line
 
     return ranking
+
+
+@get("/ranking/chart")
+def ranking_chart():
+    return static_file("chart.html", "/home/ubuntu")
 
 
 def register_upgrade(action_document, gamestate, game_id):
