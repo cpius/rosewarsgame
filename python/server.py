@@ -236,21 +236,22 @@ def calculate_ratings():
 
                 rating_points_won_and_lost = int(k_value * (1 - expected_outcome_for_winner))
 
-                debug_line = str(game_document["_id"]) + ": " + winner + " beat " + loser
-                debug_line += " (probability: " + "{0:.2f}".format(expected_outcome_for_winner) + "). "
-                debug_line += winner + ": " + str(ranking[winner])
-                debug_line += " => " + str(ranking[winner] + rating_points_won_and_lost) + ", "
-                debug_line += loser + ": " + str(ranking[loser])
-                debug_line += " => " + str(ranking[loser] - rating_points_won_and_lost)
-                debug_lines.append(debug_line)
+                # debug_line = str(game_document["created_at"]) + " "
+                # debug_line += " (" + str(game_document["_id"]) + "): " + winner + " beat " + loser
+                # debug_line += " (p: " + "{0:.2f}".format(expected_outcome_for_winner) + "). "
+                # debug_line += winner + ": " + str(ranking_winner)
+                # debug_line += " => " + str(ranking_winner + rating_points_won_and_lost) + ", "
+                # debug_line += loser + ": " + str(ranking_loser)
+                # debug_line += " => " + str(ranking_loser - rating_points_won_and_lost)
+                # debug_lines.append(debug_line)
 
                 ranking[winner] += rating_points_won_and_lost
                 ranking[loser] -= rating_points_won_and_lost
     except Exception:
         debug_lines.append(traceback.format_exc())
 
-    for index, line in enumerate(debug_lines):
-        ranking["debug_{0:03d}".format(index)] = line
+    #for index, line in enumerate(debug_lines):
+    #    ranking["debug_{0:03d}".format(index)] = line
 
     return ranking
 
