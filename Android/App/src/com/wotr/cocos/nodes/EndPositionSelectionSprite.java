@@ -21,12 +21,12 @@ import com.wotr.model.attack.AttackEndPosition;
 
 public class EndPositionSelectionSprite extends CCSprite implements CCTouchDelegateProtocol {
 
-	private final CardSprite card;
+	private final UnitSprite card;
 	private EndPositionSelectionActionListener listener;
 
 	private static List<EndPositionSelectionSprite> all = new ArrayList<EndPositionSelectionSprite>();
 
-	public EndPositionSelectionSprite(CardSprite card, AttackEndPosition endPosition, float scale, Boardframe bordframe) {
+	public EndPositionSelectionSprite(UnitSprite card, AttackEndPosition endPosition, float scale, Boardframe bordframe) {
 		super("attack_direction-hd.png");
 		this.card = card;
 

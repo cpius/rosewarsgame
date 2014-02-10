@@ -67,4 +67,12 @@ public class MultiplayerGame extends AbstractGame implements Game {
 		return false;
 
 	}
+
+	@Override
+	/**
+	 * Set initial number of actions
+	 */
+	public int getRemainingActions() {
+		return 1;
+	}
 }

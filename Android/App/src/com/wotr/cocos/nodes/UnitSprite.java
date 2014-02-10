@@ -14,17 +14,17 @@ import com.wotr.cocos.Boardframe;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.attribute.BonusListener;
-import com.wotr.touch.CardTouchListener;
+import com.wotr.touch.UnitTouchListener;
 
-public class CardSprite extends CCSprite implements BonusListener, CCTouchDelegateProtocol {
+public class UnitSprite extends CCSprite implements BonusListener, CCTouchDelegateProtocol {
 
 	private static final long BUTTON_TIME = 500;
 
 	private BonusSprite attackBonus;
 	private BonusSprite defenceBonus;
-	private CardTouchListener listener;
+	private UnitTouchListener listener;
 
-	private static CardSprite activeCard;
+	private static UnitSprite activeCard;
 	private boolean detailed = false;
 
 	// Is only used to calculate if unit is moved
@@ -35,7 +35,7 @@ public class CardSprite extends CCSprite implements BonusListener, CCTouchDelega
 
 	private long startTime;
 
-	public CardSprite(String imagePath, Unit unit, float scale, Boardframe bordframe) {
+	public UnitSprite(String imagePath, Unit unit, float scale, Boardframe bordframe) {
 		super(imagePath + unit.getImage());
 
 		Position pos = unit.getPosition();
@@ -107,7 +107,7 @@ public class CardSprite extends CCSprite implements BonusListener, CCTouchDelega
 
 			startTime = System.currentTimeMillis();
 
-			if (!detailed && listener.cardDragedStarted(this)) {
+			if (!detailed && listener.unitDragedStarted(this)) {
 				activeCard = this;
 				originalCardPosition = getPosition();
 			}
@@ -139,16 +139,16 @@ public class CardSprite extends CCSprite implements BonusListener, CCTouchDelega
 				if (detailed) {
 					activeCard = null;
 					detailed = !detailed;
-					listener.cardDeSelected(this, originalCardPosition.x, originalCardPosition.y);
+					listener.unitDeSelected(this, originalCardPosition.x, originalCardPosition.y);
 				} else {
 					detailed = !detailed;
-					listener.cardSelected(this, originalCardPosition.x, originalCardPosition.y);
+					listener.unitSelected(this, originalCardPosition.x, originalCardPosition.y);
 				}
 
 			} else if (!detailed) {
 				CCDirector sd = CCDirector.sharedDirector();
 				CGSize displaySize = sd.displaySize();
-				listener.cardDragedEnded(this, event.getX(), displaySize.getHeight() - event.getY());
+				listener.unitDragedEnded(this, event.getX(), displaySize.getHeight() - event.getY());
 				activeCard = null;
 			}
 
@@ -170,13 +170,13 @@ public class CardSprite extends CCSprite implements BonusListener, CCTouchDelega
 		if (!detailed) {
 			CCDirector sd = CCDirector.sharedDirector();
 			CGSize displaySize = sd.displaySize();
-			listener.cardMoved(this, event.getX(), displaySize.getHeight() - event.getY(), true);
+			listener.unitMoved(this, event.getX(), displaySize.getHeight() - event.getY(), true);
 		}
 
 		return true;
 	}
 
-	public void addListener(CardTouchListener listener) {
+	public void addListener(UnitTouchListener listener) {
 		this.listener = listener;
 	}
 
