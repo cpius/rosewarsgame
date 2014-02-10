@@ -1,4 +1,4 @@
-package com.wotr.cocos;
+package com.wotr.cocos.layout.flat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,20 +19,20 @@ import android.content.Context;
 
 import com.wotr.BackListener;
 import com.wotr.SceneManager;
-import com.wotr.cocos.nodes.CardSprite;
+import com.wotr.cocos.nodes.UnitSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
 import com.wotr.model.unit.UnitMap;
 import com.wotr.strategy.game.Game;
-import com.wotr.touch.CardTouchGridDecorator;
-import com.wotr.touch.CardTouchListener;
+import com.wotr.touch.UnitTouchGridDecorator;
+import com.wotr.touch.UnitTouchListener;
 
-public class SetupGameLayer extends AbstractGameLayer implements CardTouchListener, BackListener {
+public class SetupGameLayer extends AbstractGameLayerFlat implements UnitTouchListener, BackListener {
 
-	// private CCSprite sparkCard;
+	// private CCSprite sparkUnit;
 
-	private List<CardSprite> cardList = new ArrayList<CardSprite>();
-	private Map<CardSprite, Unit> modelMap = new HashMap<CardSprite, Unit>();
+	private List<UnitSprite> unitList = new ArrayList<UnitSprite>();
+	private Map<UnitSprite, Unit> modelMap = new HashMap<UnitSprite, Unit>();
 
 	private int xCount;
 	private int yCount;
@@ -50,24 +50,24 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		xCount = game.getXTileCount();
 		yCount = game.getYTileCount();
 
-		//CCSprite back = new CCSprite("woddenbackground.png");
+		// CCSprite back = new CCSprite("woddenbackground.png");
 
-		//back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
-		//addChild(back);
+		// back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
+		// addChild(back);
 
 		String imagePath = getImagePath(winSize);
-		
+
 		CCSprite prototype = new CCSprite(imagePath + "unit/archergreen.jpg");
 		CGSize contentSize = prototype.getContentSize();
 		prototype = null;
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
 
-		bordframe = new Boardframe(xCount, yCount, winSize.width, winSize.height, 0f, orientationScale, 0.7f);
+		bordframe = new BoardframeFlat(xCount, yCount, winSize.width, winSize.height, 0f, orientationScale, 0.7f);
 
-		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;		
-		
-		addBackGroundCards(imagePath, xCount, yCount, false);
+		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;
+
+		addBackGroundUnits(imagePath, xCount, yCount, false);
 
 		CCMenuItem battleButton = CCMenuItemImage.item("battle.png", "right_arrow.png", this, "startBattle");
 		battleButton.setIsEnabled(true);
@@ -75,7 +75,7 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 
 		CGSize battleButtonSize = battleButton.getContentSizeRef();
 
-		addCards(imagePath, game);
+		addUnits(imagePath, game);
 
 		CCMenu battleButtonMenu = CCMenu.menu(battleButton);
 		battleButtonMenu.setPosition(CGPoint.zero());
@@ -83,23 +83,23 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 		battleButton.setPosition(winSize.getWidth() - battleButtonSize.getWidth() / 2 - 5f, battleButtonSize.getHeight() / 2 + 5f);
 
 		addChild(battleButtonMenu);
-	}	
+	}
 
-	private void addCards(String imagePath, Game game) {
+	private void addUnits(String imagePath, Game game) {
 
 		UnitMap<Position, Unit> layoutDeck = game.getAttackingPlayer().getUnitMap();
 
-		CardTouchGridDecorator gridDecorator = new CardTouchGridDecorator(bordframe);
-		gridDecorator.addCardTouchListener(this);
+		UnitTouchGridDecorator gridDecorator = new UnitTouchGridDecorator(bordframe);
+		gridDecorator.addUnitTouchListener(this);
 
 		for (Unit unit : layoutDeck.values()) {
 
-			CardSprite card = new CardSprite(imagePath, unit, sizeScale, bordframe);
-			card.addListener(gridDecorator);
-			addChild(card);
+			UnitSprite unitSprite = new UnitSprite(imagePath, unit, sizeScale, bordframe);
+			unitSprite.addListener(gridDecorator);
+			addChild(unitSprite);
 
-			cardList.add(card);
-			modelMap.put(card, unit);
+			unitList.add(unitSprite);
+			modelMap.put(unitSprite, unit);
 		}
 
 	}
@@ -123,37 +123,37 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	}
 
 	@Override
-	public boolean cardDragedStarted(CardSprite card) {
-		selectCardForMove(card);
+	public boolean unitDragedStarted(UnitSprite unit) {
+		selectUnitForMove(unit);
 		return true;
 	}
 
 	@Override
-	public void cardDragedEnded(CardSprite card, float x, float y) {
+	public void unitDragedEnded(UnitSprite unitSprite, float x, float y) {
 
 		// If moved to a invalid position move back to original position
 		Position pInP = bordframe.getPositionInPerimeter(CGPoint.ccp(x, y));
-		if (pInP == null || getCardInPosition(pInP) != null) {
-			moveCardToOriginalPosition(card);
+		if (pInP == null || getUnitInPosition(pInP) != null) {
+			moveUnitToOriginalPosition(unitSprite);
 		} else {
-			Unit unit = card.getUnit();
+			Unit unit = unitSprite.getUnit();
 			unit.setPosition(pInP);
-			dropCardToPosition(card);
+			dropUnitToPosition(unitSprite);
 		}
 
-		reorderChild(card, 0);
-		card.setOpacity(255);
+		reorderChild(unitSprite, 0);
+		unitSprite.setOpacity(255);
 	}
 
 	@Override
-	public void cardMoved(CardSprite card, float x, float y, boolean originalPosition) {
-		card.setPosition(x, y);
+	public void unitMoved(UnitSprite unit, float x, float y, boolean originalPosition) {
+		unit.setPosition(x, y);
 	}
 
-	private Unit getCardInPosition(Position pInP) {
+	private Unit getUnitInPosition(Position pInP) {
 
-		for (CardSprite card : cardList) {
-			Unit unit = card.getUnit();
+		for (UnitSprite unitSprite : unitList) {
+			Unit unit = unitSprite.getUnit();
 			if (pInP.equals(unit.getPosition())) {
 				return unit;
 			}
@@ -162,13 +162,13 @@ public class SetupGameLayer extends AbstractGameLayer implements CardTouchListen
 	}
 
 	@Override
-	public void cardSelected(CardSprite card, float x, float y) {
-		moveCardToCenterAndEnlarge(card);
+	public void unitSelected(UnitSprite unit, float x, float y) {
+		moveUnitToCenterAndEnlarge(unit);
 	}
 
 	@Override
-	public void cardDeSelected(CardSprite card, float x, float y) {
-		moveCardToOriginalPosition(card);
+	public void unitDeSelected(UnitSprite unit, float x, float y) {
+		moveUnitToOriginalPosition(unit);
 	}
 
 	@Override

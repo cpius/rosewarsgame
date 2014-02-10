@@ -6,9 +6,9 @@ import org.cocos2d.types.CGPoint;
 import com.wotr.cocos.Boardframe;
 import com.wotr.model.Position;
 
-public class CardBackgroundSprite extends CCSprite {
+public class UnitBackgroundSprite extends CCSprite {
 
-	public CardBackgroundSprite(String imageName, Position pos, float sizeScale, Boardframe bordframe) {
+	public UnitBackgroundSprite(String imageName, Position pos, float sizeScale, Boardframe bordframe) {
 		super(imageName);
 
 		CGPoint position = bordframe.getPosition(pos);
