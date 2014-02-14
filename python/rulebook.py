@@ -88,8 +88,8 @@ def menu_choice(menu):
 def run_tutorial():
 
     menu = ["General", "Movement", "Battle"]
-    for path in glob("./rulebook/*"):
-        item = path.split("\\")[1]
+    for path in glob("./rulebook/*/*"):
+        item = os.path.split(os.path.split(path)[0])[1]
         if item not in menu:
             menu.append(item)
 
