@@ -524,8 +524,8 @@ class Controller(object):
         player_unit = self.game.gamestate.player_units[self.start_at]
         opponent_unit = self.game.gamestate.enemy_units[attack_position]
 
-        attack = battle.get_attack_rating(player_unit, opponent_unit, action, self.game.gamestate.player_units)
-        defence = battle.get_defence_rating(player_unit, opponent_unit, attack, action, self.game.gamestate.enemy_units)
+        attack = battle.get_attack(action, self.game.gamestate)
+        defence = battle.get_defence(action, attack, self.game.gamestate)
         attack = min(attack, 6)
         defence = min(defence, 6)
 
