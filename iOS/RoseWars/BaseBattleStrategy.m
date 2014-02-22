@@ -48,8 +48,8 @@
     NSLog(@"Attack value: %@", AttributeRangeToNSString(_attackValue));
     NSLog(@"Defend value: %@", AttributeRangeToNSString(_defendValue));
     
-    _attackRoll = [self.attackerDiceStrategy rollDiceWithDie:6];
-    _defenseRoll = [self.defenderDiceStrategy rollDiceWithDie:6];
+    _attackRoll = [attacker.battleStrategy.attackerDiceStrategy rollDiceWithDie:6];//[self.attackerDiceStrategy rollDiceWithDie:6];
+    _defenseRoll = [defender.battleStrategy.defenderDiceStrategy rollDiceWithDie:6];//[self.defenderDiceStrategy rollDiceWithDie:6];
     
     battleResult.attackRoll = _attackRoll;
     battleResult.defenseRoll = _defenseRoll;

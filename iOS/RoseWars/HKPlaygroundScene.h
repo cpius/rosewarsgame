@@ -21,7 +21,7 @@
 @class GameManager;
 @class HKImageButton;
 
-@interface HKGameScene : SKScene <GameBoardActionProtocol, GameManagerProtocol, ActionDelegate, LeftPanelProtocol, GCTurnBasedMatchHelperDelegate, HKDialogNodeProtocol, HKLevelIncreaseDialogProtocol, HKGameOptionsDialogProtocol> {
+@interface HKPlaygroundScene : SKScene <GameBoardActionProtocol, GameManagerProtocol, ActionDelegate, LeftPanelProtocol, GCTurnBasedMatchHelperDelegate, HKDialogNodeProtocol, HKLevelIncreaseDialogProtocol, HKGameOptionsDialogProtocol> {
     
     GameManager *_gameManager;
     GameBoard *_gameboard;

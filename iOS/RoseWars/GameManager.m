@@ -111,6 +111,8 @@
 
 - (void)attackSuccessfulAgainstCard:(Card *)card {
     
+    if (card.dead) return;
+    
     card.hitpoints--;
     
     if (card.hitpoints == 0) {
@@ -142,6 +144,16 @@
     return _currentGame.numberOfAvailableActions;
 }
 
+- (BOOL)cardIsAbleToMove:(Card*)card {
+    
+    return card.moveActionCost <= _currentGame.numberOfAvailableActions && card.movesRemaining > 0 && ![card isAffectedByAbility:kAbilityCoolDown];
+}
+
+- (BOOL)cardIsAbleToAttack:(Card*)card {
+    
+    return card.attackActionCost <= _currentGame.numberOfAvailableActions && ![card isAffectedByAbility:kAbilityCoolDown];
+}
+
 - (BOOL)shouldEndTurn {
     
     if (_currentGame.numberOfAvailableActions == 0) {
@@ -161,8 +173,8 @@
     for (Card *card in unitsToCheck) {
         
         if (!card.dead && !card.hasPerformedActionThisRound) {
-            if ((card.moveActionCost <= _currentGame.numberOfAvailableActions && card.movesRemaining > 0) ||
-                (card.attackActionCost <= _currentGame.numberOfAvailableActions) ) {
+            if ([self cardIsAbleToMove:card] ||
+                ([self cardIsAbleToAttack:card]) ) {
                 return NO;
             }
         }

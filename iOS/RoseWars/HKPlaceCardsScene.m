@@ -18,6 +18,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
 - (void)didMoveToView:(SKView *)view {
     
     CGSize screenSize = self.size;
+    self.backgroundColor = [UIColor blackColor];
     
     SKSpriteNode *background = [SKSpriteNode spriteNodeWithImageNamed:@"woddenbackground2.png"];
     background.anchorPoint = CGPointMake(0.0f, 0.0f);
@@ -34,7 +35,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
     _gameboard.colorOfTopPlayer = [GameManager sharedManager].currentGame.myColor;
     _gameboard.scale = 0.8;
     
-    _gameboard.position = CGPointMake((self.size.width - _gameboard.size.width) / 2, self.size.height - _gameboard.size.height + 45);
+    _gameboard.position = CGPointMake((self.size.width - _gameboard.size.width) / 2, self.size.height - _gameboard.size.height + 35);
     [self addChild:_gameboard];
     
     [_gameboard layoutBoard];
@@ -58,7 +59,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
         [self autoPressed:sender];
     }];
     
-    autoButton.position = CGPointMake(screenSize.width - (autoButton.size.width / 2) - 10, (autoButton.size.height / 2) + 10);
+    autoButton.position = CGPointMake(screenSize.width - (autoButton.size.width / 2) - 20, (autoButton.size.height / 2) + 30);
     
     [self addChild:autoButton];
 
@@ -131,8 +132,8 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
     
     SKNode* card = [self nodeAtPoint:touchLocation];
     
-    if ([card isKindOfClass:[CardSprite class]]) {
-        GameBoardNode *gameboardNode = [_gameboard getGameBoardNodeForPosition:[_gameboard convertPoint:touchLocation toNode:_gameboard]];
+    if ([card.parent isKindOfClass:[CardSprite class]]) {
+        GameBoardNode *gameboardNode = [_gameboard getGameBoardNodeForPosition:[self convertPoint:touchLocation toNode:_gameboard]];
         
         if (gameboardNode != nil) {
             gameboardNode.card = nil;
@@ -140,7 +141,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
         
         if (card != _selectedCard) {
             [_selectedCard removeAllActions];
-            _selectedCard = (CardSprite*)card;
+            _selectedCard = (CardSprite*)card.parent;
             [_selectedCard setZPosition:100];
             [_selectedCard runAction:[SKAction scaleTo:0.8 duration:0.2]];
         }
@@ -204,6 +205,54 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
     _isMovingCard = YES;
 }
 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    if (_selectedCard == nil) {
+        return;
+    }
+    
+    UITouch *touch = touches.anyObject;
+    CGPoint touchLocation = [touch locationInNode:self];
+    GameBoardNode *gameboardNode = [_gameboard getGameBoardNodeForPosition:[self convertPoint:touchLocation toNode:_gameboard]];
+    
+    if (_detailCard == nil) {
+        if (gameboardNode != nil && gameboardNode.card == nil && _selectedCard != nil) {
+            
+            [self placeCard:_selectedCard inGameBoardNode:gameboardNode];
+            return;
+        }
+        else {
+            
+            if ([_placedCards containsObject:_selectedCard]) {
+                [_placedCards removeObject:_selectedCard];
+            }
+            
+            SKNode *nextArrow = [self childNodeWithName:nextArrowTag];
+            
+            if (nextArrow != nil) {
+                [nextArrow removeFromParent];
+            }
+            
+            [self moveCardToHomePosition:_selectedCard];
+            _isMovingCard = NO;
+            _selectedCard = nil;
+            
+            return;
+        }
+    }
+    
+    for (CardSprite *cardSprite in _cardSprites) {
+        
+		if(CGRectContainsPoint(cardSprite.frame, touchLocation)) {
+            
+            [self toggleDetailForCard:cardSprite];
+            
+			return;
+		}
+	}
+}
+
+
 - (void)placeCard:(CardSprite*)card inGameBoardNode:(GameBoardNode *)node {
     
     [_gameboard placeCard:card withCardScale:0.4 inGameBoardNode:node useHighLighting:YES onCompletion:^{
@@ -229,56 +278,6 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
     }];
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    if (_selectedCard == nil) {
-        return;
-    }
-    
-    UITouch *touch = touches.anyObject;
-    CGPoint touchLocation = [touch locationInNode:self];
-    GameBoardNode *gameboardNode = [_gameboard getGameBoardNodeForPosition:[self convertPoint:touchLocation toNode:_gameboard]];
-    
-    if (_detailCard == nil) {
-        if (gameboardNode != nil && !gameboardNode.hasCard && _selectedCard != nil) {
-            
-            [self placeCard:_selectedCard inGameBoardNode:gameboardNode];
-            return;
-        }
-        else {
-            
-            if (_isMovingCard) {
-                
-                if ([_placedCards containsObject:_selectedCard]) {
-                    [_placedCards removeObject:_selectedCard];
-                }
-                
-                SKNode *nextArrow = [self childNodeWithName:nextArrowTag];
-                
-                if (nextArrow != nil) {
-                    [nextArrow removeFromParent];
-                }
-                
-                [self moveCardToHomePosition:_selectedCard];
-                _isMovingCard = NO;
-                _selectedCard = nil;
-                
-                return;
-            }
-        }
-    }
-    
-    for (CardSprite *cardSprite in _cardSprites) {
-        
-		if(CGRectContainsPoint(cardSprite.frame, touchLocation)) {
-            
-            [self toggleDetailForCard:cardSprite];
-            
-			return;
-		}
-	}
-}
-
 - (void)finishedPlacingCards {
     
     if (![self childNodeWithName:nextArrowTag]) {
@@ -288,7 +287,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
             [self nextScenePressed];
         }];
         
-        nextArrow.position = CGPointMake(screenSize.width - (nextArrow.size.width / 2) - 10, (nextArrow.size.height / 2) + 10);
+        nextArrow.position = CGPointMake(screenSize.width - (nextArrow.size.width / 2) - 20, (nextArrow.size.height / 2) + 30);
         nextArrow.name = nextArrowTag;
         
         [self addChild:nextArrow];
@@ -296,7 +295,6 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
         SKAction *scaleup = [SKAction scaleTo:1.5 duration:0.2];
         SKAction *scaledown = [SKAction scaleTo:1.0 duration:0.2];
         SKAction *highlight = [SKAction runBlock:^{
-//            [ParticleHelper highlightNode:nextArrow forever:NO];
         }];
         
         [nextArrow runAction:[SKAction sequence:@[scaleup, scaledown, highlight]]];
@@ -347,7 +345,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
     NSLog(@"Card %@ moving to home position %@", card, NSStringFromCGPoint(position));
     
     SKAction *moveAction = [SKAction moveTo:position duration:0.2];
-    SKAction *scaleAction = [SKAction scaleTo:0.45 duration:0.2];
+    SKAction *scaleAction = [SKAction scaleTo:0.40 duration:0.2];
 
     [card runAction:[SKAction group:@[moveAction, scaleAction]]];
 }
@@ -378,12 +376,6 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
     }
     
     [card toggleDetailWithScale:0.4];*/
-}
-
-- (void)playSwooshSound {
-    
- //   [self runAction:[SKAction playSoundFileNamed:@"" waitForCompletion:<#(BOOL)#>]]
- //   [[SimpleAudioEngine sharedEngine] playEffect:SWOOSH_SOUND];
 }
 
 

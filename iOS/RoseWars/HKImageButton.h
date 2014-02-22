@@ -16,6 +16,7 @@
 }
 
 @property (nonatomic, copy) NSString *title;
+@property (nonatomic, assign) BOOL removeOnClick;
 
 + (id)imageButtonWithImage:(NSString *)image block:(void (^)(id sender))block;
 + (id)imageButtonWithImage:(NSString *)image selectedImage:(NSString*)selectedImage block:(void (^)(id sender))block;

@@ -11,6 +11,8 @@
 #import "RangedAttackAction.h"
 #import "PathFinderStrategyFactory.h"
 
+static NSString* const kConquerNodeName = @"conquer_smoke";
+
 @interface GameBoard()
 
 @end
@@ -234,6 +236,50 @@
         
         if (![_highlightedNodes containsObject:node]) {
             [_highlightedNodes addObject:node];
+        }
+    }
+}
+
+- (BOOL)isNodeHighlightedForConquer {
+    
+    return [self nodeHighlightedForConquer] != nil;
+}
+
+- (GameBoardNode*)nodeHighlightedForConquer {
+    
+    __block GameBoardNode *conquerNode = nil;
+    [_boardNodes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        GameBoardNode *node = obj;
+        [node.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            SKNode *child = obj;
+            if ([child.name isEqualToString:kConquerNodeName]) {
+                conquerNode = node;
+                *stop = YES;
+            }
+        }];
+    }];
+    
+    return conquerNode;
+}
+
+- (void)highlightNodeAtLocation:(GridLocation*)location forConquer:(BOOL)canConquer {
+    
+    GameBoardNode *node = [self getGameBoardNodeForGridLocation:location];
+    if (node != nil) {
+        if (canConquer) {
+            [node setColor:[SKColor greenColor]];
+            node.colorBlendFactor = 0.5;
+            
+            NSString *smokeEmitterPath = [[NSBundle mainBundle] pathForResource:@"ConquerSmoke" ofType:@"sks"];
+            SKEmitterNode *smokeEmitter = [NSKeyedUnarchiver unarchiveObjectWithFile:smokeEmitterPath];
+            smokeEmitter.name = kConquerNodeName;
+            [smokeEmitter setScale:0.5];
+            
+            [node addChild:smokeEmitter];
+        }
+        else {
+            [self deHighlightNode:node];
+            [[node childNodeWithName:kConquerNodeName] removeFromParent];
         }
     }
 }

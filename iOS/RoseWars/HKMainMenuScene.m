@@ -10,7 +10,7 @@
 #import "HKImageButton.h"
 #import "HKGameTypeScene.h"
 #import "HKDialogNode.h"
-#import "HKLevelIncreaseDialog.h"
+#import "HKPlaygroundScene.h"
 
 @implementation HKMainMenuScene
 
@@ -49,9 +49,9 @@
     
     HKImageButton *settingsButton = [HKImageButton imageButtonWithImage:@"button" selectedImage:@"button_selected" title:@"Settings" block:^(id sender) {
         
-        HKLevelIncreaseDialog *dialog = [[HKLevelIncreaseDialog alloc] initWithCard:Nil inScene:self];
-        dialog.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
-        [self addChild:dialog];
+        HKPlaygroundScene *playground = [HKPlaygroundScene sceneWithSize:self.size];
+        playground.scaleMode = SKSceneScaleModeFill;
+        [self.view presentScene:playground transition:[SKTransition fadeWithDuration:0.5]];
     }];
 
     HKImageButton *creditsButton = [HKImageButton imageButtonWithImage:@"button" selectedImage:@"button_selected" title:@"Credits" block:^(id sender) {
@@ -61,19 +61,37 @@
     [settingsButton setScale:1.4];
     [creditsButton setScale:1.4];
     
-    playGameButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame) - 150);
-    settingsButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(playGameButton.frame) - 40);
-    creditsButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(settingsButton.frame) - 40);
+    playGameButton.position = CGPointMake(-CGRectGetWidth(playGameButton.frame), CGRectGetHeight(self.frame) - 150);
+    settingsButton.position = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetWidth(settingsButton.frame), CGRectGetMinY(playGameButton.frame) - 40);
+    creditsButton.position = CGPointMake(-CGRectGetWidth(creditsButton.frame), CGRectGetMinY(settingsButton.frame) - 40);
     
     [self addChild:playGameButton];
     [self addChild:settingsButton];
     [self addChild:creditsButton];
     
+    SKAction *presentMenuAction = [SKAction sequence:@[[SKAction waitForDuration:0.2], [SKAction runBlock:^{
+        
+        [playGameButton runAction:[SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame) - 150) duration:0.2 timingMode:SKActionTimingEaseIn]];
+        [settingsButton runAction:[SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(playGameButton.frame) - 40) duration:0.2 timingMode:SKActionTimingEaseIn]];
+        [creditsButton runAction:[SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(settingsButton.frame) - 40) duration:0.2 timingMode:SKActionTimingEaseIn]];
+    }]]];
+    
+    [self runAction:presentMenuAction];
+   
     SKEmitterNode *fireNode = [self newFireEmitter];
     fireNode.position = CGPointMake(55, CGRectGetHeight(self.frame) / 2 - 47);
-    fireNode.xScale = 0.5;
-    fireNode.yScale = 0.5;
+    [fireNode setScale:0.5];
     [self addChild:fireNode];
+    
+    SKEmitterNode *fireNode2 = [ self newFireEmitter];
+    fireNode2.position = CGPointMake(27, CGRectGetHeight(self.frame) / 2 - 110);
+    [fireNode2 setScale:0.5];
+    [self addChild:fireNode2];
+
+    SKEmitterNode *fireNode3 = [ self newFireEmitter];
+    fireNode3.position = CGPointMake(265, CGRectGetHeight(self.frame) / 2 - 90);
+    [fireNode3 setScale:0.5];
+    [self addChild:fireNode3];
 }
 
 - (SKEmitterNode*)newFireEmitter {

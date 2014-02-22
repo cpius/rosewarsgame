@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		614487A018B2A7BB00D97AA2 /* HKPlaygroundScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */; };
+		614487A318B3B01B00D97AA2 /* HKConquerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 614487A218B3B01B00D97AA2 /* HKConquerButton.m */; };
+		614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 614487A418B6780A00D97AA2 /* ConquerSmoke.sks */; };
 		614D42D917B4ED3F00B9889C /* HKTextButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 614D42D817B4ED3F00B9889C /* HKTextButton.m */; };
 		614D42DE17B512A200B9889C /* Flame.sks in Resources */ = {isa = PBXBuildFile; fileRef = 614D42DC17B512A200B9889C /* Flame.sks */; };
 		614D42DF17B512A200B9889C /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 614D42DD17B512A200B9889C /* spark.png */; };
@@ -28,6 +31,8 @@
 		617214A418880A08000775EE /* HKLevelIncreaseDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A318880A08000775EE /* HKLevelIncreaseDialog.m */; };
 		617214A91889CD5D000775EE /* SKSpriteNode+NodePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */; };
 		61A78C5B188DAE1500DDA1B2 /* HKBattleResultNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */; };
+		61A8B8A91896E4F50063DCBC /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A8B8A81896E4F50063DCBC /* GameKit.framework */; };
+		61A8B8AD189959BE0063DCBC /* SKAction+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A8B8AC189959BE0063DCBC /* SKAction+Utility.m */; };
 		61C47CEF17BE98BF00D644D1 /* HKGameTypeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47CEE17BE98BF00D644D1 /* HKGameTypeScene.m */; };
 		61C47CF217BE9A2700D644D1 /* HKConstructDeckScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47CF117BE9A2700D644D1 /* HKConstructDeckScene.m */; };
 		61C47D7017BEA07900D644D1 /* buttonclick.wav in Resources */ = {isa = PBXBuildFile; fileRef = 61C47D6F17BEA07900D644D1 /* buttonclick.wav */; };
@@ -121,6 +126,7 @@
 		61C47E5E17C6380E00D644D1 /* JuggernautBattleStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E5D17C6380E00D644D1 /* JuggernautBattleStrategy.m */; };
 		61C47E6017C6385C00D644D1 /* Cards.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61C47E5F17C6385C00D644D1 /* Cards.atlas */; };
 		61C47E6217C677A100D644D1 /* Graphics.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61C47E6117C677A100D644D1 /* Graphics.atlas */; };
+		61F8514A18A4F60F00F770D7 /* HKGameOptionsDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F8514918A4F60F00F770D7 /* HKGameOptionsDialog.m */; };
 		61FC5BE717F9D310001E0419 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FC5BE417F9D310001E0419 /* GameBoard.m */; };
 		61FC5BE817F9D310001E0419 /* GameBoardNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FC5BE617F9D310001E0419 /* GameBoardNode.m */; };
 		61FC5BEB17F9FAEE001E0419 /* HKGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FC5BEA17F9FAEE001E0419 /* HKGameScene.m */; };
@@ -153,6 +159,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6144879E18B2A7BB00D97AA2 /* HKPlaygroundScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKPlaygroundScene.h; sourceTree = "<group>"; };
+		6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKPlaygroundScene.m; sourceTree = "<group>"; };
+		614487A118B3B01B00D97AA2 /* HKConquerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConquerButton.h; sourceTree = "<group>"; };
+		614487A218B3B01B00D97AA2 /* HKConquerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKConquerButton.m; sourceTree = "<group>"; };
+		614487A418B6780A00D97AA2 /* ConquerSmoke.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ConquerSmoke.sks; sourceTree = "<group>"; };
 		614D42D717B4ED3F00B9889C /* HKTextButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKTextButton.h; sourceTree = "<group>"; };
 		614D42D817B4ED3F00B9889C /* HKTextButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKTextButton.m; sourceTree = "<group>"; };
 		614D42DC17B512A200B9889C /* Flame.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Flame.sks; sourceTree = "<group>"; };
@@ -193,6 +204,9 @@
 		617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKSpriteNode+NodePosition.m"; sourceTree = "<group>"; };
 		61A78C59188DAE1500DDA1B2 /* HKBattleResultNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBattleResultNode.h; sourceTree = "<group>"; };
 		61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKBattleResultNode.m; sourceTree = "<group>"; };
+		61A8B8A81896E4F50063DCBC /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		61A8B8AB189959BE0063DCBC /* SKAction+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKAction+Utility.h"; sourceTree = "<group>"; };
+		61A8B8AC189959BE0063DCBC /* SKAction+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKAction+Utility.m"; sourceTree = "<group>"; };
 		61C47CED17BE98BF00D644D1 /* HKGameTypeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKGameTypeScene.h; sourceTree = "<group>"; };
 		61C47CEE17BE98BF00D644D1 /* HKGameTypeScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKGameTypeScene.m; sourceTree = "<group>"; };
 		61C47CF017BE9A2700D644D1 /* HKConstructDeckScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConstructDeckScene.h; sourceTree = "<group>"; };
@@ -375,6 +389,9 @@
 		61C47E5D17C6380E00D644D1 /* JuggernautBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuggernautBattleStrategy.m; sourceTree = "<group>"; };
 		61C47E5F17C6385C00D644D1 /* Cards.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Cards.atlas; sourceTree = "<group>"; };
 		61C47E6117C677A100D644D1 /* Graphics.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Graphics.atlas; sourceTree = "<group>"; };
+		61F8514818A4F60F00F770D7 /* HKGameOptionsDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKGameOptionsDialog.h; sourceTree = "<group>"; };
+		61F8514918A4F60F00F770D7 /* HKGameOptionsDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKGameOptionsDialog.m; sourceTree = "<group>"; };
+		61F8514B18A4F6FA00F770D7 /* HKGameOptionsDialogProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKGameOptionsDialogProtocol.h; sourceTree = "<group>"; };
 		61FC5BE317F9D310001E0419 /* GameBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
 		61FC5BE417F9D310001E0419 /* GameBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoard.m; sourceTree = "<group>"; };
 		61FC5BE517F9D310001E0419 /* GameBoardNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoardNode.h; sourceTree = "<group>"; };
@@ -414,6 +431,7 @@
 				61FD535717B4CDAC009BED1A /* UIKit.framework in Frameworks */,
 				61FD535917B4CDAC009BED1A /* SpriteKit.framework in Frameworks */,
 				61FD535317B4CDAC009BED1A /* Foundation.framework in Frameworks */,
+				61A8B8A91896E4F50063DCBC /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +451,8 @@
 		614D42D317B4EB4B00B9889C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				61F8514818A4F60F00F770D7 /* HKGameOptionsDialog.h */,
+				61F8514918A4F60F00F770D7 /* HKGameOptionsDialog.m */,
 				61C47D5117BE9F7A00D644D1 /* PlayerIndicator.h */,
 				61C47D5217BE9F7A00D644D1 /* PlayerIndicator.m */,
 				61C47D1C17BE9F5300D644D1 /* BonusSprite.h */,
@@ -459,6 +479,9 @@
 				617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */,
 				61A78C59188DAE1500DDA1B2 /* HKBattleResultNode.h */,
 				61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */,
+				61F8514B18A4F6FA00F770D7 /* HKGameOptionsDialogProtocol.h */,
+				614487A118B3B01B00D97AA2 /* HKConquerButton.h */,
+				614487A218B3B01B00D97AA2 /* HKConquerButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -480,6 +503,7 @@
 			children = (
 				614D42DC17B512A200B9889C /* Flame.sks */,
 				614D42DD17B512A200B9889C /* spark.png */,
+				614487A418B6780A00D97AA2 /* ConquerSmoke.sks */,
 			);
 			name = Particles;
 			sourceTree = "<group>";
@@ -496,12 +520,16 @@
 		6178BA9A1893C51500FA8C6F /* Actions */ = {
 			isa = PBXGroup;
 			children = (
-				61C47D3E17BE9F7A00D644D1 /* MeleeAttackAction.h */,
-				61C47D3F17BE9F7A00D644D1 /* MeleeAttackAction.m */,
 				61C47D0317BE9F3F00D644D1 /* AbilityAction.h */,
+				61C47D0417BE9F3F00D644D1 /* AbilityAction.m */,
 				61C47D0717BE9F3F00D644D1 /* Action.h */,
 				61C47D0817BE9F3F00D644D1 /* Action.m */,
-				61C47D0417BE9F3F00D644D1 /* AbilityAction.m */,
+				61C47D3E17BE9F7A00D644D1 /* MeleeAttackAction.h */,
+				61C47D3F17BE9F7A00D644D1 /* MeleeAttackAction.m */,
+				61C47D4617BE9F7A00D644D1 /* MoveAction.h */,
+				61C47D4717BE9F7A00D644D1 /* MoveAction.m */,
+				61C47D5F17BE9F7A00D644D1 /* RangedAttackAction.h */,
+				61C47D6017BE9F7A00D644D1 /* RangedAttackAction.m */,
 			);
 			name = Actions;
 			sourceTree = "<group>";
@@ -546,7 +574,11 @@
 		6178BA9E1893C55D00FA8C6F /* BattleStrategy */ = {
 			isa = PBXGroup;
 			children = (
+				61C47D6617BE9F7A00D644D1 /* StandardBattleStrategy.h */,
+				61C47D6717BE9F7A00D644D1 /* StandardBattleStrategy.m */,
 				61C47E5C17C6380E00D644D1 /* JuggernautBattleStrategy.h */,
+				61C47E5917C636C200D644D1 /* WarElephantBattleStrategy.h */,
+				61C47E5A17C636C200D644D1 /* WarElephantBattleStrategy.m */,
 				61C47E5D17C6380E00D644D1 /* JuggernautBattleStrategy.m */,
 				61C47D0117BE9E2A00D644D1 /* BattleStrategy.h */,
 				61C47CFB17BE9E2A00D644D1 /* BaseBattleStrategy.h */,
@@ -613,9 +645,20 @@
 			name = LevelIncreaseStrategy;
 			sourceTree = "<group>";
 		};
+		61A8B8AA189959A30063DCBC /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				61A8B8AB189959BE0063DCBC /* SKAction+Utility.h */,
+				61A8B8AC189959BE0063DCBC /* SKAction+Utility.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		61C47CF317BE9DB500D644D1 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				61A8B8AA189959A30063DCBC /* Categories */,
+				61C47E0B17C6356C00D644D1 /* Units */,
 				6178BAA21893C60500FA8C6F /* Strategies */,
 				6178BAA01893C58F00FA8C6F /* Abilities */,
 				6178BA9F1893C57000FA8C6F /* Serialization */,
@@ -656,8 +699,6 @@
 				61C47D4117BE9F7A00D644D1 /* MeleeAttackPathFinderStrategy.m */,
 				61C47D4217BE9F7A00D644D1 /* MeleeAttackPlaybackAction.h */,
 				61C47D4317BE9F7A00D644D1 /* MeleeAttackPlaybackAction.m */,
-				61C47D4617BE9F7A00D644D1 /* MoveAction.h */,
-				61C47D4717BE9F7A00D644D1 /* MoveAction.m */,
 				61C47D4817BE9F7A00D644D1 /* MovePathFinderStrategy.h */,
 				61C47D4917BE9F7A00D644D1 /* MovePathFinderStrategy.m */,
 				61C47D4A17BE9F7A00D644D1 /* PathFinder.h */,
@@ -679,24 +720,17 @@
 				61C47D5C17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.m */,
 				61C47D5D17BE9F7A00D644D1 /* RangeAttribute.h */,
 				61C47D5E17BE9F7A00D644D1 /* RangeAttribute.m */,
-				61C47D5F17BE9F7A00D644D1 /* RangedAttackAction.h */,
-				61C47D6017BE9F7A00D644D1 /* RangedAttackAction.m */,
 				61C47D6117BE9F7A00D644D1 /* RangedAttackPathFinderStrategy.h */,
 				61C47D6217BE9F7A00D644D1 /* RangedAttackPathFinderStrategy.m */,
 				61C47D6317BE9F7A00D644D1 /* RawBonus.h */,
 				61C47D6417BE9F7A00D644D1 /* RawBonus.m */,
 				61C47D6517BE9F7A00D644D1 /* Serializable.h */,
-				61C47D6617BE9F7A00D644D1 /* StandardBattleStrategy.h */,
-				61C47D6717BE9F7A00D644D1 /* StandardBattleStrategy.m */,
 				61C47D6817BE9F7A00D644D1 /* TimedAbility.h */,
 				61C47D6917BE9F7A00D644D1 /* TimedAbility.m */,
 				61C47D6A17BE9F7A00D644D1 /* TimedAbilityForSerialization.h */,
 				61C47D6B17BE9F7A00D644D1 /* TimedAbilityForSerialization.m */,
 				61C47D6C17BE9F7A00D644D1 /* TimedBonus.h */,
 				61C47D6D17BE9F7A00D644D1 /* TimedBonus.m */,
-				61C47E0B17C6356C00D644D1 /* Units */,
-				61C47E5917C636C200D644D1 /* WarElephantBattleStrategy.h */,
-				61C47E5A17C636C200D644D1 /* WarElephantBattleStrategy.m */,
 				615BEA9817FC4DBD00F728E9 /* HKSelectAbilityProtocol.h */,
 			);
 			name = Domain;
@@ -789,6 +823,7 @@
 		61FD535117B4CDAC009BED1A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				61A8B8A81896E4F50063DCBC /* GameKit.framework */,
 				61FD535217B4CDAC009BED1A /* Foundation.framework */,
 				61FD535417B4CDAC009BED1A /* CoreGraphics.framework */,
 				61FD535617B4CDAC009BED1A /* UIKit.framework */,
@@ -864,6 +899,8 @@
 		61FD539117B4CE08009BED1A /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				6144879E18B2A7BB00D97AA2 /* HKPlaygroundScene.h */,
+				6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */,
 				61FD539217B4CE41009BED1A /* HKMainMenuScene.h */,
 				61FD539317B4CE41009BED1A /* HKMainMenuScene.m */,
 				61C47CED17BE98BF00D644D1 /* HKGameTypeScene.h */,
@@ -928,6 +965,11 @@
 				TargetAttributes = {
 					61FD534E17B4CDAC009BED1A = {
 						DevelopmentTeam = 8Y7XPV2UD8;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 					61FD537917B4CDAC009BED1A = {
 						TestTargetID = 61FD534E17B4CDAC009BED1A;
@@ -965,6 +1007,7 @@
 				61705CE21801D6B7001D7E1B /* Vollkorn-Regular.ttf in Resources */,
 				61C47E5717C635F000D644D1 /* pageflip.mp3 in Resources */,
 				61FD539817B4D496009BED1A /* Images.xcassets in Resources */,
+				614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */,
 				614D42DE17B512A200B9889C /* Flame.sks in Resources */,
 				61FD536B17B4CDAC009BED1A /* Main_iPad.storyboard in Resources */,
 				614D42DF17B512A200B9889C /* spark.png in Resources */,
@@ -1013,9 +1056,11 @@
 				61C47D8517BEA17500D644D1 /* BaseBonus.m in Sources */,
 				61C47D8717BEA17500D644D1 /* BaseDeckStrategy.m in Sources */,
 				61C47D8917BEA17500D644D1 /* BasePathFinderStrategy.m in Sources */,
+				614487A318B3B01B00D97AA2 /* HKConquerButton.m in Sources */,
 				61C47E4117C635BB00D644D1 /* Lancer.m in Sources */,
 				61C47D8B17BEA17500D644D1 /* BaseRangedAttribute.m in Sources */,
 				61C47E5B17C636C200D644D1 /* WarElephantBattleStrategy.m in Sources */,
+				61F8514A18A4F60F00F770D7 /* HKGameOptionsDialog.m in Sources */,
 				61C47D8D17BEA17500D644D1 /* BattlePlan.m in Sources */,
 				61C47D8F17BEA17500D644D1 /* BattleReport.m in Sources */,
 				61C47D9117BEA17500D644D1 /* BattleResult.m in Sources */,
@@ -1029,6 +1074,7 @@
 				61C47D9C17BEA17500D644D1 /* CardPool.m in Sources */,
 				617214A91889CD5D000775EE /* SKSpriteNode+NodePosition.m in Sources */,
 				61C47E3A17C635BB00D644D1 /* Catapult.m in Sources */,
+				614487A018B2A7BB00D97AA2 /* HKPlaygroundScene.m in Sources */,
 				61C47D9E17BEA17500D644D1 /* CardSprite.m in Sources */,
 				61C47E4217C635BB00D644D1 /* LightCavalry.m in Sources */,
 				61C47DA017BEA17500D644D1 /* CoolDown.m in Sources */,
@@ -1044,6 +1090,7 @@
 				61C47DB317BEA17500D644D1 /* GCTurnBasedMatchHelper.m in Sources */,
 				61C47DB517BEA17500D644D1 /* GridlLayoutManager.m in Sources */,
 				61C47E3617C635BB00D644D1 /* Archer.m in Sources */,
+				61A8B8AD189959BE0063DCBC /* SKAction+Utility.m in Sources */,
 				61C47E3C17C635BB00D644D1 /* Crusader.m in Sources */,
 				61C47DB717BEA17500D644D1 /* GridLocation.m in Sources */,
 				61A78C5B188DAE1500DDA1B2 /* HKBattleResultNode.m in Sources */,
@@ -1233,6 +1280,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -1241,8 +1289,9 @@
 				GCC_PREFIX_HEADER = "RoseWars/RoseWars-Prefix.pch";
 				INFOPLIST_FILE = "RoseWars/RoseWars-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1252,7 +1301,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -1261,8 +1311,9 @@
 				GCC_PREFIX_HEADER = "RoseWars/RoseWars-Prefix.pch";
 				INFOPLIST_FILE = "RoseWars/RoseWars-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

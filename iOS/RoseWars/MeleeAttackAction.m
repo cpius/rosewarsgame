@@ -99,28 +99,34 @@
                 [self afterPerformAction];
                 if (completion != nil) {
                     completion();
+                    return;
                 }
             }];
         }
         else {
-            
             if (_meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) {
-                
-                [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:self.enemyCard.cardLocation];
-                [self.delegate action:self wantsToReplaceCardAtLocation:self.enemyCard.cardLocation withCardAtLocation:_startLocation];
-                
                 [self afterPerformAction];
-                if (completion != nil) {
+                if (self.autoConquer) {
+                    [self conquerEnemyLocation:self.enemyCard.cardLocation withCompletion:^{
+                        completion();
+                        return;
+                    }];
+                }
+                else {
                     completion();
+                    return;
                 }
             }
-            else if (IsPushSuccessful(result.combatOutcome)) {
+            else if (IsPushSuccessful(result.combatOutcome) && !self.enemyCard.dead) {
                 
                 [PushAction performPushFromAction:self withCompletion:^{
-                    
-                    if (_meleeAttackType == kMeleeAttackTypeConquer && [[GameManager sharedManager] cardLocatedAtGridLocation:_enemyInitialLocation] == nil) {
-                        [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:_enemyInitialLocation];
-                        [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:_enemyInitialLocation];
+                    if (self.autoConquer && [[GameManager sharedManager] cardLocatedAtGridLocation:_enemyInitialLocation] == nil) {
+                        [self conquerEnemyLocation:_enemyInitialLocation withCompletion:^{
+                            if (completion != nil) {
+                                completion();
+                                return;
+                            }
+                        }];
                     }
                     else {
                         [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:retreatLocation]] withCompletion:^(GridLocation *endLocation) {
@@ -134,13 +140,9 @@
                             [self afterPerformAction];
                             if (completion != nil) {
                                 completion();
+                                return;
                             }
                         }];
-                    }
-                    
-                    [self afterPerformAction];
-                    if (completion != nil) {
-                        completion();
                     }
                 }];
             }
@@ -156,11 +158,33 @@
                     [self afterPerformAction];
                     if (completion != nil) {
                         completion();
+                        return;
                     }
                 }];
             }
         }
     }];
+}
+
+- (BOOL)unitCanConquerEnemyLocation {
+    
+    return IsAttackSuccessful(self.battleReport.primaryBattleResult.combatOutcome) && self.meleeAttackType == kMeleeAttackTypeConquer;
+}
+
+- (void)conquerEnemyLocation:(GridLocation*)enemyLocation withCompletion:(void (^)())completion {
+
+    if (_meleeAttackType == kMeleeAttackTypeNormal) {
+        // Conquer not possible in this attack, just call completion at once
+        completion();
+    }
+    else {
+        [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:enemyLocation]] withCompletion:^(GridLocation *endLocation) {
+            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:enemyLocation];
+            [self.delegate action:self wantsToReplaceCardAtLocation:enemyLocation withCardAtLocation:_startLocation];
+            
+            completion();
+        }];
+    }
 }
 
 - (void)cardIncreasedInLevel:(Card *)card withAbilityIncreased:(LevelIncreaseAbilities)ability {
@@ -177,9 +201,6 @@
     
     [[GameManager sharedManager] actionUsed:self];
     [self.cardInAction didPerformedAction:self];
-    
-    [self.delegate afterPerformAction:self];
-    
 }
 
 @end

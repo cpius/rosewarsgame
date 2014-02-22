@@ -45,12 +45,20 @@
         [background addChild:captionLabel];
         
         SKLabelNode *dialogTextNode = [SKLabelNode labelNodeWithFontNamed:APP_FONT];
-        dialogTextNode.position = CGPointMake(self.position.x, self.position.y + 40);
-        dialogTextNode.text = [NSString stringWithFormat:@"Your %@ increased in level. Select bonus:", _card.unitDescriptionName];
+        dialogTextNode.position = CGPointMake(self.position.x, self.position.y + 60);
+        dialogTextNode.text = [NSString stringWithFormat:@"Your %@ increased in level", _card.unitDescriptionName];
         dialogTextNode.fontSize = 14.0f;
         dialogTextNode.color = [UIColor whiteColor];
         dialogTextNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
         [background addChild:dialogTextNode];
+        
+        SKLabelNode *subtitleTextNode = [SKLabelNode labelNodeWithFontNamed:APP_FONT];
+        subtitleTextNode.position = CGPointMake(self.position.x, dialogTextNode.position.y - 25);
+        subtitleTextNode.text = @"Select bonus:";
+        subtitleTextNode.fontSize = 14.0f;
+        subtitleTextNode.color = [UIColor whiteColor];
+        subtitleTextNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+        [background addChild:subtitleTextNode];
         
         __block HKLevelIncreaseDialog *weakSelf = self;
         HKImageButton *attackButton = [[HKImageButton alloc] initWithImage:@"button" selectedImage:@"button_selected" title:@"Attack" block:^(id  sender) {

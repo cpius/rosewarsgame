@@ -60,22 +60,40 @@
     [multiPlayerButton setScale:1.4];
     [leaderboardButton setScale:1.4];
     [backButton setScale:1.4];
-    
-    singlePlayerButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame) - 150);
-    multiPlayerButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(singlePlayerButton.frame) - 40);
-    leaderboardButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(multiPlayerButton.frame) - 40);
-    backButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(leaderboardButton.frame) - 40);
+
+    singlePlayerButton.position = CGPointMake(-CGRectGetWidth(singlePlayerButton.frame), CGRectGetHeight(self.frame) - 150);
+    multiPlayerButton.position = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetWidth(multiPlayerButton.frame), CGRectGetMinY(singlePlayerButton.frame) - 40);
+    leaderboardButton.position = CGPointMake(-CGRectGetWidth(leaderboardButton.frame), CGRectGetMinY(multiPlayerButton.frame) - 40);
+    backButton.position = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetWidth(backButton.frame), CGRectGetMinY(leaderboardButton.frame) - 40);
 
     [self addChild:singlePlayerButton];
     [self addChild:multiPlayerButton];
     [self addChild:leaderboardButton];
     [self addChild:backButton];
     
+    SKAction *presentMenuAction = [SKAction sequence:@[[SKAction waitForDuration:0.2], [SKAction runBlock:^{
+        [singlePlayerButton runAction:[SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame) - 150) duration:0.2 timingMode:SKActionTimingEaseIn]];
+        [multiPlayerButton runAction:[SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(singlePlayerButton.frame) - 40) duration:0.2 timingMode:SKActionTimingEaseIn]];
+        [leaderboardButton runAction:[SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(multiPlayerButton.frame) - 40) duration:0.2 timingMode:SKActionTimingEaseIn]];
+        [backButton runAction:[SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(leaderboardButton.frame) - 40) duration:0.2 timingMode:SKActionTimingEaseIn]];
+    }]]];
+    
+    [self runAction:presentMenuAction];
+
     SKEmitterNode *fireNode = [self newFireEmitter];
     fireNode.position = CGPointMake(55, CGRectGetHeight(self.frame) / 2 - 47);
-    fireNode.xScale = 0.5;
-    fireNode.yScale = 0.5;
+    [fireNode setScale:0.5];
     [self addChild:fireNode];
+
+    SKEmitterNode *fireNode2 = [ self newFireEmitter];
+    fireNode2.position = CGPointMake(27, CGRectGetHeight(self.frame) / 2 - 110);
+    [fireNode2 setScale:0.5];
+    [self addChild:fireNode2];
+    
+    SKEmitterNode *fireNode3 = [ self newFireEmitter];
+    fireNode3.position = CGPointMake(265, CGRectGetHeight(self.frame) / 2 - 90);
+    [fireNode3 setScale:0.5];
+    [self addChild:fireNode3];
 }
 
 - (SKEmitterNode*)newFireEmitter {

@@ -15,6 +15,8 @@
     SKSpriteNode *_cardImageNode;
 }
 
+@property (nonatomic, assign) CGPoint originalPosition;
+
 - (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated;
 - (void)updateBonusSprite:(BonusSprite*)bonusSprite;
 - (void)updateBonusSpriteForAttribute:(RangeAttribute*)rangeAttribute;
@@ -61,6 +63,11 @@
 - (void)dealloc {
     
     [_model removeObserver:self forKeyPath:@"cardColor"];
+}
+
+- (NSString *)description {
+    
+    return self.model.description;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -220,11 +227,10 @@
 
 - (void)toggleDetailWithScale:(float)scale {
     
-    
     _model.isShowingDetail = !_model.isShowingDetail;
     
-    SKAction *textureAction;
     SKAction *scaleAction = [SKAction scaleTo:scale duration:0.2f];
+    SKAction *moveAction;
     SKAction *zPositionAction = [SKAction runBlock:^{
        
         if (_model.isShowingDetail) {
@@ -236,13 +242,16 @@
     }];
 
     if (_model.isShowingDetail) {
-        textureAction = [SKAction setTexture:[SKTexture textureWithImageNamed:_model.frontImageLarge]];
+        self.originalPosition = self.position;
+        moveAction = [SKAction moveTo:CGPointMake(self.scene.size.width / 2, self.scene.size.height / 2) duration:0.2f];
+        [_cardImageNode setTexture:[SKTexture textureWithImageNamed:_model.frontImageLarge]];
     }
     else {
-        textureAction = [SKAction setTexture:[SKTexture textureWithImageNamed:_model.frontImageSmall]];
+        moveAction = [SKAction moveTo:self.originalPosition duration:0.2f];
+        [_cardImageNode setTexture:[SKTexture textureWithImageNamed:_model.frontImageSmall]];
     }
     
-    [self runAction:[SKAction group:@[zPositionAction, textureAction, scaleAction]]];
+    [self runAction:[SKAction group:@[zPositionAction, scaleAction, moveAction]]];
 }
 
 @end

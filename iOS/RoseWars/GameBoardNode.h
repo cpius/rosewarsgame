@@ -29,7 +29,7 @@ typedef enum {
 }
 
 @property (nonatomic, readonly) HighlightTypes highlightedAs;
-@property (nonatomic, assign) BOOL hasCard;
+@property (nonatomic, readonly) BOOL hasCard;
 @property (nonatomic, strong) GridLocation *locationInGrid;
 @property (nonatomic, strong) CardSprite *card;
 

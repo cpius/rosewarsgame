@@ -32,9 +32,6 @@
     
     _manager.currentGame.myColor = kPlayerGreen;
     _manager.currentGame.enemyColor = kPlayerRed;
-
-    _attackerFixedStrategy = [FixedDiceStrategy strategy];
-    _defenderFixedStrategy = [FixedDiceStrategy strategy];
 }
 
 - (void)tearDown
@@ -144,9 +141,6 @@
                                     player2Units:[NSArray arrayWithObjects:defender1, defender2, nil]];
     
     _manager.currentPlayersTurn = kPlayerGreen;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
     
     XCTAssertFalse([_manager shouldEndTurn], @"shouldEndTurn should return NO");
     

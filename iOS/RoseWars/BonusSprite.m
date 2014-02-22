@@ -8,6 +8,7 @@
 
 #import "BonusSprite.h"
 
+static NSString* const kBonusLabelName = @"bonuslabel";
 
 @implementation BonusSprite
 
@@ -32,19 +33,20 @@
 }
 
 - (void)setBonusText:(NSString *)bonusText {
-    
-    [self removeAllChildren];
 
-    SKLabelNode *bonusLabel = [SKLabelNode labelNodeWithFontNamed:APP_FONT];
+    SKLabelNode *bonusLabel = (SKLabelNode*)[self childNodeWithName:kBonusLabelName];
+    if (!bonusLabel) {
+        bonusLabel = [SKLabelNode labelNodeWithFontNamed:APP_FONT];
+        bonusLabel.position = self.position;
+        bonusLabel.name = kBonusLabelName;
+        bonusLabel.fontSize = 14.0;
+        bonusLabel.fontColor = [UIColor blackColor];
+        bonusLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+        bonusLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+        [self addChild:bonusLabel];
+    }
     
-    bonusLabel.fontSize = 14.0;
-    bonusLabel.fontColor = [UIColor blackColor];
-    bonusLabel.position = self.position;
     bonusLabel.text = bonusText;
-    bonusLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
-    bonusLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
-    
-    [self addChild:bonusLabel];
 }
 
 @end
