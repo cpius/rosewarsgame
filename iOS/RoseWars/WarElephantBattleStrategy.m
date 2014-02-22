@@ -40,6 +40,10 @@
         [manager attackSuccessfulAgainstCard:defender];
     }
     
+    if (IsPushSuccessful(outcome)) {
+        NSLog(@"Warelephant pushed opponent");
+    }
+    
     [attacker combatFinishedAgainstDefender:defender withOutcome:outcome];
     [defender combatFinishedAgainstAttacker:attacker withOutcome:outcome];
     

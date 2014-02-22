@@ -36,14 +36,6 @@
     [super setUp];
 
     _manager = [GameManager sharedManager];
-    
-    _attackerFixedStrategy = [FixedDiceStrategy strategy];
-    _defenderFixedStrategy = [FixedDiceStrategy strategy];
-    
-    _battleStrategy = [StandardBattleStrategy strategy];
-    
-    _battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    _battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
 }
 
 - (void)testSimpleCombatDefenceSucces {
@@ -58,10 +50,10 @@
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender, nil]];
     
-    _attackerFixedStrategy.fixedDieValue = 3;
-    _defenderFixedStrategy.fixedDieValue = 1;
+    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
+    defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
     
-    BattleResult *outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
+    BattleResult *outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:attacker.battleStrategy];
     
     XCTAssertTrue(IsDefenseSuccessful(outcome.combatOutcome), @"Pike should have defended successfully");
 
@@ -81,10 +73,10 @@
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender, nil]];
     
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 4;
+    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:4];
     
-    BattleResult *outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:_battleStrategy];
+    BattleResult *outcome = [_manager resolveCombatBetween:attacker defender:defender battleStrategy:attacker.battleStrategy];
     
     XCTAssertTrue(IsAttackSuccessful(outcome.combatOutcome), @"Attack should be successful");
     
@@ -106,10 +98,10 @@
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender1, defender2, nil]];
     
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
+    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
-    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:_battleStrategy];
+    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:attacker.battleStrategy];
     
     XCTAssertTrue(attacker.experience == 1, @"Attacker should have gained 1 XP");
 
@@ -132,16 +124,17 @@
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender1, defender2, nil]];
 
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
+    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    defender2.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
-    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:_battleStrategy];
+    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:attacker.battleStrategy];
     
     XCTAssertTrue(attacker.experience == 1, @"Attacker should have gained 1 XP");
     
     [_manager endTurn];
     
-    [_manager resolveCombatBetween:attacker defender:defender2 battleStrategy:_battleStrategy];
+    [_manager resolveCombatBetween:attacker defender:defender2 battleStrategy:attacker.battleStrategy];
     
     XCTAssertTrue(attacker.experience == 2, @"Attacker should have gained 2 XP");
     XCTAssertTrue(attacker.numberOfLevelsIncreased == 1, @"Attacker should have increased a level");
@@ -350,10 +343,8 @@
                                 withPlayer1Units:[NSArray arrayWithObjects:flagbearer, pikeman, nil]
                                     player2Units:[NSArray arrayWithObject:defender]];
     
-    _attackerFixedStrategy.fixedDieValue = 4;
-    _defenderFixedStrategy.fixedDieValue = 5;
-    
-    pikeman.battleStrategy = _battleStrategy;
+    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:4];
+    defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
@@ -393,11 +384,8 @@
     
     MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[step] andCardInAction:pikeman enemyCard:defender];
     
-    _attackerFixedStrategy.fixedDieValue = 4;
-    _defenderFixedStrategy.fixedDieValue = 5;
-    
-    pikeman.battleStrategy = _battleStrategy;
-    defender.battleStrategy = _battleStrategy;
+    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:4];
+    defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     action.delegate = mock;
@@ -431,15 +419,37 @@
     
     [catapult.attack addRawBonus:[[RawBonus alloc] initWithValue:1]];
 
-    _attackerFixedStrategy.fixedDieValue = 3;
+    catapult.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
     
     // Even though Pikeman defense is succesfull, because of the catapult +1A, pikemans defense is lowered by 1
-    _defenderFixedStrategy.fixedDieValue = 3;
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
     
-    BattleResult *result = [_manager resolveCombatBetween:catapult defender:pikeman battleStrategy:_battleStrategy];
+    BattleResult *result = [_manager resolveCombatBetween:catapult defender:pikeman battleStrategy:catapult.battleStrategy];
     
     XCTAssertTrue(result.combatOutcome == kCombatOutcomeAttackSuccessful, @"Catapul attack should be succesfull");
     XCTAssertTrue(pikeman.dead, @"Pikeman should be dead");
+}
+
+// TODO: Skal afklares! Burde lightcavalry ikke kunne angribe archer uden conquer?
+- (void)testCavalryCanAttackButNotConquerEnemyWhileInZoneOfControl {
+    
+    LightCavalry *lightCavalry = [LightCavalry card];
+    Archer *archer = [Archer card];
+    Pikeman *pikeman = [Pikeman card];
+    
+    lightCavalry.cardLocation = [GridLocation gridLocationWithRow:4 column:2];
+    lightCavalry.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:3 column:2];
+    archer.cardColor = kCardColorRed;
+    
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    pikeman.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[lightCavalry] player2Units:@[archer, pikeman]];
+    
+    PathFinder *finder = [[PathFinder alloc] init];
+    NSArray *actions = [finder getMeleeAttackActionsFromLocation:lightCavalry.cardLocation forCard:lightCavalry enemyUnits:@[archer, pikeman] allLocations:_manager.currentGame.unitLayout];
 }
 
 @end

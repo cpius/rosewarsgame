@@ -93,9 +93,17 @@ static NSString* const kTitleNodeName = @"TitleNode";
     }
 
     [SKAction playSoundFileNamed:@"buttonclick.wav" waitForCompletion:YES];
+    
+    if (self.removeOnClick) {
+        [self runAction:[SKAction fadeOutWithDuration:0.2]];
+    }
 
     if (block_) {
         block_(self);
+    }
+    
+    if (self.removeOnClick) {
+        [self removeFromParent];
     }
 }
 

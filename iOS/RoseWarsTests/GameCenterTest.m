@@ -122,7 +122,7 @@
         secondAttack.delegate = mock;
         
         samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-        samurai.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+        defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
         
         [secondAttack performActionWithCompletion:^{
            

@@ -77,6 +77,7 @@
     return [NSArray arrayWithArray:participants];
 }
 
+
 - (void)player:(GKPlayer *)player receivedTurnEventForMatch:(GKTurnBasedMatch *)match didBecomeActive:(BOOL)didBecomeActive {
     
     NSLog(@"Turn has happened in match: %@", match);
@@ -109,10 +110,6 @@
     }
 }
 
-/*- (void)handleTurnEventForMatch:(GKTurnBasedMatch *)match {
-    
-}
-*/
 - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
     
     [gameCenterViewController dismissViewControllerAnimated:YES completion:nil];
@@ -124,10 +121,6 @@
     [_delegate takeTurn:match];
 }
 
-/*- (void)handleMatchEnded:(GKTurnBasedMatch *)match {
-    
-}
-*/
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController didFailWithError:(NSError *)error {
     
     [viewController dismissViewControllerAnimated:YES completion:nil];
@@ -200,8 +193,6 @@
     GKTurnBasedParticipant *nextParticipant = [_currentMatch.participants objectAtIndex:
                                                ((currentIndex + 1) % [_currentMatch.participants count ])];
     
-    NSLog(@"Send Turn, %@, %@", data, nextParticipant);
-    
     _currentMatch.message = [NSString stringWithFormat:@"It's your turn against %@", [GKLocalPlayer localPlayer].alias];
     
     [_currentMatch endTurnWithNextParticipants:@[nextParticipant] turnTimeout:60*24*7 matchData:data completionHandler:^(NSError *error) {
@@ -272,15 +263,15 @@
     
     GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
     localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error){
-        if (viewController != nil)
-        {
-            NSLog(@"viewController != nil");
+        
+        if (!error) {
             _userAuthenticated = YES;
             _localUserId = [GKLocalPlayer localPlayer].playerID;
+            
+            [[GKLocalPlayer localPlayer] registerListener:self];
         }
-        else
-        {
-            _userAuthenticated = NO;
+        else {
+            NSLog(@"Auth error: %@", error);
         }
     };
 }

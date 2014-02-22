@@ -14,6 +14,10 @@
     
     self.cardInAction.battleStrategy = _battleStrategy;
     
+    if (self.meleeAttackType == kMeleeAttackTypeConquer) {
+        self.autoConquer = YES;
+    }
+    
     [super performActionWithCompletion:completion];
 }
 

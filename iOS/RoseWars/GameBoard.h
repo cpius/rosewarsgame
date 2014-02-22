@@ -72,6 +72,9 @@
 - (void)highlightSelectedAttackDirectionAtLocation:(GridLocation*)location;
 - (void)deHighlightSelectedAttackDirectionAtLocation:(GridLocation*)location;
 
+- (void)highlightNodeAtLocation:(GridLocation*)location forConquer:(BOOL)canConquer;
+- (BOOL)isNodeHighlightedForConquer;
+- (GameBoardNode*)nodeHighlightedForConquer;
 
 - (void)highlightNodeAtLocation:(GridLocation*)location withColor:(SKColor*)color;
 - (void)highlightCardAtLocation:(GridLocation *)location withColor:(SKColor*)color;

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Heine Skov Kristensen. All rights reserved.
 //
 
-#import "HKGameScene.h"
+#import "HKPlaygroundScene.h"
 #import "GameBoardNode.h"
 #import "GameManager.h"
 #import "PlayerIndicator.h"
@@ -20,15 +20,14 @@
 #import "HKGameOptionsDialog.h"
 #import "HKConquerButton.h"
 
+#import "Archer.h"
+
 static float const kCardSpriteScaleFactor = 0.33;
 static float const kCardSpriteScaleFactorExtendedHeight = 0.40;
 
 static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
 
-@interface HKGameScene()
-
-@property (strong, nonatomic) MeleeAttackAction *conquerAction;
-@property (strong, nonatomic) GameBoardNode *conquerNode;
+@interface HKPlaygroundScene()
 
 - (void)addDeckToScene:(Deck*)deck;
 
@@ -61,7 +60,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
 
 @end
 
-@implementation HKGameScene
+@implementation HKPlaygroundScene
 
 - (void)didMoveToView:(SKView *)view {
     
@@ -134,6 +133,22 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     
     [GCTurnBasedMatchHelper sharedInstance].delegate = self;
     
+    [_gameManager startNewGameOfType:kGameTypeSinglePlayer];
+    [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
+    _gameManager.currentGame.myColor = kPlayerGreen;
+    
+    Archer *archer = [Archer card];
+    archer.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    archer.cardColor = kCardColorGreen;
+    
+    _gameManager.currentGame.myDeck = [[Deck alloc] initWithCards:@[archer]];
+    
+    Archer *enemy = [Archer card];
+    enemy.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    enemy.cardColor = kCardColorRed;
+    
+    _gameManager.currentGame.enemyDeck = [[Deck alloc] initWithCards:@[enemy]];
+    
     [_gameboard layoutBoard];
     [self layoutMyDeck];
     
@@ -143,23 +158,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     
     [_gameManager.currentGame populateUnitLayout];
     
-    _battlePlan = [[BattlePlan alloc] init];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardIncreasedInLevel:) name:GAMEEVENT_LEVEL_INCREASED object:nil];
-    
-    [self turnChangedToPlayerWithColor:_gameManager.currentPlayersTurn];
-    [_gameManager.currentGame addObserver:self forKeyPath:@"currentPlayersTurn" options:NSKeyValueObservingOptionNew context:nil];
-    
-    if (_gameManager.currentGame.gameOver) {
-        GameResults result = [_gameManager checkForEndGame];
-        [self showGameResult:result];
-    }
-    
-    if (_gameManager.currentPlayersTurn == _gameManager.currentGame.myColor) {
-        _cardsInvolvedInPlayback = [NSMutableArray array];
-        _abilitiesInvolvedInPlayback = [NSMutableArray array];
-        [self performSelector:@selector(playbackLastAction) withObject:nil afterDelay:1.0];
-    }
+    _gameManager.currentPlayersTurn = _gameManager.currentGame.myColor;
 }
 
 - (void)dialogNodeDidDismiss:(HKGameOptionsDialog *)dialogNode withSelectedResult:(GameOptionsDialogResult)result {
@@ -171,7 +170,6 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
 
 - (void)popToMainMenu {
     
-    [_gameManager.currentGame removeObserver:self forKeyPath:@"currentPlayersTurn"];
     [self.view presentScene:[[HKGameTypeScene alloc] initWithSize:self.size] transition:[SKTransition fadeWithDuration:0.5]];
 }
 
@@ -263,25 +261,14 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
         [self hideCardDetail];
     }
     
+    GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:2 column:3]];
+
+    [_gameboard highlightNodeAtLocation:node.locationInGrid forConquer:YES];
+    
     GameBoardNode *targetNode = [_gameboard getGameBoardNodeForPosition:[touch locationInNode:_gameboard]];
     
     if (targetNode != nil) {
         
-        GameBoardNode *conquerNode = [_gameboard nodeHighlightedForConquer];
-        if (conquerNode) {
-            if ((targetNode != conquerNode)) {
-                // User selected different node than conquernode
-                [_gameboard highlightNodeAtLocation:conquerNode.locationInGrid forConquer:NO];
-                self.conquerAction = nil;
-            }
-            else {
-                [self.conquerAction conquerEnemyLocation:self.conquerAction.enemyCard.cardLocation withCompletion:^{
-                    [_gameboard highlightNodeAtLocation:conquerNode.locationInGrid forConquer:NO];
-                    [self afterPerformAction:self.conquerAction];
-                }];
-            }
-        }
-
         if ([_gameboard nodeIsActive]) {
             
             Action *action = [_battlePlan getActionToGridLocation:targetNode.locationInGrid];
@@ -313,27 +300,26 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
             
             if (_actionInQueue != nil) {
                 
+                /*if (_selectedAttackDirection != nil) {
+                    [_gameboard deHighlightSelectedAttackDirectionAtLocation:_selectedAttackDirection];
+                }*/
+                
                 _pathInQueue = [_attackDirections objectForKey:targetNode.locationInGrid];
                 if (_pathInQueue != nil) {
-                    _actionInQueue.path = _pathInQueue;
+                    _selectedAttackDirection = targetNode.locationInGrid;
+                    [_gameboard highlightSelectedAttackDirectionAtLocation:_selectedAttackDirection];
                     [_actionInQueue performActionWithCompletion:^{
                         
-                        if ([_actionInQueue isKindOfClass:[MeleeAttackAction class]]) {
-                            MeleeAttackAction *attackAction = (MeleeAttackAction*)_actionInQueue;
-                            if ([attackAction unitCanConquerEnemyLocation]) {
-                                GameBoardNode *enemyNode = [_gameboard getGameBoardNodeForGridLocation:attackAction.enemyCard.cardLocation];
-                                [self afterPerformAction:_actionInQueue];
-                                [_gameboard highlightNodeAtLocation:enemyNode.locationInGrid forConquer:YES];
-                                self.conquerAction = attackAction;
-                                self.conquerNode = enemyNode;
-                            }
-                            else {
-                                [self afterPerformAction:_actionInQueue];
-                            }
-                        }
-                        else {
+                        // Check for conquer
+                        HKImageButton *conquerButton = [[HKImageButton alloc] initWithImage:@"button_conquer" selectedImage:@"button_conquer" title:@"Conquer" block:^(id sender) {
+                            NSLog(@"Conquer");
+                            
                             [self afterPerformAction:_actionInQueue];
-                        }
+                        }];
+                        
+                        [conquerButton setScale:0.70];
+                        conquerButton.position = [_gameboard convertPoint:targetNode.position toNode:_gameboard];
+                        [_gameboard.activeNode addChild:conquerButton];
                     }];
                 }
                 return;
@@ -357,13 +343,17 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
                     else {
                         [action performActionWithCompletion:^{
                             
-                            MeleeAttackAction *attackAction = (MeleeAttackAction*)action;
-                            if ([attackAction unitCanConquerEnemyLocation]) {
-                                GameBoardNode *enemyNode = [_gameboard getGameBoardNodeForGridLocation:attackAction.enemyCard.cardLocation];
-                                [self afterPerformAction:action];
-                                [_gameboard highlightNodeAtLocation:enemyNode.locationInGrid forConquer:YES];
-                                self.conquerAction = attackAction;
-                                self.conquerNode= enemyNode;
+                            if (IsAttackSuccessful(action.battleReport.primaryBattleResult.combatOutcome)) {
+                                // Check for conquer
+                                HKImageButton *conquerButton = [[HKImageButton alloc] initWithImage:@"button_conquer" selectedImage:@"button_conquer" title:@"Conquer" block:^(id sender) {
+                                    NSLog(@"Conquer");
+                                    
+                                    [self afterPerformAction:action];
+                                }];
+                                
+                                [conquerButton setScale:0.70];
+                                conquerButton.position = [_gameboard convertPoint:targetNode.position toNode:_gameboard];
+                                [self addChild:conquerButton];
                             }
                             else {
                                 [self afterPerformAction:action];
@@ -561,7 +551,6 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     [self runAction:[SKAction sequence:@[[SKAction waitForDuration:kEnemyActionDelayTime],
                                          [SKAction runBlock:^{
         [nextAction performActionWithCompletion:^{
-            [self afterPerformAction:nextAction];
             [self runAction:[SKAction sequence:@[[SKAction waitForDuration:kEnemyActionDelayTime],
                                                  [SKAction performSelector:@selector(doEnemyPlayerTurn) onTarget:self]]]];
         }];
@@ -638,26 +627,8 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     GameResults result = [_gameManager checkForEndGame];
     
     if (result == kGameResultInProgress) {
-        if (!action.playback) {
-            if ([_gameManager shouldEndTurn]) {
-                if (_gameManager.currentPlayersTurn == _gameManager.currentGame.myColor) {
-                    HKImageButton *endturnButton = [[HKImageButton alloc] initWithImage:@"button_endturn" selectedImage:@"button_endturn" title:@"" block:^(id sender) {
-                        if (self.conquerAction) {
-                            [_gameboard highlightNodeAtLocation:self.conquerNode.locationInGrid forConquer:NO];
-                        }
-                        [_gameManager endTurn];
-                    }];
-                    
-                    [endturnButton setScale:0.75];
-                    endturnButton.zPosition = kOverlayZOrder;
-                    endturnButton.removeOnClick = YES;
-                    endturnButton.position = _turnIndicator.position;
-                    [self addChild:endturnButton];
-                }
-                else {
-                    [_gameManager endTurn];
-                }
-            }
+        if (!action.playback && [_gameManager shouldEndTurn]) {
+            [_gameManager endTurn];
         }
     }
     else {
@@ -822,13 +793,6 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
                 
                 if (action.enemyCard != nil && ![_cardsInvolvedInPlayback containsObject:action.enemyCard]) {
                     [_cardsInvolvedInPlayback addObject:action.enemyCard];
-                }
-                
-                if ([action isKindOfClass:[MeleeAttackAction class]]) {
-                    MeleeAttackAction *attackAction = (MeleeAttackAction*)action;
-                    if ([attackAction unitCanConquerEnemyLocation]) {
-                        [attackAction conquerEnemyLocation:attackAction.enemyInitialLocation withCompletion:nil];
-                    }
                 }
                 
                 if ([action isKindOfClass:[AbilityAction class]]) {

@@ -19,15 +19,18 @@
     SKSpriteNode *_deck;
 }
 
+@property (nonatomic, strong) CardSprite *selectedCard;
+
 @end
 
 @implementation HKConstructDeckScene
 
 - (void)didMoveToView:(SKView *)view {
     
+    self.backgroundColor = [UIColor blackColor];
     self.userInteractionEnabled = YES;
 
-    SKSpriteNode *backgroundNode = [SKSpriteNode spriteNodeWithImageNamed:@"woddenbackground"];
+    SKSpriteNode *backgroundNode = [SKSpriteNode spriteNodeWithImageNamed:@"woddenbackground2"];
     
     backgroundNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
     backgroundNode.size = self.size;
@@ -36,7 +39,7 @@
     _deck = [SKSpriteNode spriteNodeWithImageNamed:@"DeckGreenCard"];
     
     _deck.anchorPoint = CGPointMake(0, 0);
-    _deck.position = CGPointMake(20, 20);
+    _deck.position = CGPointMake(20, 30);
     [self addChild:_deck];
     
     CardSprite *tempSprite = [[CardSprite alloc] initWithCard:[[GameManager sharedManager].currentGame.myDeck.cards objectAtIndex:0]];
@@ -58,7 +61,7 @@
     gridLayoutManager.rowHeight = _cardSize.height;
     gridLayoutManager.gridSize = CGSizeMake(screenSize.width, screenSize.height / 2);
     
-    gridLayoutManager.yOffset = screenSize.height;
+    gridLayoutManager.yOffset = screenSize.height - 20;
     gridLayoutManager.xOffset = 8;
     
     NSInteger row = 1, column = 1;
@@ -126,7 +129,7 @@
         [self.view presentScene:scene transition:[SKTransition fadeWithDuration:0.5]];
     }];
     
-    nextArrow.position = CGPointMake(screenSize.width - (nextArrow.size.width / 2) - 10, (nextArrow.size.height / 2) + 10);
+    nextArrow.position = CGPointMake(screenSize.width - (nextArrow.size.width / 2) - 20, (nextArrow.size.height / 2) + 30);
 
     SKAction *scaleup = [SKAction scaleTo:1.5 duration:0.2];
     SKAction *scaledown = [SKAction scaleTo:1.0 duration:0.2];
@@ -135,6 +138,25 @@
     [nextArrow runAction:[SKAction sequence:@[scaleup, scaledown]]];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    if (self.selectedCard != Nil) {
+        [self.selectedCard toggleDetailWithScale:0.45];
+        self.selectedCard = nil;
+    }
+    else {
+        UITouch *touch = touches.anyObject;
+        CGPoint position = [touch locationInNode:self];
+        SKNode *node = [self nodeAtPoint:position];
+        
+        if ([node.parent isKindOfClass:[CardSprite class]]) {
+            CardSprite *selectedCard = (CardSprite*)node.parent;
+            [selectedCard toggleDetailWithScale:2.0];
+            
+            self.selectedCard = selectedCard;
+        }
+    }
+}
 
 - (void)addBonusToCard:(Card*)card withDrawNumber:(NSNumber*)drawNumber {
     

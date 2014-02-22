@@ -24,22 +24,6 @@
         
         self.userInteractionEnabled = YES;
         
-        _attackButton = [HKImageButton imageButtonWithImage:@"attackbutton.png" selectedImage:@"attackbutton_selected.png" block:^(id sender) {
-            if ([_delegate respondsToSelector:@selector(leftPanelAttackButtonPressed:)]) {
-                [_delegate leftPanelAttackButtonPressed:self];
-            }
-        }];
-        
-        _attackButton.position = CGPointMake(0, (self.size.height / 2) - _attackButton.size.height);
-        
-        _moveAttackButton = [HKImageButton imageButtonWithImage:@"moveattackbutton.png" selectedImage:@"moveattackbutton_selected.png" block:^(id sender) {
-            if ([_delegate respondsToSelector:@selector(leftPanelAttackAndConquerButtonPressed:)]) {
-                [_delegate leftPanelAttackAndConquerButtonPressed:self];
-            }
-        }];
-        
-        _moveAttackButton.position = CGPointMake(0, _attackButton.position.y - _moveAttackButton.size.height - 10);
-        
         _infoButton = [HKImageButton imageButtonWithImage:@"infobutton.png" selectedImage:@"infobutton_selected.png" block:^(id sender) {
             _infoButtonSwitch = !_infoButtonSwitch;
             if ([_delegate respondsToSelector:@selector(leftPanelInfoButtonPressed:)]) {
@@ -47,10 +31,8 @@
             }
         }];
 
-        _infoButton.position = CGPointMake(0, _moveAttackButton.position.y - _infoButton.size.height - 10);
+        _infoButton.position = CGPointMake(0, (-self.size.height / 2) + (_infoButton.size.height / 2) + 10);
 
-        [self addChild:_attackButton];
-        [self addChild:_moveAttackButton];
         [self addChild:_infoButton];
     }
     
@@ -61,33 +43,12 @@
     
     _selectedAction = selectedAction;
     
-    if (_selectedAction == nil || _selectedAction.cardInAction.isRanged) {
-        _attackButton.alpha = 0.0;
-        _moveAttackButton.alpha = 0.0;
-    }
-    else {
-        [_attackButton runAction:[SKAction fadeInWithDuration:0.2]];
-        
-        if (_selectedAction.actionType == kActionTypeMelee) {
-            
-            MeleeAttackAction *meleeAction = (MeleeAttackAction*)_selectedAction;
-            
-            if (meleeAction.meleeAttackType == kMeleeAttackTypeConquer) {
-                [_moveAttackButton runAction:[SKAction fadeInWithDuration:0.2]];
-            }
-        }
-    }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    NSLog(@"began");
-}
+
 
 - (void)reset {
 
-    _attackButton.selected = NO;
-    _moveAttackButton.selected = NO;
     _infoButton.selected = NO;
 }
 

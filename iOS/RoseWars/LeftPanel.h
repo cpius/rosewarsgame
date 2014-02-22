@@ -22,8 +22,6 @@
 
 @interface LeftPanel : SKSpriteNode {
     
-    HKImageButton *_attackButton;
-    HKImageButton *_moveAttackButton;
     HKImageButton *_infoButton;
     
     BOOL _infoButtonSwitch;

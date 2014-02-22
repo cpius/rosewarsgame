@@ -24,9 +24,6 @@
     [super setUp];
     
     _manager = [GameManager sharedManager];
-    
-    _attackerFixedStrategy = [FixedDiceStrategy strategy];
-    _defenderFixedStrategy = [FixedDiceStrategy strategy];    
 }
 
 - (void)testUnitShouldBeBlockedByZocUsingMoveStrategy {

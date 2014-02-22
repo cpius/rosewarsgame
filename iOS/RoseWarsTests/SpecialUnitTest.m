@@ -38,6 +38,7 @@
 #import "Juggernaut.h"
 #import "JuggernautBattleStrategy.h"
 #import "FixedLevelIncreaseStrategy.h"
+#import "HeavyCavalry.h"
 
 @implementation SpecialUnitTest
 
@@ -46,14 +47,6 @@
     [super setUp];
     
     _manager = [GameManager sharedManager];
-    
-    _attackerFixedStrategy = [FixedDiceStrategy strategy];
-    _defenderFixedStrategy = [FixedDiceStrategy strategy];
-    
-    _battleStrategy = [StandardBattleStrategy strategy];
-    
-    _battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    _battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
 }
 
 - (void)testChariotCanMoveAfterAttack {
@@ -415,17 +408,17 @@
     
     _manager.currentPlayersTurn = kPlayerGreen;
     
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
+    viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
     XCTAssertTrue(viking.hitpoints == 2, @"Viking should have 2 hitpoints");
 
-    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:_battleStrategy];
+    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:pikeman.battleStrategy];
     
     XCTAssertFalse(viking.dead, @"Viking shouldn't die after a failed defense");
     XCTAssertTrue(viking.hitpoints == 1, @"Viking should only have 1 hitpoint left after a failed defense");
     
-    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:_battleStrategy];
+    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:pikeman.battleStrategy];
     
     XCTAssertTrue(viking.dead, @"Viking should be dead!");
 }
@@ -497,15 +490,15 @@
     
     _manager.currentPlayersTurn = kPlayerGreen;
     
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
-    
+    longswordsman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    archer.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+
     MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:longswordsman enemyCard:pikeman];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
     meleeAction.delegate = mock;
-    longswordsman.battleStrategy = _battleStrategy;
     
     [meleeAction performActionWithCompletion:^{
         
@@ -636,13 +629,8 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 1;
-
-    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
         
     [meleeAction performActionWithCompletion:^{
         
@@ -674,13 +662,8 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 1;
-    
-    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
     
     [meleeAction performActionWithCompletion:^{
         
@@ -712,13 +695,8 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
-    
-    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     [meleeAction performActionWithCompletion:^{
         
@@ -755,13 +733,8 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
-    
-    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     [meleeAction performActionWithCompletion:^{
         
@@ -800,25 +773,15 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
+
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
+    pikeman2.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    pikeman3.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 1;
-    
-    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
-    
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+
     StandardBattleStrategy *aoeBattleStrategy = [StandardBattleStrategy strategy];
-
-    FixedDiceStrategy *attackDiceStrategy = [FixedDiceStrategy strategy];
-    attackDiceStrategy.fixedDieValue = 5;
-    
-    FixedDiceStrategy *defenderDiceStrategy = [FixedDiceStrategy strategy];
-    defenderDiceStrategy.fixedDieValue = 5;
-
-    aoeBattleStrategy.attackerDiceStrategy = attackDiceStrategy;
-    aoeBattleStrategy.defenderDiceStrategy = defenderDiceStrategy;
-    
+    aoeBattleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     warelephant.aoeBattleStrategy = aoeBattleStrategy;
     
     [meleeAction performActionWithCompletion:^{
@@ -853,13 +816,8 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    BaseBattleStrategy *battleStrategy = warelephant.battleStrategy;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 2;
-    
-    battleStrategy.attackerDiceStrategy = _attackerFixedStrategy;
-    battleStrategy.defenderDiceStrategy = _defenderFixedStrategy;
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     
     [meleeAction performActionWithCompletion:^{
         
@@ -920,16 +878,17 @@
     
     _manager.currentPlayersTurn = kPlayerGreen;
     
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    archer.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
     PathFinder *pathfinder = [[PathFinder alloc ]init];
     MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:pikeman allLocations:_manager.currentGame.unitLayout];
     action.delegate = mock;
-    
-    samurai.battleStrategy = _battleStrategy;
+
+    samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
     XCTAssertTrue(action.meleeAttackType == kMeleeAttackTypeConquer, @"Samurai should be able to attack&conquer pikeman");
+    action.autoConquer = YES;
     
     [action performActionWithCompletion:^{
         
@@ -1012,11 +971,13 @@
     _manager.currentPlayersTurn = kPlayerGreen;
     
     MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeConquer];
-
+    action.autoConquer = YES;
+    
     FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
 
     JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
     battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
+    juggernaut.battleStrategy = battleStrategy;
     
     action.delegate = mock;
     
@@ -1053,6 +1014,7 @@
     
     JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
     battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
+    juggernaut.battleStrategy = battleStrategy;
     
     action.delegate = mock;
     
@@ -1093,6 +1055,7 @@
     
     JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
     battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
+    juggernaut.battleStrategy = battleStrategy;
     
     action.delegate = mock;
     
@@ -1111,33 +1074,77 @@
     
     WarElephant *warelephant = [WarElephant card];
     Pikeman *pikeman = [Pikeman card];
-    Pikeman *pikeman2 = [Pikeman card];
     
-    warelephant.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
+    pikeman.cardLocation = [GridLocation gridLocationWithRow:5 column:1];
+    pikeman.cardColor = kCardColorRed;
+
+    warelephant.cardLocation = [GridLocation gridLocationWithRow:5 column:2];
     warelephant.cardColor = kCardColorGreen;
+    // Starting with 1 experince
     warelephant.experience = 1;
     
     warelephant.levelIncreaseStrategy = [FixedLevelIncreaseStrategy fixedLevelIncreaseStrategyWithLevelIncreaseAbility:kLevelIncreaseAbilityAttack];
     
-    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
-    WarElephantBattleStrategy *battleStrategy = (WarElephantBattleStrategy*)[warelephant newBattleStrategy];
-    battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
-
-    pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
-    pikeman.cardColor = kCardColorRed;
-    
-    pikeman2.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    pikeman2.cardColor = kCardColorRed;
-    
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[warelephant] player2Units:@[pikeman, pikeman2]];
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[warelephant] player2Units:@[pikeman]];
     _manager.currentPlayersTurn = kPlayerGreen;
+    _manager.currentGame.numberOfAvailableActions = 2;
 
-    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman meleeAttackType:kMeleeAttackTypeConquer];
+    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman meleeAttackType:kMeleeAttackTypeNormal];
     action.delegate = mock;
     
     [action performActionWithCompletion:^{
         
+        XCTAssertTrue(warelephant.experience == 2, @"Warelephant should have 2 experirnce");
+        XCTAssertTrue(warelephant.numberOfLevelsIncreased == 1, @"Warelephant have increased 1 level");
+        XCTAssertTrue(warelephant.movesRemaining == 0, @"Warelephant shouldn't have any remaining moves");
+    }];
+}
+
+- (void)testEnemyShouldEndTurnWhenOnlyTwoUnitsLeftAndOnOfThemAreOnBribeCooldown {
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
+    Diplomat *diplomat = [Diplomat card];
+    diplomat.cardLocation = [GridLocation gridLocationWithRow:6 column:1];
+    diplomat.cardColor = kCardColorGreen;
+    
+    Archer *archer = [Archer card];
+    archer.cardLocation = [GridLocation gridLocationWithRow:2 column:4];
+    archer.cardColor = kCardColorRed;
+    
+    HeavyCavalry *heavycavalry = [HeavyCavalry card];
+    heavycavalry.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
+    heavycavalry.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[diplomat] player2Units:@[archer, heavycavalry]];
+    _manager.currentPlayersTurn = kPlayerGreen;
+    
+    PathFinder *pathfinder = [[PathFinder alloc] init];
+    NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation forCard:diplomat friendlyUnits:_manager.currentGame.myDeck.cards enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    
+    XCTAssertTrue(actions.count == 1, @"Diplomat should be able to bribe heavycavalry");
+    
+    AbilityAction *bribe = actions[0];
+    bribe.delegate = mock;
+    [bribe performActionWithCompletion:^{
+        XCTAssertTrue([heavycavalry isAffectedByAbility:kAbilityBribe], @"Heavycavalry should be bribed");
+        [_manager endTurn];
+        XCTAssertTrue([heavycavalry isAffectedByAbility:kAbilityCoolDown], @"Heavycavalry should be affected by cooldown");
+        
+        NSArray *archerActions = [pathfinder getMoveActionsFromLocation:archer.cardLocation forCard:archer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+        XCTAssertTrue(archerActions.count > 0, @"Archer should be able to move");
+        
+        NSArray *heavycavalryActions = [pathfinder getMoveActionsFromLocation:heavycavalry.cardLocation forCard:heavycavalry enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+        XCTAssertTrue(heavycavalryActions.count == 0, @"Heavycavalry shouldn't be able to move because of cooldown");
+        
+        MoveAction *moveAction = archerActions[0];
+        moveAction.delegate = mock;
+        [moveAction performActionWithCompletion:^{
+            XCTAssertTrue([_manager shouldEndTurn], @"Should end turn now even though one action is still available, but heavycavalry has cooldown, so enemy has no more legal moves");
+        }];
     }];
 }
 
