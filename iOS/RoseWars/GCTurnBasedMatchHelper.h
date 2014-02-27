@@ -25,10 +25,10 @@
 
 @interface GCTurnBasedMatchHelper : NSObject <GKLocalPlayerListener, GKTurnBasedMatchmakerViewControllerDelegate,GKGameCenterControllerDelegate> {
     
-    BOOL _userAuthenticated;
     UIViewController *_presentingViewController;
 }
 
+@property (nonatomic, readonly) BOOL userAuthenticated;
 @property (nonatomic, weak) id<GCTurnBasedMatchHelperDelegate> delegate;
 @property (nonatomic, readonly) BOOL gameCenterAvailable;
 @property (nonatomic, readonly) NSError *lastError;

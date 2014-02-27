@@ -30,6 +30,8 @@
 		617214A0187DE1B8000775EE /* HKDialogNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6172149F187DE1B8000775EE /* HKDialogNode.m */; };
 		617214A418880A08000775EE /* HKLevelIncreaseDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A318880A08000775EE /* HKLevelIncreaseDialog.m */; };
 		617214A91889CD5D000775EE /* SKSpriteNode+NodePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */; };
+		61A6F7AE18BBDFA40069AF61 /* Archer.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AD18BBDFA40069AF61 /* Archer.atlas */; };
+		61A6F7B018BBE15D0069AF61 /* Cavalry.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */; };
 		61A78C5B188DAE1500DDA1B2 /* HKBattleResultNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */; };
 		61A8B8A91896E4F50063DCBC /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A8B8A81896E4F50063DCBC /* GameKit.framework */; };
 		61A8B8AD189959BE0063DCBC /* SKAction+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A8B8AC189959BE0063DCBC /* SKAction+Utility.m */; };
@@ -202,6 +204,8 @@
 		617214A518880C81000775EE /* HKLevelIncreaseDialogProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLevelIncreaseDialogProtocol.h; sourceTree = "<group>"; };
 		617214A71889CD5D000775EE /* SKSpriteNode+NodePosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKSpriteNode+NodePosition.h"; sourceTree = "<group>"; };
 		617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKSpriteNode+NodePosition.m"; sourceTree = "<group>"; };
+		61A6F7AD18BBDFA40069AF61 /* Archer.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Archer.atlas; sourceTree = "<group>"; };
+		61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Cavalry.atlas; sourceTree = "<group>"; };
 		61A78C59188DAE1500DDA1B2 /* HKBattleResultNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBattleResultNode.h; sourceTree = "<group>"; };
 		61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKBattleResultNode.m; sourceTree = "<group>"; };
 		61A8B8A81896E4F50063DCBC /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -489,6 +493,7 @@
 		614D42DA17B5128600B9889C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				61A6F7AC18BBDE580069AF61 /* Animations */,
 				61705CDE1801D6A7001D7E1B /* Font */,
 				61C47E6117C677A100D644D1 /* Graphics.atlas */,
 				61C47E5F17C6385C00D644D1 /* Cards.atlas */,
@@ -643,6 +648,15 @@
 				61C47D3217BE9F6700D644D1 /* FixedLevelIncreaseStrategy.m */,
 			);
 			name = LevelIncreaseStrategy;
+			sourceTree = "<group>";
+		};
+		61A6F7AC18BBDE580069AF61 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */,
+				61A6F7AD18BBDFA40069AF61 /* Archer.atlas */,
+			);
+			name = Animations;
 			sourceTree = "<group>";
 		};
 		61A8B8AA189959A30063DCBC /* Categories */ = {
@@ -1006,11 +1020,13 @@
 				61C47E5817C635F000D644D1 /* sword_sound.wav in Resources */,
 				61705CE21801D6B7001D7E1B /* Vollkorn-Regular.ttf in Resources */,
 				61C47E5717C635F000D644D1 /* pageflip.mp3 in Resources */,
+				61A6F7AE18BBDFA40069AF61 /* Archer.atlas in Resources */,
 				61FD539817B4D496009BED1A /* Images.xcassets in Resources */,
 				614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */,
 				614D42DE17B512A200B9889C /* Flame.sks in Resources */,
 				61FD536B17B4CDAC009BED1A /* Main_iPad.storyboard in Resources */,
 				614D42DF17B512A200B9889C /* spark.png in Resources */,
+				61A6F7B018BBE15D0069AF61 /* Cavalry.atlas in Resources */,
 				61C47E5217C635F000D644D1 /* bow_fired.wav in Resources */,
 				61FD536817B4CDAC009BED1A /* Main_iPhone.storyboard in Resources */,
 				61FD535F17B4CDAC009BED1A /* InfoPlist.strings in Resources */,

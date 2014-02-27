@@ -452,4 +452,28 @@
     NSArray *actions = [finder getMeleeAttackActionsFromLocation:lightCavalry.cardLocation forCard:lightCavalry enemyUnits:@[archer, pikeman] allLocations:_manager.currentGame.unitLayout];
 }
 
+- (void)testLightCavalryCanAttackArcherFromThreeDirections {
+    
+    LightCavalry *lightCavalry = [LightCavalry card];
+    Archer *archer = [Archer card];
+    
+    lightCavalry.cardLocation = [GridLocation gridLocationWithRow:4 column:2];
+    lightCavalry.cardColor = kCardColorGreen;
+    
+    archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
+    archer.cardColor = kCardColorRed;
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[lightCavalry] player2Units:@[archer]];
+    
+    BattlePlan *battleplan = [[BattlePlan alloc] init];
+    [battleplan createBattlePlanForCard:lightCavalry friendlyUnits:_manager.currentGame.myDeck.cards enemyUnits:_manager.currentGame.enemyDeck.cards unitLayout:_manager.currentGame.unitLayout];
+  
+    XCTAssertTrue(battleplan.meleeActions.count == 1, @"LightCavalry should be able to attack archer");
+    
+    MeleeAttackAction *action = battleplan.meleeActions[0];
+    NSDictionary *attackDirections = [battleplan getAttackDirectionsAction:action withUnitLayout:_manager.currentGame.unitLayout];
+    
+    XCTAssertTrue(attackDirections.count == 3, @"LightCavalry should be able to attack archer from 3 directions");
+}
+
 @end

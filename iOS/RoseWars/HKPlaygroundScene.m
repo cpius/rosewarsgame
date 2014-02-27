@@ -137,25 +137,38 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
     _gameManager.currentGame.myColor = kPlayerGreen;
     
-    Archer *archer = [Archer card];
-    archer.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    archer.cardColor = kCardColorGreen;
+    NSArray *cavalryframes = @[[SKTexture textureWithImageNamed:@"dragoon-idle-1"],
+                               [SKTexture textureWithImageNamed:@"dragoon-idle-2"],
+                               [SKTexture textureWithImageNamed:@"dragoon-idle-3"],
+                               [SKTexture textureWithImageNamed:@"dragoon-idle-4"],
+                               [SKTexture textureWithImageNamed:@"dragoon-idle-5"],
+                               [SKTexture textureWithImageNamed:@"dragoon-idle-6"]];
     
-    _gameManager.currentGame.myDeck = [[Deck alloc] initWithCards:@[archer]];
+    SKSpriteNode *cavalry = [SKSpriteNode spriteNodeWithTexture:cavalryframes[0]];
+    cavalry.position = CGPointMake(self.size.width / 2, (self.size.height / 2) + 100);
+    [self addChild:cavalry];
     
-    Archer *enemy = [Archer card];
-    enemy.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    enemy.cardColor = kCardColorRed;
+    [cavalry runAction:[SKAction repeatActionForever:[SKAction animateWithTextures:cavalryframes timePerFrame:0.1 resize:NO restore:YES]]];
     
-    _gameManager.currentGame.enemyDeck = [[Deck alloc] initWithCards:@[enemy]];
+
+    NSArray *frames = @[[SKTexture textureWithImageNamed:@"archer-bow-attack1"],
+                        [SKTexture textureWithImageNamed:@"archer-bow-attack2"],
+                        [SKTexture textureWithImageNamed:@"archer-bow-attack3"],
+                        [SKTexture textureWithImageNamed:@"archer-bow-attack4"]];
     
-    [_gameboard layoutBoard];
+    SKSpriteNode *archer = [SKSpriteNode spriteNodeWithTexture:frames[0]];
+    archer.position = CGPointMake(self.size.width / 2, self.size.height / 2);
+    [self addChild:archer];
+    
+    [archer runAction:[SKAction repeatActionForever:[SKAction animateWithTextures:frames timePerFrame:0.1 resize:NO restore:YES]]];
+    
+  /*  [_gameboard layoutBoard];
     [self layoutMyDeck];
     
     if (_gameManager.currentGame.state == kGameStateGameStarted) {
         [self layoutEnemyDeck];
     }
-    
+    */
     [_gameManager.currentGame populateUnitLayout];
     
     _gameManager.currentPlayersTurn = _gameManager.currentGame.myColor;

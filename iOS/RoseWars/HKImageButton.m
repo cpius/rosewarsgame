@@ -22,6 +22,7 @@ static NSString* const kTitleNodeName = @"TitleNode";
     if (self) {
         
         self.userInteractionEnabled = YES;
+        self.enabled = YES;
         
         if (selectedImage != nil) {
             _selectedImageTexture = [SKTexture textureWithImageNamed:selectedImage];
@@ -61,7 +62,22 @@ static NSString* const kTitleNodeName = @"TitleNode";
     return [[HKImageButton alloc] initWithImage:image selectedImage:nil title:nil block:block];
 }
 
+- (void)setEnabled:(BOOL)enabled {
+    
+    _enabled = enabled;
+    
+    if (!_enabled) {
+        [self setColor:[UIColor darkGrayColor]];
+        [self setColorBlendFactor:0.5];
+    }
+    else {
+        [self setColor:[SKColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0]];
+    }
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    if (!self.enabled) return;
     
     UITouch *touch = touches.anyObject;
     NSLog(@"%@", NSStringFromCGPoint([touch locationInNode:self.parent]));
@@ -77,11 +93,15 @@ static NSString* const kTitleNodeName = @"TitleNode";
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    if (!self.enabled) return;
+
     [self setTexture:_imageTexture];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    if (!self.enabled) return;
+
     UITouch *touch = touches.anyObject;
     NSLog(@"%@", NSStringFromCGPoint([touch locationInNode:self]));
 

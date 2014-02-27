@@ -76,7 +76,8 @@
         
         BattleResult *result = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
         
-        result.meleeAttackType = self.meleeAttackType;
+        // Default to normal attack type
+        result.meleeAttackType = kMeleeAttackTypeNormal;
         
         self.battleResult = result;
         [self.delegate action:self hasResolvedCombatWithResult:result];
@@ -104,7 +105,7 @@
             }];
         }
         else {
-            if (_meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) {
+        /*    if (_meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) {
                 [self afterPerformAction];
                 if (self.autoConquer) {
                     [self conquerEnemyLocation:self.enemyCard.cardLocation withCompletion:^{
@@ -116,8 +117,8 @@
                     completion();
                     return;
                 }
-            }
-            else if (IsPushSuccessful(result.combatOutcome) && !self.enemyCard.dead) {
+            }*/
+            if (IsPushSuccessful(result.combatOutcome) && !self.enemyCard.dead) {
                 
                 [PushAction performPushFromAction:self withCompletion:^{
                     if (self.autoConquer && [[GameManager sharedManager] cardLocatedAtGridLocation:_enemyInitialLocation] == nil) {
@@ -155,6 +156,16 @@
                         [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
                     }
                     
+                    if (self.autoConquer) {
+                        [self conquerEnemyLocation:self.enemyInitialLocation withCompletion:^{
+                            [self afterPerformAction];
+                            if (completion != nil) {
+                                completion();
+                                return;
+                            }
+                        }];
+                    }
+                    
                     [self afterPerformAction];
                     if (completion != nil) {
                         completion();
@@ -175,14 +186,19 @@
 
     if (_meleeAttackType == kMeleeAttackTypeNormal) {
         // Conquer not possible in this attack, just call completion at once
-        completion();
+        if (completion != nil) {
+            completion();
+        }
     }
     else {
+        self.battleResult.meleeAttackType = kMeleeAttackTypeConquer;
+
         [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:enemyLocation]] withCompletion:^(GridLocation *endLocation) {
             [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:enemyLocation];
             [self.delegate action:self wantsToReplaceCardAtLocation:enemyLocation withCardAtLocation:_startLocation];
-            
-            completion();
+            if (completion != nil) {
+                completion();
+            }
         }];
     }
 }

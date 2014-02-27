@@ -14,11 +14,23 @@
 #import "GCTurnBasedMatchHelper.h"
 #import "HKGameScene.h"
 
+static NSString* const kKVOUserAuthenticatedContext = @"userAuthenticated";
+static NSString* const kButtonNameMultiplayer = @"ButtonNameMultiplayer";
+
+@interface HKGameTypeScene()
+
+@property (nonatomic, strong) GCTurnBasedMatchHelper *gamecenterHelper;
+
+@end
+
 @implementation HKGameTypeScene
 
 - (void)didMoveToView:(SKView *)view {
     
-    [GCTurnBasedMatchHelper sharedInstance].delegate = self;
+    self.gamecenterHelper = [GCTurnBasedMatchHelper sharedInstance];
+    self.gamecenterHelper.delegate = self;
+    
+    [self.gamecenterHelper addObserver:self forKeyPath:@"userAuthenticated" options:NSKeyValueObservingOptionNew context:(__bridge void *)(kKVOUserAuthenticatedContext)];
 
     SKSpriteNode *backgroundNode = [SKSpriteNode spriteNodeWithImageNamed:@"Background"];
     
@@ -66,6 +78,9 @@
     leaderboardButton.position = CGPointMake(-CGRectGetWidth(leaderboardButton.frame), CGRectGetMinY(multiPlayerButton.frame) - 40);
     backButton.position = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetWidth(backButton.frame), CGRectGetMinY(leaderboardButton.frame) - 40);
 
+    multiPlayerButton.name = kButtonNameMultiplayer;
+    multiPlayerButton.enabled = self.gamecenterHelper.userAuthenticated;
+    
     [self addChild:singlePlayerButton];
     [self addChild:multiPlayerButton];
     [self addChild:leaderboardButton];
@@ -94,6 +109,22 @@
     fireNode3.position = CGPointMake(265, CGRectGetHeight(self.frame) / 2 - 90);
     [fireNode3 setScale:0.5];
     [self addChild:fireNode3];
+}
+
+- (void)dealloc {
+    
+    [self.gamecenterHelper removeObserver:self forKeyPath:@"gamecenterHelper.userAuthenticated"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    NSString *contextString = (__bridge NSString*)context;
+    
+    if ([contextString isEqualToString:kKVOUserAuthenticatedContext]) {
+        GCTurnBasedMatchHelper *helper = object;
+        HKImageButton *multiplayerButton = (HKImageButton*)[self childNodeWithName:kButtonNameMultiplayer];
+        multiplayerButton.enabled = helper.userAuthenticated;
+    }
 }
 
 - (SKEmitterNode*)newFireEmitter {
