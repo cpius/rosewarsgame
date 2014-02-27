@@ -15,6 +15,7 @@
     SKTexture *_selectedImageTexture;
 }
 
+@property (nonatomic, assign) BOOL enabled;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) BOOL removeOnClick;
 

@@ -20,7 +20,7 @@
         label.text = @"Opponent moving";
         label.fontSize = 14.0;
         label.fontColor = [SKColor colorWithRed:255 green:255 blue:255 alpha:1.0];
-        label.position = CGPointMake(self.size.width / 2, self.size.height / 2);
+        label.position = self.position;
         label.zPosition = 10;
         
         [self addChild:label];

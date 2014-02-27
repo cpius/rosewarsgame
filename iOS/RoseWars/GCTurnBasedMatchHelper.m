@@ -8,6 +8,12 @@
 
 #import "GCTurnBasedMatchHelper.h"
 
+@interface GCTurnBasedMatchHelper()
+
+@property (nonatomic, readwrite) BOOL userAuthenticated;
+
+@end
+
 @implementation GCTurnBasedMatchHelper
 
 @synthesize gameCenterAvailable = _gameCenterAvailable;
@@ -265,13 +271,14 @@
     localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error){
         
         if (!error) {
-            _userAuthenticated = YES;
+            self.userAuthenticated = YES;
             _localUserId = [GKLocalPlayer localPlayer].playerID;
             
             [[GKLocalPlayer localPlayer] registerListener:self];
         }
         else {
             NSLog(@"Auth error: %@", error);
+            self.userAuthenticated = NO;
         }
     };
 }

@@ -22,7 +22,7 @@ static NSString* const kConquerNodeName = @"conquer_smoke";
 @synthesize rows, columns;
 @synthesize colorOfTopPlayer, colorOfBottomPlayer;
 @synthesize delegate = _delegate;
-@synthesize isMoving = _isMoving;
+
 
 - (id)init {
     
@@ -90,6 +90,7 @@ static NSString* const kConquerNodeName = @"conquer_smoke";
     NSMutableArray *tempPath = [NSMutableArray arrayWithArray:path];
     
     if (tempPath.count == 0) {
+        _isMoving = NO;
         return;
     }
     else {

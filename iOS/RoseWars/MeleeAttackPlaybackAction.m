@@ -12,7 +12,10 @@
 
 - (void)performActionWithCompletion:(void (^)())completion {
     
-    self.cardInAction.battleStrategy = _battleStrategy;
+    BaseBattleStrategy *battleStrategy = _battleStrategy;
+    
+    self.cardInAction.battleStrategy.attackerDiceStrategy = battleStrategy.attackerDiceStrategy;
+    self.enemyCard.battleStrategy.defenderDiceStrategy = battleStrategy.defenderDiceStrategy;
     
     if (self.meleeAttackType == kMeleeAttackTypeConquer) {
         self.autoConquer = YES;

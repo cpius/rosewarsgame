@@ -42,6 +42,9 @@
     NSMutableDictionary *attackDirections = [NSMutableDictionary dictionary];
     PathFinder *pathFinder = [[PathFinder alloc] init];
     
+    // Add location of target
+    [attackDirections setObject:action.path forKey:action.enemyCard.cardLocation];
+    
     NSArray *surroundingLocations = [action.enemyCard.cardLocation surroundingGridLocations];
     
     for (GridLocation *location in surroundingLocations) {
