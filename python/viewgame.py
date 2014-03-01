@@ -183,7 +183,9 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
     screen.blit(pic, base)
 
     if selected:
-        dimensions = (interface.unit_width, interface.unit_height)
+        draw_rectangle(screen, dimensions, base, interface.selected_shading)
+
+    if unit.has(State.used):
         draw_rectangle(screen, dimensions, base, interface.selected_shading)
 
     if get_blue_counters(unit):
