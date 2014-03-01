@@ -24,6 +24,7 @@ static float const kCardSpriteScaleFactor = 0.33;
 static float const kCardSpriteScaleFactorExtendedHeight = 0.40;
 
 static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
+static NSString* const kEndTurnButton = @"EndTurnButton";
 
 @interface HKGameScene()
 
@@ -645,19 +646,20 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
         if (!action.playback) {
             if ([_gameManager shouldEndTurn]) {
                 if (_gameManager.currentPlayersTurn == _gameManager.currentGame.myColor) {
-                    HKImageButton *endturnButton = [[HKImageButton alloc] initWithImage:@"button_endturn" selectedImage:@"button_endturn" title:@"" block:^(id sender) {
-                        [endturnButton removeFromParent];
-                        if (self.conquerAction) {
-                            [_gameboard highlightNodeAtLocation:self.conquerNode.locationInGrid forConquer:NO];
-                        }
-                        [_gameManager endTurn];
-                    }];
-                    
-                    [endturnButton setScale:0.75];
-                    endturnButton.zPosition = kOverlayZOrder;
-                    endturnButton.removeOnClick = YES;
-                    endturnButton.position = _turnIndicator.position;
-                    [self addChild:endturnButton];
+                    if ([self childNodeWithName:kEndTurnButton] == nil) {
+                        HKImageButton *endturnButton = [[HKImageButton alloc] initWithImage:@"button_endturn" selectedImage:@"button_endturn" title:@"" block:^(id sender) {
+                            if (self.conquerAction) {
+                                [_gameboard highlightNodeAtLocation:self.conquerNode.locationInGrid forConquer:NO];
+                            }
+                            [_gameManager endTurn];
+                        }];
+                        
+                        [endturnButton setScale:0.75];
+                        endturnButton.zPosition = kOverlayZOrder;
+                        endturnButton.removeOnClick = YES;
+                        endturnButton.position = _turnIndicator.position;
+                        [self addChild:endturnButton];
+                    }
                 }
                 else {
                     [_gameManager endTurn];
