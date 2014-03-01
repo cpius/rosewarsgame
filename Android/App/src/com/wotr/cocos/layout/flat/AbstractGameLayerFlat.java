@@ -7,7 +7,7 @@ import org.cocos2d.types.CGPoint;
 import com.wotr.cocos.AbstractGameLayer;
 import com.wotr.cocos.nodes.UnitSprite;
 
-public class AbstractGameLayerFlat extends AbstractGameLayer {
+public abstract class AbstractGameLayerFlat extends AbstractGameLayer {
 
 	protected void moveUnitToCenterAndEnlarge(UnitSprite unit) {
 
