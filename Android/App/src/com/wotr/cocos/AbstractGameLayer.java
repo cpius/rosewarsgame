@@ -13,12 +13,13 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGSize;
 
+import com.wotr.BackListener;
 import com.wotr.R;
 import com.wotr.cocos.nodes.UnitBackgroundSprite;
 import com.wotr.cocos.nodes.UnitSprite;
 import com.wotr.model.Position;
 
-public abstract class AbstractGameLayer extends CCLayer {
+public abstract class AbstractGameLayer extends CCLayer implements BackListener {
 
 	protected Boardframe bordframe;
 
