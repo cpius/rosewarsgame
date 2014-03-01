@@ -1,1 +1,0 @@
-Here, the Light Cavalry gets the bonus, whether it attacks the Pikeman or the Knight. The Archer does not get it, since it is not a melee unit.

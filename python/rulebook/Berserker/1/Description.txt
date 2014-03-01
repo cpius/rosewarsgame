@@ -1,3 +1,0 @@
-Marked in blue are the tiles it can move to without necessarily attacking. Marked in red are tiles it can move to if it attacks.
-
-If it moves to and attacks from a tile on the opponents back line, it will win the game.
