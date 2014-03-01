@@ -1,4 +1,4 @@
-package com.wotr.cocos.layout.flat;
+package com.wotr.cocos.layout.perspective;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +19,7 @@ import android.content.Context;
 
 import com.wotr.BackListener;
 import com.wotr.SceneManager;
+import com.wotr.cocos.nodes.UnitBackgroundSprite;
 import com.wotr.cocos.nodes.UnitSprite;
 import com.wotr.model.Position;
 import com.wotr.model.unit.Unit;
@@ -27,7 +28,7 @@ import com.wotr.strategy.game.Game;
 import com.wotr.touch.UnitTouchGridDecorator;
 import com.wotr.touch.UnitTouchListener;
 
-public class SetupGameLayer extends AbstractGameLayerFlat implements UnitTouchListener, BackListener {
+public class SetupGameLayerPerspective extends AbstractGameLayerPerspective implements UnitTouchListener, BackListener {
 
 	// private CCSprite sparkUnit;
 
@@ -39,7 +40,7 @@ public class SetupGameLayer extends AbstractGameLayerFlat implements UnitTouchLi
 	private SceneManager sceneManager;
 	private Game game;
 
-	public SetupGameLayer(Context context, SceneManager sceneManager, Game game) {
+	public SetupGameLayerPerspective(Context context, SceneManager sceneManager, Game game) {
 
 		this.sceneManager = sceneManager;
 		this.game = game;
@@ -48,12 +49,7 @@ public class SetupGameLayer extends AbstractGameLayerFlat implements UnitTouchLi
 		winSize = CCDirector.sharedDirector().displaySize();
 
 		xCount = game.getXTileCount();
-		yCount = game.getYTileCount();
-
-		// CCSprite back = new CCSprite("woddenbackground.png");
-
-		// back.setPosition(winSize.getWidth() / 2, winSize.getHeight() / 2);
-		// addChild(back);
+		yCount = game.getYTileCount() * 2;
 
 		String imagePath = getImagePath(winSize);
 
@@ -63,46 +59,23 @@ public class SetupGameLayer extends AbstractGameLayerFlat implements UnitTouchLi
 
 		float orientationScale = contentSize.getHeight() / contentSize.getWidth();
 
-		bordframe = new BoardframeFlat(xCount, yCount, winSize.width, winSize.height, 0f, orientationScale, 0.7f);
+		bordframe = new BoardframePerspective(xCount, yCount, winSize.width, winSize.height, 0f, orientationScale, 0.7f);
 
-		sizeScale = bordframe.getLaneWidth() / contentSize.getWidth() * 0.90f;
+		for (int x = 0; x < xCount; x++) {
+			for (int y = 0; y < yCount; y++) {
 
-		addBackGroundUnits(imagePath, xCount, yCount, false);
+				Position pos = new Position(x, y);
 
-		CCMenuItem battleButton = CCMenuItemImage.item("battle.png", "right_arrow.png", this, "startBattle");
-		battleButton.setIsEnabled(true);
-		battleButton.setVisible(true);
+				String imageName = "dot.png";
 
-		CGSize battleButtonSize = battleButton.getContentSizeRef();
-
-		addUnits(imagePath, game);
-
-		CCMenu battleButtonMenu = CCMenu.menu(battleButton);
-		battleButtonMenu.setPosition(CGPoint.zero());
-
-		battleButton.setPosition(winSize.getWidth() - battleButtonSize.getWidth() / 2 - 5f, battleButtonSize.getHeight() / 2 + 5f);
-
-		addChild(battleButtonMenu);
-	}
-
-	private void addUnits(String imagePath, Game game) {
-
-		UnitMap<Position, Unit> layoutDeck = game.getAttackingPlayer().getUnitMap();
-
-		UnitTouchGridDecorator gridDecorator = new UnitTouchGridDecorator(bordframe);
-		gridDecorator.addUnitTouchListener(this);
-
-		for (Unit unit : layoutDeck.values()) {
-
-			UnitSprite unitSprite = new UnitSprite(imagePath, unit, sizeScale, bordframe);
-			unitSprite.addListener(gridDecorator);
-			addChild(unitSprite);
-
-			unitList.add(unitSprite);
-			modelMap.put(unitSprite, unit);
+				CCSprite unitBackground = new UnitBackgroundSprite(imagePath + imageName, pos, 1, bordframe);
+				addChild(unitBackground);
+				unitBackgroundList.add(unitBackground);
+			}
 		}
-
 	}
+
+	
 
 	public void startBattle(Object obj) {
 		game.setupDone(game.getAttackingPlayer());
@@ -163,7 +136,7 @@ public class SetupGameLayer extends AbstractGameLayerFlat implements UnitTouchLi
 
 	@Override
 	public void unitSelected(UnitSprite unit, float x, float y) {
-		moveUnitToCenterAndEnlarge(unit);
+
 	}
 
 	@Override

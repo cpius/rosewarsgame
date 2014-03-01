@@ -9,9 +9,8 @@ import android.content.Intent;
 
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
 import com.google.example.games.basegameutils.GameHelper;
+import com.wotr.cocos.AbstractGameLayer;
 import com.wotr.cocos.GameMenuLayer;
-import com.wotr.cocos.layout.flat.PlayGameLayer;
-import com.wotr.cocos.layout.flat.SetupGameLayer;
 import com.wotr.strategy.game.AIGame;
 import com.wotr.strategy.game.Game;
 import com.wotr.strategy.game.GoogleTurnbasedMatchGame;
@@ -97,7 +96,9 @@ public class SceneManagerImpl implements SceneManager, GameMenuListener {
 	public void showMainMenu(boolean signedIn) {
 
 		backListener = null;
-		gameMenuLayer = new GameMenuLayer(context, this);
+
+		LayerFactory factory = new LayerFactory(context, this);
+		gameMenuLayer = factory.createGameMenuLayer(this);
 		CCScene scene = CCScene.node();
 		scene.addChild(gameMenuLayer);
 		CCDirector.sharedDirector().runWithScene(scene);
@@ -138,12 +139,14 @@ public class SceneManagerImpl implements SceneManager, GameMenuListener {
 
 		CCScene scene = CCScene.node();
 
+		LayerFactory factory = new LayerFactory(context, this);
+
 		if (isSetup) {
-			PlayGameLayer layer = new PlayGameLayer(context, this, game);
+			AbstractGameLayer layer = factory.createPlayGameLayer(game);
 			backListener = layer;
 			scene.addChild(layer);
 		} else {
-			SetupGameLayer layer = new SetupGameLayer(context, this, game);
+			AbstractGameLayer layer = factory.createSetupGameLayer(game);
 			backListener = layer;
 			scene.addChild(layer);
 		}

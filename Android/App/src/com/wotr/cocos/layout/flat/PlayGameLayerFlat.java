@@ -59,7 +59,7 @@ import com.wotr.strategy.player.Player;
 import com.wotr.touch.UnitTouchGridDecorator;
 import com.wotr.touch.UnitTouchListener;
 
-public class PlayGameLayer extends AbstractGameLayerFlat implements UnitTouchListener, GameEventListener, BattleListener, EndPositionSelectionActionListener, BonusSelectionActionListener, BackListener {
+public class PlayGameLayerFlat extends AbstractGameLayerFlat implements UnitTouchListener, GameEventListener, BattleListener, EndPositionSelectionActionListener, BonusSelectionActionListener, BackListener {
 
 	private Collection<UnitSprite> unitList = new ArrayList<UnitSprite>();
 	private int xCount;
@@ -73,7 +73,7 @@ public class PlayGameLayer extends AbstractGameLayerFlat implements UnitTouchLis
 	private PathFinderStrategy pathFinderStrategy;
 	private ActionPathSprite actionPathSprite;
 
-	public PlayGameLayer(Context context, SceneManager sceneManagerImpl, Game game) {
+	public PlayGameLayerFlat(Context context, SceneManager sceneManagerImpl, Game game) {
 
 		playerOne = game.getAttackingPlayer();
 
