@@ -79,7 +79,7 @@ def at_least_two_column_blocks(units):
     """ Tests whether there on each column are at least two 'blocks'.
     A block is either a unit, or a Pikeman zoc tile. """
     
-    blocks = [pos.column + n for n in [-1, 0, +1] for pos, unit in units.items() if unit.zoc] + \
+    blocks = [pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.zoc] + \
              [pos.column for pos in units]
 
     return all(blocks.count(column) >= 2 for column in board_columns)
