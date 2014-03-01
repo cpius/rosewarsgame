@@ -185,9 +185,6 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
     if selected:
         draw_rectangle(screen, dimensions, base, interface.selected_shading)
 
-    if unit.has(State.used):
-        draw_rectangle(screen, dimensions, base, interface.selected_shading)
-
     if get_blue_counters(unit):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
