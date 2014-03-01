@@ -1,7 +1,6 @@
 from common import *
 import view as view_module
 import json
-import pygame
 from pygame.locals import *
 from gamestate import Gamestate
 from game import Game
@@ -12,14 +11,14 @@ import units as units_module
 import outcome
 from glob import glob
 from viewcommon import *
+import sys
 
 
 shading_blue = pygame.Color(*[0, 0, 100, 160])
 shading_red = pygame.Color(*[100, 0, 0, 160])
-view = view_module.View()
 
 
-def draw_gamestate(path):
+def draw_gamestate(view, path):
     print path
     if os.path.exists(path + "Gamestate.json"):
         gamestate = Gamestate.from_file(path + "Gamestate.json")
@@ -53,7 +52,7 @@ def draw_gamestate(path):
         view.draw_tutorial_message(description, draw_unit)
 
 
-def draw_action(path):
+def draw_action(view, path):
 
     rolls = outcome.Outcome()
     rolls.set_suboutcome(Position(3, 7), outcome.rolls(2, 1))
@@ -64,7 +63,7 @@ def draw_action(path):
     view.draw_action_tutorial(action, rolls)
 
 
-def menu_choice(menu):
+def menu_choice(view, menu):
 
     view.draw_help_menu(menu)
 
@@ -72,36 +71,35 @@ def menu_choice(menu):
         event = pygame.event.wait()
 
         if quit_game_requested(event):
-            break
+            sys.exit()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if within(event.pos, view.interface.help_area):
-                break
+                return "quit"
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             for i in range(len(menu)):
                 if within(event.pos, view.interface.help_menu[i]):
-                    index = i
-                    return index
+                    return i
 
 
-def run_tutorial():
+def run_tutorial(view):
 
-    menu = ["General", "Movement", "Battle"]
-    for path in glob("./rulebook/*/*"):
+    menu = ["-General rules-", "Overview", "Movement", "Battle", "Basic Units", "",
+            "-Examples and special cases-"]
+    for path in glob("./../rulebook_1.0/*/*"):
         item = os.path.split(os.path.split(path)[0])[1]
         if item not in menu:
             menu.append(item)
 
-    index = menu_choice(menu)
+    index = menu_choice(view, menu)
 
-    if index:
+    if index != "quit":
 
-        path = "./rulebook/" + menu[index]
+        path = "./../rulebook_1.0/" + menu[index]
         scenarios = [walk[0] + "/" for walk in os.walk(path)][1:]
-        print scenarios
         index = 0
-        draw_gamestate(scenarios[index])
+        draw_gamestate(view, scenarios[index])
         while 1:
             event = pygame.event.wait()
 
@@ -111,21 +109,19 @@ def run_tutorial():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if within(event.pos, view.interface.to_help_menu_area):
-                    run_tutorial()
+                    run_tutorial(view)
                     break
 
             if quit_game_requested(event):
-                return True
+                sys.exit()
 
             if move_forward_requested(event) and len(scenarios) > index + 1:
                 index += 1
-                draw_gamestate(scenarios[index])
+                draw_gamestate(view, scenarios[index])
 
             if move_backward_requested(event) and index > 0:
                 index -= 1
-                draw_gamestate(scenarios[index])
-
-    return False
+                draw_gamestate(view, scenarios[index])
 
 
 def quit_game_requested(event):
@@ -144,8 +140,3 @@ def move_forward_requested(event):
 def move_backward_requested(event):
     return (event.type == pygame.MOUSEBUTTONDOWN and event.button == 3) or \
            (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT)
-
-if __name__ == "__main__":
-    save_pic = True
-    run_tutorial()
-
