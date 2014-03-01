@@ -164,6 +164,8 @@
                                 return;
                             }
                         }];
+                        
+                        return;
                     }
                     
                     [self afterPerformAction];
@@ -179,7 +181,7 @@
 
 - (BOOL)unitCanConquerEnemyLocation {
     
-    return IsAttackSuccessful(self.battleReport.primaryBattleResult.combatOutcome) && self.meleeAttackType == kMeleeAttackTypeConquer;
+    return IsAttackSuccessful(self.battleReport.primaryBattleResult.combatOutcome) && self.meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead;
 }
 
 - (void)conquerEnemyLocation:(GridLocation*)enemyLocation withCompletion:(void (^)())completion {
@@ -192,10 +194,12 @@
     }
     else {
         self.battleResult.meleeAttackType = kMeleeAttackTypeConquer;
+        
+        GridLocation *cardInActionStartLocation = self.cardInAction.cardLocation;
 
         [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:enemyLocation]] withCompletion:^(GridLocation *endLocation) {
-            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:enemyLocation];
-            [self.delegate action:self wantsToReplaceCardAtLocation:enemyLocation withCardAtLocation:_startLocation];
+            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];
+            [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:cardInActionStartLocation toLocation:endLocation];
             if (completion != nil) {
                 completion();
             }

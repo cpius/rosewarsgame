@@ -773,7 +773,6 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-
     pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     pikeman2.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     pikeman3.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];

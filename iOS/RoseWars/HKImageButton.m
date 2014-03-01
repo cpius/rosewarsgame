@@ -79,9 +79,6 @@ static NSString* const kTitleNodeName = @"TitleNode";
     
     if (!self.enabled) return;
     
-    UITouch *touch = touches.anyObject;
-    NSLog(@"%@", NSStringFromCGPoint([touch locationInNode:self.parent]));
-    
     if (_selectedImageTexture != nil) {
         [self setTexture:_selectedImageTexture];
         SKLabelNode *titleNode = (SKLabelNode*)[self childNodeWithName:kTitleNodeName];
@@ -101,9 +98,6 @@ static NSString* const kTitleNodeName = @"TitleNode";
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     if (!self.enabled) return;
-
-    UITouch *touch = touches.anyObject;
-    NSLog(@"%@", NSStringFromCGPoint([touch locationInNode:self]));
 
     [self setTexture:_imageTexture];
     

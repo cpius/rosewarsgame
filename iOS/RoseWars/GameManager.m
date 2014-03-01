@@ -94,6 +94,11 @@
     _currentGame.currentPlayersTurn = currentPlayersTurn;
 }
 
+- (BOOL)isCardLocatedAtGridLocation:(GridLocation*)gridLocation {
+    
+    return [self cardLocatedAtGridLocation:gridLocation] != nil;
+}
+
 - (Card*)cardLocatedAtGridLocation:(GridLocation*)gridLocation {
     
     return [_currentGame.unitLayout objectForKey:gridLocation];

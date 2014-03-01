@@ -28,6 +28,7 @@
 #import "Catapult.h"
 #import "RawBonus.h"
 #import "RangeAttribute.h"
+#import "Lancer.h"
 
 @implementation CombatTest
 
@@ -184,11 +185,12 @@
     
     NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:_manager.currentGame.unitLayout];
     
-    XCTAssertTrue(attackDirections.count == 3, @"Should be 3 attackdirections");
+    XCTAssertTrue(attackDirections.count == 4, @"Should be 4 attackdirections");
 
     XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:2]], @"Should be an attackdirection");
     XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:4 column:3]], @"Should be an attackdirection");
     XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:4]], @"Should be an attackdirection");
+    XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:3]], @"Should be an attackdirection");
 }
 
 - (void)testAttackDirectionsWithEnemyCardsObstructing {
@@ -216,9 +218,10 @@
     
     NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:_manager.currentGame.unitLayout];
     
-    XCTAssertTrue(attackDirections.count == 1, @"Should be 1 attackdirections");
+    XCTAssertTrue(attackDirections.count == 2, @"Should be 1 attackdirections");
     
     XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:4]], @"Should be an attackdirection");
+    XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:3]], @"Should be an attackdirection");
 }
 
 - (void)testAttackDirectionsWithBerserker {
@@ -245,11 +248,12 @@
     
     NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:_manager.currentGame.unitLayout];
     
-    XCTAssertTrue(attackDirections.count == 3, @"Should be 3 attackdirections");
+    XCTAssertTrue(attackDirections.count == 4, @"Should be 4 attackdirections");
     
     XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:4]], @"Should be an attackdirection");
     XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:2]], @"Should be an attackdirection");
     XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:4 column:3]], @"Should be an attackdirection");
+    XCTAssertNotNil([attackDirections objectForKey:[GridLocation gridLocationWithRow:5 column:3]], @"Should be an attackdirection");
 }
 
 - (void)testDefenseCannotExceedFour {
@@ -474,6 +478,39 @@
     NSDictionary *attackDirections = [battleplan getAttackDirectionsAction:action withUnitLayout:_manager.currentGame.unitLayout];
     
     XCTAssertTrue(attackDirections.count == 3, @"LightCavalry should be able to attack archer from 3 directions");
+}
+
+- (void)testLancerCanConquerEnemy {
+    
+    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
+    
+    Lancer *lancer = [Lancer card];
+    lancer.cardLocation = [GridLocation gridLocationWithRow:5 column:2];
+    lancer.cardColor = kCardColorGreen;
+    lancer.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+
+    
+    LightCavalry *cavalry = [LightCavalry card];
+    cavalry.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    cavalry.cardColor = kCardColorRed;
+    cavalry.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+    
+    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[lancer] player2Units:@[cavalry]];
+    
+    PathFinder *pathfinder = [[PathFinder alloc] init];
+    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:lancer againstEnemyUnit:cavalry allLocations:_manager.currentGame.unitLayout];
+    action.delegate = mock;
+    
+    [action performActionWithCompletion:^{
+        [action conquerEnemyLocation:cavalry.cardLocation withCompletion:^{
+            XCTAssertTrue([lancer.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:3 column:3]], @"Lancer should have conquered cavalry. Actual location: %@", lancer.cardLocation);
+        }];
+    }];
+    
+    XCTAssertTrue(action != nil, @"Lancer should be able to attack lightcavalry");
+    
+    
+    
 }
 
 @end

@@ -50,6 +50,7 @@
 - (void)attackSuccessfulAgainstCard:(Card*)card;
 
 - (Card*)cardLocatedAtGridLocation:(GridLocation*)gridLocation;
+- (BOOL)isCardLocatedAtGridLocation:(GridLocation*)gridLocation;
 
 - (GameResults)checkForEndGame;
 
