@@ -587,4 +587,4 @@ class Controller(object):
         return self.start_at and position not in self.game.gamestate.all_units()
 
     def open_rulebook(self):
-        rulebook.run_tutorial()
+        rulebook.run_tutorial(self.view)
