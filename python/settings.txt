@@ -1,5 +1,5 @@
 # server = "http://localhost:8080"
-server = "http://server.rosewarsgame.com:8080"
+server = http://server.rosewarsgame.com:8080
 
 AI_level = 3
 
