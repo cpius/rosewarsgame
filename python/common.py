@@ -519,4 +519,4 @@ allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalr
 all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
              "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon", "Hussar",
              "Cavalry Lieutenant", "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
-             "Fire Archer", "Lancer", "Samurai"]
+             "Fire Archer", "Lancer", "Samurai", "Crossbow Archer"]
