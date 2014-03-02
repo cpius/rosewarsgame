@@ -8,6 +8,6 @@ AI_level = 3
 
 Beginner_mode = no
 
-version = 1.0
+version = 1.1
 
 Document_ai_decisions = yes

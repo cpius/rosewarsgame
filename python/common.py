@@ -165,12 +165,17 @@ trait_descriptions = {
         1: "This unit was attacked by a unit with flanking last turn."},
     "ride_through": {
         1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where it"
-           "ends up on this empty tile. Zone of control has no effect on this ability."}
+           "ends up on this empty tile. Zone of control has no effect on this ability."},
+    "spread_attack": {
+        1: "Also attacks the adjacent tiles with -1A."},
+    "javelin": {
+        1: "Can one time make a ranged attack with range 3. The defending unit has it's defence reduced by 1."}
 }
 
 state_descriptions = {
     "extra_action": "Whether the unit is doing its extra action.",
     "lost_extra_life": "Whether the unit has lost its extra life",
+    "javelin_thrown": "Whether a unit has used it's javelin",
     "movement_remaining": "Movement points left for doing an extra action",
     "used": "Whether a unit has been used this turn.",
     "experience": "Experience.",
@@ -259,6 +264,7 @@ if 1 == 2:
         recently_bribed = None
         sabotaged = None
         recently_upgraded = None
+        javelin_thrown = None
 
         name = None
         write = None
@@ -297,6 +303,8 @@ if 1 == 2:
         flanking = None
         flanked = None
         ride_through = None
+        spread_attack = None
+        javelin = None
 
         name = None
         write = None
@@ -534,11 +542,12 @@ if get_setting("version") == "1.1":
     all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
                  "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Flanking Cavalry",
                  "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
-                 "Fire Archer", "Lancer", "Samurai", "Crossbow Archer", "Assassin"]
+                 "Fire Archer", "Lancer", "Fencer", "Crossbow Archer", "Assassin", "Trebuchet", "Javeliner"]
 
-    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
-                             "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Hobelar",
-                             "Lancer", "Flanking Cavalry", "Assassin"]
+    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur",
+                             "Royal Guard", "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat",
+                             "Halberdier", "Hussar", "Flanking Cavalry", "Hobelar",  "Fire Archer", "Lancer", "Fencer",
+                             "Crossbow Archer", "Assassin", "Trebuchet", "Javeliner"]
 
     allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 

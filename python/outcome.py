@@ -34,22 +34,26 @@ class Outcome:
     @classmethod
     def determine_outcome(cls, action, gamestate):
         outcome = cls()
-        if not action.is_attack():
+        if not action.is_attack() and not action.ability == Ability.assassinate:
             return outcome
 
         outcome.set_suboutcome(action.target_at, get_rolls())
 
         attack_direction = None
-        if action.is_attack() and action.unit.is_melee():
+        if action.is_attack() and action.unit.is_melee() and not action.is_javelin_throw():
             attack_direction = action.end_at.get_direction_to(action.target_at)
 
         if action.unit.has(Trait.triple_attack):
-            for forward_position in action.end_at.two_forward_tiles(attack_direction) & set(gamestate.enemy_units):
-                outcome.set_suboutcome(forward_position, rolls(random.randint(1, 6), random.randint(1, 6)))
+            for position in action.end_at.two_forward_tiles(attack_direction) & set(gamestate.enemy_units):
+                outcome.set_suboutcome(position, rolls(random.randint(1, 6), random.randint(1, 6)))
+
+        if action.unit.has(Trait.spread_attack):
+            for position in action.target_at.adjacent_tiles() & set(gamestate.enemy_units):
+                outcome.set_suboutcome(position, rolls(random.randint(1, 6), random.randint(1, 6)))
 
         if action.unit.has(Trait.longsword):
-            for forward_position in action.end_at.four_forward_tiles(attack_direction) & set(gamestate.enemy_units):
-                outcome.set_suboutcome(forward_position, rolls(random.randint(1, 6), random.randint(1, 6)))
+            for position in action.end_at.four_forward_tiles(attack_direction) & set(gamestate.enemy_units):
+                outcome.set_suboutcome(position, rolls(random.randint(1, 6), random.randint(1, 6)))
 
         return outcome
 

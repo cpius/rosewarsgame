@@ -164,6 +164,9 @@ class Unit(object):
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
 
+    def has_javelin(self):
+        return self.has(Trait.javelin) and not self.has(State.javelin_thrown)
+
     def is_melee(self):
         return self.range == 1
 
@@ -564,6 +567,27 @@ class Viking(Unit):
     traits = {Trait.rage: 1, Trait.extra_life: 1}
 
 
+class Javeliner(Unit):
+    def __init__(self):
+        super(Javeliner, self).__init__()
+        self.set(Trait.javelin, 1)
+
+    name = "Javeliner"
+    image = "Javeliner"
+    base_attack = 4
+    base_defence = 3
+    base_movement = 1
+    base_range = 1
+    attack_bonuses = {}
+    defence_bonuses = {}
+    zoc = []
+    type = Type.Infantry
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
+
+    traits = {Trait.javelin: 1}
+
+
 class Cannon(Unit):
     def __init__(self):
         super(Cannon, self).__init__()
@@ -582,6 +606,25 @@ class Cannon(Unit):
     special_upgrades = [{Trait.attack_cooldown: 1, Trait.far_sighted: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
     experience_to_upgrade = 3
+
+
+class Trebuchet(Unit):
+    def __init__(self):
+        super(Trebuchet, self).__init__()
+        self.set(Trait.spread_attack, 1)
+
+    name = "Trebuchet"
+    image = "Trebuchet"
+    base_attack = 3
+    base_defence = 1
+    base_movement = 1
+    base_range = 3
+    attack_bonuses = {}
+    defence_bonuses = {}
+    zoc = []
+    type = Type.War_Machine
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    experience_to_upgrade = 4
 
 
 class Flag_Bearer(Unit):
@@ -687,13 +730,13 @@ class War_Elephant(Unit):
     traits = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
 
 
-class Samurai(Unit):
+class Fencer(Unit):
     def __init__(self):
-        super(Samurai, self).__init__()
+        super(Fencer, self).__init__()
         self.set(Trait.combat_agility, 1)
 
-    name = "Samurai"
-    image = "Samurai"
+    name = "Fencer"
+    image = "Fencer"
     base_attack = 3
     base_defence = 3
     base_movement = 1

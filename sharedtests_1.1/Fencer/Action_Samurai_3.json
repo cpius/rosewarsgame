@@ -1,18 +1,18 @@
-{
+ {
     "type": "Does action exist",
-    "description": "Samurai can not do a move with attack if its movement remaining is 0",
-    "result": false,
+    "description": "Fencer can always use its second action to attack if its not a move_with_attack",
+    "result": true,
     "action": {
         "start_at": "E4",
         "end_at": "E4",
         "target_at": "E5",
-        "move_with_attack": true
+        "move_with_attack": false
     },
     "gamestate": {
         "actions_remaining": 0,
         "player1_units": {
             "E4": {
-                "name": "Samurai",
+                "name": "Fencer",
                 "used": 1,
                 "experience": 1,
                 "extra_action": 1

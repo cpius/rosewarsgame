@@ -1,0 +1,25 @@
+{
+    "type": "Does action exist",
+    "description": "Javeliner cannot throw its javelin a second time",
+    "result": false,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C3",
+        "target_at": "C6",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Archer",
+            "C3": {
+                "name": "Javeliner",
+                "javelin_thrown": 1
+            }
+        },
+        "player2_units": {
+            "C6": "Longswordsman",
+            "E4": "Knight"
+        }
+    }
+}

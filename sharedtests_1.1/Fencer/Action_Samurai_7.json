@@ -1,6 +1,6 @@
 {
     "type": "Does action exist",
-    "description": "Samurai can not do a move and attack on its second action",
+    "description": "Fencer can not do a move and attack on its first action",
     "result": false,
     "action": {
         "start_at": "E4",
@@ -12,11 +12,9 @@
         "actions_remaining": 0,
         "player1_units": {
             "E4": {
-                "name": "Samurai",
+                "name": "Fencer",
                 "used": 1,
-                "experience": 1,
-                "movement_remaining": 1,
-                "extra_action": 1
+                "experience": 1
             },
             "A2": "Pikeman"
         },

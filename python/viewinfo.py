@@ -33,8 +33,11 @@ def get_unit_lines(unit):
             lines.append("")
 
     if unit.defence_bonuses:
-        for unit_type, value in unit.attack_bonuses.items():
-            lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
+        for unit_type, value in unit.defence_bonuses.items():
+            if unit_type == Type.War_Machine:
+                lines.append("+" + str(value) + " Defence against War Machines")
+            else:
+                lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
             lines.append("")
 
     for trait, level in unit.traits.items():
@@ -59,7 +62,8 @@ def get_unit_lines(unit):
             lines.append("")
 
     for state, value in unit.states.items():
-        if value and state not in [State.used, State.recently_upgraded, State.experience]:
+        if value and state not in [State.used, State.recently_upgraded, State.experience, State.lost_extra_life,
+                                   State.javelin_thrown]:
             lines.append(State.name[state] + ": " + str(value))
 
     for effect, info in unit.effects.items():
@@ -69,6 +73,20 @@ def get_unit_lines(unit):
             lines.append(Effect.write[effect] + ": " + str(duration))
         else:
             lines.append(Effect.write[effect] + ", level " + str(level) + ": " + str(duration))
+        lines.append("")
+
+    if unit.has(Trait.extra_life):
+        if unit.has(State.lost_extra_life):
+            lines.append("No extra life")
+        else:
+            lines.append("Has extra life")
+        lines.append("")
+
+    if unit.has(Trait.javelin):
+        if unit.has(State.javelin_thrown):
+            lines.append("Javelin thrown")
+        else:
+            lines.append("Has javelin")
         lines.append("")
 
     return lines

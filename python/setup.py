@@ -13,6 +13,7 @@ Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
 units_info = {"Archer": Info({2, 3}, 3, False),
               "Assassin": Info({1}, 1, True),
+              "Trebuchet": Info({2, 3}, 1, True),
               "Ballista": Info({2, 3}, 2, True),
               "Catapult": Info({2, 3}, 2, False),
               "Knight": Info({4}, 3, False),
@@ -28,10 +29,11 @@ units_info = {"Archer": Info({2, 3}, 3, False),
               "Diplomat": Info({2, 3}, 1, False),
               "Flag Bearer": Info({3, 4}, 1, False),
               "Lancer": Info({3, 4}, 1, False),
+              "Javeliner": Info({3, 4}, 1, False),
               "Longswordsman": Info({4}, 1, False),
               "Royal Guard": Info({2, 3}, 1, False),
               "Saboteur": Info({2, 3}, 1, True),
-              "Samurai": Info({4}, 1, False),
+              "Fencer": Info({4}, 1, False),
               "Scout": Info({2, 3}, 1, False),
               "Viking": Info({4}, 1, False),
               "War Elephant": Info({4}, 1, False),
@@ -53,8 +55,9 @@ class Tiles_bag(object):
         return pick
 
     def pick_protected_tile(self, rows):
-        possible_tiles = [Position(column, row) for column in board_columns for row in [2, 3]
-                          if Position(column, row) in self.tiles and Position(column, row + 1) not in self.tiles]
+        possible_tiles = [Position(column, row) for column in board_columns for row in [1, 2, 3]
+                          if Position(column, row) in self.tiles and (Position(column, row + 1) not in self.tiles
+                          or Position(column, row + 2) not in self.tiles)]
 
         pick = random.choice([tile for tile in possible_tiles if tile.row in rows])
         self.tiles.remove(pick)

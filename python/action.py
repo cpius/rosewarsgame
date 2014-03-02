@@ -188,6 +188,9 @@ class Action(object):
     def distance_to_target(self):
         return distance(self.start_at, self.target_at)
 
+    def is_javelin_throw(self):
+        return self.unit.has_javelin() and distance(self.end_at, self.target_at) > 1
+
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack()
 
