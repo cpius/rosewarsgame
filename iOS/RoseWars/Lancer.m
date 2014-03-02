@@ -63,8 +63,8 @@
             GridLocation *firstLocation = firstStep.location;
             GridLocation *secondLocation = secondStep.location;
             
-            if ([[GameManager sharedManager] cardLocatedAtGridLocation:firstLocation] == nil &&
-                [[GameManager sharedManager] cardLocatedAtGridLocation:secondLocation] == nil) {
+            if (![[GameManager sharedManager] isCardLocatedAtGridLocation:firstLocation] &&
+                ![[GameManager sharedManager] isCardLocatedAtGridLocation:secondLocation]) {
                 
                 NSLog(@"Lancer gets +2A because 2 empty tiles exist between lancer and enemy");
                 
