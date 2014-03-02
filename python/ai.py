@@ -25,6 +25,7 @@ class AI():
 success = Outcome(dict((key, rolls(1, 6)) for key in board))
 failure = Outcome(dict((key, rolls(6, 1)) for key in board))
 
+
 values = {"Backline": [10000, 10000],
           "1 action from backline": [200, 5000],
           "1 action from backline, extra life": [280, 5000],
@@ -191,18 +192,21 @@ def score_actions_considering_two_actions(g0):
 
 
 def get_unit_factors(unit, position, gamestate, backline):
+
+    enemy_units = gamestate.enemy_units
+
     def get_backline_value():
+
         def get_coloumn_blocks():
-            columns = [position.column + i for i in [-1, 0, 1] if position.column + i in [1, 2, 3, 4, 5]]
-            coloumn_blocks = []
-            for column in columns:
-                blocks = 0
-                for enemy_position, enemy_unit in gamestate.enemy_units.items():
-                    if (enemy_position.column == column and enemy_position.row > position.row) or \
-                        ((enemy_position.column == column - 1 or enemy_position.column == column + 1) and
-                         enemy_position.row >= position.row and enemy_unit.zoc and unit.type in enemy_unit.zoc):
-                        blocks += 1
-                coloumn_blocks.append(blocks)
+            coloumn_blocks = 0
+            for row in range(position.row, backline + 1):
+                if Position(position.column, row) in enemy_units:
+                    coloumn_blocks += 1
+                for i in [-1, +1]:
+                    zoc_position = Position(position.column + i, row)
+                    if zoc_position in enemy_units and unit.type in enemy_units[zoc_position].zoc:
+                        coloumn_blocks += 1
+
             return coloumn_blocks
 
         moves_to_backline = get_moves_to_backline(unit, position, backline)
@@ -215,13 +219,13 @@ def get_unit_factors(unit, position, gamestate, backline):
             if moves_to_backline < 4:
                 return str(int(moves_to_backline)) + " move(s) from backline, extra life"
 
-        if moves_to_backline == 1 and coloumn_blocks[1] <= 1:
+        if moves_to_backline == 1 and coloumn_blocks <= 1:
             defence = unit.defence
             if defence > 3:
                 defence = 4
             return "1 move(s) from backline, defence " + str(defence)
 
-        if moves_to_backline == 2:
+        if moves_to_backline == 2 and coloumn_blocks <= 1:
             defence = unit.defence
             if defence > 3:
                 defence = 4
