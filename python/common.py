@@ -544,13 +544,10 @@ if get_setting("version") == "1.1":
 
 
 if get_setting("version") == "1.0":
-    all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
-                 "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Flanking Cavalry",
-                 "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
-                 "Fire Archer", "Lancer", "Samurai", "Crossbow Archer", "Assassin"]
+    all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Scout", "Viking", "Hobelar",
+                 "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
-    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
-                             "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Hobelar",
-                             "Lancer", "Flanking Cavalry", "Assassin"]
+    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Scout", "Viking",
+                             "Hobelar"]
 
     allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
