@@ -54,8 +54,9 @@ class Tiles_bag(object):
         return pick
 
     def pick_protected_tile(self, rows):
-        possible_tiles = [Position(column, row) for column in board_columns for row in [2, 3]
-                          if Position(column, row) in self.tiles and Position(column, row + 1) not in self.tiles]
+        possible_tiles = [Position(column, row) for column in board_columns for row in [1, 2, 3]
+                          if Position(column, row) in self.tiles and (Position(column, row + 1) not in self.tiles
+                          or Position(column, row + 2) not in self.tiles)]
 
         pick = random.choice([tile for tile in possible_tiles if tile.row in rows])
         self.tiles.remove(pick)
