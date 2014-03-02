@@ -112,7 +112,7 @@ def do_action(gamestate, action, outcome):
 
     if action.is_attack():
         unit.gain_experience()
-        if action.unit.is_melee():
+        if action.unit.is_melee() and not action.is_javelin_throw():
             attack_direction = action.end_at.get_direction_to(action.target_at)
         rolls = outcome.for_position(action.target_at)
         settle_attack(action)
@@ -123,6 +123,9 @@ def do_action(gamestate, action, outcome):
             longsword()
         elif unit.has(Trait.spread_attack):
             spread_attack()
+
+        if action.is_javelin_throw():
+            unit.set(State.javelin_thrown)
 
         if action.move_with_attack and action.attack_successful(rolls, gamestate):
             move_melee_unit_to_target_tile(gamestate, rolls, action)

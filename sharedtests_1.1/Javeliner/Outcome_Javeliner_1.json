@@ -1,0 +1,37 @@
+{
+    "description": "Test if it records that the javelin has been thrown",
+    "type": "Is outcome correct",
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": "Javeliner",
+            "A1": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    },
+    "outcome":{
+        "D4": [6, 1]
+    },
+    "action": {
+        "target_at": "D4",
+        "end_at": "C3",
+        "start_at": "C3"
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Pikeman",
+            "C3": {
+                "experience": 1,
+                "used": 1,
+                "name": "Javeliner",
+                "javelin_thrown": 1
+            }
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    }
+}

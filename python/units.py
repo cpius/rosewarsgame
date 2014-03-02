@@ -165,7 +165,7 @@ class Unit(object):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
 
     def has_javelin(self):
-        return self.has(Trait.javelin) and not self.has(State.used_javelin)
+        return self.has(Trait.javelin) and not self.has(State.javelin_thrown)
 
     def is_melee(self):
         return self.range == 1

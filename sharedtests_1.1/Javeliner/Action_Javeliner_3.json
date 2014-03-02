@@ -14,7 +14,7 @@
             "A1": "Archer",
             "C3": {
                 "name": "Javeliner",
-                "used_javelin": 1
+                "javelin_thrown": 1
             }
         },
         "player2_units": {

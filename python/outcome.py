@@ -40,7 +40,7 @@ class Outcome:
         outcome.set_suboutcome(action.target_at, get_rolls())
 
         attack_direction = None
-        if action.is_attack() and action.unit.is_melee():
+        if action.is_attack() and action.unit.is_melee() and not action.is_javelin_throw():
             attack_direction = action.end_at.get_direction_to(action.target_at)
 
         if action.unit.has(Trait.triple_attack):

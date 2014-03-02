@@ -175,7 +175,7 @@ trait_descriptions = {
 state_descriptions = {
     "extra_action": "Whether the unit is doing its extra action.",
     "lost_extra_life": "Whether the unit has lost its extra life",
-    "used_javelin": "Whether a unit has used it's javelin",
+    "javelin_thrown": "Whether a unit has used it's javelin",
     "movement_remaining": "Movement points left for doing an extra action",
     "used": "Whether a unit has been used this turn.",
     "experience": "Experience.",
@@ -264,7 +264,7 @@ if 1 == 2:
         recently_bribed = None
         sabotaged = None
         recently_upgraded = None
-        used_javelin = None
+        javelin_thrown = None
 
         name = None
         write = None
