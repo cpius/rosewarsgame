@@ -33,7 +33,7 @@
 - (NSArray*)deserializePathFromDictionary:(NSDictionary*)dictionary;
 - (Action*)deserializeActionForGame:(Game*)game fromDictionary:(NSDictionary*)dictionary;
 
-- (id<BattleStrategy>)battleStrategyForCard:(Card*)card fromBattleResult:(BattleResult*)battleResult;
+- (id<BattleStrategy>)battleStrategyForCard:(Card*)card enemyCard:(Card*)enemyCard fromBattleResult:(BattleResult*)battleResult;
 
 - (Card*)getCardInActionFromBattleReportDictionary:(NSDictionary*)dictionary forGame:(Game*)game;
 - (Card*)getEnemyCardFromBattleReportDictionary:(NSDictionary*)dictionary forGame:(Game*)game;
@@ -300,7 +300,7 @@
         BattleResult *battleresult = [[BattleResult alloc] initWithAttacker:cardInAction defender:enemyCard];
         [battleresult fromDictionary:[dictionary objectForKey:@"primarybattle"]];
         
-        cardInAction.battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:battleresult];
+        [self battleStrategyForCard:cardInAction enemyCard:enemyCard fromBattleResult:battleresult];
         
         action = [[RangedAttackAction alloc ] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
     }
@@ -318,7 +318,7 @@
         MeleeAttackPlaybackAction *meleeAction = [[MeleeAttackPlaybackAction alloc] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
 
         meleeAction.meleeAttackType = battleresult.meleeAttackType;
-        meleeAction.battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:battleresult];
+        meleeAction.battleStrategy = [self battleStrategyForCard:cardInAction enemyCard:enemyCard fromBattleResult:battleresult];
         
         NSArray *secondaryBattles = [dictionary objectForKey:@"secondarybattles"];
         
@@ -329,7 +329,7 @@
             BattleResult *secondaryBattle = [[BattleResult alloc ]initWithAttacker:cardInAction defender:secondaryEnemy];
             [secondaryBattle fromDictionary:[secondaryBattleDictionary objectForKey:@"primarybattle"]];
             
-            BaseBattleStrategy *battleStrategy = [self battleStrategyForCard:cardInAction fromBattleResult:secondaryBattle];
+            BaseBattleStrategy *battleStrategy = [self battleStrategyForCard:cardInAction enemyCard:secondaryEnemy fromBattleResult:secondaryBattle];
                         
             [meleeAction.secondaryActionsForPlayback setObject:battleStrategy forKey:secondaryEnemy.cardLocation];
         }
@@ -386,7 +386,7 @@
     return pathTaken;
 }
 
-- (id<BattleStrategy>)battleStrategyForCard:(Card*)card fromBattleResult:(BattleResult *)battleResult {
+- (id<BattleStrategy>)battleStrategyForCard:(Card*)card enemyCard:(Card*)enemyCard fromBattleResult:(BattleResult *)battleResult {
     
     BaseBattleStrategy *battleStrategy = [card newBattleStrategy];
     FixedDiceStrategy *fixedAttackRoll = [FixedDiceStrategy strategy];
@@ -395,8 +395,8 @@
     fixedAttackRoll.fixedDieValue = battleResult.attackRoll;
     fixedDesenseRoll.fixedDieValue = battleResult.defenseRoll;
     
-    battleStrategy.attackerDiceStrategy = fixedAttackRoll;
-    battleStrategy.defenderDiceStrategy = fixedDesenseRoll;
+    card.battleStrategy.attackerDiceStrategy = fixedAttackRoll;
+    enemyCard.battleStrategy.defenderDiceStrategy = fixedDesenseRoll;
     
     return battleStrategy;
 }

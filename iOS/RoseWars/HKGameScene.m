@@ -847,6 +847,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                 }
                 
                 [_gameboard deHighlightNodeAtLocation:action.enemyCard.cardLocation];
+                [self resetUserInterface];
                 [self afterPerformAction:action];
                 
                 [[GameManager sharedManager].currentGame.actionsForPlayback removeObject:action];
