@@ -33,7 +33,7 @@ def get_unit_lines(unit):
             lines.append("")
 
     if unit.defence_bonuses:
-        for unit_type, value in unit.attack_bonuses.items():
+        for unit_type, value in unit.defence_bonuses.items():
             lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
             lines.append("")
 
