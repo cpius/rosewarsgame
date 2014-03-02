@@ -105,6 +105,15 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
         return moves, attacks
 
+    def get_ride_through_attacks(attacks):
+        for direction in directions:
+            one_tile_away = direction.move(start_at)
+            two_tiles_away = direction.move(one_tile_away)
+            if one_tile_away in enemy_units and two_tiles_away in board and two_tiles_away not in units:
+                attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
+                               move_with_attack=False))
+        return attacks
+
     def get_abilities():
         abilities = []
         for ability, value in unit.abilities.items():
@@ -151,6 +160,9 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
     if unit.has(State.extra_action):
         moves, attacks = get_extra_actions()
+
+    if unit.has(Trait.ride_through):
+        attacks = get_ride_through_attacks(attacks)
 
     return moves, attacks, abilities
 

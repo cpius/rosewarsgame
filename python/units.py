@@ -379,7 +379,7 @@ class Flanking_Cavalry(Unit):
 class Hussar(Unit):
     def __init__(self):
         super(Hussar, self).__init__()
-        self.set(Trait.triple_attack, 1)
+        self.set(Trait.ride_through, 1)
 
     name = "Hussar"
     image = "Hussar"

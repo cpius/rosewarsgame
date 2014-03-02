@@ -159,8 +159,10 @@ trait_descriptions = {
         1: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
            "turn, it's flanking skill is added to it's attack."},
     "flanked": {
-        1: "This unit was attacked by a unit with flanking last turn."
-    }
+        1: "This unit was attacked by a unit with flanking last turn."},
+    "ride_through": {
+        1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where it"
+           "ends up on this empty tile. Zone of control has no effect on this ability."}
 }
 
 state_descriptions = {
@@ -289,6 +291,7 @@ if 1 == 2:
         siege_weapon_specialist = None
         flanking = None
         flanked = None
+        ride_through = None
 
         name = None
         write = None
