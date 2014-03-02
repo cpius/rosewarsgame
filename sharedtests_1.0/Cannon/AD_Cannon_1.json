@@ -1,5 +1,6 @@
 {
     "type": "Is attack and defence correct",
+    "description": "Standard attack by cannon",
     "attack": 5,
     "defence": 2,
     "action": {

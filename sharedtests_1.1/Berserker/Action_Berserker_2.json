@@ -1,11 +1,12 @@
 {
     "type": "Does action exist",
-    "result": false,
+    "description": "Berserker can also attack like normal",
+    "result": true,
     "action": {
         "start_at": "C3",
-        "end_at": "C6",
-        "target_at": "D7",
-        "move_with_attack": false
+        "end_at": "C3",
+        "target_at": "C4",
+        "move_with_attack": true
     },
     "gamestate": {
         "actions_remaining": 2,
@@ -14,7 +15,7 @@
             "A2": "Pikeman"
         },
         "player2_units": {
-            "C7": "Ballista"
+            "C4": "Ballista"
         }
     }
 }

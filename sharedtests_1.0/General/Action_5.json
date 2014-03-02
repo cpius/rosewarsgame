@@ -1,15 +1,15 @@
 {
     "type": "Does action exist",
-    "description": "test if a cavalry can move",
+    "description": "test if an infantry can move",
     "result": true,
     "action": {
         "start_at": "A2",
-        "end_at": "A1"
+        "end_at": "A3"
     },
     "gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
+            "A2": "Pikeman",
             "B6": "Catapult"
         },
         "actions_remaining": 2,

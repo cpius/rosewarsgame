@@ -1,15 +1,11 @@
 {
     "defence": 2,
-    "description": "Test if upgraded Catapult has the right attack.",
-    "attack": 5,
+    "description": "Test if Catapult has the right attack.",
+    "attack": 6,
     "gamestate": {
         "actions_remaining": 2,
         "player1_units": {
-            "C3": {
-                "name": "Catapult",
-                "attack_skill": -1,
-                "range": 1
-            }
+            "C3": "Catapult"
         },
         "player2_units": {
             "D4": "Pikeman"

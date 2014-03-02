@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "test if Scout can move past Pikemen",
     "result": true,
     "action": {
         "start_at": "E3",
@@ -12,7 +13,7 @@
             "A2": "Pikeman"
         },
         "player2_units": {
-            "B5": "Pikeman"
+            "D5": "Pikeman"
         }
     }
 }

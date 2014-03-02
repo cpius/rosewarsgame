@@ -1,6 +1,6 @@
 {
     "type": "Does action exist",
-    "description": "Berserker can also attack like normal",
+    "description": "You can choose to move with attack with a Pikeman",
     "result": true,
     "action": {
         "start_at": "C3",
@@ -9,13 +9,14 @@
         "move_with_attack": true
     },
     "gamestate": {
-        "actions_remaining": 2,
+        "actions_remaining": 1,
         "player1_units": {
-            "C3": "Berserker",
-            "A2": "Pikeman"
+            "B3": "Archer",
+            "C3": "Pikeman"
         },
         "player2_units": {
-            "C4": "Ballista"
+            "C4": "Knight",
+            "B4": "Knight"
         }
     }
 }

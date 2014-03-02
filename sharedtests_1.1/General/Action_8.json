@@ -1,13 +1,13 @@
 {
     "type": "Does action exist",
-    "description": "Test if a unit can make a move",
-    "result": true,
+    "description": "test if you can move with an opponents unit",
+    "result": false,
     "action": {
-        "start_at": "D3",
-        "end_at": "D4"
+        "start_at": "E7",
+        "end_at": "E6"
     },
     "gamestate": {
-        "actions_remaining": 1,
+        "actions_remaining": 0,
         "player1_units": {
             "B2": "Crusader",
             "D3": "Knight"

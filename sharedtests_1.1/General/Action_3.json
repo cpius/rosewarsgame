@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "test if there are any allowed actions if there are no actions left",
     "result": false,
     "action": {
         "start_at": "D3",

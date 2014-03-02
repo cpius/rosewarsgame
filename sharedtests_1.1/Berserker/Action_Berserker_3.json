@@ -1,5 +1,6 @@
 {
     "type": "Does action exist",
+    "description": "It can not move 3 tiles if it doesn't attack",
     "result": false,
     "action": {
         "start_at": "C3",
