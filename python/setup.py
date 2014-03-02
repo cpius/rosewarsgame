@@ -12,6 +12,7 @@ requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
 units_info = {"Archer": Info({2, 3}, 3, False),
+              "Assassin": Info({1}, 1, True),
               "Ballista": Info({2, 3}, 2, True),
               "Catapult": Info({2, 3}, 2, False),
               "Knight": Info({4}, 3, False),
