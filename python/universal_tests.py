@@ -156,8 +156,8 @@ if __name__ == "__main__":
         else:
             testcase_files.append(sys.argv[1])
     else:
-        testcase_files = glob.glob("./../sharedtests/*/*.json") + glob.glob("./../sharedtests_development/*/*.json")
-        replay_files = glob.glob("replay/*/*.json")
+        testcase_files = glob.glob("./../sharedtests_1.1/*/*.json") + glob.glob("./../sharedtests_1.2/*/*.json")
+        #replay_files = glob.glob("replay/*/*.json")
 
     for testcase_file in testcase_files:
         suite.addTest(UniversalTestCase(testcase_file))
