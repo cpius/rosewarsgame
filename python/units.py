@@ -460,7 +460,7 @@ class Ballista(Unit):
     base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = Type.Siege_Weapon
+    type = Type.War_Machine
     special_upgrades = [{Trait.fire_arrows: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
     experience_to_upgrade = 4
@@ -479,7 +479,7 @@ class Catapult(Unit):
     base_range = 3
     attack_bonuses = {}
     defence_bonuses = {}
-    type = Type.Siege_Weapon
+    type = Type.War_Machine
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1, Trait.attack_skill: -1}]
     experience_to_upgrade = 3
 
@@ -498,7 +498,7 @@ class Royal_Guard(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Infantry
-    zoc = [Type.Cavalry, Type.Infantry, Type.Siege_Weapon, Type.Specialist]
+    zoc = [Type.Cavalry, Type.Infantry, Type.War_Machine, Type.Specialist]
     special_upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 3
@@ -537,10 +537,10 @@ class Viking(Unit):
     base_movement = 1
     base_range = 1
     attack_bonuses = {}
-    defence_bonuses = {Type.Siege_Weapon: 1}
+    defence_bonuses = {Type.War_Machine: 1}
     zoc = []
     type = Type.Infantry
-    special_upgrades = [{Trait.siege_weapon_specialist: 1}]
+    special_upgrades = [{Trait.war_machine_specialist: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 
@@ -561,7 +561,7 @@ class Cannon(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     zoc = []
-    type = Type.Siege_Weapon
+    type = Type.War_Machine
     special_upgrades = [{Trait.attack_cooldown: 1, Trait.far_sighted: 1}]
     final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
     experience_to_upgrade = 3
@@ -724,6 +724,24 @@ class Diplomat(Unit):
     defence_bonuses = {}
     type = Type.Specialist
     special_upgrades = [{Ability.bribe: 1}]
+    final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
+
+
+class Assassin(Unit):
+    def __init__(self):
+        super(Assassin, self).__init__()
+        self.set(Ability.bribe)
+    name = "Assassin"
+    image = "Assassin"
+    base_attack = 0
+    base_defence = 2
+    base_movement = 1
+    base_range = 11
+    attack_bonuses = {}
+    defence_bonuses = {}
+    type = Type.Specialist
+    special_upgrades = [{Ability.assassinate: 1}]
     final_upgrades = [{Trait.range_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 

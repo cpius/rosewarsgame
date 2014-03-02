@@ -150,11 +150,11 @@ trait_descriptions = {
     "movement_skill": {
         1: "Is added to the units base movement"},
     "fire_arrows": {
-        1: "+3A vs Siege Weapons"},
+        1: "+3A vs War Machines"},
     "cavalry_specialist": {
         1: "+1A +1D vs Cavalry"},
-    "siege_weapon_specialist": {
-        1: "+1A +1D vs Siege Weapons"},
+    "war_machine_specialist": {
+        1: "+1A +1D vs War Machines"},
     "flanking": {
         1: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
            "turn, it's flanking skill is added to it's attack."},
@@ -201,6 +201,9 @@ ability_descriptions = {
     "sabotage": {
         1: "Reduces a units defence to 0 this turn.",
         2: "Reduces a units defence to 0 for two turns."},
+    "assassinate": {
+        1: "Assassin attacks an enemy unit, and it's defence is reduced to 2. Assassin is attacked. This ability can "
+           "only be performed on your second action."}
 }
 
 opponent_descriptions = {
@@ -216,7 +219,7 @@ ai_descriptions = {
     "3": "Hard"
 }
 
-types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
+types = ["Cavalry", "Infantry", "War_Machine", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
 
@@ -235,7 +238,7 @@ if 1 == 2:
     class Type:
         Cavalry = None
         Infantry = None
-        Siege_Weapon = None
+        War_Machine = None
         Specialist = None
 
         name = {}
@@ -288,7 +291,7 @@ if 1 == 2:
         movement_skill = None
         fire_arrows = None
         cavalry_specialist = None
-        siege_weapon_specialist = None
+        war_machine_specialist = None
         flanking = None
         flanked = None
         ride_through = None

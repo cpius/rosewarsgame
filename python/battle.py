@@ -29,7 +29,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.has(Trait.cavalry_specialist) and attacking_unit.type == Type.Cavalry:
         defence_adjusters += 1
 
-    if defending_unit.has(Trait.siege_weapon_specialist) and attacking_unit.type == Type.Siege_Weapon:
+    if defending_unit.has(Trait.war_machine_specialist) and attacking_unit.type == Type.War_Machine:
         defence_adjusters += 1
 
     return defence_adjusters
@@ -108,10 +108,10 @@ def get_attack(action, gamestate):
     if attacking_unit.has(Trait.cavalry_specialist) and defending_unit.type == Type.Cavalry:
         attack += 1
 
-    if attacking_unit.has(Trait.siege_weapon_specialist) and defending_unit.type == Type.Siege_Weapon:
+    if attacking_unit.has(Trait.war_machine_specialist) and defending_unit.type == Type.War_Machine:
         attack += 1
 
-    if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.Siege_Weapon:
+    if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.War_Machine:
         attack += 3
 
     return attack
