@@ -10,18 +10,18 @@ import com.wotr.model.Position;
 import com.wotr.model.attack.AttackEndPosition;
 import com.wotr.model.attack.FailedMeleeAttackEndpoint;
 import com.wotr.model.attack.SuccessfulMeleeAttackEndpoint;
-import com.wotr.model.unit.special.Chariot;
+import com.wotr.model.unit.special.Hobelar;
 import com.wotr.strategy.action.ActionsResolverStrategy;
 import com.wotr.strategy.battle.AttackEndpointResolverStrategy;
 import com.wotr.strategy.game.AttackEnder;
 import com.wotr.strategy.game.Game;
 
-public class ChariotAttackEndpointResolverStrategy extends MeleeAttackEndpointResolverStrategy implements AttackEndpointResolverStrategy {
+public class HobelarAttackEndpointResolverStrategy extends MeleeAttackEndpointResolverStrategy implements AttackEndpointResolverStrategy {
 
 	private Game game;
 
-	public ChariotAttackEndpointResolverStrategy(Chariot chariot, Game game) {
-		super(chariot);
+	public HobelarAttackEndpointResolverStrategy(Hobelar hobelar, Game game) {
+		super(hobelar);
 		this.game = game;
 	}
 
