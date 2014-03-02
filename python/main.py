@@ -6,14 +6,7 @@ import random
 
 
 def figure_out_player_profile():
-    filename, pathname, description = imp.find_module("settings_user")
-    settings_user = imp.load_module("settings_user", filename, pathname, description)
-
-    profile = None
-    if hasattr(settings_user, "profile"):
-        profile = settings_user.profile
-
-    filename.close()
+    profile = get_setting("profile")
 
     if profile:
         return profile

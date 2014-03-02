@@ -1,6 +1,9 @@
 # server = "http://localhost:8080"
 server = http://server.rosewarsgame.com:8080
 
+zoom = 1.3
+profile = "jonatan"
+
 AI_level = 3
 
 Beginner_mode = no
