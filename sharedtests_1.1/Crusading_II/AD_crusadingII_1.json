@@ -12,7 +12,7 @@
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
-            "B1": "Dragoon",
+            "B1": "Light Cavalry",
             "A3": "Knight"
         },
         "player2_units": {

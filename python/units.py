@@ -353,29 +353,27 @@ class Light_Cavalry(Unit):
     attack_bonuses = {}
     defence_bonuses = {}
     type = Type.Cavalry
-    upgrades = ["Dragoon", "Hussar"]
+    upgrades = ["Flanking_Cavalry", "Hussar"]
     experience_to_upgrade = 3
 
 
-class Dragoon(Unit):
+class Flanking_Cavalry(Unit):
     def __init__(self):
-        super(Dragoon, self).__init__()
-        self.set(Trait.swiftness, 1)
+        super(Flanking_Cavalry, self).__init__()
+        self.set(Trait.flanking, 2)
 
-    name = "Dragoon"
-    image = "Dragoon"
-    base_attack = 3
+    name = "Flanking Cavalry"
+    image = "Light Cavalry"
+    base_attack = 2
     base_defence = 2
     base_movement = 4
     base_range = 1
     attack_bonuses = {}
     defence_bonuses = {}
+    zoc = []
     type = Type.Cavalry
-    special_upgrades = [{Trait.flanking: 1}]
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    final_upgrades = [{Trait.flanking: 1}, {Trait.movement_skill: 1}]
     experience_to_upgrade = 4
-
-    traits = {Trait.swiftness: 1}
 
 
 class Hussar(Unit):

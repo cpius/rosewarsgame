@@ -514,11 +514,11 @@ def unit_with_trait_at(pos, trait, units, level=None):
     return pos in units and units[pos].has(trait, level)
 
 allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
-                         "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon",
-                         "Hussar", "Hobelar", "Lancer"]
+                         "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Hobelar",
+                         "Lancer", "Flanking Cavalry"]
 allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
 all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
-             "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon", "Hussar",
+             "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Flanking Cavalry"
              "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
              "Fire Archer", "Lancer", "Samurai", "Crossbow Archer"]
