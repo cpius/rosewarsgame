@@ -588,7 +588,6 @@ class Javeliner(Unit):
     traits = {Trait.javelin: 1}
 
 
-
 class Cannon(Unit):
     def __init__(self):
         super(Cannon, self).__init__()
