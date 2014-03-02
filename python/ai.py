@@ -263,7 +263,7 @@ def get_differences(g0_factors, g1):
         g1_factors["player"] += get_unit_factors(g1.player_units[pos], pos, g1, 8)
 
     for pos, unit in g1.enemy_units.items():
-        g1_factors["opponent"] += get_unit_factors(g1.enemy_units[pos], pos, g1, 8)
+        g1_factors["opponent"] += get_unit_factors(g1.enemy_units[pos], pos, g1, 1)
 
     factors = {"player": {"gain": {}, "loss": {}}, "opponent": {"gain": {}, "loss": {}}}
     player_intersection = g0_factors["player"] & g1_factors["player"]
