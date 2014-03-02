@@ -65,7 +65,7 @@ def get_defence(action, attack, gamestate):
     return defence
 
 
-def get_attack(action, gamestate):
+def get_attack(action, gamestate, is_sub_action=False):
 
     attacking_unit = action.unit
     defending_unit = action.target_unit
@@ -113,5 +113,8 @@ def get_attack(action, gamestate):
 
     if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.War_Machine:
         attack += 3
+
+    if attacking_unit.has(Trait.spread_attack) and is_sub_action:
+        attack -= 1
 
     return attack

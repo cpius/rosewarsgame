@@ -165,7 +165,9 @@ trait_descriptions = {
         1: "This unit was attacked by a unit with flanking last turn."},
     "ride_through": {
         1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where it"
-           "ends up on this empty tile. Zone of control has no effect on this ability."}
+           "ends up on this empty tile. Zone of control has no effect on this ability."},
+    "spread_attack": {
+        1: "Also attacks the adjacent tiles with -1A."},
 }
 
 state_descriptions = {
@@ -297,6 +299,7 @@ if 1 == 2:
         flanking = None
         flanked = None
         ride_through = None
+        spread_attack = None
 
         name = None
         write = None
@@ -534,7 +537,7 @@ if get_setting("version") == "1.1":
     all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
                  "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Flanking Cavalry",
                  "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
-                 "Fire Archer", "Lancer", "Samurai", "Crossbow Archer", "Assassin"]
+                 "Fire Archer", "Lancer", "Samurai", "Crossbow Archer", "Assassin", "Trebuchet"]
 
     allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
                              "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Hobelar",

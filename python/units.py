@@ -584,6 +584,25 @@ class Cannon(Unit):
     experience_to_upgrade = 3
 
 
+class Trebuchet(Unit):
+    def __init__(self):
+        super(Trebuchet, self).__init__()
+        self.set(Trait.spread_attack, 1)
+
+    name = "Trebuchet"
+    image = "Trebuchet"
+    base_attack = 3
+    base_defence = 1
+    base_movement = 1
+    base_range = 3
+    attack_bonuses = {}
+    defence_bonuses = {}
+    zoc = []
+    type = Type.War_Machine
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.range_skill: 1}]
+    experience_to_upgrade = 4
+
+
 class Flag_Bearer(Unit):
     def __init__(self):
         super(Flag_Bearer, self).__init__()

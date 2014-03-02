@@ -1,0 +1,43 @@
+{
+    "type": "Is outcome correct",
+    "description": "Trebuchet get's -1A on adjacent tiles.",
+    "outcome": {
+        "C5": [3, 6],
+        "C6": [2, 6],
+        "B5": [3, 6]
+    },
+    "action": {
+        "start_at": "C2",
+        "end_at": "C2",
+        "target_at": "C5",
+        "move_with_attack": false
+    },
+    "pre_gamestate": {
+        "player1_units": {
+            "C2": "Trebuchet",
+            "B2": "Archer"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "C5": "Pikeman",
+            "C6": "Pikeman",
+            "B5": "Pikeman",
+            "B8": "Knight"
+        }
+    },
+    "post_gamestate": {
+        "player1_units": {
+            "C2": {
+                "name": "Trebuchet",
+                "used": 1,
+                "experience": 1
+            },
+            "B2": "Archer"
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "B8": "Knight",
+            "B5": "Pikeman"
+        }
+    }
+}

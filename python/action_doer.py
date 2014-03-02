@@ -1,15 +1,21 @@
 from __future__ import division
 from common import *
 from action import Action
-from outcome import Outcome
+import battle
+
+
+def is_win(action, rolls, gamestate, is_sub_action):
+    attack = battle.get_attack(action, gamestate, is_sub_action)
+    defence = battle.get_defence(action, attack, gamestate)
+    return rolls.attack <= attack and not rolls.defence <= defence
 
 
 def do_action(gamestate, action, outcome):
 
-    def settle_attack(action, attack_direction=None):
+    def settle_attack(action, attack_direction=None, is_sub_action=False):
         rolls = outcome.for_position(action.target_at)
 
-        if action.is_win(rolls, gamestate):
+        if is_win(action, rolls, gamestate, is_sub_action):
             if action.target_unit.has_extra_life():
                 action.target_unit.set(State.lost_extra_life)
             else:
@@ -78,12 +84,17 @@ def do_action(gamestate, action, outcome):
     def triple_attack():
         for position in action.end_at.two_forward_tiles(attack_direction) & set(enemy_units):
             sub_action = Action(all_units, action.start_at, action.end_at, position)
-            settle_attack(sub_action, attack_direction)
+            settle_attack(sub_action, attack_direction, True)
+
+    def spread_attack():
+        for position in action.target_at.adjacent_tiles() & set(enemy_units):
+            sub_action = Action(all_units, action.start_at, action.end_at, position)
+            settle_attack(sub_action, None, True)
 
     def longsword():
         for position in action.end_at.four_forward_tiles(attack_direction) & set(enemy_units):
             sub_action = Action(all_units, action.start_at, action.end_at, position)
-            settle_attack(sub_action)
+            settle_attack(sub_action, None, True)
 
     unit = action.unit
     player_units = gamestate.player_units
@@ -110,6 +121,8 @@ def do_action(gamestate, action, outcome):
             triple_attack()
         elif unit.has(Trait.longsword):
             longsword()
+        elif unit.has(Trait.spread_attack):
+            spread_attack()
 
         if action.move_with_attack and action.attack_successful(rolls, gamestate):
             move_melee_unit_to_target_tile(gamestate, rolls, action)
