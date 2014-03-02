@@ -34,7 +34,7 @@ class Outcome:
     @classmethod
     def determine_outcome(cls, action, gamestate):
         outcome = cls()
-        if not action.is_attack():
+        if not action.is_attack() and not action.ability == Ability.assassinate:
             return outcome
 
         outcome.set_suboutcome(action.target_at, get_rolls())

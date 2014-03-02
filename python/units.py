@@ -769,7 +769,7 @@ class Assassin(Unit):
         super(Assassin, self).__init__()
         self.set(Ability.assassinate)
     name = "Assassin"
-    image = "Assassin"
+    image = "Saboteur"
     base_attack = 0
     base_defence = 2
     base_movement = 1
