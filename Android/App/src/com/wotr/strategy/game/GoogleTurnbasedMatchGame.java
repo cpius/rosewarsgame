@@ -62,7 +62,7 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 
 			// If player two in players has no units map
 			if (!currentParticipantId.equals(match.getCreatorId()) && state.getPlayerTwoUnits() == null) {
-				state.setPlayerTwoUnits(drawDeck());
+				state.setPlayerTwoUnits(drawDeck(true));
 				byte[] stateArray = serializer.serialize(state);
 				mHelper.getGamesClient().takeTurn(this, match.getMatchId(), stateArray, currentParticipantId);
 			}
@@ -95,7 +95,7 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 		GoogleTurnbasedMatchGameState state = new GoogleTurnbasedMatchGameState();
 
 		// Draw deck for the current player. This will the inviting player
-		UnitMap<Position, Unit> deck = drawDeck();
+		UnitMap<Position, Unit> deck = drawDeck(false);
 		state.setPlayerOneUnits(deck);
 
 		// Set participantIds in state
@@ -111,9 +111,9 @@ public class GoogleTurnbasedMatchGame extends AbstractGame implements Game, Atta
 		return state;
 	}
 
-	private UnitMap<Position, Unit> drawDeck() {
+	private UnitMap<Position, Unit> drawDeck(boolean enemy) {
 		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
-		List<Unit> deck = deckStrategy.drawDeck();
+		List<Unit> deck = deckStrategy.drawDeck(enemy);
 
 		deck.get(0).getAttackAttribute().addBonus(new RawBonus(1));
 		deck.get(1).getDefenceAttribute().addBonus(new RawBonus(1));

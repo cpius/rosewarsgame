@@ -6,6 +6,6 @@ import com.wotr.model.unit.Unit;
 
 public interface DeckDrawStrategy {
 	
-	public List<Unit> drawDeck();
+	public List<Unit> drawDeck(boolean enemy);
 
 }
