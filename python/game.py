@@ -73,7 +73,7 @@ class Game:
 
             outcome = None
             outcome_document = None
-            if action.is_attack():
+            if action.is_attack() or action.ability == Ability.assassinate:
                 outcome_document = log_document[str(action_number) + "_outcome"]
                 outcome = Outcome.from_document(outcome_document)
                 if options and "move_with_attack" in options:
