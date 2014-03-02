@@ -2,7 +2,6 @@ import json
 from gamestate import Gamestate
 from action import Action
 import action_getter
-import battle
 from outcome import Outcome
 import glob
 from unittest import TestCase, TextTestRunner, TestSuite
@@ -112,14 +111,8 @@ class UniversalTestCase(TestCase):
         self.assertEqual(actual, expected, message)
 
     def is_attack_and_defence_correct(self, gamestate, action, expected_attack, expected_defence):
-        all_units = gamestate.all_units()
-
-        attacking_unit = all_units[action.start_at]
-        defending_unit = all_units[action.target_at]
-
-        actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate.player_units)
-        actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action,
-                                                   gamestate.enemy_units)
+        actual_attack = action.get_attack(gamestate)
+        actual_defence = action.get_defence(gamestate)
 
         error_string = "Filename" + self.testcase_file + "\n" + \
                        "Expected attack / defence " + str(expected_attack) + "," + str(expected_defence) + "\n" + \
@@ -162,8 +155,9 @@ if __name__ == "__main__":
         else:
             testcase_files.append(sys.argv[1])
     else:
-        testcase_files = glob.glob("./../sharedtests/*/*.json") + glob.glob("./../sharedtests_development/*/*.json")
-        replay_files = glob.glob("replay/*/*.json")
+        testcase_files = glob.glob("./../sharedtests_1.1/*/*.json")
+        #replay_files = glob.glob("replay/*/*.json")
+        #testcase_files = ["./../sharedtests_1.1/Flanking_Cavalry/AD_Flanking_3.json"]
 
     for testcase_file in testcase_files:
         suite.addTest(UniversalTestCase(testcase_file))

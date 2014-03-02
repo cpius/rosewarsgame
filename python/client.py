@@ -6,7 +6,6 @@ from outcome import Outcome
 from datetime import datetime
 from time import mktime
 from email.utils import parsedate
-import setup_settings as settings
 from time import sleep
 
 
@@ -27,7 +26,7 @@ class Client():
     def get_game(self):
         if self.game_id:
             print "getting game from server"
-            request = urllib2.Request(settings.server + "/games/view/" + self.game_id)
+            request = urllib2.Request(get_setting("server") + "/games/view/" + self.game_id)
 
             formatted_time = httpdate(self.last_modified)
             if self.last_modified > datetime(1970, 1, 1):
@@ -58,7 +57,7 @@ class Client():
             return json.load(response)
 
         else:
-            response = json.load(urllib2.urlopen(settings.server + "/games/join_or_create/" + self.profilename))
+            response = json.load(urllib2.urlopen(get_setting("server") + "/games/join_or_create/" + self.profilename))
             self.game_id = response["ID"]
 
             print response["Message"], self.game_id
@@ -126,7 +125,7 @@ class Client():
         return
 
     def send_action(self, action):
-        url = settings.server + "/games/" + self.game_id + "/do_action"
+        url = get_setting("server") + "/games/" + self.game_id + "/do_action"
         print "sending json:", document_to_string(action)
         request = urllib2.Request(url, document_to_string(action), {"Content-Type": "application/json"})
         response = urllib2.urlopen(request)

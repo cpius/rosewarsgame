@@ -1,0 +1,20 @@
+{
+    "gamestate":
+    {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B2": "Archer",
+            "B3": "Ballista"
+        },
+        "player2_units": {
+            "B5": "Archer"
+        }
+    },
+    "action":
+    {
+        "start_at": "B3",
+        "end_at": "B3",
+        "target_at": "B5"
+    }
+}
+

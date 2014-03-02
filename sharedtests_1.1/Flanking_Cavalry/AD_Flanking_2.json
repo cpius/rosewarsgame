@@ -1,0 +1,24 @@
+{
+    "type": "Is attack and defence correct",
+    "description": "The flanking bonus should apply",
+    "attack": 4,
+    "defence": 1,
+    "action": {
+        "start_at": "B4",
+        "end_at": "B4",
+        "target_at": "C4",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B4": "Flanking Cavalry",
+            "A3": "Archer"
+        },
+        "player2_units": {
+            "B5": "Archer",
+            "C4": "Ballista"
+
+        }
+    }
+}

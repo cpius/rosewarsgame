@@ -6,14 +6,7 @@ import random
 
 
 def figure_out_player_profile():
-    filename, pathname, description = imp.find_module("settings_user")
-    settings_user = imp.load_module("settings_user", filename, pathname, description)
-
-    profile = None
-    if hasattr(settings_user, "profile"):
-        profile = settings_user.profile
-
-    filename.close()
+    profile = get_setting("profile")
 
     if profile:
         return profile
@@ -35,15 +28,6 @@ def decide_opponent():
     return int(sys.stdin.readline().rstrip())
 
 
-def decide_AI_strength():
-    global j
-    print "Choose AI strength level"
-    for j in range(1, 3):
-        print str(j) + ":", ai_descriptions[AI.name[j]]
-    print "> ",
-    return AI.name[int(sys.stdin.readline().rstrip())]
-
-
 if __name__ == '__main__':
 
     opponent_choice = decide_opponent()
@@ -57,12 +41,11 @@ if __name__ == '__main__':
     elif opponent_choice == Opponent.HotSeat:
         controller = Controller.new_game("Human", "Human")
     elif opponent_choice == Opponent.AI:
-        ai_strength = decide_AI_strength()
         coinflip = random.randint(0, 1)
         if coinflip == 0:
-            controller = Controller.new_game("Human", ai_strength)
+            controller = Controller.new_game("Human", "AI")
         else:
-            controller = Controller.new_game(ai_strength, "Human")
+            controller = Controller.new_game("AI", "Human")
 
     if controller:
         controller.run_game()

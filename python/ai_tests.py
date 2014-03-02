@@ -1,18 +1,24 @@
 from gamestate import Gamestate
 from action import Action
 import json
-import ai_level2 as ai
+import ai as ai_module
+import glob
 
-path = "../ai_tests/test1.json"
-document = json.loads(open(path).read())
+paths = glob.glob("../ai_tests/*.json")
 
-gamestate = Gamestate.from_document(document["gamestate"])
-desired_action = Action.from_document(gamestate.all_units(), document["action"])
-gamestate.set_available_actions()
-actions = gamestate.get_actions()
+for path in paths:
+    print path
+    document = json.loads(open(path).read())
 
-action = ai.get_action(actions, gamestate)
+    gamestate = Gamestate.from_document(document["gamestate"])
+    desired_action = Action.from_document(gamestate.all_units(), document["action"])
 
-print action
-print desired_action
-print action == desired_action
+    gamestate.set_available_actions()
+    ai = ai_module.AI()
+
+    action = ai.select_action(gamestate)
+
+    if action != desired_action:
+        print action
+        print desired_action
+        print

@@ -1,0 +1,1 @@
+Here, the Pikeman will get the attack bonus. The Light Cavalry will get it as well, if it attacks from the marked tile. The Archer and the Heavy Cavalry do not receive the bonus.

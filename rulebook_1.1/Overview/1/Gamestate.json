@@ -1,0 +1,25 @@
+{
+    "actions_remaining": 0,
+    "player1_units": {
+        "A3": "Pikeman",
+        "A2": "Catapult",
+        "B2": "Knight",
+        "B3": "Light Cavalry",
+        "C3": "Ballista",
+        "E4": "Knight",
+        "D4": "Knight",
+        "E3": "Pikeman",
+        "C4": "Archer"
+    },
+    "player2_units": {
+        "E6": "Archer",
+        "B5": "Knight",
+        "B6": "Knight",
+        "A7": "Light Cavalry",
+        "A6": "Archer",
+        "D6": "Archer",
+        "D7": "Catapult",
+        "D5": "Pikeman",
+        "C6": "Catapult"
+    }
+}

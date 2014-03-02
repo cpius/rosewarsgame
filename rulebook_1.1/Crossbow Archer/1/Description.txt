@@ -1,0 +1,2 @@
+Description:
+Here the Crossbow Archer can hit the Pikeman and the Archer in one attack. It cannot hit the Ballista, since it is out of its range. It can also hit the Knight, but then it cannot hit any other units.

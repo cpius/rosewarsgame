@@ -1,1 +1,0 @@
-If the attacked unit receives any bonuses, these are ignored.

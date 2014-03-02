@@ -1,0 +1,20 @@
+{
+    "type": "Does action exist",
+    "description": "Assassin's ability can only be used in your last action",
+    "result": false,
+    "action": {
+        "start_at": "A1",
+        "end_at": "A1",
+        "target_at": "E8",
+        "ability": "assassinate"
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "A1": "Assassin"
+            },
+        "player2_units": {
+            "E8": "Knight"
+        }
+    }
+}

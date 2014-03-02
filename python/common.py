@@ -4,6 +4,8 @@ from bson.objectid import ObjectId
 import collections
 import functools
 from dictdiffer import DictDiffer
+import random
+from collections import namedtuple
 
 
 class Direction:
@@ -31,6 +33,12 @@ class Direction:
 
     def __repr__(self):
         return self.name
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 
 class Position:
@@ -64,17 +72,16 @@ class Position:
         return Position(self.column, board_height - self.row + 1)
 
     def four_forward_tiles(self, direction):
-        return direction.perpendicular(self) + direction.forward_and_sideways(self)
+        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board)
 
     def surrounding_tiles(self):
-        surrounding = set(direction.move(self) for direction in eight_directions)
-        return set(tile for tile in surrounding if tile in board)
+        return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board)
 
     def adjacent_tiles(self):
-        return set(direction.move(self) for direction in directions)
+        return set(pos for pos in [direction.move(self) for direction in directions] if pos in board)
 
     def two_forward_tiles(self, direction):
-        return direction.forward_and_sideways(self)
+        return set(pos for pos in direction.forward_and_sideways(self) if pos in board)
 
 
 def enum(n, *sequential, **named):
@@ -85,6 +92,7 @@ def enum(n, *sequential, **named):
     enums["write"] = reverse_print
     return type('Enum', (), enums)
 
+rolls = namedtuple("rolls", ["attack", "defence"])
 
 trait_descriptions = {
     "attack_cooldown": {
@@ -94,8 +102,6 @@ trait_descriptions = {
         1: "Can move 4 tiles if movement ends with an attack."},
     "big_shield": {
         1: "+2D v melee"},
-    "cavalry_charging": {
-        1: "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement"},
     "combat_agility": {
         1: "Can make an attack after its first action. (But not a second move.)"},
     "crusading": {
@@ -147,13 +153,19 @@ trait_descriptions = {
     "movement_skill": {
         1: "Is added to the units base movement"},
     "fire_arrows": {
-        1: "+3A vs Siege Weapons"},
+        1: "+3A vs War Machines"},
     "cavalry_specialist": {
         1: "+1A +1D vs Cavalry"},
-    "siege_weapon_specialist": {
-        1: "+1A +1D vs Siege Weapons"},
+    "war_machine_specialist": {
+        1: "+1A +1D vs War Machines"},
     "flanking": {
-        1: "+2A vs Infantry"}
+        1: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
+           "turn, it's flanking skill is added to it's attack."},
+    "flanked": {
+        1: "This unit was attacked by a unit with flanking last turn."},
+    "ride_through": {
+        1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where it"
+           "ends up on this empty tile. Zone of control has no effect on this ability."}
 }
 
 state_descriptions = {
@@ -192,8 +204,9 @@ ability_descriptions = {
     "sabotage": {
         1: "Reduces a units defence to 0 this turn.",
         2: "Reduces a units defence to 0 for two turns."},
-    "triple_attack": {
-        1: "Also hits the two diagonally nearby tiles in the attack direction."},
+    "assassinate": {
+        1: "Assassin attacks an enemy unit, and it's defence is reduced to 2. Assassin is attacked. This ability can "
+           "only be performed on your second action."}
 }
 
 opponent_descriptions = {
@@ -204,11 +217,12 @@ opponent_descriptions = {
 }
 
 ai_descriptions = {
-    "ai_advancer": "Advancer",
-    "ai_level2": "AI level 2 (under construction)"
+    "1": "Easy",
+    "2": "Medium",
+    "3": "Hard"
 }
 
-types = ["Cavalry", "Infantry", "Siege_Weapon", "Specialist"]
+types = ["Cavalry", "Infantry", "War_Machine", "Specialist"]
 
 Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
 
@@ -227,7 +241,7 @@ if 1 == 2:
     class Type:
         Cavalry = None
         Infantry = None
-        Siege_Weapon = None
+        War_Machine = None
         Specialist = None
 
         name = {}
@@ -237,7 +251,6 @@ if 1 == 2:
         attack_cooldown = None
         bribed = None
         extra_action = None
-        poisoned = None
         improved_weapons = None
         movement_remaining = None
         lost_extra_life = None
@@ -253,7 +266,6 @@ if 1 == 2:
     class Trait:
         berserking = None
         big_shield = None
-        cavalry_charging = None
         combat_agility = None
         defence_maneuverability = None
         double_attack_cost = None
@@ -281,8 +293,10 @@ if 1 == 2:
         movement_skill = None
         fire_arrows = None
         cavalry_specialist = None
-        siege_weapon_specialist = None
+        war_machine_specialist = None
         flanking = None
+        flanked = None
+        ride_through = None
 
         name = None
         write = None
@@ -292,7 +306,7 @@ if 1 == 2:
         improve_weapons = None
         poison = None
         sabotage = None
-        triple_attack = None
+        assassinate = None
 
         name = {}
         write = {}
@@ -374,8 +388,8 @@ def assert_equal_documents(testcase, expected, actual, testcase_file):
         message += "Added " + str(difference.added())
     if difference.removed():
         message += "Removed " + str(difference.removed())
-    if difference.changed():
-        message += "Changed " + str(difference.changed())
+    if difference.changed_recursive():
+        message += "Changed " + str(difference.changed_recursive())
 
     testcase.assertEqual(expected, actual, message)
 
@@ -486,3 +500,54 @@ def attribute_key(attribute, value):
 
 def flip_units(units):
     return dict((position.flip(), unit) for position, unit in units.items())
+
+
+def merge_units(units1, units2):
+    units = units1.copy()
+    units.update(units2)
+    return units
+
+
+def get_setting(name):
+    with open("settings.txt") as input:
+        for line in input:
+            line = line.split()
+            if len(line) > 1 and line[0] == name:
+                setting = line[2].strip()
+                if setting in ["yes", "no"]:
+                    return setting == "yes"
+                elif setting in [str(i) for i in range(10)]:
+                    return int(setting)
+                else:
+                    return setting
+
+
+def unit_with_trait_at(pos, trait, units, level=None):
+    return pos in units and units[pos].has(trait, level)
+
+
+def get_rolls():
+    return rolls(random.randint(1, 6), random.randint(1, 6))
+
+
+if get_setting("version") == "1.1":
+    all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
+                 "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Flanking Cavalry",
+                 "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
+                 "Fire Archer", "Lancer", "Samurai", "Crossbow Archer", "Assassin"]
+
+    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
+                             "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Hobelar",
+                             "Lancer", "Flanking Cavalry", "Assassin"]
+
+    allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
+
+
+if get_setting("version") == "1.0":
+    all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Scout", "Viking", "Hobelar",
+                 "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
+
+    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Scout", "Viking",
+                             "Hobelar"]
+
+    allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]

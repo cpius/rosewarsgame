@@ -154,6 +154,16 @@ class Action(object):
         else:
             return 0
 
+    def flanking(self):
+        if not self.unit.has(Trait.flanking) or self.target_unit.has(Trait.flanked):
+            return False
+        attack_direction = self.end_at.get_direction_to(self.target_at)
+        if attack_direction == Direction("Up"):
+            return False
+
+        return True
+
+
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack()
 
@@ -168,12 +178,12 @@ class Action(object):
                                          self.is_surrounding_unit_with(units, Trait.flag_bearing, self.end_at, 2))
 
     def is_surrounding_unit_with(self, units, trait, position, level=None):
-        units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in surrounding_units(position, units_excluding_current) if unit.has(trait, level))
+        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.surrounding_tiles() if
+                   pos != self.start_at)
 
-    def is_adjacent_unit_with(self, units, trait, position, n=1):
-        units_excluding_current = units_excluding_position(units, self.start_at)
-        return any(unit for unit in adjacent_units(position, units_excluding_current) if unit.has(trait, n))
+    def is_adjacent_unit_with(self, units, trait, position, level=None):
+        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.adjacent_tiles() if
+                   pos != self.start_at)
 
     def distance_to_target(self):
         return distance(self.start_at, self.target_at)
@@ -181,29 +191,44 @@ class Action(object):
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack()
 
+    def get_attack(self, gamestate):
+        if not hasattr(self, "attack"):
+            self.attack = battle.get_attack(self, gamestate)
+        return self.attack
+
+    def get_defence(self, gamestate):
+        if not hasattr(self, "defence"):
+            attack = self.get_attack(gamestate)
+            self.defence = battle.get_defence(self, attack, gamestate)
+        return self.defence
+
     def attack_successful(self, rolls, gamestate):
-        return battle.attack_successful(self, rolls, gamestate)
+        return rolls.attack <= self.get_attack(gamestate)
 
     def defence_successful(self, rolls, gamestate):
-        return battle.defence_successful(self, rolls, gamestate)
+        return rolls.defence <= self.get_defence(gamestate)
 
     def is_win(self, rolls, gamestate):
         return self.attack_successful(rolls, gamestate) and not self.defence_successful(rolls, gamestate)
 
     def is_miss(self, rolls, gamestate):
-        return not battle.attack_successful(self, rolls, gamestate)
+        return not self.attack_successful(rolls, gamestate)
 
     def outcome_string(self, rolls, gamestate):
         if not self.is_attack() or not rolls:
             return ""
-
-        if self.is_miss(rolls, gamestate):
+        elif self.is_miss(rolls, gamestate):
             return "Miss"
-
-        if self.is_win(rolls, gamestate):
+        elif self.is_win(rolls, gamestate):
             return "Win"
-
-        return "Defend"
+        else:
+            return "Defend"
 
     def copy(self):
         return deepcopy(self)
+
+    def update_references(self, gamestate):
+        units = merge_units(gamestate.player_units, gamestate.enemy_units)
+        self.unit = units[self.start_at]
+        if self.target_at and self.target_at in units:
+            self.target_unit = units[self.target_at]

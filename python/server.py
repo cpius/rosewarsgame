@@ -424,7 +424,7 @@ def get_expected_action(log_document, gamestate):
             return action_number, "move_with_attack"
 
     unit, position = gamestate.get_unit_from_action_document(last_action_document)
-    if unit.is_milf():
+    if unit.should_be_upgraded():
         if not last_action_options or not "upgrade" in last_action_options:
             return action_number, "upgrade",
 

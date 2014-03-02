@@ -1,0 +1,21 @@
+{
+    "type": "Does action exist",
+    "description": "A cavalry cannot pass a Pikeman sideways",
+    "result": false,
+    "action": {
+        "start_at": "A4",
+        "end_at": "D4"
+    },
+    "gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A4": "Light Cavalry",
+            "E6": "Catapult"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "C5": "Pikeman",
+            "A3": "Archer"
+        }
+    }
+}
