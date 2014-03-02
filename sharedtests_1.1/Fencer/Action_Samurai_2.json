@@ -1,25 +1,24 @@
 {
     "type": "Does action exist",
-    "description": "Samurai can not do a move and attack on its first action",
+    "description": "Fencer can never move on its second action, only attack",
     "result": false,
     "action": {
         "start_at": "E4",
-        "end_at": "E5",
-        "target_at": "D5",
-        "move_with_attack": false
+        "end_at": "E5"
     },
     "gamestate": {
-        "actions_remaining": 0,
+        "actions_remaining": 1,
         "player1_units": {
             "E4": {
-                "name": "Samurai",
+                "name": "Fencer",
                 "used": 1,
-                "experience": 1
+                "experience": 1,
+                "movement_remaining": 1,
+                "extra_action": 1
             },
             "A2": "Pikeman"
         },
         "player2_units": {
-            "D5": "Knight",
             "D7": "Ballista"
         }
     }

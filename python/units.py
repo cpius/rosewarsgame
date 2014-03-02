@@ -731,13 +731,13 @@ class War_Elephant(Unit):
     traits = {Trait.double_attack_cost: 1, Trait.triple_attack: 1, Trait.push: 1}
 
 
-class Samurai(Unit):
+class Fencer(Unit):
     def __init__(self):
-        super(Samurai, self).__init__()
+        super(Fencer, self).__init__()
         self.set(Trait.combat_agility, 1)
 
-    name = "Samurai"
-    image = "Samurai"
+    name = "Fencer"
+    image = "Fencer"
     base_attack = 3
     base_defence = 3
     base_movement = 1

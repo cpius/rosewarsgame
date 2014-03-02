@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct",
-    "description": "After Samurai does it's extra action, it shouldn't have more extra actions",
+    "description": "After Fencer does it's extra action, it shouldn't have more extra actions",
     "outcome": {
         "E4": [1, 6]
     },
@@ -14,7 +14,7 @@
         "actions_remaining": 1,
         "player1_units": {
             "E3": {
-                "name": "Samurai",
+                "name": "Fencer",
                 "used": 1,
                 "experience": 1,
                 "extra_action": 1
