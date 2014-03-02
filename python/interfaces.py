@@ -12,6 +12,7 @@ class Interface(object):
         self.fonts = {}
 
         self.line_distances = {"small": 15 * zoom,
+                               "medium": 20 * zoom,
                                "normal": 25 * zoom}
 
         self.coordinates = {"base": Coordinates(self.base_coordinates, self),
@@ -30,6 +31,7 @@ class Interface(object):
         self.fonts = {"message": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "very_small": pygame.font.SysFont(font_name, int(11 * zoom), bold=True),
                       "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
+                      "medium": pygame.font.SysFont(font_name, int(16 * zoom), bold=True),
                       "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "experience": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)

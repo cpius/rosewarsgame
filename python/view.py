@@ -115,14 +115,14 @@ class View(object):
         self.refresh()
 
     def draw_tutorial_message(self, message, draw_on_lower):
-        line_distances = self.interface.line_distances["normal"]
-        fonts = self.interface.fonts["normal"]
+        line_distances = self.interface.line_distances["medium"]
+        fonts = self.interface.fonts["medium"]
         x_coordinate = 410 * settings.zoom
         if draw_on_lower:
             y_coordinate = 500 * settings.zoom
         else:
-            y_coordinate = 40 * settings.zoom
-        show_lines(self.screen, message, 47 * settings.zoom, line_distances, fonts, x_coordinate, y_coordinate)
+            y_coordinate = 10 * settings.zoom
+        show_lines(self.screen, message, 42 * settings.zoom, line_distances, fonts, x_coordinate, y_coordinate + 30)
         self.refresh()
 
     def draw_game_tutorial(self, game):
