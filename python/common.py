@@ -199,8 +199,6 @@ ability_descriptions = {
     "sabotage": {
         1: "Reduces a units defence to 0 this turn.",
         2: "Reduces a units defence to 0 for two turns."},
-    "triple_attack": {
-        1: "Also hits the two diagonally nearby tiles in the attack direction."},
 }
 
 opponent_descriptions = {
@@ -300,7 +298,6 @@ if 1 == 2:
         improve_weapons = None
         poison = None
         sabotage = None
-        triple_attack = None
 
         name = {}
         write = {}
