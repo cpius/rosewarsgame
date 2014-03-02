@@ -6,8 +6,8 @@ from collections import namedtuple
 
 required_special_units = []
 
-requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_siege_weapon",
-                "at_most_two_siege_weapons", "at_least_five_melee_with_weaponsmith"]
+requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_war_machine",
+                "at_most_two_war_machines", "at_least_five_melee_with_weaponsmith"]
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
@@ -89,12 +89,12 @@ def at_most_one_pikeman_per_column(units):
                                                              pos.column == column and unit.zoc) > 1)
 
 
-def at_least_one_siege_weapon(units):
-    return any(unit.type == Type.Siege_Weapon for unit in units.values())
+def at_least_one_war_machine(units):
+    return any(unit.type == Type.War_Machine for unit in units.values())
 
 
-def at_most_two_siege_weapons(units):
-    return sum(1 for unit in units.values() if unit.type == Type.Siege_Weapon) <= 2
+def at_most_two_war_machines(units):
+    return sum(1 for unit in units.values() if unit.type == Type.War_Machine) <= 2
 
 
 def at_least_five_melee_with_weaponsmith(units):
