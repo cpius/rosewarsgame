@@ -168,11 +168,14 @@ trait_descriptions = {
            "ends up on this empty tile. Zone of control has no effect on this ability."},
     "spread_attack": {
         1: "Also attacks the adjacent tiles with -1A."},
+    "javelin": {
+        1: "Can one time make a ranged attack with range 3. The defending unit has it's defence reduced by 1."}
 }
 
 state_descriptions = {
     "extra_action": "Whether the unit is doing its extra action.",
     "lost_extra_life": "Whether the unit has lost its extra life",
+    "used_javelin": "Whether a unit has used it's javelin",
     "movement_remaining": "Movement points left for doing an extra action",
     "used": "Whether a unit has been used this turn.",
     "experience": "Experience.",
@@ -261,6 +264,7 @@ if 1 == 2:
         recently_bribed = None
         sabotaged = None
         recently_upgraded = None
+        used_javelin = None
 
         name = None
         write = None
@@ -300,6 +304,7 @@ if 1 == 2:
         flanked = None
         ride_through = None
         spread_attack = None
+        javelin = None
 
         name = None
         write = None

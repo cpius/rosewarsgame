@@ -32,6 +32,9 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.has(Trait.war_machine_specialist) and attacking_unit.type == Type.War_Machine:
         defence_adjusters += 1
 
+    if attacking_unit.has(Trait.javelin) and distance(action.start_at, action.target_at) > 1:
+        defence_adjusters -= 1
+
     return defence_adjusters
 
 

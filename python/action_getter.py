@@ -80,6 +80,12 @@ def get_unit_actions(unit, start_at, gamestate):
 
         return moves, attacks
 
+    def get_javelin_attacks():
+        javelin_attacks = ranged_attack_actions(ranged_attacks_set(start_at, frozenset(enemy_units), 3))
+        javelin_attacks = [attack for attack in javelin_attacks if distance(attack.end_at, attack.target_at) > 1]
+        return javelin_attacks
+
+
     def get_extra_actions():
 
         def get_actions_combat_agility():
@@ -166,6 +172,9 @@ def get_unit_actions(unit, start_at, gamestate):
 
     if unit.has(Trait.ride_through):
         attacks = get_ride_through_attacks(attacks)
+
+    if unit.has_javelin():
+        attacks += get_javelin_attacks()
 
     return moves, attacks, abilities
 

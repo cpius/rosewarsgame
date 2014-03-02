@@ -164,6 +164,9 @@ class Unit(object):
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
 
+    def has_javelin(self):
+        return self.has(Trait.javelin) and not self.has(State.used_javelin)
+
     def is_melee(self):
         return self.range == 1
 
@@ -562,6 +565,28 @@ class Viking(Unit):
     experience_to_upgrade = 4
 
     traits = {Trait.rage: 1, Trait.extra_life: 1}
+
+
+class Javeliner(Unit):
+    def __init__(self):
+        super(Javeliner, self).__init__()
+        self.set(Trait.javelin, 1)
+
+    name = "Javeliner"
+    image = "Javeliner"
+    base_attack = 4
+    base_defence = 3
+    base_movement = 1
+    base_range = 1
+    attack_bonuses = {}
+    defence_bonuses = {}
+    zoc = []
+    type = Type.Infantry
+    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 4
+
+    traits = {Trait.javelin: 1}
+
 
 
 class Cannon(Unit):

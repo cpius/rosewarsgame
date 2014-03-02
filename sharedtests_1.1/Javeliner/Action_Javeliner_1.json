@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "description": "Javeliner can throw its javelin",
+    "result": true,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C3",
+        "target_at": "C6",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Archer",
+            "C3": "Javeliner"
+        },
+        "player2_units": {
+            "C6": "Longswordsman",
+            "E4": "Knight"
+        }
+    }
+}
