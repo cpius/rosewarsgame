@@ -2,7 +2,6 @@ import json
 from gamestate import Gamestate
 from action import Action
 import action_getter
-import battle
 from outcome import Outcome
 import glob
 from unittest import TestCase, TextTestRunner, TestSuite
