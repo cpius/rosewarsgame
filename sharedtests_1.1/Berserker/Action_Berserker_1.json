@@ -1,0 +1,20 @@
+{
+    "type": "Does action exist",
+    "result": true,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C6",
+        "target_at": "C7",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": "Berserker",
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "C7": "Ballista"
+        }
+    }
+}

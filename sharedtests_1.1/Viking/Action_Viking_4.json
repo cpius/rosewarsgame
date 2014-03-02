@@ -1,0 +1,23 @@
+{
+    "type": "Does action exist",
+    "description": "Viking still has a normal attack",
+    "result": true,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C3",
+        "target_at": "D3",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Flag Bearer",
+            "C3": "Viking"
+        },
+        "player2_units": {
+            "C5": "Longswordsman",
+            "E4": "Knight",
+            "D3": "Pikeman"
+        }
+    }
+}

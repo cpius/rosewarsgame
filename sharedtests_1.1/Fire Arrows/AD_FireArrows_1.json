@@ -12,10 +12,7 @@
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
-            "B4": {
-                "name": "Archer",
-                "fire_arrows": 1
-            },
+            "B4": "Fire Archer",
             "C2": "Knight"
         },
         "player2_units": {

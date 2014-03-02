@@ -1,0 +1,42 @@
+{
+    "type": "Is outcome correct",
+    "description": "Hobelar is stopped by Pikeman after move-with-attack",
+    "outcome": {
+        "A5": [1, 6]
+    },
+    "action": {
+        "start_at": "A4",
+        "end_at": "A4",
+        "target_at": "A5",
+        "move_with_attack": true
+    },
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "A4": "Hobelar",
+            "A8": "Ballista"
+        },
+        "player2_units": {
+            "A5": "Archer",
+            "B5": "Pikeman",
+            "B7": "Catapult",
+            "D7": "Archer"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A5": {
+                "experience": 1,
+                "name": "Hobelar",
+                "used": 1
+            },
+            "A8": "Ballista"
+        },
+        "player2_units": {
+            "B5": "Pikeman",
+            "B7": "Catapult",
+            "D7": "Archer"
+        }
+    }
+}
