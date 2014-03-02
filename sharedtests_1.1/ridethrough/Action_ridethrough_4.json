@@ -1,0 +1,21 @@
+{
+    "type": "Does action exist",
+    "description": "ride through can work backwards",
+    "result": true,
+    "action": {
+        "move_with_attack": false,
+        "start_at": "E7",
+        "end_at": "E5",
+        "target_at": "E6"
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E7": "Hussar",
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "E6": "Pikeman"
+        }
+    }
+}

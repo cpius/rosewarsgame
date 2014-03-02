@@ -1,0 +1,3 @@
+It rolled a 2. The Archer has an attack of 2, so it succeeded. 
+
+Since the attack was successful, the defender rolls a die. As with attack, if the roll is lower than or equal to its defence, the defence is successful.

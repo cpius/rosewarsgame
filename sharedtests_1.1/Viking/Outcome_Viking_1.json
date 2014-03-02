@@ -1,0 +1,41 @@
+{
+    "description": "Test if viking loses 1 life",
+    "type": "Is outcome correct",
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": "Ballista",
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "C4": {
+                "name": "Viking"
+            }
+        }
+    },
+    "action": {
+        "start_at": "C3",
+        "target_at": "C4",
+        "end_at": "C3"
+    },
+    "outcome": {
+        "C4": [1, 6]
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C3": {
+                "experience": 1,
+                "used": 1,
+                "name": "Ballista"
+            },
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "C4": {
+                "lost_extra_life": 1,
+                "name": "Viking"
+            }
+        }
+    }
+}

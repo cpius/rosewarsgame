@@ -1,0 +1,21 @@
+{
+    "type": "Does action exist",
+    "description": "ride through move",
+    "result": true,
+    "action": {
+        "move_with_attack": false,
+        "start_at": "E5",
+        "end_at": "E7",
+        "target_at": "E6"
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E5": "Hussar",
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E6": "Pikeman"
+        }
+    }
+}

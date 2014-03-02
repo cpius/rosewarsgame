@@ -1,0 +1,1 @@
+It rolled a 3. The Catapult has a defence of 3, thus the defence is not successful, and the Catapult is killed.

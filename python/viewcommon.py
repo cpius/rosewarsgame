@@ -134,3 +134,8 @@ def get_position_from_mouseclick(interface, coordinates):
         y = 8 - int((coordinates[1] - interface.y_border_top) /
                     (interface.unit_height + interface.unit_padding_height))
     return Position(x, y)
+
+
+
+def within(point, area):
+    return area[0].y <= point[1] <= area[1].y and area[0].x <= point[0] <= area[1].x

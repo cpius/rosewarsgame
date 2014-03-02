@@ -1,0 +1,34 @@
+{
+    "description": "Test the assassination result",
+    "type": "Is outcome correct",
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": "Assassin",
+            "A1": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer",
+            "E7": "Pikeman"
+        }
+    },
+    "action": {
+        "target_at": "D4",
+        "end_at": "C3",
+        "start_at": "C3",
+        "ability": "assassinate"
+    },
+    "outcome": {
+        "D4": [2, 3]
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Pikeman"
+        },
+        "player2_units": {
+            "E7": "Pikeman",
+            "D4": "Archer"
+        }
+    }
+}

@@ -23,7 +23,7 @@ public class AIGame extends AbstractGame implements Game {
 	public AIGame() {
 
 		DeckDrawStrategy deckStrategy = new FixedDeckDrawStrategy();
-		List<Unit> deck = deckStrategy.drawDeck();
+		List<Unit> deck = deckStrategy.drawDeck(false);
 
 		deck.get(0).getAttackAttribute().addBonus(new RawBonus(1));
 		deck.get(1).getDefenceAttribute().addBonus(new RawBonus(1));
@@ -34,7 +34,7 @@ public class AIGame extends AbstractGame implements Game {
 		playerOne = new AIPlayer(layoutDeck, "Bot 1", 0);
 
 		deckStrategy = new FixedDeckDrawStrategy();
-		deck = deckStrategy.drawDeck();
+		deck = deckStrategy.drawDeck(true);
 
 		deck.get(0).getAttackAttribute().addBonus(new RawBonus(1));
 		deck.get(1).getDefenceAttribute().addBonus(new RawBonus(1));

@@ -1,7 +1,0 @@
-3. Battle.
-
-There are two types of attacks, ranged and melee.
-
-A melee unit can attack units standing on tiles they can move to. It first moves to a tile adjacent to the target tile, and then attacks. If it wins the attack, the player can choose to move the unit to the conquered tile, or choose to stay.
-
-Here, the Knight can attack the Catapult from either of the marked tiles.

@@ -1,6 +1,7 @@
 from __future__ import division
 from common import *
 from action import Action
+from outcome import Outcome
 
 
 def do_action(gamestate, action, outcome):
@@ -28,9 +29,14 @@ def do_action(gamestate, action, outcome):
         if action.ability == Ability.bribe:
             action.target_unit.set_effect(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
+        elif action.ability == Ability.assassinate:
+            if outcome.outcomes[action.target_at].attack > 2:
+                del enemy_units[action.target_at]
+            if outcome.outcomes[action.target_at].defence > 2:
+                del player_units[action.start_at]
         else:
-            value = action.unit.get(action.ability)
-            action.target_unit.do(action.ability, value)
+            level = action.unit.get(action.ability)
+            action.target_unit.do(action.ability, level)
 
     def prepare_extra_actions(action):
         if action.unit.has(State.extra_action):
@@ -70,12 +76,12 @@ def do_action(gamestate, action, outcome):
         player_units[action.end_at] = player_units.pop(action.start_at)
 
     def triple_attack():
-        for position in set(action.end_at.two_forward_tiles(attack_direction)) & set(enemy_units):
+        for position in action.end_at.two_forward_tiles(attack_direction) & set(enemy_units):
             sub_action = Action(all_units, action.start_at, action.end_at, position)
             settle_attack(sub_action, attack_direction)
 
     def longsword():
-        for position in set(action.end_at.four_forward_tiles(attack_direction)) & set(enemy_units):
+        for position in action.end_at.four_forward_tiles(attack_direction) & set(enemy_units):
             sub_action = Action(all_units, action.start_at, action.end_at, position)
             settle_attack(sub_action)
 
@@ -83,8 +89,6 @@ def do_action(gamestate, action, outcome):
     player_units = gamestate.player_units
     enemy_units = gamestate.enemy_units
     all_units = gamestate.all_units()
-    if action.is_attack() and action.unit.is_melee():
-        attack_direction = action.end_at.get_direction_to(action.target_at)
 
     apply_unit_effects()
 
@@ -93,10 +97,12 @@ def do_action(gamestate, action, outcome):
     update_unit_position()
 
     if unit.has(Trait.scouting):
-        unit.gain_xp()
+        unit.gain_experience()
 
     if action.is_attack():
-        unit.gain_xp()
+        unit.gain_experience()
+        if action.unit.is_melee():
+            attack_direction = action.end_at.get_direction_to(action.target_at)
         rolls = outcome.for_position(action.target_at)
         settle_attack(action)
 
@@ -105,15 +111,15 @@ def do_action(gamestate, action, outcome):
         elif unit.has(Trait.longsword):
             longsword()
 
+        if action.move_with_attack and action.attack_successful(rolls, gamestate):
+            move_melee_unit_to_target_tile(gamestate, rolls, action)
+
     elif action.is_ability():
-        unit.gain_xp()
+        unit.gain_experience()
         settle_ability(action)
 
     if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility]):
         prepare_extra_actions(action)
-
-    if action.is_attack() and action.move_with_attack and action.attack_successful(rolls, gamestate):
-        move_melee_unit_to_target_tile(gamestate, rolls, action)
 
     unit.set(State.used)
 

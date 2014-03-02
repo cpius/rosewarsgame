@@ -1,0 +1,33 @@
+{
+    "type": "Is outcome correct",
+    "description": "Hobelar doesn't get an extra action after a move",
+    "action": {
+        "start_at": "E3",
+        "end_at": "E2"
+    },
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E3": "Hobelar",
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D7": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "E2": {
+                "name": "Hobelar",
+                "used": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E4": "Archer",
+            "D7": "Ballista"
+        }
+    }
+}

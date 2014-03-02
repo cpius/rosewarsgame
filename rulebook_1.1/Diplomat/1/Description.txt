@@ -1,0 +1,2 @@
+Special Cases
+You cant win the game by moving a bribed unit to the opponents back line.

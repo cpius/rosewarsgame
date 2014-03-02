@@ -1,0 +1,3 @@
+If you play with the full rules, instead of starting with 9 basic units, you start with 7 basic units and 2 special units. These units can be of the same three types, Infantry, Cavalry and Siege Weapon. In addition, they can also be of type Specialist. These units have no attack, but instead have one or more abilities. Specialists can target units within their range, but instead of attacking those units, they apply an effect to them, depending on their ability.
+
+Each time you use a unit, it gets an experience point. When it has filled up its experience bar, it upgrades to a choice of two special units.

@@ -11,13 +11,13 @@ import com.wotr.model.unit.basic.HeavyCavalry;
 import com.wotr.model.unit.basic.LightCavalry;
 import com.wotr.model.unit.basic.Pikeman;
 import com.wotr.model.unit.special.Berserker;
-import com.wotr.model.unit.special.Chariot;
+import com.wotr.model.unit.special.Hobelar;
 import com.wotr.strategy.DeckDrawStrategy;
 
 public class FixedDeckDrawStrategy implements DeckDrawStrategy {
 
 	@Override
-	public List<Unit> drawDeck() {
+	public List<Unit> drawDeck(boolean enemy) {
 		List<Unit> result = new ArrayList<Unit>();
 
 		result.add(new Archer());
@@ -28,7 +28,13 @@ public class FixedDeckDrawStrategy implements DeckDrawStrategy {
 		result.add(new LightCavalry());
 		result.add(new Pikeman());
 		result.add(new Berserker());
-		result.add(new Chariot());
+		result.add(new Hobelar());
+
+		if (enemy) {
+			for (Unit unit : result) {
+				unit.setEnemy(true);
+			}
+		}
 
 		return result;
 	}

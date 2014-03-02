@@ -1,0 +1,3 @@
+Pikemen exerts zone of control over Cavalry. This means that if you are standing adjacent to it with a cavalry, you can only move directly backwards from it, or attack it. 
+
+Here the Knight can move to the tiles marked blue, and is blocked by the Pikeman from moving to the tiles marked red.

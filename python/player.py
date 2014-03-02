@@ -1,4 +1,4 @@
-import ai_module
+import ai
 
 
 class Player(object):
@@ -7,7 +7,7 @@ class Player(object):
         self.color = color
         self.intelligence = intelligence
         if intelligence not in ["Human", "Network"]:
-            self.ai = ai_module.AI(intelligence)
+            self.ai = ai.AI()
 
         if color == "Red":
             self.backline = 8

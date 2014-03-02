@@ -98,6 +98,7 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
     if not action:
         draw_turn_box(screen, interface, player_color, action_number, *base)
 
+    write(screen, "Help", interface.help_area[0], interface.fonts["normal"])
     return logbook
 
 
