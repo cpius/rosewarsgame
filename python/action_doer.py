@@ -1,6 +1,7 @@
 from __future__ import division
 from common import *
 from action import Action
+from outcome import Outcome
 
 
 def do_action(gamestate, action, outcome):
@@ -28,6 +29,11 @@ def do_action(gamestate, action, outcome):
         if action.ability == Ability.bribe:
             action.target_unit.set_effect(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
+        elif action.ability == Ability.assassinate:
+            if outcome.outcomes[action.target_at].attack > 2:
+                del enemy_units[action.target_at]
+            if outcome.outcomes[action.target_at].defence > 2:
+                del player_units[action.start_at]
         else:
             level = action.unit.get(action.ability)
             action.target_unit.do(action.ability, level)

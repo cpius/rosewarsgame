@@ -4,6 +4,8 @@ from bson.objectid import ObjectId
 import collections
 import functools
 from dictdiffer import DictDiffer
+import random
+from collections import namedtuple
 
 
 class Direction:
@@ -90,6 +92,7 @@ def enum(n, *sequential, **named):
     enums["write"] = reverse_print
     return type('Enum', (), enums)
 
+rolls = namedtuple("rolls", ["attack", "defence"])
 
 trait_descriptions = {
     "attack_cooldown": {
@@ -303,6 +306,7 @@ if 1 == 2:
         improve_weapons = None
         poison = None
         sabotage = None
+        assassinate = None
 
         name = {}
         write = {}
@@ -521,15 +525,10 @@ def get_setting(name):
 def unit_with_trait_at(pos, trait, units, level=None):
     return pos in units and units[pos].has(trait, level)
 
-allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
-                         "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Hobelar",
-                         "Lancer", "Flanking Cavalry"]
-allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
-all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
-             "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Flanking Cavalry",
-             "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
-             "Fire Archer", "Lancer", "Samurai", "Crossbow Archer"]
+def get_rolls():
+    return rolls(random.randint(1, 6), random.randint(1, 6))
+
 
 if get_setting("version") == "1.1":
     all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",

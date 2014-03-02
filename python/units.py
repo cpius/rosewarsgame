@@ -748,7 +748,7 @@ class Diplomat(Unit):
 class Assassin(Unit):
     def __init__(self):
         super(Assassin, self).__init__()
-        self.set(Ability.bribe)
+        self.set(Ability.assassinate)
     name = "Assassin"
     image = "Assassin"
     base_attack = 0

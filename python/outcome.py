@@ -1,8 +1,4 @@
 from common import *
-import random
-from collections import namedtuple
-
-rolls = namedtuple("rolls", ["attack", "defence"])
 
 
 class Outcome:
@@ -41,7 +37,7 @@ class Outcome:
         if not action.is_attack():
             return outcome
 
-        outcome.set_suboutcome(action.target_at, rolls(random.randint(1, 6), random.randint(1, 6)))
+        outcome.set_suboutcome(action.target_at, get_rolls())
 
         attack_direction = None
         if action.is_attack() and action.unit.is_melee():

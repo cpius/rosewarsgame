@@ -14,7 +14,7 @@ def get_actions(gamestate):
     actions = []
     for position, unit in gamestate.player_units.items():
         if can_use_unit(unit, is_extra_action):
-            moves, attacks, abilities = get_unit_actions(unit, position, gamestate.enemy_units, gamestate.player_units)
+            moves, attacks, abilities = get_unit_actions(unit, position, gamestate)
 
             if not can_attack_with_unit(gamestate, unit) or unit.attack == 0:
                 attacks = []
@@ -27,7 +27,7 @@ def get_actions(gamestate):
     return actions
 
 
-def get_unit_actions(unit, start_at, enemy_units, player_units):
+def get_unit_actions(unit, start_at, gamestate):
 
     def melee_attack_actions(moveset):
         return [Action(units, start_at, **terms) for terms in attack_generator(moveset)]
@@ -117,7 +117,7 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
     def get_abilities():
         abilities = []
         for ability, value in unit.abilities.items():
-            if ability in [Ability.sabotage, Ability.poison]:
+            if ability in [Ability.sabotage, Ability.poison, Ability.assassinate]:
                 target_positions = enemy_units
             elif ability in [Ability.improve_weapons]:
                 target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
@@ -127,13 +127,16 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
                 target_positions = []
 
             abilityset = ranged_attacks_set(start_at, frozenset(target_positions), unit.range)
-            abilities += ability_actions(abilityset, ability)
+            if ability != Ability.assassinate or gamestate.actions_remaining == 1:
+                abilities += ability_actions(abilityset, ability)
 
         return abilities
 
-    zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
-
+    player_units = gamestate.player_units
+    enemy_units = gamestate.enemy_units
     units = merge_units(player_units, enemy_units)
+
+    zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
     moveset_with_leftover, moveset_no_leftover = generate_movesets(unit.movement)
     moveset = moveset_with_leftover | moveset_no_leftover
