@@ -1,0 +1,1 @@
+Ignores zone of control from Pikeman and Royal Guard.
