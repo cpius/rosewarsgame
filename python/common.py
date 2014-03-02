@@ -248,7 +248,6 @@ if 1 == 2:
         attack_cooldown = None
         bribed = None
         extra_action = None
-        poisoned = None
         improved_weapons = None
         movement_remaining = None
         lost_extra_life = None
