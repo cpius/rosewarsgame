@@ -150,7 +150,11 @@ trait_descriptions = {
     "siege_weapon_specialist": {
         1: "+1A +1D vs Siege Weapons"},
     "flanking": {
-        1: "+2A vs Infantry"}
+        1: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
+           "turn, it's flanking skill is added to it's attack."},
+    "flanked": {
+        1: "This unit was attacked by a unit with flanking last turn."
+    }
 }
 
 state_descriptions = {
@@ -280,6 +284,7 @@ if 1 == 2:
         cavalry_specialist = None
         siege_weapon_specialist = None
         flanking = None
+        flanked = None
 
         name = None
         write = None
