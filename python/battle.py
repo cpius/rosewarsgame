@@ -75,6 +75,9 @@ def get_attack(action, gamestate):
     if action.lancing():
         attack += action.lancing()
 
+    if action.flanking():
+        attack += attacking_unit.get(Trait.flanking)
+
     if "No_player_Crusader" not in gamestate.ai_factors and action.is_crusading_attack(gamestate.player_units):
         attack += 1
 
@@ -110,8 +113,5 @@ def get_attack(action, gamestate):
 
     if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.Siege_Weapon:
         attack += 3
-
-    if attacking_unit.has(Trait.flanking) and defending_unit.type == Type.Infantry:
-        attack += 2
 
     return attack

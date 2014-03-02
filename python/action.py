@@ -154,6 +154,16 @@ class Action(object):
         else:
             return 0
 
+    def flanking(self):
+        if not self.unit.has(Trait.flanking) or self.target_unit.has(Trait.flanked):
+            return False
+        attack_direction = self.end_at.get_direction_to(self.target_at)
+        if attack_direction == Direction("Up"):
+            return False
+
+        return True
+
+
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack()
 
