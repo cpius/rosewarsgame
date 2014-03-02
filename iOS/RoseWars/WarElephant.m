@@ -73,9 +73,9 @@
     return _battleStrategy;
 }
 
-- (void)didPerformedAction:(Action *)action {
+- (void)didResolveCombatDuringAction:(Action *)action {
     
-    [super didPerformedAction:action];
+    [super didResolveCombatDuringAction:action];
     
     if (action.isAttack) {
         MeleeAttackAction *meleeAttackAction = (MeleeAttackAction*)action;
@@ -107,7 +107,7 @@
                         battleStrategyForBattle = battleStrategy;
                     }
                 }
-
+                
                 BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:battleStrategyForBattle];
                 
                 outcome.meleeAttackType = kMeleeAttackTypeNormal;
@@ -121,6 +121,12 @@
             }
         }
     }
+}
+
+- (void)didPerformedAction:(Action *)action {
+    
+    [super didPerformedAction:action];
+    
 }
 
 

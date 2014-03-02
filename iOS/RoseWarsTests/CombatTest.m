@@ -502,7 +502,7 @@
     action.delegate = mock;
     
     [action performActionWithCompletion:^{
-        [action conquerEnemyLocation:cavalry.cardLocation withCompletion:^{
+        [action conquerEnemyLocationWithCompletion:^{
             XCTAssertTrue([lancer.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:3 column:3]], @"Lancer should have conquered cavalry. Actual location: %@", lancer.cardLocation);
         }];
     }];

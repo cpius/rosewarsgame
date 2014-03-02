@@ -72,7 +72,7 @@
             }
         }
         
-        if (action.enemyCard.unitName == kLancer) {
+        if ([action.enemyCard isOfType:kLancer]) {
             
             // +1A against lancer
             
@@ -90,7 +90,7 @@
     
     if (action.isAttack) {
         
-        if (action.enemyCard.unitName == kLancer) {
+        if ([action.enemyCard isOfType:kLancer]) {
             
             [self.attack removeRawBonus:_bonusAgainstLancer];
         }

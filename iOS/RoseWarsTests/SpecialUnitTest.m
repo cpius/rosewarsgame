@@ -887,7 +887,7 @@
     samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
     XCTAssertTrue(action.meleeAttackType == kMeleeAttackTypeConquer, @"Samurai should be able to attack&conquer pikeman");
-    action.autoConquer = YES;
+    action.meleeAttackStrategy = kMeleeAttackStrategyAutoConquer;
     
     [action performActionWithCompletion:^{
         
@@ -970,7 +970,7 @@
     _manager.currentPlayersTurn = kPlayerGreen;
     
     MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeConquer];
-    action.autoConquer = YES;
+    action.meleeAttackStrategy = kMeleeAttackStrategyAutoConquer;
     
     FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
 

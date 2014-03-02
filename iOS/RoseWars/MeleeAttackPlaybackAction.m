@@ -18,7 +18,7 @@
     self.enemyCard.battleStrategy.defenderDiceStrategy = battleStrategy.defenderDiceStrategy;
     
     if (self.meleeAttackType == kMeleeAttackTypeConquer) {
-        self.autoConquer = YES;
+        self.meleeAttackStrategy = kMeleeAttackStrategyAutoConquer;
     }
     
     [super performActionWithCompletion:completion];

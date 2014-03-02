@@ -391,6 +391,8 @@ static NSString* const kConquerNodeName = @"conquer_smoke";
 
 - (void)selectCardInGameBoardNode:(GameBoardNode *)node useHighlighting:(BOOL)highlight {
     
+    NSLog(@"Selected card at location: %@", node.locationInGrid);
+    
     [self deselectActiveNode];
         
     [node setZPosition:kGameBoardnodeZOrder];

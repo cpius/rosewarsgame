@@ -36,6 +36,7 @@
         
         _startLocation = card.cardLocation;
         _enemyInitialLocation = enemyCard.cardLocation;
+        _gridLocationForConquer = enemyCard.cardLocation;
         
         _secondaryActionsForPlayback = [NSMutableDictionary dictionary];
     }
@@ -75,6 +76,8 @@
         [self.cardInAction consumeMoves:self.path.count];
         
         BattleResult *result = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
+        
+        [self.cardInAction didResolveCombatDuringAction:self];
         
         // Default to normal attack type
         result.meleeAttackType = kMeleeAttackTypeNormal;
@@ -121,8 +124,8 @@
             if (IsPushSuccessful(result.combatOutcome) && !self.enemyCard.dead) {
                 
                 [PushAction performPushFromAction:self withCompletion:^{
-                    if (self.autoConquer && [[GameManager sharedManager] cardLocatedAtGridLocation:_enemyInitialLocation] == nil) {
-                        [self conquerEnemyLocation:_enemyInitialLocation withCompletion:^{
+                    if (self.meleeAttackStrategy == kMeleeAttackStrategyAutoConquer && ![[GameManager sharedManager] isCardLocatedAtGridLocation:_enemyInitialLocation]) {
+                        [self conquerEnemyLocationWithCompletion:^{
                             if (completion != nil) {
                                 completion();
                                 return;
@@ -156,8 +159,8 @@
                         [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
                     }
                     
-                    if (self.autoConquer) {
-                        [self conquerEnemyLocation:self.enemyInitialLocation withCompletion:^{
+                    if (self.meleeAttackStrategy == kMeleeAttackStrategyAutoConquer) {
+                        [self conquerEnemyLocationWithCompletion:^{
                             [self afterPerformAction];
                             if (completion != nil) {
                                 completion();
@@ -181,10 +184,12 @@
 
 - (BOOL)unitCanConquerEnemyLocation {
     
-    return IsAttackSuccessful(self.battleReport.primaryBattleResult.combatOutcome) && self.meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead;
+    // If attack or push is successful
+    return (IsAttackSuccessful(self.battleReport.primaryBattleResult.combatOutcome) && self.meleeAttackType == kMeleeAttackTypeConquer && self.enemyCard.dead) ||
+            (IsPushSuccessful(self.battleReport.primaryBattleResult.combatOutcome));
 }
 
-- (void)conquerEnemyLocation:(GridLocation*)enemyLocation withCompletion:(void (^)())completion {
+- (void)conquerEnemyLocationWithCompletion:(void (^)())completion {
 
     if (_meleeAttackType == kMeleeAttackTypeNormal) {
         // Conquer not possible in this attack, just call completion at once
@@ -197,7 +202,7 @@
         
         GridLocation *cardInActionStartLocation = self.cardInAction.cardLocation;
 
-        [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:enemyLocation]] withCompletion:^(GridLocation *endLocation) {
+        [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:self.gridLocationForConquer]] withCompletion:^(GridLocation *endLocation) {
             [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];
             [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:cardInActionStartLocation toLocation:endLocation];
             if (completion != nil) {

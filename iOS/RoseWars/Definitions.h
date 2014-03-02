@@ -132,6 +132,11 @@ typedef enum {
     
 } CombatOutcome;
 
+typedef NS_ENUM(NSInteger, MeleeAttackStrategy) {
+    kMeleeAttackStrategyManualConquer,
+    kMeleeAttackStrategyAutoConquer
+};
+
 NS_INLINE BOOL IsAttackSuccessful(CombatOutcome outcome) {
     
     return outcome == kCombatOutcomeAttackSuccessful || outcome == kCombatOutcomeAttackSuccessfulAndPush;

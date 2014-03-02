@@ -266,6 +266,10 @@
     }
 }
 
+- (void)didResolveCombatDuringAction:(Action *)action {
+    
+}
+
 - (BOOL)isValidTarget:(Card*)targetCard {
     
     return YES;
@@ -378,6 +382,11 @@
 - (NSInteger)movesRemaining {
     
     return move - movesConsumed;
+}
+
+- (BOOL)isOfType:(UnitName)type {
+    
+    return self.unitName == type;
 }
 
 - (BOOL)isOwnedByMe {

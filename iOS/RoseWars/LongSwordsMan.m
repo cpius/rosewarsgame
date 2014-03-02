@@ -51,10 +51,10 @@
     return [[LongSwordsMan alloc] init];
 }
 
-- (void)didPerformedAction:(Action *)action {
+- (void)didResolveCombatDuringAction:(Action *)action {
     
-    [super didPerformedAction:action];
-    
+    [super didResolveCombatDuringAction:action];
+
     MeleeAttackAction *meleeAttackAction = (MeleeAttackAction*)action;
     
     if (meleeAttackAction.isAttack) {
@@ -87,7 +87,7 @@
                         battleStrategyForBattle = battleStrategy;
                     }
                 }
-
+                
                 BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:battleStrategyForBattle];
                 
                 outcome.meleeAttackType = meleeAction.meleeAttackType;
@@ -101,6 +101,11 @@
             }
         }
     }
+}
+
+- (void)didPerformedAction:(Action *)action {
+    
+    [super didPerformedAction:action];
 }
 
 @end

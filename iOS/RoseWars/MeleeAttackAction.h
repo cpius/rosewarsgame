@@ -13,12 +13,14 @@
 @property (nonatomic, assign) MeleeAttackTypes meleeAttackType;
 @property (nonatomic, strong) BattleResult *battleResult;
 @property (nonatomic, strong) NSMutableDictionary *secondaryActionsForPlayback;
-@property (nonatomic, assign) BOOL autoConquer;
+@property (nonatomic, assign) MeleeAttackStrategy meleeAttackStrategy;
+@property (nonatomic, readonly) GridLocation *gridLocationForConquer;
+
 
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard;
 - (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard meleeAttackType:(MeleeAttackTypes)meleeAttackType;
 
 - (BOOL)unitCanConquerEnemyLocation;
-- (void)conquerEnemyLocation:(GridLocation*)enemyLocation withCompletion:(void (^)())completion;
+- (void)conquerEnemyLocationWithCompletion:(void (^)())completion;
 
 @end

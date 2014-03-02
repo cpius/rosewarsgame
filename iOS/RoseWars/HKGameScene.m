@@ -276,9 +276,9 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                 self.conquerAction = nil;
             }
             else {
-                [self.conquerAction conquerEnemyLocation:self.conquerNode.locationInGrid withCompletion:^{
+                [self.conquerAction conquerEnemyLocationWithCompletion:^{
                     [_gameboard highlightNodeAtLocation:conquerNode.locationInGrid forConquer:NO];
-                    [self afterPerformAction:self.conquerAction];
+                   // [self afterPerformAction:self.conquerAction];
                 }];
             }
         }
@@ -287,9 +287,8 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
             
             // User selected the same unit again - deselect it
             if (_gameboard.activeNode == targetNode) {
-                [_gameboard deHighlightAllNodes];
-                [_gameboard deselectActiveNode];
-                [self hideToolsPanel];
+                [self resetUserInterface];
+                [self resetAttackDirection];
                 return;
             }
             
@@ -301,8 +300,8 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                     [self resetUserInterface];
                     [self resetAttackDirection];
                     
-                    if ([targetNode.card.model isOwnedByMe]) {
-                        [self createBattlePlanForNode:targetNode];
+                    if ([targetNode hasCard] && [targetNode.card.model isOwnedByMe]) {
+                        _battlePlan = [self createBattlePlanForNode:targetNode];
                         if (_battlePlan.hasActions) {
                             [self showToolsPanel];
                         }
@@ -325,6 +324,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                     _actionInQueue.path = _pathInQueue;
                     [_actionInQueue performActionWithCompletion:^{
                         
+                        [self resetUserInterface];
                         if ([_actionInQueue isKindOfClass:[MeleeAttackAction class]]) {
                             MeleeAttackAction *attackAction = (MeleeAttackAction*)_actionInQueue;
                             if ([attackAction unitCanConquerEnemyLocation]) {
@@ -363,7 +363,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                     }
                     else {
                         [action performActionWithCompletion:^{
-                            
+                            [self resetUserInterface];
                             MeleeAttackAction *attackAction = (MeleeAttackAction*)action;
                             if ([attackAction unitCanConquerEnemyLocation]) {
                                 GameBoardNode *enemyNode = [_gameboard getGameBoardNodeForGridLocation:attackAction.enemyCard.cardLocation];
@@ -381,11 +381,13 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
             }
             else {
                 [action performActionWithCompletion:^{
+                    [self resetUserInterface];
+                    [self resetAttackDirection];
                 }];
             }
         }
         else {
-            if ([targetNode.card.model isOwnedByMe]) {
+            if ([targetNode hasCard] && [targetNode.card.model isOwnedByMe]) {
                 _battlePlan = [self createBattlePlanForNode:targetNode];
                 
                 if ([_battlePlan hasActions]) {
@@ -495,8 +497,6 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
     
     NSUInteger remainingActions = _gameManager.currentGame.numberOfAvailableActions;
     [self updateRemainingActions:remainingActions];
-    [self resetUserInterface];
-    [self hideToolsPanel];
     [self checkForEndTurnAfterAction:action];
 }
 
@@ -568,6 +568,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
     [self runAction:[SKAction sequence:@[[SKAction waitForDuration:kEnemyActionDelayTime],
                                          [SKAction runBlock:^{
         [nextAction performActionWithCompletion:^{
+            [self resetUserInterface];
             [self afterPerformAction:nextAction];
             [self runAction:[SKAction sequence:@[[SKAction waitForDuration:kEnemyActionDelayTime],
                                                  [SKAction performSelector:@selector(doEnemyPlayerTurn) onTarget:self]]]];
@@ -587,6 +588,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
     
     [_gameboard deselectActiveNode];
     [_gameboard deHighlightAllNodes];
+    [self hideToolsPanel];
 }
 
 - (void)card:(CardSprite *)card movedToNode:(GameBoardNode *)node {
@@ -657,6 +659,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                         [endturnButton setScale:0.75];
                         endturnButton.zPosition = kOverlayZOrder;
                         endturnButton.removeOnClick = YES;
+                        endturnButton.name = kEndTurnButton;
                         endturnButton.position = _turnIndicator.position;
                         [self addChild:endturnButton];
                     }
@@ -833,8 +836,8 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                 
                 if ([action isKindOfClass:[MeleeAttackAction class]]) {
                     MeleeAttackAction *attackAction = (MeleeAttackAction*)action;
-                    if (attackAction.autoConquer) {
-                        [attackAction conquerEnemyLocation:attackAction.enemyInitialLocation withCompletion:nil];
+                    if (attackAction.meleeAttackStrategy == kMeleeAttackStrategyAutoConquer) {
+                        [attackAction conquerEnemyLocationWithCompletion:nil];
                     }
                 }
                 

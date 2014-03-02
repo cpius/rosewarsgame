@@ -54,6 +54,8 @@
 
     BattleResult *result = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
     
+    [self.cardInAction didResolveCombatDuringAction:self];
+    
     _battleReport.primaryBattleResult = result;
     
     self.battleResult = result;

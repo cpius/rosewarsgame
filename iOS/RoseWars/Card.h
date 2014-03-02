@@ -118,11 +118,13 @@
 
 - (void)willPerformAction:(Action*)action;
 - (void)didPerformedAction:(Action*)action;
+- (void)didResolveCombatDuringAction:(Action*)action;
 
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount;
 - (BOOL)allowAction:(Action*)action allLocations:(NSDictionary*)allLocations;
 - (BOOL)allowPath:(NSArray*)path forActionType:(ActionTypes)actionType allLocations:(NSDictionary*)allLocations;
 - (BOOL)isValidTarget:(Card*)targetCard;
+- (BOOL)isOfType:(UnitName)type;
 
 - (BOOL)zoneOfControlAgainst:(Card*)opponent;
 
