@@ -77,6 +77,12 @@ class Unit(object):
         else:
             dictionary[attribute] = amount
 
+    def increment_trait(self, trait):
+        if trait in self.traits:
+            self.traits[trait] += 1
+        else:
+            self.traits[trait] = 1
+
     def has(self, attribute, value=None, level=None):
         if attribute in Effect.name:
             return self.has_effect(attribute, level)
@@ -193,6 +199,14 @@ class Unit(object):
 
     def get_upgraded_unit(self, choice):
 
+        if get_setting("version") == "1.0":
+            if int(choice.keys()[0]) == Trait.attack_skill:
+                self.increment_trait(Trait.attack_skill)
+            elif int(choice.keys()[0]) == Trait.defence_skill:
+                self.increment_trait(Trait.defence_skill)
+            self.set(State.recently_upgraded)
+            return self
+
         if isinstance(choice, basestring):
             self.remove_state(State.experience)
             upgraded_unit = self.make(choice)
@@ -221,6 +235,9 @@ class Unit(object):
     def is_allowed_upgrade_choice(self, upgrade_choice):
         if not self.should_be_upgraded():
             return False
+
+        if get_setting("version") == "1.0":
+            return True
 
         return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
 
