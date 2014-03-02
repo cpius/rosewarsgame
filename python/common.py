@@ -93,8 +93,6 @@ trait_descriptions = {
         1: "Can move 4 tiles if movement ends with an attack."},
     "big_shield": {
         1: "+2D v melee"},
-    "cavalry_charging": {
-        1: "All cavalry units starting their turn in the 8 surrounding tiles have +1 Movement"},
     "combat_agility": {
         1: "Can make an attack after its first action. (But not a second move.)"},
     "crusading": {
@@ -253,7 +251,6 @@ if 1 == 2:
     class Trait:
         berserking = None
         big_shield = None
-        cavalry_charging = None
         combat_agility = None
         defence_maneuverability = None
         double_attack_cost = None
@@ -513,10 +510,10 @@ def unit_with_trait_at(pos, trait, units, level=None):
 
 allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard",
                          "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon",
-                         "Hussar", "Cavalry Lieutenant", "Hobelar", "Lancer"]
+                         "Hussar", "Hobelar", "Lancer"]
 allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
 
 all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
              "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Dragoon", "Hussar",
-             "Cavalry Lieutenant", "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
+             "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
              "Fire Archer", "Lancer", "Samurai", "Crossbow Archer"]

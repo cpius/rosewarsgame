@@ -124,14 +124,9 @@ def get_unit_actions(unit, start_at, enemy_units, player_units):
 
     zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
-    friendly_units = units_excluding_position(player_units, start_at)
     units = merge_units(player_units, enemy_units)
 
-    movement = unit.movement
-    if cavalry_charging(start_at, friendly_units):
-        movement += 1
-
-    moveset_with_leftover, moveset_no_leftover = generate_movesets(movement)
+    moveset_with_leftover, moveset_no_leftover = generate_movesets(unit.movement)
     moveset = moveset_with_leftover | moveset_no_leftover
     moves = move_actions(moveset)
     if unit.is_ranged():
@@ -249,9 +244,3 @@ def melee_frozen(enemy_units, start_at):
 def can_attack_with_unit(gamestate, unit):
     return not (gamestate.get_actions_remaining() == 1 and unit.has(Trait.double_attack_cost)) \
         and not unit.has(Effect.attack_frozen)
-
-
-def cavalry_charging(start_at, friendly_units):
-    return any(pos for pos in start_at.surrounding_tiles() if
-               unit_with_trait_at(pos, Trait.cavalry_charging, friendly_units))
-

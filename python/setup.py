@@ -7,8 +7,7 @@ from collections import namedtuple
 required_special_units = []
 
 requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_siege_weapon",
-                "at_most_two_siege_weapons", "at_least_five_melee_with_weaponsmith",
-                "at_least_three_cavalry_with_cavalry_lieutenant"]
+                "at_most_two_siege_weapons", "at_least_five_melee_with_weaponsmith"]
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
@@ -20,7 +19,6 @@ units_info = {"Archer": Info({2, 3}, 3, False),
               "Pikeman": Info({2, 3, 4}, 3, False),
               "Berserker": Info({2, 3}, 1, False),
               "Cannon": Info({2}, 1, True),
-              "Cavalry Lieutenant": Info({3, 4}, 1, False),
               "Halberdier": Info({4}, 1, False),
               "Hobelar": Info({3, 4}, 1, False),
               "Hussar": Info({3, 4}, 1, False),
@@ -101,11 +99,6 @@ def at_most_two_siege_weapons(units):
 def at_least_five_melee_with_weaponsmith(units):
     return not any(unit.name == "Weaponsmith" for unit in units.values()) or \
         sum(1 for unit in units.values() if unit.range == 1) >=5
-
-
-def at_least_three_cavalry_with_cavalry_lieutenant(units):
-    return not any(unit.name == "Cavalry Lieutenant" for unit in units.values()) or \
-        sum(1 for unit in units.values() if unit.type == Type.Cavalry) >= 3
 
 
 def get_units():

@@ -397,24 +397,6 @@ class Hussar(Unit):
     experience_to_upgrade = 4
 
 
-class Cavalry_Lieutenant(Unit):
-    def __init__(self):
-        super(Cavalry_Lieutenant, self).__init__()
-        self.set(Trait.cavalry_charging, 1)
-
-    name = "Cavalry Lieutenant"
-    image = "Cavalry Lieutenant"
-    base_attack = 3
-    base_defence = 2
-    base_movement = 3
-    base_range = 1
-    attack_bonuses = {}
-    defence_bonuses = {}
-    type = Type.Cavalry
-    final_upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
-    experience_to_upgrade = 4
-
-
 class Knight(Unit):
 
     name = "Knight"
