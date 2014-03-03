@@ -85,61 +85,6 @@
     XCTAssertTrue(!attacker.dead, @"Attacker isn't dead");
 }
 
-- (void)testOnlyOneExperiecePointPerRound {
-        
-    Archer *attacker = [Archer card];
-    Pikeman *defender1 = [Pikeman card];
-    LightCavalry *defender2 = [LightCavalry card];
-    
-    attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    defender1.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
-    defender2.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
-                                withPlayer1Units:[NSArray arrayWithObject:attacker]
-                                    player2Units:[NSArray arrayWithObjects:defender1, defender2, nil]];
-    
-    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    
-    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:attacker.battleStrategy];
-    
-    XCTAssertTrue(attacker.experience == 1, @"Attacker should have gained 1 XP");
-
-    [_manager resolveCombatBetween:attacker defender:defender2 battleStrategy:_battleStrategy];
-
-    XCTAssertTrue(attacker.experience == 1, @"Attacker should not have gained extra XP this round");
-}
-
-- (void)testUnitShouldIncreaseInLevelAfterTwoSuccesfulAttacksOverTwoRounds {
-        
-    Archer *attacker = [Archer card];
-    Pikeman *defender1 = [Pikeman card];
-    LightCavalry *defender2 = [LightCavalry card];
-    
-    attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    defender1.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
-    defender2.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
-                                withPlayer1Units:[NSArray arrayWithObject:attacker]
-                                    player2Units:[NSArray arrayWithObjects:defender1, defender2, nil]];
-
-    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    defender2.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    
-    [_manager resolveCombatBetween:attacker defender:defender1 battleStrategy:attacker.battleStrategy];
-    
-    XCTAssertTrue(attacker.experience == 1, @"Attacker should have gained 1 XP");
-    
-    [_manager endTurn];
-    
-    [_manager resolveCombatBetween:attacker defender:defender2 battleStrategy:attacker.battleStrategy];
-    
-    XCTAssertTrue(attacker.experience == 2, @"Attacker should have gained 2 XP");
-    XCTAssertTrue(attacker.numberOfLevelsIncreased == 1, @"Attacker should have increased a level");
-}
 
 - (void)testTimedBonusShouldDisappear {
     
@@ -508,9 +453,6 @@
     }];
     
     XCTAssertTrue(action != nil, @"Lancer should be able to attack lightcavalry");
-    
-    
-    
 }
 
 @end

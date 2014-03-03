@@ -30,6 +30,7 @@
 		617214A0187DE1B8000775EE /* HKDialogNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6172149F187DE1B8000775EE /* HKDialogNode.m */; };
 		617214A418880A08000775EE /* HKLevelIncreaseDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A318880A08000775EE /* HKLevelIncreaseDialog.m */; };
 		617214A91889CD5D000775EE /* SKSpriteNode+NodePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */; };
+		617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26618C3D80E00E64829 /* HKExperienceTets.m */; };
 		61A6F7AE18BBDFA40069AF61 /* Archer.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AD18BBDFA40069AF61 /* Archer.atlas */; };
 		61A6F7B018BBE15D0069AF61 /* Cavalry.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */; };
 		61A78C5B188DAE1500DDA1B2 /* HKBattleResultNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */; };
@@ -204,6 +205,7 @@
 		617214A518880C81000775EE /* HKLevelIncreaseDialogProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLevelIncreaseDialogProtocol.h; sourceTree = "<group>"; };
 		617214A71889CD5D000775EE /* SKSpriteNode+NodePosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKSpriteNode+NodePosition.h"; sourceTree = "<group>"; };
 		617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKSpriteNode+NodePosition.m"; sourceTree = "<group>"; };
+		617DB26618C3D80E00E64829 /* HKExperienceTets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKExperienceTets.m; sourceTree = "<group>"; };
 		61A6F7AD18BBDFA40069AF61 /* Archer.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Archer.atlas; sourceTree = "<group>"; };
 		61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Cavalry.atlas; sourceTree = "<group>"; };
 		61A78C59188DAE1500DDA1B2 /* HKBattleResultNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBattleResultNode.h; sourceTree = "<group>"; };
@@ -897,6 +899,7 @@
 				61705CD018018C24001D7E1B /* WarOfTheRosesTest.h */,
 				61705CD118018C24001D7E1B /* WarOfTheRosesTest.m */,
 				61FD538217B4CDAC009BED1A /* Supporting Files */,
+				617DB26618C3D80E00E64829 /* HKExperienceTets.m */,
 			);
 			path = RoseWarsTests;
 			sourceTree = "<group>";
@@ -1164,6 +1167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				61705CD818018C24001D7E1B /* TestHelper.m in Sources */,
+				617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */,
 				61705CD618018C24001D7E1B /* MoveTest.m in Sources */,
 				61705CD918018C24001D7E1B /* WarOfTheRosesTest.m in Sources */,
 				61705CD418018C24001D7E1B /* GameBoardMockup.m in Sources */,

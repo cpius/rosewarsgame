@@ -278,7 +278,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
             else {
                 [self.conquerAction conquerEnemyLocationWithCompletion:^{
                     [_gameboard highlightNodeAtLocation:conquerNode.locationInGrid forConquer:NO];
-                   // [self afterPerformAction:self.conquerAction];
+                    [self checkForEndTurnAfterAction:self.conquerAction];
                 }];
             }
         }
@@ -329,8 +329,8 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                             MeleeAttackAction *attackAction = (MeleeAttackAction*)_actionInQueue;
                             if ([attackAction unitCanConquerEnemyLocation]) {
                                 GameBoardNode *enemyNode = [_gameboard getGameBoardNodeForGridLocation:attackAction.enemyCard.cardLocation];
-                                [self afterPerformAction:_actionInQueue];
-                                [_gameboard highlightNodeAtLocation:enemyNode.locationInGrid forConquer:YES];
+                                [self afterPerformAction:attackAction];
+                                [_gameboard highlightNodeAtLocation:attackAction.gridLocationForConquer forConquer:YES];
                                 self.conquerAction = attackAction;
                                 self.conquerNode = enemyNode;
                             }
@@ -368,7 +368,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                             if ([attackAction unitCanConquerEnemyLocation]) {
                                 GameBoardNode *enemyNode = [_gameboard getGameBoardNodeForGridLocation:attackAction.enemyCard.cardLocation];
                                 [self afterPerformAction:action];
-                                [_gameboard highlightNodeAtLocation:enemyNode.locationInGrid forConquer:YES];
+                                [_gameboard highlightNodeAtLocation:attackAction.gridLocationForConquer forConquer:YES];
                                 self.conquerAction = attackAction;
                                 self.conquerNode= enemyNode;
                             }

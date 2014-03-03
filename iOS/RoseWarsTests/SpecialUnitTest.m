@@ -985,6 +985,7 @@
         XCTAssertFalse(pikeman.dead, @"Pikeman should be alive");
         XCTAssertTrue([pikeman.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:4 column:3]], @"Pikeman should be pushed");
         XCTAssertTrue([juggernaut.cardLocation isSameLocationAs:[GridLocation gridLocationWithRow:4 column:4]], @"Juggernaut should have conquered pikemans location");
+        XCTAssertTrue([action.gridLocationForConquer isSameLocationAs:[GridLocation gridLocationWithRow:4 column:4]], @"Juggernaut should have conquered pikemans location");
     }];
 }
 
