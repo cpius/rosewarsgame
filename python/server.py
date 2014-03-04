@@ -176,7 +176,7 @@ def do_action_post(game_id):
         return validation_errors
 
     if action_document["type"] == "options" and "move_with_attack" in action_document:
-        response_document = register_move_with_attack(action_document, game_id)
+        response_document = register_move_with_attack(action_document, game_id, game.gamestate)
         cache.set(game_id, datetime.utcnow().replace(microsecond=0))
         return response_document
     elif action_document["type"] == "options" and "upgrade" in action_document:
@@ -312,11 +312,16 @@ def register_upgrade(action_document, gamestate, game_id):
         "New unit": document_to_string(new_unit.to_document())}
 
 
-def register_move_with_attack(action_document, game_id):
+def register_move_with_attack(action_document, game_id, gamestate):
     action_collection = get_collection("actions")
 
     action_document["game"] = ObjectId(game_id)
     action_collection.insert(action_document)
+
+    if gamestate.is_ended():
+        games = get_collection("games")
+        games.update({"_id": ObjectId(game_id)}, {"$set": {"finished_at": datetime.utcnow()}})
+
     return {"Status": "OK", "Message": "Options recorded"}
 
 
