@@ -163,7 +163,6 @@ class Action(object):
 
         return True
 
-
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack()
 
