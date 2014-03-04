@@ -267,14 +267,21 @@
         return;
     }
     
-    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+    __weak GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
     localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error){
-        
-        if (!error) {
+        if (viewController) {
+            [_presentingViewController presentViewController:viewController animated:YES completion:^{
+                [localPlayer registerListener:self];
+                self.userAuthenticated = YES;
+                _localUserId = [GKLocalPlayer localPlayer].playerID;
+            }];
+        }
+        else if (localPlayer.authenticated) {
+            [localPlayer registerListener:self];
             self.userAuthenticated = YES;
             _localUserId = [GKLocalPlayer localPlayer].playerID;
             
-            [[GKLocalPlayer localPlayer] registerListener:self];
+            NSLog(@"User %@ logged in", localPlayer.alias);
         }
         else {
             NSLog(@"Auth error: %@", error);
