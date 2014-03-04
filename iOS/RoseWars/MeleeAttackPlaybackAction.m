@@ -11,12 +11,7 @@
 @implementation MeleeAttackPlaybackAction
 
 - (void)performActionWithCompletion:(void (^)())completion {
-    
-    BaseBattleStrategy *battleStrategy = _battleStrategy;
-    
-    self.cardInAction.battleStrategy.attackerDiceStrategy = battleStrategy.attackerDiceStrategy;
-    self.enemyCard.battleStrategy.defenderDiceStrategy = battleStrategy.defenderDiceStrategy;
-    
+        
     if (self.meleeAttackType == kMeleeAttackTypeConquer) {
         self.meleeAttackStrategy = kMeleeAttackStrategyAutoConquer;
     }

@@ -14,6 +14,7 @@
 #import "WarElephantBattleStrategy.h"
 #import "MoveAction.h"
 #import "PushAction.h"
+#import "HKSecondaryAttackDiceRolls.h"
 
 @implementation WarElephant
 
@@ -97,18 +98,18 @@
                 MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation];
                 
                 BattleReport *battleReport = [BattleReport battleReportWithAction:meleeAction];
-                id<BattleStrategy> battleStrategyForBattle = _aoeBattleStrategy;
                 
                 if (action.playback) {
                     
-                    BaseBattleStrategy *battleStrategy = [meleeAttackAction.secondaryActionsForPlayback objectForKey:gridLocation];
+                    HKSecondaryAttackDiceRolls *secondaryAttackDiceRolls = [meleeAttackAction.secondaryActionsForPlayback objectForKey:gridLocation];
                     
-                    if (battleStrategy != nil) {
-                        battleStrategyForBattle = battleStrategy;
+                    if (secondaryAttackDiceRolls != nil) {
+                        action.cardInAction.battleStrategy.attackerDiceStrategy = secondaryAttackDiceRolls.attackRoll;
+                        cardInLocation.battleStrategy.defenderDiceStrategy = secondaryAttackDiceRolls.defenseRoll;
                     }
                 }
                 
-                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:battleStrategyForBattle];
+                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
                 
                 outcome.meleeAttackType = kMeleeAttackTypeNormal;
                 battleReport.primaryBattleResult = outcome;

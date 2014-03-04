@@ -11,6 +11,4 @@
 
 @interface MeleeAttackPlaybackAction : MeleeAttackAction
 
-@property (nonatomic, strong) id<BattleStrategy> battleStrategy;
-
 @end

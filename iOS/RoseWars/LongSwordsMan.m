@@ -12,6 +12,7 @@
 #import "PathFinderStep.h"
 #import "MeleeAttackAction.h"
 #import "StandardBattleStrategy.h"
+#import "HKSecondaryAttackDiceRolls.h"
 
 @implementation LongSwordsMan
 
@@ -77,18 +78,18 @@
                 MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation meleeAttackType:kMeleeAttackTypeNormal];
                 
                 BattleReport *battleReport = [BattleReport battleReportWithAction:meleeAction];
-                id<BattleStrategy> battleStrategyForBattle = action.cardInAction.battleStrategy;
                 
                 if (action.playback) {
                     
-                    BaseBattleStrategy *battleStrategy = [meleeAttackAction.secondaryActionsForPlayback objectForKey:gridLocation];
+                    HKSecondaryAttackDiceRolls *secondaryAttackDiceRolls = [meleeAttackAction.secondaryActionsForPlayback objectForKey:gridLocation];
                     
-                    if (battleStrategy != nil) {
-                        battleStrategyForBattle = battleStrategy;
+                    if (secondaryAttackDiceRolls != nil) {
+                        action.cardInAction.battleStrategy.attackerDiceStrategy = secondaryAttackDiceRolls.attackRoll;
+                        cardInLocation.battleStrategy.defenderDiceStrategy = secondaryAttackDiceRolls.defenseRoll;
                     }
                 }
                 
-                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:battleStrategyForBattle];
+                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
                 
                 outcome.meleeAttackType = meleeAction.meleeAttackType;
                 battleReport.primaryBattleResult = outcome;

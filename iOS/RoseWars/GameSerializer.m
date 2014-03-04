@@ -23,6 +23,7 @@
 #import "StandardBattleStrategy.h"
 #import "FixedLevelIncreaseStrategy.h"
 #import "MeleeAttackPlaybackAction.h"
+#import "HKSecondaryAttackDiceRolls.h"
 
 @interface GameSerializer()
 
@@ -329,9 +330,9 @@
             BattleResult *secondaryBattle = [[BattleResult alloc ]initWithAttacker:cardInAction defender:secondaryEnemy];
             [secondaryBattle fromDictionary:[secondaryBattleDictionary objectForKey:@"primarybattle"]];
             
-            BaseBattleStrategy *battleStrategy = [self battleStrategyForCard:cardInAction enemyCard:secondaryEnemy fromBattleResult:secondaryBattle];
+            HKSecondaryAttackDiceRolls *secondaryAttackRolls = [self secondaryAttackRollsForCard:cardInAction enemyCard:secondaryEnemy fromBattleResult:secondaryBattle];
                         
-            [meleeAction.secondaryActionsForPlayback setObject:battleStrategy forKey:secondaryEnemy.cardLocation];
+            [meleeAction.secondaryActionsForPlayback setObject:secondaryAttackRolls forKey:secondaryEnemy.cardLocation];
         }
         
         action = meleeAction;
@@ -384,6 +385,17 @@
     }
     
     return pathTaken;
+}
+
+- (HKSecondaryAttackDiceRolls*)secondaryAttackRollsForCard:(Card*)card enemyCard:(Card*)enemyCard fromBattleResult:(BattleResult*)battleResult {
+    
+    FixedDiceStrategy *fixedAttackRoll = [FixedDiceStrategy strategy];
+    FixedDiceStrategy *fixedDesenseRoll = [FixedDiceStrategy strategy];
+    
+    fixedAttackRoll.fixedDieValue = battleResult.attackRoll;
+    fixedDesenseRoll.fixedDieValue = battleResult.defenseRoll;
+    
+    return [[HKSecondaryAttackDiceRolls alloc] initWithAttackRoll:fixedAttackRoll andDefenseRoll:fixedDesenseRoll];
 }
 
 - (id<BattleStrategy>)battleStrategyForCard:(Card*)card enemyCard:(Card*)enemyCard fromBattleResult:(BattleResult *)battleResult {

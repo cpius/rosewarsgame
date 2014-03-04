@@ -31,6 +31,7 @@
 		617214A418880A08000775EE /* HKLevelIncreaseDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A318880A08000775EE /* HKLevelIncreaseDialog.m */; };
 		617214A91889CD5D000775EE /* SKSpriteNode+NodePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */; };
 		617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26618C3D80E00E64829 /* HKExperienceTets.m */; };
+		617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */; };
 		61A6F7AE18BBDFA40069AF61 /* Archer.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AD18BBDFA40069AF61 /* Archer.atlas */; };
 		61A6F7B018BBE15D0069AF61 /* Cavalry.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */; };
 		61A78C5B188DAE1500DDA1B2 /* HKBattleResultNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */; };
@@ -206,6 +207,8 @@
 		617214A71889CD5D000775EE /* SKSpriteNode+NodePosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKSpriteNode+NodePosition.h"; sourceTree = "<group>"; };
 		617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKSpriteNode+NodePosition.m"; sourceTree = "<group>"; };
 		617DB26618C3D80E00E64829 /* HKExperienceTets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKExperienceTets.m; sourceTree = "<group>"; };
+		617DB26B18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKSecondaryAttackDiceRolls.h; sourceTree = "<group>"; };
+		617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSecondaryAttackDiceRolls.m; sourceTree = "<group>"; };
 		61A6F7AD18BBDFA40069AF61 /* Archer.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Archer.atlas; sourceTree = "<group>"; };
 		61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Cavalry.atlas; sourceTree = "<group>"; };
 		61A78C59188DAE1500DDA1B2 /* HKBattleResultNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBattleResultNode.h; sourceTree = "<group>"; };
@@ -601,6 +604,8 @@
 				61C47D3417BE9F6700D644D1 /* GameSerializer.m */,
 				61C47D2217BE9F5300D644D1 /* CardForSerialization.h */,
 				61C47D2317BE9F5300D644D1 /* CardForSerialization.m */,
+				617DB26B18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.h */,
+				617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */,
 			);
 			name = Serialization;
 			sourceTree = "<group>";
@@ -1110,6 +1115,7 @@
 				61C47DB517BEA17500D644D1 /* GridlLayoutManager.m in Sources */,
 				61C47E3617C635BB00D644D1 /* Archer.m in Sources */,
 				61A8B8AD189959BE0063DCBC /* SKAction+Utility.m in Sources */,
+				617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */,
 				61C47E3C17C635BB00D644D1 /* Crusader.m in Sources */,
 				61C47DB717BEA17500D644D1 /* GridLocation.m in Sources */,
 				61A78C5B188DAE1500DDA1B2 /* HKBattleResultNode.m in Sources */,
