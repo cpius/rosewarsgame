@@ -318,7 +318,7 @@
         MeleeAttackPlaybackAction *meleeAction = [[MeleeAttackPlaybackAction alloc] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
 
         meleeAction.meleeAttackType = battleresult.meleeAttackType;
-        meleeAction.battleStrategy = [self battleStrategyForCard:cardInAction enemyCard:enemyCard fromBattleResult:battleresult];
+        [self battleStrategyForCard:cardInAction enemyCard:enemyCard fromBattleResult:battleresult];
         
         NSArray *secondaryBattles = [dictionary objectForKey:@"secondarybattles"];
         
