@@ -41,7 +41,8 @@ def get_unit_lines(unit):
             lines.append("")
 
     for trait, level in unit.traits.items():
-        if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill]:
+        if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill,
+                         Trait.extra_life]:
             if level == 1:
                 lines.append(Trait.write[trait] + ":")
                 lines.append(get_description(trait, 1))
