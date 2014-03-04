@@ -160,6 +160,8 @@ trait_descriptions = {
         1: "+1A +1D vs War Machines"},
     "flanking": {
         1: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
+           "turn, it's flanking skill is added to it's attack.",
+        2: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
            "turn, it's flanking skill is added to it's attack."},
     "flanked": {
         1: "This unit was attacked by a unit with flanking last turn."},
