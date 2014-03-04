@@ -25,18 +25,15 @@ class Client():
 
     def get_game(self):
         if self.game_id:
-            print "getting game from server"
             request = urllib2.Request(get_setting("server") + "/games/view/" + self.game_id)
 
             formatted_time = httpdate(self.last_modified)
             if self.last_modified > datetime(1970, 1, 1):
-                print "setting If-Modified-Since", formatted_time
                 request.add_header("If-Modified-Since", formatted_time)
 
             opener = urllib2.build_opener(DefaultErrorHandler())
             response = opener.open(request)
             if response.getcode() == 304:
-                print "no new data on the server"
                 return
 
             last_modified_header = response.info().getheader("Last-Modified")
@@ -45,13 +42,9 @@ class Client():
                 last_modified_timestamp = mktime(last_modified_tuple)
                 last_modified = datetime.fromtimestamp(last_modified_timestamp)
 
-                print "response Last-Modified: ", last_modified
-
                 if last_modified > self.last_modified:
-                    print "new data was found on the server"
                     self.last_modified = last_modified
                 else:
-                    print "no new data on the server"
                     return
 
             return json.load(response)
@@ -73,9 +66,6 @@ class Client():
             # No new data on the server
             return None, None, None
         expected_action = str(gamestate.action_count + 1)
-
-        print "received action count:", game["action_count"]
-        print "our current action count:", gamestate.action_count
 
         if game["action_count"] > gamestate.action_count + 1:
             # Several new things happened on the server
@@ -168,5 +158,6 @@ def httpdate(dt):
     weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][dt.weekday()]
     month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
              "Oct", "Nov", "Dec"][dt.month - 1]
-    return "%s, %02d %s %04d %02d:%02d:%02d GMT" % (weekday, dt.day, month,
-        dt.year, dt.hour, dt.minute, dt.second)
+    rfc1123_format = "%s, %02d %s %04d %02d:%02d:%02d GMT"
+
+    return rfc1123_format % (weekday, dt.day, month, dt.year, dt.hour, dt.minute, dt.second)
