@@ -158,5 +158,6 @@ def httpdate(dt):
     weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][dt.weekday()]
     month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
              "Oct", "Nov", "Dec"][dt.month - 1]
-    return "%s, %02d %s %04d %02d:%02d:%02d GMT" % (weekday, dt.day, month,
-        dt.year, dt.hour, dt.minute, dt.second)
+    rfc1123_format = "%s, %02d %s %04d %02d:%02d:%02d GMT"
+
+    return rfc1123_format % (weekday, dt.day, month, dt.year, dt.hour, dt.minute, dt.second)
