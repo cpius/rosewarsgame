@@ -383,7 +383,7 @@ class Flanking_Cavalry(Unit):
         self.set(Trait.flanking, 2)
 
     name = "Flanking Cavalry"
-    image = "Light Cavalry"
+    image = "Flanking Cavalry"
     base_attack = 2
     base_defence = 2
     base_movement = 4
