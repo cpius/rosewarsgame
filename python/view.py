@@ -24,7 +24,6 @@ class View(object):
             "sword": "sword_sound.wav",
             "War_Elephant": "Elephant.wav",
             "Archer": "bow_fired.wav",
-            "Fire_Archer": "bow_fired.wav",
             "Catapult": "catapult_attacksound.wav",
             "unit_defeated": "infantry_defeated_sound.wav",
             "your_turn": "fanfare.wav"
