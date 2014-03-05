@@ -245,15 +245,14 @@ class Unit_class(object):
 
         if attributes:
             unit_dict = readable(attributes)
-            unit_dict["name"] = self.name
+            unit_dict["name"] = str(self)
             return unit_dict
         else:
-            return self.name
+            return str(self)
 
     @classmethod
-    def make(cls, name):
-        name = name.replace(" ", "_")
-        return globals()[name]()
+    def make(cls, unit):
+        return globals()[Unit.name[unit]]()
 
 
 class Archer(Unit_class):
@@ -658,4 +657,4 @@ class Weaponsmith(Unit_class):
     experience_to_upgrade = 4
 
 
-base_units = {name: Unit.make(name) for name in all_units}
+base_units = {unit: Unit_class.make(unit) for unit in Unit.name.keys()}
