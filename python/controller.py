@@ -523,7 +523,7 @@ class Controller(object):
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
         player_unit = self.game.gamestate.player_units[self.start_at]
         opponent_unit = self.game.gamestate.enemy_units[attack_position]
-        if player_unit.name == "Assassin":
+        if player_unit == Unit.Assassin:
             attack = 6
             defence = 2
         else:

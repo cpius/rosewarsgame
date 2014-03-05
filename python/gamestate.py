@@ -2,7 +2,7 @@ from __future__ import division
 import action_doer
 import initializer
 import action_getter
-from units import Unit
+from units import Unit_class
 import json
 from common import *
 from copy import copy
@@ -122,9 +122,9 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if isinstance(unit_document, basestring):
-                unit = Unit.make(unit_document)
+                unit = Unit_class.make(Unit.get_enum[unit_document.replace(" ", "_")])
             else:
-                unit = Unit.make(unit_document["name"])
+                unit = Unit_class.make(Unit.get_enum[unit_document["name"].replace(" ", "_")])
 
                 for attribute, value in unit_document.items():
                     if attribute == "zoc":

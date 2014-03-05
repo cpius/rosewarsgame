@@ -5,7 +5,7 @@ from collections import namedtuple
 Effect_tuple = namedtuple('Effect_tuple', ['level', 'duration'])
 
 
-class Unit(object):
+class Unit_class(object):
     def __init__(self):
         self.traits = {}
         self.states = {}
@@ -46,13 +46,17 @@ class Unit(object):
         return self.base_movement + self.get(Trait.movement_skill)
 
     def __repr__(self):
-        return self.name
+        return Unit.name[self.unit]
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    @property
+    def name(self):
+        return Unit.name[self.unit]
 
     def get_dict(self, attribute):
         if attribute in Trait.name:

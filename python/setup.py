@@ -1,7 +1,7 @@
 from __future__ import division
 import random
 from common import *
-from units import Unit
+from units import Unit_class
 from collections import namedtuple
 
 required_special_units = []
@@ -11,35 +11,43 @@ requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", 
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
-units_info = {"Archer": Info({2, 3}, 3, False),
-              "Assassin": Info({1}, 1, True),
-              "Trebuchet": Info({2, 3}, 1, True),
-              "Ballista": Info({2, 3}, 2, True),
-              "Catapult": Info({2, 3}, 2, False),
-              "Knight": Info({4}, 3, False),
-              "Light Cavalry": Info({2, 3}, 3, False),
-              "Pikeman": Info({2, 3, 4}, 3, False),
-              "Berserker": Info({2, 3}, 1, False),
-              "Cannon": Info({2}, 1, True),
-              "Halberdier": Info({4}, 1, False),
-              "Hobelar": Info({3, 4}, 1, False),
-              "Hussar": Info({3, 4}, 1, False),
-              "Flanking Cavalry": Info({3, 4}, 1, False),
-              "Crusader": Info({3, 4}, 1, False),
-              "Diplomat": Info({2, 3}, 1, False),
-              "Flag Bearer": Info({3, 4}, 1, False),
-              "Lancer": Info({3, 4}, 1, False),
-              "Javeliner": Info({3, 4}, 1, False),
-              "Longswordsman": Info({4}, 1, False),
-              "Royal Guard": Info({2, 3}, 1, False),
-              "Saboteur": Info({2, 3}, 1, True),
-              "Fencer": Info({4}, 1, False),
-              "Scout": Info({2, 3}, 1, False),
-              "Viking": Info({4}, 1, False),
-              "War Elephant": Info({4}, 1, False),
-              "Weaponsmith": Info({2, 3}, 1, True),
-              "Crossbow Archer": Info({2, 3}, 3, False),
-              "Fire Archer": Info({2, 3}, 3, False)}
+units_info = {Unit.Archer: Info({2, 3}, 3, False),
+              Unit.Assassin: Info({1}, 1, True),
+              Unit.Trebuchet: Info({2, 3}, 1, True),
+              Unit.Ballista: Info({2, 3}, 2, True),
+              Unit.Catapult: Info({2, 3}, 2, False),
+              Unit.Knight: Info({4}, 3, False),
+              Unit.Light_Cavalry: Info({2, 3}, 3, False),
+              Unit.Pikeman: Info({2, 3, 4}, 3, False),
+              Unit.Berserker: Info({2, 3}, 1, False),
+              Unit.Cannon: Info({2}, 1, True),
+              Unit.Halberdier: Info({4}, 1, False),
+              Unit.Hobelar: Info({3, 4}, 1, False),
+              Unit.Hussar: Info({3, 4}, 1, False),
+              Unit.Flanking_Cavalry: Info({3, 4}, 1, False),
+              Unit.Crusader: Info({3, 4}, 1, False),
+              Unit.Diplomat: Info({2, 3}, 1, False),
+              Unit.Flag_Bearer: Info({3, 4}, 1, False),
+              Unit.Lancer: Info({3, 4}, 1, False),
+              Unit.Javeliner: Info({3, 4}, 1, False),
+              Unit.Longswordsman: Info({4}, 1, False),
+              Unit.Royal_Guard: Info({2, 3}, 1, False),
+              Unit.Saboteur: Info({2, 3}, 1, True),
+              Unit.Fencer: Info({4}, 1, False),
+              Unit.Scout: Info({2, 3}, 1, False),
+              Unit.Viking: Info({4}, 1, False),
+              Unit.War_Elephant: Info({4}, 1, False),
+              Unit.Weaponsmith: Info({2, 3}, 1, True)}
+
+if get_setting("version") == "1.1":
+    allowed_special_units = [Unit.Berserker, Unit.Cannon, Unit.Scout]
+    allowed_basic_units = [Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman]
+
+if get_setting("version") == "1.0":
+    allowed_special_units = [Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman,
+                             Unit.Scout, Unit.Viking, Unit.Hobelar]
+    allowed_basic_units = [Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman]
+
 
 board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
@@ -101,7 +109,7 @@ def at_most_two_war_machines(units):
 
 
 def at_least_five_melee_with_weaponsmith(units):
-    return not any(unit.name == "Weaponsmith" for unit in units.values()) or \
+    return not any(unit.unit == Unit.Weaponsmith for unit in units.values()) or \
         sum(1 for unit in units.values() if unit.range == 1) >=5
 
 
@@ -165,7 +173,7 @@ def get_units():
             continue
 
         for position, unit in units.items():
-            units[position] = Unit.make(unit)
+            units[position] = Unit_class.make(unit)
 
         if any(not globals()[requirement](units) for requirement in requirements):
             continue

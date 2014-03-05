@@ -172,7 +172,7 @@ def draw_crusading(screen, interface, position):
 
 
 def draw_unit(screen, interface, unit, position, color, selected=False):
-    unit_pic = get_unit_pic(interface, unit.image)
+    unit_pic = get_unit_pic(interface, unit)
     counters_drawn = 0
 
     dimensions = (int(interface.unit_width), int(interface.unit_height))

@@ -88,6 +88,7 @@ def enum(n, *sequential, **named):
     enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
     reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.iteritems())
+    enums["get_enum"] = enums
     enums["name"] = reverse
     enums["write"] = reverse_print
     return type('Enum', (), enums)
@@ -229,19 +230,53 @@ ai_descriptions = {
     "3": "Hard"
 }
 
+unit_descriptions = {
+    "Archer": "Archer",
+    "Ballista": "Ballista",
+    "Catapult": "Catapult",
+    "Knight": "Knight",
+    "Light_Cavalry": "Light Cavalry",
+    "Pikeman": "Pikeman",
+    "Berserker": "Berserker",
+    "Cannon": "Cannon",
+    "Crusader": "Crusader",
+    "Flag_Bearer": "Flag Bearer",
+    "Longswordsman": "Longswordsman",
+    "Saboteur": "Saboteur",
+    "Royal_Guard": "Royal Guard",
+    "Scout": "Scout",
+    "War_Elephant": "War Elephant",
+    "Weaponsmith": "Weaponsmith",
+    "Viking": "Viking",
+    "Diplomat": "Diplomat",
+    "Halberdier": "Halberdier",
+    "Hussar": "Hussar",
+    "Flanking_Cavalry": "Flanking Cavalry",
+    "Hobelar": "Hobelar",
+    "Lancer": "Lancer",
+    "Fencer": "Fencer",
+    "Assassin": "Assassin",
+    "Trebuchet": "Trebuchet",
+    "Javeliner": "Javeliner"
+}
+
+
 types = ["Cavalry", "Infantry", "War_Machine", "Specialist"]
 
-Trait = enum(1, *(trait for trait in dict(trait_descriptions)))
+Trait = enum(1000, *(trait for trait in dict(trait_descriptions)))
 
-State = enum(1000, *(state for state in dict(state_descriptions)))
+State = enum(2000, *(state for state in dict(state_descriptions)))
 
-Effect = enum(2000, *(effect for effect in dict(effect_descriptions)))
+Effect = enum(3000, *(effect for effect in dict(effect_descriptions)))
 
-Ability = enum(3000, *(ability for ability in ability_descriptions))
+Ability = enum(4000, *(ability for ability in ability_descriptions))
 
-Type = enum(4000, *types)
+Type = enum(1, *types)
+
+Unit = enum(1, *(unit for unit in unit_descriptions))
 
 Opponent = enum(1, *(opponent for opponent in dict(opponent_descriptions)))
+
 AI = enum(1, *(ai for ai in dict(ai_descriptions)))
 
 if 1 == 2:
@@ -253,6 +288,7 @@ if 1 == 2:
 
         name = {}
         write = {}
+        get_enum = {}
 
     class State:
         attack_cooldown = None
@@ -330,6 +366,39 @@ if 1 == 2:
 
         name = {}
         write = {}
+
+    class Unit:
+        Archer = None
+        Ballista = None
+        Catapult = None
+        Knight = None
+        Light_Cavalry = None
+        Pikeman = None
+        Berserker = None
+        Cannon = None
+        Crusader = None
+        Flag_Bearer = None
+        Longswordsman = None
+        Saboteur = None
+        Royal_Guard = None
+        Scout = None
+        War_Elephant = None
+        Weaponsmith = None
+        Viking = None
+        Diplomat = None
+        Halberdier = None
+        Hussar = None
+        Flanking_Cavalry = None
+        Hobelar = None
+        Lancer = None
+        Fencer = None
+        Assassin = None
+        Trebuchet = None
+        Javeliner = None
+
+        name = {}
+        write = {}
+        get_enum = {}
 
     class Opponent:
         HotSeat = None
@@ -540,25 +609,3 @@ def get_rolls():
     return rolls(random.randint(1, 6), random.randint(1, 6))
 
 
-if get_setting("version") == "1.1":
-    all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur", "Royal Guard", "Scout",
-                 "War Elephant", "Weaponsmith", "Viking", "Diplomat", "Halberdier", "Hussar", "Flanking Cavalry",
-                 "Hobelar", "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman",
-                 "Fire Archer", "Lancer", "Fencer", "Crossbow Archer", "Assassin", "Trebuchet", "Javeliner"]
-
-    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Saboteur",
-                             "Royal Guard", "Scout", "War Elephant", "Weaponsmith", "Viking", "Diplomat",
-                             "Halberdier", "Hussar", "Flanking Cavalry", "Hobelar",  "Fire Archer", "Lancer", "Fencer",
-                             "Crossbow Archer", "Assassin", "Trebuchet", "Javeliner"]
-
-    allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
-
-
-if get_setting("version") == "1.0":
-    all_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Scout", "Viking", "Hobelar",
-                 "Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]
-
-    allowed_special_units = ["Berserker", "Cannon", "Crusader", "Flag Bearer", "Longswordsman", "Scout", "Viking",
-                             "Hobelar"]
-
-    allowed_basic_units = ["Archer", "Ballista", "Catapult", "Knight", "Light Cavalry", "Pikeman"]

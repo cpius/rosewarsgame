@@ -129,7 +129,7 @@ def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
     unit_width = int((interface.unit_width / interface.unit_height) * unit_height)
 
     location = (base_x + (65 + index * 100) * zoom, base_y + 3 * zoom)
-    unit_pic = get_unit_pic(interface, unit.image)
+    unit_pic = get_unit_pic(interface, unit)
     unit_image = get_image(unit_pic, (unit_width, unit_height))
 
     screen.blit(unit_image, location)

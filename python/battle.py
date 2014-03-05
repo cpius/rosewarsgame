@@ -20,7 +20,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if attacking_unit.is_melee() and defending_unit.has(Trait.melee_expert):
         defence_adjusters += 1
 
-    if attacking_unit.has(Trait.pikeman_specialist) and defending_unit.name == "Pikeman":
+    if attacking_unit.has(Trait.pikeman_specialist) and defending_unit == Unit.Pikeman:
         defence_adjusters += 1
 
     if attacking_unit.is_ranged() and defending_unit.has(Trait.tall_shield):
@@ -99,7 +99,7 @@ def get_attack(action, gamestate, is_sub_action=False):
     if defending_unit.type in attacking_unit.attack_bonuses:
         attack += attacking_unit.attack_bonuses[defending_unit.type]
 
-    if defending_unit.has(Trait.pikeman_specialist) and attacking_unit.name == "Pikeman":
+    if defending_unit.has(Trait.pikeman_specialist) and attacking_unit == Unit.Pikeman:
         attack += 1
 
     if defending_unit.is_melee() and attacking_unit.has(Trait.melee_expert):

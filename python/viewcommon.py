@@ -74,8 +74,8 @@ def split_lines(lines, line_length):
     return new_lines
 
 
-def get_unit_pic(interface, name):
-    return "./" + interface.unit_folder + "/" + name.replace(" ", "_") + ".jpg"
+def get_unit_pic(interface, unit):
+    return "./" + interface.unit_folder + "/" + unit.name.replace(" ", "_") + ".jpg"
 
 
 def draw_rectangle(screen, dimensions, location, color):

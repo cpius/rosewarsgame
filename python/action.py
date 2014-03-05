@@ -81,17 +81,17 @@ class Action(object):
         return cls(units, start_at, end_at, target_at, move_with_attack, ability, number=number, created_at=created_at)
 
     def __repr__(self):
-        representation = self.unit.name + " on " + str(self.start_at)
+        representation = str(self.unit) + " on " + str(self.start_at)
         if self.end_at != self.start_at:
             representation += " move to " + str(self.end_at)
         if self.ability:
             representation += " " + Ability.name[self.ability]
-            representation += " " + self.target_unit.name + " on " + str(self.target_at)
+            representation += " " + str(self.target_unit) + " on " + str(self.target_at)
         elif self.is_attack() and self.move_with_attack:
-            representation += " attack-move " + self.target_unit.name + " on " + str(self.target_at)
+            representation += " attack-move " + str(self.target_unit) + " on " + str(self.target_at)
         elif self.is_attack():
             if hasattr(self, "target_unit"):
-                target = self.target_unit.name
+                target = str(self.target_unit)
             else:
                 target = "unit"
             representation += " attack " + target + " on " + str(self.target_at)

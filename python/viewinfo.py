@@ -95,7 +95,7 @@ def get_unit_lines(unit):
 
 def show_unit_zoomed(screen, interface, unit, attack_hint):
 
-    unit_pic = get_unit_pic(interface, unit.image)
+    unit_pic = get_unit_pic(interface, unit)
     pic = get_image(unit_pic, zoomed_unit_size)
 
     base = interface.show_unit_location
