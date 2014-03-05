@@ -79,7 +79,7 @@ def get_attack(action, gamestate, is_sub_action=False):
         attack += action.lancing()
 
     if action.flanking():
-        attack += attacking_unit.get(Trait.flanking)
+        attack += 2 * attacking_unit.get(Trait.flanking)
 
     if "No_player_Crusader" not in gamestate.ai_factors and action.is_crusading_attack(gamestate.player_units):
         attack += 1
