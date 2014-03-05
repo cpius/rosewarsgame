@@ -455,7 +455,7 @@ class Controller(object):
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
 
-            upgraded_unit = action.unit.get_upgraded_unit(upgrade)
+            upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
 
             readable_upgrade = upgrade
