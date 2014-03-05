@@ -1,14 +1,11 @@
 {
-    "type": "Upgrade",
-    "description": "The weaponsmith tries unsuccessfully to upgrade its defence",
-    "upgrade": {
-        "defence_skill": 1
-    },
+    "type": "Does upgrade exist",
+    "result": false,
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Weaponsmith",
+                "name": "Diplomat",
                 "experience": 4
             }
         },
@@ -20,8 +17,10 @@
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Weaponsmith",
-                "experience": 4
+                "name": "Diplomat",
+                "experience": 4,
+                "defence_skill": 1,
+                "recently_upgraded": 1
             }
         },
         "player2_units": {

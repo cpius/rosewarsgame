@@ -1,0 +1,31 @@
+{
+    "type": "Does upgrade exist",
+    "result": true,
+    "pre_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Ballista",
+                "attack_skill": 2,
+                "experience": 4
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Ballista",
+                "experience": 4,
+                "attack_skill": 3,
+                "recently_upgraded": 1
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    }
+}

@@ -1,12 +1,11 @@
 {
-    "type": "Upgrade",
-    "description": "The archer upgrades to a Fire Archer",
-    "upgrade": "Fire_Archer",
+    "type": "Does upgrade exist",
+    "result": false,
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Archer",
+                "name": "Berserker",
                 "experience": 4
             }
         },
@@ -18,7 +17,9 @@
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
-                "name": "Fire Archer",
+                "name": "Berserker",
+                "experience": 4,
+                "attack_skill": 1,
                 "recently_upgraded": 1
             }
         },
