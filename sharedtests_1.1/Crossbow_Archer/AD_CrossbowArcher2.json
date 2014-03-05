@@ -5,7 +5,10 @@
     "gamestate": {
         "actions_remaining": 2,
         "player1_units": {
-            "C3": "Crossbow Archer",
+            "C3": {
+                "name": "Archer",
+                "sharpshooting": 1
+            },
             "A3": "Pikeman"
         },
         "player2_units": {

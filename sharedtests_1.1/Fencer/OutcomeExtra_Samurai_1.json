@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct, extra action",
-    "description": "Samurai attacks successfully and attacks again successfully",
+    "description": "Fencer attacks successfully and attacks again successfully",
     "outcome1": {
         "E4": [1, 6]
     },
@@ -22,7 +22,7 @@
     "pre_gamestate": {
         "actions_remaining": 2,
         "player1_units": {
-            "E3": "Samurai",
+            "E3": "Fencer",
             "A2": "Pikeman"
         },
         "player2_units": {
@@ -35,7 +35,7 @@
         "actions_remaining": 1,
         "player1_units": {
             "E4": {
-                "name": "Samurai",
+                "name": "Fencer",
                 "used": 1,
                 "experience": 1
             },
