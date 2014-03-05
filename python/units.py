@@ -165,61 +165,21 @@ class Unit_class(object):
     def is_ranged(self):
         return self.range > 1
 
-    def get_upgrade_choice(self, choice_index):
-        if getattr(self, "upgrades"):
-            return self.upgrades[choice_index].replace(" ", "_")
+    def get_upgraded_unit_from_upgrade(self, upgrade):
 
-        upgrades = []
-        if getattr(self, "special_upgrades"):
-            for upgrade in self.special_upgrades:
-                if not self.has_upgrade(upgrade):
-                    upgrades.append(upgrade)
-
-        while len(upgrades) < 2:
-            upgrades.append(self.final_upgrades[1 - len(upgrades)])
-
-        return upgrades[choice_index]
-
-    def has_upgrade(self, upgrade):
-        attribute = upgrade.keys()[0]
-        base_unit_attributes = self.make(self.name).get_dict(attribute)
-        self_attributes = self.get_dict(attribute)
-
-        if attribute not in self_attributes:
-            return False
-        elif attribute not in base_unit_attributes and attribute in self_attributes:
-            return True
+        if isinstance(upgrade, int):
+            upgraded_unit = self.make(upgrade)
         else:
-            return base_unit_attributes[attribute] != self_attributes[attribute]
-
-    def get_upgraded_unit(self, choice):
-
-        if get_setting("version") == "1.0":
-            if int(choice.keys()[0]) == Trait.attack_skill:
-                self.increment_trait(Trait.attack_skill)
-            elif int(choice.keys()[0]) == Trait.defence_skill:
-                self.increment_trait(Trait.defence_skill)
-            self.set(State.recently_upgraded)
-            return self
-
-        if isinstance(choice, basestring):
-            self.remove_state(State.experience)
-            upgraded_unit = self.make(choice)
-
-        else:
-            upgraded_unit = self.make(self.name)
+            upgraded_unit = self.make(self.unit)
             for trait, level in self.traits.items():
                 upgraded_unit.set(trait, level)
-
             for ability, level in self.abilities.items():
                 upgraded_unit.set(ability, level)
-
-            for attribute, amount in choice.items():
-                upgraded_unit.upgrade_attribute(attribute, amount)
+            for attribute, amount in upgrade.items():
+                upgraded_unit.increase(attribute, amount)
 
         for state, level in self.states.items():
             upgraded_unit.set(state, level)
-
         for effect, info in self.effects.items():
             upgraded_unit.set(effect, info[0], info[1])
 
@@ -227,22 +187,48 @@ class Unit_class(object):
 
         return upgraded_unit
 
-    def is_allowed_upgrade_choice(self, upgrade_choice):
-        if not self.should_be_upgraded():
-            return False
+    def get_upgraded_unit_from_choice(self, choice):
+        upgrade = self.get_upgrade(choice)
+        return self.get_upgraded_unit_from_upgrade(upgrade)
+
+    def get_upgrade(self, choice):
+
+        def has_upgrade(upgrade):
+            attribute = upgrade.keys()[0]
+            base_unit_attributes = self.make(self.unit).get_dict(attribute)
+            self_attributes = self.get_dict(attribute)
+
+            if attribute not in self_attributes:
+                return False
+            elif attribute not in base_unit_attributes and attribute in self_attributes:
+                return True
+            else:
+                return base_unit_attributes[attribute] != self_attributes[attribute]
 
         if get_setting("version") == "1.0":
-            return True
+            if choice == 1:
+                return Trait.attack_skill
+            else:
+                return Trait.defence_skill
 
-        return upgrade_choice in [self.get_upgrade_choice(0), self.get_upgrade_choice(1)]
+        if isinstance(self.upgrades[0], int):
+            return self.upgrades[choice]
+
+        possible_upgrade_choices = range(len(self.upgrades))
+        if has_upgrade(self.upgrades[0]) and len(self.upgrades) > 2:
+            possible_upgrade_choices.remove(0)
+        if has_upgrade(self.upgrades[1]) and len(self.upgrades) > 3:
+            possible_upgrade_choices.remove(1)
+
+        return self.upgrades[possible_upgrade_choices[choice]]
 
     def get_abilities_not_in_base(self):
         return dict((ability, level) for ability, level in self.abilities.items() if
-                    level != base_units[self.name].get(ability))
+                    level != base_units[self.unit].get(ability))
 
     def get_traits_not_in_base(self):
         return dict((trait, level) for trait, level in self.traits.items() if
-                    level != base_units[self.name].get(trait))
+                    level != base_units[self.unit].get(trait))
 
     def get_unit_level(self):
         experience = self.get(State.experience)

@@ -113,51 +113,28 @@ def show_unit_zoomed(screen, interface, unit, attack_hint):
     show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
-def draw_upgrade_choice(screen, interface, index, upgrade_choice, unit):
+def show_unit_upgrade_choice(screen, interface, unit, index):
+
+    unit_pic = get_unit_pic(interface, unit)
+    pic = get_image(unit_pic, upgrade_unit_size)
 
     base = interface.upgrade_locations[index]
     title_location = base
     image_location = [base[0], base[1] + 20 * zoom]
     text_location = [base[0], base[1] + 160 * zoom]
-    unit = unit.get_upgraded_unit(upgrade_choice)
 
-    unit_pic = get_unit_pic(interface, unit.image)
-    pic = get_image(unit_pic, upgrade_unit_size)
-    screen.blit(pic, image_location)
     write(screen, unit.name, title_location, interface.fonts["normal"])
+    screen.blit(pic, image_location)
 
-    if isinstance(upgrade_choice, basestring):
-        lines = get_unit_lines(unit)
-        line_length = 30
-        line_distances = interface.line_distances["small"]
-        fonts = interface.fonts["very_small"]
-        show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
-
-    else:
-        lines = []
-        for attribute, amount in upgrade_choice.items():
-            if attribute in unit.get_dict(attribute):
-                level = unit.get_dict(attribute)[attribute]
-            else:
-                level = amount
-            name = readable(attribute)
-            if level > 1:
-                lines.append(name.replace("_", " ") + ", level " + str(level))
-                lines.append(get_description(attribute, level))
-            else:
-                lines.append(name.replace("_", " "))
-                lines.append(get_description(attribute, level))
-            lines.append("")
-        line_length = 30
-        line_distances = interface.line_distances["small"]
-        fonts = interface.fonts["very_small"]
-        show_lines(screen, lines, line_length, line_distances, fonts, *text_location)
+    lines = get_unit_lines(unit)
+    line_length = 30
+    show_lines(screen, lines, line_length, interface.line_distances["small"], interface.fonts["small"], *text_location)
 
 
 def draw_upgrade_options(screen, interface, unit):
     for i in range(2):
-        upgrade_choice = unit.get_upgrade_choice(i)
-        draw_upgrade_choice(screen, interface, i, upgrade_choice, unit)
+        upgraded_unit = unit.get_upgraded_unit_from_choice(i)
+        show_unit_upgrade_choice(screen, interface, upgraded_unit, i)
 
 
 def draw_ask_about_ability(screen, interface, unit):
