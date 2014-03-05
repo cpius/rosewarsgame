@@ -33,7 +33,7 @@ def do_action(gamestate, action, outcome):
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
-            action.target_unit.set_effect(Effect.bribed)
+            action.target_unit.set(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         elif action.ability == Ability.assassinate:
             if outcome.outcomes[action.target_at].attack > 2:
@@ -46,8 +46,8 @@ def do_action(gamestate, action, outcome):
 
     def prepare_extra_actions(action):
         if action.unit.has(State.extra_action):
-            unit.remove_state(State.extra_action)
-            unit.remove_state(State.movement_remaining)
+            unit.remove(State.extra_action)
+            unit.remove(State.movement_remaining)
 
         elif action.is_attack():
             movement_remaining = unit.movement - distance(action.start_at, action.end_at) - 1
@@ -73,10 +73,10 @@ def do_action(gamestate, action, outcome):
 
     def apply_unit_effects():
         if unit.has(Trait.attack_cooldown) and action.is_attack():
-            unit.set_effect(Effect.attack_frozen, duration=3)
+            unit.set(Effect.attack_frozen, duration=3)
 
         if unit.has(Trait.attack_cooldown, 2) and action.is_attack():
-            unit.set_effect(Effect.attack_frozen, duration=2)
+            unit.set(Effect.attack_frozen, duration=2)
 
     def update_unit_position():
         player_units[action.end_at] = player_units.pop(action.start_at)

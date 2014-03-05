@@ -66,56 +66,25 @@ class Unit_class(object):
         elif attribute in State.name:
             return self.states
 
-    def set(self, attribute, value=1, duration=None):
+    def set(self, attribute, value=1, duration=1):
         if attribute in Effect.name:
-            self.set_effect(attribute, value, duration)
+            self.effects[attribute] = Effect_tuple(value, duration)
         else:
             self.get_dict(attribute)[attribute] = value
 
-    def upgrade_attribute(self, attribute, amount):
+    def increase(self, attribute, amount):
         dictionary = self.get_dict(attribute)
         if attribute in dictionary:
             dictionary[attribute] += amount
         else:
             dictionary[attribute] = amount
 
-    def increment_trait(self, trait):
-        if trait in self.traits:
-            self.traits[trait] += 1
+    def increment(self, attribute):
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            dictionary[attribute] += 1
         else:
-            self.traits[trait] = 1
-
-    def has(self, attribute, value=None, level=None):
-        if attribute in Effect.name:
-            return self.has_effect(attribute, level)
-
-        if value:
-            return self.get(attribute) == value
-        else:
-            return self.get(attribute)
-
-    def has_effect(self, effect, level=None):
-        if not effect in self.effects:
-            return False
-
-        if not level:
-            return True
-
-        return self.effects[effect].level == level
-
-    def get(self, attribute):
-        if attribute in Effect.name:
-            return self.get_effect_level(attribute)
-        else:
-            dictionary = self.get_dict(attribute)
-            if attribute in dictionary:
-                return self.get_dict(attribute)[attribute]
-            else:
-                return 0
-
-    def remove_state(self, state):
-        if state in self.states:
-            del self.states[state]
+            dictionary[attribute] = 1
 
     def decrement(self, attribute):
         dictionary = self.get_dict(attribute)
@@ -124,44 +93,65 @@ class Unit_class(object):
             if dictionary[attribute][0] == 0:
                 del dictionary[attribute]
 
-    def increment_state(self, state):
-        if state in self.states:
-            self.states[state] += 1
+    def has(self, attribute, value=None, level=None):
+        if attribute in Effect.name:
+            if not attribute in self.effects:
+                return False
+            if not level:
+                return True
+            return self.effects[attribute].level == level
+
+        if value:
+            return self.get(attribute) == value
         else:
-            self.states[state] = 1
+            return self.get(attribute)
+
+    def get(self, attribute):
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            if attribute in Effect.name:
+                return self.get_dict(attribute)[attribute].level
+            else:
+                return self.get_dict(attribute)[attribute]
+        else:
+            return 0
+
+    def remove(self, attribute):
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            del dictionary[attribute]
+
+    def decrement(self, attribute):
+        dictionary = self.get_dict(attribute)
+        if attribute in dictionary:
+            if attribute in Effect.name:
+                if self.effects[attribute].duration <= 1:
+                    del self.effects[attribute]
+                else:
+                    self.effects[attribute] = Effect_tuple(self.effects[attribute].level,
+                                                           self.effects[attribute].duration - 1)
+            else:
+                dictionary[attribute][0] = max(0, dictionary[attribute][0] - 1)
+                if dictionary[attribute][0] == 0:
+                    del dictionary[attribute]
 
     def do(self, ability, level):
         if ability == Ability.poison:
             self.set(Effect.poisoned, duration=level)
 
         if ability == Ability.sabotage:
-            self.set_effect(Effect.sabotaged, duration=level)
+            self.set(Effect.sabotaged, duration=level)
 
         if ability == Ability.improve_weapons:
             if level == 2:
-                self.set_effect(Effect.improved_weapons, 2, 2)
+                self.set(Effect.improved_weapons, 2, 2)
             else:
-                self.set_effect(Effect.improved_weapons)
-
-    def set_effect(self, effect, level=1, duration=1):
-        self.effects[effect] = Effect_tuple(level, duration)
-
-    def get_effect_level(self, effect):
-        if not effect in self.effects:
-            return 0
-        else:
-            return self.effects[effect].level
+                self.set(Effect.improved_weapons)
 
     def gain_experience(self):
         if not self.has(State.used) and not get_setting("Beginner_mode"):
-            self.increment_state(State.experience)
-            self.remove_state(State.recently_upgraded)
-
-    def reduce_effect(self, effect):
-        if self.effects[effect].duration <= 1:
-            del self.effects[effect]
-        else:
-            self.effects[effect] = Effect_tuple(self.effects[effect].level, self.effects[effect].duration - 1)
+            self.increment(State.experience)
+            self.remove(State.recently_upgraded)
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
