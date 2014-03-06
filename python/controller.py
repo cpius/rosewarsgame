@@ -494,15 +494,6 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-    def show_attack(self, attack_position):
-        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
-        player_unit = self.game.gamestate.player_units[self.start_at]
-
-        opponent_unit = self.game.gamestate.enemy_units[attack_position]
-        self.view.show_attack(self.game.gamestate, action, player_unit, opponent_unit)
-
-        return
-
     def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
         unit = None
         position = start_at

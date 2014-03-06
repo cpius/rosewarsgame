@@ -105,10 +105,6 @@ class View(object):
         viewgame.shade_positions(self.screen, self.interface, positions, color)
         self.refresh()
 
-    def show_attack(self, gamestate, action, player_unit, opponent_unit):
-        viewinfo.show_attack(self.screen, self.interface, action, player_unit, opponent_unit, gamestate)
-        self.refresh()
-
     def draw_message(self, message):
         write_message(self.screen, self.interface, message)
         self.refresh()
