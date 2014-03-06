@@ -279,20 +279,29 @@ def deploy():
 
 def register_upgrade(action_document, gamestate, game_id):
     position, unit = gamestate.get_upgradeable_unit()
+    upgrade = action_document["upgrade"]
+    upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
 
-    upgrade_options = [unit.get_upgrade_choice(0), unit.get_upgrade_choice(1)]
-    is_valid_choice = False
+    if upgrade in upgrade_options:
+        new_unit = unit.get_upgraded_unit_from_upgrade(upgrade)
 
-    is_simple_upgrade = isinstance(action_document["upgrade"], basestring)
-
-    for choice in range(0, 2):
-        if is_simple_upgrade:
-            if upgrade_options[choice] == upgrade_options[choice]:
-                is_valid_choice = True
+        action_collection = get_collection("actions")
+    
+        existing_options = action_collection.find_one(
+            {"type": "options", "number": action_document["number"], "game": ObjectId(game_id)})
+        if existing_options:
+            existing_options["upgrade"] = action_document["upgrade"]
+            action_collection.save(existing_options)
         else:
-            if action_document["upgrade"] == readable(upgrade_options[choice]):
-                is_valid_choice = True
-    if not is_valid_choice:
+            action_document["game"] = ObjectId(game_id)
+            action_collection.insert(action_document)
+
+        return {
+            "Status": "OK",
+            "Message": "Upgraded " + str(unit) + " on " + str(position),
+            "New unit": document_to_string(new_unit.to_document())}
+
+    else:
         message = "The upgrade must be one of "
         for choice in range(0, 2):
             if isinstance(upgrade_options[choice], basestring):
@@ -303,27 +312,6 @@ def register_upgrade(action_document, gamestate, game_id):
                 message += " and "
 
         return {"Status": "Error", "Message": message}
-
-    if is_simple_upgrade:
-        new_unit = unit.get_upgraded_unit(action_document["upgrade"])
-    else:
-        new_unit = unit.get_upgraded_unit(enum_attributes(action_document["upgrade"]))
-
-    action_collection = get_collection("actions")
-
-    existing_options = action_collection.find_one(
-        {"type": "options", "number": action_document["number"], "game": ObjectId(game_id)})
-    if existing_options:
-        existing_options["upgrade"] = action_document["upgrade"]
-        action_collection.save(existing_options)
-    else:
-        action_document["game"] = ObjectId(game_id)
-        action_collection.insert(action_document)
-
-    return {
-        "Status": "OK",
-        "Message": "Upgraded " + str(unit) + " on " + str(position),
-        "New unit": document_to_string(new_unit.to_document())}
 
 
 def register_move_with_attack(action_document, game_id, gamestate):
