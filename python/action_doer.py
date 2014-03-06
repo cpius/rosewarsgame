@@ -20,8 +20,6 @@ def defence_successful(action, rolls, gamestate, is_sub_action=False):
     return rolls.defence <= defence
 
 
-
-
 def do_action(gamestate, action, outcome):
 
     def settle_attack(action, attack_direction=None, is_sub_action=False):
