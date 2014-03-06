@@ -166,11 +166,6 @@ def draw_bribed(screen, interface, position):
     screen.blit(pic, interface.coordinates["flag"].get(position))
 
 
-def draw_crusading(screen, interface, position):
-    pic = get_image(interface.crusading_icon)
-    screen.blit(pic, interface.coordinates["flag"].get(position))
-
-
 def draw_unit(screen, interface, unit, position, color, selected=False):
     unit_pic = get_unit_pic(interface, unit)
     counters_drawn = 0
@@ -226,10 +221,6 @@ def flip_action(action):
             setattr(flipped_action, attribute, getattr(flipped_action, attribute).flip())
 
     return flipped_action
-
-
-def flip_direction(direction):
-    return Direction(direction.x, - direction.y)
 
 
 def get_yellow_counters(unit):
