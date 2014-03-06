@@ -6,6 +6,7 @@ import action_getter
 from outcome import Outcome
 from common import *
 import traceback
+import battle
 
 
 def run_test(test_file):
@@ -138,8 +139,8 @@ def run_test(test_file):
             expected_attack = test_document["attack"]
             expected_defence = test_document["defence"]
 
-            actual_attack = action.get_attack(gamestate)
-            actual_defence = action.get_defence(gamestate)
+            actual_attack = battle.get_attack(action, gamestate)
+            actual_defence = battle.get_defence(action, actual_attack, gamestate)
 
             if actual_attack == expected_attack and actual_defence == expected_defence:
                 return "pass"

@@ -8,7 +8,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if attacking_unit.is_melee() and defending_unit.has(Trait.big_shield):
         defence_adjusters += 2
 
-    if "No_Crusader" not in gamestate.ai_factors and action.is_crusading_defense(gamestate.enemy_units, level=2):
+    if "No_Crusader" not in gamestate.ai_factors and is_crusading_defense(action, gamestate.enemy_units, level=2):
         defence_adjusters += 1
 
     if attacking_unit.type in defending_unit.defence_bonuses:
@@ -32,7 +32,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.has(Trait.war_machine_specialist) and attacking_unit.type == Type.War_Machine:
         defence_adjusters += 1
 
-    if attacking_unit.has(Trait.javelin) and distance(action.start_at, action.target_at) > 1:
+    if action.is_javelin_throw():
         defence_adjusters -= 1
 
     return defence_adjusters
@@ -75,16 +75,16 @@ def get_attack(action, gamestate, is_sub_action=False):
 
     attack = attacking_unit.attack
 
-    if action.lancing():
-        attack += action.lancing()
+    if lancing(action):
+        attack += lancing(action)
 
-    if action.flanking():
+    if flanking(action):
         attack += 2 * attacking_unit.get(Trait.flanking)
 
-    if "No_player_Crusader" not in gamestate.ai_factors and action.is_crusading_attack(gamestate.player_units):
+    if "No_player_Crusader" not in gamestate.ai_factors and is_crusading_attack(action, gamestate.player_units):
         attack += 1
 
-    if "No_FlagBearer" not in gamestate.ai_factors and action.has_high_morale(gamestate.player_units):
+    if "No_FlagBearer" not in gamestate.ai_factors and has_high_morale(action, gamestate.player_units):
         attack += 2
 
     if attacking_unit.has(Effect.bribed):
@@ -121,3 +121,49 @@ def get_attack(action, gamestate, is_sub_action=False):
         attack -= 1
 
     return attack
+
+
+def lancing(action):
+    if action.unit.has(Trait.lancing, 1) and action.is_attack() and distance_to_target(action) >= 3:
+        return 2
+    elif action.unit.has(Trait.lancing, 2) and action.is_attack() and distance_to_target(action) >= 4:
+        return 3
+    else:
+        return 0
+
+
+def distance_to_target(action):
+    return distance(action.start_at, action.target_at)
+
+
+def is_crusading_attack(action, units, level=None):
+    return action.unit.is_melee() and (is_surrounding_unit_with(action, units, Trait.crusading, action.start_at, level))
+
+
+def is_crusading_defense(action, units, level=None):
+    return action.unit.is_melee() and (is_surrounding_unit_with(action, units, Trait.crusading, action.target_at, level))
+
+
+def has_high_morale(action, units):
+    return action.unit.is_melee() and (is_adjacent_unit_with(action, units, Trait.flag_bearing, action.end_at) or
+                                       is_surrounding_unit_with(action, units, Trait.flag_bearing, action.end_at, 2))
+
+
+def is_surrounding_unit_with(action, units, trait, position, level=None):
+    return any(unit_with_trait_at(pos, trait, units, level) for pos in position.surrounding_tiles() if
+               pos != action.start_at)
+
+
+def is_adjacent_unit_with(action, units, trait, position, level=None):
+    return any(unit_with_trait_at(pos, trait, units, level) for pos in position.adjacent_tiles() if
+               pos != action.start_at)
+
+
+def flanking(action):
+    if not action.unit.has(Trait.flanking) or action.target_unit.has(Trait.flanked):
+        return False
+    attack_direction = action.end_at.get_direction_to(action.target_at)
+    if attack_direction == Direction("Up"):
+        return False
+
+    return True

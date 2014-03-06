@@ -242,6 +242,6 @@ class Gamestate:
             return False
 
         rolls = outcome.for_position(action.target_at)
-        push_possible = action.is_push() and action.attack_successful(rolls, self)
+        push_possible = action.is_push() and action_doer.attack_successful(action, rolls, self)
 
-        return push_possible or action.is_win(rolls, self)
+        return push_possible or action_doer.is_win(action, rolls, self)
