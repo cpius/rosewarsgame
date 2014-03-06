@@ -343,7 +343,7 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
     # gamestate_before = gamestate.copy()
     outcome = None
 
-    if action.is_attack() or action.ability == Ability.assassinate:
+    if action.has_outcome():
         outcome = Outcome.determine_outcome(action, gamestate)
 
     gamestate.do_action(action, outcome)

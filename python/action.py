@@ -163,3 +163,6 @@ class Action(object):
         self.unit = units[self.start_at]
         if self.target_at and self.target_at in units:
             self.target_unit = units[self.target_at]
+
+    def has_outcome(self):
+        return self.is_attack() or self.ability == Ability.assassinate
