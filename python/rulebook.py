@@ -1,6 +1,5 @@
 from common import *
 import json
-from pygame.locals import *
 from gamestate import Gamestate
 from game import Game
 from player import Player
@@ -170,14 +169,6 @@ def run_tutorial(view):
         run_tutorial_10(view)
     else:
         run_tutorial_11(view)
-
-
-def quit_game_requested(event):
-    return event.type == QUIT or (event.type == KEYDOWN and command_q_down(event.key))
-
-
-def command_q_down(key):
-    return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
 
 
 def move_forward_requested(event):
