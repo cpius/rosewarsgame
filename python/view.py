@@ -58,11 +58,11 @@ class View(object):
         write(self.screen, "To Menu", self.interface.to_help_menu_area[0], self.interface.fonts["normal"])
         self.showing_unit_info = False
 
-    def draw_game(self, game, start_at=None, actions=(), update_log=False):
+    def draw_game(self, game, start_at=None, actions=(), redraw_log=False):
         viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
-        if update_log:
+        if redraw_log:
             self.clear_right()
-            self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
+            viewlog.draw_logbook(self.screen, self.interface, self.logbook)
         self.refresh()
 
     def show_unit_zoomed(self, unit, attack_hint):
@@ -78,10 +78,10 @@ class View(object):
         write(self.screen, "To Game", self.interface.help_area[0], self.interface.fonts["normal"])
         self.refresh()
 
-    def hide_unit_zoomed(self, game):
+    def hide_unit_zoomed(self):
         if self.showing_unit_info:
             self.clear_right()
-            self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
+            viewlog.draw_logbook(self.screen, self.interface, self.logbook)
 
     @staticmethod
     def refresh():
@@ -96,7 +96,8 @@ class View(object):
         self.refresh()
 
     def draw_action(self, action, outcome, game, flip=False):
-        viewlog.draw_log(self.logbook, self.screen, self.interface, game, action, outcome)
+        self.logbook = viewlog.add_log(action, outcome, game, self.logbook)
+        viewlog.draw_logbook(self.screen, self.interface, self.logbook)
         viewgame.draw_action(self.screen, self.interface, action, outcome, flip)
         self.refresh()
 
@@ -163,7 +164,6 @@ class View(object):
                         message.append(Ability.write[attribute])
                         message.append(get_description(attribute, 2))
                         message.append("")
-        #write(self.screen, upgrade, (10, 10), self.interface.fonts["normal"])
         show_lines(self.screen, message, 52 * settings.zoom, self.interface.line_distances["larger"],
                    self.interface.fonts["normal"], 5, 5)
         self.refresh()

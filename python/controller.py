@@ -290,7 +290,7 @@ class Controller(object):
                     position = position.flip()
 
                 if event.button == 1:
-                    self.view.hide_unit_zoomed(self.game)
+                    self.view.hide_unit_zoomed()
                     if self.game.is_player_human():
                         self.left_click(position)
                 elif event.button == 3:
