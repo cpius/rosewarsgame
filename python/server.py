@@ -271,16 +271,15 @@ def test():
 
 @post("/deploy")
 def deploy():
-    print "deployment requested"
     if request.json["ref"] != "refs/heads/master":
-        return "not deploying"
+        return "OK"  # We only care about pushes to master
 
-    print request.json
-    call(["git", "fetch"])
-    call(["git", "reset", "--hard", "origin/master"])
+    print "deployment requested"
+    call("git fetch")
+    call("git reset --hard origin/master")
 
     print "deployment successful"
-    return "deployment successful"
+    return "OK"
 
 
 def register_upgrade(action_document, gamestate, game_id):
