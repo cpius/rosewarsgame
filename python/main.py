@@ -30,6 +30,11 @@ def menu_choice(view, menu):
                 if within(event.pos, view.interface.opponent_menu[i]):
                     return i + 1
 
+        keys = {K_1: 1, K_2: 2, K_3: 3, K_4: 4}
+        for key, item in keys.items():
+            if event.type == KEYDOWN and event.key == key:
+                return item
+
 
 def figure_out_player_profile():
     profile = get_setting("profile")
@@ -46,7 +51,7 @@ def figure_out_player_profile():
 
 
 def decide_opponent(view):
-    menu = [opponent_descriptions[Opponent.name[i]] for i in range(1, 5)]
+    menu = [str(i) + ". " + opponent_descriptions[Opponent.name[i]] for i in range(1, 5)]
     return menu_choice(view, menu)
 
 
