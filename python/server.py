@@ -14,6 +14,7 @@ from outcome import Outcome
 import random
 import memcache
 import traceback
+from subprocess import call
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
@@ -265,7 +266,15 @@ def ranking_chart():
 
 @get("/test")
 def test():
-    return "Hello World"
+    return "Hello World 4"
+
+
+@post("/deploy")
+def deploy():
+    call(["git", "fetch"])
+    call(["git", "reset --hard origin/master"])
+
+    return "deployment successful"
 
 
 def register_upgrade(action_document, gamestate, game_id):
