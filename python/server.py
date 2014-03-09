@@ -15,10 +15,8 @@ import random
 import memcache
 import traceback
 from subprocess import call
-from threading import Lock
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
-lock = Lock()
 
 
 @get("/games/new/<player1>/vs/<player2>")
@@ -274,10 +272,12 @@ def test():
 @post("/deploy")
 def deploy():
     print "deployment requested"
+    if request.json["ref"] != "refs/heads/master":
+        return "not deploying"
+
     print request.json
-    with lock:
-        call(["git", "fetch"])
-        call(["git", "reset", "--hard", "origin/master"])
+    call(["git", "fetch"])
+    call(["git", "reset", "--hard", "origin/master"])
 
     print "deployment successful"
     return "deployment successful"
