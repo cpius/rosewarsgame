@@ -275,8 +275,8 @@ def deploy():
         return "OK"  # We only care about pushes to master
 
     print "deployment requested"
-    call("git fetch")
-    call("git reset --hard origin/master")
+    call(["git", "fetch"])
+    call(["git", "reset", "--hard", "origin/master"])
 
     print "deployment successful"
     return "OK"
