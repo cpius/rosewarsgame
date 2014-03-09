@@ -272,7 +272,7 @@ def test():
 @post("/deploy")
 def deploy():
     call(["git", "fetch"])
-    call(["git", "reset --hard origin/master"])
+    call(["git", "reset", "--hard", "origin/master"])
 
     return "deployment successful"
 
