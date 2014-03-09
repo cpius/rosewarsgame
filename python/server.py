@@ -502,4 +502,4 @@ if socket.gethostname() == "MD-rMBP.local":
     host_address = "localhost"
 
 install(JSONPlugin(json_dumps=lambda document: document_to_string(document)))
-run(host=host_address, port=8080, debug=True)
+run(host=host_address, port=8080, debug=True, reloader=True)
