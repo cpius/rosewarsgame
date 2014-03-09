@@ -14,6 +14,7 @@ from outcome import Outcome
 import random
 import memcache
 import traceback
+from subprocess import call
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
@@ -263,6 +264,19 @@ def ranking_chart():
     return static_file("chart.html", "/home/ubuntu")
 
 
+@post("/deploy")
+def deploy():
+    if request.json["ref"] != "refs/heads/master":
+        return "OK"  # We only care about pushes to master
+
+    print "deployment requested"
+    call(["git", "fetch"])
+    call(["git", "reset", "--hard", "origin/master"])
+
+    print "deployment successful"
+    return "OK"
+
+
 def register_upgrade(action_document, gamestate, game_id):
     position, unit = gamestate.get_upgradeable_unit()
 
@@ -497,4 +511,4 @@ if socket.gethostname() == "MD-rMBP.local":
     host_address = "localhost"
 
 install(JSONPlugin(json_dumps=lambda document: document_to_string(document)))
-run(host=host_address, port=8080, debug=True)
+run(host=host_address, port=8080, debug=True, reloader=True)
