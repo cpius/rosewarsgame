@@ -15,8 +15,10 @@ import random
 import memcache
 import traceback
 from subprocess import call
+from threading import Lock
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
+lock = Lock()
 
 
 @get("/games/new/<player1>/vs/<player2>")
@@ -271,8 +273,9 @@ def test():
 
 @post("/deploy")
 def deploy():
-    call(["git", "fetch"])
-    call(["git", "reset", "--hard", "origin/master"])
+    with lock:
+        call(["git", "fetch"])
+        call(["git", "reset", "--hard", "origin/master"])
 
     return "deployment successful"
 
