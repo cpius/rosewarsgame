@@ -263,6 +263,11 @@ def ranking_chart():
     return static_file("chart.html", "/home/ubuntu")
 
 
+@get("/test")
+def test():
+    return "Hello World"
+
+
 def register_upgrade(action_document, gamestate, game_id):
     position, unit = gamestate.get_upgradeable_unit()
 
