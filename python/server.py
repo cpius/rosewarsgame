@@ -273,10 +273,13 @@ def test():
 
 @post("/deploy")
 def deploy():
+    print "deployment requested"
+    print request.json
     with lock:
         call(["git", "fetch"])
         call(["git", "reset", "--hard", "origin/master"])
 
+    print "deployment successful"
     return "deployment successful"
 
 
