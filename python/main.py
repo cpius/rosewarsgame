@@ -65,7 +65,7 @@ if __name__ == '__main__':
         player_profile = figure_out_player_profile()
         controller = Controller.from_network(player_profile)
     elif opponent_choice == Opponent.Load:
-        controller = Controller.from_replay(sys.argv[1])
+        controller = Controller.from_replay()
     elif opponent_choice == Opponent.HotSeat:
         controller = Controller.new_game("Human", "Human")
     elif opponent_choice == Opponent.AI:

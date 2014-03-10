@@ -5,6 +5,7 @@ from pygame.locals import *
 import setup
 from gamestate import Gamestate
 import os
+import glob
 import interface_settings as settings
 from player import Player
 from action import Action
@@ -70,7 +71,9 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_replay(cls, savegame_file):
+    def from_replay(cls):
+        savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
+
         controller = cls(View())
         savegame_document = json.loads(open(savegame_file).read())
         controller.game = Game.from_log_document(savegame_document)
