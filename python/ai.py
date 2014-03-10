@@ -8,6 +8,7 @@ import math
 from itertools import product
 from collections import Counter
 import os
+import battle
 
 
 class AI():
@@ -159,7 +160,7 @@ def get_gamestate_factors(g):
 
 def score_actions_considering_two_actions(g0):
     g0.ai_factors = {}
-    if not any(unit == Unit.Crusader for unit in g0.player_units.values()):
+    if not any(unit.name == Unit.Crusader for unit in g0.player_units.values()):
         g0.ai_factors["No_player_Crusader"] = 1
     if not any(unit.name == "Flag Bearer" for unit in g0.player_units.values()):
         g0.ai_factors["No_FlagBearer"] = 1
@@ -290,8 +291,8 @@ def get_score(factors):
 
 def chance_of_win(gamestate, action):
 
-    attack = action.get_attack(gamestate)
-    defence = action.get_defence(gamestate)
+    attack = battle.get_attack(action, gamestate)
+    defence = battle.get_defence(action, attack, gamestate)
 
     if attack < 0:
         attack = 0
