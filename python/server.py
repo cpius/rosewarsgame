@@ -266,7 +266,7 @@ def ranking_chart():
 
 @get("/test")
 def test():
-    return "Hello World 19"
+    return "Hello World 20"
 
 
 @post("/deploy")
