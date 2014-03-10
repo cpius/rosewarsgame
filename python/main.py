@@ -8,11 +8,26 @@ from viewcommon import *
 from view import View
 
 
+def pause():
+    while True:
+        event = pygame.event.wait()
+
+        if event.type == QUIT:
+            exit_game()
+
+        elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            return
+
+
+def exit_game():
+    sys.exit()
+
+
 def menu_choice(view, menu):
 
     view.screen.fill(colors["light_grey"])
     for i, item in enumerate(menu):
-        write(view.screen, item, view.interface.help_menu[i], view.interface.fonts["normal"])
+        write(view.screen, item, view.interface.opponent_menu[i], view.interface.fonts["normal"])
     view.refresh()
 
     while 1:
@@ -36,18 +51,18 @@ def menu_choice(view, menu):
                 return item
 
 
-def figure_out_player_profile():
+def figure_out_player_profile(view):
     profile = get_setting("profile")
 
     if profile:
         return profile
     else:
-        print "Please specify a profile name\n> ",
-        profile = sys.stdin.readline().rstrip()
-        with open("settings_user.py", "a") as settings_user_file:
-            settings_user_file.write("profile = \"" + profile + "\"\r\n")
-
-        return figure_out_player_profile()
+        view.screen.fill(colors["light_grey"])
+        message = "Add a line to you settings.txt saying: 'profile: profile_name'"
+        write(view.screen, message, view.interface.opponent_menu[0], view.interface.fonts["normal"])
+        view.refresh()
+        pause()
+        return "quit"
 
 
 def decide_opponent(view):
@@ -62,8 +77,9 @@ if __name__ == '__main__':
 
     controller = None
     if opponent_choice == Opponent.Internet:
-        player_profile = figure_out_player_profile()
-        controller = Controller.from_network(player_profile)
+        player_profile = figure_out_player_profile(view)
+        if not player_profile == "quit":
+            controller = Controller.from_network(player_profile)
     elif opponent_choice == Opponent.Load:
         controller = Controller.from_replay()
     elif opponent_choice == Opponent.HotSeat:
@@ -77,4 +93,3 @@ if __name__ == '__main__':
 
     if controller:
         controller.run_game()
-
