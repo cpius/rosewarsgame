@@ -219,9 +219,9 @@ ability_descriptions = {
 
 opponent_descriptions = {
     "HotSeat": "Start a new hot seat game on this machine",
-    "AI": "Start a new game against an artificial intelligence on this machine",
-    "Internet": "Start a new game against an opponent from the internet",
-    "Load": "Load a saved game"
+    "AI": "Start a new game against an AI",
+    "Load": "Load the most recent game",
+    "Internet": "Start a new game against an opponent from the internet"
 }
 
 ai_descriptions = {
