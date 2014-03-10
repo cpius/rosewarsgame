@@ -61,9 +61,9 @@ class Game:
 
             action_document = log_document[str(action_number)]
 
-            game.actions[str(action_number)] = action_document
-
             action = Action.from_document(gamestate.all_units(), action_document)
+
+            game.actions[str(action_number)] = action
 
             options = None
             if str(action_number) + "_options" in log_document:
@@ -73,7 +73,7 @@ class Game:
 
             outcome = None
             outcome_document = None
-            if action.is_attack() or action.ability == Ability.assassinate:
+            if action.has_outcome():
                 outcome_document = log_document[str(action_number) + "_outcome"]
                 outcome = Outcome.from_document(outcome_document)
                 if options and "move_with_attack" in options:
@@ -129,7 +129,8 @@ class Game:
 
         action_count = self.gamestate.action_count
 
-        self.actions[action_count] = action.to_document()
+        action.outcome = outcome
+        self.actions[action_count] = action
         if outcome:
             outcome_document = outcome.to_document()
             self.outcomes[action_count] = outcome_document
@@ -142,8 +143,8 @@ class Game:
         savegame_document["gamestate"] = self.gamestate.to_document()
         savegame_document["initial_gamestate"] = self.initial_gamestate.to_document()
         savegame_document["action_count"] = self.gamestate.action_count
-        for action_number, document in self.actions.items():
-            savegame_document[action_number] = document
+        for action_number, action in self.actions.items():
+            savegame_document[action_number] = action.to_document()
 
         for action_number, document in self.outcomes.items():
             savegame_document[str(action_number) + "_outcome"] = document

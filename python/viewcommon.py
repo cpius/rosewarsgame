@@ -3,6 +3,7 @@ import pygame
 import textwrap
 import interface_settings as settings
 from common import *
+from pygame.locals import *
 
 colors = {"black": (0, 0, 0),
           "white": (255, 255, 255),
@@ -74,8 +75,8 @@ def split_lines(lines, line_length):
     return new_lines
 
 
-def get_unit_pic(interface, name):
-    return "./" + interface.unit_folder + "/" + name.replace(" ", "_") + ".jpg"
+def get_unit_pic(interface, unit):
+    return "./" + interface.unit_folder + "/" + unit.name.replace(" ", "_") + ".jpg"
 
 
 def draw_rectangle(screen, dimensions, location, color):
@@ -139,3 +140,12 @@ def get_position_from_mouseclick(interface, coordinates):
 
 def within(point, area):
     return area[0].y <= point[1] <= area[1].y and area[0].x <= point[0] <= area[1].x
+
+
+def quit_game_requested(event):
+    return event.type == QUIT or (event.type == KEYDOWN and command_q_down(event.key))
+
+
+def command_q_down(key):
+    return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
+

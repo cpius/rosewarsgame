@@ -1,7 +1,6 @@
 from datetime import datetime
 from copy import copy, deepcopy
 from common import *
-import battle
 
 
 class Action(object):
@@ -81,17 +80,17 @@ class Action(object):
         return cls(units, start_at, end_at, target_at, move_with_attack, ability, number=number, created_at=created_at)
 
     def __repr__(self):
-        representation = self.unit.name + " on " + str(self.start_at)
+        representation = str(self.unit) + " on " + str(self.start_at)
         if self.end_at != self.start_at:
             representation += " move to " + str(self.end_at)
         if self.ability:
             representation += " " + Ability.name[self.ability]
-            representation += " " + self.target_unit.name + " on " + str(self.target_at)
+            representation += " " + str(self.target_unit) + " on " + str(self.target_at)
         elif self.is_attack() and self.move_with_attack:
-            representation += " attack-move " + self.target_unit.name + " on " + str(self.target_at)
+            representation += " attack-move " + str(self.target_unit) + " on " + str(self.target_at)
         elif self.is_attack():
             if hasattr(self, "target_unit"):
-                target = self.target_unit.name
+                target = str(self.target_unit)
             else:
                 target = "unit"
             representation += " attack " + target + " on " + str(self.target_at)
@@ -146,85 +145,14 @@ class Action(object):
     def is_ability(self):
         return bool(self.ability)
 
-    def lancing(self):
-        if self.unit.has(Trait.lancing, 1) and self.is_attack() and self.distance_to_target() >= 3:
-            return 2
-        elif self.unit.has(Trait.lancing, 2) and self.is_attack() and self.distance_to_target() >= 4:
-            return 3
-        else:
-            return 0
-
-    def flanking(self):
-        if not self.unit.has(Trait.flanking) or self.target_unit.has(Trait.flanked):
-            return False
-        attack_direction = self.end_at.get_direction_to(self.target_at)
-        if attack_direction == Direction("Up"):
-            return False
-
-        return True
-
     def is_push(self):
         return self.unit.has(Trait.push) and self.is_attack()
-
-    def is_crusading_attack(self, units, level=None):
-        return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.start_at, level))
-
-    def is_crusading_defense(self, units, level=None):
-        return self.unit.is_melee() and (self.is_surrounding_unit_with(units, Trait.crusading, self.target_at, level))
-
-    def has_high_morale(self, units):
-        return self.unit.is_melee() and (self.is_adjacent_unit_with(units, Trait.flag_bearing, self.end_at) or
-                                         self.is_surrounding_unit_with(units, Trait.flag_bearing, self.end_at, 2))
-
-    def is_surrounding_unit_with(self, units, trait, position, level=None):
-        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.surrounding_tiles() if
-                   pos != self.start_at)
-
-    def is_adjacent_unit_with(self, units, trait, position, level=None):
-        return any(unit_with_trait_at(pos, trait, units, level) for pos in position.adjacent_tiles() if
-                   pos != self.start_at)
-
-    def distance_to_target(self):
-        return distance(self.start_at, self.target_at)
 
     def is_javelin_throw(self):
         return self.unit.has_javelin() and distance(self.end_at, self.target_at) > 1
 
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack()
-
-    def get_attack(self, gamestate):
-        if not hasattr(self, "attack"):
-            self.attack = battle.get_attack(self, gamestate)
-        return self.attack
-
-    def get_defence(self, gamestate):
-        if not hasattr(self, "defence"):
-            attack = self.get_attack(gamestate)
-            self.defence = battle.get_defence(self, attack, gamestate)
-        return self.defence
-
-    def attack_successful(self, rolls, gamestate):
-        return rolls.attack <= self.get_attack(gamestate)
-
-    def defence_successful(self, rolls, gamestate):
-        return rolls.defence <= self.get_defence(gamestate)
-
-    def is_win(self, rolls, gamestate):
-        return self.attack_successful(rolls, gamestate) and not self.defence_successful(rolls, gamestate)
-
-    def is_miss(self, rolls, gamestate):
-        return not self.attack_successful(rolls, gamestate)
-
-    def outcome_string(self, rolls, gamestate):
-        if not self.is_attack() or not rolls:
-            return ""
-        elif self.is_miss(rolls, gamestate):
-            return "Miss"
-        elif self.is_win(rolls, gamestate):
-            return "Win"
-        else:
-            return "Defend"
 
     def copy(self):
         return deepcopy(self)
@@ -234,3 +162,6 @@ class Action(object):
         self.unit = units[self.start_at]
         if self.target_at and self.target_at in units:
             self.target_unit = units[self.target_at]
+
+    def has_outcome(self):
+        return self.is_attack() or self.ability == Ability.assassinate

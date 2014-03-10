@@ -159,7 +159,7 @@ def get_gamestate_factors(g):
 
 def score_actions_considering_two_actions(g0):
     g0.ai_factors = {}
-    if not any(unit.name == "Crusader" for unit in g0.player_units.values()):
+    if not any(unit == Unit.Crusader for unit in g0.player_units.values()):
         g0.ai_factors["No_player_Crusader"] = 1
     if not any(unit.name == "Flag Bearer" for unit in g0.player_units.values()):
         g0.ai_factors["No_FlagBearer"] = 1

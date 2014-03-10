@@ -5,7 +5,7 @@
         "actions_remaining": 0,
         "player2_units": {
             "C3": {
-                "name": "Fire Archer",
+                "name": "Archer",
                 "experience": 4
             },
             "E4": "Light Cavalry"
@@ -22,7 +22,7 @@
         "actions_remaining": 2,
         "player1_units": {
             "C3": {
-                "name": "Fire Archer",
+                "name": "Archer",
                 "experience": 4
             },
             "E4": "Light Cavalry"

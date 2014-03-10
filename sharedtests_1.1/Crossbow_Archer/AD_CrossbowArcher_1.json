@@ -11,7 +11,8 @@
         "actions_remaining": 1,
         "player1_units": {
             "B2": {
-                "name": "Crossbow Archer",
+                "name": "Archer",
+                "sharpshooting": 1,
                 "experience": 1
             },
             "A3": "Weaponsmith"

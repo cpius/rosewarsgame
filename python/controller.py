@@ -290,7 +290,7 @@ class Controller(object):
                     position = position.flip()
 
                 if event.button == 1:
-                    self.view.hide_unit_zoomed(self.game)
+                    self.view.hide_unit_zoomed()
                     if self.game.is_player_human():
                         self.left_click(position)
                 elif event.button == 3:
@@ -455,7 +455,7 @@ class Controller(object):
             if not position in self.game.gamestate.player_units:
                 position = action.target_at
 
-            upgraded_unit = action.unit.get_upgraded_unit(upgrade)
+            upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
 
             readable_upgrade = upgrade
@@ -494,15 +494,6 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-    def show_attack(self, attack_position):
-        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
-        player_unit = self.game.gamestate.player_units[self.start_at]
-
-        opponent_unit = self.game.gamestate.enemy_units[attack_position]
-        self.view.show_attack(self.game.gamestate, action, player_unit, opponent_unit)
-
-        return
-
     def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
         unit = None
         position = start_at
@@ -523,7 +514,7 @@ class Controller(object):
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
         player_unit = self.game.gamestate.player_units[self.start_at]
         opponent_unit = self.game.gamestate.enemy_units[attack_position]
-        if player_unit.name == "Assassin":
+        if player_unit == Unit.Assassin:
             attack = 6
             defence = 2
         else:
