@@ -497,3 +497,5 @@ def construct_log_document(game_document):
 
 
 install(JSONPlugin(json_dumps=lambda document: document_to_string(document)))
+
+# To run the server: uwsgi --http :8080 --wsgi-file server.py --callable app --master --py-autoreload=1
