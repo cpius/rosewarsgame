@@ -1,4 +1,4 @@
-from bottle import run, get, post, install, JSONPlugin, request, response, static_file
+from bottle import run, get, post, install, JSONPlugin, request, response, static_file, Bottle
 from pymongo import MongoClient
 import socket
 from time import mktime, time
@@ -18,8 +18,10 @@ from subprocess import call
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
+app = Bottle()
 
-@get("/games/new/<player1>/vs/<player2>")
+
+@app.get("/games/new/<player1>/vs/<player2>")
 def new_game(player1, player2):
     games = get_collection("games")
     players = [Player("Green", "Human", player1), Player("Red", "Human", player2)]
@@ -34,7 +36,7 @@ def new_game(player1, player2):
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time(), "Message": "New game created"}
 
 
-@get("/games/view/<game_id>")
+@app.get("/games/view/<game_id>")
 def view(game_id):
     last_modified_cache = cache.get(game_id)
     if last_modified_cache:
@@ -71,12 +73,12 @@ def view(game_id):
     return log_document
 
 
-@get("/cache/get/<game_id>")
+@app.get("/cache/get/<game_id>")
 def getcache(game_id):
     return str(cache.get(game_id))
 
 
-@get("/games/view_log/<game_id>")
+@app.get("/games/view_log/<game_id>")
 def view_log(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -88,7 +90,7 @@ def view_log(game_id):
     return log_document
 
 
-@get("/actions/view/<game_id>")
+@app.get("/actions/view/<game_id>")
 def view_actions(game_id):
     actions = get_collection("actions")
     action_documents = list(actions.find({"game": ObjectId(game_id)}))
@@ -105,7 +107,7 @@ def view_actions(game_id):
 
 
 # db.games.update({}, { "$set": { "finished_at": finished_at } }, {"multi": true} );
-@get("/games/join_or_create/<profile>")
+@app.get("/games/join_or_create/<profile>")
 def join_or_create(profile):
     games = get_collection("games")
 
@@ -156,7 +158,7 @@ def join_or_create(profile):
         return new_game("OPEN", profile)
 
 
-@post("/games/<game_id>/do_action")
+@app.post("/games/<game_id>/do_action")
 def do_action_post(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -202,7 +204,7 @@ def do_action_post(game_id):
     return response_document
 
 
-@get("/ranking/calculate")
+@app.get("/ranking/calculate")
 def calculate_ratings():
     games = list(get_collection("games").find({}).sort("finished_at", 1))
 
@@ -259,12 +261,12 @@ def calculate_ratings():
     return ranking
 
 
-@get("/ranking/chart")
+@app.get("/ranking/chart")
 def ranking_chart():
     return static_file("chart.html", "/home/ubuntu")
 
 
-@post("/deploy")
+@app.post("/deploy")
 def deploy():
     if request.json["ref"] != "refs/heads/master":
         return "OK"  # We only care about pushes to master
@@ -494,9 +496,4 @@ def construct_log_document(game_document):
     return replay_document
 
 
-host_address = "10.224.105.151"
-if socket.gethostname() == "MD-rMBP.local":
-    host_address = "localhost"
-
 install(JSONPlugin(json_dumps=lambda document: document_to_string(document)))
-run(host=host_address, port=8080, debug=True, reloader=True)
