@@ -167,8 +167,8 @@ trait_descriptions = {
     "flanked": {
         1: "This unit was attacked by a unit with flanking last turn."},
     "ride_through": {
-        1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where it"
-           "ends up on this empty tile. Zone of control has no effect on this ability."},
+        1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where "
+           "it ends up on this empty tile. Zone of control has no effect on this ability."},
     "spread_attack": {
         1: "Also attacks the adjacent tiles with -1A."},
     "javelin": {
