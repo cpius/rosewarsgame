@@ -522,6 +522,8 @@ def readable(attributes):
             return Effect.name[attributes].title()
         if attributes in State.name:
             return State.name[attributes].title()
+        if attributes in Unit.name:
+            return Unit.name[attributes].title()
 
     dictionary = {}
     for attribute, value in attributes.items():
