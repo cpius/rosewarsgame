@@ -84,12 +84,16 @@ class Game:
 
             if options and "upgrade" in options:
                 upgrade = options["upgrade"]
-                if not isinstance(upgrade, basestring):
+                if isinstance(upgrade, basestring):
+                    upgrade = Unit.get_enum[upgrade]
+                else:
                     upgrade = enum_attributes(upgrade)
+
                 position = action.end_at
                 if not position in game.gamestate.player_units:
                     position = action.target_at
-                upgraded_unit = action.unit.get_upgraded_unit(upgrade)
+
+                upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
                 game.gamestate.player_units[position] = upgraded_unit
 
         if shift_turn:
