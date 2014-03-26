@@ -1,33 +1,29 @@
 {
     "type": "Is outcome correct",
-    "description": "Hobelar doesn't get an extra action after a move",
+    "description": "Cavalry gets an xp for movement",
     "action": {
         "start_at": "E3",
-        "end_at": "E2"
+        "end_at": "E4"
     },
     "pre_gamestate": {
         "actions_remaining": 2,
         "player1_units": {
-            "E3": "Hobelar",
-            "A2": "Pikeman"
+            "E3": "Knight"
         },
         "player2_units": {
-            "E4": "Archer",
             "D7": "Ballista"
         }
     },
     "post_gamestate": {
-        "actions_remaining": 1,
+        "actions_remaining": 0,
         "player1_units": {
-            "E2": {
-                "name": "Hobelar",
+            "E4": {
                 "experience": 1,
-                "used": 1
-            },
-            "A2": "Pikeman"
+                "used": 1,
+                "name": "Knight"
+            }
         },
         "player2_units": {
-            "E4": "Archer",
             "D7": "Ballista"
         }
     }
