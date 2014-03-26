@@ -6,11 +6,11 @@
 //
 //
 
-#import "Chariot.h"
+#import "Hobelar.h"
 #import "Action.h"
 #import "ActionCostLess.h"
 
-@implementation Chariot
+@implementation Hobelar
 
 -(id)init {
     self = [super init];
@@ -19,7 +19,7 @@
         
         self.cardType = kCardTypeSpecialUnit;
         self.unitType = kCavalry;
-        self.unitName = kChariot;
+        self.unitName = kHobelar;
         self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];
@@ -45,7 +45,7 @@
 
 + (id)card {
     
-    return [[Chariot alloc] init];
+    return [[Hobelar alloc] init];
 }
 
 - (void)didPerformedAction:(Action *)action {
@@ -55,7 +55,7 @@
         
         [self addTimedAbility:[[ActionCostLess alloc] initForNumberOfTurns:1 onCard:self]];
         
-        NSLog(@"Chariot has attacked but moves are not consumed");
+        NSLog(@"Hobelar has attacked but moves are not consumed");
     }
 }
 @end

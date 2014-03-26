@@ -144,7 +144,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
     
     [_gameManager.currentGame populateUnitLayout];
     
-    _battlePlan = [[BattlePlan alloc] init];
+    _battlePlan = [[BattlePlan alloc] initWithGame:_gameManager.currentGame];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardIncreasedInLevel:) name:GAMEEVENT_LEVEL_INCREASED object:nil];
     

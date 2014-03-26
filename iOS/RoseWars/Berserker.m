@@ -57,7 +57,7 @@
         PathFinderStep *endLocation = path.lastObject;
         Card *cardAtEndLocation = [allLocations objectForKey:endLocation.location];
         
-        if (cardAtEndLocation != nil && cardAtEndLocation.cardColor != [GameManager sharedManager].currentGame.myColor) {
+        if (cardAtEndLocation != nil && [cardAtEndLocation isOwnedByEnemy]) {
             if (path.count <= 4) {
                 allowPath = YES;
             }

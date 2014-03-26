@@ -8,7 +8,7 @@
 
 #import "SpecialUnitTest.h"
 #import "Definitions.h"
-#import "Chariot.h"
+#import "Hobelar.h"
 #import "Archer.h"
 #import "GameManager.h"
 #import "TestHelper.h"
@@ -27,7 +27,7 @@
 #import "LightCavalry.h"
 #import "Viking.h"
 #import "MoveAction.h"
-#import "LongSwordsMan.h"
+#import "Longswordsman.h"
 #import "Crusader.h"
 #import "FlagBearer.h"
 #import "StandardBattleStrategy.h"
@@ -38,7 +38,7 @@
 #import "Juggernaut.h"
 #import "JuggernautBattleStrategy.h"
 #import "FixedLevelIncreaseStrategy.h"
-#import "HeavyCavalry.h"
+#import "Knight.h"
 
 @implementation SpecialUnitTest
 
@@ -54,7 +54,7 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
     Archer *archer = [Archer card];
-    Chariot *chariot = [Chariot card];
+    Hobelar *chariot = [Hobelar card];
     
     archer.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
     archer.cardColor = kCardColorRed;
@@ -133,7 +133,7 @@
 - (void)testBerserkerCanAttackEnemyUnitWithFourNodes {
     
     Berserker *berserker = [Berserker card];
-    Chariot *chariot = [Chariot card];
+    Hobelar *chariot = [Hobelar card];
     Archer *archer = [Archer card];
     
     berserker.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
@@ -471,7 +471,7 @@
 
 - (void)testLongswordsmanHitsSurroundingEnemies {
     
-    LongSwordsMan *longswordsman = [LongSwordsMan card];
+    Longswordsman *longswordsman = [Longswordsman card];
     Pikeman *pikeman = [Pikeman card];
     Archer *archer = [Archer card];
     
@@ -1068,40 +1068,6 @@
     }];
 }
 
-- (void)testThatWarElephantDoesntHaveExtraMovesWhenAttackingAndIncreasingLevel {
-    
-    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
-    
-    WarElephant *warelephant = [WarElephant card];
-    Pikeman *pikeman = [Pikeman card];
-    
-    pikeman.cardLocation = [GridLocation gridLocationWithRow:5 column:1];
-    pikeman.cardColor = kCardColorRed;
-
-    warelephant.cardLocation = [GridLocation gridLocationWithRow:5 column:2];
-    warelephant.cardColor = kCardColorGreen;
-    // Starting with 1 experince
-    warelephant.experience = 1;
-    
-    warelephant.levelIncreaseStrategy = [FixedLevelIncreaseStrategy fixedLevelIncreaseStrategyWithLevelIncreaseAbility:kLevelIncreaseAbilityAttack];
-    
-    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[warelephant] player2Units:@[pikeman]];
-    _manager.currentPlayersTurn = kPlayerGreen;
-    _manager.currentGame.numberOfAvailableActions = 2;
-
-    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman meleeAttackType:kMeleeAttackTypeNormal];
-    action.delegate = mock;
-    
-    [action performActionWithCompletion:^{
-        
-        XCTAssertTrue(warelephant.experience == 2, @"Warelephant should have 2 experirnce");
-        XCTAssertTrue(warelephant.numberOfLevelsIncreased == 1, @"Warelephant have increased 1 level");
-        XCTAssertTrue(warelephant.movesRemaining == 0, @"Warelephant shouldn't have any remaining moves");
-    }];
-}
 
 - (void)testEnemyShouldEndTurnWhenOnlyTwoUnitsLeftAndOnOfThemAreOnBribeCooldown {
     
@@ -1115,7 +1081,7 @@
     archer.cardLocation = [GridLocation gridLocationWithRow:2 column:4];
     archer.cardColor = kCardColorRed;
     
-    HeavyCavalry *heavycavalry = [HeavyCavalry card];
+    Knight *heavycavalry = [Knight card];
     heavycavalry.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
     heavycavalry.cardColor = kCardColorRed;
     

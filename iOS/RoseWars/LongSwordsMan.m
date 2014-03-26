@@ -6,7 +6,7 @@
 //
 //
 
-#import "LongSwordsMan.h"
+#import "Longswordsman.h"
 #import "Action.h"
 #import "GameManager.h"
 #import "PathFinderStep.h"
@@ -14,7 +14,7 @@
 #import "StandardBattleStrategy.h"
 #import "HKSecondaryAttackDiceRolls.h"
 
-@implementation LongSwordsMan
+@implementation Longswordsman
 
 -(id)init {
     self = [super init];
@@ -23,7 +23,7 @@
         
         self.cardType = kCardTypeSpecialUnit;
         self.unitType = kInfantry;
-        self.unitName = kLongSwordsMan;
+        self.unitName = kLongswordsman;
         self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];
@@ -49,7 +49,7 @@
 
 + (id)card {
     
-    return [[LongSwordsMan alloc] init];
+    return [[Longswordsman alloc] init];
 }
 
 - (void)didResolveCombatDuringAction:(Action *)action {

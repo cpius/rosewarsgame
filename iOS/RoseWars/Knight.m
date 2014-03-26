@@ -6,9 +6,9 @@
 //
 //
 
-#import "HeavyCavalry.h"
+#import "Knight.h"
 
-@implementation HeavyCavalry
+@implementation Knight
 
 -(id)init {
     self = [super init];
@@ -17,7 +17,7 @@
         
         self.cardType = kCardTypeBasicUnit;
         self.unitType = kCavalry;
-        self.unitName = kHeavyCalavry;
+        self.unitName = kKnight;
         self.unitAttackType = kUnitAttackTypeMelee;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];
@@ -41,7 +41,7 @@
 
 + card {
     
-    return [[HeavyCavalry alloc] init];
+    return [[Knight alloc] init];
 }
 
 @end

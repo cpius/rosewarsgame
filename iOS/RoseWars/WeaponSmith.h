@@ -8,7 +8,7 @@
 
 #import "Card.h"
 
-@interface WeaponSmith : Card
+@interface Weaponsmith : Card
 
 + (id)card;
 

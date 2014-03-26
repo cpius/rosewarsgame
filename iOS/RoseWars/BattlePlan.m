@@ -11,15 +11,17 @@
 #import "GameManager.h"
 #import "PathFinderStrategyFactory.h"
 #import "MeleeAttackAction.h"
+#import "Game.h"
 
 @implementation BattlePlan
 
-- init {
+- initWithGame:(Game*)game {
     
     self = [super init];
     
     if (self) {
-        
+        NSAssert(!game, @"Game must be non-nil");
+        _game = game;
     }
     
     return self;
@@ -108,6 +110,8 @@
 }
 
 - (NSArray *)createBattlePlanForCard:(Card *)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray *)enemyUnits unitLayout:(NSDictionary *)unitLayout {
+    
+    if (![card isOwnedByMe]) return [NSArray array];
     
     PathFinder *pathFinder = [[PathFinder alloc] init];
     

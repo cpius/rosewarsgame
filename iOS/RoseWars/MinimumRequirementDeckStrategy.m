@@ -27,9 +27,9 @@
     
     if (self) {
         
-        _nonFrontLineUnits = @[@(kLightCavalry), @(kBallista), @(kCatapult), @(kArcher), @(kScout), @(kSaboteur), @(kDiplomat), @(kBerserker), @(kCannon), @(kWeaponSmith), @(kRoyalGuard)];
+        _nonFrontLineUnits = @[@(kLightCavalry), @(kBallista), @(kCatapult), @(kArcher), @(kScout), @(kSaboteur), @(kDiplomat), @(kBerserker), @(kCannon), @(kWeaponsmith), @(kRoyalGuard)];
         
-        _nonBackLineUnits = @[@(kPikeman), @(kBerserker), @(kLongSwordsMan), @(kRoyalGuard), @(kSamurai), @(kViking), @(kWarElephant)];
+        _nonBackLineUnits = @[@(kPikeman), @(kBerserker), @(kLongswordsman), @(kRoyalGuard), @(kSamurai), @(kViking), @(kWarElephant)];
     }
     
     return self;

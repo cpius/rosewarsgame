@@ -15,7 +15,7 @@
 #import "ImproveWeapons.h"
 #import "GameManager.h"
 #import "AbilityFactory.h"
-#import "LongSwordsMan.h"
+#import "Longswordsman.h"
 #import "FixedDiceStrategy.h"
 #import "Samurai.h"
 #import "StandardBattleStrategy.h"

@@ -32,6 +32,76 @@
 		617214A91889CD5D000775EE /* SKSpriteNode+NodePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 617214A81889CD5D000775EE /* SKSpriteNode+NodePosition.m */; };
 		617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26618C3D80E00E64829 /* HKExperienceTets.m */; };
 		617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */; };
+		617DB27518C7057300E64829 /* GameCenterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27018C7057300E64829 /* GameCenterManager.m */; };
+		617DB27618C7057300E64829 /* NSDataAES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27218C7057300E64829 /* NSDataAES256.m */; };
+		617DB27718C7057300E64829 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27418C7057300E64829 /* Reachability.m */; };
+		617DB2C518C7285700E64829 /* Action_Berserker_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27B18C7285700E64829 /* Action_Berserker_1.json */; };
+		617DB2C618C7285700E64829 /* Action_Berserker_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27C18C7285700E64829 /* Action_Berserker_2.json */; };
+		617DB2C718C7285700E64829 /* Action_Berserker_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27D18C7285700E64829 /* Action_Berserker_3.json */; };
+		617DB2C818C7285700E64829 /* AD_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27F18C7285700E64829 /* AD_Cannon_1.json */; };
+		617DB2C918C7285700E64829 /* Outcome_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28018C7285700E64829 /* Outcome_Cannon_1.json */; };
+		617DB2CA18C7285700E64829 /* AD_Catapult_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28218C7285700E64829 /* AD_Catapult_1.json */; };
+		617DB2CB18C7285700E64829 /* AD_Crusader_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28418C7285700E64829 /* AD_Crusader_1.json */; };
+		617DB2CC18C7285700E64829 /* AD_Crusader_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28518C7285700E64829 /* AD_Crusader_2.json */; };
+		617DB2CD18C7285700E64829 /* AD_Crusader_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28618C7285700E64829 /* AD_Crusader_3.json */; };
+		617DB2CE18C7285700E64829 /* AD_Crusader_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28718C7285700E64829 /* AD_Crusader_4.json */; };
+		617DB2CF18C7285700E64829 /* AD_Crusader_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28818C7285700E64829 /* AD_Crusader_5.json */; };
+		617DB2D018C7285700E64829 /* AD_FlagBearer_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28A18C7285700E64829 /* AD_FlagBearer_1.json */; };
+		617DB2D118C7285700E64829 /* AD_FlagBearer_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28B18C7285700E64829 /* AD_FlagBearer_2.json */; };
+		617DB2D218C7285700E64829 /* AD_FlagBearer_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */; };
+		617DB2D318C7285700E64829 /* AD_FlagBearer_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */; };
+		617DB2D418C7285700E64829 /* AD_FlagBearer_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */; };
+		617DB2D518C7285700E64829 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29018C7285700E64829 /* Action_1.json */; };
+		617DB2D618C7285700E64829 /* Action_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29118C7285700E64829 /* Action_10.json */; };
+		617DB2D718C7285700E64829 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29218C7285700E64829 /* Action_2.json */; };
+		617DB2D818C7285700E64829 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29318C7285700E64829 /* Action_3.json */; };
+		617DB2D918C7285700E64829 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29418C7285700E64829 /* Action_4.json */; };
+		617DB2DA18C7285700E64829 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29518C7285700E64829 /* Action_5.json */; };
+		617DB2DB18C7285700E64829 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29618C7285700E64829 /* Action_6.json */; };
+		617DB2DC18C7285700E64829 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29718C7285700E64829 /* Action_7.json */; };
+		617DB2DD18C7285700E64829 /* Action_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29818C7285700E64829 /* Action_8.json */; };
+		617DB2DE18C7285700E64829 /* Action_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29918C7285700E64829 /* Action_9.json */; };
+		617DB2DF18C7285700E64829 /* AD_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29A18C7285700E64829 /* AD_1.json */; };
+		617DB2E018C7285700E64829 /* Outcome_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29B18C7285700E64829 /* Outcome_1.json */; };
+		617DB2E118C7285700E64829 /* Turn_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29C18C7285700E64829 /* Turn_1.json */; };
+		617DB2E218C7285700E64829 /* Action_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29E18C7285700E64829 /* Action_Hobelar_1.json */; };
+		617DB2E318C7285700E64829 /* Action_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29F18C7285700E64829 /* Action_Hobelar_2.json */; };
+		617DB2E418C7285700E64829 /* Action_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A018C7285700E64829 /* Action_Hobelar_3.json */; };
+		617DB2E518C7285700E64829 /* Action_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A118C7285700E64829 /* Action_Hobelar_4.json */; };
+		617DB2E618C7285700E64829 /* Outcome_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A218C7285700E64829 /* Outcome_Hobelar_1.json */; };
+		617DB2E718C7285700E64829 /* Outcome_Hobelar_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A318C7285700E64829 /* Outcome_Hobelar_10.json */; };
+		617DB2E818C7285700E64829 /* Outcome_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A418C7285700E64829 /* Outcome_Hobelar_2.json */; };
+		617DB2E918C7285700E64829 /* Outcome_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A518C7285700E64829 /* Outcome_Hobelar_3.json */; };
+		617DB2EA18C7285700E64829 /* Outcome_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A618C7285700E64829 /* Outcome_Hobelar_4.json */; };
+		617DB2EB18C7285700E64829 /* Outcome_Hobelar_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A718C7285700E64829 /* Outcome_Hobelar_5.json */; };
+		617DB2EC18C7285700E64829 /* Outcome_Hobelar_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A818C7285700E64829 /* Outcome_Hobelar_6.json */; };
+		617DB2ED18C7285700E64829 /* Outcome_Hobelar_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A918C7285700E64829 /* Outcome_Hobelar_7.json */; };
+		617DB2EE18C7285700E64829 /* Outcome_Hobelar_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */; };
+		617DB2EF18C7285700E64829 /* Outcome_Hobelar_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */; };
+		617DB2F018C7285700E64829 /* Outcome_Longswordsman_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */; };
+		617DB2F118C7285700E64829 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AF18C7285700E64829 /* Action_1.json */; };
+		617DB2F218C7285700E64829 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B018C7285700E64829 /* Action_2.json */; };
+		617DB2F318C7285700E64829 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B118C7285700E64829 /* Action_3.json */; };
+		617DB2F418C7285700E64829 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B218C7285700E64829 /* Action_4.json */; };
+		617DB2F518C7285700E64829 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B318C7285700E64829 /* Action_5.json */; };
+		617DB2F618C7285700E64829 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B418C7285700E64829 /* Action_6.json */; };
+		617DB2F718C7285700E64829 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B518C7285700E64829 /* Action_7.json */; };
+		617DB2F818C7285700E64829 /* Action_Scout_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B718C7285700E64829 /* Action_Scout_1.json */; };
+		617DB2F918C7285700E64829 /* Action_Scout_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B818C7285700E64829 /* Action_Scout_2.json */; };
+		617DB2FA18C7285700E64829 /* Upgrade_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BA18C7285700E64829 /* Upgrade_1.json */; };
+		617DB2FB18C7285700E64829 /* Upgrade_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BB18C7285700E64829 /* Upgrade_2.json */; };
+		617DB2FC18C7285700E64829 /* Upgrade_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BC18C7285700E64829 /* Upgrade_3.json */; };
+		617DB2FD18C7285700E64829 /* Upgrade_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BD18C7285700E64829 /* Upgrade_4.json */; };
+		617DB2FE18C7285700E64829 /* Action_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BF18C7285700E64829 /* Action_Viking_1.json */; };
+		617DB2FF18C7285700E64829 /* Action_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C018C7285700E64829 /* Action_Viking_2.json */; };
+		617DB30018C7285700E64829 /* Action_Viking_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C118C7285700E64829 /* Action_Viking_3.json */; };
+		617DB30118C7285700E64829 /* Action_Viking_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C218C7285700E64829 /* Action_Viking_4.json */; };
+		617DB30218C7285700E64829 /* Outcome_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C318C7285700E64829 /* Outcome_Viking_1.json */; };
+		617DB30318C7285700E64829 /* Outcome_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C418C7285700E64829 /* Outcome_Viking_2.json */; };
+		617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30418C7295600E64829 /* HKSharedTestBench.m */; };
+		617DB30918C7305C00E64829 /* HKSharedTestFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30818C7305C00E64829 /* HKSharedTestFactory.m */; };
+		617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */; };
+		617DB31018C730F300E64829 /* HKSharedTestCheckActionExistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30F18C730F300E64829 /* HKSharedTestCheckActionExistence.m */; };
 		61A6F7AE18BBDFA40069AF61 /* Archer.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AD18BBDFA40069AF61 /* Archer.atlas */; };
 		61A6F7B018BBE15D0069AF61 /* Cavalry.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */; };
 		61A78C5B188DAE1500DDA1B2 /* HKBattleResultNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A78C5A188DAE1500DDA1B2 /* HKBattleResultNode.m */; };
@@ -103,11 +173,11 @@
 		61C47E3817C635BB00D644D1 /* Berserker.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1117C635BB00D644D1 /* Berserker.m */; };
 		61C47E3917C635BB00D644D1 /* Canon.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1317C635BB00D644D1 /* Canon.m */; };
 		61C47E3A17C635BB00D644D1 /* Catapult.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1517C635BB00D644D1 /* Catapult.m */; };
-		61C47E3B17C635BB00D644D1 /* Chariot.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1717C635BB00D644D1 /* Chariot.m */; };
+		61C47E3B17C635BB00D644D1 /* Hobelar.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1717C635BB00D644D1 /* Hobelar.m */; };
 		61C47E3C17C635BB00D644D1 /* Crusader.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1917C635BB00D644D1 /* Crusader.m */; };
 		61C47E3D17C635BB00D644D1 /* Diplomat.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1B17C635BB00D644D1 /* Diplomat.m */; };
 		61C47E3E17C635BB00D644D1 /* FlagBearer.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1D17C635BB00D644D1 /* FlagBearer.m */; };
-		61C47E3F17C635BB00D644D1 /* HeavyCavalry.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1F17C635BB00D644D1 /* HeavyCavalry.m */; };
+		61C47E3F17C635BB00D644D1 /* Knight.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1F17C635BB00D644D1 /* Knight.m */; };
 		61C47E4017C635BB00D644D1 /* Juggernaut.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E2117C635BB00D644D1 /* Juggernaut.m */; };
 		61C47E4117C635BB00D644D1 /* Lancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E2317C635BB00D644D1 /* Lancer.m */; };
 		61C47E4217C635BB00D644D1 /* LightCavalry.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E2517C635BB00D644D1 /* LightCavalry.m */; };
@@ -209,6 +279,84 @@
 		617DB26618C3D80E00E64829 /* HKExperienceTets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKExperienceTets.m; sourceTree = "<group>"; };
 		617DB26B18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKSecondaryAttackDiceRolls.h; sourceTree = "<group>"; };
 		617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSecondaryAttackDiceRolls.m; sourceTree = "<group>"; };
+		617DB26F18C7057300E64829 /* GameCenterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCenterManager.h; sourceTree = "<group>"; };
+		617DB27018C7057300E64829 /* GameCenterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCenterManager.m; sourceTree = "<group>"; };
+		617DB27118C7057300E64829 /* NSDataAES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAES256.h; sourceTree = "<group>"; };
+		617DB27218C7057300E64829 /* NSDataAES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAES256.m; sourceTree = "<group>"; };
+		617DB27318C7057300E64829 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		617DB27418C7057300E64829 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		617DB27818C7281000E64829 /* HKGameSerializerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKGameSerializerProtocol.h; sourceTree = "<group>"; };
+		617DB27B18C7285700E64829 /* Action_Berserker_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Berserker_1.json; sourceTree = "<group>"; };
+		617DB27C18C7285700E64829 /* Action_Berserker_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Berserker_2.json; sourceTree = "<group>"; };
+		617DB27D18C7285700E64829 /* Action_Berserker_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Berserker_3.json; sourceTree = "<group>"; };
+		617DB27F18C7285700E64829 /* AD_Cannon_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Cannon_1.json; sourceTree = "<group>"; };
+		617DB28018C7285700E64829 /* Outcome_Cannon_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Cannon_1.json; sourceTree = "<group>"; };
+		617DB28218C7285700E64829 /* AD_Catapult_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Catapult_1.json; sourceTree = "<group>"; };
+		617DB28418C7285700E64829 /* AD_Crusader_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Crusader_1.json; sourceTree = "<group>"; };
+		617DB28518C7285700E64829 /* AD_Crusader_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Crusader_2.json; sourceTree = "<group>"; };
+		617DB28618C7285700E64829 /* AD_Crusader_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Crusader_3.json; sourceTree = "<group>"; };
+		617DB28718C7285700E64829 /* AD_Crusader_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Crusader_4.json; sourceTree = "<group>"; };
+		617DB28818C7285700E64829 /* AD_Crusader_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Crusader_5.json; sourceTree = "<group>"; };
+		617DB28A18C7285700E64829 /* AD_FlagBearer_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_1.json; sourceTree = "<group>"; };
+		617DB28B18C7285700E64829 /* AD_FlagBearer_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_2.json; sourceTree = "<group>"; };
+		617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_3.json; sourceTree = "<group>"; };
+		617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_4.json; sourceTree = "<group>"; };
+		617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_5.json; sourceTree = "<group>"; };
+		617DB29018C7285700E64829 /* Action_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_1.json; sourceTree = "<group>"; };
+		617DB29118C7285700E64829 /* Action_10.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_10.json; sourceTree = "<group>"; };
+		617DB29218C7285700E64829 /* Action_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_2.json; sourceTree = "<group>"; };
+		617DB29318C7285700E64829 /* Action_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_3.json; sourceTree = "<group>"; };
+		617DB29418C7285700E64829 /* Action_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_4.json; sourceTree = "<group>"; };
+		617DB29518C7285700E64829 /* Action_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_5.json; sourceTree = "<group>"; };
+		617DB29618C7285700E64829 /* Action_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_6.json; sourceTree = "<group>"; };
+		617DB29718C7285700E64829 /* Action_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_7.json; sourceTree = "<group>"; };
+		617DB29818C7285700E64829 /* Action_8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_8.json; sourceTree = "<group>"; };
+		617DB29918C7285700E64829 /* Action_9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_9.json; sourceTree = "<group>"; };
+		617DB29A18C7285700E64829 /* AD_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_1.json; sourceTree = "<group>"; };
+		617DB29B18C7285700E64829 /* Outcome_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_1.json; sourceTree = "<group>"; };
+		617DB29C18C7285700E64829 /* Turn_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Turn_1.json; sourceTree = "<group>"; };
+		617DB29E18C7285700E64829 /* Action_Hobelar_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Hobelar_1.json; sourceTree = "<group>"; };
+		617DB29F18C7285700E64829 /* Action_Hobelar_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Hobelar_2.json; sourceTree = "<group>"; };
+		617DB2A018C7285700E64829 /* Action_Hobelar_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Hobelar_3.json; sourceTree = "<group>"; };
+		617DB2A118C7285700E64829 /* Action_Hobelar_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Hobelar_4.json; sourceTree = "<group>"; };
+		617DB2A218C7285700E64829 /* Outcome_Hobelar_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_1.json; sourceTree = "<group>"; };
+		617DB2A318C7285700E64829 /* Outcome_Hobelar_10.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_10.json; sourceTree = "<group>"; };
+		617DB2A418C7285700E64829 /* Outcome_Hobelar_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_2.json; sourceTree = "<group>"; };
+		617DB2A518C7285700E64829 /* Outcome_Hobelar_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_3.json; sourceTree = "<group>"; };
+		617DB2A618C7285700E64829 /* Outcome_Hobelar_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_4.json; sourceTree = "<group>"; };
+		617DB2A718C7285700E64829 /* Outcome_Hobelar_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_5.json; sourceTree = "<group>"; };
+		617DB2A818C7285700E64829 /* Outcome_Hobelar_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_6.json; sourceTree = "<group>"; };
+		617DB2A918C7285700E64829 /* Outcome_Hobelar_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_7.json; sourceTree = "<group>"; };
+		617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_8.json; sourceTree = "<group>"; };
+		617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_9.json; sourceTree = "<group>"; };
+		617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Longswordsman_1.json; sourceTree = "<group>"; };
+		617DB2AF18C7285700E64829 /* Action_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_1.json; sourceTree = "<group>"; };
+		617DB2B018C7285700E64829 /* Action_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_2.json; sourceTree = "<group>"; };
+		617DB2B118C7285700E64829 /* Action_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_3.json; sourceTree = "<group>"; };
+		617DB2B218C7285700E64829 /* Action_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_4.json; sourceTree = "<group>"; };
+		617DB2B318C7285700E64829 /* Action_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_5.json; sourceTree = "<group>"; };
+		617DB2B418C7285700E64829 /* Action_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_6.json; sourceTree = "<group>"; };
+		617DB2B518C7285700E64829 /* Action_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_7.json; sourceTree = "<group>"; };
+		617DB2B718C7285700E64829 /* Action_Scout_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Scout_1.json; sourceTree = "<group>"; };
+		617DB2B818C7285700E64829 /* Action_Scout_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Scout_2.json; sourceTree = "<group>"; };
+		617DB2BA18C7285700E64829 /* Upgrade_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_1.json; sourceTree = "<group>"; };
+		617DB2BB18C7285700E64829 /* Upgrade_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_2.json; sourceTree = "<group>"; };
+		617DB2BC18C7285700E64829 /* Upgrade_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_3.json; sourceTree = "<group>"; };
+		617DB2BD18C7285700E64829 /* Upgrade_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_4.json; sourceTree = "<group>"; };
+		617DB2BF18C7285700E64829 /* Action_Viking_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Viking_1.json; sourceTree = "<group>"; };
+		617DB2C018C7285700E64829 /* Action_Viking_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Viking_2.json; sourceTree = "<group>"; };
+		617DB2C118C7285700E64829 /* Action_Viking_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Viking_3.json; sourceTree = "<group>"; };
+		617DB2C218C7285700E64829 /* Action_Viking_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Viking_4.json; sourceTree = "<group>"; };
+		617DB2C318C7285700E64829 /* Outcome_Viking_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Viking_1.json; sourceTree = "<group>"; };
+		617DB2C418C7285700E64829 /* Outcome_Viking_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Viking_2.json; sourceTree = "<group>"; };
+		617DB30418C7295600E64829 /* HKSharedTestBench.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSharedTestBench.m; sourceTree = "<group>"; };
+		617DB30718C7305C00E64829 /* HKSharedTestFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKSharedTestFactory.h; sourceTree = "<group>"; };
+		617DB30818C7305C00E64829 /* HKSharedTestFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSharedTestFactory.m; sourceTree = "<group>"; };
+		617DB30A18C7308C00E64829 /* HKSharedTestExecuter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKSharedTestExecuter.h; sourceTree = "<group>"; };
+		617DB30B18C730C500E64829 /* HKSharedTestBaseExecuter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKSharedTestBaseExecuter.h; sourceTree = "<group>"; };
+		617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSharedTestBaseExecuter.m; sourceTree = "<group>"; };
+		617DB30E18C730F300E64829 /* HKSharedTestCheckActionExistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKSharedTestCheckActionExistence.h; sourceTree = "<group>"; };
+		617DB30F18C730F300E64829 /* HKSharedTestCheckActionExistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSharedTestCheckActionExistence.m; sourceTree = "<group>"; };
 		61A6F7AD18BBDFA40069AF61 /* Archer.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Archer.atlas; sourceTree = "<group>"; };
 		61A6F7AF18BBE15D0069AF61 /* Cavalry.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Cavalry.atlas; sourceTree = "<group>"; };
 		61A78C59188DAE1500DDA1B2 /* HKBattleResultNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBattleResultNode.h; sourceTree = "<group>"; };
@@ -353,16 +501,16 @@
 		61C47E1317C635BB00D644D1 /* Canon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canon.m; sourceTree = "<group>"; };
 		61C47E1417C635BB00D644D1 /* Catapult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Catapult.h; sourceTree = "<group>"; };
 		61C47E1517C635BB00D644D1 /* Catapult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Catapult.m; sourceTree = "<group>"; };
-		61C47E1617C635BB00D644D1 /* Chariot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chariot.h; sourceTree = "<group>"; };
-		61C47E1717C635BB00D644D1 /* Chariot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chariot.m; sourceTree = "<group>"; };
+		61C47E1617C635BB00D644D1 /* Hobelar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hobelar.h; sourceTree = "<group>"; };
+		61C47E1717C635BB00D644D1 /* Hobelar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hobelar.m; sourceTree = "<group>"; };
 		61C47E1817C635BB00D644D1 /* Crusader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crusader.h; sourceTree = "<group>"; };
 		61C47E1917C635BB00D644D1 /* Crusader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Crusader.m; sourceTree = "<group>"; };
 		61C47E1A17C635BB00D644D1 /* Diplomat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Diplomat.h; sourceTree = "<group>"; };
 		61C47E1B17C635BB00D644D1 /* Diplomat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Diplomat.m; sourceTree = "<group>"; };
 		61C47E1C17C635BB00D644D1 /* FlagBearer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagBearer.h; sourceTree = "<group>"; };
 		61C47E1D17C635BB00D644D1 /* FlagBearer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlagBearer.m; sourceTree = "<group>"; };
-		61C47E1E17C635BB00D644D1 /* HeavyCavalry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeavyCavalry.h; sourceTree = "<group>"; };
-		61C47E1F17C635BB00D644D1 /* HeavyCavalry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeavyCavalry.m; sourceTree = "<group>"; };
+		61C47E1E17C635BB00D644D1 /* Knight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Knight.h; sourceTree = "<group>"; };
+		61C47E1F17C635BB00D644D1 /* Knight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Knight.m; sourceTree = "<group>"; };
 		61C47E2017C635BB00D644D1 /* Juggernaut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Juggernaut.h; sourceTree = "<group>"; };
 		61C47E2117C635BB00D644D1 /* Juggernaut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Juggernaut.m; sourceTree = "<group>"; };
 		61C47E2217C635BB00D644D1 /* Lancer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lancer.h; sourceTree = "<group>"; };
@@ -606,6 +754,7 @@
 				61C47D2317BE9F5300D644D1 /* CardForSerialization.m */,
 				617DB26B18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.h */,
 				617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */,
+				617DB27818C7281000E64829 /* HKGameSerializerProtocol.h */,
 			);
 			name = Serialization;
 			sourceTree = "<group>";
@@ -650,11 +799,210 @@
 		6178BAA31893C61300FA8C6F /* LevelIncreaseStrategy */ = {
 			isa = PBXGroup;
 			children = (
+				61C47D5317BE9F7A00D644D1 /* PromptLevelIncreaseStrategy.h */,
+				61C47D5417BE9F7A00D644D1 /* PromptLevelIncreaseStrategy.m */,
+				61C47D5B17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.h */,
+				61C47D5C17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.m */,
 				61C47D3D17BE9F7A00D644D1 /* LevelIncreaseStrategy.h */,
 				61C47D3117BE9F6700D644D1 /* FixedLevelIncreaseStrategy.h */,
 				61C47D3217BE9F6700D644D1 /* FixedLevelIncreaseStrategy.m */,
 			);
 			name = LevelIncreaseStrategy;
+			sourceTree = "<group>";
+		};
+		617DB26E18C7055500E64829 /* Gamecenter */ = {
+			isa = PBXGroup;
+			children = (
+				617DB26F18C7057300E64829 /* GameCenterManager.h */,
+				617DB27018C7057300E64829 /* GameCenterManager.m */,
+				617DB27118C7057300E64829 /* NSDataAES256.h */,
+				617DB27218C7057300E64829 /* NSDataAES256.m */,
+				617DB27318C7057300E64829 /* Reachability.h */,
+				617DB27418C7057300E64829 /* Reachability.m */,
+			);
+			name = Gamecenter;
+			sourceTree = "<group>";
+		};
+		617DB27918C7285700E64829 /* sharedtests_1.0 */ = {
+			isa = PBXGroup;
+			children = (
+				617DB27A18C7285700E64829 /* Berserker */,
+				617DB27E18C7285700E64829 /* Cannon */,
+				617DB28118C7285700E64829 /* Catapult */,
+				617DB28318C7285700E64829 /* Crusader */,
+				617DB28918C7285700E64829 /* Flag Bearer */,
+				617DB28F18C7285700E64829 /* General */,
+				617DB29D18C7285700E64829 /* Hobelar */,
+				617DB2AC18C7285700E64829 /* Longswordsman */,
+				617DB2AE18C7285700E64829 /* Pikeman */,
+				617DB2B618C7285700E64829 /* Scout */,
+				617DB2B918C7285700E64829 /* Upgrades */,
+				617DB2BE18C7285700E64829 /* Viking */,
+			);
+			name = sharedtests_1.0;
+			path = ../../sharedtests_1.0;
+			sourceTree = "<group>";
+		};
+		617DB27A18C7285700E64829 /* Berserker */ = {
+			isa = PBXGroup;
+			children = (
+				617DB27B18C7285700E64829 /* Action_Berserker_1.json */,
+				617DB27C18C7285700E64829 /* Action_Berserker_2.json */,
+				617DB27D18C7285700E64829 /* Action_Berserker_3.json */,
+			);
+			path = Berserker;
+			sourceTree = "<group>";
+		};
+		617DB27E18C7285700E64829 /* Cannon */ = {
+			isa = PBXGroup;
+			children = (
+				617DB27F18C7285700E64829 /* AD_Cannon_1.json */,
+				617DB28018C7285700E64829 /* Outcome_Cannon_1.json */,
+			);
+			path = Cannon;
+			sourceTree = "<group>";
+		};
+		617DB28118C7285700E64829 /* Catapult */ = {
+			isa = PBXGroup;
+			children = (
+				617DB28218C7285700E64829 /* AD_Catapult_1.json */,
+			);
+			path = Catapult;
+			sourceTree = "<group>";
+		};
+		617DB28318C7285700E64829 /* Crusader */ = {
+			isa = PBXGroup;
+			children = (
+				617DB28418C7285700E64829 /* AD_Crusader_1.json */,
+				617DB28518C7285700E64829 /* AD_Crusader_2.json */,
+				617DB28618C7285700E64829 /* AD_Crusader_3.json */,
+				617DB28718C7285700E64829 /* AD_Crusader_4.json */,
+				617DB28818C7285700E64829 /* AD_Crusader_5.json */,
+			);
+			path = Crusader;
+			sourceTree = "<group>";
+		};
+		617DB28918C7285700E64829 /* Flag Bearer */ = {
+			isa = PBXGroup;
+			children = (
+				617DB28A18C7285700E64829 /* AD_FlagBearer_1.json */,
+				617DB28B18C7285700E64829 /* AD_FlagBearer_2.json */,
+				617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */,
+				617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */,
+				617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */,
+			);
+			path = "Flag Bearer";
+			sourceTree = "<group>";
+		};
+		617DB28F18C7285700E64829 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				617DB29018C7285700E64829 /* Action_1.json */,
+				617DB29118C7285700E64829 /* Action_10.json */,
+				617DB29218C7285700E64829 /* Action_2.json */,
+				617DB29318C7285700E64829 /* Action_3.json */,
+				617DB29418C7285700E64829 /* Action_4.json */,
+				617DB29518C7285700E64829 /* Action_5.json */,
+				617DB29618C7285700E64829 /* Action_6.json */,
+				617DB29718C7285700E64829 /* Action_7.json */,
+				617DB29818C7285700E64829 /* Action_8.json */,
+				617DB29918C7285700E64829 /* Action_9.json */,
+				617DB29A18C7285700E64829 /* AD_1.json */,
+				617DB29B18C7285700E64829 /* Outcome_1.json */,
+				617DB29C18C7285700E64829 /* Turn_1.json */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		617DB29D18C7285700E64829 /* Hobelar */ = {
+			isa = PBXGroup;
+			children = (
+				617DB29E18C7285700E64829 /* Action_Hobelar_1.json */,
+				617DB29F18C7285700E64829 /* Action_Hobelar_2.json */,
+				617DB2A018C7285700E64829 /* Action_Hobelar_3.json */,
+				617DB2A118C7285700E64829 /* Action_Hobelar_4.json */,
+				617DB2A218C7285700E64829 /* Outcome_Hobelar_1.json */,
+				617DB2A318C7285700E64829 /* Outcome_Hobelar_10.json */,
+				617DB2A418C7285700E64829 /* Outcome_Hobelar_2.json */,
+				617DB2A518C7285700E64829 /* Outcome_Hobelar_3.json */,
+				617DB2A618C7285700E64829 /* Outcome_Hobelar_4.json */,
+				617DB2A718C7285700E64829 /* Outcome_Hobelar_5.json */,
+				617DB2A818C7285700E64829 /* Outcome_Hobelar_6.json */,
+				617DB2A918C7285700E64829 /* Outcome_Hobelar_7.json */,
+				617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */,
+				617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */,
+			);
+			path = Hobelar;
+			sourceTree = "<group>";
+		};
+		617DB2AC18C7285700E64829 /* Longswordsman */ = {
+			isa = PBXGroup;
+			children = (
+				617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */,
+			);
+			path = Longswordsman;
+			sourceTree = "<group>";
+		};
+		617DB2AE18C7285700E64829 /* Pikeman */ = {
+			isa = PBXGroup;
+			children = (
+				617DB2AF18C7285700E64829 /* Action_1.json */,
+				617DB2B018C7285700E64829 /* Action_2.json */,
+				617DB2B118C7285700E64829 /* Action_3.json */,
+				617DB2B218C7285700E64829 /* Action_4.json */,
+				617DB2B318C7285700E64829 /* Action_5.json */,
+				617DB2B418C7285700E64829 /* Action_6.json */,
+				617DB2B518C7285700E64829 /* Action_7.json */,
+			);
+			path = Pikeman;
+			sourceTree = "<group>";
+		};
+		617DB2B618C7285700E64829 /* Scout */ = {
+			isa = PBXGroup;
+			children = (
+				617DB2B718C7285700E64829 /* Action_Scout_1.json */,
+				617DB2B818C7285700E64829 /* Action_Scout_2.json */,
+			);
+			path = Scout;
+			sourceTree = "<group>";
+		};
+		617DB2B918C7285700E64829 /* Upgrades */ = {
+			isa = PBXGroup;
+			children = (
+				617DB2BA18C7285700E64829 /* Upgrade_1.json */,
+				617DB2BB18C7285700E64829 /* Upgrade_2.json */,
+				617DB2BC18C7285700E64829 /* Upgrade_3.json */,
+				617DB2BD18C7285700E64829 /* Upgrade_4.json */,
+			);
+			path = Upgrades;
+			sourceTree = "<group>";
+		};
+		617DB2BE18C7285700E64829 /* Viking */ = {
+			isa = PBXGroup;
+			children = (
+				617DB2BF18C7285700E64829 /* Action_Viking_1.json */,
+				617DB2C018C7285700E64829 /* Action_Viking_2.json */,
+				617DB2C118C7285700E64829 /* Action_Viking_3.json */,
+				617DB2C218C7285700E64829 /* Action_Viking_4.json */,
+				617DB2C318C7285700E64829 /* Outcome_Viking_1.json */,
+				617DB2C418C7285700E64829 /* Outcome_Viking_2.json */,
+			);
+			path = Viking;
+			sourceTree = "<group>";
+		};
+		617DB30618C7303E00E64829 /* SharedTestsExecuter */ = {
+			isa = PBXGroup;
+			children = (
+				617DB30418C7295600E64829 /* HKSharedTestBench.m */,
+				617DB30718C7305C00E64829 /* HKSharedTestFactory.h */,
+				617DB30818C7305C00E64829 /* HKSharedTestFactory.m */,
+				617DB30A18C7308C00E64829 /* HKSharedTestExecuter.h */,
+				617DB30B18C730C500E64829 /* HKSharedTestBaseExecuter.h */,
+				617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */,
+				617DB30E18C730F300E64829 /* HKSharedTestCheckActionExistence.h */,
+				617DB30F18C730F300E64829 /* HKSharedTestCheckActionExistence.m */,
+			);
+			name = SharedTestsExecuter;
 			sourceTree = "<group>";
 		};
 		61A6F7AC18BBDE580069AF61 /* Animations */ = {
@@ -678,6 +1026,7 @@
 		61C47CF317BE9DB500D644D1 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				617DB26E18C7055500E64829 /* Gamecenter */,
 				61A8B8AA189959A30063DCBC /* Categories */,
 				61C47E0B17C6356C00D644D1 /* Units */,
 				6178BAA21893C60500FA8C6F /* Strategies */,
@@ -729,16 +1078,12 @@
 				61C47D4E17BE9F7A00D644D1 /* PathFinderStrategy.h */,
 				61C47D4F17BE9F7A00D644D1 /* PathFinderStrategyFactory.h */,
 				61C47D5017BE9F7A00D644D1 /* PathFinderStrategyFactory.m */,
-				61C47D5317BE9F7A00D644D1 /* PromptLevelIncreaseStrategy.h */,
-				61C47D5417BE9F7A00D644D1 /* PromptLevelIncreaseStrategy.m */,
 				61C47D5517BE9F7A00D644D1 /* PushAction.h */,
 				61C47D5617BE9F7A00D644D1 /* PushAction.m */,
 				61C47D5717BE9F7A00D644D1 /* RandomDeckStrategy.h */,
 				61C47D5817BE9F7A00D644D1 /* RandomDeckStrategy.m */,
 				61C47D5917BE9F7A00D644D1 /* RandomDiceStrategy.h */,
 				61C47D5A17BE9F7A00D644D1 /* RandomDiceStrategy.m */,
-				61C47D5B17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.h */,
-				61C47D5C17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.m */,
 				61C47D5D17BE9F7A00D644D1 /* RangeAttribute.h */,
 				61C47D5E17BE9F7A00D644D1 /* RangeAttribute.m */,
 				61C47D6117BE9F7A00D644D1 /* RangedAttackPathFinderStrategy.h */,
@@ -786,16 +1131,16 @@
 				61C47E1317C635BB00D644D1 /* Canon.m */,
 				61C47E1417C635BB00D644D1 /* Catapult.h */,
 				61C47E1517C635BB00D644D1 /* Catapult.m */,
-				61C47E1617C635BB00D644D1 /* Chariot.h */,
-				61C47E1717C635BB00D644D1 /* Chariot.m */,
+				61C47E1617C635BB00D644D1 /* Hobelar.h */,
+				61C47E1717C635BB00D644D1 /* Hobelar.m */,
 				61C47E1817C635BB00D644D1 /* Crusader.h */,
 				61C47E1917C635BB00D644D1 /* Crusader.m */,
 				61C47E1A17C635BB00D644D1 /* Diplomat.h */,
 				61C47E1B17C635BB00D644D1 /* Diplomat.m */,
 				61C47E1C17C635BB00D644D1 /* FlagBearer.h */,
 				61C47E1D17C635BB00D644D1 /* FlagBearer.m */,
-				61C47E1E17C635BB00D644D1 /* HeavyCavalry.h */,
-				61C47E1F17C635BB00D644D1 /* HeavyCavalry.m */,
+				61C47E1E17C635BB00D644D1 /* Knight.h */,
+				61C47E1F17C635BB00D644D1 /* Knight.m */,
 				61C47E2017C635BB00D644D1 /* Juggernaut.h */,
 				61C47E2117C635BB00D644D1 /* Juggernaut.m */,
 				61C47E2217C635BB00D644D1 /* Lancer.h */,
@@ -887,6 +1232,8 @@
 		61FD538117B4CDAC009BED1A /* RoseWarsTests */ = {
 			isa = PBXGroup;
 			children = (
+				617DB30618C7303E00E64829 /* SharedTestsExecuter */,
+				617DB27918C7285700E64829 /* sharedtests_1.0 */,
 				61705CC218018C24001D7E1B /* BasicUnitTest.h */,
 				61705CC318018C24001D7E1B /* BasicUnitTest.m */,
 				61705CC418018C24001D7E1B /* CombatTest.h */,
@@ -1024,26 +1371,89 @@
 			files = (
 				61C47E6217C677A100D644D1 /* Graphics.atlas in Resources */,
 				61C47E5517C635F000D644D1 /* fanfare.mp3 in Resources */,
+				617DB2C518C7285700E64829 /* Action_Berserker_1.json in Resources */,
 				615BEA9A17FC6E4800F728E9 /* infantry_defeated_sound.mp3 in Resources */,
 				61C47E5817C635F000D644D1 /* sword_sound.wav in Resources */,
+				617DB2E718C7285700E64829 /* Outcome_Hobelar_10.json in Resources */,
+				617DB2FD18C7285700E64829 /* Upgrade_4.json in Resources */,
+				617DB2D318C7285700E64829 /* AD_FlagBearer_4.json in Resources */,
+				617DB2D218C7285700E64829 /* AD_FlagBearer_3.json in Resources */,
+				617DB2DF18C7285700E64829 /* AD_1.json in Resources */,
+				617DB2EC18C7285700E64829 /* Outcome_Hobelar_6.json in Resources */,
+				617DB2FA18C7285700E64829 /* Upgrade_1.json in Resources */,
+				617DB2DC18C7285700E64829 /* Action_7.json in Resources */,
 				61705CE21801D6B7001D7E1B /* Vollkorn-Regular.ttf in Resources */,
 				61C47E5717C635F000D644D1 /* pageflip.mp3 in Resources */,
+				617DB2EE18C7285700E64829 /* Outcome_Hobelar_8.json in Resources */,
+				617DB2D818C7285700E64829 /* Action_3.json in Resources */,
+				617DB2FE18C7285700E64829 /* Action_Viking_1.json in Resources */,
+				617DB2D418C7285700E64829 /* AD_FlagBearer_5.json in Resources */,
 				61A6F7AE18BBDFA40069AF61 /* Archer.atlas in Resources */,
+				617DB2DB18C7285700E64829 /* Action_6.json in Resources */,
 				61FD539817B4D496009BED1A /* Images.xcassets in Resources */,
+				617DB2D018C7285700E64829 /* AD_FlagBearer_1.json in Resources */,
+				617DB2E918C7285700E64829 /* Outcome_Hobelar_3.json in Resources */,
+				617DB2F918C7285700E64829 /* Action_Scout_2.json in Resources */,
 				614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */,
+				617DB2DD18C7285700E64829 /* Action_8.json in Resources */,
+				617DB2CE18C7285700E64829 /* AD_Crusader_4.json in Resources */,
+				617DB2FC18C7285700E64829 /* Upgrade_3.json in Resources */,
+				617DB2D918C7285700E64829 /* Action_4.json in Resources */,
+				617DB2D518C7285700E64829 /* Action_1.json in Resources */,
+				617DB2C618C7285700E64829 /* Action_Berserker_2.json in Resources */,
+				617DB2DA18C7285700E64829 /* Action_5.json in Resources */,
 				614D42DE17B512A200B9889C /* Flame.sks in Resources */,
+				617DB2CB18C7285700E64829 /* AD_Crusader_1.json in Resources */,
+				617DB2F718C7285700E64829 /* Action_7.json in Resources */,
 				61FD536B17B4CDAC009BED1A /* Main_iPad.storyboard in Resources */,
+				617DB30118C7285700E64829 /* Action_Viking_4.json in Resources */,
+				617DB2EA18C7285700E64829 /* Outcome_Hobelar_4.json in Resources */,
+				617DB2F518C7285700E64829 /* Action_5.json in Resources */,
 				614D42DF17B512A200B9889C /* spark.png in Resources */,
+				617DB2DE18C7285700E64829 /* Action_9.json in Resources */,
+				617DB2C718C7285700E64829 /* Action_Berserker_3.json in Resources */,
+				617DB2FF18C7285700E64829 /* Action_Viking_2.json in Resources */,
+				617DB2ED18C7285700E64829 /* Outcome_Hobelar_7.json in Resources */,
+				617DB2E018C7285700E64829 /* Outcome_1.json in Resources */,
+				617DB2C818C7285700E64829 /* AD_Cannon_1.json in Resources */,
+				617DB2F118C7285700E64829 /* Action_1.json in Resources */,
+				617DB2EF18C7285700E64829 /* Outcome_Hobelar_9.json in Resources */,
+				617DB2E118C7285700E64829 /* Turn_1.json in Resources */,
+				617DB2D118C7285700E64829 /* AD_FlagBearer_2.json in Resources */,
+				617DB2F418C7285700E64829 /* Action_4.json in Resources */,
+				617DB2F018C7285700E64829 /* Outcome_Longswordsman_1.json in Resources */,
+				617DB2CA18C7285700E64829 /* AD_Catapult_1.json in Resources */,
+				617DB2EB18C7285700E64829 /* Outcome_Hobelar_5.json in Resources */,
+				617DB2E418C7285700E64829 /* Action_Hobelar_3.json in Resources */,
+				617DB2F618C7285700E64829 /* Action_6.json in Resources */,
+				617DB2E818C7285700E64829 /* Outcome_Hobelar_2.json in Resources */,
+				617DB2E218C7285700E64829 /* Action_Hobelar_1.json in Resources */,
 				61A6F7B018BBE15D0069AF61 /* Cavalry.atlas in Resources */,
+				617DB2CF18C7285700E64829 /* AD_Crusader_5.json in Resources */,
+				617DB2CD18C7285700E64829 /* AD_Crusader_3.json in Resources */,
+				617DB2D618C7285700E64829 /* Action_10.json in Resources */,
+				617DB2F218C7285700E64829 /* Action_2.json in Resources */,
 				61C47E5217C635F000D644D1 /* bow_fired.wav in Resources */,
+				617DB2F818C7285700E64829 /* Action_Scout_1.json in Resources */,
+				617DB2CC18C7285700E64829 /* AD_Crusader_2.json in Resources */,
 				61FD536817B4CDAC009BED1A /* Main_iPhone.storyboard in Resources */,
+				617DB30218C7285700E64829 /* Outcome_Viking_1.json in Resources */,
 				61FD535F17B4CDAC009BED1A /* InfoPlist.strings in Resources */,
+				617DB2E318C7285700E64829 /* Action_Hobelar_2.json in Resources */,
+				617DB30318C7285700E64829 /* Outcome_Viking_2.json in Resources */,
+				617DB2FB18C7285700E64829 /* Upgrade_2.json in Resources */,
 				61C47E6017C6385C00D644D1 /* Cards.atlas in Resources */,
 				61C47E5317C635F000D644D1 /* catapult_attacksound.wav in Resources */,
+				617DB2F318C7285700E64829 /* Action_3.json in Resources */,
+				617DB2D718C7285700E64829 /* Action_2.json in Resources */,
 				61705CE11801D6B7001D7E1B /* Vollkorn-Bold.ttf in Resources */,
 				61C47E5617C635F000D644D1 /* defeat.mp3 in Resources */,
+				617DB2E518C7285700E64829 /* Action_Hobelar_4.json in Resources */,
+				617DB30018C7285700E64829 /* Action_Viking_3.json in Resources */,
 				61C47D7017BEA07900D644D1 /* buttonclick.wav in Resources */,
 				61C47E5417C635F000D644D1 /* Elephant.mp3 in Resources */,
+				617DB2E618C7285700E64829 /* Outcome_Hobelar_1.json in Resources */,
+				617DB2C918C7285700E64829 /* Outcome_Cannon_1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1073,7 +1483,7 @@
 				61C47D7817BEA17500D644D1 /* ActionCostLess.m in Sources */,
 				61C47D7A17BEA17500D644D1 /* AIPlayer.m in Sources */,
 				61C47D7D17BEA17500D644D1 /* AIStrategyAdvancer.m in Sources */,
-				61C47E3B17C635BB00D644D1 /* Chariot.m in Sources */,
+				61C47E3B17C635BB00D644D1 /* Hobelar.m in Sources */,
 				61C47D7F17BEA17500D644D1 /* AIStrategyCatapulter.m in Sources */,
 				61C47D8117BEA17500D644D1 /* AIStrategyDestroyer.m in Sources */,
 				61C47D8317BEA17500D644D1 /* BaseBattleStrategy.m in Sources */,
@@ -1095,6 +1505,7 @@
 				61C47D9617BEA17500D644D1 /* Bribe.m in Sources */,
 				61C47D9817BEA17500D644D1 /* Card.m in Sources */,
 				61C47D9A17BEA17500D644D1 /* CardForSerialization.m in Sources */,
+				617DB27618C7057300E64829 /* NSDataAES256.m in Sources */,
 				61C47D9C17BEA17500D644D1 /* CardPool.m in Sources */,
 				617214A91889CD5D000775EE /* SKSpriteNode+NodePosition.m in Sources */,
 				61C47E3A17C635BB00D644D1 /* Catapult.m in Sources */,
@@ -1114,6 +1525,7 @@
 				61C47DB317BEA17500D644D1 /* GCTurnBasedMatchHelper.m in Sources */,
 				61C47DB517BEA17500D644D1 /* GridlLayoutManager.m in Sources */,
 				61C47E3617C635BB00D644D1 /* Archer.m in Sources */,
+				617DB27518C7057300E64829 /* GameCenterManager.m in Sources */,
 				61A8B8AD189959BE0063DCBC /* SKAction+Utility.m in Sources */,
 				617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */,
 				61C47E3C17C635BB00D644D1 /* Crusader.m in Sources */,
@@ -1142,7 +1554,7 @@
 				61C47DD717BEA17500D644D1 /* RandomDiceStrategy.m in Sources */,
 				61C47DD917BEA17500D644D1 /* RandomLevelIncreaseStrategy.m in Sources */,
 				61C47DDB17BEA17500D644D1 /* RangeAttribute.m in Sources */,
-				61C47E3F17C635BB00D644D1 /* HeavyCavalry.m in Sources */,
+				61C47E3F17C635BB00D644D1 /* Knight.m in Sources */,
 				61C47DDD17BEA17500D644D1 /* RangedAttackAction.m in Sources */,
 				61C47DDF17BEA17500D644D1 /* RangedAttackPathFinderStrategy.m in Sources */,
 				61C47DE117BEA17500D644D1 /* RawBonus.m in Sources */,
@@ -1162,6 +1574,7 @@
 				61C47CEF17BE98BF00D644D1 /* HKGameTypeScene.m in Sources */,
 				61FD536117B4CDAC009BED1A /* main.m in Sources */,
 				61FD539417B4CE41009BED1A /* HKMainMenuScene.m in Sources */,
+				617DB27718C7057300E64829 /* Reachability.m in Sources */,
 				61C47CF217BE9A2700D644D1 /* HKConstructDeckScene.m in Sources */,
 				61FD536517B4CDAC009BED1A /* HKAppDelegate.m in Sources */,
 				61FC5BE817F9D310001E0419 /* GameBoardNode.m in Sources */,
@@ -1173,14 +1586,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				61705CD818018C24001D7E1B /* TestHelper.m in Sources */,
+				617DB31018C730F300E64829 /* HKSharedTestCheckActionExistence.m in Sources */,
 				617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */,
+				617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */,
 				61705CD618018C24001D7E1B /* MoveTest.m in Sources */,
 				61705CD918018C24001D7E1B /* WarOfTheRosesTest.m in Sources */,
 				61705CD418018C24001D7E1B /* GameBoardMockup.m in Sources */,
 				61705CD218018C24001D7E1B /* BasicUnitTest.m in Sources */,
+				617DB30918C7305C00E64829 /* HKSharedTestFactory.m in Sources */,
 				61705CD718018C24001D7E1B /* SpecialUnitTest.m in Sources */,
 				61705CD518018C24001D7E1B /* GameCenterTest.m in Sources */,
 				61705CD318018C24001D7E1B /* CombatTest.m in Sources */,
+				617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

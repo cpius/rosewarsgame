@@ -12,9 +12,9 @@
 #import "Catapult.h"
 #import "Pikeman.h"
 #import "LightCavalry.h"
-#import "HeavyCavalry.h"
+#import "Knight.h"
 
-#import "Chariot.h"
+#import "Hobelar.h"
 #import "Canon.h"
 #import "Berserker.h"
 #import "Scout.h"
@@ -22,11 +22,11 @@
 #import "RoyalGuard.h"
 #import "Samurai.h"
 #import "Viking.h"
-#import "LongSwordsMan.h"
+#import "Longswordsman.h"
 #import "Crusader.h"
 #import "FlagBearer.h"
 #import "WarElephant.h"
-#import "WeaponSmith.h"
+#import "Weaponsmith.h"
 #import "Diplomat.h"
 #import "Juggernaut.h"
 
@@ -64,8 +64,8 @@
         case kCatapult:
             createdCard = [Catapult card];
             break;
-        case kHeavyCalavry:
-            createdCard = [HeavyCavalry card];
+        case kKnight:
+            createdCard = [Knight card];
             break;
         case kLightCavalry:
             createdCard = [LightCavalry card];
@@ -73,8 +73,8 @@
         case kPikeman:
             createdCard = [Pikeman card];
             break;
-        case kChariot:
-            createdCard = [Chariot card];
+        case kHobelar:
+            createdCard = [Hobelar card];
             break;
         case kCannon:
             createdCard = [Canon card];
@@ -97,8 +97,8 @@
         case kViking:
             createdCard = [Viking card];
             break;
-        case kLongSwordsMan:
-            createdCard = [LongSwordsMan card];
+        case kLongswordsman:
+            createdCard = [Longswordsman card];
             break;
         case kCrusader:
             createdCard = [Crusader card];
@@ -109,8 +109,8 @@
         case kWarElephant:
             createdCard = [WarElephant card];
             break;
-        case kWeaponSmith:
-            createdCard = [WeaponSmith card];
+        case kWeaponsmith:
+            createdCard = [Weaponsmith card];
             break;
         case kDiplomat:
             createdCard = [Diplomat card];

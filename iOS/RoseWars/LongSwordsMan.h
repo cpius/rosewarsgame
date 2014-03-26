@@ -8,7 +8,7 @@
 
 #import "Card.h"
 
-@interface LongSwordsMan : Card
+@interface Longswordsman : Card
 
 + (id)card;
 

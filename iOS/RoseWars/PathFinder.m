@@ -160,6 +160,20 @@
     return nil;
 }
 
+- (MoveAction*)getMoveActionFromLocation:(GridLocation*)fromLocation forCard:(Card*)card toLocation:(GridLocation*)toLocation enemyUnits:(NSArray*)enemyUnits allLocations:(NSDictionary*)allLocations {
+    
+    NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:allLocations];
+    
+    MoveAction *action = [[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil];
+    
+    if ([card allowAction:action allLocations:allLocations]) {
+        return action;
+    }
+    
+    return nil;
+}
+
+
 - (NSArray*)getMoveActionsFromLocation:(GridLocation*)fromLocation forCard:(Card*)card enemyUnits:(NSArray*)enemyUnits allLocations:(NSDictionary*)allLocations {
     
     NSMutableArray *moveActions = [NSMutableArray array];
@@ -168,12 +182,11 @@
         for (int column = 1; column <= BOARDSIZE_COLUMNS; column++) {
         
             GridLocation *toLocation = [GridLocation gridLocationWithRow:row column:column];
-            NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:allLocations];
             
-            Action *action = [[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil];
+            MoveAction *moveaction = [self getMoveActionFromLocation:fromLocation forCard:card toLocation:toLocation enemyUnits:enemyUnits allLocations:allLocations];
             
-            if ([card allowAction:action allLocations:allLocations]) {
-                [moveActions addObject:action];
+            if (moveaction != nil) {
+                [moveActions addObject:moveaction];
             }
         }
     }
@@ -228,6 +241,19 @@
     return [NSArray arrayWithArray:attackActions];
 }
 
+- (RangedAttackAction*)getRangedAttackActionForCard:(Card*)card againstEnemyUnit:(Card*)enemyUnit allLocations:(NSDictionary*)allLocations {
+    
+    NSArray *path = [self getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:enemyUnit.cardLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
+    
+    RangedAttackAction *action = [[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyUnit];
+    
+    if ([card allowAction:action allLocations:allLocations]) {
+        return action;
+    }
+    
+    return nil;
+}
+
 - (NSArray *)getRangedAttackActionsFromLocation:(GridLocation *)fromLocation forCard:(Card *)card enemyUnits:(NSArray *)enemyUnits allLocations:(NSDictionary *)allLocations {
     
     NSMutableArray *attackActions = [NSMutableArray array];
@@ -236,13 +262,9 @@
         
         if (enemyCard.dead) continue;
         
-        GridLocation *enemyLocation = enemyCard.cardLocation;
+        Action *action = [self getRangedAttackActionForCard:card againstEnemyUnit:enemyCard allLocations:allLocations];
         
-        NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
-        
-        Action *action = [[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyCard];
-        
-        if ([card allowAction:action allLocations:allLocations]) {
+        if (action) {
             [attackActions addObject:action];
         }
     }

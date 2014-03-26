@@ -11,7 +11,7 @@
 #import "Archer.h"
 #import "Pikeman.h"
 #import "LightCavalry.h"
-#import "HeavyCavalry.h"
+#import "Knight.h"
 
 @implementation BasicUnitTest
 

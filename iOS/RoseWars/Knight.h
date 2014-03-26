@@ -8,7 +8,7 @@
 
 #import "Card.h"
 
-@interface HeavyCavalry : Card
+@interface Knight : Card
 
 + (id)card;
 

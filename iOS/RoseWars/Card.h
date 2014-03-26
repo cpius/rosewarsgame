@@ -103,6 +103,8 @@
 @property (nonatomic, readonly) NSArray *abilities;
 
 @property(nonatomic, assign) BOOL hasReceivedExperiencePointsThisRound;
+@property (nonatomic, readonly) NSInteger numberOfExperienceToIncreaseLevel;
+
 @property(nonatomic, assign) BOOL hasPerformedActionThisRound;
 @property(nonatomic, assign) BOOL hasPerformedAttackThisRound;
 

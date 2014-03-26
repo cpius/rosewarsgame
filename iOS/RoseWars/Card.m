@@ -13,10 +13,7 @@
 #import "RandomLevelIncreaseStrategy.h"
 #import "PromptLevelIncreaseStrategy.h"
 
-@interface Card()
-
-
-@end
+const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 
 @implementation Card
 
@@ -207,23 +204,11 @@
 
 - (void)combatFinishedAgainstDefender:(Card *)defender withOutcome:(CombatOutcome)combatOutcome {
     
-    if (IsAttackSuccessful(combatOutcome)) {
-        
-        if (defender.dead) {
-            // Attack succcessfull - assign experience if applicable
-            if (!self.hasReceivedExperiencePointsThisRound && self.experience < 4) {
-                self.experience++;
-                
-                // Unit can only receive experience point once every round
-                self.hasReceivedExperiencePointsThisRound = YES;
-                
-                // Unit can only increase in level twice
-                if ((self.experience % 2) == 0) {
-                    [self levelIncreased];
-                }
-            }
-        }
-    }
+}
+
+- (NSInteger)numberOfExperienceToIncreaseLevel {
+    
+    return kNumberOfExperiencePointsToIncreaseLevel;
 }
 
 - (void)levelIncreased {
@@ -263,6 +248,17 @@
     if (action.isAttack) {
         self.hasPerformedAttackThisRound = YES;
         [self consumeAllMoves];
+    }
+
+    if (!self.hasReceivedExperiencePointsThisRound) {
+        self.experience++;
+        
+        // Unit can only receive experience point once every round
+        self.hasReceivedExperiencePointsThisRound = YES;
+        
+        if ((self.experience % kNumberOfExperiencePointsToIncreaseLevel) == 0) {
+            [self levelIncreased];
+        }
     }
 }
 

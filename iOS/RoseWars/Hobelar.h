@@ -8,7 +8,7 @@
 
 #import "Card.h"
 
-@interface Chariot : Card
+@interface Hobelar : Card
 
 + (id)card;
 

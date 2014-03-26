@@ -20,7 +20,7 @@
 #import "GameManager.h"
 #import "BattleResult.h"
 #import "Berserker.h"
-#import "LongSwordsMan.h"
+#import "Longswordsman.h"
 #import "RoyalGuard.h"
 #import "MeleeAttackAction.h"
 #import "PathFinderStrategyFactory.h"
@@ -215,7 +215,7 @@
 
 - (void)testLongswordsManCanAttackEnemyUnitWhenStandingNextToRoyalGuardButNotConquer {
     
-    LongSwordsMan *longswordsman = [LongSwordsMan card];
+    Longswordsman *longswordsman = [Longswordsman card];
     RoyalGuard *royalguard = [RoyalGuard card];
     Pikeman *pikeman = [Pikeman card];
     

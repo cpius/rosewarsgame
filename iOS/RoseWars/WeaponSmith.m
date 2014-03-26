@@ -6,10 +6,10 @@
 //
 //
 
-#import "WeaponSmith.h"
+#import "Weaponsmith.h"
 #import "ImproveWeapons.h"
 
-@implementation WeaponSmith
+@implementation Weaponsmith
 
 -(id)init {
     self = [super init];
@@ -18,7 +18,7 @@
         
         self.cardType = kCardTypeSpecialUnit;
         self.unitType = kInfantry;
-        self.unitName = kWeaponSmith;
+        self.unitName = kWeaponsmith;
         self.unitAttackType = kUnitAttackTypeCaster;
         
         self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(0, 0)];
@@ -44,7 +44,7 @@
 
 + (id)card {
     
-    return [[WeaponSmith alloc] init];
+    return [[Weaponsmith alloc] init];
 }
 
 - (NSArray *)abilities {

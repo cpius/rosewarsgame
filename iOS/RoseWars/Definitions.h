@@ -184,8 +184,8 @@ typedef enum {
     kCatapult,
     kPikeman,
     kLightCavalry,
-    kHeavyCalavry,
-    kChariot,
+    kKnight,
+    kHobelar,
     kCannon,
     kBerserker,
     kScout,
@@ -193,11 +193,11 @@ typedef enum {
     kRoyalGuard,
     kViking,
     kSamurai,
-    kLongSwordsMan,
+    kLongswordsman,
     kCrusader,
     kFlagBearer,
     kWarElephant,
-    kWeaponSmith,
+    kWeaponsmith,
     kDiplomat,
     kJuggernaut,
     kSaboteur,
@@ -218,10 +218,10 @@ NS_INLINE NSString* UnitNameAsString(UnitName unitName) {
             return @"Pikeman";
         case kLightCavalry:
             return @"LightCavalry";
-        case kHeavyCalavry:
-            return @"HeavyCavalry";
-        case kChariot:
-            return @"Chariot";
+        case kKnight:
+            return @"Knight";
+        case kHobelar:
+            return @"Hobelar";
         case kCannon:
             return @"Cannon";
         case kBerserker:
@@ -236,16 +236,16 @@ NS_INLINE NSString* UnitNameAsString(UnitName unitName) {
             return @"Viking";
         case kSamurai:
             return @"Samurai";
-        case kLongSwordsMan:
-            return @"LongswordsMan";
+        case kLongswordsman:
+            return @"Longswordsman";
         case kCrusader:
             return @"Crusader";
         case kFlagBearer:
             return @"Flagbearer";
         case kWarElephant:
             return @"WarElephant";
-        case kWeaponSmith:
-            return @"WeaponSmith";
+        case kWeaponsmith:
+            return @"Weaponsmith";
         case kDiplomat:
             return @"Diplomat";
         case kSaboteur:
