@@ -316,6 +316,12 @@ def register_upgrade(action_document, gamestate, game_id):
         return {"Status": "Error", "Message": message}
 
 
+@app.get("games/remove/<game_id>")
+def remove(game_id):
+    games = get_collection("games")
+    games.remove({"_id": ObjectId(game_id)})
+    
+
 def register_move_with_attack(action_document, game_id, gamestate):
     action_collection = get_collection("actions")
 
