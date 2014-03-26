@@ -306,7 +306,7 @@ if test_file:
     print result
 
 else:
-    path = "./../sharedtests_1.1/"
+    path = "./../sharedtests_" + get_setting("version")
     testcase_files = [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(path)
                       for f in files if f.endswith(".json")]
 
