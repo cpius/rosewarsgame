@@ -4,10 +4,20 @@ from action import Action
 import battle
 
 
-def is_win(action, rolls, gamestate, is_sub_action):
+def is_win(action, rolls, gamestate, is_sub_action=False):
+    return attack_successful(action, rolls, gamestate, is_sub_action) and not \
+        defence_successful(action, rolls, gamestate, is_sub_action)
+
+
+def attack_successful(action, rolls, gamestate, is_sub_action=False):
+    attack = battle.get_attack(action, gamestate, is_sub_action)
+    return rolls.attack <= attack
+
+
+def defence_successful(action, rolls, gamestate, is_sub_action=False):
     attack = battle.get_attack(action, gamestate, is_sub_action)
     defence = battle.get_defence(action, attack, gamestate)
-    return rolls.attack <= attack and not rolls.defence <= defence
+    return rolls.defence <= defence
 
 
 def do_action(gamestate, action, outcome):
@@ -21,7 +31,7 @@ def do_action(gamestate, action, outcome):
             else:
                 del enemy_units[action.target_at]
 
-        elif action.is_push() and action.attack_successful(rolls, gamestate):
+        elif action.is_push() and attack_successful(action, rolls, gamestate):
             if not attack_direction:
                 attack_direction = action.end_at.get_direction_to(action.target_at)
             push_destination = attack_direction.move(action.target_at)
@@ -33,7 +43,7 @@ def do_action(gamestate, action, outcome):
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
-            action.target_unit.set_effect(Effect.bribed)
+            action.target_unit.set(Effect.bribed)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         elif action.ability == Ability.assassinate:
             if outcome.outcomes[action.target_at].attack > 2:
@@ -46,13 +56,13 @@ def do_action(gamestate, action, outcome):
 
     def prepare_extra_actions(action):
         if action.unit.has(State.extra_action):
-            unit.remove_state(State.extra_action)
-            unit.remove_state(State.movement_remaining)
+            unit.remove(State.extra_action)
+            unit.remove(State.movement_remaining)
 
         elif action.is_attack():
             movement_remaining = unit.movement - distance(action.start_at, action.end_at) - 1
 
-            if unit.has(Trait.combat_agility) and action.is_attack() and not action.is_win(rolls, gamestate):
+            if unit.has(Trait.combat_agility) and action.is_attack() and not is_win(action, rolls, gamestate):
                 movement_remaining += 1
 
             if movement_remaining:
@@ -73,10 +83,10 @@ def do_action(gamestate, action, outcome):
 
     def apply_unit_effects():
         if unit.has(Trait.attack_cooldown) and action.is_attack():
-            unit.set_effect(Effect.attack_frozen, duration=3)
+            unit.set(Effect.attack_frozen, duration=3)
 
         if unit.has(Trait.attack_cooldown, 2) and action.is_attack():
-            unit.set_effect(Effect.attack_frozen, duration=2)
+            unit.set(Effect.attack_frozen, duration=2)
 
     def update_unit_position():
         player_units[action.end_at] = player_units.pop(action.start_at)
@@ -127,7 +137,7 @@ def do_action(gamestate, action, outcome):
         if action.is_javelin_throw():
             unit.set(State.javelin_thrown)
 
-        if action.move_with_attack and action.attack_successful(rolls, gamestate):
+        if action.move_with_attack and attack_successful(action, rolls, gamestate):
             move_melee_unit_to_target_tile(gamestate, rolls, action)
 
     elif action.is_ability():
@@ -142,8 +152,8 @@ def do_action(gamestate, action, outcome):
 
 def move_melee_unit_to_target_tile(gamestate, rolls, action):
 
-    if action.is_win(rolls, gamestate) and not action.target_unit.has_extra_life():
+    if is_win(action, rolls, gamestate) and not action.target_unit.has_extra_life():
         gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
 
-    elif action.is_push() and action.attack_successful(rolls, gamestate):
+    elif action.is_push() and attack_successful(action, rolls, gamestate):
         gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)

@@ -24,7 +24,6 @@ class View(object):
             "sword": "sword_sound.wav",
             "War_Elephant": "Elephant.wav",
             "Archer": "bow_fired.wav",
-            "Fire_Archer": "bow_fired.wav",
             "Catapult": "catapult_attacksound.wav",
             "unit_defeated": "infantry_defeated_sound.wav",
             "your_turn": "fanfare.wav"
@@ -50,17 +49,20 @@ class View(object):
         write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"])
         self.showing_unit_info = False
 
+    def clear_left(self):
+        pygame.draw.rect(self.screen, colors["light_grey"], self.interface.left_side_rectangle)
+
     def clear_right_tutorial(self):
         pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
         write(self.screen, "To Game", self.interface.help_area[0], self.interface.fonts["normal"])
         write(self.screen, "To Menu", self.interface.to_help_menu_area[0], self.interface.fonts["normal"])
         self.showing_unit_info = False
 
-    def draw_game(self, game, start_at=None, actions=(), update_log=False):
+    def draw_game(self, game, start_at=None, actions=(), redraw_log=False):
         viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
-        if update_log:
+        if redraw_log:
             self.clear_right()
-            self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
+            viewlog.draw_logbook(self.screen, self.interface, self.logbook)
         self.refresh()
 
     def show_unit_zoomed(self, unit, attack_hint):
@@ -76,10 +78,10 @@ class View(object):
         write(self.screen, "To Game", self.interface.help_area[0], self.interface.fonts["normal"])
         self.refresh()
 
-    def hide_unit_zoomed(self, game):
+    def hide_unit_zoomed(self):
         if self.showing_unit_info:
             self.clear_right()
-            self.logbook = viewlog.draw_log(self.logbook, self.screen, self.interface, game)
+            viewlog.draw_logbook(self.screen, self.interface, self.logbook)
 
     @staticmethod
     def refresh():
@@ -94,7 +96,8 @@ class View(object):
         self.refresh()
 
     def draw_action(self, action, outcome, game, flip=False):
-        viewlog.draw_log(self.logbook, self.screen, self.interface, game, action, outcome)
+        self.logbook = viewlog.add_log(action, outcome, game, self.logbook)
+        viewlog.draw_logbook(self.screen, self.interface, self.logbook)
         viewgame.draw_action(self.screen, self.interface, action, outcome, flip)
         self.refresh()
 
@@ -104,10 +107,6 @@ class View(object):
 
     def shade_positions(self, positions, color=None):
         viewgame.shade_positions(self.screen, self.interface, positions, color)
-        self.refresh()
-
-    def show_attack(self, gamestate, action, player_unit, opponent_unit):
-        viewinfo.show_attack(self.screen, self.interface, action, player_unit, opponent_unit, gamestate)
         self.refresh()
 
     def draw_message(self, message):
@@ -130,6 +129,9 @@ class View(object):
         self.clear_right_tutorial()
         self.refresh()
 
+    def draw_tutorial_page_number(self, number, total):
+        write(self.screen, str(number) + "/" + str(total), (740, 20), self.interface.fonts["normal"])
+
     def draw_action_tutorial(self, action, rolls):
         viewgame.draw_action(self.screen, self.interface, action, rolls)
         self.refresh()
@@ -143,4 +145,25 @@ class View(object):
         for i, item in enumerate(menu):
             write(self.screen, item, self.interface.help_menu[i], self.interface.fonts["normal"])
         write(self.screen, "To game", self.interface.help_area[0], self.interface.fonts["normal"])
+        self.refresh()
+
+    def show_upgrades_tutorial(self, upgrades):
+        self.clear_left()
+        message = []
+        for index, upgrade in enumerate(upgrades):
+            if isinstance(upgrade, int):
+                message.append(str(index + 1) + ". " + Unit.write[upgrade])
+            else:
+                message.append(str(index + 1) + ". ")
+                for attribute, level in upgrade.items():
+                    if attribute in Trait.name:
+                        message.append(Trait.write[attribute])
+                        message.append(get_description(attribute, level))
+                        message.append("")
+                    elif attribute in Ability.name:
+                        message.append(Ability.write[attribute])
+                        message.append(get_description(attribute, 2))
+                        message.append("")
+        show_lines(self.screen, message, 52 * settings.zoom, self.interface.line_distances["larger"],
+                   self.interface.fonts["normal"], 5, 5)
         self.refresh()

@@ -1,4 +1,4 @@
-from bottle import run, get, post, install, JSONPlugin, request, response, static_file
+from bottle import run, get, post, install, JSONPlugin, request, response, static_file, Bottle
 from pymongo import MongoClient
 import socket
 from time import mktime, time
@@ -14,11 +14,14 @@ from outcome import Outcome
 import random
 import memcache
 import traceback
+from subprocess import call
 
 cache = memcache.Client(['127.0.0.1:11211'], debug=0)
 
+app = Bottle()
 
-@get("/games/new/<player1>/vs/<player2>")
+
+@app.get("/games/new/<player1>/vs/<player2>")
 def new_game(player1, player2):
     games = get_collection("games")
     players = [Player("Green", "Human", player1), Player("Red", "Human", player2)]
@@ -33,7 +36,7 @@ def new_game(player1, player2):
     return {"Status": "OK", "ID": str(game_id), "ServerTime": time(), "Message": "New game created"}
 
 
-@get("/games/view/<game_id>")
+@app.get("/games/view/<game_id>")
 def view(game_id):
     last_modified_cache = cache.get(game_id)
     if last_modified_cache:
@@ -70,12 +73,12 @@ def view(game_id):
     return log_document
 
 
-@get("/cache/get/<game_id>")
+@app.get("/cache/get/<game_id>")
 def getcache(game_id):
     return str(cache.get(game_id))
 
 
-@get("/games/view_log/<game_id>")
+@app.get("/games/view_log/<game_id>")
 def view_log(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -87,7 +90,7 @@ def view_log(game_id):
     return log_document
 
 
-@get("/actions/view/<game_id>")
+@app.get("/actions/view/<game_id>")
 def view_actions(game_id):
     actions = get_collection("actions")
     action_documents = list(actions.find({"game": ObjectId(game_id)}))
@@ -104,7 +107,7 @@ def view_actions(game_id):
 
 
 # db.games.update({}, { "$set": { "finished_at": finished_at } }, {"multi": true} );
-@get("/games/join_or_create/<profile>")
+@app.get("/games/join_or_create/<profile>")
 def join_or_create(profile):
     games = get_collection("games")
 
@@ -155,7 +158,7 @@ def join_or_create(profile):
         return new_game("OPEN", profile)
 
 
-@post("/games/<game_id>/do_action")
+@app.post("/games/<game_id>/do_action")
 def do_action_post(game_id):
     games = get_collection("games")
     game_document = games.find_one({"_id": ObjectId(game_id)})
@@ -176,7 +179,7 @@ def do_action_post(game_id):
         return validation_errors
 
     if action_document["type"] == "options" and "move_with_attack" in action_document:
-        response_document = register_move_with_attack(action_document, game_id)
+        response_document = register_move_with_attack(action_document, game_id, game.gamestate)
         cache.set(game_id, datetime.utcnow().replace(microsecond=0))
         return response_document
     elif action_document["type"] == "options" and "upgrade" in action_document:
@@ -201,7 +204,7 @@ def do_action_post(game_id):
     return response_document
 
 
-@get("/ranking/calculate")
+@app.get("/ranking/calculate")
 def calculate_ratings():
     games = list(get_collection("games").find({}).sort("finished_at", 1))
 
@@ -258,27 +261,49 @@ def calculate_ratings():
     return ranking
 
 
-@get("/ranking/chart")
+@app.get("/ranking/chart")
 def ranking_chart():
     return static_file("chart.html", "/home/ubuntu")
 
 
+@app.post("/deploy")
+def deploy():
+    if request.json["ref"] != "refs/heads/master":
+        return "OK"  # We only care about pushes to master
+
+    print "deployment requested"
+    call(["git", "fetch"])
+    call(["git", "reset", "--hard", "origin/master"])
+
+    print "deployment successful"
+    return "OK"
+
+
 def register_upgrade(action_document, gamestate, game_id):
     position, unit = gamestate.get_upgradeable_unit()
+    upgrade = action_document["upgrade"]
+    upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
 
-    upgrade_options = [unit.get_upgrade_choice(0), unit.get_upgrade_choice(1)]
-    is_valid_choice = False
+    if upgrade in upgrade_options:
+        new_unit = unit.get_upgraded_unit_from_upgrade(upgrade)
 
-    is_simple_upgrade = isinstance(action_document["upgrade"], basestring)
-
-    for choice in range(0, 2):
-        if is_simple_upgrade:
-            if upgrade_options[choice] == upgrade_options[choice]:
-                is_valid_choice = True
+        action_collection = get_collection("actions")
+    
+        existing_options = action_collection.find_one(
+            {"type": "options", "number": action_document["number"], "game": ObjectId(game_id)})
+        if existing_options:
+            existing_options["upgrade"] = action_document["upgrade"]
+            action_collection.save(existing_options)
         else:
-            if action_document["upgrade"] == readable(upgrade_options[choice]):
-                is_valid_choice = True
-    if not is_valid_choice:
+            action_document["game"] = ObjectId(game_id)
+            action_collection.insert(action_document)
+
+        return {
+            "Status": "OK",
+            "Message": "Upgraded " + str(unit) + " on " + str(position),
+            "New unit": document_to_string(new_unit.to_document())}
+
+    else:
         message = "The upgrade must be one of "
         for choice in range(0, 2):
             if isinstance(upgrade_options[choice], basestring):
@@ -290,33 +315,17 @@ def register_upgrade(action_document, gamestate, game_id):
 
         return {"Status": "Error", "Message": message}
 
-    if is_simple_upgrade:
-        new_unit = unit.get_upgraded_unit(action_document["upgrade"])
-    else:
-        new_unit = unit.get_upgraded_unit(enum_attributes(action_document["upgrade"]))
 
-    action_collection = get_collection("actions")
-
-    existing_options = action_collection.find_one(
-        {"type": "options", "number": action_document["number"], "game": ObjectId(game_id)})
-    if existing_options:
-        existing_options["upgrade"] = action_document["upgrade"]
-        action_collection.save(existing_options)
-    else:
-        action_document["game"] = ObjectId(game_id)
-        action_collection.insert(action_document)
-
-    return {
-        "Status": "OK",
-        "Message": "Upgraded " + str(unit) + " on " + str(position),
-        "New unit": document_to_string(new_unit.to_document())}
-
-
-def register_move_with_attack(action_document, game_id):
+def register_move_with_attack(action_document, game_id, gamestate):
     action_collection = get_collection("actions")
 
     action_document["game"] = ObjectId(game_id)
     action_collection.insert(action_document)
+
+    if gamestate.is_ended():
+        games = get_collection("games")
+        games.update({"_id": ObjectId(game_id)}, {"$set": {"finished_at": datetime.utcnow()}})
+
     return {"Status": "OK", "Message": "Options recorded"}
 
 
@@ -324,7 +333,7 @@ def register_move_attack_ability(action_document, game_id, gamestate, action):
     # gamestate_before = gamestate.copy()
     outcome = None
 
-    if action.is_attack() or action.ability == Ability.assassinate:
+    if action.has_outcome():
         outcome = Outcome.determine_outcome(action, gamestate)
 
     gamestate.do_action(action, outcome)
@@ -487,9 +496,6 @@ def construct_log_document(game_document):
     return replay_document
 
 
-host_address = "10.224.105.151"
-if socket.gethostname() == "MD-rMBP.local":
-    host_address = "localhost"
+app.install(JSONPlugin(json_dumps=lambda document: document_to_string(document)))
 
-install(JSONPlugin(json_dumps=lambda document: document_to_string(document)))
-run(host=host_address, port=8080, debug=True)
+# To run the server: uwsgi --http :8080 --wsgi-file server.py --callable app --master --py-autoreload=1

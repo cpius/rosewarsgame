@@ -3,10 +3,10 @@ import json
 from gamestate import Gamestate
 from action import Action
 import action_getter
-import battle
 from outcome import Outcome
 from common import *
 import traceback
+import battle
 
 
 def run_test(test_file):
@@ -51,12 +51,13 @@ def run_test(test_file):
         print "Wrong outcome for", test_file
         if "description" in test_document:
             print "Description:", test_document["description"]
-        print "Action:"
-        print action
-        print "Actual gamestate:"
-        print document_to_string(actual_gamestate_document)
-        print "Expected gamestate:"
-        print document_to_string(expected_gamestate_document)
+        difference = DictDiffer(actual_gamestate_document, expected_gamestate_document)
+        if difference.added():
+            print "Added " + str(difference.added())
+        if difference.removed():
+            print "Removed " + str(difference.removed())
+        if difference.changed_recursive():
+            print "Changed " + str(difference.changed_recursive())
         print
 
     def write_message_extra_outcome():
@@ -93,6 +94,23 @@ def run_test(test_file):
         print document_to_string(expected_gamestate_document)
         print
 
+    def write_message_upgrade_existance():
+        print "wrong upgrade existance for", test_file
+        if expected_result:
+            print "Expected to find"
+        else:
+            print "Did not expect to find"
+        if "description" in test_document:
+            print "Description:", test_document["description"]
+        print "Actual gamestate 1:"
+        print document_to_string(actual_gamestate1_document)
+        print "Actual gamestate 2:"
+        print document_to_string(actual_gamestate2_document)
+        print "Expected gamestate:"
+        print document_to_string(expected_gamestate_document)
+        print
+
+
     try:
         test_document = json.loads(open(test_file).read())
     except ValueError:
@@ -121,14 +139,8 @@ def run_test(test_file):
             expected_attack = test_document["attack"]
             expected_defence = test_document["defence"]
 
-            all_units = gamestate.all_units()
-
-            attacking_unit = all_units[action.start_at]
-            defending_unit = all_units[action.target_at]
-
-            actual_attack = battle.get_attack_rating(attacking_unit, defending_unit, action, gamestate.player_units)
-            actual_defence = battle.get_defence_rating(attacking_unit, defending_unit, actual_attack, action,
-                                                       gamestate.enemy_units)
+            actual_attack = battle.get_attack(action, gamestate)
+            actual_defence = battle.get_defence(action, actual_attack, gamestate)
 
             if actual_attack == expected_attack and actual_defence == expected_defence:
                 return "pass"
@@ -242,8 +254,7 @@ def run_test(test_file):
                 upgrade_choice = enum_attributes(test_document["upgrade"])
 
             for position, unit in gamestate.player_units.items():
-                if unit.is_allowed_upgrade_choice(upgrade_choice):
-                    gamestate.player_units[position] = unit.get_upgraded_unit(upgrade_choice)
+                gamestate.player_units[position] = unit.get_upgraded_unit_from_upgrade(upgrade_choice)
 
             actual_gamestate_document = gamestate.to_document()
             expected_gamestate_document = expected_gamestate.to_document()
@@ -254,6 +265,31 @@ def run_test(test_file):
                 write_message_upgrade()
                 return "wrong result"
 
+        if test_document["type"] == "Does upgrade exist":
+            gamestate1 = Gamestate.from_document(test_document["pre_gamestate"])
+            gamestate2 = Gamestate.from_document(test_document["pre_gamestate"])
+            expected_result = test_document["result"]
+            expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
+
+            for position, unit in gamestate1.player_units.items():
+                gamestate1.player_units[position] = unit.get_upgraded_unit_from_choice(0)
+
+            for position, unit in gamestate2.player_units.items():
+                gamestate2.player_units[position] = unit.get_upgraded_unit_from_choice(1)
+
+            actual_gamestate1_document = gamestate1.to_document()
+            actual_gamestate2_document = gamestate2.to_document()
+            expected_gamestate_document = expected_gamestate.to_document()
+
+            actual_result = (actual_gamestate1_document == expected_gamestate_document or
+                             actual_gamestate2_document == expected_gamestate_document)
+
+            if actual_result == expected_result:
+                return "pass"
+            else:
+                write_message_upgrade_existance()
+                return "wrong result"
+
     except Exception as e:
         print test_file
         print e
@@ -262,7 +298,6 @@ def run_test(test_file):
 
 
 break_at_error = False
-test_file = "./../sharedtests_development\OutcomeExtra_Samurai_2.json"
 test_file = ""
 
 if test_file:
@@ -271,12 +306,11 @@ if test_file:
     print result
 
 else:
-    path1 = "./../sharedtests/"
-    path2 = "./../sharedtests_development/"
-    testcase_files = [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(path1)
-                      for f in files if f.endswith(".json")] + \
-                     [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(path2)
+    path = "./../sharedtests_1.1/"
+    testcase_files = [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(path)
                       for f in files if f.endswith(".json")]
+
+    #testcase_files = ["./../sharedtests_1.1/Upgrades\Upgrade_existence_Berserker_1.json"]
 
     results = {"pass": 0, "read error": 0, "wrong result": 0, "run error": 0, "total": 0}
     for test_file in testcase_files:

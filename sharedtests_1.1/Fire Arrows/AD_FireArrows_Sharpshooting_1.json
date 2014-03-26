@@ -13,8 +13,9 @@
         "actions_remaining": 1,
         "player1_units": {
             "B4": {
-                "name": "Crossbow Archer",
-                "fire_arrows": 1
+                "name": "Archer",
+                "fire_arrows": 1,
+                "sharpshooting": 1
             },
             "C2": "Knight"
         },

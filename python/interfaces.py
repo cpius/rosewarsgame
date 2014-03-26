@@ -13,7 +13,9 @@ class Interface(object):
 
         self.line_distances = {"small": 15 * zoom,
                                "medium": 20 * zoom,
-                               "normal": 25 * zoom}
+                               "normal": 25 * zoom,
+                               "larger": 35 * zoom,
+                               "big": 40 * zoom}
 
         self.coordinates = {"base": Coordinates(self.base_coordinates, self),
                             "base_box": Coordinates(self.base_box_coordinates, self),
@@ -33,6 +35,7 @@ class Interface(object):
                       "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
                       "medium": pygame.font.SysFont(font_name, int(16 * zoom), bold=True),
                       "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "larger": pygame.font.SysFont(font_name, int(25 * zoom), bold=True),
                       "experience": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)
                       }
@@ -101,6 +104,7 @@ class Rectangles(Interface):
 
         self.show_unit_coordinates = (450 * zoom, 20 * zoom)
         self.right_side_rectangle = (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom)
+        self.left_side_rectangle = (0, 0, 391 * self.zoom, 743 * self.zoom)
 
         self.lower_right_rectangle = (391 * self.zoom, 391 * self.zoom, 391 * self.zoom, 391 * self.zoom)
 
@@ -116,7 +120,6 @@ class Rectangles(Interface):
         self.show_unit_location = (410 * zoom, 25 * zoom)
 
         self.upgrade_locations = [(410 * zoom, 370 * zoom), (600 * zoom, 370 * zoom)]
-        self.show_attack_location = (410 * zoom, 230 * zoom)
         self.ask_about_ability_location = (410 * zoom, 230 * zoom)
 
         self.upgrade_text_locations = [(410 * zoom, 510 * zoom), (600 * zoom, 510 * zoom)]
@@ -136,4 +139,7 @@ class Rectangles(Interface):
         self.help_menu = [[Point(200 * zoom, (40 + 40 * i) * zoom), Point(310 * zoom, (70 + 40 * i) * zoom)]
                           for i in range(15)] + \
                          [[Point(500 * zoom, (40 + 40 * i) * zoom), Point(610 * zoom, (70 + 40 * i) * zoom)]
+                          for i in range(15)]
+
+        self.opponent_menu = [[Point(100 * zoom, (40 + 40 * i) * zoom), Point(510 * zoom, (70 + 40 * i) * zoom)]
                           for i in range(15)]

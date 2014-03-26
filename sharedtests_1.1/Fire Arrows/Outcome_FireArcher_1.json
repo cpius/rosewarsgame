@@ -7,7 +7,8 @@
             "A1": "Pikeman",
             "C3": {
                 "experience": 4,
-                "name": "Fire Archer",
+                "name": "Archer",
+                "fire_arrows": 1,
                 "recently_upgraded": 1
             }
         },
@@ -29,7 +30,8 @@
             "A1": "Pikeman",
             "C3": {
                 "experience": 5,
-                "name": "Fire Archer",
+                "name": "Archer",
+                "fire_arrows": 1,
                 "used": 1
             }
         },

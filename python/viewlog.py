@@ -2,6 +2,7 @@ from __future__ import division
 from viewcommon import *
 import pygame
 import interface_settings as settings
+import action_doer
 
 
 zoom = settings.zoom
@@ -16,35 +17,8 @@ class Log():
         self.action_number = action_number
         self.player_color = player_color
 
-    def get_next(self):
-        if self.action_number == 1:
-            return self.player_color, 2
-        else:
-            if self.player_color == "Red":
-                player_color = "Green"
-            else:
-                player_color = "Red"
-            return player_color, 1
 
-
-def draw_log(logbook, screen, interface, game, action=None, outcome=None):
-    player_color = game.current_player().color
-    action_number = 3 - game.gamestate.get_actions_remaining()
-    if action:
-        if game.gamestate.action_count == 0:
-            action_number -= 1
-
-        if action.is_attack():
-            for position in outcome.outcomes:
-                outcome_string = action.outcome_string(outcome.for_position(position), game.gamestate)
-                modified_action = action.copy()
-                modified_action.target_at = position
-                modified_action.target_unit = game.gamestate.enemy_units[position]
-                log = Log(modified_action, outcome_string, action_number, player_color)
-                logbook.append(log)
-        else:
-            log = Log(action, None, action_number, player_color)
-            logbook.append(log)
+def draw_logbook(screen, interface, logbook):
 
     if len(logbook) > maximum_logs:
         logbook.pop(0)
@@ -91,14 +65,32 @@ def draw_log(logbook, screen, interface, game, action=None, outcome=None):
             elif log.player_color == "Red":
                 draw_unit_right(screen, interface, log.action, "Red", 0, *base)
 
-    base_x = int(391 * zoom)
-    base_y = int(len(logbook) * log_heights)
-    base = (base_x, base_y)
-
-    if not action:
-        draw_turn_box(screen, interface, player_color, action_number, *base)
-
     write(screen, "Help", interface.help_area[0], interface.fonts["normal"])
+
+
+def get_outcome_string(action, rolls, gamestate, is_sub_action):
+
+    if action_doer.is_win(action, rolls, gamestate, is_sub_action):
+        return "WIN"
+    elif not action_doer.attack_successful(action, rolls, gamestate, is_sub_action):
+        return "MISS"
+    else:
+        return "DEFEND"
+
+
+def add_log(action, outcome, game, logbook):
+
+    action_number = 3 - game.gamestate.get_actions_remaining()
+    player_color = game.current_player().color
+
+    if action.is_attack():
+        for position in outcome.outcomes:
+            is_sub_action = action.target_at == position
+            outcome_string = get_outcome_string(action, outcome.outcomes[position], game.gamestate, is_sub_action)
+            logbook.append(Log(action, outcome_string, action_number, player_color))
+    else:
+        logbook.append(Log(action, None, action_number, player_color))
+
     return logbook
 
 
@@ -129,7 +121,7 @@ def draw_unit_right(screen, interface, action, color, index, base_x, base_y):
     unit_width = int((interface.unit_width / interface.unit_height) * unit_height)
 
     location = (base_x + (65 + index * 100) * zoom, base_y + 3 * zoom)
-    unit_pic = get_unit_pic(interface, unit.image)
+    unit_pic = get_unit_pic(interface, unit)
     unit_image = get_image(unit_pic, (unit_width, unit_height))
 
     screen.blit(unit_image, location)
@@ -190,6 +182,7 @@ def draw_unit_box_right(screen, interface, base, color, height, width):
     pygame.draw.lines(screen, colors["black"], True, outer_corners)
 
 
-def draw_outcome(screen, interface, outcome, base_x, base_y):
+def draw_outcome(screen, interface, outcome_string, base_x, base_y):
+
     location = (base_x + 230 * zoom, base_y + 5 * zoom)
-    write(screen, outcome, location, interface.fonts["big"])
+    write(screen, outcome_string, location, interface.fonts["larger"])

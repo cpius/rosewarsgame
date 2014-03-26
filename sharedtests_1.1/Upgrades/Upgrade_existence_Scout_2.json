@@ -1,0 +1,34 @@
+{
+    "type": "Does upgrade exist",
+    "result": true,
+    "pre_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Scout",
+                "attack_skill": 2,
+                "tall_shield": 1,
+                "experience": 4
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A3": {
+                "name": "Scout",
+                "experience": 4,
+                "attack_skill": 2,
+                "tall_shield": 1,
+                "defence_skill": 1,
+                "recently_upgraded": 1
+            }
+        },
+        "player2_units": {
+            "B4": "Archer"
+        }
+    }
+}

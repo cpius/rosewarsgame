@@ -2,7 +2,7 @@ from __future__ import division
 import action_doer
 import initializer
 import action_getter
-from units import Unit
+from units import Unit_class
 import json
 from common import *
 from copy import copy
@@ -46,8 +46,8 @@ class Gamestate:
     def decrement_actions_if_none_available(self, action):
         if not self.available_actions:
             if action.unit.has(State.extra_action):
-                action.unit.remove_state(State.extra_action)
-                action.unit.remove_state(State.movement_remaining)
+                action.unit.remove(State.extra_action)
+                action.unit.remove(State.movement_remaining)
                 self.set_available_actions()
             else:
                 self.actions_remaining = 0
@@ -122,9 +122,9 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if isinstance(unit_document, basestring):
-                unit = Unit.make(unit_document)
+                unit = Unit_class.make(Unit.get_enum[unit_document.replace(" ", "_")])
             else:
-                unit = Unit.make(unit_document["name"])
+                unit = Unit_class.make(Unit.get_enum[unit_document["name"].replace(" ", "_")])
 
                 for attribute, value in unit_document.items():
                     if attribute == "zoc":
@@ -141,9 +141,9 @@ class Gamestate:
                     elif attribute in effect_descriptions:
                         effect = getattr(Effect, attribute)
                         if isinstance(value, int):
-                            unit.set_effect(effect, 1, value)
+                            unit.set(effect, 1, value)
                         else:
-                            unit.set_effect(effect, level=value[0], duration=value[1])
+                            unit.set(effect, value=value[0], duration=value[1])
 
             units[position] = unit
 
@@ -242,6 +242,6 @@ class Gamestate:
             return False
 
         rolls = outcome.for_position(action.target_at)
-        push_possible = action.is_push() and action.attack_successful(rolls, self)
+        push_possible = action.is_push() and action_doer.attack_successful(action, rolls, self)
 
-        return push_possible or action.is_win(rolls, self)
+        return push_possible or action_doer.is_win(action, rolls, self)
