@@ -441,7 +441,7 @@ class Scout(Unit_class):
     base_movement = 4
     base_range = 1
     upgrades = [{Trait.tall_shield: 1}, {Trait.attack_skill: 2}, {Trait.movement_skill: 1}, {Trait.defence_skill: 1}]
-    experience_to_upgrade = 1
+    experience_to_upgrade = 2
 
 
 class Viking(Unit_class):

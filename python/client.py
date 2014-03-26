@@ -87,7 +87,9 @@ class Client():
                     action.move_with_attack = bool(options["move_with_attack"])
                 if "upgrade" in options:
                     upgrade = options["upgrade"]
-                    if not isinstance(upgrade, basestring):
+                    if isinstance(upgrade, basestring):
+                        upgrade = Unit.get_enum[upgrade]
+                    else:
                         upgrade = enum_attributes(upgrade)
 
             return action, outcome, upgrade
