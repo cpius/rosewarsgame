@@ -103,7 +103,7 @@ def show_unit_zoomed(screen, interface, unit, attack_hint):
     image_location = [base[0], base[1] + 20 * zoom]
     text_location = [base[0], base[1] + 290 * zoom]
 
-    write(screen, unit.name, title_location, interface.fonts["normal"])
+    write(screen, unit.name.replace("_", " "), title_location, interface.fonts["normal"])
     screen.blit(pic, image_location)
 
     lines = get_unit_lines(unit)

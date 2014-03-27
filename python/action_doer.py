@@ -117,11 +117,10 @@ def do_action(gamestate, action, outcome):
 
     update_unit_position()
 
-    if unit.has(Trait.scouting):
+    if action.is_attack() or unit.type == Type.Cavalry or action.is_ability():
         unit.gain_experience()
 
     if action.is_attack():
-        unit.gain_experience()
         if action.unit.is_melee() and not action.is_javelin_throw():
             attack_direction = action.end_at.get_direction_to(action.target_at)
         rolls = outcome.for_position(action.target_at)
@@ -141,7 +140,6 @@ def do_action(gamestate, action, outcome):
             move_melee_unit_to_target_tile(gamestate, rolls, action)
 
     elif action.is_ability():
-        unit.gain_experience()
         settle_ability(action)
 
     if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility]):
