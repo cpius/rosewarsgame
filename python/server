@@ -1,0 +1,1 @@
+uwsgi --http :8080 --wsgi-file server.py --callable app --master --py-autoreload=1
