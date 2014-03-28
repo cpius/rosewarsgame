@@ -21,6 +21,7 @@
         "player1_units": {
             "E2": {
                 "name": "Hobelar",
+                "experience": 1,
                 "used": 1
             },
             "A2": "Pikeman"
