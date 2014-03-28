@@ -309,7 +309,7 @@ def register_upgrade(action_document, gamestate, game_id):
     else:
         message = "The upgrade must be one of "
         for choice in range(0, 2):
-            message += readable(upgrade_options[choice])
+            message += str(readable(upgrade_options[choice]))
             if choice == 0:
                 message += " and "
 
