@@ -35,6 +35,8 @@
 
 - (void)testCasesExist {
     
+    NSLog(@"Executing %i shared test cases", self.testcases.count);
+
     NSError *error = nil;
     for (NSString *file in self.testcases) {
         
