@@ -21,7 +21,7 @@
     
     NSDictionary *actiondata = data[@"action"];
     
-    NSInteger expectedOutcome = [data[@"result"] integerValue];
+    BOOL expectedExistence = [data[@"result"] boolValue];
 
     GridLocation *startLocation = [self convertLocation:actiondata[@"start_at"]];
     GridLocation *endLocation = [self convertLocation:actiondata[@"end_at"]];
@@ -44,23 +44,27 @@
 
     BOOL moveWithAttack = [actiondata[@"move_with_attack"] integerValue] == 1 ? YES : NO;
     if (cardLocatedAtStartLocation.isMelee) {
-    
+
         MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
-        
+
         if (meleeAction && moveWithAttack) {
-            return [self evaluateOutcomeFromExpectedOutcome:expectedOutcome actualOutcome:meleeAction.meleeAttackType == kMeleeAttackTypeConquer];
-       }
+            BOOL actualExistence = meleeAction.meleeAttackType == kMeleeAttackTypeConquer;
+
+            return expectedExistence == actualExistence;
+        }
         
         action = meleeAction;
     }
-    
+
     if (cardLocatedAtStartLocation.isRanged) {
         if (moveWithAttack) {
-            return [self evaluateOutcomeFromExpectedOutcome:expectedOutcome actualOutcome:NO];
+            return !expectedExistence;
         }
     }
     
-    return [self evaluateOutcomeFromExpectedOutcome:expectedOutcome actualOutcome:action != nil];
+    BOOL actualExistence = action != nil;
+
+    return expectedExistence == actualExistence;
 }
 
 @end
