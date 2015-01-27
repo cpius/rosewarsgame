@@ -91,7 +91,6 @@
 		617DB2FA18C7285700E64829 /* Upgrade_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BA18C7285700E64829 /* Upgrade_1.json */; };
 		617DB2FB18C7285700E64829 /* Upgrade_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BB18C7285700E64829 /* Upgrade_2.json */; };
 		617DB2FC18C7285700E64829 /* Upgrade_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BC18C7285700E64829 /* Upgrade_3.json */; };
-		617DB2FD18C7285700E64829 /* Upgrade_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BD18C7285700E64829 /* Upgrade_4.json */; };
 		617DB2FE18C7285700E64829 /* Action_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BF18C7285700E64829 /* Action_Viking_1.json */; };
 		617DB2FF18C7285700E64829 /* Action_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C018C7285700E64829 /* Action_Viking_2.json */; };
 		617DB30018C7285700E64829 /* Action_Viking_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C118C7285700E64829 /* Action_Viking_3.json */; };
@@ -342,7 +341,6 @@
 		617DB2BA18C7285700E64829 /* Upgrade_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_1.json; sourceTree = "<group>"; };
 		617DB2BB18C7285700E64829 /* Upgrade_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_2.json; sourceTree = "<group>"; };
 		617DB2BC18C7285700E64829 /* Upgrade_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_3.json; sourceTree = "<group>"; };
-		617DB2BD18C7285700E64829 /* Upgrade_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_4.json; sourceTree = "<group>"; };
 		617DB2BF18C7285700E64829 /* Action_Viking_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Viking_1.json; sourceTree = "<group>"; };
 		617DB2C018C7285700E64829 /* Action_Viking_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Viking_2.json; sourceTree = "<group>"; };
 		617DB2C118C7285700E64829 /* Action_Viking_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Viking_3.json; sourceTree = "<group>"; };
@@ -972,7 +970,6 @@
 				617DB2BA18C7285700E64829 /* Upgrade_1.json */,
 				617DB2BB18C7285700E64829 /* Upgrade_2.json */,
 				617DB2BC18C7285700E64829 /* Upgrade_3.json */,
-				617DB2BD18C7285700E64829 /* Upgrade_4.json */,
 			);
 			path = Upgrades;
 			sourceTree = "<group>";
@@ -1375,7 +1372,6 @@
 				615BEA9A17FC6E4800F728E9 /* infantry_defeated_sound.mp3 in Resources */,
 				61C47E5817C635F000D644D1 /* sword_sound.wav in Resources */,
 				617DB2E718C7285700E64829 /* Outcome_Hobelar_10.json in Resources */,
-				617DB2FD18C7285700E64829 /* Upgrade_4.json in Resources */,
 				617DB2D318C7285700E64829 /* AD_FlagBearer_4.json in Resources */,
 				617DB2D218C7285700E64829 /* AD_FlagBearer_3.json in Resources */,
 				617DB2DF18C7285700E64829 /* AD_1.json in Resources */,
