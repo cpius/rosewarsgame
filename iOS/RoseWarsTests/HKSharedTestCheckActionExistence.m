@@ -17,7 +17,7 @@
 
 - (BOOL)executeSharedTestWithData:(NSDictionary *)data {
     
-    BOOL executeSuccess = [super executeSharedTestWithData:data];
+    [super executeSharedTestWithData:data];
     
     NSDictionary *actiondata = data[@"action"];
     
