@@ -17,8 +17,6 @@
 
 - (BOOL)executeSharedTestWithData:(NSDictionary *)data {
     
-    NSLog(@"Executing shared test: '%@'", data[@"description"]);
-    
     if ([data[@"description"] isEqualToString:@"test if Scout can move past Pikemen"]) {
         NSLog(@"dfdf");
     }
