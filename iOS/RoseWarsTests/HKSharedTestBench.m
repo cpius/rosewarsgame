@@ -45,6 +45,11 @@
         NSString *testcaseDescription = testcase[@"description"];
         
         id<HKSharedTestExecuter> testExecuter = [HKSharedTestFactory createSharedTestExecuterOfType:testcaseType];
+
+        if (testExecuter == nil) {
+            continue;
+        }
+
         BOOL executeSuccess = [testExecuter executeSharedTestWithData:testcase];
         
         XCTAssertTrue(executeSuccess, @"Testcase with description '%@' failed", testcaseDescription);
