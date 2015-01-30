@@ -111,8 +111,6 @@
 
 - (NSArray *)createBattlePlanForCard:(Card *)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray *)enemyUnits unitLayout:(NSDictionary *)unitLayout {
     
-    if (![card isOwnedByMe]) return [NSArray array];
-    
     PathFinder *pathFinder = [[PathFinder alloc] init];
     
     NSUInteger remainingActionCount = [GameManager sharedManager].currentGame.numberOfAvailableActions;
