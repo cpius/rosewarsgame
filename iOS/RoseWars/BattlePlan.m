@@ -20,7 +20,7 @@
     self = [super init];
     
     if (self) {
-        NSAssert(!game, @"Game must be non-nil");
+        NSAssert(game, @"Game must be non-nil");
         _game = game;
     }
     
