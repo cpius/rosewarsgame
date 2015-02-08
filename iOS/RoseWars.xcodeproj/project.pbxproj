@@ -7,8 +7,156 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		611CE4391A84D0ED003BF6A1 /* HKSamuraiTestCases.m in Sources */ = {isa = PBXBuildFile; fileRef = 611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */; };
-		613790E11A84A2EB00B0F887 /* HKHobelarTestCases.m in Sources */ = {isa = PBXBuildFile; fileRef = 613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */; };
+		09F17BE71A77CD3300542F04 /* Action_Berserker_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27B18C7285700E64829 /* Action_Berserker_1.json */; };
+		09F17BE81A77CD3300542F04 /* Action_Berserker_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27C18C7285700E64829 /* Action_Berserker_2.json */; };
+		09F17BE91A77CD3300542F04 /* Action_Berserker_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27D18C7285700E64829 /* Action_Berserker_3.json */; };
+		09F17BEA1A77CD3300542F04 /* AD_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27F18C7285700E64829 /* AD_Cannon_1.json */; };
+		09F17BEB1A77CD3300542F04 /* Outcome_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28018C7285700E64829 /* Outcome_Cannon_1.json */; };
+		09F17BEC1A77CD3300542F04 /* AD_Catapult_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28218C7285700E64829 /* AD_Catapult_1.json */; };
+		09F17BED1A77CD3300542F04 /* AD_Crusader_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28418C7285700E64829 /* AD_Crusader_1.json */; };
+		09F17BEE1A77CD3300542F04 /* AD_Crusader_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28518C7285700E64829 /* AD_Crusader_2.json */; };
+		09F17BEF1A77CD3300542F04 /* AD_Crusader_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28618C7285700E64829 /* AD_Crusader_3.json */; };
+		09F17BF01A77CD3300542F04 /* AD_Crusader_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28718C7285700E64829 /* AD_Crusader_4.json */; };
+		09F17BF11A77CD3300542F04 /* AD_Crusader_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28818C7285700E64829 /* AD_Crusader_5.json */; };
+		09F17BF21A77CD3300542F04 /* AD_FlagBearer_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28A18C7285700E64829 /* AD_FlagBearer_1.json */; };
+		09F17BF31A77CD3300542F04 /* AD_FlagBearer_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28B18C7285700E64829 /* AD_FlagBearer_2.json */; };
+		09F17BF41A77CD3300542F04 /* AD_FlagBearer_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */; };
+		09F17BF51A77CD3300542F04 /* AD_FlagBearer_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */; };
+		09F17BF61A77CD3300542F04 /* AD_FlagBearer_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */; };
+		09F17BF71A77CD3300542F04 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B8E1A77C1E800542F04 /* Action_1.json */; };
+		09F17BF81A77CD3300542F04 /* Action_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B8F1A77C1E800542F04 /* Action_10.json */; };
+		09F17BF91A77CD3300542F04 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B901A77C1E800542F04 /* Action_2.json */; };
+		09F17BFA1A77CD3300542F04 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B911A77C1E800542F04 /* Action_3.json */; };
+		09F17BFB1A77CD3300542F04 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B921A77C1E800542F04 /* Action_4.json */; };
+		09F17BFC1A77CD3400542F04 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B931A77C1E800542F04 /* Action_5.json */; };
+		09F17BFD1A77CD3400542F04 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B941A77C1E800542F04 /* Action_6.json */; };
+		09F17BFE1A77CD3400542F04 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B951A77C1E800542F04 /* Action_7.json */; };
+		09F17BFF1A77CD3400542F04 /* Action_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B961A77C1E800542F04 /* Action_8.json */; };
+		09F17C001A77CD3400542F04 /* Action_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B971A77C1E800542F04 /* Action_9.json */; };
+		09F17C011A77CD3400542F04 /* AD_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B981A77C1E800542F04 /* AD_1.json */; };
+		09F17C021A77CD3400542F04 /* Outcome_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B991A77C1E800542F04 /* Outcome_1.json */; };
+		09F17C031A77CD3400542F04 /* Outcome_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9A1A77C1E800542F04 /* Outcome_2.json */; };
+		09F17C041A77CD3400542F04 /* Outcome_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9B1A77C1E800542F04 /* Outcome_3.json */; };
+		09F17C051A77CD3400542F04 /* Outcome_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9C1A77C1E800542F04 /* Outcome_4.json */; };
+		09F17C061A77CD3400542F04 /* Turn_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9D1A77C1E800542F04 /* Turn_1.json */; };
+		09F17C071A77CD3400542F04 /* Action_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29E18C7285700E64829 /* Action_Hobelar_1.json */; };
+		09F17C081A77CD3400542F04 /* Action_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29F18C7285700E64829 /* Action_Hobelar_2.json */; };
+		09F17C091A77CD3400542F04 /* Action_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A018C7285700E64829 /* Action_Hobelar_3.json */; };
+		09F17C0A1A77CD3400542F04 /* Action_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A118C7285700E64829 /* Action_Hobelar_4.json */; };
+		09F17C0B1A77CD3400542F04 /* Outcome_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A218C7285700E64829 /* Outcome_Hobelar_1.json */; };
+		09F17C0C1A77CD3400542F04 /* Outcome_Hobelar_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A318C7285700E64829 /* Outcome_Hobelar_10.json */; };
+		09F17C0D1A77CD3400542F04 /* Outcome_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A418C7285700E64829 /* Outcome_Hobelar_2.json */; };
+		09F17C0E1A77CD3400542F04 /* Outcome_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A518C7285700E64829 /* Outcome_Hobelar_3.json */; };
+		09F17C0F1A77CD3400542F04 /* Outcome_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A618C7285700E64829 /* Outcome_Hobelar_4.json */; };
+		09F17C101A77CD3400542F04 /* Outcome_Hobelar_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A718C7285700E64829 /* Outcome_Hobelar_5.json */; };
+		09F17C111A77CD3400542F04 /* Outcome_Hobelar_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A818C7285700E64829 /* Outcome_Hobelar_6.json */; };
+		09F17C121A77CD3400542F04 /* Outcome_Hobelar_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A918C7285700E64829 /* Outcome_Hobelar_7.json */; };
+		09F17C131A77CD3400542F04 /* Outcome_Hobelar_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */; };
+		09F17C141A77CD3400542F04 /* Outcome_Hobelar_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */; };
+		09F17C151A77CD3400542F04 /* AD_Weaponsmith_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B7F1A77C10000542F04 /* AD_Weaponsmith_1.json */; };
+		09F17C161A77CD3400542F04 /* AD_Weaponsmith_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B801A77C10000542F04 /* AD_Weaponsmith_2.json */; };
+		09F17C171A77CD3400542F04 /* Outcome_Improveweapons_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B811A77C10000542F04 /* Outcome_Improveweapons_1.json */; };
+		09F17C181A77CD3400542F04 /* Turn_ImprovedWeapons_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B821A77C10000542F04 /* Turn_ImprovedWeapons_1.json */; };
+		09F17C191A77CD3400542F04 /* Turn_ImprovedWeapons_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B831A77C10000542F04 /* Turn_ImprovedWeapons_2.json */; };
+		09F17C1A1A77CD3400542F04 /* Turn_ImprovedWeapons_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B841A77C10000542F04 /* Turn_ImprovedWeapons_3.json */; };
+		09F17C1B1A77CD3400542F04 /* Turn_ImprovedWeapons_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B851A77C10000542F04 /* Turn_ImprovedWeapons_4.json */; };
+		09F17C1C1A77CD3400542F04 /* AD_Lancer_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B781A77C0F200542F04 /* AD_Lancer_1.json */; };
+		09F17C1D1A77CD3400542F04 /* AD_Lancer_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B791A77C0F200542F04 /* AD_Lancer_2.json */; };
+		09F17C1E1A77CD3400542F04 /* AD_Lancer_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B7A1A77C0F200542F04 /* AD_Lancer_3.json */; };
+		09F17C1F1A77CD3400542F04 /* Outcome_Longswordsman_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */; };
+		09F17C271A77CD3400542F04 /* Action_Scout_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B718C7285700E64829 /* Action_Scout_1.json */; };
+		09F17C281A77CD3400542F04 /* Action_Scout_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B818C7285700E64829 /* Action_Scout_2.json */; };
+		09F17C291A77CD3400542F04 /* Upgrade_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BA18C7285700E64829 /* Upgrade_1.json */; };
+		09F17C2A1A77CD3400542F04 /* Upgrade_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BB18C7285700E64829 /* Upgrade_2.json */; };
+		09F17C2B1A77CD3400542F04 /* Upgrade_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BC18C7285700E64829 /* Upgrade_3.json */; };
+		09F17C2C1A77CD3400542F04 /* Action_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BF18C7285700E64829 /* Action_Viking_1.json */; };
+		09F17C2D1A77CD3400542F04 /* Action_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C018C7285700E64829 /* Action_Viking_2.json */; };
+		09F17C2E1A77CD3400542F04 /* Action_Viking_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C118C7285700E64829 /* Action_Viking_3.json */; };
+		09F17C2F1A77CD3400542F04 /* Action_Viking_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C218C7285700E64829 /* Action_Viking_4.json */; };
+		09F17C301A77CD3400542F04 /* Outcome_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C318C7285700E64829 /* Outcome_Viking_1.json */; };
+		09F17C311A77CD3400542F04 /* Outcome_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C418C7285700E64829 /* Outcome_Viking_2.json */; };
+		09F17C321A77CE2D00542F04 /* Action_Berserker_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27B18C7285700E64829 /* Action_Berserker_1.json */; };
+		09F17C331A77CE2D00542F04 /* Action_Berserker_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27C18C7285700E64829 /* Action_Berserker_2.json */; };
+		09F17C341A77CE2D00542F04 /* Action_Berserker_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27D18C7285700E64829 /* Action_Berserker_3.json */; };
+		09F17C351A77CE2D00542F04 /* AD_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27F18C7285700E64829 /* AD_Cannon_1.json */; };
+		09F17C361A77CE2D00542F04 /* Outcome_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28018C7285700E64829 /* Outcome_Cannon_1.json */; };
+		09F17C371A77CE2D00542F04 /* AD_Catapult_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28218C7285700E64829 /* AD_Catapult_1.json */; };
+		09F17C381A77CE2D00542F04 /* AD_Crusader_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28418C7285700E64829 /* AD_Crusader_1.json */; };
+		09F17C391A77CE2D00542F04 /* AD_Crusader_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28518C7285700E64829 /* AD_Crusader_2.json */; };
+		09F17C3A1A77CE2D00542F04 /* AD_Crusader_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28618C7285700E64829 /* AD_Crusader_3.json */; };
+		09F17C3B1A77CE2D00542F04 /* AD_Crusader_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28718C7285700E64829 /* AD_Crusader_4.json */; };
+		09F17C3C1A77CE2D00542F04 /* AD_Crusader_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28818C7285700E64829 /* AD_Crusader_5.json */; };
+		09F17C3D1A77CE2D00542F04 /* AD_FlagBearer_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28A18C7285700E64829 /* AD_FlagBearer_1.json */; };
+		09F17C3E1A77CE2D00542F04 /* AD_FlagBearer_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28B18C7285700E64829 /* AD_FlagBearer_2.json */; };
+		09F17C3F1A77CE2D00542F04 /* AD_FlagBearer_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */; };
+		09F17C401A77CE2D00542F04 /* AD_FlagBearer_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */; };
+		09F17C411A77CE2D00542F04 /* AD_FlagBearer_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */; };
+		09F17C421A77CE2D00542F04 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B8E1A77C1E800542F04 /* Action_1.json */; };
+		09F17C431A77CE2D00542F04 /* Action_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B8F1A77C1E800542F04 /* Action_10.json */; };
+		09F17C441A77CE2D00542F04 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B901A77C1E800542F04 /* Action_2.json */; };
+		09F17C451A77CE2D00542F04 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B911A77C1E800542F04 /* Action_3.json */; };
+		09F17C461A77CE2D00542F04 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B921A77C1E800542F04 /* Action_4.json */; };
+		09F17C471A77CE2D00542F04 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B931A77C1E800542F04 /* Action_5.json */; };
+		09F17C481A77CE2D00542F04 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B941A77C1E800542F04 /* Action_6.json */; };
+		09F17C491A77CE2D00542F04 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B951A77C1E800542F04 /* Action_7.json */; };
+		09F17C4A1A77CE2D00542F04 /* Action_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B961A77C1E800542F04 /* Action_8.json */; };
+		09F17C4B1A77CE2D00542F04 /* Action_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B971A77C1E800542F04 /* Action_9.json */; };
+		09F17C4C1A77CE2D00542F04 /* AD_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B981A77C1E800542F04 /* AD_1.json */; };
+		09F17C4D1A77CE2D00542F04 /* Outcome_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B991A77C1E800542F04 /* Outcome_1.json */; };
+		09F17C4E1A77CE2D00542F04 /* Outcome_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9A1A77C1E800542F04 /* Outcome_2.json */; };
+		09F17C4F1A77CE2D00542F04 /* Outcome_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9B1A77C1E800542F04 /* Outcome_3.json */; };
+		09F17C501A77CE2D00542F04 /* Outcome_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9C1A77C1E800542F04 /* Outcome_4.json */; };
+		09F17C511A77CE2D00542F04 /* Turn_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B9D1A77C1E800542F04 /* Turn_1.json */; };
+		09F17C521A77CE2D00542F04 /* Action_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29E18C7285700E64829 /* Action_Hobelar_1.json */; };
+		09F17C531A77CE2D00542F04 /* Action_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29F18C7285700E64829 /* Action_Hobelar_2.json */; };
+		09F17C541A77CE2D00542F04 /* Action_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A018C7285700E64829 /* Action_Hobelar_3.json */; };
+		09F17C551A77CE2D00542F04 /* Action_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A118C7285700E64829 /* Action_Hobelar_4.json */; };
+		09F17C561A77CE2D00542F04 /* Outcome_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A218C7285700E64829 /* Outcome_Hobelar_1.json */; };
+		09F17C571A77CE2D00542F04 /* Outcome_Hobelar_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A318C7285700E64829 /* Outcome_Hobelar_10.json */; };
+		09F17C581A77CE2D00542F04 /* Outcome_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A418C7285700E64829 /* Outcome_Hobelar_2.json */; };
+		09F17C591A77CE2D00542F04 /* Outcome_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A518C7285700E64829 /* Outcome_Hobelar_3.json */; };
+		09F17C5A1A77CE2D00542F04 /* Outcome_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A618C7285700E64829 /* Outcome_Hobelar_4.json */; };
+		09F17C5B1A77CE2D00542F04 /* Outcome_Hobelar_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A718C7285700E64829 /* Outcome_Hobelar_5.json */; };
+		09F17C5C1A77CE2D00542F04 /* Outcome_Hobelar_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A818C7285700E64829 /* Outcome_Hobelar_6.json */; };
+		09F17C5D1A77CE2D00542F04 /* Outcome_Hobelar_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A918C7285700E64829 /* Outcome_Hobelar_7.json */; };
+		09F17C5E1A77CE2D00542F04 /* Outcome_Hobelar_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */; };
+		09F17C5F1A77CE2D00542F04 /* Outcome_Hobelar_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */; };
+		09F17C601A77CE2D00542F04 /* AD_Weaponsmith_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B7F1A77C10000542F04 /* AD_Weaponsmith_1.json */; };
+		09F17C611A77CE2D00542F04 /* AD_Weaponsmith_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B801A77C10000542F04 /* AD_Weaponsmith_2.json */; };
+		09F17C621A77CE2D00542F04 /* Outcome_Improveweapons_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B811A77C10000542F04 /* Outcome_Improveweapons_1.json */; };
+		09F17C631A77CE2D00542F04 /* Turn_ImprovedWeapons_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B821A77C10000542F04 /* Turn_ImprovedWeapons_1.json */; };
+		09F17C641A77CE2D00542F04 /* Turn_ImprovedWeapons_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B831A77C10000542F04 /* Turn_ImprovedWeapons_2.json */; };
+		09F17C651A77CE2D00542F04 /* Turn_ImprovedWeapons_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B841A77C10000542F04 /* Turn_ImprovedWeapons_3.json */; };
+		09F17C661A77CE2D00542F04 /* Turn_ImprovedWeapons_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B851A77C10000542F04 /* Turn_ImprovedWeapons_4.json */; };
+		09F17C671A77CE2D00542F04 /* AD_Lancer_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B781A77C0F200542F04 /* AD_Lancer_1.json */; };
+		09F17C681A77CE2D00542F04 /* AD_Lancer_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B791A77C0F200542F04 /* AD_Lancer_2.json */; };
+		09F17C691A77CE2D00542F04 /* AD_Lancer_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17B7A1A77C0F200542F04 /* AD_Lancer_3.json */; };
+		09F17C6A1A77CE2D00542F04 /* Outcome_Longswordsman_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */; };
+		09F17C721A77CE2D00542F04 /* Action_Scout_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B718C7285700E64829 /* Action_Scout_1.json */; };
+		09F17C731A77CE2D00542F04 /* Action_Scout_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B818C7285700E64829 /* Action_Scout_2.json */; };
+		09F17C741A77CE2D00542F04 /* Upgrade_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BA18C7285700E64829 /* Upgrade_1.json */; };
+		09F17C751A77CE2D00542F04 /* Upgrade_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BB18C7285700E64829 /* Upgrade_2.json */; };
+		09F17C761A77CE2D00542F04 /* Upgrade_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BC18C7285700E64829 /* Upgrade_3.json */; };
+		09F17C771A77CE2D00542F04 /* Action_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BF18C7285700E64829 /* Action_Viking_1.json */; };
+		09F17C781A77CE2D00542F04 /* Action_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C018C7285700E64829 /* Action_Viking_2.json */; };
+		09F17C791A77CE2D00542F04 /* Action_Viking_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C118C7285700E64829 /* Action_Viking_3.json */; };
+		09F17C7A1A77CE2D00542F04 /* Action_Viking_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C218C7285700E64829 /* Action_Viking_4.json */; };
+		09F17C7B1A77CE2D00542F04 /* Outcome_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C318C7285700E64829 /* Outcome_Viking_1.json */; };
+		09F17C7C1A77CE2D00542F04 /* Outcome_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C418C7285700E64829 /* Outcome_Viking_2.json */; };
+		09F17C841A77DC1000542F04 /* Action_Pikeman_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C7D1A77DC1000542F04 /* Action_Pikeman_1.json */; };
+		09F17C851A77DC1000542F04 /* Action_Pikeman_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C7E1A77DC1000542F04 /* Action_Pikeman_2.json */; };
+		09F17C861A77DC1000542F04 /* Action_Pikeman_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C7F1A77DC1000542F04 /* Action_Pikeman_3.json */; };
+		09F17C871A77DC1000542F04 /* Action_Pikeman_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C801A77DC1000542F04 /* Action_Pikeman_4.json */; };
+		09F17C881A77DC1000542F04 /* Action_Pikeman_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */; };
+		09F17C891A77DC1000542F04 /* Action_Pikeman_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */; };
+		09F17C8A1A77DC1000542F04 /* Action_Pikeman_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */; };
+		09F17C8B1A77DC4600542F04 /* Action_Pikeman_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C7D1A77DC1000542F04 /* Action_Pikeman_1.json */; };
+		09F17C8C1A77DC4600542F04 /* Action_Pikeman_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C7E1A77DC1000542F04 /* Action_Pikeman_2.json */; };
+		09F17C8D1A77DC4600542F04 /* Action_Pikeman_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C7F1A77DC1000542F04 /* Action_Pikeman_3.json */; };
+		09F17C8E1A77DC4600542F04 /* Action_Pikeman_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C801A77DC1000542F04 /* Action_Pikeman_4.json */; };
+		09F17C8F1A77DC4600542F04 /* Action_Pikeman_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */; };
+		09F17C901A77DC4600542F04 /* Action_Pikeman_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */; };
+		09F17C911A77DC4600542F04 /* Action_Pikeman_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */; };
 		614487A018B2A7BB00D97AA2 /* HKPlaygroundScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */; };
 		614487A318B3B01B00D97AA2 /* HKConquerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 614487A218B3B01B00D97AA2 /* HKConquerButton.m */; };
 		614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 614487A418B6780A00D97AA2 /* ConquerSmoke.sks */; };
@@ -36,68 +184,7 @@
 		617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */; };
 		617DB27518C7057300E64829 /* GameCenterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27018C7057300E64829 /* GameCenterManager.m */; };
 		617DB27618C7057300E64829 /* NSDataAES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27218C7057300E64829 /* NSDataAES256.m */; };
-		617DB2C518C7285700E64829 /* Action_Berserker_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27B18C7285700E64829 /* Action_Berserker_1.json */; };
-		617DB2C618C7285700E64829 /* Action_Berserker_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27C18C7285700E64829 /* Action_Berserker_2.json */; };
-		617DB2C718C7285700E64829 /* Action_Berserker_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27D18C7285700E64829 /* Action_Berserker_3.json */; };
-		617DB2C818C7285700E64829 /* AD_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27F18C7285700E64829 /* AD_Cannon_1.json */; };
-		617DB2C918C7285700E64829 /* Outcome_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28018C7285700E64829 /* Outcome_Cannon_1.json */; };
-		617DB2CA18C7285700E64829 /* AD_Catapult_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28218C7285700E64829 /* AD_Catapult_1.json */; };
-		617DB2CB18C7285700E64829 /* AD_Crusader_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28418C7285700E64829 /* AD_Crusader_1.json */; };
-		617DB2CC18C7285700E64829 /* AD_Crusader_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28518C7285700E64829 /* AD_Crusader_2.json */; };
-		617DB2CD18C7285700E64829 /* AD_Crusader_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28618C7285700E64829 /* AD_Crusader_3.json */; };
-		617DB2CE18C7285700E64829 /* AD_Crusader_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28718C7285700E64829 /* AD_Crusader_4.json */; };
-		617DB2CF18C7285700E64829 /* AD_Crusader_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28818C7285700E64829 /* AD_Crusader_5.json */; };
-		617DB2D018C7285700E64829 /* AD_FlagBearer_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28A18C7285700E64829 /* AD_FlagBearer_1.json */; };
-		617DB2D118C7285700E64829 /* AD_FlagBearer_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28B18C7285700E64829 /* AD_FlagBearer_2.json */; };
-		617DB2D218C7285700E64829 /* AD_FlagBearer_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */; };
-		617DB2D318C7285700E64829 /* AD_FlagBearer_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */; };
-		617DB2D418C7285700E64829 /* AD_FlagBearer_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */; };
-		617DB2D518C7285700E64829 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29018C7285700E64829 /* Action_1.json */; };
-		617DB2D618C7285700E64829 /* Action_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29118C7285700E64829 /* Action_10.json */; };
-		617DB2D718C7285700E64829 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29218C7285700E64829 /* Action_2.json */; };
-		617DB2D818C7285700E64829 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29318C7285700E64829 /* Action_3.json */; };
-		617DB2D918C7285700E64829 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29418C7285700E64829 /* Action_4.json */; };
-		617DB2DA18C7285700E64829 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29518C7285700E64829 /* Action_5.json */; };
-		617DB2DB18C7285700E64829 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29618C7285700E64829 /* Action_6.json */; };
-		617DB2DC18C7285700E64829 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29718C7285700E64829 /* Action_7.json */; };
-		617DB2DD18C7285700E64829 /* Action_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29818C7285700E64829 /* Action_8.json */; };
-		617DB2DE18C7285700E64829 /* Action_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29918C7285700E64829 /* Action_9.json */; };
-		617DB2DF18C7285700E64829 /* AD_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29A18C7285700E64829 /* AD_1.json */; };
-		617DB2E018C7285700E64829 /* Outcome_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29B18C7285700E64829 /* Outcome_1.json */; };
-		617DB2E118C7285700E64829 /* Turn_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29C18C7285700E64829 /* Turn_1.json */; };
-		617DB2E218C7285700E64829 /* Action_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29E18C7285700E64829 /* Action_Hobelar_1.json */; };
-		617DB2E318C7285700E64829 /* Action_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29F18C7285700E64829 /* Action_Hobelar_2.json */; };
-		617DB2E418C7285700E64829 /* Action_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A018C7285700E64829 /* Action_Hobelar_3.json */; };
-		617DB2E518C7285700E64829 /* Action_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A118C7285700E64829 /* Action_Hobelar_4.json */; };
-		617DB2E618C7285700E64829 /* Outcome_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A218C7285700E64829 /* Outcome_Hobelar_1.json */; };
-		617DB2E718C7285700E64829 /* Outcome_Hobelar_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A318C7285700E64829 /* Outcome_Hobelar_10.json */; };
-		617DB2E818C7285700E64829 /* Outcome_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A418C7285700E64829 /* Outcome_Hobelar_2.json */; };
-		617DB2E918C7285700E64829 /* Outcome_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A518C7285700E64829 /* Outcome_Hobelar_3.json */; };
-		617DB2EA18C7285700E64829 /* Outcome_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A618C7285700E64829 /* Outcome_Hobelar_4.json */; };
-		617DB2EB18C7285700E64829 /* Outcome_Hobelar_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A718C7285700E64829 /* Outcome_Hobelar_5.json */; };
-		617DB2EC18C7285700E64829 /* Outcome_Hobelar_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A818C7285700E64829 /* Outcome_Hobelar_6.json */; };
-		617DB2ED18C7285700E64829 /* Outcome_Hobelar_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A918C7285700E64829 /* Outcome_Hobelar_7.json */; };
-		617DB2EE18C7285700E64829 /* Outcome_Hobelar_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */; };
-		617DB2EF18C7285700E64829 /* Outcome_Hobelar_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */; };
-		617DB2F018C7285700E64829 /* Outcome_Longswordsman_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */; };
-		617DB2F118C7285700E64829 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AF18C7285700E64829 /* Action_1.json */; };
-		617DB2F218C7285700E64829 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B018C7285700E64829 /* Action_2.json */; };
-		617DB2F318C7285700E64829 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B118C7285700E64829 /* Action_3.json */; };
-		617DB2F418C7285700E64829 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B218C7285700E64829 /* Action_4.json */; };
-		617DB2F518C7285700E64829 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B318C7285700E64829 /* Action_5.json */; };
-		617DB2F618C7285700E64829 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B418C7285700E64829 /* Action_6.json */; };
-		617DB2F718C7285700E64829 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B518C7285700E64829 /* Action_7.json */; };
-		617DB2F818C7285700E64829 /* Action_Scout_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B718C7285700E64829 /* Action_Scout_1.json */; };
-		617DB2F918C7285700E64829 /* Action_Scout_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B818C7285700E64829 /* Action_Scout_2.json */; };
-		617DB2FA18C7285700E64829 /* Upgrade_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BA18C7285700E64829 /* Upgrade_1.json */; };
-		617DB2FB18C7285700E64829 /* Upgrade_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BB18C7285700E64829 /* Upgrade_2.json */; };
-		617DB2FC18C7285700E64829 /* Upgrade_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BC18C7285700E64829 /* Upgrade_3.json */; };
-		617DB2FE18C7285700E64829 /* Action_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BF18C7285700E64829 /* Action_Viking_1.json */; };
-		617DB2FF18C7285700E64829 /* Action_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C018C7285700E64829 /* Action_Viking_2.json */; };
-		617DB30018C7285700E64829 /* Action_Viking_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C118C7285700E64829 /* Action_Viking_3.json */; };
-		617DB30118C7285700E64829 /* Action_Viking_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C218C7285700E64829 /* Action_Viking_4.json */; };
-		617DB30218C7285700E64829 /* Outcome_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C318C7285700E64829 /* Outcome_Viking_1.json */; };
-		617DB30318C7285700E64829 /* Outcome_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C418C7285700E64829 /* Outcome_Viking_2.json */; };
+		617DB27718C7057300E64829 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27418C7057300E64829 /* Reachability.m */; };
 		617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30418C7295600E64829 /* HKSharedTestBench.m */; };
 		617DB30918C7305C00E64829 /* HKSharedTestFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30818C7305C00E64829 /* HKSharedTestFactory.m */; };
 		617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */; };
@@ -235,6 +322,39 @@
 /* Begin PBXFileReference section */
 		611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKSamuraiTestCases.m; path = Units/HKSamuraiTestCases.m; sourceTree = "<group>"; };
 		613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKHobelarTestCases.m; path = Units/HKHobelarTestCases.m; sourceTree = "<group>"; };
+		09F17B781A77C0F200542F04 /* AD_Lancer_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_1.json; sourceTree = "<group>"; };
+		09F17B791A77C0F200542F04 /* AD_Lancer_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_2.json; sourceTree = "<group>"; };
+		09F17B7A1A77C0F200542F04 /* AD_Lancer_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_3.json; sourceTree = "<group>"; };
+		09F17B7F1A77C10000542F04 /* AD_Weaponsmith_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Weaponsmith_1.json; sourceTree = "<group>"; };
+		09F17B801A77C10000542F04 /* AD_Weaponsmith_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Weaponsmith_2.json; sourceTree = "<group>"; };
+		09F17B811A77C10000542F04 /* Outcome_Improveweapons_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Improveweapons_1.json; sourceTree = "<group>"; };
+		09F17B821A77C10000542F04 /* Turn_ImprovedWeapons_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Turn_ImprovedWeapons_1.json; sourceTree = "<group>"; };
+		09F17B831A77C10000542F04 /* Turn_ImprovedWeapons_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Turn_ImprovedWeapons_2.json; sourceTree = "<group>"; };
+		09F17B841A77C10000542F04 /* Turn_ImprovedWeapons_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Turn_ImprovedWeapons_3.json; sourceTree = "<group>"; };
+		09F17B851A77C10000542F04 /* Turn_ImprovedWeapons_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Turn_ImprovedWeapons_4.json; sourceTree = "<group>"; };
+		09F17B8E1A77C1E800542F04 /* Action_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_1.json; sourceTree = "<group>"; };
+		09F17B8F1A77C1E800542F04 /* Action_10.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_10.json; sourceTree = "<group>"; };
+		09F17B901A77C1E800542F04 /* Action_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_2.json; sourceTree = "<group>"; };
+		09F17B911A77C1E800542F04 /* Action_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_3.json; sourceTree = "<group>"; };
+		09F17B921A77C1E800542F04 /* Action_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_4.json; sourceTree = "<group>"; };
+		09F17B931A77C1E800542F04 /* Action_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_5.json; sourceTree = "<group>"; };
+		09F17B941A77C1E800542F04 /* Action_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_6.json; sourceTree = "<group>"; };
+		09F17B951A77C1E800542F04 /* Action_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_7.json; sourceTree = "<group>"; };
+		09F17B961A77C1E800542F04 /* Action_8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_8.json; sourceTree = "<group>"; };
+		09F17B971A77C1E800542F04 /* Action_9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_9.json; sourceTree = "<group>"; };
+		09F17B981A77C1E800542F04 /* AD_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_1.json; sourceTree = "<group>"; };
+		09F17B991A77C1E800542F04 /* Outcome_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_1.json; sourceTree = "<group>"; };
+		09F17B9A1A77C1E800542F04 /* Outcome_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_2.json; sourceTree = "<group>"; };
+		09F17B9B1A77C1E800542F04 /* Outcome_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_3.json; sourceTree = "<group>"; };
+		09F17B9C1A77C1E800542F04 /* Outcome_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_4.json; sourceTree = "<group>"; };
+		09F17B9D1A77C1E800542F04 /* Turn_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Turn_1.json; sourceTree = "<group>"; };
+		09F17C7D1A77DC1000542F04 /* Action_Pikeman_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_1.json; sourceTree = "<group>"; };
+		09F17C7E1A77DC1000542F04 /* Action_Pikeman_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_2.json; sourceTree = "<group>"; };
+		09F17C7F1A77DC1000542F04 /* Action_Pikeman_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_3.json; sourceTree = "<group>"; };
+		09F17C801A77DC1000542F04 /* Action_Pikeman_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_4.json; sourceTree = "<group>"; };
+		09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_5.json; sourceTree = "<group>"; };
+		09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_6.json; sourceTree = "<group>"; };
+		09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_7.json; sourceTree = "<group>"; };
 		6144879E18B2A7BB00D97AA2 /* HKPlaygroundScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKPlaygroundScene.h; sourceTree = "<group>"; };
 		6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKPlaygroundScene.m; sourceTree = "<group>"; };
 		614487A118B3B01B00D97AA2 /* HKConquerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConquerButton.h; sourceTree = "<group>"; };
@@ -302,19 +422,6 @@
 		617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_3.json; sourceTree = "<group>"; };
 		617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_4.json; sourceTree = "<group>"; };
 		617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_FlagBearer_5.json; sourceTree = "<group>"; };
-		617DB29018C7285700E64829 /* Action_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_1.json; sourceTree = "<group>"; };
-		617DB29118C7285700E64829 /* Action_10.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_10.json; sourceTree = "<group>"; };
-		617DB29218C7285700E64829 /* Action_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_2.json; sourceTree = "<group>"; };
-		617DB29318C7285700E64829 /* Action_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_3.json; sourceTree = "<group>"; };
-		617DB29418C7285700E64829 /* Action_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_4.json; sourceTree = "<group>"; };
-		617DB29518C7285700E64829 /* Action_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_5.json; sourceTree = "<group>"; };
-		617DB29618C7285700E64829 /* Action_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_6.json; sourceTree = "<group>"; };
-		617DB29718C7285700E64829 /* Action_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_7.json; sourceTree = "<group>"; };
-		617DB29818C7285700E64829 /* Action_8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_8.json; sourceTree = "<group>"; };
-		617DB29918C7285700E64829 /* Action_9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_9.json; sourceTree = "<group>"; };
-		617DB29A18C7285700E64829 /* AD_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_1.json; sourceTree = "<group>"; };
-		617DB29B18C7285700E64829 /* Outcome_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_1.json; sourceTree = "<group>"; };
-		617DB29C18C7285700E64829 /* Turn_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Turn_1.json; sourceTree = "<group>"; };
 		617DB29E18C7285700E64829 /* Action_Hobelar_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Hobelar_1.json; sourceTree = "<group>"; };
 		617DB29F18C7285700E64829 /* Action_Hobelar_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Hobelar_2.json; sourceTree = "<group>"; };
 		617DB2A018C7285700E64829 /* Action_Hobelar_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Hobelar_3.json; sourceTree = "<group>"; };
@@ -330,13 +437,6 @@
 		617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_8.json; sourceTree = "<group>"; };
 		617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Hobelar_9.json; sourceTree = "<group>"; };
 		617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Outcome_Longswordsman_1.json; sourceTree = "<group>"; };
-		617DB2AF18C7285700E64829 /* Action_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_1.json; sourceTree = "<group>"; };
-		617DB2B018C7285700E64829 /* Action_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_2.json; sourceTree = "<group>"; };
-		617DB2B118C7285700E64829 /* Action_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_3.json; sourceTree = "<group>"; };
-		617DB2B218C7285700E64829 /* Action_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_4.json; sourceTree = "<group>"; };
-		617DB2B318C7285700E64829 /* Action_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_5.json; sourceTree = "<group>"; };
-		617DB2B418C7285700E64829 /* Action_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_6.json; sourceTree = "<group>"; };
-		617DB2B518C7285700E64829 /* Action_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_7.json; sourceTree = "<group>"; };
 		617DB2B718C7285700E64829 /* Action_Scout_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Scout_1.json; sourceTree = "<group>"; };
 		617DB2B818C7285700E64829 /* Action_Scout_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Scout_2.json; sourceTree = "<group>"; };
 		617DB2BA18C7285700E64829 /* Upgrade_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Upgrade_1.json; sourceTree = "<group>"; };
@@ -614,6 +714,67 @@
 			name = Units;
 			sourceTree = "<group>";
 		};
+		09F17B771A77C0F200542F04 /* Lancer */ = {
+			isa = PBXGroup;
+			children = (
+				09F17B781A77C0F200542F04 /* AD_Lancer_1.json */,
+				09F17B791A77C0F200542F04 /* AD_Lancer_2.json */,
+				09F17B7A1A77C0F200542F04 /* AD_Lancer_3.json */,
+			);
+			path = Lancer;
+			sourceTree = "<group>";
+		};
+		09F17B7E1A77C10000542F04 /* Improve_Weapons */ = {
+			isa = PBXGroup;
+			children = (
+				09F17B7F1A77C10000542F04 /* AD_Weaponsmith_1.json */,
+				09F17B801A77C10000542F04 /* AD_Weaponsmith_2.json */,
+				09F17B811A77C10000542F04 /* Outcome_Improveweapons_1.json */,
+				09F17B821A77C10000542F04 /* Turn_ImprovedWeapons_1.json */,
+				09F17B831A77C10000542F04 /* Turn_ImprovedWeapons_2.json */,
+				09F17B841A77C10000542F04 /* Turn_ImprovedWeapons_3.json */,
+				09F17B851A77C10000542F04 /* Turn_ImprovedWeapons_4.json */,
+			);
+			path = Improve_Weapons;
+			sourceTree = "<group>";
+		};
+		09F17B8D1A77C1E800542F04 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				09F17B8E1A77C1E800542F04 /* Action_1.json */,
+				09F17B8F1A77C1E800542F04 /* Action_10.json */,
+				09F17B901A77C1E800542F04 /* Action_2.json */,
+				09F17B911A77C1E800542F04 /* Action_3.json */,
+				09F17B921A77C1E800542F04 /* Action_4.json */,
+				09F17B931A77C1E800542F04 /* Action_5.json */,
+				09F17B941A77C1E800542F04 /* Action_6.json */,
+				09F17B951A77C1E800542F04 /* Action_7.json */,
+				09F17B961A77C1E800542F04 /* Action_8.json */,
+				09F17B971A77C1E800542F04 /* Action_9.json */,
+				09F17B981A77C1E800542F04 /* AD_1.json */,
+				09F17B991A77C1E800542F04 /* Outcome_1.json */,
+				09F17B9A1A77C1E800542F04 /* Outcome_2.json */,
+				09F17B9B1A77C1E800542F04 /* Outcome_3.json */,
+				09F17B9C1A77C1E800542F04 /* Outcome_4.json */,
+				09F17B9D1A77C1E800542F04 /* Turn_1.json */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		09F17BCF1A77C76F00542F04 /* Pikeman */ = {
+			isa = PBXGroup;
+			children = (
+				09F17C7D1A77DC1000542F04 /* Action_Pikeman_1.json */,
+				09F17C7E1A77DC1000542F04 /* Action_Pikeman_2.json */,
+				09F17C7F1A77DC1000542F04 /* Action_Pikeman_3.json */,
+				09F17C801A77DC1000542F04 /* Action_Pikeman_4.json */,
+				09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */,
+				09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */,
+				09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */,
+			);
+			path = Pikeman;
+			sourceTree = "<group>";
+		};
 		614D42D317B4EB4B00B9889C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -838,10 +999,12 @@
 				617DB28118C7285700E64829 /* Catapult */,
 				617DB28318C7285700E64829 /* Crusader */,
 				617DB28918C7285700E64829 /* Flag Bearer */,
-				617DB28F18C7285700E64829 /* General */,
+				09F17B8D1A77C1E800542F04 /* General */,
 				617DB29D18C7285700E64829 /* Hobelar */,
+				09F17B7E1A77C10000542F04 /* Improve_Weapons */,
+				09F17B771A77C0F200542F04 /* Lancer */,
 				617DB2AC18C7285700E64829 /* Longswordsman */,
-				617DB2AE18C7285700E64829 /* Pikeman */,
+				09F17BCF1A77C76F00542F04 /* Pikeman */,
 				617DB2B618C7285700E64829 /* Scout */,
 				617DB2B918C7285700E64829 /* Upgrades */,
 				617DB2BE18C7285700E64829 /* Viking */,
@@ -901,26 +1064,6 @@
 			path = "Flag Bearer";
 			sourceTree = "<group>";
 		};
-		617DB28F18C7285700E64829 /* General */ = {
-			isa = PBXGroup;
-			children = (
-				617DB29018C7285700E64829 /* Action_1.json */,
-				617DB29118C7285700E64829 /* Action_10.json */,
-				617DB29218C7285700E64829 /* Action_2.json */,
-				617DB29318C7285700E64829 /* Action_3.json */,
-				617DB29418C7285700E64829 /* Action_4.json */,
-				617DB29518C7285700E64829 /* Action_5.json */,
-				617DB29618C7285700E64829 /* Action_6.json */,
-				617DB29718C7285700E64829 /* Action_7.json */,
-				617DB29818C7285700E64829 /* Action_8.json */,
-				617DB29918C7285700E64829 /* Action_9.json */,
-				617DB29A18C7285700E64829 /* AD_1.json */,
-				617DB29B18C7285700E64829 /* Outcome_1.json */,
-				617DB29C18C7285700E64829 /* Turn_1.json */,
-			);
-			path = General;
-			sourceTree = "<group>";
-		};
 		617DB29D18C7285700E64829 /* Hobelar */ = {
 			isa = PBXGroup;
 			children = (
@@ -948,20 +1091,6 @@
 				617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */,
 			);
 			path = Longswordsman;
-			sourceTree = "<group>";
-		};
-		617DB2AE18C7285700E64829 /* Pikeman */ = {
-			isa = PBXGroup;
-			children = (
-				617DB2AF18C7285700E64829 /* Action_1.json */,
-				617DB2B018C7285700E64829 /* Action_2.json */,
-				617DB2B118C7285700E64829 /* Action_3.json */,
-				617DB2B218C7285700E64829 /* Action_4.json */,
-				617DB2B318C7285700E64829 /* Action_5.json */,
-				617DB2B418C7285700E64829 /* Action_6.json */,
-				617DB2B518C7285700E64829 /* Action_7.json */,
-			);
-			path = Pikeman;
 			sourceTree = "<group>";
 		};
 		617DB2B618C7285700E64829 /* Scout */ = {
@@ -1377,90 +1506,103 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09F17C321A77CE2D00542F04 /* Action_Berserker_1.json in Resources */,
+				09F17C331A77CE2D00542F04 /* Action_Berserker_2.json in Resources */,
+				09F17C341A77CE2D00542F04 /* Action_Berserker_3.json in Resources */,
+				09F17C351A77CE2D00542F04 /* AD_Cannon_1.json in Resources */,
+				09F17C361A77CE2D00542F04 /* Outcome_Cannon_1.json in Resources */,
+				09F17C371A77CE2D00542F04 /* AD_Catapult_1.json in Resources */,
+				09F17C381A77CE2D00542F04 /* AD_Crusader_1.json in Resources */,
+				09F17C391A77CE2D00542F04 /* AD_Crusader_2.json in Resources */,
+				09F17C3A1A77CE2D00542F04 /* AD_Crusader_3.json in Resources */,
+				09F17C3B1A77CE2D00542F04 /* AD_Crusader_4.json in Resources */,
+				09F17C3C1A77CE2D00542F04 /* AD_Crusader_5.json in Resources */,
+				09F17C3D1A77CE2D00542F04 /* AD_FlagBearer_1.json in Resources */,
+				09F17C3E1A77CE2D00542F04 /* AD_FlagBearer_2.json in Resources */,
+				09F17C3F1A77CE2D00542F04 /* AD_FlagBearer_3.json in Resources */,
+				09F17C401A77CE2D00542F04 /* AD_FlagBearer_4.json in Resources */,
+				09F17C411A77CE2D00542F04 /* AD_FlagBearer_5.json in Resources */,
+				09F17C421A77CE2D00542F04 /* Action_1.json in Resources */,
+				09F17C431A77CE2D00542F04 /* Action_10.json in Resources */,
+				09F17C441A77CE2D00542F04 /* Action_2.json in Resources */,
+				09F17C451A77CE2D00542F04 /* Action_3.json in Resources */,
+				09F17C461A77CE2D00542F04 /* Action_4.json in Resources */,
+				09F17C471A77CE2D00542F04 /* Action_5.json in Resources */,
+				09F17C481A77CE2D00542F04 /* Action_6.json in Resources */,
+				09F17C491A77CE2D00542F04 /* Action_7.json in Resources */,
+				09F17C4A1A77CE2D00542F04 /* Action_8.json in Resources */,
+				09F17C4B1A77CE2D00542F04 /* Action_9.json in Resources */,
+				09F17C4C1A77CE2D00542F04 /* AD_1.json in Resources */,
+				09F17C4D1A77CE2D00542F04 /* Outcome_1.json in Resources */,
+				09F17C4E1A77CE2D00542F04 /* Outcome_2.json in Resources */,
+				09F17C4F1A77CE2D00542F04 /* Outcome_3.json in Resources */,
+				09F17C501A77CE2D00542F04 /* Outcome_4.json in Resources */,
+				09F17C511A77CE2D00542F04 /* Turn_1.json in Resources */,
+				09F17C521A77CE2D00542F04 /* Action_Hobelar_1.json in Resources */,
+				09F17C531A77CE2D00542F04 /* Action_Hobelar_2.json in Resources */,
+				09F17C541A77CE2D00542F04 /* Action_Hobelar_3.json in Resources */,
+				09F17C551A77CE2D00542F04 /* Action_Hobelar_4.json in Resources */,
+				09F17C561A77CE2D00542F04 /* Outcome_Hobelar_1.json in Resources */,
+				09F17C571A77CE2D00542F04 /* Outcome_Hobelar_10.json in Resources */,
+				09F17C581A77CE2D00542F04 /* Outcome_Hobelar_2.json in Resources */,
+				09F17C591A77CE2D00542F04 /* Outcome_Hobelar_3.json in Resources */,
+				09F17C5A1A77CE2D00542F04 /* Outcome_Hobelar_4.json in Resources */,
+				09F17C5B1A77CE2D00542F04 /* Outcome_Hobelar_5.json in Resources */,
+				09F17C5C1A77CE2D00542F04 /* Outcome_Hobelar_6.json in Resources */,
+				09F17C5D1A77CE2D00542F04 /* Outcome_Hobelar_7.json in Resources */,
+				09F17C5E1A77CE2D00542F04 /* Outcome_Hobelar_8.json in Resources */,
+				09F17C5F1A77CE2D00542F04 /* Outcome_Hobelar_9.json in Resources */,
+				09F17C601A77CE2D00542F04 /* AD_Weaponsmith_1.json in Resources */,
+				09F17C611A77CE2D00542F04 /* AD_Weaponsmith_2.json in Resources */,
+				09F17C621A77CE2D00542F04 /* Outcome_Improveweapons_1.json in Resources */,
+				09F17C631A77CE2D00542F04 /* Turn_ImprovedWeapons_1.json in Resources */,
+				09F17C641A77CE2D00542F04 /* Turn_ImprovedWeapons_2.json in Resources */,
+				09F17C651A77CE2D00542F04 /* Turn_ImprovedWeapons_3.json in Resources */,
+				09F17C661A77CE2D00542F04 /* Turn_ImprovedWeapons_4.json in Resources */,
+				09F17C671A77CE2D00542F04 /* AD_Lancer_1.json in Resources */,
+				09F17C681A77CE2D00542F04 /* AD_Lancer_2.json in Resources */,
+				09F17C691A77CE2D00542F04 /* AD_Lancer_3.json in Resources */,
+				09F17C6A1A77CE2D00542F04 /* Outcome_Longswordsman_1.json in Resources */,
+				09F17C8B1A77DC4600542F04 /* Action_Pikeman_1.json in Resources */,
+				09F17C8C1A77DC4600542F04 /* Action_Pikeman_2.json in Resources */,
+				09F17C8D1A77DC4600542F04 /* Action_Pikeman_3.json in Resources */,
+				09F17C8E1A77DC4600542F04 /* Action_Pikeman_4.json in Resources */,
+				09F17C8F1A77DC4600542F04 /* Action_Pikeman_5.json in Resources */,
+				09F17C901A77DC4600542F04 /* Action_Pikeman_6.json in Resources */,
+				09F17C911A77DC4600542F04 /* Action_Pikeman_7.json in Resources */,
+				09F17C721A77CE2D00542F04 /* Action_Scout_1.json in Resources */,
+				09F17C731A77CE2D00542F04 /* Action_Scout_2.json in Resources */,
+				09F17C741A77CE2D00542F04 /* Upgrade_1.json in Resources */,
+				09F17C751A77CE2D00542F04 /* Upgrade_2.json in Resources */,
+				09F17C761A77CE2D00542F04 /* Upgrade_3.json in Resources */,
+				09F17C771A77CE2D00542F04 /* Action_Viking_1.json in Resources */,
+				09F17C781A77CE2D00542F04 /* Action_Viking_2.json in Resources */,
+				09F17C791A77CE2D00542F04 /* Action_Viking_3.json in Resources */,
+				09F17C7A1A77CE2D00542F04 /* Action_Viking_4.json in Resources */,
+				09F17C7B1A77CE2D00542F04 /* Outcome_Viking_1.json in Resources */,
+				09F17C7C1A77CE2D00542F04 /* Outcome_Viking_2.json in Resources */,
 				61C47E6217C677A100D644D1 /* Graphics.atlas in Resources */,
 				61C47E5517C635F000D644D1 /* fanfare.mp3 in Resources */,
-				617DB2C518C7285700E64829 /* Action_Berserker_1.json in Resources */,
 				615BEA9A17FC6E4800F728E9 /* infantry_defeated_sound.mp3 in Resources */,
 				61C47E5817C635F000D644D1 /* sword_sound.wav in Resources */,
-				617DB2E718C7285700E64829 /* Outcome_Hobelar_10.json in Resources */,
-				617DB2D318C7285700E64829 /* AD_FlagBearer_4.json in Resources */,
-				617DB2D218C7285700E64829 /* AD_FlagBearer_3.json in Resources */,
-				617DB2DF18C7285700E64829 /* AD_1.json in Resources */,
-				617DB2EC18C7285700E64829 /* Outcome_Hobelar_6.json in Resources */,
-				617DB2FA18C7285700E64829 /* Upgrade_1.json in Resources */,
-				617DB2DC18C7285700E64829 /* Action_7.json in Resources */,
 				61705CE21801D6B7001D7E1B /* Vollkorn-Regular.ttf in Resources */,
 				61C47E5717C635F000D644D1 /* pageflip.mp3 in Resources */,
-				617DB2EE18C7285700E64829 /* Outcome_Hobelar_8.json in Resources */,
-				617DB2D818C7285700E64829 /* Action_3.json in Resources */,
-				617DB2FE18C7285700E64829 /* Action_Viking_1.json in Resources */,
-				617DB2D418C7285700E64829 /* AD_FlagBearer_5.json in Resources */,
 				61A6F7AE18BBDFA40069AF61 /* Archer.atlas in Resources */,
-				617DB2DB18C7285700E64829 /* Action_6.json in Resources */,
 				61FD539817B4D496009BED1A /* Images.xcassets in Resources */,
-				617DB2D018C7285700E64829 /* AD_FlagBearer_1.json in Resources */,
-				617DB2E918C7285700E64829 /* Outcome_Hobelar_3.json in Resources */,
-				617DB2F918C7285700E64829 /* Action_Scout_2.json in Resources */,
 				614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */,
-				617DB2DD18C7285700E64829 /* Action_8.json in Resources */,
-				617DB2CE18C7285700E64829 /* AD_Crusader_4.json in Resources */,
-				617DB2FC18C7285700E64829 /* Upgrade_3.json in Resources */,
-				617DB2D918C7285700E64829 /* Action_4.json in Resources */,
-				617DB2D518C7285700E64829 /* Action_1.json in Resources */,
-				617DB2C618C7285700E64829 /* Action_Berserker_2.json in Resources */,
-				617DB2DA18C7285700E64829 /* Action_5.json in Resources */,
 				614D42DE17B512A200B9889C /* Flame.sks in Resources */,
-				617DB2CB18C7285700E64829 /* AD_Crusader_1.json in Resources */,
-				617DB2F718C7285700E64829 /* Action_7.json in Resources */,
 				61FD536B17B4CDAC009BED1A /* Main_iPad.storyboard in Resources */,
-				617DB30118C7285700E64829 /* Action_Viking_4.json in Resources */,
-				617DB2EA18C7285700E64829 /* Outcome_Hobelar_4.json in Resources */,
-				617DB2F518C7285700E64829 /* Action_5.json in Resources */,
 				614D42DF17B512A200B9889C /* spark.png in Resources */,
-				617DB2DE18C7285700E64829 /* Action_9.json in Resources */,
-				617DB2C718C7285700E64829 /* Action_Berserker_3.json in Resources */,
-				617DB2FF18C7285700E64829 /* Action_Viking_2.json in Resources */,
-				617DB2ED18C7285700E64829 /* Outcome_Hobelar_7.json in Resources */,
-				617DB2E018C7285700E64829 /* Outcome_1.json in Resources */,
-				617DB2C818C7285700E64829 /* AD_Cannon_1.json in Resources */,
-				617DB2F118C7285700E64829 /* Action_1.json in Resources */,
-				617DB2EF18C7285700E64829 /* Outcome_Hobelar_9.json in Resources */,
-				617DB2E118C7285700E64829 /* Turn_1.json in Resources */,
-				617DB2D118C7285700E64829 /* AD_FlagBearer_2.json in Resources */,
-				617DB2F418C7285700E64829 /* Action_4.json in Resources */,
-				617DB2F018C7285700E64829 /* Outcome_Longswordsman_1.json in Resources */,
-				617DB2CA18C7285700E64829 /* AD_Catapult_1.json in Resources */,
-				617DB2EB18C7285700E64829 /* Outcome_Hobelar_5.json in Resources */,
-				617DB2E418C7285700E64829 /* Action_Hobelar_3.json in Resources */,
-				617DB2F618C7285700E64829 /* Action_6.json in Resources */,
-				617DB2E818C7285700E64829 /* Outcome_Hobelar_2.json in Resources */,
-				617DB2E218C7285700E64829 /* Action_Hobelar_1.json in Resources */,
 				61A6F7B018BBE15D0069AF61 /* Cavalry.atlas in Resources */,
-				617DB2CF18C7285700E64829 /* AD_Crusader_5.json in Resources */,
-				617DB2CD18C7285700E64829 /* AD_Crusader_3.json in Resources */,
-				617DB2D618C7285700E64829 /* Action_10.json in Resources */,
-				617DB2F218C7285700E64829 /* Action_2.json in Resources */,
 				61C47E5217C635F000D644D1 /* bow_fired.wav in Resources */,
-				617DB2F818C7285700E64829 /* Action_Scout_1.json in Resources */,
-				617DB2CC18C7285700E64829 /* AD_Crusader_2.json in Resources */,
 				61FD536817B4CDAC009BED1A /* Main_iPhone.storyboard in Resources */,
-				617DB30218C7285700E64829 /* Outcome_Viking_1.json in Resources */,
 				61FD535F17B4CDAC009BED1A /* InfoPlist.strings in Resources */,
-				617DB2E318C7285700E64829 /* Action_Hobelar_2.json in Resources */,
-				617DB30318C7285700E64829 /* Outcome_Viking_2.json in Resources */,
-				617DB2FB18C7285700E64829 /* Upgrade_2.json in Resources */,
 				61C47E6017C6385C00D644D1 /* Cards.atlas in Resources */,
 				61C47E5317C635F000D644D1 /* catapult_attacksound.wav in Resources */,
-				617DB2F318C7285700E64829 /* Action_3.json in Resources */,
-				617DB2D718C7285700E64829 /* Action_2.json in Resources */,
 				61705CE11801D6B7001D7E1B /* Vollkorn-Bold.ttf in Resources */,
 				61C47E5617C635F000D644D1 /* defeat.mp3 in Resources */,
-				617DB2E518C7285700E64829 /* Action_Hobelar_4.json in Resources */,
-				617DB30018C7285700E64829 /* Action_Viking_3.json in Resources */,
 				61C47D7017BEA07900D644D1 /* buttonclick.wav in Resources */,
 				61C47E5417C635F000D644D1 /* Elephant.mp3 in Resources */,
-				617DB2E618C7285700E64829 /* Outcome_Hobelar_1.json in Resources */,
-				617DB2C918C7285700E64829 /* Outcome_Cannon_1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1468,6 +1610,81 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09F17BE71A77CD3300542F04 /* Action_Berserker_1.json in Resources */,
+				09F17BE81A77CD3300542F04 /* Action_Berserker_2.json in Resources */,
+				09F17BE91A77CD3300542F04 /* Action_Berserker_3.json in Resources */,
+				09F17BEA1A77CD3300542F04 /* AD_Cannon_1.json in Resources */,
+				09F17C871A77DC1000542F04 /* Action_Pikeman_4.json in Resources */,
+				09F17BEB1A77CD3300542F04 /* Outcome_Cannon_1.json in Resources */,
+				09F17BEC1A77CD3300542F04 /* AD_Catapult_1.json in Resources */,
+				09F17BED1A77CD3300542F04 /* AD_Crusader_1.json in Resources */,
+				09F17BEE1A77CD3300542F04 /* AD_Crusader_2.json in Resources */,
+				09F17BEF1A77CD3300542F04 /* AD_Crusader_3.json in Resources */,
+				09F17BF01A77CD3300542F04 /* AD_Crusader_4.json in Resources */,
+				09F17BF11A77CD3300542F04 /* AD_Crusader_5.json in Resources */,
+				09F17BF21A77CD3300542F04 /* AD_FlagBearer_1.json in Resources */,
+				09F17BF31A77CD3300542F04 /* AD_FlagBearer_2.json in Resources */,
+				09F17C841A77DC1000542F04 /* Action_Pikeman_1.json in Resources */,
+				09F17BF41A77CD3300542F04 /* AD_FlagBearer_3.json in Resources */,
+				09F17BF51A77CD3300542F04 /* AD_FlagBearer_4.json in Resources */,
+				09F17C851A77DC1000542F04 /* Action_Pikeman_2.json in Resources */,
+				09F17BF61A77CD3300542F04 /* AD_FlagBearer_5.json in Resources */,
+				09F17BF71A77CD3300542F04 /* Action_1.json in Resources */,
+				09F17BF81A77CD3300542F04 /* Action_10.json in Resources */,
+				09F17C881A77DC1000542F04 /* Action_Pikeman_5.json in Resources */,
+				09F17BF91A77CD3300542F04 /* Action_2.json in Resources */,
+				09F17BFA1A77CD3300542F04 /* Action_3.json in Resources */,
+				09F17BFB1A77CD3300542F04 /* Action_4.json in Resources */,
+				09F17BFC1A77CD3400542F04 /* Action_5.json in Resources */,
+				09F17BFD1A77CD3400542F04 /* Action_6.json in Resources */,
+				09F17BFE1A77CD3400542F04 /* Action_7.json in Resources */,
+				09F17BFF1A77CD3400542F04 /* Action_8.json in Resources */,
+				09F17C001A77CD3400542F04 /* Action_9.json in Resources */,
+				09F17C011A77CD3400542F04 /* AD_1.json in Resources */,
+				09F17C021A77CD3400542F04 /* Outcome_1.json in Resources */,
+				09F17C031A77CD3400542F04 /* Outcome_2.json in Resources */,
+				09F17C041A77CD3400542F04 /* Outcome_3.json in Resources */,
+				09F17C051A77CD3400542F04 /* Outcome_4.json in Resources */,
+				09F17C061A77CD3400542F04 /* Turn_1.json in Resources */,
+				09F17C071A77CD3400542F04 /* Action_Hobelar_1.json in Resources */,
+				09F17C081A77CD3400542F04 /* Action_Hobelar_2.json in Resources */,
+				09F17C091A77CD3400542F04 /* Action_Hobelar_3.json in Resources */,
+				09F17C0A1A77CD3400542F04 /* Action_Hobelar_4.json in Resources */,
+				09F17C0B1A77CD3400542F04 /* Outcome_Hobelar_1.json in Resources */,
+				09F17C0C1A77CD3400542F04 /* Outcome_Hobelar_10.json in Resources */,
+				09F17C0D1A77CD3400542F04 /* Outcome_Hobelar_2.json in Resources */,
+				09F17C0E1A77CD3400542F04 /* Outcome_Hobelar_3.json in Resources */,
+				09F17C0F1A77CD3400542F04 /* Outcome_Hobelar_4.json in Resources */,
+				09F17C101A77CD3400542F04 /* Outcome_Hobelar_5.json in Resources */,
+				09F17C111A77CD3400542F04 /* Outcome_Hobelar_6.json in Resources */,
+				09F17C121A77CD3400542F04 /* Outcome_Hobelar_7.json in Resources */,
+				09F17C891A77DC1000542F04 /* Action_Pikeman_6.json in Resources */,
+				09F17C8A1A77DC1000542F04 /* Action_Pikeman_7.json in Resources */,
+				09F17C131A77CD3400542F04 /* Outcome_Hobelar_8.json in Resources */,
+				09F17C141A77CD3400542F04 /* Outcome_Hobelar_9.json in Resources */,
+				09F17C151A77CD3400542F04 /* AD_Weaponsmith_1.json in Resources */,
+				09F17C161A77CD3400542F04 /* AD_Weaponsmith_2.json in Resources */,
+				09F17C171A77CD3400542F04 /* Outcome_Improveweapons_1.json in Resources */,
+				09F17C181A77CD3400542F04 /* Turn_ImprovedWeapons_1.json in Resources */,
+				09F17C191A77CD3400542F04 /* Turn_ImprovedWeapons_2.json in Resources */,
+				09F17C1A1A77CD3400542F04 /* Turn_ImprovedWeapons_3.json in Resources */,
+				09F17C1B1A77CD3400542F04 /* Turn_ImprovedWeapons_4.json in Resources */,
+				09F17C1C1A77CD3400542F04 /* AD_Lancer_1.json in Resources */,
+				09F17C1D1A77CD3400542F04 /* AD_Lancer_2.json in Resources */,
+				09F17C861A77DC1000542F04 /* Action_Pikeman_3.json in Resources */,
+				09F17C1E1A77CD3400542F04 /* AD_Lancer_3.json in Resources */,
+				09F17C1F1A77CD3400542F04 /* Outcome_Longswordsman_1.json in Resources */,
+				09F17C271A77CD3400542F04 /* Action_Scout_1.json in Resources */,
+				09F17C281A77CD3400542F04 /* Action_Scout_2.json in Resources */,
+				09F17C291A77CD3400542F04 /* Upgrade_1.json in Resources */,
+				09F17C2A1A77CD3400542F04 /* Upgrade_2.json in Resources */,
+				09F17C2B1A77CD3400542F04 /* Upgrade_3.json in Resources */,
+				09F17C2C1A77CD3400542F04 /* Action_Viking_1.json in Resources */,
+				09F17C2D1A77CD3400542F04 /* Action_Viking_2.json in Resources */,
+				09F17C2E1A77CD3400542F04 /* Action_Viking_3.json in Resources */,
+				09F17C2F1A77CD3400542F04 /* Action_Viking_4.json in Resources */,
+				09F17C301A77CD3400542F04 /* Outcome_Viking_1.json in Resources */,
+				09F17C311A77CD3400542F04 /* Outcome_Viking_2.json in Resources */,
 				61FD538617B4CDAC009BED1A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
