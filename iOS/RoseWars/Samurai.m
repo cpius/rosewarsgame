@@ -11,7 +11,6 @@
 
 @interface Samurai()
 
-@property (nonatomic, readwrite) NSInteger numberOfAttacksUsed;
 @property (nonatomic, readwrite) BOOL hasPerformedMove;
 
 @end
@@ -38,6 +37,9 @@
         self.attackActionCost = 1;
         self.hitpoints = 1;
         
+        self.unitHasExtraAction = YES;
+        self.extraActionType = kExtraActionTypeAttack;
+        
         self.attackSound = @"sword_sound.wav";
         self.defeatSound = @"infantry_defeated_sound.mp3";
 
@@ -59,13 +61,12 @@
     
     [super resetAfterNewRound];
     
-    self.numberOfAttacksUsed = 0;
     self.attackActionCost = 1;
     self.hasPerformedMove = NO;
+    self.hasPerformedAttackThisRound = NO;
 }
 
 - (BOOL)allowAction:(Action *)action allLocations:(NSDictionary *)allLocations {
-    
     BOOL allowAction = [super allowAction:action allLocations:allLocations];
 
     if (action.actionType == kActionTypeMelee) {
@@ -73,11 +74,7 @@
         MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
         if (action.path != nil && action.path.count == 1) {
             
-            if (_numberOfAttacksUsed == 0) {
-                allowAction = YES;
-            }
-            
-            if (_numberOfAttacksUsed == 1 && meleeAction.meleeAttackType == kMeleeAttackTypeNormal) {
+            if (self.hasPerformedAttackThisRound && meleeAction.meleeAttackType == kMeleeAttackTypeNormal) {
                 allowAction = YES;
             }
         }
@@ -87,14 +84,18 @@
 }
 
 - (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount {
-    
     BOOL canPerformAction = [super canPerformActionOfType:actionType withRemainingActionCount:remainingActionCount];
     
-    if (actionType == kActionTypeMelee && _numberOfAttacksUsed < 2) {
-        canPerformAction = YES;
+    if (actionType == kActionTypeMelee) {
+        if (self.extraActionConsumed) {
+            canPerformAction = NO;
+        }
+        else {
+            canPerformAction = YES;
+        }
     }
     
-    if (_hasPerformedMove) {
+    if (self.hasPerformedMove) {
         canPerformAction = NO;
     }
     
@@ -102,29 +103,23 @@
 }
 
 - (void)didPerformedAction:(Action *)action {
+    if (action.isAttack) {
+        MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
+        
+        if (self.hasPerformedAttackThisRound) {
+            self.extraActionConsumed = YES;
+        }
+        else {
+            if (IsAttackSuccessful(meleeAction.battleResult.combatOutcome) && meleeAction.meleeAttackType == kMeleeAttackTypeConquer) {
+                [self consumeAllMoves];
+            }
+        }
+    }
     
     [super didPerformedAction:action];
     
     if (action.isMove) {
-        _hasPerformedMove = YES;
-    }
-    
-    if (action.isAttack) {
-        
-        MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
-        
-        if (_numberOfAttacksUsed < 2) {
-            _numberOfAttacksUsed++;
-            self.hasPerformedAttackThisRound = NO;
-            self.attackActionCost = 0;
-            
-            if (IsAttackSuccessful(meleeAction.battleResult.combatOutcome) && meleeAction.meleeAttackType == kMeleeAttackTypeConquer) {
-                [self consumeAllMoves];
-            }
-            else {
-                self.movesConsumed = 0;
-            }
-        }
+        self.hasPerformedMove = YES;
     }
 }
 

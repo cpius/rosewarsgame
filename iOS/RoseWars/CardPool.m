@@ -32,27 +32,28 @@
 
 @interface CardPool()
 
--(NSArray*)shuffle:(NSArray *)array;
+@property (nonatomic, readonly) GameManager *gamemanager;
 
+-(NSArray*)shuffle:(NSArray *)array;
 
 @end
 
 @implementation CardPool
 
-- (id)init {
+- (id)initWithGameManager:(GameManager*)gamemanager {
     
     self = [super init];
     
     if (self) {
-    
+        _gamemanager = gamemanager;
     }
     
     return self;
 }
 
-+ (Card *)createCardOfName:(UnitName)unitName withCardColor:(CardColors)cardColor {
++ (id)createCardOfName:(UnitName)unitName withCardColor:(CardColors)cardColor gamemanager:(GameManager*)gamemanager {
 
-    Card *createdCard;
+    id<HKCardProtocol> createdCard;
     
     switch (unitName) {
         case kArcher:
@@ -122,6 +123,7 @@
             NSLog(@"Unknown cardname: %d", unitName);
     }
     
+    createdCard.gamemanager = gamemanager;
     createdCard.cardColor = cardColor;
     
     return createdCard;
@@ -142,17 +144,17 @@
     return [NSArray arrayWithArray:tempArray];
 }
 
-- (Card *)drawCardOfCardType:(CardType)cardType cardColor:(CardColors)cardColor {
+- (id<HKCardProtocol>)drawCardOfCardType:(CardType)cardType cardColor:(CardColors)cardColor {
     
-    Card *drawnCard;
+    id<HKCardProtocol> drawnCard;
     
     if (cardType == kCardTypeBasicUnit) {
         UnitName unitName = (arc4random() % 6);
-        drawnCard = [CardPool createCardOfName:unitName withCardColor:cardColor];
+        drawnCard = [CardPool createCardOfName:unitName withCardColor:cardColor gamemanager:self.gamemanager];
     }
     else if (cardType == kCardTypeSpecialUnit) {
         UnitName unitName = (arc4random() % 15) + 6;
-        drawnCard = [CardPool createCardOfName:unitName withCardColor:cardColor];
+        drawnCard = [CardPool createCardOfName:unitName withCardColor:cardColor gamemanager:self.gamemanager];
     }
     
     return drawnCard;

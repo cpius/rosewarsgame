@@ -8,6 +8,11 @@
 
 #import "AbilityAction.h"
 #import "AbilityFactory.h"
+#import "GameManager.h"
+
+@interface AbilityAction()
+
+@end
 
 @implementation AbilityAction
 
@@ -15,12 +20,14 @@
 @synthesize startLocation = _startLocation;
 @synthesize availableAbilities = _availableAbilities;
 @synthesize battleReport = _battleReport;
+@synthesize gamemanager = _gamemanager;
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card targetCard:(Card *)targetCard {
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card targetCard:(Card *)targetCard {
     
-    self = [super initWithPath:path andCardInAction:card enemyCard:targetCard];
+    self = [super initWithGameManager:gamemanager path:path andCardInAction:card enemyCard:targetCard];
     
     if (self) {
+        _gamemanager = gamemanager;
         _actionType = kActionTypeAbility;
         _startLocation = card.cardLocation;
         
@@ -49,7 +56,7 @@
     
     _battleReport = [BattleReport battleReportWithAction:self];
 
-    [[GameManager sharedManager] willUseAction:self];
+    [self.gamemanager willUseAction:self];
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
@@ -57,10 +64,10 @@
         _abilityUsed = [AbilityFactory addAbilityOfType:(AbilityTypes)[_availableAbilities[0] integerValue] onCard:self.enemyCard];
     }
         
-    [[GameManager sharedManager] actionUsed:self];
+    [self.gamemanager actionUsed:self];
     [self.cardInAction didPerformedAction:self];
     
-    [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
+    [self.gamemanager.currentGame addBattleReport:_battleReport forAction:self];
     
     [self.delegate afterPerformAction:self];
     

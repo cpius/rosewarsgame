@@ -8,6 +8,7 @@
 #import "BaseBonus.h"
 
 @class RangeAttribute;
+@class GameManager;
 @interface TimedBonus : BaseBonus {
     
     RangeAttribute *_parent;
@@ -15,10 +16,11 @@
     NSUInteger bonusValueStartedInTurn;
 }
 
-@property (nonatomic, readonly) NSUInteger numberOfRounds;
+@property (nonatomic, readonly) GameManager *gamemanager;
+@property (nonatomic, readonly) NSUInteger numberOfTurns;
 
-- (id)initWithValue:(NSUInteger)bonusValue;
-- (id)initWithValue:(NSUInteger)bonusValue forNumberOfTurns:(NSUInteger)numberOfTurns;
+- (id)initWithValue:(NSUInteger)bonusValue gamemanager:(GameManager*)gamemanager;
+- (id)initWithValue:(NSUInteger)bonusValue forNumberOfTurns:(NSUInteger)numberOfTurns gamemanager:(GameManager*)gamemanager;
 
 - (void)startTimedBonus:(RangeAttribute*)parent;
 

@@ -34,28 +34,26 @@
     return self;
 }
 
-+ (GameManager*)sharedManager {
-    
-    static GameManager* _instance = nil;
 
-    @synchronized(self) {
-        
-        if (_instance == nil) {
-            _instance = [[GameManager alloc] init];
-        }
-    }
+
++ (GameManager*)sharedManager {
+    static GameManager* instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[GameManager alloc] init];
+    });
     
-    return _instance;
+    return instance;
 }
 
 - (void)continueExistingGame {
-    
+    _currentGame = nil;
     _currentGame = [[Game alloc] init];
     _currentGame.gametype = kGameTypeMultiPlayer;
 }
 
 - (void)startNewGameOfType:(GameTypes)gameType {
-    
+    _currentGame = nil;
     _currentGame = [[Game alloc] init];
     _currentGame.gametype = gameType;
     _currentGame.state = kGameStateInitialState;
@@ -67,19 +65,19 @@
 
     // Only 1 action in first round
     _currentGame.numberOfAvailableActions = 1;
-    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:NUMBER_OF_BASICUNITS andSpecialType:NUMBER_OF_SPECIALUNITS cardColor:_currentGame.myColor];
+    _currentGame.myDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:NUMBER_OF_BASICUNITS andSpecialType:NUMBER_OF_SPECIALUNITS cardColor:CardColorForPlayerWithColor(_currentGame.myColor) gamemanager:self];
     
     if (gameType == kGameTypeMultiPlayer) {
         
-        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:NUMBER_OF_BASICUNITS andSpecialType:NUMBER_OF_SPECIALUNITS cardColor:_currentGame.enemyColor];
+        _currentGame.enemyDeck = [_deckStrategy generateNewDeckWithNumberOfBasicType:NUMBER_OF_BASICUNITS andSpecialType:NUMBER_OF_SPECIALUNITS cardColor:CardColorForPlayerWithColor(_currentGame.enemyColor) gamemanager:self];
     }
     
     if (gameType == kGameTypeSinglePlayer) {
         
-        _enemyPlayer = [[AIPlayer alloc] initWithStrategy:[[AIStrategyAdvancer alloc] init]];
+        _enemyPlayer = [[AIPlayer alloc] initWithStrategy:[[AIStrategyAdvancer alloc] init] gameManager:self];
         _enemyPlayer.deckStrategy = [MinimumRequirementDeckStrategy strategy];
         
-        _currentGame.enemyDeck = [_enemyPlayer.deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:_currentGame.enemyColor];
+        _currentGame.enemyDeck = [_enemyPlayer.deckStrategy generateNewDeckWithNumberOfBasicType:6 andSpecialType:1 cardColor:CardColorForPlayerWithColor(_currentGame.enemyColor) gamemanager:self];
         [_enemyPlayer placeCardsInDeck:_currentGame.enemyDeck];
     }
 }
@@ -132,7 +130,7 @@
         }
     }
     else {
-        NSLog(@"Card: %@ has lost in combat...Remaining hitpoints: %d", card, card.hitpoints);
+        NSLog(@"Card: %@ has lost in combat...Remaining hitpoints: %lu", card, (unsigned long)card.hitpoints);
     }
 }
 
@@ -198,11 +196,12 @@
 - (void)endTurn {
 
     _currentGame.turnCounter++;
+    NSLog(@"Turn counter increased to %ld", _currentGame.turnCounter);
     
     if ((_currentGame.turnCounter % 2) == 0) {
         _currentGame.currentRound++;
         
-        NSLog(@"Round increased to %d", _currentGame.currentRound);
+        NSLog(@"Round increased to %lu", (unsigned long)_currentGame.currentRound);
     }
 
     // Reset actioncount
@@ -229,7 +228,7 @@
     if ((_currentGame.turnCounter % 2) == 0) {
         _currentGame.currentRound++;
         
-        NSLog(@"Round increased to %d", _currentGame.currentRound);
+        NSLog(@"Round increased to %lu", (unsigned long)_currentGame.currentRound);
     }
 
     _currentGame.currentPlayersTurn = !_currentGame.currentPlayersTurn;

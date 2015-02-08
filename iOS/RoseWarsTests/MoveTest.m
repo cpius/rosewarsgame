@@ -16,6 +16,13 @@
 #import "TestHelper.h"
 #import "PathFinder.h"
 #import "PathFinderStrategyFactory.h"
+#import "CardPool.h"
+
+@interface MoveTest()
+
+@property (nonatomic) GameManager *gamemanager;
+
+@end
 
 @implementation MoveTest
 
@@ -23,63 +30,55 @@
 {
     [super setUp];
     
-    _manager = [GameManager sharedManager];
+    self.gamemanager = [[GameManager alloc] init];
 }
 
 - (void)testUnitShouldBeBlockedByZocUsingMoveStrategy {
     
-    LightCavalry *attacker = [LightCavalry card];
-    Pikeman *defender1 = [Pikeman card];
-    Pikeman *defender2 = [Pikeman card];
-    Archer *defender3 = [Archer card];
+    LightCavalry *attacker = [CardPool createCardOfName:kLightCavalry withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Pikeman *defender2 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *defender3 = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     attacker.cardLocation = [GridLocation gridLocationWithRow:4 column:1];
-    attacker.cardColor = kCardColorGreen;
     defender1.cardLocation = [GridLocation gridLocationWithRow:2 column:1];
-    defender1.cardColor = kCardColorRed;
     defender2.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    defender2.cardColor = kCardColorRed;
     defender3.cardLocation = [GridLocation gridLocationWithRow:4 column:2];
-    defender3.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender1, defender2, defender3, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:_manager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertNil(path, @"Shouldn't be able to move to pikeman because of ZOC");
 }
 
 - (void)testUnitShouldBeBlockedByZocUsingMeleeStrategy {
     
-    LightCavalry *attacker = [LightCavalry card];
-    Pikeman *defender1 = [Pikeman card];
-    Pikeman *defender2 = [Pikeman card];
-    Archer *defender3 = [Archer card];
+    LightCavalry *attacker = [CardPool createCardOfName:kLightCavalry withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Pikeman *defender2 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *defender3 = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     attacker.cardLocation = [GridLocation gridLocationWithRow:4 column:1];
-    attacker.cardColor = kCardColorGreen;
     defender1.cardLocation = [GridLocation gridLocationWithRow:2 column:1];
-    defender1.cardColor = kCardColorRed;
     defender2.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    defender2.cardColor = kCardColorRed;
     defender3.cardLocation = [GridLocation gridLocationWithRow:4 column:2];
-    defender3.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender1, defender2, defender3, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackWithConquerStrategy] allLocations:_manager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackWithConquerStrategy] allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertNil(path, @"Shouldn't be able to move to pikeman because of ZOC");
     

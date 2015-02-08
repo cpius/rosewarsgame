@@ -17,8 +17,8 @@
 @property (nonatomic, readonly) GridLocation *gridLocationForConquer;
 
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard;
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard meleeAttackType:(MeleeAttackTypes)meleeAttackType;
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard;
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard meleeAttackType:(MeleeAttackTypes)meleeAttackType;
 
 - (BOOL)unitCanConquerEnemyLocation;
 - (void)conquerEnemyLocationWithCompletion:(void (^)())completion;

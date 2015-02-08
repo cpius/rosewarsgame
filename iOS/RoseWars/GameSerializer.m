@@ -27,6 +27,8 @@
 
 @interface GameSerializer()
 
+@property (nonatomic, readonly) GameManager *gamemanager;
+
 - (NSArray*)serializeCardData:(Game*)game;
 
 - (NSMutableDictionary*)serializeBattleReport:(BattleReport*)battleReport;
@@ -42,6 +44,15 @@
 @end
 
 @implementation GameSerializer
+
+- (instancetype)initWithGameManager:(GameManager*)gamemanager
+{
+    self = [super init];
+    if (self) {
+        _gamemanager = gamemanager;
+    }
+    return self;
+}
 
 - (NSArray *)serializeCardData:(Game *)game {
     
@@ -207,7 +218,7 @@
             for (NSDictionary *carddata in cards) {
                 
                 CardColors cardColor = [[carddata objectForKey:@"cardcolor"] integerValue];
-                Card *card = [CardPool createCardOfName:[[carddata objectForKey:@"unitname"] integerValue] withCardColor:cardColor];
+                Card *card = [CardPool createCardOfName:[[carddata objectForKey:@"unitname"] integerValue] withCardColor:cardColor gamemanager:self.gamemanager];
                 
                 card.cardLocation = [GridLocation gridLocationWithRow:[[carddata objectForKey:@"row"] integerValue]
                                                                column:[[carddata objectForKey:@"column"] integerValue]];
@@ -292,7 +303,7 @@
     
     if (actionType == kActionTypeMove) {
         
-        action = [[MoveAction alloc] initWithPath:pathTaken andCardInAction:cardInAction
+        action = [[MoveAction alloc] initWithGameManager:self.gamemanager path:pathTaken andCardInAction:cardInAction
                                                                   enemyCard:enemyCard];
     }
     
@@ -303,12 +314,12 @@
         
         [self battleStrategyForCard:cardInAction enemyCard:enemyCard fromBattleResult:battleresult];
         
-        action = [[RangedAttackAction alloc ] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
+        action = [[RangedAttackAction alloc ] initWithGameManager:self.gamemanager path:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
     }
     
     if (actionType == kActionTypeAbility) {
                 
-        action = [[AbilityAction alloc] initWithPath:pathTaken andCardInAction:cardInAction targetCard:enemyCard];
+        action = [[AbilityAction alloc] initWithGameManager:self.gamemanager path:pathTaken andCardInAction:cardInAction targetCard:enemyCard];
     }
     
     if (actionType == kActionTypeMelee) {
@@ -316,7 +327,7 @@
         BattleResult *battleresult = [[BattleResult alloc] initWithAttacker:cardInAction defender:enemyCard];
         [battleresult fromDictionary:[dictionary objectForKey:@"primarybattle"]];
         
-        MeleeAttackPlaybackAction *meleeAction = [[MeleeAttackPlaybackAction alloc] initWithPath:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
+        MeleeAttackPlaybackAction *meleeAction = [[MeleeAttackPlaybackAction alloc] initWithGameManager:self.gamemanager path:pathTaken andCardInAction:cardInAction enemyCard:enemyCard];
 
         meleeAction.meleeAttackType = battleresult.meleeAttackType;
         [self battleStrategyForCard:cardInAction enemyCard:enemyCard fromBattleResult:battleresult];

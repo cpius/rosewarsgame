@@ -24,6 +24,13 @@
 #import "GameBoardMockup.h"
 #import "Diplomat.h"
 #import "AbilityAction.h"
+#import "CardPool.h"
+
+@interface GameCenterTest()
+
+@property (nonatomic) GameManager *gamemanager;
+
+@end
 
 @implementation GameCenterTest
 
@@ -31,8 +38,9 @@
 {
     [super setUp];
     
-    [[GameManager sharedManager] startNewGameOfType:kGameTypeSinglePlayer];
-    [GameManager sharedManager].currentGame.localUserId = @"localuser";
+    self.gamemanager = [[GameManager alloc] init];
+    [self.gamemanager startNewGameOfType:kGameTypeSinglePlayer];
+    self.gamemanager.currentGame.localUserId = @"localuser";
 }
 
 - (void)tearDown
@@ -44,136 +52,66 @@
 
 - (void)testTimedAbilityPersistsThroughEndTurn {
     
-    Pikeman *attacker = [Pikeman card];
-    Pikeman *defender1 = [Pikeman card];
+    Pikeman *attacker = [CardPool createCardOfName:kPikeman withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    attacker.cardColor = kCardColorGreen;
-    
     defender1.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
-    defender1.cardColor = kCardColorRed;
     
-    [GameManager sharedManager].currentGame.myColor = kPlayerGreen;
-    [GameManager sharedManager].currentGame = [TestHelper setupGame:[GameManager sharedManager].currentGame
+    self.gamemanager.currentGame.myColor = kPlayerGreen;
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender1, nil]];
     
-    [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
+    self.gamemanager.currentGame.state = kGameStateGameStarted;
     
     [AbilityFactory addAbilityOfType:kAbilityImprovedWeapons onCard:attacker];
     
-    [[GameManager sharedManager] endTurn];
+    [self.gamemanager endTurn];
 
-    NSData *data = [[GameManager sharedManager].currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
+    NSData *data = [self.gamemanager.currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
     
     XCTAssertTrue([attacker.attack calculateValue].lowerValue == 2, @"Pikeman attack should be 2-6");
     
-    [[GameManager sharedManager].currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
+    [self.gamemanager.currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
     
-    attacker = [[GameManager sharedManager].currentGame.myDeck.cards objectAtIndex:0];
+    attacker = [self.gamemanager.currentGame.myDeck.cards objectAtIndex:0];
     
     XCTAssertTrue([attacker.attack calculateValue].lowerValue == 2, @"Pikeman attack should still be 2-6");
 
-    [[GameManager sharedManager] endTurn];
+    [self.gamemanager endTurn];
 
-    data = [[GameManager sharedManager].currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
+    data = [self.gamemanager.currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
 
     
-    [[GameManager sharedManager].currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
+    [self.gamemanager.currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
 
-    attacker = [[GameManager sharedManager].currentGame.myDeck.cards objectAtIndex:0];
+    attacker = [self.gamemanager.currentGame.myDeck.cards objectAtIndex:0];
 
     XCTAssertTrue([attacker.attack calculateValue].lowerValue == 5, @"Pikeman attack should be 5-6");
 }
 
-- (void)testReplayOfSamuraiSecondaryAttacks {
-    
-    Samurai *samurai = [Samurai card];
-    Pikeman *defender1 = [Pikeman card];
-    
-    samurai.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    samurai.cardColor = kCardColorGreen;
-    
-    defender1.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    defender1.cardColor = kCardColorRed;
-    
-    [GameManager sharedManager].currentGame.myColor = kPlayerGreen;
-    [GameManager sharedManager].currentGame = [TestHelper setupGame:[GameManager sharedManager].currentGame
-                                                   withPlayer1Units:[NSArray arrayWithObject:samurai]
-                                                       player2Units:[NSArray arrayWithObject:defender1]];
-    
-    [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
-    
-    StandardBattleStrategy *battleStrategy = [StandardBattleStrategy strategy];
-    
-    battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
-    battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
-    
-    samurai.battleStrategy = battleStrategy;
-    
-    PathFinderStep *step = [[PathFinderStep alloc] initWithLocation:defender1.cardLocation];
-    MeleeAttackAction *firstAttack = [[MeleeAttackAction alloc] initWithPath:@[step] andCardInAction:samurai enemyCard:defender1 meleeAttackType:kMeleeAttackTypeNormal];
-    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
-    firstAttack.delegate = mock;
-    
-    [firstAttack performActionWithCompletion:^{
-        
-        MeleeAttackAction *secondAttack = [[MeleeAttackAction alloc] initWithPath:@[step] andCardInAction:samurai enemyCard:defender1 meleeAttackType:kMeleeAttackTypeNormal];
-        secondAttack.delegate = mock;
-        
-        samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-        defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-        
-        [secondAttack performActionWithCompletion:^{
-           
-            XCTAssertTrue([GameManager sharedManager].currentGame.latestBattleReports.count == 2, @"2 actions were performed");
-            
-            NSData *data = [[GameManager sharedManager].currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
-            [[GameManager sharedManager] endTurn];
-            
-            [TestHelper swapBoardInGame:[GameManager sharedManager].currentGame myCurrentGameBoardSide:kGameBoardLower];
-            
-            [[GameManager sharedManager].currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:YES onlyEnemyUnits:NO];
-            
-            XCTAssertTrue([GameManager sharedManager].currentGame.actionsForPlayback.count == 2, @"Should contain 2 actions for playback");
-            
-            for (Action *action in [GameManager sharedManager].currentGame.actionsForPlayback) {
-                
-                action.playback = YES;
-                action.delegate = mock;
-                
-                [action performActionWithCompletion:^{
-                    
-                    XCTAssertTrue(defender1.dead, @"Pikeman should be dead");
-                }];
-            }
-        }];
-    }];
-}
 
 - (void)testDiplomatCannotBribeTheSameUnitTwoRoundsInARowInMultiplayerGame {
     
-    Diplomat *diplomat = [Diplomat card];
-    Pikeman *defender1 = [Pikeman card];
+    Diplomat *diplomat = [CardPool createCardOfName:kDiplomat withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     diplomat.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    diplomat.cardColor = kCardColorGreen;
-    
     defender1.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    defender1.cardColor = kCardColorRed;
     
-    [GameManager sharedManager].currentGame.myColor = kPlayerGreen;
-    [GameManager sharedManager].currentGame = [TestHelper setupGame:[GameManager sharedManager].currentGame
+    self.gamemanager.currentGame.myColor = kPlayerGreen;
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                                    withPlayer1Units:[NSArray arrayWithObject:diplomat]
                                                        player2Units:[NSArray arrayWithObject:defender1]];
     
-    [GameManager sharedManager].currentGame.state = kGameStateGameStarted;
+    self.gamemanager.currentGame.state = kGameStateGameStarted;
     
     XCTAssertTrue([diplomat isValidTarget:defender1], @"Diplomat should be able to bribe pikeman");
     
     PathFinderStep *step = [[PathFinderStep alloc] initWithLocation:defender1.cardLocation];
     
-    AbilityAction *bribeAction = [[AbilityAction alloc] initWithPath:@[step] andCardInAction:diplomat targetCard:defender1];
+    AbilityAction *bribeAction = [[AbilityAction alloc] initWithGameManager:self.gamemanager path:@[step] andCardInAction:diplomat targetCard:defender1];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     bribeAction.delegate = mock;
@@ -182,12 +120,12 @@
         
         XCTAssertTrue([defender1 isAffectedByAbility:kAbilityBribe], @"Pikeman should be affected by bribe");
 
-        NSData *data = [[GameManager sharedManager].currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
-        [[GameManager sharedManager] endTurn];
+        NSData *data = [self.gamemanager.currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
+        [self.gamemanager endTurn];
         
-        [TestHelper swapBoardInGame:[GameManager sharedManager].currentGame myCurrentGameBoardSide:kGameBoardLower];
+        [TestHelper swapBoardInGame:self.gamemanager.currentGame myCurrentGameBoardSide:kGameBoardLower];
         
-        [[GameManager sharedManager].currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
+        [self.gamemanager.currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
         
         XCTAssertFalse([defender1 isAffectedByAbility:kAbilityBribe], @"Pikeman should no longer be affected by bribe");
         XCTAssertTrue([defender1 isAffectedByAbility:kAbilityCoolDown], @"Pikeman should be affected by cooldown");

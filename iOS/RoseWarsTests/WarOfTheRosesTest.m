@@ -20,6 +20,13 @@
 #import "Diplomat.h"
 #import "AbilityAction.h"
 #import "GameBoardMockup.h"
+#import "CardPool.h"
+
+@interface WarOfTheRosesTest()
+
+@property (nonatomic) GameManager *gamemanager;
+
+@end
 
 @class GameManager;
 @implementation WarOfTheRosesTest
@@ -28,10 +35,10 @@
 {
     [super setUp];
     
-    _manager = [GameManager sharedManager];
+    self.gamemanager = [[GameManager alloc] init];
     
-    _manager.currentGame.myColor = kPlayerGreen;
-    _manager.currentGame.enemyColor = kPlayerRed;
+    self.gamemanager.currentGame.myColor = kPlayerGreen;
+    self.gamemanager.currentGame.enemyColor = kPlayerRed;
 }
 
 - (void)tearDown
@@ -43,7 +50,7 @@
 
 - (void)testUnitDescriptionName {
     
-    Diplomat *diplomant = [Diplomat card];
+    Diplomat *diplomant = [CardPool createCardOfName:kDiplomat withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     
     XCTAssertTrue([diplomant.unitDescriptionName isEqualToString:@"Diplomat"], @"UnitDescription should be Diplomat");
 }
@@ -90,22 +97,19 @@
 
 - (void)testGridLocationEntryPointWithOnlyOneStepInPath {
     
-    Pikeman *pikeman = [Pikeman card];
-    Archer *archer = [Archer card];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
         
     pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    pikeman.cardColor = kCardColorGreen;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObjects:pikeman, nil]
                                     player2Units:[NSArray arrayWithObject:archer]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
     
     GridLocation *entryLocation = [meleeAction getEntryLocationInPath];
     
@@ -125,28 +129,25 @@
 
 - (void)testShouldEndTurnIfOnlyOneUnitLeftWithInsufficientActions {
         
-    LightCavalry *attacker = [LightCavalry card];
-    Pikeman *defender1 = [Pikeman card];
-    LightCavalry *defender2 = [LightCavalry card];
+    LightCavalry *attacker = [CardPool createCardOfName:kLightCavalry withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    LightCavalry *defender2 = [CardPool createCardOfName:kLightCavalry withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     attacker.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    attacker.cardColor = kCardColorGreen;
     defender1.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
-    defender1.cardColor = kCardColorRed;
     defender2.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    defender2.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender1, defender2, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    XCTAssertFalse([_manager shouldEndTurn], @"shouldEndTurn should return NO");
+    XCTAssertFalse([self.gamemanager shouldEndTurn], @"shouldEndTurn should return NO");
     
     attacker.hasPerformedActionThisRound = YES;
     
-    XCTAssertTrue([_manager shouldEndTurn], @"shouldEndTurn should return YES");
+    XCTAssertTrue([self.gamemanager shouldEndTurn], @"shouldEndTurn should return YES");
 }
 
 - (void)testFlipBackline {
@@ -162,82 +163,74 @@
 
 - (void)testVictoryWhenUnitOnEnemyBackline {
     
-    Diplomat *attacker = [Diplomat card];
-    Pikeman *defender1 = [Pikeman card];
+    Diplomat *attacker = [CardPool createCardOfName:kDiplomat withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     attacker.cardLocation = [GridLocation gridLocationWithRow:UPPER_BACKLINE + 1 column:3];
-    attacker.cardColor = kCardColorGreen;
     defender1.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
-    defender1.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObject:defender1]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    GameResults result = [_manager checkForEndGame];
+    GameResults result = [self.gamemanager checkForEndGame];
     XCTAssertTrue(result == kGameResultInProgress, @"Game should be in progress");
     
-    [_manager card:attacker movedToGridLocation:[GridLocation gridLocationWithRow:UPPER_BACKLINE column:3]];
+    [self.gamemanager card:attacker movedToGridLocation:[GridLocation gridLocationWithRow:UPPER_BACKLINE column:3]];
 
-    result = [_manager checkForEndGame];
+    result = [self.gamemanager checkForEndGame];
     XCTAssertTrue(result == kGameResultVictory, @"Should result in victory");
 }
 
 - (void)testDefeatWhenUnitOnMyBackline {
     
-    Diplomat *attacker = [Diplomat card];
-    Pikeman *defender1 = [Pikeman card];
+    Diplomat *attacker = [CardPool createCardOfName:kDiplomat withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
-    attacker.cardColor = kCardColorGreen;
     attacker.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
-    defender1.cardColor = kCardColorRed;
     defender1.cardLocation = [GridLocation gridLocationWithRow:LOWER_BACKLINE - 1 column:3];
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObject:defender1]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    GameResults result = [_manager checkForEndGame];
+    GameResults result = [self.gamemanager checkForEndGame];
     XCTAssertTrue(result == kGameResultInProgress, @"Game should be in progress");
     
-    [_manager card:defender1 movedToGridLocation:[GridLocation gridLocationWithRow:LOWER_BACKLINE column:3]];
+    [self.gamemanager card:defender1 movedToGridLocation:[GridLocation gridLocationWithRow:LOWER_BACKLINE column:3]];
     
-    result = [_manager checkForEndGame];
+    result = [self.gamemanager checkForEndGame];
     XCTAssertTrue(result == kGameResultDefeat, @"Should result in victory");
 }
 
 - (void)testNoVictoryWhenUnitBribedOnEnemyBackline {
+    Diplomat *attacker = [CardPool createCardOfName:kDiplomat withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *defender1 = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
-    Diplomat *attacker = [Diplomat card];
-    Pikeman *defender1 = [Pikeman card];
-    
-    attacker.cardColor = kCardColorGreen;
     attacker.cardLocation = [GridLocation gridLocationWithRow:UPPER_BACKLINE + 1 column:3];
-    
-    defender1.cardColor = kCardColorRed;
     defender1.cardLocation = [GridLocation gridLocationWithRow:UPPER_BACKLINE  column:3];
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObject:defender1]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    GameResults result = [_manager checkForEndGame];
+    GameResults result = [self.gamemanager checkForEndGame];
     XCTAssertTrue(result == kGameResultInProgress, @"Game should be in progress");
     
-    AbilityAction *action = [[AbilityAction alloc] initWithPath:@[[GridLocation gridLocationWithRow:UPPER_BACKLINE column:3]] andCardInAction:attacker targetCard:defender1];
+    AbilityAction *action = [[AbilityAction alloc] initWithGameManager:self.gamemanager path:@[defender1.cardLocation] andCardInAction:attacker targetCard:defender1];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     action.delegate = mock;
     
     [action performActionWithCompletion:^{
         
-        GameResults result = [_manager checkForEndGame];
+        GameResults result = [self.gamemanager checkForEndGame];
         XCTAssertTrue(result == kGameResultInProgress, @"Game should still be in progress");
     }];
 }

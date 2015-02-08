@@ -44,6 +44,10 @@
         NSString *testcaseType = testcase[@"type"];
         NSString *testcaseDescription = testcase[@"description"];
         
+        if ([testcaseDescription isEqualToString:@"Hobelar can move even though it is used and there are not action remaining"]) {
+            NSLog(@"break");
+        }
+        
         id<HKSharedTestExecuter> testExecuter = [HKSharedTestFactory createSharedTestExecuterOfType:testcaseType];
 
         if (testExecuter == nil) {

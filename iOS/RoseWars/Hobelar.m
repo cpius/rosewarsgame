@@ -10,6 +10,10 @@
 #import "Action.h"
 #import "ActionCostLess.h"
 
+@interface Hobelar()
+
+@end
+
 @implementation Hobelar
 
 -(id)init {
@@ -31,6 +35,9 @@
         self.moveActionCost = self.attackActionCost = 1;
         self.hitpoints = 1;
         
+        self.unitHasExtraAction = YES;
+        self.extraActionType = kExtraActionTypeMove;
+        
         self.attackSound = @"sword_sound.wav";
         self.defeatSound = @"defeat.mp3";
         
@@ -44,18 +51,32 @@
 }
 
 + (id)card {
-    
     return [[Hobelar alloc] init];
 }
 
 - (void)didPerformedAction:(Action *)action {
+    // If unit already has performed an action, this is the extra action
+    if (self.hasPerformedAttackThisRound) {
+        self.extraActionConsumed = YES;
+    }
     
     if (action.isAttack) {
         self.hasPerformedAttackThisRound = YES;
-        
-        [self addTimedAbility:[[ActionCostLess alloc] initForNumberOfTurns:1 onCard:self]];
-        
         NSLog(@"Hobelar has attacked but moves are not consumed");
     }
+}
+
+- (BOOL)checkIfExtraActionOfTypeCanBePerformed:(ActionTypes)actionType {
+    return !self.extraActionConsumed && self.hasPerformedAttackThisRound && actionType == kActionTypeMove && self.movesRemaining > 0;
+}
+
+- (BOOL)canPerformActionOfType:(ActionTypes)actionType withRemainingActionCount:(NSUInteger)remainingActionCount {
+    BOOL canPerformAction = [super canPerformActionOfType:actionType withRemainingActionCount:remainingActionCount];
+    
+    if ([self checkIfExtraActionOfTypeCanBePerformed:actionType]) {
+        canPerformAction = YES;
+    }
+    
+    return canPerformAction;
 }
 @end

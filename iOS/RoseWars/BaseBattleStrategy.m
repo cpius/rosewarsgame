@@ -54,8 +54,8 @@
     battleResult.attackRoll = _attackRoll;
     battleResult.defenseRoll = _defenseRoll;
     
-    NSLog(@"Attack roll: %d", _attackRoll);
-    NSLog(@"Defence roll: %d", _defenseRoll);
+    NSLog(@"Attack roll: %ld", (long)_attackRoll);
+    NSLog(@"Defence roll: %ld", (long)_defenseRoll);
     
     return battleResult;
 }

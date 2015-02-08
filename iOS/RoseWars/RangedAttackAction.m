@@ -15,9 +15,9 @@
 @synthesize startLocation = _startLocation;
 @synthesize battleReport = _battleReport;
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
-    self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
+    self = [super initWithGameManager:gamemanager path:path andCardInAction:card enemyCard:enemyCard];
     
     if (self) {
         _actionType = kActionTypeRanged;
@@ -48,11 +48,11 @@
     
     self.cardInAction.delegate = self;
 
-    [[GameManager sharedManager] willUseAction:self];
+    [self.gamemanager willUseAction:self];
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
 
-    BattleResult *result = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
+    BattleResult *result = [self.gamemanager resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
     
     [self.cardInAction didResolveCombatDuringAction:self];
     
@@ -61,10 +61,10 @@
     self.battleResult = result;
     [self.delegate action:self hasResolvedCombatWithResult:result];
         
-    [[GameManager sharedManager] actionUsed:self];
+    [self.gamemanager actionUsed:self];
     [self.cardInAction didPerformedAction:self];
     
-    [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
+    [self.gamemanager.currentGame addBattleReport:_battleReport forAction:self];
 
     [self.delegate afterPerformAction:self];
     self.cardInAction.delegate = nil;

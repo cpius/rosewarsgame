@@ -46,7 +46,7 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"%d-%d", self.row, self.column];
+    return [NSString stringWithFormat:@"Row:%lu Column:%lu", (unsigned long)self.row, self.column];
 }
 
 - (NSUInteger)hash {

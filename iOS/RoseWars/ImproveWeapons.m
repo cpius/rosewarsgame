@@ -12,8 +12,8 @@
 
 - (void)applyEffect {
     
-    [self.card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:3]];
-    [self.card.defence addTimedBonus:[[TimedBonus alloc] initWithValue:1]];
+    [self.card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:3 gamemanager:self.card.gamemanager]];
+    [self.card.defence addTimedBonus:[[TimedBonus alloc] initWithValue:1 gamemanager:self.card.gamemanager]];
 }
 
 - (void)startTimedAbility {

@@ -14,8 +14,6 @@
 @class StandardBattleStrategy;
 @interface CombatTest : XCTestCase {
     
-    GameManager *_manager;
-    
     StandardBattleStrategy *_battleStrategy;
     
     FixedDiceStrategy *_attackerFixedStrategy;

@@ -48,7 +48,6 @@
 }
 
 + (id)card {
-    
     return [[Canon alloc] init];
 }
 
@@ -58,7 +57,7 @@
 
     if (action.isAttack) {
         _isQuarantined = YES;
-        _lastAttackInRound = [GameManager sharedManager].currentGame.currentRound;
+        _lastAttackInRound = self.gamemanager.currentGame.currentRound;
     }
 }
 
@@ -67,7 +66,7 @@
     BOOL canPerformAction = [super canPerformActionOfType:actionType withRemainingActionCount:remainingActionCount];
     
     if (actionType == kActionTypeRanged) {
-        if (_isQuarantined && ([GameManager sharedManager].currentGame.currentRound - _lastAttackInRound < 3)) {
+        if (_isQuarantined && (self.gamemanager.currentGame.currentRound - _lastAttackInRound < 3)) {
             canPerformAction = NO;
         }
         else {

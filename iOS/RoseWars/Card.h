@@ -12,8 +12,15 @@
 #import "TimedAbility.h"
 #import "Serializable.h"
 #import "LevelIncreaseStrategy.h"
+#import "HKCardProtocol.h"
 
-@class Card;
+typedef NS_ENUM(NSInteger, ExtraActionTypes) {
+    kExtraActionNoAction = 0,
+    kExtraActionTypeMove = 1,
+    kExtraActionTypeAttack = 2
+};
+
+@class Card, GameManager;
 @protocol CardDelegate <NSObject>
 
 @optional
@@ -23,7 +30,10 @@
 
 @class Action;
 @class BaseBattleStrategy;
-@interface Card : SKNode <TimedAbilityDelegate, Serializable>
+@interface Card : SKNode <TimedAbilityDelegate, Serializable, HKCardProtocol>
+
+@property (nonatomic, strong) GameManager *gamemanager;
+
 /*
  Angiver om der er tale om en basic unit eller en special unit
  */
@@ -50,6 +60,11 @@
 @property (nonatomic, copy) NSString *cardIdentifier;
 
 @property (nonatomic, strong) BaseBattleStrategy *battleStrategy;
+
+@property (nonatomic, assign) BOOL unitHasExtraAction;
+@property (nonatomic, assign) BOOL extraActionConsumed;
+@property (nonatomic, assign) ExtraActionTypes extraActionType;
+
 /*
  Samme mekanisme som range, man kan bevæge sig til siden og fremad eller bagud. Man kan ikke bevæge sig ind I et felt som er optaget af en anden unit. Man kan heller ikke gå igennem egne eller modstanderens units.
  Eksempel: Hvis en unit har move 2 og range 1 har den unit følgende muligheder:
@@ -109,6 +124,8 @@
 @property(nonatomic, assign) BOOL hasPerformedAttackThisRound;
 
 @property(nonatomic, readonly) NSMutableArray *currentlyAffectedByAbilities;
+
+- (instancetype)initWithGameManager:(GameManager*)gamemanager;
 
 - (void)commonInit;
 

@@ -16,7 +16,7 @@
 {
     self = [super init];
     if (self) {
-        _gamemanager = [GameManager sharedManager];
+        _gamemanager = [[GameManager alloc] init];
         _gamemanager.currentGame.myColor = kPlayerGreen;
         _gamemanager.currentGame.currentRound = 1;
         _gamemanager.currentGame.numberOfAvailableActions = 2;
@@ -56,10 +56,10 @@
 
     // Player 1 is always green in testcases
     if (playercolor == kPlayerGreen) {
-        _gamemanager.currentGame.myDeck = [fixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0];
+        _gamemanager.currentGame.myDeck = [fixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0 gamemanager:self.gamemanager];
     }
     else {
-        _gamemanager.currentGame.enemyDeck = [fixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0];
+        _gamemanager.currentGame.enemyDeck = [fixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0 gamemanager:self.gamemanager];
     }
 }
 
@@ -100,8 +100,12 @@
         
         card.cardLocation = [self convertLocation:cardLocation];
         card.hasPerformedActionThisRound = unitHasBeenUsed;
+        if (card.isMelee) {
+            card.hasPerformedActionThisRound = unitHasBeenUsed;
+        }
         card.experience = experience;
         card.movesConsumed = card.move - (card.move - movementRemaining);
+        card.extraActionConsumed = !extraAction;
         
         if (playercolor == kPlayerGreen) {
             card.cardColor = kCardColorGreen;

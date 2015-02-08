@@ -13,7 +13,6 @@
 @class GameManager;
 @interface WarOfTheRosesTest : XCTestCase {
     
-    GameManager *_manager;
     
     FixedDiceStrategy *_attackerFixedStrategy;
     FixedDiceStrategy *_defenderFixedStrategy;

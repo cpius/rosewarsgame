@@ -10,37 +10,55 @@
 #import "RangeAttribute.h"
 #import "GameManager.h"
 
+@interface TimedBonus()
+
+@property (nonatomic, assign) BOOL observerAdded;
+
+@end
+
 @implementation TimedBonus
 
 @synthesize bonusValue = _bonusValue;
-@synthesize numberOfRounds = _numberOfTurns;
 
-- (id)initWithValue:(NSUInteger)bonusValue {
+- (id)initWithValue:(NSUInteger)bonusValue gamemanager:(GameManager*)gamemanager {
     
-    return [self initWithValue:bonusValue forNumberOfTurns:2];
+    return [self initWithValue:bonusValue forNumberOfTurns:2 gamemanager:gamemanager];
 }
 
-- (id)initWithValue:(NSUInteger)bonusValue forNumberOfTurns:(NSUInteger)numberOfTurns {
+- (id)initWithValue:(NSUInteger)bonusValue forNumberOfTurns:(NSUInteger)numberOfTurns gamemanager:(GameManager*)gamemanager {
     
     self = [super init];
     
     if (self) {
+        _gamemanager = gamemanager;
         _bonusValue = bonusValue;
         _numberOfTurns = numberOfTurns;
         
-        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
+        [_gamemanager.currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
+        self.observerAdded = YES;
     }
     
     return self;
 }
 
+- (void)dealloc {
+    if (self.observerAdded) {
+        [self.gamemanager.currentGame removeObserver:self forKeyPath:@"turnCounter"];
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
-    if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"turnCounter"]) {
+    if (object == self.gamemanager.currentGame && [keyPath isEqualToString:@"turnCounter"]) {
         
-        if ([GameManager sharedManager].currentGame.turnCounter == bonusValueStartedInTurn + _numberOfTurns) {
+        if (self.gamemanager.currentGame.turnCounter == bonusValueStartedInTurn + _numberOfTurns) {
             [self stopTimedBonus];
-            [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"turnCounter"];
+            @try {
+                if (self.observerAdded) {
+                    [self.gamemanager.currentGame removeObserver:self forKeyPath:@"turnCounter"];
+                    self.observerAdded = NO;
+                }
+            }@catch (NSException *exception) {}
         }
     }
 }
@@ -48,7 +66,7 @@
 - (void)startTimedBonus:(RangeAttribute*)parent {
     
     _parent = parent;
-    bonusValueStartedInTurn = [GameManager sharedManager].currentGame.turnCounter;
+    bonusValueStartedInTurn = self.gamemanager.currentGame.turnCounter;
 }
 
 - (void)stopTimedBonus {
@@ -58,7 +76,7 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"Bonus value %d for %d turns", _bonusValue, _numberOfTurns];
+    return [NSString stringWithFormat:@"Bonus value %lu for %lu turns", (unsigned long)_bonusValue, (unsigned long)_numberOfTurns];
 }
 
 @end

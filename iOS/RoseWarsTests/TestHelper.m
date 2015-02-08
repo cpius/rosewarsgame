@@ -14,7 +14,7 @@
 
 @implementation TestHelper
 
-+ (Game *)setupGame:(Game*)game withPlayer1Units:(NSArray *)player1Units player2Units:(NSArray *)player2Units {
++ (Game *)setupGame:(Game*)game gamemanager:(GameManager*)gamemanager withPlayer1Units:(NSArray *)player1Units player2Units:(NSArray *)player2Units {
 
     FixedDeckStrategy *attackerFixedDeckStrategy = [FixedDeckStrategy strategy];
     FixedDeckStrategy *defenderFixedDeckStrategy = [FixedDeckStrategy strategy];
@@ -36,8 +36,8 @@
         [defenderFixedDeckStrategy.fixedCards addObject:card];
     }
     
-    game.myDeck = [attackerFixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0];
-    game.enemyDeck = [defenderFixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0];
+    game.myDeck = [attackerFixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0 gamemanager:gamemanager];
+    game.enemyDeck = [defenderFixedDeckStrategy generateNewDeckWithNumberOfBasicType:0 andSpecialType:0 cardColor:0 gamemanager:gamemanager];
     
     game.currentRound = 1;
     game.numberOfAvailableActions = 1;

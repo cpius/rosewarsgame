@@ -10,7 +10,6 @@
 
 @interface Samurai : Card
 
-@property (nonatomic, readonly) NSInteger numberOfAttacksUsed;
 @property (nonatomic, readonly) BOOL hasPerformedMove;
 
 + (id)card;

@@ -14,12 +14,14 @@
 @synthesize actionType = _actionType;
 @synthesize startLocation = _startLocation;
 @synthesize battleReport = _battleReport;
+@synthesize gamemanager = _gamemanager;
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
-    self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
+    self = [super initWithGameManager:gamemanager path:path andCardInAction:card enemyCard:enemyCard];
     
     if (self) {
+        _gamemanager = gamemanager;
         _actionType = kActionTypeMove;
         _startLocation = card.cardLocation;
     }
@@ -51,7 +53,7 @@
     
     _battleReport = [BattleReport battleReportWithAction:self];
 
-    [[GameManager sharedManager] willUseAction:self];
+    [self.gamemanager willUseAction:self];
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
@@ -61,15 +63,15 @@
         
         if (![self.cardInAction.cardLocation isEqual:endLocation]) {
             
-            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];
+            [self.gamemanager card:self.cardInAction movedToGridLocation:endLocation];
             
             [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:endLocation];
         }
         
-        [[GameManager sharedManager] actionUsed:self];
+        [self.gamemanager actionUsed:self];
         [self.cardInAction didPerformedAction:self];
 
-        [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
+        [self.gamemanager.currentGame addBattleReport:_battleReport forAction:self];
 
         [self.delegate afterPerformAction:self];
 

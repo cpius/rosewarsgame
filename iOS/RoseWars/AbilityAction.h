@@ -8,11 +8,12 @@
 
 #import "Action.h"
 
+@class GameManager;
 @interface AbilityAction : Action
 
 @property (nonatomic, readonly) NSArray *availableAbilities;
 @property (nonatomic, readonly) TimedAbility *abilityUsed;
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card targetCard:(Card *)targetCard;
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card targetCard:(Card *)targetCard;
 
 @end

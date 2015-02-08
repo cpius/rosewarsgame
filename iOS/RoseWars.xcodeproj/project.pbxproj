@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		611CE4391A84D0ED003BF6A1 /* HKSamuraiTestCases.m in Sources */ = {isa = PBXBuildFile; fileRef = 611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */; };
+		613790E11A84A2EB00B0F887 /* HKHobelarTestCases.m in Sources */ = {isa = PBXBuildFile; fileRef = 613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */; };
 		614487A018B2A7BB00D97AA2 /* HKPlaygroundScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */; };
 		614487A318B3B01B00D97AA2 /* HKConquerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 614487A218B3B01B00D97AA2 /* HKConquerButton.m */; };
 		614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 614487A418B6780A00D97AA2 /* ConquerSmoke.sks */; };
@@ -34,7 +36,6 @@
 		617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */; };
 		617DB27518C7057300E64829 /* GameCenterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27018C7057300E64829 /* GameCenterManager.m */; };
 		617DB27618C7057300E64829 /* NSDataAES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27218C7057300E64829 /* NSDataAES256.m */; };
-		617DB27718C7057300E64829 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27418C7057300E64829 /* Reachability.m */; };
 		617DB2C518C7285700E64829 /* Action_Berserker_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27B18C7285700E64829 /* Action_Berserker_1.json */; };
 		617DB2C618C7285700E64829 /* Action_Berserker_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27C18C7285700E64829 /* Action_Berserker_2.json */; };
 		617DB2C718C7285700E64829 /* Action_Berserker_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27D18C7285700E64829 /* Action_Berserker_3.json */; };
@@ -232,6 +233,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKSamuraiTestCases.m; path = Units/HKSamuraiTestCases.m; sourceTree = "<group>"; };
+		613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKHobelarTestCases.m; path = Units/HKHobelarTestCases.m; sourceTree = "<group>"; };
 		6144879E18B2A7BB00D97AA2 /* HKPlaygroundScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKPlaygroundScene.h; sourceTree = "<group>"; };
 		6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKPlaygroundScene.m; sourceTree = "<group>"; };
 		614487A118B3B01B00D97AA2 /* HKConquerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConquerButton.h; sourceTree = "<group>"; };
@@ -282,8 +285,6 @@
 		617DB27018C7057300E64829 /* GameCenterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCenterManager.m; sourceTree = "<group>"; };
 		617DB27118C7057300E64829 /* NSDataAES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAES256.h; sourceTree = "<group>"; };
 		617DB27218C7057300E64829 /* NSDataAES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAES256.m; sourceTree = "<group>"; };
-		617DB27318C7057300E64829 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		617DB27418C7057300E64829 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		617DB27818C7281000E64829 /* HKGameSerializerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKGameSerializerProtocol.h; sourceTree = "<group>"; };
 		617DB27B18C7285700E64829 /* Action_Berserker_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Berserker_1.json; sourceTree = "<group>"; };
 		617DB27C18C7285700E64829 /* Action_Berserker_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Berserker_2.json; sourceTree = "<group>"; };
@@ -544,6 +545,7 @@
 		61C47E5D17C6380E00D644D1 /* JuggernautBattleStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuggernautBattleStrategy.m; sourceTree = "<group>"; };
 		61C47E5F17C6385C00D644D1 /* Cards.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Cards.atlas; sourceTree = "<group>"; };
 		61C47E6117C677A100D644D1 /* Graphics.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Graphics.atlas; sourceTree = "<group>"; };
+		61EFD94D1A8771FE00EE45D2 /* HKCardProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKCardProtocol.h; sourceTree = "<group>"; };
 		61F8514818A4F60F00F770D7 /* HKGameOptionsDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKGameOptionsDialog.h; sourceTree = "<group>"; };
 		61F8514918A4F60F00F770D7 /* HKGameOptionsDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKGameOptionsDialog.m; sourceTree = "<group>"; };
 		61F8514B18A4F6FA00F770D7 /* HKGameOptionsDialogProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKGameOptionsDialogProtocol.h; sourceTree = "<group>"; };
@@ -603,6 +605,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		613790DF1A84A2B800B0F887 /* Units */ = {
+			isa = PBXGroup;
+			children = (
+				613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */,
+				611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */,
+			);
+			name = Units;
+			sourceTree = "<group>";
+		};
 		614D42D317B4EB4B00B9889C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -815,8 +826,6 @@
 				617DB27018C7057300E64829 /* GameCenterManager.m */,
 				617DB27118C7057300E64829 /* NSDataAES256.h */,
 				617DB27218C7057300E64829 /* NSDataAES256.m */,
-				617DB27318C7057300E64829 /* Reachability.h */,
-				617DB27418C7057300E64829 /* Reachability.m */,
 			);
 			name = Gamecenter;
 			sourceTree = "<group>";
@@ -1047,6 +1056,7 @@
 				61C47D0017BE9E2A00D644D1 /* BattleResult.m */,
 				61C47D2017BE9F5300D644D1 /* Card.h */,
 				61C47D2117BE9F5300D644D1 /* Card.m */,
+				61EFD94D1A8771FE00EE45D2 /* HKCardProtocol.h */,
 				61C47D2417BE9F5300D644D1 /* CardPool.h */,
 				61C47D2517BE9F5300D644D1 /* CardPool.m */,
 				61C47D2A17BE9F5C00D644D1 /* Deck.h */,
@@ -1229,6 +1239,7 @@
 		61FD538117B4CDAC009BED1A /* RoseWarsTests */ = {
 			isa = PBXGroup;
 			children = (
+				613790DF1A84A2B800B0F887 /* Units */,
 				617DB30618C7303E00E64829 /* SharedTestsExecuter */,
 				617DB27918C7285700E64829 /* sharedtests_1.0 */,
 				61705CC218018C24001D7E1B /* BasicUnitTest.h */,
@@ -1570,7 +1581,6 @@
 				61C47CEF17BE98BF00D644D1 /* HKGameTypeScene.m in Sources */,
 				61FD536117B4CDAC009BED1A /* main.m in Sources */,
 				61FD539417B4CE41009BED1A /* HKMainMenuScene.m in Sources */,
-				617DB27718C7057300E64829 /* Reachability.m in Sources */,
 				61C47CF217BE9A2700D644D1 /* HKConstructDeckScene.m in Sources */,
 				61FD536517B4CDAC009BED1A /* HKAppDelegate.m in Sources */,
 				61FC5BE817F9D310001E0419 /* GameBoardNode.m in Sources */,
@@ -1584,6 +1594,7 @@
 				61705CD818018C24001D7E1B /* TestHelper.m in Sources */,
 				617DB31018C730F300E64829 /* HKSharedTestCheckActionExistence.m in Sources */,
 				617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */,
+				611CE4391A84D0ED003BF6A1 /* HKSamuraiTestCases.m in Sources */,
 				617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */,
 				61705CD618018C24001D7E1B /* MoveTest.m in Sources */,
 				61705CD918018C24001D7E1B /* WarOfTheRosesTest.m in Sources */,
@@ -1593,6 +1604,7 @@
 				61705CD718018C24001D7E1B /* SpecialUnitTest.m in Sources */,
 				61705CD518018C24001D7E1B /* GameCenterTest.m in Sources */,
 				61705CD318018C24001D7E1B /* CombatTest.m in Sources */,
+				613790E11A84A2EB00B0F887 /* HKHobelarTestCases.m in Sources */,
 				617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

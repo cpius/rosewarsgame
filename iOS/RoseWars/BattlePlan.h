@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Card.h"
 
-@class Game;
+@class GameManager;
 @class MeleeAttackAction;
 @interface BattlePlan : NSObject
 
@@ -17,9 +17,9 @@
 @property (nonatomic, readonly) NSArray *meleeActions;
 @property (nonatomic, readonly) NSArray *rangeActions;
 @property (nonatomic, readonly) NSArray *abilityActions;
-@property (nonatomic, readonly) Game *game;
+@property (nonatomic, readonly) GameManager *gamemanager;
 
-- (instancetype)initWithGame:(Game*)game;
+- (instancetype)initWithGame:(GameManager*)gamemanager;
 
 - (NSArray*)createBattlePlanForCard:(Card*)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray*)enemyUnits unitLayout:(NSDictionary*)unitLayout;
 - (Action*)getActionToGridLocation:(GridLocation*)gridLocation;

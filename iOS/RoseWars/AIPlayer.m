@@ -10,6 +10,7 @@
 
 @interface AIPlayer()
 
+@property (nonatomic) GameManager *gamemanager;
 
 @end
 
@@ -18,11 +19,12 @@
 @synthesize deckStrategy;
 @synthesize actionStrategy = _actionStrategy;
 
-- initWithStrategy:(id<AIStrategy>)strategy {
+- initWithStrategy:(id<AIStrategy>)strategy gameManager:(GameManager*)gamemanager {
     
     self = [super init];
     
     if (self) {
+        _gamemanager = gamemanager;
         _actionStrategy = strategy;
         _battlePlans = [[NSMutableDictionary alloc] init];
     }
@@ -59,7 +61,7 @@
     for (Card *unit in units) {
         
         if (!unit.dead) {
-            BattlePlan *battlePlan = [[BattlePlan alloc] init];
+            BattlePlan *battlePlan = [[BattlePlan alloc] initWithGame:self.gamemanager];
             [battlePlan createBattlePlanForCard:unit friendlyUnits:units enemyUnits:enemyUnits unitLayout:unitLayout];
             
             [_battlePlans setObject:battlePlan forKey:unit.cardLocation];

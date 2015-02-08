@@ -25,11 +25,12 @@
 @synthesize startLocation = _startLocation;
 @synthesize enemyInitialLocation = _enemyInitialLocation;
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
     self = [super init];
     
     if (self) {
+        _gamemanager = gamemanager;
         _path = path;
         _cardInAction = card;
         _enemyCard = enemyCard;
@@ -45,7 +46,7 @@
 
 - (BOOL)isWithinRange {
     
-    return [self.cardInAction allowAction:self allLocations:[GameManager sharedManager].currentGame.unitLayout];
+    return [self.cardInAction allowAction:self allLocations:self.gamemanager.currentGame.unitLayout];
 }
 
 - (void)performActionWithCompletion:(void (^)())completion {

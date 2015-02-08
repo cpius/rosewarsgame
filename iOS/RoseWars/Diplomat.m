@@ -50,7 +50,7 @@
 }
 
 + (id)card {
-    
+
     return [[Diplomat alloc] init];
 }
 
@@ -73,7 +73,7 @@
 
 - (BOOL)canBribeOpponent:(Card *)opponent {
     
-    if ([opponent.cardIdentifier isEqualToString:_bribedOpponentIdentifier] && [GameManager sharedManager].currentGame.currentRound - _opponentBribedInRound < 2) {
+    if ([opponent.cardIdentifier isEqualToString:_bribedOpponentIdentifier] && self.gamemanager.currentGame.currentRound - _opponentBribedInRound < 2) {
         return NO;
     }
     
@@ -83,7 +83,7 @@
 - (void)bribeOpponent:(Card *)opponent {
     
     _bribedOpponentIdentifier = opponent.cardIdentifier;
-    _opponentBribedInRound = [GameManager sharedManager].currentGame.currentRound;
+    _opponentBribedInRound = self.gamemanager.currentGame.currentRound;
 }
 
 - (BOOL)isValidTarget:(Card*)targetCard {

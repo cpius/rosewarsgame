@@ -22,7 +22,7 @@ NS_INLINE AttributeRange MakeAttributeRange(NSInteger lower, NSInteger upper) {
 
 NS_INLINE NSString* AttributeRangeToNSString(AttributeRange range) {
     
-    return [NSString stringWithFormat:@"%d - %d", range.lowerValue, range.upperValue];
+    return [NSString stringWithFormat:@"%ldd - %d",(long) (long)range.lowerValue, range.upperValue];
 }
 
 @interface BaseRangedAttribute : NSObject {

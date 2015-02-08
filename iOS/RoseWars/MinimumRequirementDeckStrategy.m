@@ -51,10 +51,10 @@
     return nil;
 }
 
-- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
+- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor gamemanager:(GameManager*)gamemanager {
     
     NSUInteger retries = 0;
-    CardPool *cardPool = [[CardPool alloc] init];
+    CardPool *cardPool = [[CardPool alloc] initWithGameManager:gamemanager];
 
     do {
         _cards = [[NSMutableArray alloc] init];

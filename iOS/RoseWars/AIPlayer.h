@@ -21,7 +21,7 @@
 @property (nonatomic, strong) id<DeckStrategy> deckStrategy;
 @property (nonatomic, strong) id<AIStrategy> actionStrategy;
 
-- initWithStrategy:(id<AIStrategy>)strategy;
+- initWithStrategy:(id<AIStrategy>)strategy gameManager:(GameManager*)gamemanager;
 
 - (void)placeCardsInDeck:(Deck*)deck;
 - (Action *)decideNextAction;

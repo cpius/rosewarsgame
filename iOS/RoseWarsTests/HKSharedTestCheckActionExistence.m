@@ -27,7 +27,7 @@
     GridLocation *endLocation = [self convertLocation:actiondata[@"end_at"]];
     GridLocation *targetLocation = [self convertLocation:actiondata[@"target_at"]];
     
-    BattlePlan *battleplan = [[BattlePlan alloc] init];
+    BattlePlan *battleplan = [[BattlePlan alloc] initWithGame:self.gamemanager];
     
     Card *cardLocatedAtStartLocation = [self.gamemanager cardLocatedAtGridLocation:startLocation];
     

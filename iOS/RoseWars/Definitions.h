@@ -285,6 +285,10 @@ typedef enum {
     kPlayerRed = 1
 } PlayerColors;
 
+NS_INLINE CardColors CardColorForPlayerWithColor(PlayerColors playerColor) {
+    return playerColor == kPlayerGreen ? kCardColorGreen : kCardColorRed;
+}
+
 NS_INLINE CardColors OppositeColorOfCardColor(CardColors cardColor) {
     
     if (cardColor == kCardColorGreen) {

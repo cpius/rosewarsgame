@@ -15,6 +15,8 @@
     NSArray *_cardsAfterAction;
 }
 
+- (instancetype)initWithGameManager:(GameManager*)gamemanager;
+
 - (void)takeCardSnapshot:(Game *)game state:(CardSnapshotStates)state;
 - (NSData*)serializeGame:(Game*)game forPlayerWithId:(NSString*)playerId;
 - (void)deserializeGameData:(NSData *)gameData forPlayerWithId:(NSString*)playerId allPlayers:(NSArray*)allPlayers toGame:(Game *)game onlyActions:(BOOL)onlyActions onlyEnemyUnits:(BOOL)onlyEnemyUnits;

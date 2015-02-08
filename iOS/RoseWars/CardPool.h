@@ -7,7 +7,7 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
-#import "Card.h"
+#import "HKCardProtocol.h"
 
 @interface CardPool : SKNode {
     
@@ -15,7 +15,9 @@
     NSMutableArray *_specialTypesCardPool;
 }
 
-+ (Card *)createCardOfName:(UnitName)unitName withCardColor:(CardColors)cardColor;
-- (Card *)drawCardOfCardType:(CardType)cardType cardColor:(CardColors)cardColor;
+- (id)initWithGameManager:(GameManager*)gamemanager;
+
++ (id)createCardOfName:(UnitName)unitName withCardColor:(CardColors)cardColor gamemanager:(GameManager*)gamemanager;
+- (id<HKCardProtocol>)drawCardOfCardType:(CardType)cardType cardColor:(CardColors)cardColor;
 
 @end

@@ -35,14 +35,14 @@
     if (IsDefenseSuccessful(self.combatOutcome)) {
         
         if (self.combatOutcome == kCombatOutcomeDefendSuccessfulMissed) {
-            resultString = [NSString stringWithFormat:@"Missed! (%d)", self.attackRoll];
+            resultString = [NSString stringWithFormat:@"Missed! (%lu)", (unsigned long)self.attackRoll];
         }
         else {
-            resultString = [NSString stringWithFormat:@"Unit defended (%d)", self.defenseRoll];
+            resultString = [NSString stringWithFormat:@"Unit defended (%lu)", (unsigned long)self.defenseRoll];
         }
     }
     else if (IsAttackSuccessful(self.combatOutcome)) {
-        resultString = [NSString stringWithFormat:@"Attack successful (%d)", self.attackRoll];
+        resultString = [NSString stringWithFormat:@"Attack successful (%lu)", (unsigned long)self.attackRoll];
     }
     else if (IsPushSuccessful(self.combatOutcome)) {
         resultString = @"Pushed!";

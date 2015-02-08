@@ -63,7 +63,7 @@
 
     // When they start movement in one of the 8 nodes surrounding Crusader
     if ([[self.cardLocation surroundingEightGridLocations] containsObject:action.cardInAction.cardLocation]) {
-        [action.cardInAction.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfTurns:2]];
+        [action.cardInAction.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfTurns:2 gamemanager:self.gamemanager]];
     }
 }
 

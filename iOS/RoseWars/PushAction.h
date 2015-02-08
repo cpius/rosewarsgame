@@ -10,8 +10,8 @@
 
 @interface PushAction : Action
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card;
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card;
 
-+ (void)performPushFromAction:(Action*)action withCompletion:(void (^)())completion;
++ (void)performPushFromAction:(Action*)action gameManager:(GameManager*)gamemanager withCompletion:(void (^)())completion;
 
 @end

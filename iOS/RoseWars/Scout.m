@@ -57,7 +57,7 @@
     }
     
     // Scout can't move the first round
-    if ([GameManager sharedManager].currentGame.currentRound == 1) {
+    if (self.gamemanager.currentGame.currentRound == 1) {
         canPerformAction = NO;
     }
 

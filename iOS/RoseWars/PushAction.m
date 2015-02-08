@@ -15,9 +15,9 @@
 @synthesize startLocation = _startLocation;
 @synthesize battleReport = _battleReport;
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card {
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card {
     
-    self = [super initWithPath:path andCardInAction:card enemyCard:nil];
+    self = [super initWithGameManager:gamemanager path:path andCardInAction:card enemyCard:nil];
     
     if (self) {
         _actionType = kActionTypePush;
@@ -48,19 +48,19 @@
     return 0;
 }
 
-+ (void)performPushFromAction:(Action*)action withCompletion:(void (^)())completion {
++ (void)performPushFromAction:(Action*)action gameManager:(GameManager*)gamemanager withCompletion:(void (^)())completion {
     
     GridLocation *pushLocation = [action.enemyCard.cardLocation getPushLocationForGridLocationWhenComingFromGridLocation:[action getEntryLocationInPath]];
     
-    Card *cardAtPushLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:pushLocation];
+    Card *cardAtPushLocation = [gamemanager cardLocatedAtGridLocation:pushLocation];
     
     if (cardAtPushLocation != nil || ![pushLocation isInsideGameBoard]) {
         
-        [[GameManager sharedManager] attackSuccessfulAgainstCard:action.enemyCard];
+        [gamemanager attackSuccessfulAgainstCard:action.enemyCard];
         completion();
     }
     else {
-        PushAction *pushAction = [[PushAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard];
+        PushAction *pushAction = [[PushAction alloc] initWithGameManager:gamemanager path:@[[[PathFinderStep alloc] initWithLocation:pushLocation]] andCardInAction:action.enemyCard];
         
         pushAction.delegate = action.delegate;
         [pushAction performActionWithCompletion:^{
@@ -80,7 +80,7 @@
                 
         if (![self.cardInAction.cardLocation isEqual:endLocation]) {
             
-            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];
+            [self.gamemanager card:self.cardInAction movedToGridLocation:endLocation];
             
             [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:endLocation];
         }

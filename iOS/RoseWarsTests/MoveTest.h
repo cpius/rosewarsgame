@@ -13,8 +13,6 @@
 @class GameManager;
 @interface MoveTest : XCTestCase {
     
-    GameManager *_manager;
-    
     FixedDiceStrategy *_attackerFixedStrategy;
     FixedDiceStrategy *_defenderFixedStrategy;
 }

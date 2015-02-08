@@ -17,37 +17,12 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 
 @implementation Card
 
-@synthesize frontImageSmall = _frontImageSmall;
-@synthesize frontImageLarge = _frontImageLarge;
-@synthesize backImage = _backImage;
-@synthesize cardColor = _cardColor;
-@synthesize cardLocation = _cardLocation;
-@synthesize isShowingDetail;
-@synthesize attack = _attack, defence = _defence;
-@synthesize movesConsumed;
-@synthesize move;
-@synthesize experience;
-@synthesize range;
-@synthesize isRanged, isMelee, isCaster;
-@synthesize dead;
-@synthesize moveActionCost;
-@synthesize attackActionCost;
-@synthesize hasReceivedExperiencePointsThisRound;
-@synthesize numberOfLevelsIncreased;
-@synthesize delegate = _delegate;
-@synthesize attackSound = _attackSound, defeatSound = _defenceSound, moveSound = _moveSound;
-@synthesize currentlyAffectedByAbilities = _currentlyAffectedByAbilities;
-@synthesize hitpoints;
-@synthesize battleStrategy = _battleStrategy;
-
-- (id)init {
-    
+- (instancetype)init
+{
     self = [super init];
     
     if (self) {
-        
         self.isShowingDetail = NO;
-        
         _currentlyAffectedByAbilities = [NSMutableArray array];
     }
     
@@ -65,6 +40,9 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
     
     self.numberOfLevelsIncreased = 0;
     self.experience = 0;
+    
+    _unitHasExtraAction = NO;
+    _extraActionType = kExtraActionNoAction;
     
     _cardIdentifier = [self createCardIdentifier];
 }
@@ -115,6 +93,7 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
     self.hasReceivedExperiencePointsThisRound = NO;
     self.hasPerformedActionThisRound = NO;
     self.hasPerformedAttackThisRound = NO;
+    self.extraActionConsumed = NO;
 }
 
 - (NSArray*)abilities {
@@ -144,11 +123,11 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 
 - (NSString *)description {
     
-    NSString *description = [NSString stringWithFormat:@"Unit: %@ - with color: %@ boardlocation: row %d column %d",
+    NSString *description = [NSString stringWithFormat:@"Unit: %@ - with color: %@ boardlocation: row %lu column %lu",
                              UnitNameAsString(self.unitName),
                              CardColorAsString(self.cardColor),
-                             self.cardLocation.row,
-                             self.cardLocation.column];
+                             (unsigned long)self.cardLocation.row,
+                             (unsigned long)self.cardLocation.column];
     
     return description;
 }
@@ -229,10 +208,10 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
     NSArray *cards;
     
     if ([action.cardInAction isOwnedByMe]) {
-        cards = [GameManager sharedManager].currentGame.myDeck.cards;
+        cards = self.gamemanager.currentGame.myDeck.cards;
     }
     else {
-        cards = [GameManager sharedManager].currentGame.enemyDeck.cards;
+        cards = self.gamemanager.currentGame.enemyDeck.cards;
     }
     
     for (Card *card in cards) {
@@ -362,7 +341,7 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 
 - (void)consumeAllMoves {
     
-    movesConsumed = move;
+    _movesConsumed = _move;
 }
 
 - (void)consumeMove {
@@ -372,12 +351,12 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 
 - (void)consumeMoves:(NSUInteger)moves {
     
-    movesConsumed += moves;
+    _movesConsumed += moves;
 }
 
 - (NSInteger)movesRemaining {
     
-    return move - movesConsumed;
+    return _move - _movesConsumed;
 }
 
 - (BOOL)isOfType:(UnitName)type {
@@ -387,8 +366,8 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 
 - (BOOL)isOwnedByMe {
     
-    return (self.cardColor == kCardColorGreen && [GameManager sharedManager].currentGame.myColor == kPlayerGreen) ||
-        (self.cardColor == kCardColorRed && [GameManager sharedManager].currentGame.myColor == kPlayerRed);
+    return (self.cardColor == kCardColorGreen && self.gamemanager.currentGame.myColor == kPlayerGreen) ||
+        (self.cardColor == kCardColorRed && self.gamemanager.currentGame.myColor == kPlayerRed);
 }
 
 - (BOOL)isOwnedByEnemy {

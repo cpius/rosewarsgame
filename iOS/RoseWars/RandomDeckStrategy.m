@@ -17,7 +17,7 @@
     return [[RandomDeckStrategy alloc] init];
 }
 
-- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
+- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor gamemanager:(GameManager*)gamemanager {
     
     _cards = [[NSMutableArray alloc] init];
     

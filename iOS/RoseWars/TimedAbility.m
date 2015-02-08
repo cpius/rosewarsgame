@@ -15,6 +15,8 @@
 
 - (void)notifyAndStopTimedAbility;
 
+@property (nonatomic, assign) BOOL observerAdded;
+
 @end
 
 @implementation TimedAbility
@@ -38,7 +40,9 @@
         _numberOfTurns = numberOfTurns;
         _card = card;
         
-        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
+        [_card.gamemanager.currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
+        self.observerAdded = YES;
+        NSLog(@"Timed ability of type %@ ADDED to card %@", NSStringFromClass(self.class), card);
         
         if ([_delegate respondsToSelector:@selector(timedAbilityWillStart:)]) {
             [_delegate timedAbilityWillStart:self];
@@ -65,7 +69,9 @@
         
         [self fromDictionary:abilityData];
         
-        [[GameManager sharedManager].currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
+        [self.card.gamemanager.currentGame addObserver:self forKeyPath:@"turnCounter" options:NSKeyValueObservingOptionNew context:nil];
+        NSLog(@"Timed ability of type %@ ADDED to card %@", NSStringFromClass(self.class), card);
+        self.observerAdded = YES;
         
         if (_numberOfTurns > 0) {
 
@@ -86,17 +92,29 @@
     return self;
 }
 
+- (void)dealloc {
+    if (self.observerAdded) {
+        [self.card.gamemanager.currentGame removeObserver:self forKeyPath:@"turnCounter"];
+        self.observerAdded = NO;
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    
-    if (object == [GameManager sharedManager].currentGame && [keyPath isEqualToString:@"turnCounter"]) {
+    if (object == self.card.gamemanager.currentGame && [keyPath isEqualToString:@"turnCounter"]) {
         
-        if ([GameManager sharedManager].currentGame.turnCounter == _abilityStartedInTurn + _numberOfTurns) {
+        if (self.card.gamemanager.currentGame.turnCounter == _abilityStartedInTurn + _numberOfTurns) {
             [self notifyAndStopTimedAbility];
         }
     }
 }
 
 - (void)notifyAndStopTimedAbility {
+    if (self.observerAdded) {
+        [self.card.gamemanager.currentGame removeObserver:self forKeyPath:@"turnCounter"];
+        NSLog(@"Timed ability of type %@ REMOVED from card %@", NSStringFromClass(self.class), self.card);
+
+        self.observerAdded = NO;
+    }
     
     if ([_delegate respondsToSelector:@selector(timedAbilityWillStop:)]) {
         [_delegate timedAbilityWillStop:self];
@@ -113,7 +131,7 @@
     
     _abilityStartedInTurn--;
     
-    if ([GameManager sharedManager].currentGame.turnCounter == _abilityStartedInTurn + _numberOfTurns) {
+    if (self.card.gamemanager.currentGame.turnCounter == _abilityStartedInTurn + _numberOfTurns) {
         [self notifyAndStopTimedAbility];
     }
 }
@@ -124,7 +142,7 @@
 
 - (void)startTimedAbility {
     
-    _abilityStartedInTurn = [GameManager sharedManager].currentGame.turnCounter;
+    _abilityStartedInTurn = self.card.gamemanager.currentGame.turnCounter;
 }
 
 - (void)stopTimedAbility {
@@ -147,11 +165,6 @@
 
 - (void)fromDictionary:(NSDictionary*)dictionary {
     
-}
-
-- (void)dealloc {
-    
-    [[GameManager sharedManager].currentGame removeObserver:self forKeyPath:@"turnCounter"];
 }
 
 @end

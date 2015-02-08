@@ -15,6 +15,8 @@
 
 @interface PathFinder()
 
+@property (nonatomic, readonly) GameManager *gamemanager;
+
 - (void)insertInOpenSteps:(PathFinderStep*)step;
 - (int)computeHScoreFromGridLocation:(GridLocation*)fromLocation toGridLocation:(GridLocation*)toLocation;
 - (int)costToMovingFromStep:(PathFinderStep*)step toAdjacentStep:(PathFinderStep*)toStep;
@@ -27,6 +29,20 @@
 @end
 
 @implementation PathFinder
+
+- (instancetype)init {
+    NSAssert(YES, @"use initWithGameManager");
+    return nil;
+}
+
+- (instancetype)initWithGameManager:(GameManager*)gamemanager
+{
+    self = [super init];
+    if (self) {
+        _gamemanager = gamemanager;
+    }
+    return self;
+}
 
 - (void)insertInOpenSteps:(PathFinderStep *)step {
     
@@ -51,12 +67,13 @@
 
 - (int)computeHScoreFromGridLocation:(GridLocation*)fromLocation toGridLocation:(GridLocation*)toLocation {
     
-    return abs(toLocation.column - fromLocation.column) + abs(toLocation.row - fromLocation.row);
+    return abs((int)toLocation.column - (int)fromLocation.column) + abs((int)toLocation.row - (int)fromLocation.row);
 }
 
 - (int)costToMovingFromStep:(PathFinderStep *)step toAdjacentStep:(PathFinderStep *)toStep {
-    
-    return 1;
+    // The further away from the destination, the more expensive
+    return [self computeHScoreFromGridLocation:step.location toGridLocation:toStep.location];
+    //return 1;
 }
 
 - (PathFinderStep *)getStepWithLowestFCost {
@@ -164,7 +181,7 @@
     
     NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:toLocation usingStrategy:[PathFinderStrategyFactory getMoveStrategy] allLocations:allLocations];
     
-    MoveAction *action = [[MoveAction alloc] initWithPath:path andCardInAction:card enemyCard:nil];
+    MoveAction *action = [[MoveAction alloc] initWithGameManager:self.gamemanager path:path andCardInAction:card enemyCard:nil];
     
     if ([card allowAction:action allLocations:allLocations]) {
         return action;
@@ -202,7 +219,7 @@
     
     NSArray *path = [self getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackWithConquerStrategy] allLocations:allLocations];
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyUnit meleeAttackType:kMeleeAttackTypeConquer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:path andCardInAction:card enemyCard:enemyUnit meleeAttackType:kMeleeAttackTypeConquer];
     
     if ([card allowAction:meleeAction allLocations:allLocations]) {
         return meleeAction;
@@ -214,7 +231,7 @@
         if (meleeRange <= card.meleeRange) {
             path = [self getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:enemyLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:allLocations];
             
-            meleeAction = [[MeleeAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyUnit meleeAttackType:kMeleeAttackTypeNormal];
+            meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:path andCardInAction:card enemyCard:enemyUnit meleeAttackType:kMeleeAttackTypeNormal];
             
             if ([card allowAction:meleeAction allLocations:allLocations]) {
                 return meleeAction;
@@ -245,7 +262,7 @@
     
     NSArray *path = [self getPathForCard:card fromGridLocation:card.cardLocation toGridLocation:enemyUnit.cardLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
     
-    RangedAttackAction *action = [[RangedAttackAction alloc] initWithPath:path andCardInAction:card enemyCard:enemyUnit];
+    RangedAttackAction *action = [[RangedAttackAction alloc] initWithGameManager:self.gamemanager path:path andCardInAction:card enemyCard:enemyUnit];
     
     if ([card allowAction:action allLocations:allLocations]) {
         return action;
@@ -285,7 +302,7 @@
         
         NSArray *path = [self getPathForCard:card fromGridLocation:fromLocation toGridLocation:targetLocation usingStrategy:[PathFinderStrategyFactory getRangedAttackStrategy] allLocations:allLocations];
         
-        Action *action = [[AbilityAction alloc] initWithPath:path andCardInAction:card targetCard:targetCard];
+        Action *action = [[AbilityAction alloc] initWithGameManager:self.gamemanager path:path andCardInAction:card targetCard:targetCard];
         
         if ([card allowAction:action allLocations:allLocations] && [card isValidTarget:targetCard]) {
             [abilityActions addObject:action];

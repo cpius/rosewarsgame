@@ -30,7 +30,7 @@
     return [[FixedDeckStrategy alloc] init];
 }
 
-- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor {
+- (Deck*)generateNewDeckWithNumberOfBasicType:(NSUInteger)basicType andSpecialType:(NSInteger)specialType cardColor:(CardColors)cardColor gamemanager:(GameManager *)gamemanager {
     
     return [[Deck alloc] initWithCards:_fixedCards];
 }

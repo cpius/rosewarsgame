@@ -398,7 +398,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
 
 - (BattlePlan*)createBattlePlanForNode:(GameBoardNode *)node {
     
-    BattlePlan *battleplan = [[BattlePlan alloc] init];
+    BattlePlan *battleplan = [[BattlePlan alloc] initWithGame:[GameManager sharedManager]];
     
     if (node.hasCard && [node.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
         [_gameboard selectCardInGameBoardNode:node useHighlighting:NO];

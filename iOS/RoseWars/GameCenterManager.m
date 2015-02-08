@@ -218,7 +218,7 @@
 
 // Check for internet with Reachability
 - (BOOL)isInternetAvailable {
-    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+/*    Reachability *reachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus internetStatus = [reachability currentReachabilityStatus];
     
     if (internetStatus == NotReachable) {
@@ -232,7 +232,8 @@
         return NO;
     } else {
         return YES;
-    }
+    }*/
+ return YES;
 }
 
 //------------------------------------------------------------------------------------------------------------//

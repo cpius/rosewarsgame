@@ -30,6 +30,8 @@
 @class Card;
 @interface Action : NSObject <CardDelegate>
 
+@property (nonatomic, readonly) GameManager *gamemanager;
+
 @property (nonatomic, weak) id<ActionDelegate> delegate;
 @property (nonatomic, strong) NSArray *path;
 @property (nonatomic, readonly) Card *cardInAction;
@@ -48,7 +50,7 @@
 
 @property (nonatomic, assign) BOOL playback;
 
-- (id)initWithPath:(NSArray*)path andCardInAction:(Card*)card enemyCard:(Card*)enemyCard;
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard;
 
 - (BOOL)isWithinRange;
 - (GridLocation*)getFirstLocationInPath;

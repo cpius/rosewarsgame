@@ -12,13 +12,26 @@
 #import "Pikeman.h"
 #import "LightCavalry.h"
 #import "Knight.h"
+#import "CardPool.h"
+
+@interface BasicUnitTest()
+
+@property (nonatomic, strong) GameManager *gamemanager;
+
+@end
 
 @implementation BasicUnitTest
 
-- (void)testArcherBonusAgainstInfantry {
+- (void)setUp
+{
+    [super setUp];
     
-    Archer *archer = [Archer card];
-    Pikeman *pikeman = [Pikeman card];
+    self.gamemanager = [[GameManager alloc] init];
+}
+
+- (void)testArcherBonusAgainstInfantry {
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     XCTAssertTrue([archer.attack calculateValue].lowerValue == 5, @"Archer lowerValye base attack should be 5");
     
@@ -34,8 +47,8 @@
 
 - (void)testPikemanBonusAgainstLightCavalry {
     
-    LightCavalry *lightCavalry = [LightCavalry card];
-    Pikeman *pikeman = [Pikeman card];
+    LightCavalry *lightCavalry = [CardPool createCardOfName:kLightCavalry withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman lowerValue base attack should be 5");
     

@@ -15,6 +15,6 @@
 }
 
 + (void)swapBoardInGame:(Game*)game myCurrentGameBoardSide:(GameBoardSides)gameBoardSide;
-+ (Game *)setupGame:(Game*)game withPlayer1Units:(NSArray *)player1Units player2Units:(NSArray *)player2Units;
++ (Game *)setupGame:(Game*)game gamemanager:(GameManager*)gamemanager withPlayer1Units:(NSArray *)player1Units player2Units:(NSArray *)player2Units;
 
 @end

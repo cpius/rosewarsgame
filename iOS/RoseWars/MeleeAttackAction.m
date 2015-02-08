@@ -20,17 +20,19 @@
 @synthesize startLocation = _startLocation;
 @synthesize battleReport = _battleReport;
 @synthesize enemyInitialLocation = _enemyInitialLocation;
+@synthesize gamemanager = _gamemanager;
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard {
     
-    return [self initWithPath:path andCardInAction:card enemyCard:enemyCard meleeAttackType:kMeleeAttackTypeConquer];
+    return [self initWithGameManager:gamemanager path:path andCardInAction:card enemyCard:enemyCard meleeAttackType:kMeleeAttackTypeConquer];
 }
 
-- (id)initWithPath:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard meleeAttackType:(MeleeAttackTypes)meleeAttackType {
+- (id)initWithGameManager:(GameManager*)gamemanager path:(NSArray *)path andCardInAction:(Card *)card enemyCard:(Card *)enemyCard meleeAttackType:(MeleeAttackTypes)meleeAttackType {
     
-    self = [super initWithPath:path andCardInAction:card enemyCard:enemyCard];
+    self = [super initWithGameManager:gamemanager path:path andCardInAction:card enemyCard:enemyCard];
     
     if (self) {
+        _gamemanager = gamemanager;
         _actionType = kActionTypeMelee;
         _meleeAttackType = meleeAttackType;
         
@@ -65,7 +67,7 @@
     
     self.cardInAction.delegate = self;
 
-    [[GameManager sharedManager] willUseAction:self];
+    [self.gamemanager willUseAction:self];
     [self.cardInAction willPerformAction:self];
     [self.delegate beforePerformAction:self];
     
@@ -75,7 +77,7 @@
         
         [self.cardInAction consumeMoves:self.path.count];
         
-        BattleResult *result = [[GameManager sharedManager] resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
+        BattleResult *result = [self.gamemanager resolveCombatBetween:self.cardInAction defender:self.enemyCard battleStrategy:self.cardInAction.battleStrategy];
         
         [self.cardInAction didResolveCombatDuringAction:self];
         
@@ -87,7 +89,7 @@
         
         _battleReport.primaryBattleResult = result;
 
-        [[GameManager sharedManager].currentGame addBattleReport:_battleReport forAction:self];
+        [self.gamemanager.currentGame addBattleReport:_battleReport forAction:self];
 
         if (IsDefenseSuccessful(result.combatOutcome)) {
             
@@ -96,7 +98,7 @@
             [self.delegate action:self wantsToMoveFollowingPath:@[retreatToLocation] withCompletion:^(GridLocation *endLocation) {
                 
                 if (![self.cardInAction.cardLocation isSameLocationAs:retreatLocation]) {
-                    [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
+                    [self.gamemanager card:self.cardInAction movedToGridLocation:retreatLocation];
                     [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
                 }
                 
@@ -123,8 +125,8 @@
             }*/
             if (IsPushSuccessful(result.combatOutcome) && !self.enemyCard.dead) {
                 
-                [PushAction performPushFromAction:self withCompletion:^{
-                    if (self.meleeAttackStrategy == kMeleeAttackStrategyAutoConquer && ![[GameManager sharedManager] isCardLocatedAtGridLocation:_enemyInitialLocation]) {
+                [PushAction performPushFromAction:self gameManager:self.gamemanager withCompletion:^{
+                    if (self.meleeAttackStrategy == kMeleeAttackStrategyAutoConquer && ![self.gamemanager isCardLocatedAtGridLocation:_enemyInitialLocation]) {
                         [self conquerEnemyLocationWithCompletion:^{
                             if (completion != nil) {
                                 completion();
@@ -135,7 +137,7 @@
                     else {
                         [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:retreatLocation]] withCompletion:^(GridLocation *endLocation) {
                             
-                            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
+                            [self.gamemanager card:self.cardInAction movedToGridLocation:retreatLocation];
                             
                             if (![_startLocation isEqual:retreatLocation]) {
                                 [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
@@ -153,7 +155,7 @@
             else {
                 [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:retreatLocation]] withCompletion:^(GridLocation *endLocation) {
                     
-                    [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:retreatLocation];
+                    [self.gamemanager card:self.cardInAction movedToGridLocation:retreatLocation];
                     
                     if (![_startLocation isEqual:retreatLocation]) {
                         [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:_startLocation toLocation:retreatLocation];
@@ -203,7 +205,7 @@
         GridLocation *cardInActionStartLocation = self.cardInAction.cardLocation;
 
         [self.delegate action:self wantsToMoveFollowingPath:@[[[PathFinderStep alloc] initWithLocation:self.gridLocationForConquer]] withCompletion:^(GridLocation *endLocation) {
-            [[GameManager sharedManager] card:self.cardInAction movedToGridLocation:endLocation];
+            [self.gamemanager card:self.cardInAction movedToGridLocation:endLocation];
             [self.delegate action:self wantsToMoveCard:self.cardInAction fromLocation:cardInActionStartLocation toLocation:endLocation];
             if (completion != nil) {
                 completion();
@@ -224,7 +226,7 @@
     
     self.cardInAction.delegate = nil;
     
-    [[GameManager sharedManager] actionUsed:self];
+    [self.gamemanager actionUsed:self];
     [self.cardInAction didPerformedAction:self];
 }
 

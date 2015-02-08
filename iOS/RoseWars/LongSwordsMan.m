@@ -48,7 +48,6 @@
 }
 
 + (id)card {
-    
     return [[Longswordsman alloc] init];
 }
 
@@ -71,11 +70,11 @@
         
         for (GridLocation *gridLocation in surroundingMyCard.allObjects) {
             
-            Card *cardInLocation = [[GameManager sharedManager] cardLocatedAtGridLocation:gridLocation];
+            Card *cardInLocation = [self.gamemanager cardLocatedAtGridLocation:gridLocation];
             
             if (cardInLocation != nil && cardInLocation.cardColor != meleeAttackAction.cardInAction.cardColor) {
                 
-                MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation meleeAttackType:kMeleeAttackTypeNormal];
+                MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:gridLocation]] andCardInAction:action.cardInAction enemyCard:cardInLocation meleeAttackType:kMeleeAttackTypeNormal];
                 
                 BattleReport *battleReport = [BattleReport battleReportWithAction:meleeAction];
                 
@@ -89,7 +88,7 @@
                     }
                 }
                 
-                BattleResult *outcome = [[GameManager sharedManager] resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
+                BattleResult *outcome = [self.gamemanager resolveCombatBetween:action.cardInAction defender:cardInLocation battleStrategy:action.cardInAction.battleStrategy];
                 
                 outcome.meleeAttackType = meleeAction.meleeAttackType;
                 battleReport.primaryBattleResult = outcome;

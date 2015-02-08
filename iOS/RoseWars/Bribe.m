@@ -18,7 +18,7 @@
     self.card.cardColor = OppositeColorOfCardColor(_originalColorOfBribedUnit);
     
     // And adds a +1 attack bonus
-    [self.card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfTurns:1]];
+    [self.card.attack addTimedBonus:[[TimedBonus alloc] initWithValue:1 forNumberOfTurns:1 gamemanager:self.card.gamemanager]];
     
     NSLog(@"Card: %@ has been bribed", self.card);
 }

@@ -11,17 +11,22 @@
 #import "GameManager.h"
 #import "PathFinderStrategyFactory.h"
 #import "MeleeAttackAction.h"
-#import "Game.h"
+#import "GameManager.h"
 
 @implementation BattlePlan
 
-- initWithGame:(Game*)game {
+- (instancetype)init {
+    NSAssert(YES, @"use initWithGame");
+    return nil;
+}
+
+- initWithGame:(GameManager*)gamemanager {
     
     self = [super init];
     
     if (self) {
-        NSAssert(!game, @"Game must be non-nil");
-        _game = game;
+        NSAssert(gamemanager, @"Game must be non-nil");
+        _gamemanager = gamemanager;
     }
     
     return self;
@@ -42,7 +47,7 @@
 - (NSDictionary *)getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:(NSDictionary*)unitLayout {
     
     NSMutableDictionary *attackDirections = [NSMutableDictionary dictionary];
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
     // Add location of target
     [attackDirections setObject:action.path forKey:action.enemyCard.cardLocation];
@@ -55,14 +60,14 @@
         
         if (cardInLocation == nil && [location isInsideGameBoard]) {
 
-            NSArray *path = [pathFinder getPathForCard:action.cardInAction fromGridLocation:action.cardInAction.cardLocation toGridLocation:location usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategyWithMeleeAttackType:action.meleeAttackType] allLocations:[GameManager sharedManager].currentGame.unitLayout];
+            NSArray *path = [pathFinder getPathForCard:action.cardInAction fromGridLocation:action.cardInAction.cardLocation toGridLocation:location usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategyWithMeleeAttackType:action.meleeAttackType] allLocations:self.gamemanager.currentGame.unitLayout];
             
             if (path != nil) {
                 NSMutableArray *newPath = [NSMutableArray arrayWithArray:path];
                 // And add last step from enemy unit
                 [newPath addObject:[[PathFinderStep alloc] initWithLocation:action.enemyCard.cardLocation]];
                 
-                MeleeAttackAction *tempAction = [[MeleeAttackAction alloc] initWithPath:newPath andCardInAction:action.cardInAction enemyCard:action.enemyCard meleeAttackType:action.meleeAttackType];
+                MeleeAttackAction *tempAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:newPath andCardInAction:action.cardInAction enemyCard:action.enemyCard meleeAttackType:action.meleeAttackType];
                 
                 if ([action.cardInAction allowAction:tempAction allLocations:unitLayout]) {
                     [attackDirections setObject:newPath forKey:location];
@@ -113,9 +118,9 @@
     
     if (![card isOwnedByMe]) return [NSArray array];
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:_gamemanager];
     
-    NSUInteger remainingActionCount = [GameManager sharedManager].currentGame.numberOfAvailableActions;
+    NSUInteger remainingActionCount = self.gamemanager.currentGame.numberOfAvailableActions;
     
     if ([card canPerformActionOfType:kActionTypeMove withRemainingActionCount:remainingActionCount]) {
         _moveActions = [pathFinder getMoveActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];

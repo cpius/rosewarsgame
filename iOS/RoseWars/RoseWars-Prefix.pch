@@ -13,10 +13,8 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-
     #import "Definitions.h"
-    #import "GridLocation.h"
-    #import "TimedAbility.h"
     #import "GameManager.h"
+    #import "GridLocation.h"
     #import "SKAction+Utility.h"
 #endif

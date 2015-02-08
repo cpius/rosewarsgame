@@ -39,6 +39,13 @@
 #import "JuggernautBattleStrategy.h"
 #import "FixedLevelIncreaseStrategy.h"
 #import "Knight.h"
+#import "CardPool.h"
+
+@interface SpecialUnitTest()
+
+@property (nonatomic) GameManager *gamemanager;
+
+@end
 
 @implementation SpecialUnitTest
 
@@ -46,60 +53,25 @@
 {
     [super setUp];
     
-    _manager = [GameManager sharedManager];
+    self.gamemanager = [[GameManager alloc] init];
 }
 
-- (void)testChariotCanMoveAfterAttack {
-    
-    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
-    
-    Archer *archer = [Archer card];
-    Hobelar *chariot = [Hobelar card];
-    
-    archer.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    archer.cardColor = kCardColorRed;
-    
-    chariot.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    chariot.cardColor = kCardColorGreen;
-    
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
-                                withPlayer1Units:[NSArray arrayWithObject:chariot]
-                                    player2Units:[NSArray arrayWithObjects:archer, nil]];
-    
-    _manager.currentPlayersTurn = kPlayerGreen;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
-    
-    MeleeAttackAction *meleeAttack = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:archer.cardLocation]] andCardInAction:chariot enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
-    
-    meleeAttack.delegate = mock;
-    
-    [meleeAttack performActionWithCompletion:^{
-        XCTAssertTrue(chariot.movesRemaining > 0, @"Chariot should have remaining moves after combat");
-        XCTAssertTrue([chariot canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Chariot should be able to move after attack");
-        XCTAssertFalse([chariot canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Chariot shouldn't be able to attack a second time");
-    }];
-}
 
 - (void)testBerserkerAttackingCannon {
     
-    Berserker *berserker = [Berserker card];
-    Canon *canon = [Canon card];
+    Berserker *berserker = [CardPool createCardOfName:kBerserker withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Canon *canon = [CardPool createCardOfName:kCannon withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     berserker.cardLocation = [GridLocation gridLocationWithRow:3 column:2];
-    berserker.cardColor = kCardColorGreen;
-    
     canon.cardLocation = [GridLocation gridLocationWithRow:1 column:2];
-    canon.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:berserker]
                                     player2Units:[NSArray arrayWithObjects:canon, nil]];
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertTrue(meleeAttacks.count == 1, @"Berserker should be able to attack cannon");
 }
@@ -107,81 +79,72 @@
 
 - (void)testScoutCannotMoveFirstRound {
     
-    Scout *scout = [Scout card];
+    Scout *scout = [CardPool createCardOfName:kScout withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     
     scout.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    scout.cardColor = kCardColorGreen;
-        
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:scout]
                                     player2Units:[NSArray arrayWithObjects:nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
 
-    BOOL canPerformAction = [scout canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions];
+    BOOL canPerformAction = [scout canPerformActionOfType:kActionTypeMove withRemainingActionCount:self.gamemanager.currentGame.numberOfAvailableActions];
     
     XCTAssertFalse(canPerformAction, @"Scout should not be able to move in the first round");
     
-    [_manager endTurn];
-    [_manager endTurn];
+    [self.gamemanager endTurn];
+    [self.gamemanager endTurn];
     
-    canPerformAction = [scout canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions];
+    canPerformAction = [scout canPerformActionOfType:kActionTypeMove withRemainingActionCount:self.gamemanager.currentGame.numberOfAvailableActions];
 
     XCTAssertTrue(canPerformAction, @"Scout should be able to move when past the first round");
 }
 
 - (void)testBerserkerCanAttackEnemyUnitWithFourNodes {
     
-    Berserker *berserker = [Berserker card];
-    Hobelar *chariot = [Hobelar card];
-    Archer *archer = [Archer card];
+    Berserker *berserker = [CardPool createCardOfName:kBerserker withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Hobelar *chariot = [CardPool createCardOfName:kHobelar withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     berserker.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    berserker.cardColor = kCardColorGreen;
-    
     chariot.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    chariot.cardColor = kCardColorRed;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:berserker]
                                     player2Units:[NSArray arrayWithObjects:chariot, archer, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
 
     XCTAssertTrue(meleeAttacks.count == 1, @"Berserker should be able to attack chariot");
     
-    NSArray *moveActions = [pathFinder getMoveActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    NSArray *moveActions = [pathFinder getMoveActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertTrue(moveActions.count == 4, @"Berserker should only be able to move to adjacent nodes");
 }
 
 - (void)testLancerGetsAttackBonusWhenAttackingWithTwoEmptyNodes {
     
-    Lancer *lancer = [Lancer card];
-    Archer *archer = [Archer card];
+    Lancer *lancer = [CardPool createCardOfName:kLancer withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     lancer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    lancer.cardColor = kCardColorGreen;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    archer.cardColor = kCardColorRed;
-        
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:lancer]
                                     player2Units:[NSArray arrayWithObjects:archer, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
 
     XCTAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
     
@@ -192,8 +155,8 @@
     
     [lancer didPerformedAction:meleeAttacks[0]];
     
-    [_manager endTurn];
-    [_manager endTurn];
+    [self.gamemanager endTurn];
+    [self.gamemanager endTurn];
 
     XCTAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
     XCTAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
@@ -201,24 +164,21 @@
 
 - (void)testLancerDoesntGetAttackBonusWhenAttackingWithLessThanTwoEmptyNodes {
     
-    Lancer *lancer = [Lancer card];
-    Archer *archer = [Archer card];
+    Lancer *lancer = [CardPool createCardOfName:kLancer withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     lancer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    lancer.cardColor = kCardColorGreen;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:lancer]
                                     player2Units:[NSArray arrayWithObjects:archer, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
     
@@ -235,28 +195,23 @@
 
 - (void)testLancerDoesntGetAttackBonusWhenAttackingWithTwoNonEmptyNodes {
     
-    Lancer *lancer = [Lancer card];
-    Archer *archer = [Archer card];
-    Archer *archer2 = [Archer card];
+    Lancer *lancer = [CardPool createCardOfName:kLancer withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *archer2 = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     lancer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    lancer.cardColor = kCardColorGreen;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    archer.cardColor = kCardColorRed;
-
     archer2.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    archer2.cardColor = kCardColorRed;
 
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:lancer]
                                     player2Units:[NSArray arrayWithObjects:archer,archer2, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
     
@@ -273,20 +228,17 @@
 
 - (void)testRoyalGuardGetsDefenseBonusAgainstMelee {
     
-    RoyalGuard *royalguard = [RoyalGuard card];
-    Pikeman *pikeman = [Pikeman card];
+    RoyalGuard *royalguard = [CardPool createCardOfName:kRoyalGuard withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     royalguard.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    royalguard.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    pikeman.cardColor = kCardColorRed;
-        
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:royalguard]
                                     player2Units:[NSArray arrayWithObjects:pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     [royalguard combatStartingAgainstAttacker:pikeman];
     
@@ -299,202 +251,136 @@
 
 - (void)testRoyalGuardGetsIncreasedMovementWhenMovingSideways {
     
-    RoyalGuard *royalguard = [RoyalGuard card];
+    RoyalGuard *royalguard = [CardPool createCardOfName:kRoyalGuard withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     
     royalguard.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    royalguard.cardColor = kCardColorGreen;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:royalguard]
                                     player2Units:[NSArray arrayWithObjects:nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
 
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *pathWithSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:3 column:4] usingStrategy:[MovePathFinderStrategy strategy] allLocations:_manager.currentGame.unitLayout];
+    NSArray *pathWithSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:3 column:4] usingStrategy:[MovePathFinderStrategy strategy] allLocations:self.gamemanager.currentGame.unitLayout];
     
-    XCTAssertTrue([royalguard allowPath:pathWithSidewaysMovement forActionType:kActionTypeMove allLocations:_manager.currentGame.unitLayout], @"RoyalGuard should be able to move 2 nodes when one of them is sideways");
+    XCTAssertTrue([royalguard allowPath:pathWithSidewaysMovement forActionType:kActionTypeMove allLocations:self.gamemanager.currentGame.unitLayout], @"RoyalGuard should be able to move 2 nodes when one of them is sideways");
 }
 
 - (void)testRoyalGuardDoesntGetIncreasedMovementWhenOnlyMovingUpOrDown {
     
-    RoyalGuard *royalguard = [RoyalGuard card];
+    RoyalGuard *royalguard = [CardPool createCardOfName:kRoyalGuard withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     
     royalguard.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    royalguard.cardColor = kCardColorGreen;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:royalguard]
                                     player2Units:[NSArray arrayWithObjects:nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *pathWithoutSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:4 column:3] usingStrategy:[MovePathFinderStrategy strategy] allLocations:_manager.currentGame.unitLayout];
+    NSArray *pathWithoutSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:4 column:3] usingStrategy:[MovePathFinderStrategy strategy] allLocations:self.gamemanager.currentGame.unitLayout];
     
-    XCTAssertFalse([royalguard allowPath:pathWithoutSidewaysMovement forActionType:kActionTypeMove allLocations:_manager.currentGame.unitLayout], @"RoyalGuard shouldn't be able to move 2 tiles when none of them is sideways");
+    XCTAssertFalse([royalguard allowPath:pathWithoutSidewaysMovement forActionType:kActionTypeMove allLocations:self.gamemanager.currentGame.unitLayout], @"RoyalGuard shouldn't be able to move 2 tiles when none of them is sideways");
 }
 
-- (void)testSamuraiCanAttackTwice {
-    
-    GameBoardMockup *mock = [[GameBoardMockup alloc] init];
-    
-    Samurai *samurai = [Samurai card];
-    
-    LightCavalry *lightCavalry1 = [LightCavalry card];
-    LightCavalry *lightCavalry2 = [LightCavalry card];
-    
-    samurai.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    samurai.cardColor = kCardColorGreen;
-    
-    lightCavalry1.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    lightCavalry1.cardColor = kCardColorRed;
-
-    lightCavalry2.cardLocation = [GridLocation gridLocationWithRow:2 column:4];
-    lightCavalry2.cardColor = kCardColorRed;
-
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
-                                withPlayer1Units:[NSArray arrayWithObject:samurai]
-                                    player2Units:[NSArray arrayWithObjects:lightCavalry1, lightCavalry2, nil]];
-    
-    _manager.currentPlayersTurn = kPlayerGreen;
-    
-    _attackerFixedStrategy.fixedDieValue = 5;
-    _defenderFixedStrategy.fixedDieValue = 5;
-    
-    PathFinder *pathFinder = [[PathFinder alloc] init];
-
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:samurai.cardLocation forCard:samurai enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
-    
-    XCTAssertTrue(meleeAttacks.count == 2, @"Samurai should be able to attack both cavalry");
-    XCTAssertTrue([samurai canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai should be able to perform melee action");
-    XCTAssertTrue([samurai canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai should be able to perform move action");
-    
-    MeleeAttackAction *action1 = meleeAttacks[0];
-    
-    action1.delegate = mock;
-    
-    [action1 performActionWithCompletion:^{
-        XCTAssertTrue([samurai canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai should be able to perform a second melee action");
-        XCTAssertFalse([samurai canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai shouldn't be able to perform move action");
-    }];
-    
-    MeleeAttackAction *action2 = meleeAttacks[1];
-    
-    action2.delegate = mock;
-
-    [action2 performActionWithCompletion:^{
-        XCTAssertFalse([samurai canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai shouldn't be able to perform a third melee action");
-        XCTAssertFalse([samurai canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Samurai shouldn't be able to perform move action");
-    }];
-}
 
 - (void)testVikingNeedsTwoSuccessfulHitsToDie {
     
-    Viking *viking = [Viking card];
-    Pikeman *pikeman = [Pikeman card];
+    Viking *viking = [CardPool createCardOfName:kViking withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     viking.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    viking.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    pikeman.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:viking]
                                     player2Units:[NSArray arrayWithObjects:pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
     XCTAssertTrue(viking.hitpoints == 2, @"Viking should have 2 hitpoints");
 
-    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:pikeman.battleStrategy];
+    [self.gamemanager resolveCombatBetween:pikeman defender:viking battleStrategy:pikeman.battleStrategy];
     
     XCTAssertFalse(viking.dead, @"Viking shouldn't die after a failed defense");
     XCTAssertTrue(viking.hitpoints == 1, @"Viking should only have 1 hitpoint left after a failed defense");
     
-    [_manager resolveCombatBetween:pikeman defender:viking battleStrategy:pikeman.battleStrategy];
+    [self.gamemanager resolveCombatBetween:pikeman defender:viking battleStrategy:pikeman.battleStrategy];
     
     XCTAssertTrue(viking.dead, @"Viking should be dead!");
 }
 
 - (void)testVikingCanAttackAfterMove {
     
-    Viking *viking = [Viking card];
-    Pikeman *pikeman = [Pikeman card];
+    Viking *viking = [CardPool createCardOfName:kViking withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     viking.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    viking.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    pikeman.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:viking]
                                     player2Units:[NSArray arrayWithObjects:pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     _attackerFixedStrategy.fixedDieValue = 5;
     _defenderFixedStrategy.fixedDieValue = 5;
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
-    MoveAction *moveAction = [[MoveAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:viking enemyCard:pikeman];
+    MoveAction *moveAction = [[MoveAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:viking enemyCard:pikeman];
     
-    XCTAssertTrue([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking should be able to perform move action");
+    XCTAssertTrue([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:self.gamemanager.currentGame.numberOfAvailableActions], @"Viking should be able to perform move action");
     
     moveAction.delegate = mock;
     
     [moveAction performActionWithCompletion:^{
         
-        XCTAssertFalse([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a second move action");
+        XCTAssertFalse([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:self.gamemanager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a second move action");
         
-        XCTAssertTrue([viking canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking should be able to perform a melee action after a move action");
+        XCTAssertTrue([viking canPerformActionOfType:kActionTypeMelee withRemainingActionCount:self.gamemanager.currentGame.numberOfAvailableActions], @"Viking should be able to perform a melee action after a move action");
         
-        MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:viking enemyCard:pikeman];
+        MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:4 column:3]]] andCardInAction:viking enemyCard:pikeman];
         
         meleeAction.delegate = mock;
         
         [meleeAction performActionWithCompletion:^{
-            XCTAssertFalse([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a move action after a melee action");
+            XCTAssertFalse([viking canPerformActionOfType:kActionTypeMove withRemainingActionCount:self.gamemanager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a move action after a melee action");
 
-            XCTAssertFalse([viking canPerformActionOfType:kActionTypeMelee withRemainingActionCount:_manager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a second melee action");
+            XCTAssertFalse([viking canPerformActionOfType:kActionTypeMelee withRemainingActionCount:self.gamemanager.currentGame.numberOfAvailableActions], @"Viking shouldn't be able to perform a second melee action");
         }];
     }];
 }
 
 - (void)testLongswordsmanHitsSurroundingEnemies {
     
-    Longswordsman *longswordsman = [Longswordsman card];
-    Pikeman *pikeman = [Pikeman card];
-    Archer *archer = [Archer card];
+    Longswordsman *longswordsman = [CardPool createCardOfName:kLongswordsman withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     longswordsman.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    longswordsman.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    pikeman.cardColor = kCardColorRed;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:longswordsman]
                                     player2Units:[NSArray arrayWithObjects:pikeman, archer, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     longswordsman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     archer.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:longswordsman enemyCard:pikeman];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:longswordsman enemyCard:pikeman];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
@@ -510,27 +396,22 @@
 
 - (void)testCardAdjacentToCrusaderIsAffectedByAoeEffect {
     
-    Crusader *crusader = [Crusader card];
-    Pikeman *pikeman = [Pikeman card];
-    Archer *archer = [Archer card];
+    Crusader *crusader = [CardPool createCardOfName:kCrusader withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     crusader.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    crusader.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    pikeman.cardColor = kCardColorGreen;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObjects:crusader, pikeman, nil]
                                     player2Units:[NSArray arrayWithObject:archer]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:3 column:3]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -543,27 +424,22 @@
 
 - (void)testCardNotAdjacentToCrusaderIsNotAffectedByAoeEffect {
     
-    Crusader *crusader = [Crusader card];
-    Pikeman *pikeman = [Pikeman card];
-    Archer *archer = [Archer card];
+    Crusader *crusader = [CardPool createCardOfName:kCrusader withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     crusader.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    crusader.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:7 column:3];
-    pikeman.cardColor = kCardColorGreen;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:7 column:4];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObjects:crusader, pikeman, nil]
                                     player2Units:[NSArray arrayWithObject:archer]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:7 column:4]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:[GridLocation gridLocationWithRow:7 column:4]]] andCardInAction:pikeman enemyCard:archer meleeAttackType:kMeleeAttackTypeConquer];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -576,26 +452,21 @@
 
 - (void)testCardRecievesAttackBonusWhileAdjacentToFlagBearer {
     
-    FlagBearer *flagbearer = [FlagBearer card];
-    Pikeman *pikeman = [Pikeman card];
-    Archer *archer = [Archer card];
+    FlagBearer *flagbearer = [CardPool createCardOfName:kFlagBearer withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     flagbearer.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    flagbearer.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    pikeman.cardColor = kCardColorGreen;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObjects:flagbearer, pikeman, nil]
                                     player2Units:[NSArray arrayWithObject:archer]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:archer.cardLocation]] andCardInAction:pikeman enemyCard:archer];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:archer.cardLocation]] andCardInAction:pikeman enemyCard:archer];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -608,23 +479,20 @@
 
 - (void)testWarElephantPushesEnemyWhenDefenseIsSuccesful {
     
-    WarElephant *warelephant = [WarElephant card];
-    Pikeman *pikeman = [Pikeman card];
+    WarElephant *warelephant = [CardPool createCardOfName:kWarElephant withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    warelephant.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    pikeman.cardColor = kCardColorRed;
     
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:warelephant]
                                     player2Units:[NSArray arrayWithObject:pikeman]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -641,23 +509,19 @@
 
 - (void)testWarElephantKillsEnemyWhenPushedOutOfGameBoard {
     
-    WarElephant *warelephant = [WarElephant card];
-    Pikeman *pikeman = [Pikeman card];
+    WarElephant *warelephant = [CardPool createCardOfName:kWarElephant withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     warelephant.cardLocation = [GridLocation gridLocationWithRow:1 column:4];
-    warelephant.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:1 column:5];
-    pikeman.cardColor = kCardColorRed;
     
-    
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:warelephant]
                                     player2Units:[NSArray arrayWithObject:pikeman]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -674,23 +538,19 @@
 
 - (void)testWarElephantPushesVikingAndVikingLosesOneHitPoint {
     
-    WarElephant *warelephant = [WarElephant card];
-    Viking *viking = [Viking card];
+    WarElephant *warelephant = [CardPool createCardOfName:kWarElephant withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Viking *viking = [CardPool createCardOfName:kViking withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    warelephant.cardColor = kCardColorGreen;
-    
     viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    viking.cardColor = kCardColorRed;
     
-    
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:warelephant]
                                     player2Units:[NSArray arrayWithObject:viking]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -709,26 +569,21 @@
 
 - (void)testWarElephantKillsVikingIfPushIsNotPossible {
     
-    WarElephant *warelephant = [WarElephant card];
-    Viking *viking = [Viking card];
-    Pikeman *pikeman = [Pikeman card];
+    WarElephant *warelephant = [CardPool createCardOfName:kWarElephant withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Viking *viking = [CardPool createCardOfName:kViking withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    warelephant.cardColor = kCardColorGreen;
-    
     viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    viking.cardColor = kCardColorRed;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    pikeman.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:warelephant]
                                     player2Units:[NSArray arrayWithObjects:viking, pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -747,35 +602,31 @@
 
 - (void)testWarElephantHitsSurroundingEnemies {
     
-    WarElephant *warelephant = [WarElephant card];
-    Pikeman *pikeman = [Pikeman card];
-    Pikeman *pikeman2 = [Pikeman card];
-    Pikeman *pikeman3 = [Pikeman card];
+    WarElephant *warelephant = [CardPool createCardOfName:kWarElephant withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Archer *defender1 = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *defender2 = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *defender3 = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    warelephant.cardColor = kCardColorGreen;
     
-    pikeman.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    pikeman.cardColor = kCardColorRed;
-    pikeman2.cardLocation = [GridLocation gridLocationWithRow:3 column:2];
-    pikeman2.cardColor = kCardColorRed;
-    pikeman3.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
-    pikeman3.cardColor = kCardColorRed;
+    defender1.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
+    defender2.cardLocation = [GridLocation gridLocationWithRow:3 column:2];
+    defender3.cardLocation = [GridLocation gridLocationWithRow:3 column:4];
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:warelephant]
-                                    player2Units:[NSArray arrayWithObjects:pikeman, pikeman2, pikeman3, nil]];
+                                    player2Units:[NSArray arrayWithObjects:defender1, defender2, defender3, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:warelephant enemyCard:pikeman];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:defender1.cardLocation]] andCardInAction:warelephant enemyCard:defender1];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
-    pikeman2.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    pikeman3.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
+    defender2.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    defender3.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
@@ -784,33 +635,29 @@
     warelephant.aoeBattleStrategy = aoeBattleStrategy;
     
     [meleeAction performActionWithCompletion:^{
+        XCTAssertTrue(defender1.cardLocation.row == 4, @"Pikeman should be pushed");
+        XCTAssertTrue(defender1.cardLocation.column == 3, @"Pikeman should be pushed");
         
-        XCTAssertTrue(pikeman.cardLocation.row == 4, @"Pikeman should be pushed");
-        XCTAssertTrue(pikeman.cardLocation.column == 3, @"Pikeman should be pushed");
-        
-        XCTAssertTrue(pikeman2.dead, @"Pikeman2 should be dead");
-        XCTAssertTrue(pikeman3.dead, @"Pikeman3 should be dead");
+        XCTAssertTrue(defender2.dead, @"Pikeman2 should be dead");
+        XCTAssertTrue(defender3.dead, @"Pikeman3 should be dead");
     }];
 }
 
 - (void)testWarElephantPushesVikingWithoutLossOfLifeIfVikingDefenseIsSuccessful {
     
-    WarElephant *warelephant = [WarElephant card];
-    Viking *viking = [Viking card];
+    WarElephant *warelephant = [CardPool createCardOfName:kWarElephant withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Viking *viking = [CardPool createCardOfName:kViking withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     warelephant.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
-    warelephant.cardColor = kCardColorGreen;
-    
     viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    viking.cardColor = kCardColorRed;
-        
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:warelephant]
                                     player2Units:[NSArray arrayWithObject:viking]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
+    MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:warelephant enemyCard:viking];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
@@ -829,24 +676,21 @@
 
 - (void)testVikingShouldBeAbleToPerformMeleeActionWithoutConquerAgainstUnitsInRangeTwo {
     
-    WarElephant *warelephant = [WarElephant card];
-    Viking *viking = [Viking card];
+    WarElephant *warelephant = [CardPool createCardOfName:kWarElephant withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Viking *viking = [CardPool createCardOfName:kViking withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     
     viking.cardLocation = [GridLocation gridLocationWithRow:3 column:3];
-    viking.cardColor = kCardColorGreen;
-
     warelephant.cardLocation = [GridLocation gridLocationWithRow:5 column:3];
-    warelephant.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:viking]
                                     player2Units:[NSArray arrayWithObject:warelephant]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathFinder = [[PathFinder alloc] init];
+    PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAactions = [pathFinder getMeleeAttackActionsFromLocation:viking.cardLocation forCard:viking enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    NSArray *meleeAactions = [pathFinder getMeleeAttackActionsFromLocation:viking.cardLocation forCard:viking enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertTrue(meleeAactions.count == 1, @"Viking should be able to attack warelephant in range 2");
 
@@ -858,30 +702,25 @@
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
 
-    Samurai *samurai = [Samurai card];
-    Pikeman *pikeman = [Pikeman card];
-    Archer *archer = [Archer card];
+    Samurai *samurai = [CardPool createCardOfName:kSamurai withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     samurai.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
-    samurai.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
-    pikeman.cardColor = kCardColorRed;
-    
     archer.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    archer.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:samurai]
                                     player2Units:[NSArray arrayWithObjects:pikeman, archer, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     archer.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
-    PathFinder *pathfinder = [[PathFinder alloc ]init];
-    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:pikeman allLocations:_manager.currentGame.unitLayout];
+    PathFinder *pathfinder = [[PathFinder alloc ]initWithGameManager:self.gamemanager];
+    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:pikeman allLocations:self.gamemanager.currentGame.unitLayout];
     action.delegate = mock;
 
     samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
@@ -891,7 +730,7 @@
     
     [action performActionWithCompletion:^{
         
-        MeleeAttackAction *secondaryAttack = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:archer allLocations:_manager.currentGame.unitLayout];
+        MeleeAttackAction *secondaryAttack = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:archer allLocations:self.gamemanager.currentGame.unitLayout];
         
         XCTAssertNotNil(secondaryAttack, @"Samurai should be able to make a secondary attack");
         XCTAssertTrue(secondaryAttack.meleeAttackType == kMeleeAttackTypeNormal, @"Samurai shouldn't be able to attack&conquer archer");
@@ -902,27 +741,24 @@
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
 
-    Diplomat *diplomat = [Diplomat card];
-    Pikeman *pikeman = [Pikeman card];
+    Diplomat *diplomat = [CardPool createCardOfName:kDiplomat withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     diplomat.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
-    diplomat.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
-    pikeman.cardColor = kCardColorRed;
-        
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:diplomat]
                                     player2Units:[NSArray arrayWithObjects:pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    PathFinder *pathfinder = [[PathFinder alloc ] init];
+    PathFinder *pathfinder = [[PathFinder alloc ] initWithGameManager:self.gamemanager];
     NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation
                                                          forCard:diplomat
-                                                   friendlyUnits:_manager.currentGame.myDeck.cards
-                                                      enemyUnits:_manager.currentGame.enemyDeck.cards
-                                                    allLocations:_manager.currentGame.unitLayout];
+                                                   friendlyUnits:self.gamemanager.currentGame.myDeck.cards
+                                                      enemyUnits:self.gamemanager.currentGame.enemyDeck.cards
+                                                    allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertNotNil(actions, @"Diplomat should be able to bribe pikeman");
     
@@ -934,17 +770,17 @@
         XCTAssertTrue(pikeman.cardColor == diplomat.cardColor, @"Pikeman should now be green");
         XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 4, @"Pikeman should have +1A when bribed");
         
-        [_manager endTurn];
+        [self.gamemanager endTurn];
         
         XCTAssertTrue(pikeman.cardColor == kCardColorRed, @"Pikeman should be red again");
         XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikemans attackbonus from bribe should be gone");
         XCTAssertTrue([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman is affected by cooldown");
         
-        [_manager endTurn];
+        [self.gamemanager endTurn];
         
         XCTAssertTrue([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman should no longer be affected by cooldown");
         
-        [_manager endTurn];
+        [self.gamemanager endTurn];
 
         XCTAssertFalse([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman should no longer be affected by cooldown");
     }];
@@ -954,22 +790,19 @@
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
-    Juggernaut *juggernaut = [Juggernaut card];
-    Pikeman *pikeman = [Pikeman card];
+    Juggernaut *juggernaut = [CardPool createCardOfName:kJuggernaut withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     juggernaut.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
-    juggernaut.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
-    pikeman.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:juggernaut]
                                     player2Units:[NSArray arrayWithObjects:pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeConquer];
+    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeConquer];
     action.meleeAttackStrategy = kMeleeAttackStrategyAutoConquer;
     
     FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
@@ -993,22 +826,19 @@
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
-    Juggernaut *juggernaut = [Juggernaut card];
-    Pikeman *pikeman = [Pikeman card];
+    Juggernaut *juggernaut = [CardPool createCardOfName:kJuggernaut withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     juggernaut.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
-    juggernaut.cardColor = kCardColorGreen;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
-    pikeman.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:juggernaut]
                                     player2Units:[NSArray arrayWithObjects:pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeNormal];
+    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeNormal];
     
     FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
     
@@ -1030,26 +860,21 @@
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
-    Juggernaut *juggernaut = [Juggernaut card];
-    Viking *viking = [Viking card];
-    Pikeman *pikeman = [Pikeman card];
+    Juggernaut *juggernaut = [CardPool createCardOfName:kJuggernaut withCardColor:kCardColorGreen gamemanager:self.gamemanager];
+    Viking *viking = [CardPool createCardOfName:kViking withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     juggernaut.cardLocation = [GridLocation gridLocationWithRow:4 column:5];
-    juggernaut.cardColor = kCardColorGreen;
-    
     viking.cardLocation = [GridLocation gridLocationWithRow:4 column:4];
-    viking.cardColor = kCardColorRed;
-    
     pikeman.cardLocation = [GridLocation gridLocationWithRow:4 column:3];
-    pikeman.cardColor = kCardColorRed;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager
                                 withPlayer1Units:[NSArray arrayWithObject:juggernaut]
                                     player2Units:[NSArray arrayWithObjects:viking, pikeman, nil]];
     
-    _manager.currentPlayersTurn = kPlayerGreen;
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithPath:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:juggernaut enemyCard:viking meleeAttackType:kMeleeAttackTypeConquer];
+    MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:juggernaut enemyCard:viking meleeAttackType:kMeleeAttackTypeConquer];
     
     FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
     
@@ -1073,23 +898,20 @@
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
-    Diplomat *diplomat = [Diplomat card];
+    Diplomat *diplomat = [CardPool createCardOfName:kDiplomat withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     diplomat.cardLocation = [GridLocation gridLocationWithRow:6 column:1];
-    diplomat.cardColor = kCardColorGreen;
     
-    Archer *archer = [Archer card];
+    Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     archer.cardLocation = [GridLocation gridLocationWithRow:2 column:4];
-    archer.cardColor = kCardColorRed;
     
-    Knight *heavycavalry = [Knight card];
+    Knight *heavycavalry = [CardPool createCardOfName:kKnight withCardColor:kCardColorRed gamemanager:self.gamemanager];
     heavycavalry.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
-    heavycavalry.cardColor = kCardColorRed;
+
+    self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager withPlayer1Units:@[diplomat] player2Units:@[archer, heavycavalry]];
+    self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    _manager.currentGame = [TestHelper setupGame:_manager.currentGame withPlayer1Units:@[diplomat] player2Units:@[archer, heavycavalry]];
-    _manager.currentPlayersTurn = kPlayerGreen;
-    
-    PathFinder *pathfinder = [[PathFinder alloc] init];
-    NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation forCard:diplomat friendlyUnits:_manager.currentGame.myDeck.cards enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+    PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
+    NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation forCard:diplomat friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
     
     XCTAssertTrue(actions.count == 1, @"Diplomat should be able to bribe heavycavalry");
     
@@ -1097,19 +919,19 @@
     bribe.delegate = mock;
     [bribe performActionWithCompletion:^{
         XCTAssertTrue([heavycavalry isAffectedByAbility:kAbilityBribe], @"Heavycavalry should be bribed");
-        [_manager endTurn];
+        [self.gamemanager endTurn];
         XCTAssertTrue([heavycavalry isAffectedByAbility:kAbilityCoolDown], @"Heavycavalry should be affected by cooldown");
         
-        NSArray *archerActions = [pathfinder getMoveActionsFromLocation:archer.cardLocation forCard:archer enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+        NSArray *archerActions = [pathfinder getMoveActionsFromLocation:archer.cardLocation forCard:archer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
         XCTAssertTrue(archerActions.count > 0, @"Archer should be able to move");
         
-        NSArray *heavycavalryActions = [pathfinder getMoveActionsFromLocation:heavycavalry.cardLocation forCard:heavycavalry enemyUnits:_manager.currentGame.enemyDeck.cards allLocations:_manager.currentGame.unitLayout];
+        NSArray *heavycavalryActions = [pathfinder getMoveActionsFromLocation:heavycavalry.cardLocation forCard:heavycavalry enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
         XCTAssertTrue(heavycavalryActions.count == 0, @"Heavycavalry shouldn't be able to move because of cooldown");
         
         MoveAction *moveAction = archerActions[0];
         moveAction.delegate = mock;
         [moveAction performActionWithCompletion:^{
-            XCTAssertTrue([_manager shouldEndTurn], @"Should end turn now even though one action is still available, but heavycavalry has cooldown, so enemy has no more legal moves");
+            XCTAssertTrue([self.gamemanager shouldEndTurn], @"Should end turn now even though one action is still available, but heavycavalry has cooldown, so enemy has no more legal moves");
         }];
     }];
 }

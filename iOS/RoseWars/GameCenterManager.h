@@ -15,10 +15,6 @@
     #ifndef __IPHONE_7_0
         #warning GameCenterManager uses features only available in iOS SDK 7.0 and later. Running on an older version of iOS may result in a crash. Download an older release from GitHub for compatibility with iOS SDK < 7.0
     #endif
-#else
-    #ifndef __MAC_10_9
-        #warning GameCenterManager uses features only available in OS X SDK 10.9 and later. Running on an older version of OS X may result in a crash. Download an older release from GitHub for compatibility with OS X SDK < 10.9
-    #endif
 #endif
 
 #define LIBRARY_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Library"]
@@ -30,11 +26,9 @@
 
 #if TARGET_OS_IPHONE
     #import <UIKit/UIKit.h>
-#else
-    #import <Cocoa/Cocoa.h>
 #endif
 
-#import "Reachability.h"
+//#import "Reachability.h"
 #import "NSDataAES256.h"
 
 
