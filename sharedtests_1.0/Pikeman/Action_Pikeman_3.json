@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "description": "You can attack a Pikeman with a cavalry, and move with attack",
+    "result": true,
+    "action": {
+        "start_at": "A4",
+        "end_at": "A4",
+        "target_at": "B4",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A4": "Knight",
+            "E6": "Catapult"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B4": "Pikeman"
+        }
+    }
+}
