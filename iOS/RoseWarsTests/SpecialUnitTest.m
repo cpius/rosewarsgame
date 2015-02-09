@@ -18,7 +18,7 @@
 #import "PathFinderStep.h"
 #import "Berserker.h"
 #import "Scout.h"
-#import "Canon.h"
+#import "Cannon.h"
 #import "Lancer.h"
 #import "RoyalGuard.h"
 #import "Pikeman.h"
@@ -60,7 +60,7 @@
 - (void)testBerserkerAttackingCannon {
     
     Berserker *berserker = [CardPool createCardOfName:kBerserker withCardColor:kCardColorGreen gamemanager:self.gamemanager];
-    Canon *canon = [CardPool createCardOfName:kCannon withCardColor:kCardColorRed gamemanager:self.gamemanager];
+    Cannon *canon = [CardPool createCardOfName:kCannon withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
     berserker.cardLocation = [GridLocation gridLocationWithRow:3 column:2];
     canon.cardLocation = [GridLocation gridLocationWithRow:1 column:2];

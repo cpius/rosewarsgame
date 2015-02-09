@@ -157,6 +157,7 @@
 		09F17C8F1A77DC4600542F04 /* Action_Pikeman_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */; };
 		09F17C901A77DC4600542F04 /* Action_Pikeman_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */; };
 		09F17C911A77DC4600542F04 /* Action_Pikeman_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */; };
+		611D39B11A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D39B01A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m */; };
 		614487A018B2A7BB00D97AA2 /* HKPlaygroundScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */; };
 		614487A318B3B01B00D97AA2 /* HKConquerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 614487A218B3B01B00D97AA2 /* HKConquerButton.m */; };
 		614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 614487A418B6780A00D97AA2 /* ConquerSmoke.sks */; };
@@ -184,7 +185,6 @@
 		617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */; };
 		617DB27518C7057300E64829 /* GameCenterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27018C7057300E64829 /* GameCenterManager.m */; };
 		617DB27618C7057300E64829 /* NSDataAES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27218C7057300E64829 /* NSDataAES256.m */; };
-		617DB27718C7057300E64829 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27418C7057300E64829 /* Reachability.m */; };
 		617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30418C7295600E64829 /* HKSharedTestBench.m */; };
 		617DB30918C7305C00E64829 /* HKSharedTestFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30818C7305C00E64829 /* HKSharedTestFactory.m */; };
 		617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */; };
@@ -258,7 +258,7 @@
 		61C47E3617C635BB00D644D1 /* Archer.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E0D17C635BB00D644D1 /* Archer.m */; };
 		61C47E3717C635BB00D644D1 /* Ballista.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E0F17C635BB00D644D1 /* Ballista.m */; };
 		61C47E3817C635BB00D644D1 /* Berserker.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1117C635BB00D644D1 /* Berserker.m */; };
-		61C47E3917C635BB00D644D1 /* Canon.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1317C635BB00D644D1 /* Canon.m */; };
+		61C47E3917C635BB00D644D1 /* Cannon.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1317C635BB00D644D1 /* Cannon.m */; };
 		61C47E3A17C635BB00D644D1 /* Catapult.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1517C635BB00D644D1 /* Catapult.m */; };
 		61C47E3B17C635BB00D644D1 /* Hobelar.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1717C635BB00D644D1 /* Hobelar.m */; };
 		61C47E3C17C635BB00D644D1 /* Crusader.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1917C635BB00D644D1 /* Crusader.m */; };
@@ -320,8 +320,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKSamuraiTestCases.m; path = Units/HKSamuraiTestCases.m; sourceTree = "<group>"; };
-		613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKHobelarTestCases.m; path = Units/HKHobelarTestCases.m; sourceTree = "<group>"; };
 		09F17B781A77C0F200542F04 /* AD_Lancer_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_1.json; sourceTree = "<group>"; };
 		09F17B791A77C0F200542F04 /* AD_Lancer_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_2.json; sourceTree = "<group>"; };
 		09F17B7A1A77C0F200542F04 /* AD_Lancer_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_3.json; sourceTree = "<group>"; };
@@ -355,6 +353,10 @@
 		09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_5.json; sourceTree = "<group>"; };
 		09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_6.json; sourceTree = "<group>"; };
 		09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_7.json; sourceTree = "<group>"; };
+		611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKSamuraiTestCases.m; path = Units/HKSamuraiTestCases.m; sourceTree = "<group>"; };
+		611D39B01A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSharedTestIsAttackAndDefenseCorrect.m; sourceTree = "<group>"; };
+		611D39B21A880C3D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKSharedTestIsAttackAndDefenseCorrect.h; sourceTree = "<group>"; };
+		613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKHobelarTestCases.m; path = Units/HKHobelarTestCases.m; sourceTree = "<group>"; };
 		6144879E18B2A7BB00D97AA2 /* HKPlaygroundScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKPlaygroundScene.h; sourceTree = "<group>"; };
 		6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKPlaygroundScene.m; sourceTree = "<group>"; };
 		614487A118B3B01B00D97AA2 /* HKConquerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConquerButton.h; sourceTree = "<group>"; };
@@ -596,8 +598,8 @@
 		61C47E0F17C635BB00D644D1 /* Ballista.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ballista.m; sourceTree = "<group>"; };
 		61C47E1017C635BB00D644D1 /* Berserker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Berserker.h; sourceTree = "<group>"; };
 		61C47E1117C635BB00D644D1 /* Berserker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Berserker.m; sourceTree = "<group>"; };
-		61C47E1217C635BB00D644D1 /* Canon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canon.h; sourceTree = "<group>"; };
-		61C47E1317C635BB00D644D1 /* Canon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canon.m; sourceTree = "<group>"; };
+		61C47E1217C635BB00D644D1 /* Cannon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cannon.h; sourceTree = "<group>"; };
+		61C47E1317C635BB00D644D1 /* Cannon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cannon.m; sourceTree = "<group>"; };
 		61C47E1417C635BB00D644D1 /* Catapult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Catapult.h; sourceTree = "<group>"; };
 		61C47E1517C635BB00D644D1 /* Catapult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Catapult.m; sourceTree = "<group>"; };
 		61C47E1617C635BB00D644D1 /* Hobelar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hobelar.h; sourceTree = "<group>"; };
@@ -705,15 +707,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		613790DF1A84A2B800B0F887 /* Units */ = {
-			isa = PBXGroup;
-			children = (
-				613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */,
-				611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */,
-			);
-			name = Units;
-			sourceTree = "<group>";
-		};
 		09F17B771A77C0F200542F04 /* Lancer */ = {
 			isa = PBXGroup;
 			children = (
@@ -773,6 +766,15 @@
 				09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */,
 			);
 			path = Pikeman;
+			sourceTree = "<group>";
+		};
+		613790DF1A84A2B800B0F887 /* Units */ = {
+			isa = PBXGroup;
+			children = (
+				613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */,
+				611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */,
+			);
+			name = Units;
 			sourceTree = "<group>";
 		};
 		614D42D317B4EB4B00B9889C /* Views */ = {
@@ -1136,6 +1138,8 @@
 				617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */,
 				617DB30E18C730F300E64829 /* HKSharedTestCheckActionExistence.h */,
 				617DB30F18C730F300E64829 /* HKSharedTestCheckActionExistence.m */,
+				611D39B01A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m */,
+				611D39B21A880C3D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.h */,
 			);
 			name = SharedTestsExecuter;
 			sourceTree = "<group>";
@@ -1263,8 +1267,8 @@
 				61C47E0F17C635BB00D644D1 /* Ballista.m */,
 				61C47E1017C635BB00D644D1 /* Berserker.h */,
 				61C47E1117C635BB00D644D1 /* Berserker.m */,
-				61C47E1217C635BB00D644D1 /* Canon.h */,
-				61C47E1317C635BB00D644D1 /* Canon.m */,
+				61C47E1217C635BB00D644D1 /* Cannon.h */,
+				61C47E1317C635BB00D644D1 /* Cannon.m */,
 				61C47E1417C635BB00D644D1 /* Catapult.h */,
 				61C47E1517C635BB00D644D1 /* Catapult.m */,
 				61C47E1617C635BB00D644D1 /* Hobelar.h */,
@@ -1762,7 +1766,7 @@
 				61C47DC017BEA17500D644D1 /* MeleeAttackPlaybackAction.m in Sources */,
 				61C47DC217BEA17500D644D1 /* MinimumRequirementDeckStrategy.m in Sources */,
 				617214A0187DE1B8000775EE /* HKDialogNode.m in Sources */,
-				61C47E3917C635BB00D644D1 /* Canon.m in Sources */,
+				61C47E3917C635BB00D644D1 /* Cannon.m in Sources */,
 				61C47E4A17C635BB00D644D1 /* WeaponSmith.m in Sources */,
 				61C47DC417BEA17500D644D1 /* MoveAction.m in Sources */,
 				61C47DC617BEA17500D644D1 /* MovePathFinderStrategy.m in Sources */,
@@ -1811,9 +1815,9 @@
 				61705CD818018C24001D7E1B /* TestHelper.m in Sources */,
 				617DB31018C730F300E64829 /* HKSharedTestCheckActionExistence.m in Sources */,
 				617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */,
-				611CE4391A84D0ED003BF6A1 /* HKSamuraiTestCases.m in Sources */,
 				617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */,
 				61705CD618018C24001D7E1B /* MoveTest.m in Sources */,
+				611D39B11A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m in Sources */,
 				61705CD918018C24001D7E1B /* WarOfTheRosesTest.m in Sources */,
 				61705CD418018C24001D7E1B /* GameBoardMockup.m in Sources */,
 				61705CD218018C24001D7E1B /* BasicUnitTest.m in Sources */,
@@ -1821,7 +1825,6 @@
 				61705CD718018C24001D7E1B /* SpecialUnitTest.m in Sources */,
 				61705CD518018C24001D7E1B /* GameCenterTest.m in Sources */,
 				61705CD318018C24001D7E1B /* CombatTest.m in Sources */,
-				613790E11A84A2EB00B0F887 /* HKHobelarTestCases.m in Sources */,
 				617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -6,11 +6,11 @@
 //
 //
 
-#import "Canon.h"
+#import "Cannon.h"
 #import "Action.h"
 #import "GameManager.h"
 
-@implementation Canon
+@implementation Cannon
 
 @synthesize isQuarantined = _isQuarantined;
 
@@ -48,7 +48,7 @@
 }
 
 + (id)card {
-    return [[Canon alloc] init];
+    return [[Cannon alloc] init];
 }
 
 - (void)didPerformedAction:(Action *)action {

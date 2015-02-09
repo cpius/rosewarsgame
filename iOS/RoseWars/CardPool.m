@@ -15,7 +15,7 @@
 #import "Knight.h"
 
 #import "Hobelar.h"
-#import "Canon.h"
+#import "Cannon.h"
 #import "Berserker.h"
 #import "Scout.h"
 #import "Lancer.h"
@@ -78,7 +78,7 @@
             createdCard = [Hobelar card];
             break;
         case kCannon:
-            createdCard = [Canon card];
+            createdCard = [Cannon card];
             break;
         case kBerserker:
             createdCard = [Berserker card];

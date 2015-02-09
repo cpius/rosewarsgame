@@ -8,7 +8,7 @@
 
 #import "Card.h"
 
-@interface Canon : Card {
+@interface Cannon : Card {
     
     NSUInteger _lastAttackInRound;
 }

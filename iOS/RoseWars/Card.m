@@ -12,6 +12,7 @@
 #import "StandardBattleStrategy.h"
 #import "RandomLevelIncreaseStrategy.h"
 #import "PromptLevelIncreaseStrategy.h"
+#import "MeleeAttackAction.h"
 
 const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 
@@ -251,8 +252,14 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 }
 
 - (BOOL)allowAction:(Action *)action allLocations:(NSDictionary*)allLocations {
-    
     BOOL allowAction = [self allowPath:action.path forActionType:action.actionType allLocations:allLocations];
+    
+    if (action.actionType == kActionTypeMelee) {
+        MeleeAttackAction *meleeAction = (MeleeAttackAction*)action;
+        if (meleeAction.meleeAttackType == kMeleeAttackTypeConquer && action.enemyCard.hitpoints > 1) {
+            allowAction = NO;
+        }
+    }
 
     // Check if card is affected by any abilities that doesn't allow this action
     for (TimedAbility *ability in _currentlyAffectedByAbilities) {

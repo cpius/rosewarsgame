@@ -98,10 +98,11 @@
         Class cardClass = NSClassFromString(unittype);
         Card *card = [[cardClass alloc] init];
         
+        card.gamemanager = self.gamemanager;
         card.cardLocation = [self convertLocation:cardLocation];
         card.hasPerformedActionThisRound = unitHasBeenUsed;
         if (card.isMelee) {
-            card.hasPerformedActionThisRound = unitHasBeenUsed;
+            card.hasPerformedAttackThisRound = unitHasBeenUsed;
         }
         card.experience = experience;
         card.movesConsumed = card.move - (card.move - movementRemaining);
