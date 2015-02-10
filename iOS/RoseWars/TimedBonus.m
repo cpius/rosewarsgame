@@ -7,7 +7,7 @@
 //
 
 #import "TimedBonus.h"
-#import "RangeAttribute.h"
+#import "HKAttribute.h"
 #import "GameManager.h"
 
 @interface TimedBonus()
@@ -63,8 +63,7 @@
     }
 }
 
-- (void)startTimedBonus:(RangeAttribute*)parent {
-    
+- (void)startTimedBonus:(HKAttribute*)parent {
     _parent = parent;
     bonusValueStartedInTurn = self.gamemanager.currentGame.turnCounter;
 }

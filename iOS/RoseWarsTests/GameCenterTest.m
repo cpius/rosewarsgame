@@ -71,13 +71,13 @@
 
     NSData *data = [self.gamemanager.currentGame serializeCurrentGameForPlayerWithId:@"TestPlayerId"];
     
-    XCTAssertTrue([attacker.attack calculateValue].lowerValue == 2, @"Pikeman attack should be 2-6");
+    XCTAssertTrue([attacker.attack calculateValue] == 5, @"Pikeman attack should be 5");
     
     [self.gamemanager.currentGame deserializeGameData:data forPlayerWithId:@"TestPlayerId" allPlayers:@[@"TestPlayerId", @"TestPlayerId2"] onlyActions:NO onlyEnemyUnits:NO];
     
     attacker = [self.gamemanager.currentGame.myDeck.cards objectAtIndex:0];
     
-    XCTAssertTrue([attacker.attack calculateValue].lowerValue == 2, @"Pikeman attack should still be 2-6");
+    XCTAssertTrue([attacker.attack calculateValue] == 5, @"Pikeman attack should still be 5");
 
     [self.gamemanager endTurn];
 
@@ -88,7 +88,7 @@
 
     attacker = [self.gamemanager.currentGame.myDeck.cards objectAtIndex:0];
 
-    XCTAssertTrue([attacker.attack calculateValue].lowerValue == 5, @"Pikeman attack should be 5-6");
+    XCTAssertTrue([attacker.attack calculateValue] == 2, @"Pikeman attack should be 2");
 }
 
 

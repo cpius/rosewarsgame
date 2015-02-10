@@ -14,6 +14,7 @@
 #import "GameBoardMockup.h"
 #import "MeleeAttackAction.h"
 #import "BaseRangedAttribute.h"
+#import "HKAttribute.h"
 
 @implementation HKSharedTestIsAttackAndDefenseCorrect
 
@@ -23,7 +24,7 @@
     NSDictionary *actiondata = data[@"action"];
     
     NSInteger minimumAttackRequired = [data[@"attack"] integerValue];
-    NSInteger maximumDefenceRequired = [data[@"defence"] integerValue];
+    NSInteger minimumDefenceRequired = [data[@"defence"] integerValue];
     
     GridLocation *startLocation = [self convertLocation:actiondata[@"start_at"]];
     GridLocation *endLocation = [self convertLocation:actiondata[@"end_at"]];
@@ -53,11 +54,11 @@
     __block BOOL testSucceeded = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [action performActionWithCompletion:^{
-        AttributeRange attackValue = [attacker.attack calculateValue];
-        AttributeRange defendValue = [defender.defence calculateValue];
+        NSInteger attackValue = [attacker.attack calculateValue];
+        NSInteger defendValue = [defender.defence calculateValue];
 
-        BOOL attackSuccess = minimumAttackRequired >= attackValue.lowerValue && minimumAttackRequired <= attackValue.upperValue;
-        BOOL defenceSuccess = maximumDefenceRequired >= defendValue.lowerValue && maximumDefenceRequired <= defendValue.upperValue;
+        BOOL attackSuccess = attackValue <= minimumAttackRequired;
+        BOOL defenceSuccess = defendValue <= minimumDefenceRequired;
         testSucceeded = attackSuccess && defenceSuccess;
         dispatch_semaphore_signal(semaphore);
     }];

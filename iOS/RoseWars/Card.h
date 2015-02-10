@@ -13,6 +13,7 @@
 #import "Serializable.h"
 #import "LevelIncreaseStrategy.h"
 #import "HKCardProtocol.h"
+#import "HKAttribute.h"
 
 typedef NS_ENUM(NSInteger, ExtraActionTypes) {
     kExtraActionNoAction = 0,
@@ -30,6 +31,7 @@ typedef NS_ENUM(NSInteger, ExtraActionTypes) {
 
 @class Action;
 @class BaseBattleStrategy;
+@class HKAttribute;
 @interface Card : SKNode <TimedAbilityDelegate, Serializable, HKCardProtocol>
 
 @property (nonatomic, strong) GameManager *gamemanager;
@@ -79,12 +81,12 @@ typedef NS_ENUM(NSInteger, ExtraActionTypes) {
 /*
  Angiver hvilket interval på en d6 hvori unit laver et succesfuldt angreb. Et succesfuldt angreb medfører at den angrebne unit skal lave et defense roll. Hvis defense roll ikke lykkes dør den forsvarende unit og den angribende unit tilføres et experience point. Ydermere kan den angribende unit overtage den forsvarende units plads. Hvis den forsvarende unit klarer sit defense roll overlever den. Et attack tæller som et move og konsumerer alle restenrende moves, se nedenfor under Move
  */
-@property (nonatomic, strong) RangeAttribute *attack;
+@property (nonatomic, strong) HKAttribute *attack;
 
 /*
  Angiver hvilket interval på en d6 hvori unit laver et succesfuldt forsvar. Reglerne er som beskrevet ovenfor under Attack.
  */
-@property (nonatomic, strong) RangeAttribute *defence;
+@property (nonatomic, strong) HKAttribute *defence;
 
 /*
  (sekundær stat som kun behøver at være tilgængelig når man zoomer ind på kortet):
@@ -124,8 +126,6 @@ typedef NS_ENUM(NSInteger, ExtraActionTypes) {
 @property(nonatomic, assign) BOOL hasPerformedAttackThisRound;
 
 @property(nonatomic, readonly) NSMutableArray *currentlyAffectedByAbilities;
-
-- (instancetype)initWithGameManager:(GameManager*)gamemanager;
 
 - (void)commonInit;
 

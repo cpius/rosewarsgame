@@ -15,8 +15,8 @@
     NSInteger _attackRoll;
     NSInteger _defenseRoll;
     
-    AttributeRange _attackValue;
-    AttributeRange _defendValue;
+    NSInteger _attackValue;
+    NSInteger _defendValue;
 }
 
 @property (nonatomic, strong) id<DiceStrategy> attackerDiceStrategy;

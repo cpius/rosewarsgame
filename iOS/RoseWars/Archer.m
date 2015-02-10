@@ -20,9 +20,8 @@
         self.unitName = kArcher;
         self.unitAttackType = kUnitAttackTypeRanged;
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
-        
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 2)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:2];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:2];
         
         self.range = 4;
         self.move = 1;

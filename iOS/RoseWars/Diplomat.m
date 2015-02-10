@@ -28,9 +28,8 @@
         self.unitName = kDiplomat;
         self.unitAttackType = kUnitAttackTypeCaster;
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(0, 0)];
-        
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 2)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:0];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:2];
         
         self.range = 3;
         self.move = 1;

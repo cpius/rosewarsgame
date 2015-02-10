@@ -80,8 +80,8 @@
 
 - (float)chanceOfAttacker:(Card *)attacker winningOverDefender:(Card *)defencer withAction:(Action *)action {
     
-    NSUInteger attackValue = MIN(MAX([attacker.attack calculateValue].upperValue, 0), 6);
-    NSUInteger defendValue = MIN(MAX([defencer.defence calculateValue].upperValue, 0), 6);
+    NSUInteger attackValue = MIN(MAX([attacker.attack calculateValue], 0), 6);
+    NSUInteger defendValue = MIN(MAX([defencer.defence calculateValue], 0), 6);
     
     return ((7- attackValue) / 6) * ((6 - defendValue) / 6);
 }

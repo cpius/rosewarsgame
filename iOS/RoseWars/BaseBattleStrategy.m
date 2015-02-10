@@ -40,13 +40,13 @@
     _attackValue = [attacker.attack calculateValue];
     _defendValue = [defender.defence calculateValue];
     
-    // Adjust defense if attack is greater than 1-6
-    if (_attackValue.lowerValue < 1) {
-        _defendValue.upperValue--;
+    // Adjust defense if attack is greater than 6
+    if (_attackValue > 6) {
+        _defendValue--;
     }
     
-    NSLog(@"Attack value: %@", AttributeRangeToNSString(_attackValue));
-    NSLog(@"Defend value: %@", AttributeRangeToNSString(_defendValue));
+    NSLog(@"Attack value: %ld", (long)_attackValue);
+    NSLog(@"Defend value: %ld", (long)_defendValue);
     
     _attackRoll = [attacker.battleStrategy.attackerDiceStrategy rollDiceWithDie:6];//[self.attackerDiceStrategy rollDiceWithDie:6];
     _defenseRoll = [defender.battleStrategy.defenderDiceStrategy rollDiceWithDie:6];//[self.defenderDiceStrategy rollDiceWithDie:6];

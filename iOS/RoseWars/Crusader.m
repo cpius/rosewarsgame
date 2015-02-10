@@ -22,9 +22,8 @@
         self.unitName = kCrusader;
         self.unitAttackType = kUnitAttackTypeMelee;
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(4, 6)];
-        
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 3)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:3];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:3];
         
         self.range = 1;
         self.move = 3;

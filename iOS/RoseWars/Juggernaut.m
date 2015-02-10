@@ -26,9 +26,8 @@
         self.unitName = kJuggernaut;
         self.unitAttackType = kUnitAttackTypeMelee;
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(3, 6)];
-        
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 2)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:4];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:2];
         
         self.range = 1;
         self.move = 2;

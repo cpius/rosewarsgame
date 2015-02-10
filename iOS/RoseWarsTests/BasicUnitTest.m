@@ -33,16 +33,16 @@
     Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
-    XCTAssertTrue([archer.attack calculateValue].lowerValue == 5, @"Archer lowerValye base attack should be 5");
+    XCTAssertTrue([archer.attack calculateValue] == 2, @"Archer base atta2k should be 5");
     
     // Attacker has special against defender
     [archer combatStartingAgainstDefender:pikeman];
     
-    XCTAssertTrue([archer.attack calculateValue].lowerValue == 4, @"Archer should have +1 attack against infantry");
+    XCTAssertTrue([archer.attack calculateValue] == 3, @"Archer should have +1 attack against infantry");
     
     [archer combatFinishedAgainstDefender:pikeman withOutcome:kCombatOutcomeAttackSuccessful];
     
-    XCTAssertTrue([archer.attack calculateValue].lowerValue == 5, @"Archer lowerValue attack should again be reduced to 5 after attack against infantry");
+    XCTAssertTrue([archer.attack calculateValue] == 2, @"Archer attack should again be reduced to 2 after attack against infantry");
 }
 
 - (void)testPikemanBonusAgainstLightCavalry {
@@ -50,16 +50,16 @@
     LightCavalry *lightCavalry = [CardPool createCardOfName:kLightCavalry withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
-    XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman lowerValue base attack should be 5");
+    XCTAssertTrue([pikeman.attack calculateValue] == 2, @"Pikeman base attack should be 2");
     
     // Attacker has special against defender
     [pikeman combatStartingAgainstDefender:lightCavalry];
     
-    XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 4, @"Pikeman should have +1 attack against cavalry");
+    XCTAssertTrue([pikeman.attack calculateValue] == 3, @"Pikeman should have +1 attack against cavalry");
     
     [pikeman combatFinishedAgainstDefender:pikeman withOutcome:kCombatOutcomeAttackSuccessful];
     
-    XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman lowerValue attack should again be 5 after attack against cavalry");
+    XCTAssertTrue([pikeman.attack calculateValue] == 2, @"Pikeman attack should again be 2 after attack against cavalry");
 }
 
 

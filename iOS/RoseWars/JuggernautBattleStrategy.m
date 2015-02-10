@@ -22,7 +22,7 @@
     CombatOutcome outcome;
     
     // Check attackroll
-    if (_attackRoll >= _attackValue.lowerValue && _attackRoll <= _attackValue.upperValue) {
+    if (_attackRoll <= _attackValue) {
         outcome = kCombatOutcomePush;
     }
     else {

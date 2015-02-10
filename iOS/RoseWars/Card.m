@@ -33,10 +33,8 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
 - (void)commonInit {
     
     self.attack.attributeAbbreviation = @"A";
-    self.attack.valueAffectedByBonuses = kRangedAttributeLowerValue;
     
     self.defence.attributeAbbreviation = @"D";
-    self.defence.valueAffectedByBonuses = kRangedAttributeUpperValue;
     self.defence.valueLimit = 4;
     
     self.numberOfLevelsIncreased = 0;

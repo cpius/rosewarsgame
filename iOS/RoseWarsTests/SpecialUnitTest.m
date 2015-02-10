@@ -150,16 +150,14 @@
     
     [lancer willPerformAction:meleeAttacks[0]];
     
-    XCTAssertTrue([lancer.attack calculateValue].lowerValue == 3, @"Lancer should receive +2A bonus when 2 empty tiles before attack");
-    XCTAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    XCTAssertTrue([lancer.attack calculateValue] == 4, @"Lancer should receive +2A bonus when 2 empty tiles before attack");
     
     [lancer didPerformedAction:meleeAttacks[0]];
     
     [self.gamemanager endTurn];
     [self.gamemanager endTurn];
 
-    XCTAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
-    XCTAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    XCTAssertTrue([lancer.attack calculateValue] == 2, @"Lancers +2A bonus should be removed after attack");
 }
 
 - (void)testLancerDoesntGetAttackBonusWhenAttackingWithLessThanTwoEmptyNodes {
@@ -184,13 +182,11 @@
     
     [lancer willPerformAction:meleeAttacks[0]];
     
-    XCTAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancer shouldn't receive +2A bonus when only one empty tiles before attack");
-    XCTAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    XCTAssertTrue([lancer.attack calculateValue] == 2, @"Lancer shouldn't receive +2A bonus when only one empty tiles before attack");
     
     [lancer didPerformedAction:meleeAttacks[0]];
     
-    XCTAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
-    XCTAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    XCTAssertTrue([lancer.attack calculateValue] == 2, @"Lancers +2A bonus should be removed after attack");
 }
 
 - (void)testLancerDoesntGetAttackBonusWhenAttackingWithTwoNonEmptyNodes {
@@ -217,13 +213,11 @@
     
     [lancer willPerformAction:meleeAttacks[0]];
     
-    XCTAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancer shouldn't receive +2A bonus when one of the two node are occupied");
-    XCTAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    XCTAssertTrue([lancer.attack calculateValue] == 2, @"Lancer shouldn't receive +2A bonus when one of the two node are occupied");
     
     [lancer didPerformedAction:meleeAttacks[0]];
     
-    XCTAssertTrue([lancer.attack calculateValue].lowerValue == 5, @"Lancers +2A bonus should be removed after attack");
-    XCTAssertTrue([lancer.attack calculateValue].upperValue == 6, @"Lancer upper attack value should remain unchanfed");
+    XCTAssertTrue([lancer.attack calculateValue] == 2, @"Lancers +2A bonus should be removed after attack");
 }
 
 - (void)testRoyalGuardGetsDefenseBonusAgainstMelee {
@@ -242,11 +236,11 @@
     
     [royalguard combatStartingAgainstAttacker:pikeman];
     
-    XCTAssertTrue([royalguard.defence calculateValue].upperValue == 4, @"Royal guard should get +1D against melee attackers");
+    XCTAssertTrue([royalguard.defence calculateValue] == 4, @"Royal guard should get +1D against melee attackers");
     
     [royalguard combatFinishedAgainstAttacker:pikeman withOutcome:kCombatOutcomeDefendSuccessful];
 
-    XCTAssertTrue([royalguard.defence calculateValue].upperValue == 3, @"Royal guards defense bonus should be removed after combat");
+    XCTAssertTrue([royalguard.defence calculateValue] == 3, @"Royal guards defense bonus should be removed after combat");
 }
 
 - (void)testRoyalGuardGetsIncreasedMovementWhenMovingSideways {
@@ -303,7 +297,7 @@
     self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
-    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
 
     XCTAssertTrue(viking.hitpoints == 2, @"Viking should have 2 hitpoints");
 
@@ -376,7 +370,7 @@
     
     self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    longswordsman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    longswordsman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     archer.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
@@ -418,7 +412,7 @@
     
     [meleeAction performActionWithCompletion:^{
 
-        XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 4, @"Pikeman should have received +1A aoe effect from Crusader");
+        XCTAssertTrue([pikeman.attack calculateValue] == 3, @"Pikeman should have received +1A aoe effect from Crusader");
     }];
 }
 
@@ -428,7 +422,7 @@
     Pikeman *pikeman = [CardPool createCardOfName:kPikeman withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     Archer *archer = [CardPool createCardOfName:kArcher withCardColor:kCardColorRed gamemanager:self.gamemanager];
     
-    crusader.cardLocation = [GridLocation gridLocationWithRow:2 column:3];
+    crusader.cardLocation = [GridLocation gridLocationWithRow:6 column:3];
     pikeman.cardLocation = [GridLocation gridLocationWithRow:7 column:3];
     archer.cardLocation = [GridLocation gridLocationWithRow:7 column:4];
     
@@ -446,7 +440,7 @@
     
     [meleeAction performActionWithCompletion:^{
         
-        XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman should have received +1A aoe effect from Crusader");
+        XCTAssertTrue([pikeman.attack calculateValue] == 3, @"Pikeman should have received +1A aoe effect from Crusader");
     }];
 }
 
@@ -473,7 +467,7 @@
     
     [meleeAction performActionWithCompletion:^{
         
-        XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 3, @"Pikeman should have received +1A aoe effect from Crusader");
+        XCTAssertTrue([pikeman.attack calculateValue] == 4, @"Pikeman should have received +2A aoe effect from FlagBearer");
     }];
 }
 
@@ -497,7 +491,7 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
         
     [meleeAction performActionWithCompletion:^{
@@ -526,7 +520,7 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
     
     [meleeAction performActionWithCompletion:^{
@@ -555,7 +549,7 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     [meleeAction performActionWithCompletion:^{
@@ -588,7 +582,7 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     [meleeAction performActionWithCompletion:^{
@@ -628,10 +622,10 @@
     defender2.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     defender3.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
-    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
 
     StandardBattleStrategy *aoeBattleStrategy = [StandardBattleStrategy strategy];
-    aoeBattleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    aoeBattleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     warelephant.aoeBattleStrategy = aoeBattleStrategy;
     
     [meleeAction performActionWithCompletion:^{
@@ -662,7 +656,7 @@
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     meleeAction.delegate = mock;
     
-    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    warelephant.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     viking.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     
     [meleeAction performActionWithCompletion:^{
@@ -723,7 +717,7 @@
     MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:pikeman allLocations:self.gamemanager.currentGame.unitLayout];
     action.delegate = mock;
 
-    samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
 
     XCTAssertTrue(action.meleeAttackType == kMeleeAttackTypeConquer, @"Samurai should be able to attack&conquer pikeman");
     action.meleeAttackStrategy = kMeleeAttackStrategyAutoConquer;
@@ -768,12 +762,12 @@
     [action performActionWithCompletion:^{
         
         XCTAssertTrue(pikeman.cardColor == diplomat.cardColor, @"Pikeman should now be green");
-        XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 4, @"Pikeman should have +1A when bribed");
+        XCTAssertTrue([pikeman.attack calculateValue] == 3, @"Pikeman should have +1A when bribed");
         
         [self.gamemanager endTurn];
         
         XCTAssertTrue(pikeman.cardColor == kCardColorRed, @"Pikeman should be red again");
-        XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikemans attackbonus from bribe should be gone");
+        XCTAssertTrue([pikeman.attack calculateValue] == 2, @"Pikemans attackbonus from bribe should be gone");
         XCTAssertTrue([pikeman isAffectedByAbility:kAbilityCoolDown], @"Pikeman is affected by cooldown");
         
         [self.gamemanager endTurn];
@@ -805,7 +799,7 @@
     MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeConquer];
     action.meleeAttackStrategy = kMeleeAttackStrategyAutoConquer;
     
-    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
 
     JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
     battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
@@ -840,7 +834,7 @@
     
     MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:pikeman.cardLocation]] andCardInAction:juggernaut enemyCard:pikeman meleeAttackType:kMeleeAttackTypeNormal];
     
-    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
     
     JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
     battleStrategy.attackerDiceStrategy = attackerFixedStrategy;
@@ -876,7 +870,7 @@
     
     MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[[[PathFinderStep alloc] initWithLocation:viking.cardLocation]] andCardInAction:juggernaut enemyCard:viking meleeAttackType:kMeleeAttackTypeConquer];
     
-    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+    FixedDiceStrategy *attackerFixedStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
     
     JuggernautBattleStrategy *battleStrategy = (JuggernautBattleStrategy*)[juggernaut newBattleStrategy];
     battleStrategy.attackerDiceStrategy = attackerFixedStrategy;

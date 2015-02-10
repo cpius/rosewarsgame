@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+<<<<<<< HEAD
+		611CE4391A84D0ED003BF6A1 /* HKSamuraiTestCases.m in Sources */ = {isa = PBXBuildFile; fileRef = 611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */; };
+		613790E11A84A2EB00B0F887 /* HKHobelarTestCases.m in Sources */ = {isa = PBXBuildFile; fileRef = 613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */; };
+=======
 		09F17BE71A77CD3300542F04 /* Action_Berserker_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27B18C7285700E64829 /* Action_Berserker_1.json */; };
 		09F17BE81A77CD3300542F04 /* Action_Berserker_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27C18C7285700E64829 /* Action_Berserker_2.json */; };
 		09F17BE91A77CD3300542F04 /* Action_Berserker_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27D18C7285700E64829 /* Action_Berserker_3.json */; };
@@ -157,8 +161,7 @@
 		09F17C8F1A77DC4600542F04 /* Action_Pikeman_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */; };
 		09F17C901A77DC4600542F04 /* Action_Pikeman_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */; };
 		09F17C911A77DC4600542F04 /* Action_Pikeman_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */; };
-		611D39B11A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D39B01A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m */; };
-		611D39C41A8964E8002B6F0A /* HKAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D39C31A8964E8002B6F0A /* HKAttribute.m */; };
+>>>>>>> 105007c645d0dd7d710c032367bd65dada3ff5f2
 		614487A018B2A7BB00D97AA2 /* HKPlaygroundScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */; };
 		614487A318B3B01B00D97AA2 /* HKConquerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 614487A218B3B01B00D97AA2 /* HKConquerButton.m */; };
 		614487A518B6780A00D97AA2 /* ConquerSmoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 614487A418B6780A00D97AA2 /* ConquerSmoke.sks */; };
@@ -186,6 +189,72 @@
 		617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB26C18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m */; };
 		617DB27518C7057300E64829 /* GameCenterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27018C7057300E64829 /* GameCenterManager.m */; };
 		617DB27618C7057300E64829 /* NSDataAES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27218C7057300E64829 /* NSDataAES256.m */; };
+<<<<<<< HEAD
+		617DB2C518C7285700E64829 /* Action_Berserker_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27B18C7285700E64829 /* Action_Berserker_1.json */; };
+		617DB2C618C7285700E64829 /* Action_Berserker_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27C18C7285700E64829 /* Action_Berserker_2.json */; };
+		617DB2C718C7285700E64829 /* Action_Berserker_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27D18C7285700E64829 /* Action_Berserker_3.json */; };
+		617DB2C818C7285700E64829 /* AD_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB27F18C7285700E64829 /* AD_Cannon_1.json */; };
+		617DB2C918C7285700E64829 /* Outcome_Cannon_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28018C7285700E64829 /* Outcome_Cannon_1.json */; };
+		617DB2CA18C7285700E64829 /* AD_Catapult_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28218C7285700E64829 /* AD_Catapult_1.json */; };
+		617DB2CB18C7285700E64829 /* AD_Crusader_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28418C7285700E64829 /* AD_Crusader_1.json */; };
+		617DB2CC18C7285700E64829 /* AD_Crusader_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28518C7285700E64829 /* AD_Crusader_2.json */; };
+		617DB2CD18C7285700E64829 /* AD_Crusader_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28618C7285700E64829 /* AD_Crusader_3.json */; };
+		617DB2CE18C7285700E64829 /* AD_Crusader_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28718C7285700E64829 /* AD_Crusader_4.json */; };
+		617DB2CF18C7285700E64829 /* AD_Crusader_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28818C7285700E64829 /* AD_Crusader_5.json */; };
+		617DB2D018C7285700E64829 /* AD_FlagBearer_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28A18C7285700E64829 /* AD_FlagBearer_1.json */; };
+		617DB2D118C7285700E64829 /* AD_FlagBearer_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28B18C7285700E64829 /* AD_FlagBearer_2.json */; };
+		617DB2D218C7285700E64829 /* AD_FlagBearer_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28C18C7285700E64829 /* AD_FlagBearer_3.json */; };
+		617DB2D318C7285700E64829 /* AD_FlagBearer_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28D18C7285700E64829 /* AD_FlagBearer_4.json */; };
+		617DB2D418C7285700E64829 /* AD_FlagBearer_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB28E18C7285700E64829 /* AD_FlagBearer_5.json */; };
+		617DB2D518C7285700E64829 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29018C7285700E64829 /* Action_1.json */; };
+		617DB2D618C7285700E64829 /* Action_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29118C7285700E64829 /* Action_10.json */; };
+		617DB2D718C7285700E64829 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29218C7285700E64829 /* Action_2.json */; };
+		617DB2D818C7285700E64829 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29318C7285700E64829 /* Action_3.json */; };
+		617DB2D918C7285700E64829 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29418C7285700E64829 /* Action_4.json */; };
+		617DB2DA18C7285700E64829 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29518C7285700E64829 /* Action_5.json */; };
+		617DB2DB18C7285700E64829 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29618C7285700E64829 /* Action_6.json */; };
+		617DB2DC18C7285700E64829 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29718C7285700E64829 /* Action_7.json */; };
+		617DB2DD18C7285700E64829 /* Action_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29818C7285700E64829 /* Action_8.json */; };
+		617DB2DE18C7285700E64829 /* Action_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29918C7285700E64829 /* Action_9.json */; };
+		617DB2DF18C7285700E64829 /* AD_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29A18C7285700E64829 /* AD_1.json */; };
+		617DB2E018C7285700E64829 /* Outcome_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29B18C7285700E64829 /* Outcome_1.json */; };
+		617DB2E118C7285700E64829 /* Turn_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29C18C7285700E64829 /* Turn_1.json */; };
+		617DB2E218C7285700E64829 /* Action_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29E18C7285700E64829 /* Action_Hobelar_1.json */; };
+		617DB2E318C7285700E64829 /* Action_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB29F18C7285700E64829 /* Action_Hobelar_2.json */; };
+		617DB2E418C7285700E64829 /* Action_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A018C7285700E64829 /* Action_Hobelar_3.json */; };
+		617DB2E518C7285700E64829 /* Action_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A118C7285700E64829 /* Action_Hobelar_4.json */; };
+		617DB2E618C7285700E64829 /* Outcome_Hobelar_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A218C7285700E64829 /* Outcome_Hobelar_1.json */; };
+		617DB2E718C7285700E64829 /* Outcome_Hobelar_10.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A318C7285700E64829 /* Outcome_Hobelar_10.json */; };
+		617DB2E818C7285700E64829 /* Outcome_Hobelar_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A418C7285700E64829 /* Outcome_Hobelar_2.json */; };
+		617DB2E918C7285700E64829 /* Outcome_Hobelar_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A518C7285700E64829 /* Outcome_Hobelar_3.json */; };
+		617DB2EA18C7285700E64829 /* Outcome_Hobelar_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A618C7285700E64829 /* Outcome_Hobelar_4.json */; };
+		617DB2EB18C7285700E64829 /* Outcome_Hobelar_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A718C7285700E64829 /* Outcome_Hobelar_5.json */; };
+		617DB2EC18C7285700E64829 /* Outcome_Hobelar_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A818C7285700E64829 /* Outcome_Hobelar_6.json */; };
+		617DB2ED18C7285700E64829 /* Outcome_Hobelar_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2A918C7285700E64829 /* Outcome_Hobelar_7.json */; };
+		617DB2EE18C7285700E64829 /* Outcome_Hobelar_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AA18C7285700E64829 /* Outcome_Hobelar_8.json */; };
+		617DB2EF18C7285700E64829 /* Outcome_Hobelar_9.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AB18C7285700E64829 /* Outcome_Hobelar_9.json */; };
+		617DB2F018C7285700E64829 /* Outcome_Longswordsman_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AD18C7285700E64829 /* Outcome_Longswordsman_1.json */; };
+		617DB2F118C7285700E64829 /* Action_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2AF18C7285700E64829 /* Action_1.json */; };
+		617DB2F218C7285700E64829 /* Action_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B018C7285700E64829 /* Action_2.json */; };
+		617DB2F318C7285700E64829 /* Action_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B118C7285700E64829 /* Action_3.json */; };
+		617DB2F418C7285700E64829 /* Action_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B218C7285700E64829 /* Action_4.json */; };
+		617DB2F518C7285700E64829 /* Action_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B318C7285700E64829 /* Action_5.json */; };
+		617DB2F618C7285700E64829 /* Action_6.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B418C7285700E64829 /* Action_6.json */; };
+		617DB2F718C7285700E64829 /* Action_7.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B518C7285700E64829 /* Action_7.json */; };
+		617DB2F818C7285700E64829 /* Action_Scout_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B718C7285700E64829 /* Action_Scout_1.json */; };
+		617DB2F918C7285700E64829 /* Action_Scout_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2B818C7285700E64829 /* Action_Scout_2.json */; };
+		617DB2FA18C7285700E64829 /* Upgrade_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BA18C7285700E64829 /* Upgrade_1.json */; };
+		617DB2FB18C7285700E64829 /* Upgrade_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BB18C7285700E64829 /* Upgrade_2.json */; };
+		617DB2FC18C7285700E64829 /* Upgrade_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BC18C7285700E64829 /* Upgrade_3.json */; };
+		617DB2FE18C7285700E64829 /* Action_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2BF18C7285700E64829 /* Action_Viking_1.json */; };
+		617DB2FF18C7285700E64829 /* Action_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C018C7285700E64829 /* Action_Viking_2.json */; };
+		617DB30018C7285700E64829 /* Action_Viking_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C118C7285700E64829 /* Action_Viking_3.json */; };
+		617DB30118C7285700E64829 /* Action_Viking_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C218C7285700E64829 /* Action_Viking_4.json */; };
+		617DB30218C7285700E64829 /* Outcome_Viking_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C318C7285700E64829 /* Outcome_Viking_1.json */; };
+		617DB30318C7285700E64829 /* Outcome_Viking_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 617DB2C418C7285700E64829 /* Outcome_Viking_2.json */; };
+=======
+		617DB27718C7057300E64829 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB27418C7057300E64829 /* Reachability.m */; };
+>>>>>>> 105007c645d0dd7d710c032367bd65dada3ff5f2
 		617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30418C7295600E64829 /* HKSharedTestBench.m */; };
 		617DB30918C7305C00E64829 /* HKSharedTestFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30818C7305C00E64829 /* HKSharedTestFactory.m */; };
 		617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */ = {isa = PBXBuildFile; fileRef = 617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */; };
@@ -247,6 +316,7 @@
 		61C47DD517BEA17500D644D1 /* RandomDeckStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47D5817BE9F7A00D644D1 /* RandomDeckStrategy.m */; };
 		61C47DD717BEA17500D644D1 /* RandomDiceStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47D5A17BE9F7A00D644D1 /* RandomDiceStrategy.m */; };
 		61C47DD917BEA17500D644D1 /* RandomLevelIncreaseStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47D5C17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.m */; };
+		61C47DDB17BEA17500D644D1 /* RangeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47D5E17BE9F7A00D644D1 /* RangeAttribute.m */; };
 		61C47DDD17BEA17500D644D1 /* RangedAttackAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47D6017BE9F7A00D644D1 /* RangedAttackAction.m */; };
 		61C47DDF17BEA17500D644D1 /* RangedAttackPathFinderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47D6217BE9F7A00D644D1 /* RangedAttackPathFinderStrategy.m */; };
 		61C47DE117BEA17500D644D1 /* RawBonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47D6417BE9F7A00D644D1 /* RawBonus.m */; };
@@ -258,7 +328,7 @@
 		61C47E3617C635BB00D644D1 /* Archer.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E0D17C635BB00D644D1 /* Archer.m */; };
 		61C47E3717C635BB00D644D1 /* Ballista.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E0F17C635BB00D644D1 /* Ballista.m */; };
 		61C47E3817C635BB00D644D1 /* Berserker.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1117C635BB00D644D1 /* Berserker.m */; };
-		61C47E3917C635BB00D644D1 /* Cannon.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1317C635BB00D644D1 /* Cannon.m */; };
+		61C47E3917C635BB00D644D1 /* Canon.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1317C635BB00D644D1 /* Canon.m */; };
 		61C47E3A17C635BB00D644D1 /* Catapult.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1517C635BB00D644D1 /* Catapult.m */; };
 		61C47E3B17C635BB00D644D1 /* Hobelar.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1717C635BB00D644D1 /* Hobelar.m */; };
 		61C47E3C17C635BB00D644D1 /* Crusader.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C47E1917C635BB00D644D1 /* Crusader.m */; };
@@ -320,6 +390,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+<<<<<<< HEAD
+		611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKSamuraiTestCases.m; path = Units/HKSamuraiTestCases.m; sourceTree = "<group>"; };
+		613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKHobelarTestCases.m; path = Units/HKHobelarTestCases.m; sourceTree = "<group>"; };
+=======
 		09F17B781A77C0F200542F04 /* AD_Lancer_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_1.json; sourceTree = "<group>"; };
 		09F17B791A77C0F200542F04 /* AD_Lancer_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_2.json; sourceTree = "<group>"; };
 		09F17B7A1A77C0F200542F04 /* AD_Lancer_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AD_Lancer_3.json; sourceTree = "<group>"; };
@@ -353,12 +427,7 @@
 		09F17C811A77DC1000542F04 /* Action_Pikeman_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_5.json; sourceTree = "<group>"; };
 		09F17C821A77DC1000542F04 /* Action_Pikeman_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_6.json; sourceTree = "<group>"; };
 		09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Action_Pikeman_7.json; sourceTree = "<group>"; };
-		611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKSamuraiTestCases.m; path = Units/HKSamuraiTestCases.m; sourceTree = "<group>"; };
-		611D39B01A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKSharedTestIsAttackAndDefenseCorrect.m; sourceTree = "<group>"; };
-		611D39B21A880C3D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKSharedTestIsAttackAndDefenseCorrect.h; sourceTree = "<group>"; };
-		611D39C21A8964E8002B6F0A /* HKAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKAttribute.h; sourceTree = "<group>"; };
-		611D39C31A8964E8002B6F0A /* HKAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKAttribute.m; sourceTree = "<group>"; };
-		613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKHobelarTestCases.m; path = Units/HKHobelarTestCases.m; sourceTree = "<group>"; };
+>>>>>>> 105007c645d0dd7d710c032367bd65dada3ff5f2
 		6144879E18B2A7BB00D97AA2 /* HKPlaygroundScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKPlaygroundScene.h; sourceTree = "<group>"; };
 		6144879F18B2A7BB00D97AA2 /* HKPlaygroundScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKPlaygroundScene.m; sourceTree = "<group>"; };
 		614487A118B3B01B00D97AA2 /* HKConquerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConquerButton.h; sourceTree = "<group>"; };
@@ -576,6 +645,8 @@
 		61C47D5A17BE9F7A00D644D1 /* RandomDiceStrategy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RandomDiceStrategy.m; sourceTree = "<group>"; };
 		61C47D5B17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RandomLevelIncreaseStrategy.h; sourceTree = "<group>"; };
 		61C47D5C17BE9F7A00D644D1 /* RandomLevelIncreaseStrategy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RandomLevelIncreaseStrategy.m; sourceTree = "<group>"; };
+		61C47D5D17BE9F7A00D644D1 /* RangeAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RangeAttribute.h; sourceTree = "<group>"; };
+		61C47D5E17BE9F7A00D644D1 /* RangeAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RangeAttribute.m; sourceTree = "<group>"; };
 		61C47D5F17BE9F7A00D644D1 /* RangedAttackAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RangedAttackAction.h; sourceTree = "<group>"; };
 		61C47D6017BE9F7A00D644D1 /* RangedAttackAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RangedAttackAction.m; sourceTree = "<group>"; };
 		61C47D6117BE9F7A00D644D1 /* RangedAttackPathFinderStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RangedAttackPathFinderStrategy.h; sourceTree = "<group>"; };
@@ -598,8 +669,8 @@
 		61C47E0F17C635BB00D644D1 /* Ballista.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ballista.m; sourceTree = "<group>"; };
 		61C47E1017C635BB00D644D1 /* Berserker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Berserker.h; sourceTree = "<group>"; };
 		61C47E1117C635BB00D644D1 /* Berserker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Berserker.m; sourceTree = "<group>"; };
-		61C47E1217C635BB00D644D1 /* Cannon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cannon.h; sourceTree = "<group>"; };
-		61C47E1317C635BB00D644D1 /* Cannon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cannon.m; sourceTree = "<group>"; };
+		61C47E1217C635BB00D644D1 /* Canon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canon.h; sourceTree = "<group>"; };
+		61C47E1317C635BB00D644D1 /* Canon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canon.m; sourceTree = "<group>"; };
 		61C47E1417C635BB00D644D1 /* Catapult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Catapult.h; sourceTree = "<group>"; };
 		61C47E1517C635BB00D644D1 /* Catapult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Catapult.m; sourceTree = "<group>"; };
 		61C47E1617C635BB00D644D1 /* Hobelar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hobelar.h; sourceTree = "<group>"; };
@@ -707,6 +778,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+<<<<<<< HEAD
+		613790DF1A84A2B800B0F887 /* Units */ = {
+			isa = PBXGroup;
+			children = (
+				613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */,
+				611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */,
+			);
+			name = Units;
+=======
 		09F17B771A77C0F200542F04 /* Lancer */ = {
 			isa = PBXGroup;
 			children = (
@@ -766,15 +846,7 @@
 				09F17C831A77DC1000542F04 /* Action_Pikeman_7.json */,
 			);
 			path = Pikeman;
-			sourceTree = "<group>";
-		};
-		613790DF1A84A2B800B0F887 /* Units */ = {
-			isa = PBXGroup;
-			children = (
-				613790E01A84A2EB00B0F887 /* HKHobelarTestCases.m */,
-				611CE4381A84D0ED003BF6A1 /* HKSamuraiTestCases.m */,
-			);
-			name = Units;
+>>>>>>> 105007c645d0dd7d710c032367bd65dada3ff5f2
 			sourceTree = "<group>";
 		};
 		614D42D317B4EB4B00B9889C /* Views */ = {
@@ -1138,8 +1210,6 @@
 				617DB30C18C730C500E64829 /* HKSharedTestBaseExecuter.m */,
 				617DB30E18C730F300E64829 /* HKSharedTestCheckActionExistence.h */,
 				617DB30F18C730F300E64829 /* HKSharedTestCheckActionExistence.m */,
-				611D39B01A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m */,
-				611D39B21A880C3D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.h */,
 			);
 			name = SharedTestsExecuter;
 			sourceTree = "<group>";
@@ -1224,6 +1294,8 @@
 				61C47D5817BE9F7A00D644D1 /* RandomDeckStrategy.m */,
 				61C47D5917BE9F7A00D644D1 /* RandomDiceStrategy.h */,
 				61C47D5A17BE9F7A00D644D1 /* RandomDiceStrategy.m */,
+				61C47D5D17BE9F7A00D644D1 /* RangeAttribute.h */,
+				61C47D5E17BE9F7A00D644D1 /* RangeAttribute.m */,
 				61C47D6117BE9F7A00D644D1 /* RangedAttackPathFinderStrategy.h */,
 				61C47D6217BE9F7A00D644D1 /* RangedAttackPathFinderStrategy.m */,
 				61C47D6317BE9F7A00D644D1 /* RawBonus.h */,
@@ -1236,8 +1308,6 @@
 				61C47D6C17BE9F7A00D644D1 /* TimedBonus.h */,
 				61C47D6D17BE9F7A00D644D1 /* TimedBonus.m */,
 				615BEA9817FC4DBD00F728E9 /* HKSelectAbilityProtocol.h */,
-				611D39C21A8964E8002B6F0A /* HKAttribute.h */,
-				611D39C31A8964E8002B6F0A /* HKAttribute.m */,
 			);
 			name = Domain;
 			sourceTree = "<group>";
@@ -1267,8 +1337,8 @@
 				61C47E0F17C635BB00D644D1 /* Ballista.m */,
 				61C47E1017C635BB00D644D1 /* Berserker.h */,
 				61C47E1117C635BB00D644D1 /* Berserker.m */,
-				61C47E1217C635BB00D644D1 /* Cannon.h */,
-				61C47E1317C635BB00D644D1 /* Cannon.m */,
+				61C47E1217C635BB00D644D1 /* Canon.h */,
+				61C47E1317C635BB00D644D1 /* Canon.m */,
 				61C47E1417C635BB00D644D1 /* Catapult.h */,
 				61C47E1517C635BB00D644D1 /* Catapult.m */,
 				61C47E1617C635BB00D644D1 /* Hobelar.h */,
@@ -1753,7 +1823,6 @@
 				61C47DB317BEA17500D644D1 /* GCTurnBasedMatchHelper.m in Sources */,
 				61C47DB517BEA17500D644D1 /* GridlLayoutManager.m in Sources */,
 				61C47E3617C635BB00D644D1 /* Archer.m in Sources */,
-				611D39C41A8964E8002B6F0A /* HKAttribute.m in Sources */,
 				617DB27518C7057300E64829 /* GameCenterManager.m in Sources */,
 				61A8B8AD189959BE0063DCBC /* SKAction+Utility.m in Sources */,
 				617DB26D18C65DDD00E64829 /* HKSecondaryAttackDiceRolls.m in Sources */,
@@ -1767,7 +1836,7 @@
 				61C47DC017BEA17500D644D1 /* MeleeAttackPlaybackAction.m in Sources */,
 				61C47DC217BEA17500D644D1 /* MinimumRequirementDeckStrategy.m in Sources */,
 				617214A0187DE1B8000775EE /* HKDialogNode.m in Sources */,
-				61C47E3917C635BB00D644D1 /* Cannon.m in Sources */,
+				61C47E3917C635BB00D644D1 /* Canon.m in Sources */,
 				61C47E4A17C635BB00D644D1 /* WeaponSmith.m in Sources */,
 				61C47DC417BEA17500D644D1 /* MoveAction.m in Sources */,
 				61C47DC617BEA17500D644D1 /* MovePathFinderStrategy.m in Sources */,
@@ -1782,6 +1851,7 @@
 				61C47DD517BEA17500D644D1 /* RandomDeckStrategy.m in Sources */,
 				61C47DD717BEA17500D644D1 /* RandomDiceStrategy.m in Sources */,
 				61C47DD917BEA17500D644D1 /* RandomLevelIncreaseStrategy.m in Sources */,
+				61C47DDB17BEA17500D644D1 /* RangeAttribute.m in Sources */,
 				61C47E3F17C635BB00D644D1 /* Knight.m in Sources */,
 				61C47DDD17BEA17500D644D1 /* RangedAttackAction.m in Sources */,
 				61C47DDF17BEA17500D644D1 /* RangedAttackPathFinderStrategy.m in Sources */,
@@ -1815,9 +1885,9 @@
 				61705CD818018C24001D7E1B /* TestHelper.m in Sources */,
 				617DB31018C730F300E64829 /* HKSharedTestCheckActionExistence.m in Sources */,
 				617DB26718C3D80E00E64829 /* HKExperienceTets.m in Sources */,
+				611CE4391A84D0ED003BF6A1 /* HKSamuraiTestCases.m in Sources */,
 				617DB30518C7295600E64829 /* HKSharedTestBench.m in Sources */,
 				61705CD618018C24001D7E1B /* MoveTest.m in Sources */,
-				611D39B11A87D03D002B6F0A /* HKSharedTestIsAttackAndDefenseCorrect.m in Sources */,
 				61705CD918018C24001D7E1B /* WarOfTheRosesTest.m in Sources */,
 				61705CD418018C24001D7E1B /* GameBoardMockup.m in Sources */,
 				61705CD218018C24001D7E1B /* BasicUnitTest.m in Sources */,
@@ -1825,6 +1895,7 @@
 				61705CD718018C24001D7E1B /* SpecialUnitTest.m in Sources */,
 				61705CD518018C24001D7E1B /* GameCenterTest.m in Sources */,
 				61705CD318018C24001D7E1B /* CombatTest.m in Sources */,
+				613790E11A84A2EB00B0F887 /* HKHobelarTestCases.m in Sources */,
 				617DB30D18C730C500E64829 /* HKSharedTestBaseExecuter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -20,8 +20,9 @@
         self.unitName = kPikeman;
         self.unitAttackType = kUnitAttackTypeMelee;
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 3)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:2];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:2];
+
         self.range = 1;
         self.move = 1;
         self.moveActionCost = self.attackActionCost = 1;

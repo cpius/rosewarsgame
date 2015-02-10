@@ -24,9 +24,8 @@
         self.unitName = kCannon;
         self.unitAttackType = kUnitAttackTypeRanged;
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(2, 6)];
-        
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 1)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:5];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:1];
         
         self.range = 4;
         self.move = 1;

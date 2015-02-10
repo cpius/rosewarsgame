@@ -20,8 +20,9 @@
         self.unitName = kLightCavalry;
         self.unitAttackType = kUnitAttackTypeMelee;
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(5, 6)];
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 2)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:2];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:2];
+
         self.range = 1;
         self.move = 4;
         self.moveActionCost = self.attackActionCost = 1;

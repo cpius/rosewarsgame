@@ -67,7 +67,7 @@
     
     self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
-    samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     catapult.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
@@ -134,7 +134,7 @@
         MeleeAttackAction *secondAttack = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[step] andCardInAction:samurai enemyCard:defender1 meleeAttackType:kMeleeAttackTypeNormal];
         secondAttack.delegate = mock;
         
-        samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+        samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
         defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
         
         [secondAttack performActionWithCompletion:^{

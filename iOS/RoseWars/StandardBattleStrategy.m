@@ -22,9 +22,9 @@
     CombatOutcome outcome;
     
     // Check attackroll
-    if (_attackRoll >= _attackValue.lowerValue && _attackRoll <= _attackValue.upperValue) {
+    if (_attackRoll <= _attackValue) {
         // Check defenceroll
-        if (_defenseRoll >= _defendValue.lowerValue && _defenseRoll <= _defendValue.upperValue) {
+        if (_defenseRoll <= _defendValue) {
             outcome = kCombatOutcomeDefendSuccessful;
         }
         else {

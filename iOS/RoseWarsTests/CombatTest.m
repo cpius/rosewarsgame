@@ -27,7 +27,6 @@
 #import "FlagBearer.h"
 #import "Catapult.h"
 #import "RawBonus.h"
-#import "RangeAttribute.h"
 #import "Lancer.h"
 #import "CardPool.h"
 
@@ -59,7 +58,7 @@
                                     player2Units:[NSArray arrayWithObjects:defender, nil]];
     
     attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
-    defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
+    defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     
     BattleResult *outcome = [self.gamemanager resolveCombatBetween:attacker defender:defender battleStrategy:attacker.battleStrategy];
     
@@ -81,7 +80,7 @@
                                 withPlayer1Units:[NSArray arrayWithObject:attacker]
                                     player2Units:[NSArray arrayWithObjects:defender, nil]];
     
-    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
+    attacker.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:4];
     
     BattleResult *outcome = [self.gamemanager resolveCombatBetween:attacker defender:defender battleStrategy:attacker.battleStrategy];
@@ -108,12 +107,12 @@
     TimedBonus *timedBonus = [[TimedBonus alloc] initWithValue:2 forNumberOfTurns:2 gamemanager:self.gamemanager];
     [attacker.attack addTimedBonus:timedBonus];
     
-    XCTAssertTrue([attacker.attack calculateValue].lowerValue == 3, @"Attack lower value should be 3");
+    XCTAssertTrue([attacker.attack calculateValue] == 4, @"Attack should be 4");
     
     [self.gamemanager endTurn];
     [self.gamemanager endTurn];
 
-    XCTAssertTrue([attacker.attack calculateValue].lowerValue == 5, @"Attack lower value should be 5");
+    XCTAssertTrue([attacker.attack calculateValue] == 2, @"Attack should be 2");
 }
 
 - (void)testAttackDirections {
@@ -215,7 +214,7 @@
     
     [attacker.defence addRawBonus:[[RawBonus alloc] initWithValue:4]];
     
-    XCTAssertTrue([attacker.defence calculateValue].upperValue == 4, @"Defense upper value should be 4");
+    XCTAssertTrue([attacker.defence calculateValue] == 4, @"Defense upper value should be 4");
 }
 
 - (void)testLongswordsManCanAttackEnemyUnitWhenStandingNextToRoyalGuardButNotConquer {
@@ -282,7 +281,7 @@
                                 withPlayer1Units:[NSArray arrayWithObjects:flagbearer, pikeman, nil]
                                     player2Units:[NSArray arrayWithObject:defender]];
     
-    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:4];
+    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
     defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
@@ -317,7 +316,7 @@
     
     MeleeAttackAction *action = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:@[step] andCardInAction:pikeman enemyCard:defender];
     
-    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:4];
+    pikeman.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
     defender.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
     
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
@@ -326,7 +325,7 @@
     [action performActionWithCompletion:^{
         
         XCTAssertFalse(defender.dead, @"Defender shouldn't be dead");
-        XCTAssertTrue([pikeman.attack calculateValue].lowerValue == 5, @"Pikeman shouldn't receive bonus from dead flagbearer");
+        XCTAssertTrue([pikeman.attack calculateValue] == 2, @"Pikeman shouldn't receive bonus from dead flagbearer");
     }];
 }
 
@@ -352,7 +351,7 @@
     catapult.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
     
     // Even though Pikeman defense is succesfull, because of the catapult +1A, pikemans defense is lowered by 1
-    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:3];
+    pikeman.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
     
     BattleResult *result = [self.gamemanager resolveCombatBetween:catapult defender:pikeman battleStrategy:catapult.battleStrategy];
     
@@ -402,7 +401,7 @@
     
     Lancer *lancer = [CardPool createCardOfName:kLancer withCardColor:kCardColorGreen gamemanager:self.gamemanager];
     lancer.cardLocation = [GridLocation gridLocationWithRow:5 column:2];
-    lancer.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:6];
+    lancer.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:4];
     
     LightCavalry *cavalry = [CardPool createCardOfName:kLightCavalry withCardColor:kCardColorRed gamemanager:self.gamemanager];
     cavalry.cardLocation = [GridLocation gridLocationWithRow:3 column:3];

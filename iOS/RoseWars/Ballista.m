@@ -21,8 +21,9 @@
         self.unitAttackType = kUnitAttackTypeRanged;
         
         
-        self.attack = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(3, 6)];
-        self.defence = [[RangeAttribute alloc] initWithStartingRange:MakeAttributeRange(1, 1)];
+        self.attack = [[HKAttribute alloc] initWithStartingValue:4];
+        self.defence = [[HKAttribute alloc] initWithStartingValue:1];
+
         self.range = 3;
         self.move = 1;
         self.moveActionCost = self.attackActionCost = 1;

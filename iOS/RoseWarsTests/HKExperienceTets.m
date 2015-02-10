@@ -27,7 +27,6 @@
 #import "FlagBearer.h"
 #import "Catapult.h"
 #import "RawBonus.h"
-#import "RangeAttribute.h"
 #import "Lancer.h"
 #import "FixedDiceStrategy.h"
 #import "FixedDeckStrategy.h"
@@ -135,7 +134,8 @@
 
     PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     MeleeAttackAction *attack = [pathfinder getMeleeAttackActionForCard:attacker againstEnemyUnit:defender1 allLocations:self.gamemanager.currentGame.unitLayout];
-    
+    GameBoardMockup *mock = [GameBoardMockup new];
+    attack.delegate = mock;
     XCTAssertNotNil(attack, @"Samurai should be able to attack");
 
     [attack performActionWithCompletion:^{
@@ -143,6 +143,7 @@
         
         MeleeAttackAction *attack = [pathfinder getMeleeAttackActionForCard:attacker againstEnemyUnit:defender1 allLocations:self.gamemanager.currentGame.unitLayout];
         XCTAssertNotNil(attack, @"Samurai should be able to attack");
+        attack.delegate = mock;
         [attack performActionWithCompletion:^{
             XCTAssertTrue(attacker.experience == 1, @"Attacker should not have gained extra XP this round");
         }];
