@@ -168,7 +168,11 @@ class Unit_class(object):
     def get_upgraded_unit_from_upgrade(self, upgrade):
 
         if isinstance(upgrade, int):
-            upgraded_unit = self.make(upgrade)
+            if get_setting("version") == "1.0":
+                upgraded_unit = self
+                upgraded_unit.increment(upgrade)
+            else:
+                upgraded_unit = self.make(upgrade)
         else:
             upgraded_unit = self.make(self.unit)
             for trait, level in self.traits.items():
