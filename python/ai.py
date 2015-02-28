@@ -131,18 +131,20 @@ def score_actions_considering_one_action(g0):
     return score_actions_considering_one_more_action(g0, g0)
 
 
-def score_actions_considering_one_more_action(g1, g0_factors):
+def score_actions_considering_one_more_action(g1, g0):
     actions = g1.get_actions()
     for a in actions:
         if a.is_attack():
             g2_win = one_action_forward(a, g1, success)
             g2_loss = one_action_forward(a, g1, failure)
             a.chance = chance_of_win(g1, a)
+            g0_factors = get_gamestate_factors(g0)
             a.factors_if_win = get_differences(g0_factors, g2_win)
             a.factors_if_loss = get_differences(g0_factors, g2_loss)
             a.score = a.chance * get_score(a.factors_if_win) + (1 - a.chance) * get_score(a.factors_if_loss)
         else:
             g2 = one_action_forward(a, g1)
+            g0_factors = get_gamestate_factors(g0)
             a.factors = get_differences(g0_factors, g2)
             a.score = get_score(a.factors)
     return actions
