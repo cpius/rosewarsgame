@@ -5,6 +5,20 @@ import interface_settings as settings
 from common import *
 from pygame.locals import *
 
+
+class Location(object):
+    def __init__(self, x, y, zoom):
+        self.x = x
+        self.y = y
+        self.zoom = zoom
+
+    def adjust(self, x, y):
+        return Location(self.x + x * self.zoom, self.y + y * self.zoom, self.zoom)
+
+    @property
+    def tuple(self):
+        return self.x, self.y
+
 colors = {"black": (0, 0, 0),
           "white": (255, 255, 255),
           "green": (0, 255, 0),
