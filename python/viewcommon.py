@@ -19,6 +19,7 @@ class Location(object):
     def tuple(self):
         return self.x, self.y
 
+
 class Color:
     Black = (0, 0, 0)
     White = (255, 255, 255)
@@ -150,7 +151,6 @@ def get_position_from_mouseclick(interface, coordinates):
         y = 8 - int((coordinates[1] - interface.y_border_top) /
                     (interface.unit_height + interface.unit_padding_height))
     return Position(x, y)
-
 
 
 def within(point, area):
