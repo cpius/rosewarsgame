@@ -442,18 +442,6 @@ def distance(position1, position2):
     return position1.distance(position2)
 
 
-def units_excluding_position(player_units, position):
-    return dict((pos, player_units[pos]) for pos in player_units if pos != position)
-
-
-def adjacent_units(position, units):
-    return [units[pos] for pos in position.adjacent_tiles() if pos in units]
-
-
-def surrounding_units(position, units):
-    return [units[pos] for pos in position.surrounding_tiles() if pos in units]
-
-
 def assert_equal_documents(testcase, expected, actual, testcase_file):
     message = "Wrong document for " + testcase_file + "\n\n"
 
