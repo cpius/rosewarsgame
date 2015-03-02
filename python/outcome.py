@@ -1,4 +1,6 @@
 from common import *
+from collections import namedtuple
+import random
 
 rolls = namedtuple("rolls", ["attack", "defence"])
 

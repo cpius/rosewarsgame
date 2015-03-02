@@ -3,8 +3,6 @@ from datetime import datetime
 import collections
 import functools
 from dictdiffer import DictDiffer
-import random
-from collections import namedtuple
 
 
 class Direction:
