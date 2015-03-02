@@ -52,7 +52,7 @@ class Viewlog:
 
         clear_log()
 
-        if len(self.logbook) > self.maximum_logs:
+        while len(self.logbook) > self.maximum_logs:
             self.logbook.pop(0)
 
         for lognumber, log in enumerate(self.logbook):
