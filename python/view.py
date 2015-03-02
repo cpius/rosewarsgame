@@ -1,9 +1,7 @@
 from __future__ import division
-import pygame
-import interface_settings as settings
 from viewlog import Viewlog
-import viewgame
-import viewinfo
+from viewgame import Viewgame
+from viewinfo import Viewinfo
 from viewcommon import *
 
 
@@ -17,6 +15,8 @@ class View(object):
         self.interface.load_fonts(self.zoom)
         self.screen = pygame.display.set_mode(self.interface.board_size)
         self.viewlog = Viewlog(self.zoom, self.interface, self.screen)
+        self.viewgame = Viewgame(self.interface, self.screen)
+        self.viewinfo = Viewinfo(self.interface, self.screen, self.zoom)
         self.counter_size = self.interface.counter_size
         self.showing_unit_info = False
 
@@ -33,7 +33,7 @@ class View(object):
         return get_position_from_mouseclick(self.interface, coordinates)
 
     def draw_ask_about_move_with_attack(self, position):
-        viewgame.draw_ask_about_move_with_attack(self.screen, self.interface, position)
+        self.viewgame.draw_ask_about_move_with_attack(position)
         write_message(self.screen, self.interface, "Click the tile you want to stand on.")
         self.refresh()
 
@@ -59,7 +59,7 @@ class View(object):
         self.showing_unit_info = False
 
     def draw_game(self, game, start_at=None, actions=(), redraw_log=False):
-        viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
+        self.viewgame.draw_game(game, start_at, actions)
         if redraw_log:
             self.clear_right()
             self.viewlog.draw_logbook()
@@ -67,13 +67,13 @@ class View(object):
 
     def show_unit_zoomed(self, unit, attack_hint):
         self.clear_right()
-        viewinfo.show_unit_zoomed(self.screen, self.interface, unit, attack_hint)
+        self.viewinfo.show_unit_zoomed(unit, attack_hint)
         self.showing_unit_info = True
         self.refresh()
 
     def show_unit_zoomed_tutorial(self, unit, attack_hint):
         self.clear_right_tutorial()
-        viewinfo.show_unit_zoomed(self.screen, self.interface, unit, attack_hint)
+        self.viewinfo.show_unit_zoomed(unit, attack_hint)
         self.showing_unit_info = True
         write(self.screen, "To Game", self.interface.help_area[0], self.interface.fonts["normal"])
         self.refresh()
@@ -88,25 +88,25 @@ class View(object):
         pygame.display.flip()
 
     def draw_upgrade_options(self, unit):
-        viewinfo.draw_upgrade_options(self.screen, self.interface, unit)
+        self.viewinfo.draw_upgrade_options(unit)
         self.refresh()
 
     def draw_ask_about_ability(self, unit):
-        viewinfo.draw_ask_about_ability(self.screen, self.interface, unit)
+        self.viewinfo.draw_ask_about_ability(unit)
         self.refresh()
 
     def draw_action(self, action, outcome, game, flip=False):
         self.viewlog.add_log(action, outcome, game)
         self.viewlog.draw_logbook()
-        viewgame.draw_action(self.screen, self.interface, action, outcome, flip)
+        self.viewgame.draw_action(action, outcome, flip)
         self.refresh()
 
     def draw_post_movement(self, action):
-        viewgame.draw_post_movement(self.screen, self.interface, action)
+        self.viewgame.draw_post_movement(action)
         self.refresh()
 
     def shade_positions(self, positions, color=None):
-        viewgame.shade_positions(self.screen, self.interface, positions, color)
+        self.viewgame.shade_positions(positions, color)
         self.refresh()
 
     def draw_message(self, message):
@@ -125,7 +125,7 @@ class View(object):
         self.refresh()
 
     def draw_game_tutorial(self, game):
-        viewgame.draw_game(self.screen, self.interface, game)
+        self.viewgame.draw_game(game)
         self.clear_right_tutorial()
         self.refresh()
 
@@ -133,7 +133,7 @@ class View(object):
         write(self.screen, str(number) + "/" + str(total), (740, 20), self.interface.fonts["normal"])
 
     def draw_action_tutorial(self, action, rolls):
-        viewgame.draw_action(self.screen, self.interface, action, rolls)
+        self.viewgame.draw_action(action, rolls)
         self.refresh()
 
     def play_sound(self, sound):
