@@ -85,7 +85,6 @@ def get_unit_actions(unit, start_at, gamestate):
         javelin_attacks = [attack for attack in javelin_attacks if distance(attack.end_at, attack.target_at) > 1]
         return javelin_attacks
 
-
     def get_extra_actions():
 
         def get_actions_combat_agility():

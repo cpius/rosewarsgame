@@ -134,7 +134,7 @@ def score_actions_considering_one_action(g0):
 def score_actions_considering_one_more_action(g1, g0):
     actions = g1.get_actions()
     for a in actions:
-        if a.is_attack():
+        if a.has_outcome():
             g2_win = one_action_forward(a, g1, success)
             g2_loss = one_action_forward(a, g1, failure)
             a.chance = chance_of_win(g1, a)

@@ -198,7 +198,7 @@ class Unit_class(object):
     def get_upgrade(self, choice):
 
         def has_upgrade(upgrade):
-            attribute = upgrade.keys()[0]
+            attribute = list(upgrade)[0]
             base_unit_attributes = self.make(self.unit).get_dict(attribute)
             self_attributes = self.get_dict(attribute)
 
@@ -218,7 +218,7 @@ class Unit_class(object):
         if isinstance(self.upgrades[0], int):
             return self.upgrades[choice]
 
-        possible_upgrade_choices = range(len(self.upgrades))
+        possible_upgrade_choices = list(range(len(self.upgrades)))
         if has_upgrade(self.upgrades[0]) and len(self.upgrades) > 2:
             possible_upgrade_choices.remove(0)
         if has_upgrade(self.upgrades[1]) and len(self.upgrades) > 3:

@@ -5,21 +5,37 @@ import interface_settings as settings
 from common import *
 from pygame.locals import *
 
-colors = {"black": (0, 0, 0),
-          "white": (255, 255, 255),
-          "green": (0, 255, 0),
-          "red": (255, 0, 0),
-          "blue": (0, 0, 255),
-          "light_blue": (20, 70, 255),
-          "brown": (128, 64, 0),
-          "grey": (48, 48, 48),
-          "yellow": (200, 200, 0),
-          "light_grey": (223, 223, 223),
-          "dark_green": (60, 113, 50),
-          "dark_red": (204, 0, 16),
-          "gold": (150, 130, 15),
-          "dull_red": (190, 55, 55),
-          "dodger_blue": (30, 144, 255)}
+
+class Location(object):
+    def __init__(self, x, y, zoom):
+        self.x = x
+        self.y = y
+        self.zoom = zoom
+
+    def adjust(self, x, y):
+        return Location(self.x + x * self.zoom, self.y + y * self.zoom, self.zoom)
+
+    @property
+    def tuple(self):
+        return self.x, self.y
+
+
+class Color:
+    Black = (0, 0, 0)
+    White = (255, 255, 255)
+    Green = (0, 255, 0)
+    Red = (255, 0, 0)
+    Blue = (0, 0, 255)
+    Light_blue = (20, 70, 255)
+    Brown = (128, 64, 0)
+    Grey = (48, 48, 48)
+    Yellow = (200, 200, 0)
+    Light_grey = (223, 223, 223)
+    Dark_green = (60, 113, 50)
+    Dark_red = (204, 0, 16)
+    Gold = (150, 130, 15)
+    Dull_red = (190, 55, 55)
+    Dodger_blue = (30, 144, 255)
 
 
 _anti_alias = True
@@ -53,7 +69,7 @@ def get_image(path, dimensions=None):
     return image
 
 
-def write(screen, message, location, font, color=colors["black"]):
+def write(screen, message, location, font, color=Color.Black):
     label = font.render(message, _anti_alias, color)
     screen.blit(label, location)
 
@@ -113,7 +129,7 @@ def draw_unit_box(screen, interface, base, color, resize=1):
 
     inner_corners = scale_rectangle(base_corners, -1)
 
-    pygame.draw.lines(screen, colors["black"], True, inner_corners)
+    pygame.draw.lines(screen, Color.Black, True, inner_corners)
 
     thickness = int(5 * settings.zoom * resize)
 
@@ -122,7 +138,7 @@ def draw_unit_box(screen, interface, base, color, resize=1):
         pygame.draw.lines(screen, border_color, True, middle_corners)
 
     outer_corners = scale_rectangle(base_corners, thickness)
-    pygame.draw.lines(screen, colors["black"], True, outer_corners)
+    pygame.draw.lines(screen, Color.Black, True, outer_corners)
 
 
 def get_position_from_mouseclick(interface, coordinates):
@@ -135,7 +151,6 @@ def get_position_from_mouseclick(interface, coordinates):
         y = 8 - int((coordinates[1] - interface.y_border_top) /
                     (interface.unit_height + interface.unit_padding_height))
     return Position(x, y)
-
 
 
 def within(point, area):

@@ -25,7 +25,7 @@ def exit_game():
 
 def menu_choice(view, menu):
 
-    view.screen.fill(colors["light_grey"])
+    view.screen.fill(Color.Light_grey)
     for i, item in enumerate(menu):
         write(view.screen, item, view.interface.opponent_menu[i], view.interface.fonts["normal"])
     view.refresh()
@@ -57,7 +57,7 @@ def figure_out_player_profile(view):
     if profile:
         return profile
     else:
-        view.screen.fill(colors["light_grey"])
+        view.screen.fill(Color.Light_grey)
         message = "Add a line to you settings.txt saying: 'profile: profile_name'"
         write(view.screen, message, view.interface.opponent_menu[0], view.interface.fonts["normal"])
         view.refresh()

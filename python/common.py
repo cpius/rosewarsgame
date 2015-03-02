@@ -1,11 +1,8 @@
 from json import JSONEncoder, dumps
 from datetime import datetime
-from bson.objectid import ObjectId
 import collections
 import functools
 from dictdiffer import DictDiffer
-import random
-from collections import namedtuple
 
 
 class Direction:
@@ -86,14 +83,12 @@ class Position:
 
 def enum(n, *sequential, **named):
     enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
-    reverse = dict((value, key) for key, value in enums.iteritems())
-    reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.iteritems())
+    reverse = dict((value, key) for key, value in enums.items())
+    reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.items())
     enums["get_enum"] = enums
     enums["name"] = reverse
     enums["write"] = reverse_print
     return type('Enum', (), enums)
-
-rolls = namedtuple("rolls", ["attack", "defence"])
 
 trait_descriptions = {
     "attack_cooldown": {
@@ -444,18 +439,6 @@ def distance(position1, position2):
     return position1.distance(position2)
 
 
-def units_excluding_position(player_units, position):
-    return dict((pos, player_units[pos]) for pos in player_units if pos != position)
-
-
-def adjacent_units(position, units):
-    return [units[pos] for pos in position.adjacent_tiles() if pos in units]
-
-
-def surrounding_units(position, units):
-    return [units[pos] for pos in position.surrounding_tiles() if pos in units]
-
-
 def assert_equal_documents(testcase, expected, actual, testcase_file):
     message = "Wrong document for " + testcase_file + "\n\n"
 
@@ -477,13 +460,11 @@ class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
-        if isinstance(obj, ObjectId):
-            return str(obj)
         return JSONEncoder.default(self, obj)
 
 
 def document_to_string(document):
-    return dumps(document, indent=4, cls=CustomJsonEncoder, sort_keys=True)
+    return dumps(document, indent=4, cls=CustomJsonEncoder, sort_keys=False)
 
 
 class memoized(object):
@@ -607,7 +588,5 @@ def unit_with_trait_at(pos, trait, units, level=None):
     return pos in units and units[pos].has(trait, level)
 
 
-def get_rolls():
-    return rolls(random.randint(1, 6), random.randint(1, 6))
 
 

@@ -1,4 +1,8 @@
 from common import *
+from collections import namedtuple
+import random
+
+rolls = namedtuple("rolls", ["attack", "defence"])
 
 
 class Outcome:
@@ -32,12 +36,16 @@ class Outcome:
         return outcome_document
 
     @classmethod
+    def get_rolls(cls):
+        return rolls(random.randint(1, 6), random.randint(1, 6))
+
+    @classmethod
     def determine_outcome(cls, action, gamestate):
         outcome = cls()
         if not action.has_outcome():
             return outcome
 
-        outcome.set_suboutcome(action.target_at, get_rolls())
+        outcome.set_suboutcome(action.target_at, cls.get_rolls())
 
         attack_direction = None
         if action.is_attack() and action.unit.is_melee() and not action.is_javelin_throw():

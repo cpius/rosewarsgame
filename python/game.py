@@ -38,8 +38,8 @@ class Game:
             elif player2.profile == player_profile:
                 player1.intelligence = player1.ai = "Network"
             else:
-                print player_profile, "is not playing this game."
-                print "The players are:", player1.profile, "and", player2.profile
+                print(player_profile, "is not playing this game.")
+                print("The players are:", player1.profile, "and", player2.profile)
                 return
 
         if "created_at" in log_document:
@@ -84,7 +84,7 @@ class Game:
 
             if options and "upgrade" in options:
                 upgrade = options["upgrade"]
-                if isinstance(upgrade, basestring):
+                if type(upgrade) is str:
                     upgrade = Unit.get_enum[upgrade]
                 else:
                     upgrade = enum_attributes(upgrade)
