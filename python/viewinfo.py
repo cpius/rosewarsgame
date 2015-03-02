@@ -8,7 +8,7 @@ upgrade_unit_size = (int(118 * zoom), int(135.5 * zoom))
 
 
 def clear(screen, interface):
-    pygame.draw.rect(screen, colors["light_grey"], interface.lower_right_rectangle)
+    pygame.draw.rect(screen, Color.Light_grey, interface.lower_right_rectangle)
 
 
 def get_unit_lines(unit):

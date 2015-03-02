@@ -1,5 +1,5 @@
 from __future__ import division
-from viewcommon import colors
+from viewcommon import Color
 import pygame
 from coordinates import Coordinates
 from collections import namedtuple
@@ -93,9 +93,9 @@ class Rectangles(Interface):
         self.second_font_coordinates = (counter_base_x - 5 * zoom, counter_base_y + 28 * zoom)
         self.third_font_coordinates = (counter_base_x - 5 * zoom, counter_base_y + 8 * zoom)
 
-        self.green_player_color = colors["gold"]
-        self.red_player_color = colors["dull_red"]
-        self.counter_circle_color = colors["black"]
+        self.green_player_color = Color.Gold
+        self.red_player_color = Color.Dull_red
+        self.counter_circle_color = Color.Black
 
         self.message_location = (410 * zoom, 420 * zoom)
         self.message_font_size = int(23 * zoom)

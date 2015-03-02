@@ -54,7 +54,7 @@ def shade_actions(screen, interface, actions):
 
 
 def draw_post_movement(screen, interface, action):
-    pygame.draw.circle(screen, colors["black"], interface.coordinates["center"].get(action.start_at), 10)
+    pygame.draw.circle(screen, Color.Black, interface.coordinates["center"].get(action.start_at), 10)
     draw_line(screen, interface, action.end_at, action.target_at)
     pic = get_image(interface.move_icon)
     screen.blit(pic, interface.coordinates["battle"].get(action.target_at))
@@ -73,7 +73,7 @@ def draw_action(screen, interface, action, outcome, flip=False):
 
     coordinates = interface.coordinates
 
-    pygame.draw.circle(screen, colors["black"], coordinates["center"].get(aligned_action.start_at), 10)
+    pygame.draw.circle(screen, Color.Black, coordinates["center"].get(aligned_action.start_at), 10)
     draw_line(screen, interface, aligned_action.start_at, aligned_action.end_at)
 
     if aligned_action.is_attack():
@@ -99,7 +99,7 @@ def draw_action(screen, interface, action, outcome, flip=False):
 def draw_line(screen, interface, start_position, end_position):
     start_coordinates = interface.coordinates["center"].get(start_position)
     end_coordinates = interface.coordinates["center"].get(end_position)
-    pygame.draw.line(screen, colors["black"], start_coordinates, end_coordinates, 5)
+    pygame.draw.line(screen, Color.Black, start_coordinates, end_coordinates, 5)
 
 
 def shade_positions(screen, interface, positions, color=None):
@@ -120,7 +120,7 @@ def draw_counters(screen, interface, counters, color, position, counter_coordina
 
 
 def draw_bordered_circle(screen, position, size, color):
-    pygame.draw.circle(screen, colors["black"], position, size + 2)
+    pygame.draw.circle(screen, Color.Black, position, size + 2)
     pygame.draw.circle(screen, color, position, size)
 
 
@@ -139,16 +139,16 @@ def draw_symbols(screen, interface, unit, position):
         corner3 = (base[0] + width, base[1] + height)
         corner4 = (base[0], base[1] + height)
         base_corners = [corner1, corner2, corner3, corner4]
-        pygame.draw.lines(screen, colors["black"], True, base_corners)
+        pygame.draw.lines(screen, Color.Black, True, base_corners)
         draw_rectangle(screen, (3, 6), (base[0] + 1, base[1] + 1), color)
 
     total_boxes = unit.experience_to_upgrade
     blue_boxes = unit.get(State.experience) % unit.experience_to_upgrade
     for index in range(blue_boxes):
-        draw_box(index, colors["light_blue"])
+        draw_box(index, Color.Light_blue)
 
     for index in range(blue_boxes, total_boxes):
-        draw_box(index, colors["white"])
+        draw_box(index, Color.White)
 
     if unit.has(Effect.bribed):
         draw_bribed(screen, interface, position)
@@ -184,13 +184,13 @@ def draw_unit(screen, interface, unit, position, color, selected=False):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
         counters = get_blue_counters(unit)
-        draw_counters(screen, interface, counters, colors["blue"], position, counter_coordinates, font_coordinates)
+        draw_counters(screen, interface, counters, Color.Blue, position, counter_coordinates, font_coordinates)
         counters_drawn += 1
     if get_yellow_counters(unit):
         counter_coordinates = get_counter_coordinates(interface, counters_drawn)
         font_coordinates = get_font_coordinates(interface, counters_drawn)
         counters = get_yellow_counters(unit)
-        draw_counters(screen, interface, counters, colors["yellow"], position, counter_coordinates, font_coordinates)
+        draw_counters(screen, interface, counters, Color.Yellow, position, counter_coordinates, font_coordinates)
 
     draw_unit_box(screen, interface, base, color)
     draw_symbols(screen, interface, unit, position)

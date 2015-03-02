@@ -45,15 +45,15 @@ class View(object):
         self.refresh()
 
     def clear_right(self):
-        pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
+        pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
         write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"])
         self.showing_unit_info = False
 
     def clear_left(self):
-        pygame.draw.rect(self.screen, colors["light_grey"], self.interface.left_side_rectangle)
+        pygame.draw.rect(self.screen, Color.Light_grey, self.interface.left_side_rectangle)
 
     def clear_right_tutorial(self):
-        pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
+        pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
         write(self.screen, "To Game", self.interface.help_area[0], self.interface.fonts["normal"])
         write(self.screen, "To Menu", self.interface.to_help_menu_area[0], self.interface.fonts["normal"])
         self.showing_unit_info = False
@@ -141,7 +141,7 @@ class View(object):
         sound.play()
 
     def draw_help_menu(self, menu):
-        self.screen.fill(colors["light_grey"])
+        self.screen.fill(Color.Light_grey)
         for i, item in enumerate(menu):
             write(self.screen, item, self.interface.help_menu[i], self.interface.fonts["normal"])
         write(self.screen, "To game", self.interface.help_area[0], self.interface.fonts["normal"])

@@ -48,7 +48,7 @@ class Viewlog:
     def draw_logbook(self):
 
         def clear_log():
-            pygame.draw.rect(self.screen, colors["light_grey"], self.interface.right_side_rectangle)
+            pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
 
         clear_log()
 
@@ -122,7 +122,7 @@ class Viewlog:
 
         line_start = locations["line"]
         line_end = line_start.adjust(600, 0)
-        pygame.draw.line(self.screen, colors["black"], line_start.tuple, line_end.tuple, self.line_thickness)
+        pygame.draw.line(self.screen, Color.Black, line_start.tuple, line_end.tuple, self.line_thickness)
 
     def draw_unit_box(self, base, color):
 
@@ -130,10 +130,10 @@ class Viewlog:
         thickness = int(3 * self.zoom)
 
         rectangle = pygame.Rect(base.tuple, self.unit_dimensions)
-        pygame.draw.rect(self.screen, colors["black"], rectangle, 1)
+        pygame.draw.rect(self.screen, Color.Black, rectangle, 1)
         for i in range(1, thickness):
             pygame.draw.rect(self.screen, border_color, rectangle.inflate(2*i, 2*i), 1)
-        pygame.draw.rect(self.screen, colors["black"], rectangle.inflate(2*thickness, 2*thickness), 1)
+        pygame.draw.rect(self.screen, Color.Black, rectangle.inflate(2*thickness, 2*thickness), 1)
 
     def draw_outcome(self, outcome_string, location):
         write(self.screen, outcome_string, location.tuple, self.interface.fonts["larger"])
