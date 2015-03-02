@@ -64,7 +64,7 @@ class Controller(object):
         controller.client = client
 
         player = controller.game.current_player()
-        print "current player is", player.color, player.intelligence, player.profile
+        print("current player is", player.color, player.intelligence, player.profile)
         controller.clear_move()
 
         controller.view.play_sound("your_turn")
@@ -85,7 +85,7 @@ class Controller(object):
             controller.game.shift_turn()
 
         player = controller.game.current_player()
-        print "current player is", player.color, player.intelligence
+        print("current player is", player.color, player.intelligence)
 
         return controller
 
@@ -98,11 +98,11 @@ class Controller(object):
         if action is None:
             return
 
-        print "received action from network: ", action
+        print("received action from network: ", action)
         if outcome:
-            print "with outcome: ", outcome
+            print("with outcome: ", outcome)
         if upgrade:
-            print "with upgrade: ", upgrade
+            print("with upgrade: ", upgrade)
 
         self.perform_action(action, outcome, upgrade)
 
@@ -142,7 +142,7 @@ class Controller(object):
             ability = self.selected_unit.abilities.keys()[index]
 
         else:
-            ability = self.selected_unit.abilities.keys()[0]
+            ability = list(self.selected_unit.abilities)[0]
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
         if action in self.game.gamestate.get_actions():
             self.perform_action(action)
@@ -306,10 +306,10 @@ class Controller(object):
                 self.view.draw_game(self.game)
 
             elif event.type == KEYDOWN and event.key == K_g:
-                print self.game.gamestate
+                print(self.game.gamestate)
 
             elif event.type == KEYDOWN and event.key == K_a:
-                print self.game.gamestate.available_actions
+                print(self.game.gamestate.available_actions)
 
             elif self.quit_game_requested(event):
                 self.exit_game()
@@ -487,12 +487,12 @@ class Controller(object):
 
             self.select_unit(position)
 
-        print "Action performed. Expecting action from", self.game.current_player().intelligence
+        print("Action performed. Expecting action from", self.game.current_player().intelligence)
 
         if self.game.is_player_human():
             return
         elif self.game.is_player_network():
-            print "Waiting for network action from network with number", self.game.gamestate.action_count + 1
+            print("Waiting for network action from network with number", self.game.gamestate.action_count + 1)
             self.trigger_network_player()
         else:
             self.trigger_artificial_intelligence()

@@ -17,17 +17,17 @@ def initialize_turn(gamestate):
     for position, unit in gamestate.player_units.items():
         for state in remove_states:
             unit.remove(state)
-        for effect in unit.effects.keys():
+        for effect in list(unit.effects):
             if effect not in wear_off_in_opponents_turn:
                 unit.decrement(effect)
 
     for position, unit in gamestate.enemy_units.items():
-        for effect in unit.effects.keys():
+        for effect in list(unit.effects):
             if effect in wear_off_in_opponents_turn:
                 unit.decrement(effect)
 
     # We just got the turn. Any bribed units we own is still controlled by the enemy,
     # at least until we take it back at the start of our turn (now)
-    for position, unit in gamestate.enemy_units.items():
+    for position, unit in list(gamestate.enemy_units.items()):
         resolve_bribe(unit)
         unit.remove(State.used)

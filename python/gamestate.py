@@ -6,7 +6,7 @@ from units import Unit_class
 import json
 from common import *
 from copy import copy
-
+from six import string_types
 
 class Gamestate:
     def __init__(self,
@@ -121,7 +121,7 @@ class Gamestate:
         for position_string, unit_document in document.items():
             position = Position.from_string(position_string)
 
-            if isinstance(unit_document, basestring):
+            if type(unit_document) is str:
                 unit = Unit_class.make(Unit.get_enum[unit_document.replace(" ", "_")])
             else:
                 unit = Unit_class.make(Unit.get_enum[unit_document["name"].replace(" ", "_")])

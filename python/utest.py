@@ -95,7 +95,7 @@ def upgrade(test_document):
     gamestate = Gamestate.from_document(test_document["pre_gamestate"])
     expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
 
-    if isinstance(test_document["upgrade"], basestring):
+    if type(test_document["upgrade"]) is str:
         upgrade_choice = test_document["upgrade"]
     else:
         upgrade_choice = enum_attributes(test_document["upgrade"])
@@ -132,7 +132,7 @@ def run():
         results[test_document["type"]][test] += 1
 
     for key, value in results.items():
-        print key + ": ", value
+        print(key + ": ", value)
 
 
 

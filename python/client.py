@@ -53,7 +53,7 @@ class Client():
             response = json.load(urllib2.urlopen(get_setting("server") + "/games/join_or_create/" + self.profilename))
             self.game_id = response["ID"]
 
-            print response["Message"], self.game_id
+            print(response["Message"], self.game_id)
 
             if response["Message"] == "New game created":
                 return self.wait_for_opponent()
@@ -74,7 +74,7 @@ class Client():
             self.last_modified = datetime(1970, 1, 1)
 
         if game["action_count"] > gamestate.action_count:
-            print "received action", document_to_string(game[expected_action])
+            print("received action", document_to_string(game[expected_action]))
             action = Action.from_document(gamestate.all_units(), game[expected_action])
             outcome = None
             if action.is_attack():
@@ -87,7 +87,7 @@ class Client():
                     action.move_with_attack = bool(options["move_with_attack"])
                 if "upgrade" in options:
                     upgrade = options["upgrade"]
-                    if isinstance(upgrade, basestring):
+                    if type(upgrade) is str:
                         upgrade = Unit.get_enum[upgrade]
                     else:
                         upgrade = enum_attributes(upgrade)
@@ -101,9 +101,9 @@ class Client():
             game = self.get_game()
             opponent = self.look_for_opponent(game)
             if opponent:
-                print "Opponent found:", opponent
+                print("Opponent found:", opponent)
                 return game
-            print "Waiting for opponent..."
+            print("Waiting for opponent...")
             sleep(3)
 
     def look_for_opponent(self, game):
@@ -118,11 +118,11 @@ class Client():
 
     def send_action(self, action):
         url = get_setting("server") + "/games/" + self.game_id + "/do_action"
-        print "sending json:", document_to_string(action)
+        print("sending json:", document_to_string(action))
         request = urllib2.Request(url, document_to_string(action), {"Content-Type": "application/json"})
         response = urllib2.urlopen(request)
         response_string = response.read()
-        print "received: " + response_string
+        print("received: " + response_string)
         json_response = json.loads(response_string)
         response.close()
         if json_response["Status"] == "OK":

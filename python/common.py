@@ -86,8 +86,8 @@ class Position:
 
 def enum(n, *sequential, **named):
     enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
-    reverse = dict((value, key) for key, value in enums.iteritems())
-    reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.iteritems())
+    reverse = dict((value, key) for key, value in enums.items())
+    reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.items())
     enums["get_enum"] = enums
     enums["name"] = reverse
     enums["write"] = reverse_print
