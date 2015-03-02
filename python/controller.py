@@ -71,8 +71,10 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_replay(cls):
-        savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
+    def from_replay(cls, savegame_file=None):
+
+        if not savegame_file:
+            savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
 
         controller = cls(View())
         savegame_document = json.loads(open(savegame_file).read())
