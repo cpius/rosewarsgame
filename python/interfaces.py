@@ -55,8 +55,6 @@ class Rectangles(Interface):
 
     def __init__(self, zoom):
 
-        self.zoom = zoom
-
         self.board_image = "./graphics/board.gif"
         self.unit_folder = "./graphics/units"
 
@@ -103,10 +101,10 @@ class Rectangles(Interface):
         self.message_font_size = int(23 * zoom)
 
         self.show_unit_coordinates = (450 * zoom, 20 * zoom)
-        self.right_side_rectangle = (391 * self.zoom, 0, 391 * self.zoom, 743 * self.zoom)
-        self.left_side_rectangle = (0, 0, 391 * self.zoom, 743 * self.zoom)
+        self.right_side_rectangle = (391 * zoom, 0, 391 * zoom, 743 * zoom)
+        self.left_side_rectangle = (0, 0, 391 * zoom, 743 * zoom)
 
-        self.lower_right_rectangle = (391 * self.zoom, 391 * self.zoom, 391 * self.zoom, 391 * self.zoom)
+        self.lower_right_rectangle = (391 * zoom, 391 * zoom, 391 * zoom, 391 * zoom)
 
         self.move_shading = pygame.Color(0, 0, 0, 160)
         self.attack_shading = pygame.Color(130, 0, 0, 150)
