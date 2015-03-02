@@ -1,7 +1,7 @@
 from __future__ import division
 import pygame
 import interface_settings as settings
-import viewlog
+from viewlog import Viewlog
 import viewgame
 import viewinfo
 from viewcommon import *
@@ -16,7 +16,7 @@ class View(object):
         self.interface = settings.interface
         self.interface.load_fonts(self.zoom)
         self.screen = pygame.display.set_mode(self.interface.board_size)
-        self.logbook = []
+        self.viewlog = Viewlog(self.zoom, self.interface, self.screen)
         self.counter_size = self.interface.counter_size
         self.showing_unit_info = False
 
@@ -62,7 +62,7 @@ class View(object):
         viewgame.draw_game(self.screen, self.interface, game, start_at, actions)
         if redraw_log:
             self.clear_right()
-            viewlog.draw_logbook(self.screen, self.interface, self.logbook)
+            self.viewlog.draw_logbook()
         self.refresh()
 
     def show_unit_zoomed(self, unit, attack_hint):
@@ -81,7 +81,7 @@ class View(object):
     def hide_unit_zoomed(self):
         if self.showing_unit_info:
             self.clear_right()
-            viewlog.draw_logbook(self.screen, self.interface, self.logbook)
+            self.viewlog.draw_logbook()
 
     @staticmethod
     def refresh():
@@ -96,8 +96,8 @@ class View(object):
         self.refresh()
 
     def draw_action(self, action, outcome, game, flip=False):
-        self.logbook = viewlog.add_log(action, outcome, game, self.logbook)
-        viewlog.draw_logbook(self.screen, self.interface, self.logbook)
+        self.viewlog.add_log(action, outcome, game)
+        self.viewlog.draw_logbook()
         viewgame.draw_action(self.screen, self.interface, action, outcome, flip)
         self.refresh()
 
