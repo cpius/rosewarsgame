@@ -1,6 +1,5 @@
 from json import JSONEncoder, dumps
 from datetime import datetime
-from bson.objectid import ObjectId
 import collections
 import functools
 from dictdiffer import DictDiffer
@@ -463,13 +462,11 @@ class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
-        if isinstance(obj, ObjectId):
-            return str(obj)
         return JSONEncoder.default(self, obj)
 
 
 def document_to_string(document):
-    return dumps(document, indent=4, cls=CustomJsonEncoder, sort_keys=True)
+    return dumps(document, indent=4, cls=CustomJsonEncoder, sort_keys=False)
 
 
 class memoized(object):
