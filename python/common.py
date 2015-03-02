@@ -93,8 +93,6 @@ def enum(n, *sequential, **named):
     enums["write"] = reverse_print
     return type('Enum', (), enums)
 
-rolls = namedtuple("rolls", ["attack", "defence"])
-
 trait_descriptions = {
     "attack_cooldown": {
         1: "Can only attack every third turn.",
@@ -607,7 +605,5 @@ def unit_with_trait_at(pos, trait, units, level=None):
     return pos in units and units[pos].has(trait, level)
 
 
-def get_rolls():
-    return rolls(random.randint(1, 6), random.randint(1, 6))
 
 
