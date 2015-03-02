@@ -1,5 +1,5 @@
 import json
-import urllib2
+import urllib.request as urllib2
 from common import *
 from action import Action
 from outcome import Outcome
