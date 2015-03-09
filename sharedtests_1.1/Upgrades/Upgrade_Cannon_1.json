@@ -10,7 +10,9 @@
         "player1_units": {
             "A3": {
                 "name": "Cannon",
-                "attack_frozen": [1,2],
+                "attack_frozen": {
+					"level": 1,
+					"duration": 2},
                 "experience": 3
             }
         },
@@ -25,7 +27,9 @@
                 "name": "Cannon",
                 "attack_cooldown": 2,
                 "far_sighted": 1,
-                "attack_frozen": [1, 2],
+                "attack_frozen": {
+					"level": 1,
+					"duration": 2},
                 "experience": 3,
                 "recently_upgraded": 1
             }

@@ -6,7 +6,7 @@ from units import Unit_class
 import json
 from common import *
 from copy import copy
-from six import string_types
+
 
 class Gamestate:
     def __init__(self,
@@ -108,6 +108,7 @@ class Gamestate:
             created_at = document["created_at"]
         else:
             created_at = None
+
         return cls(player1_units, player2_units, actions_remaining, created_at, ai_factors=ai_factors)
 
     @classmethod
@@ -122,29 +123,16 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if type(unit_document) is str:
-                unit = Unit_class.make(Unit.get_enum[unit_document.replace(" ", "_")])
+                unit = Unit_class.make(Unit[unit_document.replace(" ", "_")])
             else:
-                unit = Unit_class.make(Unit.get_enum[unit_document["name"].replace(" ", "_")])
+                unit = Unit_class.make(Unit[unit_document["name"].replace(" ", "_")])
 
-                for attribute, value in unit_document.items():
-                    if attribute == "zoc":
-                        unit.zoc = {getattr(Type, unit_type) for unit_type in unit_document["zoc"]}
-                    elif attribute in state_descriptions:
-                        state = getattr(State, attribute)
-                        unit.set(state, value)
-                    elif attribute in trait_descriptions:
-                        trait = getattr(Trait, attribute)
-                        unit.set(trait, value=value)
-                    elif attribute in ability_descriptions:
-                        ability = getattr(Ability, attribute)
-                        unit.set(ability, value=value)
-                    elif attribute in effect_descriptions:
-                        effect = getattr(Effect, attribute)
-                        if isinstance(value, int):
-                            unit.set(effect, 1, value)
-                        else:
-                            unit.set(effect, value=value[0], duration=value[1])
-
+                for attribute_name, number in unit_document.items():
+                    if type(number) is bool:
+                        number = int(number)
+                    if attribute_name != "name":
+                        attribute, attributes = get_attribute_from_document(attribute_name, number)
+                        unit.attributes[attribute] = attributes
             units[position] = unit
 
         return units
@@ -227,7 +215,7 @@ class Gamestate:
 
     def is_extra_action(self):
         for position, unit in self.player_units.items():
-            if unit.has(State.extra_action):
+            if unit.has_state(State.extra_action):
                 return True
 
         return False

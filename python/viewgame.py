@@ -16,12 +16,8 @@ class Viewgame:
         if not game.is_player_human():
             gamestate.flip_all_units()
 
-        current_color = game.current_player().color
-        enemy_color = game.opponent_player().color
-        player_units = gamestate.player_units
-        enemy_units = gamestate.enemy_units
-
-        self.draw_units(player_units, current_color, enemy_units, enemy_color, start_at, actions)
+        self.draw_units(gamestate.player_units, game.current_player().color,
+                        gamestate.enemy_units, game.opponent_player().color, start_at, actions)
 
         if actions:
             self.shade_actions(actions)
@@ -106,7 +102,7 @@ class Viewgame:
         self.draw_bordered_circle(counter_coordinates.get(position), self.interface.counter_size, color)
 
         if counters > 1:
-            write(self.screen, str(counters), font_coordinates.get(position), interface.fonts["small"])
+            write(self.screen, str(counters), font_coordinates.get(position), self.interface.fonts["small"])
 
     def draw_bordered_circle(self, position, size, color):
         pygame.draw.circle(self.screen, Color.Black, position, size + 2)
@@ -131,7 +127,7 @@ class Viewgame:
             draw_rectangle(self.screen, (3, 6), (base[0] + 1, base[1] + 1), color)
 
         total_boxes = unit.experience_to_upgrade
-        blue_boxes = unit.get(State.experience) % unit.experience_to_upgrade
+        blue_boxes = unit.get_state(State.experience) % unit.experience_to_upgrade
         for index in range(blue_boxes):
             draw_box(index, Color.Light_blue)
 
@@ -197,13 +193,10 @@ class Viewgame:
 
     @staticmethod
     def flip_action(action):
-
         flipped_action = action.copy()
-
         for attribute in ["start_at", "end_at", "target_at"]:
             if getattr(flipped_action, attribute):
                 setattr(flipped_action, attribute, getattr(flipped_action, attribute).flip())
-
         return flipped_action
 
     @staticmethod
@@ -212,7 +205,7 @@ class Viewgame:
 
     @staticmethod
     def get_blue_counters(unit):
-        return max(unit.get(Effect.poisoned), unit.get(Effect.attack_frozen), unit.has(State.recently_bribed))
+        return max(unit.get_level(Effect.poisoned), unit.get_level(Effect.attack_frozen), unit.has(State.recently_bribed))
 
     def draw_ask_about_move_with_attack(self, position):
         base = self.interface.coordinates["base"].get(position)

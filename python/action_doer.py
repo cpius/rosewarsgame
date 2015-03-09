@@ -43,7 +43,7 @@ def do_action(gamestate, action, outcome):
 
     def settle_ability(action):
         if action.ability == Ability.bribe:
-            action.target_unit.set(Effect.bribed)
+            action.target_unit.set(Effect.bribed, duration=1)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         elif action.ability == Ability.assassinate:
             if outcome.outcomes[action.target_at].attack > 2:
@@ -51,7 +51,7 @@ def do_action(gamestate, action, outcome):
             if outcome.outcomes[action.target_at].defence > 2:
                 del player_units[action.start_at]
         else:
-            level = action.unit.get(action.ability)
+            level = action.unit.get_level(action.ability)
             action.target_unit.do(action.ability, level)
 
     def prepare_extra_actions(action):
@@ -86,7 +86,7 @@ def do_action(gamestate, action, outcome):
             unit.set(Effect.attack_frozen, duration=3)
 
         if unit.has(Trait.attack_cooldown, 2) and action.is_attack():
-            unit.set(Effect.attack_frozen, duration=2)
+            unit.set(Effect.attack_frozen, level=2, duration=2)
 
     def update_unit_position():
         player_units[action.end_at] = player_units.pop(action.start_at)
@@ -142,10 +142,10 @@ def do_action(gamestate, action, outcome):
     elif action.is_ability():
         settle_ability(action)
 
-    if any(unit.has(trait) for trait in [Trait.swiftness, Trait.combat_agility]):
+    if any(unit.has(attribute) for attribute in [Trait.swiftness, Trait.combat_agility]):
         prepare_extra_actions(action)
 
-    unit.set(State.used)
+    unit.set(State.used, value=1)
 
 
 def move_melee_unit_to_target_tile(gamestate, rolls, action):

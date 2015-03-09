@@ -125,7 +125,7 @@ class Action(object):
         if self.number:
             document["number"] = self.number
         if self.ability:
-            document["ability"] = Ability.name[self.ability]
+            document["ability"] = self.ability.name
         if not self.move_with_attack is None:
             document["move_with_attack"] = self.move_with_attack
 
