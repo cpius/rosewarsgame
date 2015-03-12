@@ -526,11 +526,20 @@ class Controller(object):
             attack = min(attack, 6)
             defence = min(defence, 6)
 
-        return ["Attack hint:",
-                "Attack: " + str(attack),
-                "Defence: " + str(defence),
-                "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
-                str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
+        if action.is_ability():
+            return ""
+
+        attack_hint = ["Attack hint:",
+                       "Attack: " + str(attack),
+                       "Defence: " + str(defence),
+                       "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                       str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36 * 100, 1)) + "%"]
+
+        if action.is_push():
+            attack_hint.append("Chance of push: " + str(attack) + " / 6 * " + str(defence) + " / 6 = " +
+                               str(round((attack / 6) * (defence/6) * 100, 1)) + "%")
+
+        return attack_hint
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
