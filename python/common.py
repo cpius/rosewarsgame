@@ -235,17 +235,6 @@ ai_descriptions = {
 }
 
 
-class DirectionDescription(Enum):
-    Up = 1
-    Right = 2
-    Left = 3
-    Down = 4
-    Up_Left = 5
-    Up_Right = 6
-    Down_Left = 7
-    Down_Right = 8
-
-
 class Type(Enum):
     Cavalry = 1
     Infantry = 2
@@ -456,18 +445,6 @@ def readable(attributes):
 
     return dictionary
 
-def readable2(attributes):
-    dictionary = {}
-    for attribute, attribute_value in attributes.items():
-        if attribute in Trait or attribute in Ability:
-            dictionary[attribute.name] = attribute_value.level
-        elif attribute in State:
-            dictionary[attribute.name] = attribute_value.value
-        if attribute in Effect:
-            dictionary[attribute.name] = {"duration": attribute_values.duration, "level": attribute_values.level}
-
-    return dictionary
-
 
 def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dictionary=None):
     merged_dictionary = first_dictionary.copy()
@@ -480,7 +457,6 @@ def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dic
         merged_dictionary.update(fourth_dictionary)
 
     return merged_dictionary
-
 
 
 def attribute_key(attribute, value):
