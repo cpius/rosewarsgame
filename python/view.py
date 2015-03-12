@@ -41,6 +41,8 @@ class View(object):
         pygame.image.save(self.screen, name)
 
     def draw_game_end(self, color):
+        self.clear_right()
+        self.viewlog.draw_logbook()
         write_message(self.screen, self.interface, color + " Wins")
         self.refresh()
 
