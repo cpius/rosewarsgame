@@ -132,17 +132,17 @@ class Controller(object):
             self.perform_move(position)
 
     def perform_ability(self, position):
-        if len(self.selected_unit.abilities) > 1:
+        if len(self.selected_unit.get_abilities()) > 1:
             index = self.get_input_abilities(self.selected_unit)
 
             if index == "escape":
                 self.clear_move()
                 return
 
-            ability = self.selected_unit.abilities.keys()[index]
+            ability = self.selected_unit.get_abilities()[index]
 
         else:
-            ability = list(self.selected_unit.abilities)[0]
+            ability = list(self.selected_unit.get_abilities())[0]
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
         if action in self.game.gamestate.get_actions():
             self.perform_action(action)

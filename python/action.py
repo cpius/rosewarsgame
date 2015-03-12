@@ -84,7 +84,7 @@ class Action(object):
         if self.end_at != self.start_at:
             representation += " move to " + str(self.end_at)
         if self.ability:
-            representation += " " + Ability.name[self.ability]
+            representation += " " + self.ability.name
             representation += " " + str(self.target_unit) + " on " + str(self.target_at)
         elif self.is_attack() and self.move_with_attack:
             representation += " attack-move " + str(self.target_unit) + " on " + str(self.target_at)

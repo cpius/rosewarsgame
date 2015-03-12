@@ -369,8 +369,8 @@ four_directions_namedtuple = collections.namedtuple("directions", [name for name
 directions = four_directions_namedtuple(*(Direction(name) for name in ["Up", "Down", "Left", "Right"]))
 
 
-def get_description(attribute, level=1):
-    return ""
+def get_ability_description(ability, level=1):
+    return ability_descriptions[ability.name][level]
 
 
 def distance(position1, position2):
@@ -435,6 +435,8 @@ class memoized(object):
 
 def readable(attributes):
     dictionary = {}
+    if attributes in Unit:
+        return attributes.name
     for attribute, attribute_values in attributes:
         if attribute in Trait or attribute in Ability:
             dictionary[attribute.name] = attribute_values.level
@@ -496,6 +498,8 @@ def get_setting(name):
 
 def unit_with_attribute_at(pos, attribute, units, level=1):
     return pos in units and units[pos].has_skill(attribute, level)
+
+
 
 
 
