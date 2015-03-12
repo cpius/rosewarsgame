@@ -6,7 +6,7 @@ import battle
 import action_getter
 import glob
 from collections import Counter
-from common import enum_attributes
+from common import *
 
 
 def does_action_exist(test_document):
@@ -41,8 +41,13 @@ def does_upgrade_exist(test_document):
             gamestate1.player_units[position] = unit.get_upgraded_unit_from_choice(0)
             gamestate2.player_units[position] = unit.get_upgraded_unit_from_choice(1)
 
-    return (expected_gamestate in [gamestate1, gamestate2]) == test_document["result"]
-
+    if (expected_gamestate in [gamestate1, gamestate2]) == test_document["result"]:
+        return True
+    else:
+        print("g1", gamestate1.to_document())
+        print("g2", gamestate2.to_document())
+        print("ex", expected_gamestate.to_document())
+        return False
 
 
 def is_attack_and_defence_correct(test_document):
@@ -67,10 +72,14 @@ def is_outcome_correct(test_document):
 
     gamestate.do_action(action, outcome)
 
-    gamestate_document = gamestate.to_document()
-    expected_gamestate_document = expected_gamestate.to_document()
+    actual = gamestate.to_document()
+    expected = expected_gamestate.to_document()
 
-    return gamestate_document == expected_gamestate_document
+    if actual == expected:
+        return True
+    print("act", actual)
+    print("exp", expected)
+    return False
 
 
 def is_outcome_correct_extra_action(test_document):
@@ -93,17 +102,30 @@ def is_outcome_correct_extra_action(test_document):
 
 def upgrade(test_document):
     gamestate = Gamestate.from_document(test_document["pre_gamestate"])
+
     expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
 
     if type(test_document["upgrade"]) is str:
-        upgrade_choice = test_document["upgrade"]
+        upgrade_choice = enum_from_string["upgrade"]
     else:
-        upgrade_choice = enum_attributes(test_document["upgrade"])
+        upgrade_choice = {}
+        for key, value in test_document["upgrade"].items():
+            attribute_name = key
+            number = value
+
+            attribute, attributes = get_attribute_from_document(attribute_name, number)
+            upgrade_choice[attribute] = attributes
 
     for position, unit in gamestate.player_units.items():
         gamestate.player_units[position] = unit.get_upgraded_unit_from_upgrade(upgrade_choice)
 
-    return expected_gamestate.to_document() == gamestate.to_document()
+    expected = expected_gamestate.to_document()
+    actual = gamestate.to_document()
+    if actual == expected:
+        return True
+    print("act", actual)
+    print("exp", expected)
+    return False
 
 
 def utest(test_document):
@@ -112,6 +134,7 @@ def utest(test_document):
 
 def run():
     testcase_files = glob.glob("./../sharedtests_1.1/*/*.json")
+    #testcase_files = ["./../sharedtests_1.1/Poison_II/Turn_PoisonII_1.json"] #running just 1 test.
 
     results = {}
     for file in testcase_files:
@@ -127,9 +150,11 @@ def run():
             except Exception as e:
                 test = "ERROR"
         else:
+            print(file)
             test = utest(test_document)
 
         results[test_document["type"]][test] += 1
+        print()
 
     for key, value in results.items():
         print(key + ": ", value)

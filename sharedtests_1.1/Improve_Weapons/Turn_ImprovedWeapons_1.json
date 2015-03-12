@@ -7,9 +7,6 @@
             "C3": {
                 "name": "Pikeman",
                 "improved_weapons": 1,
-                "zoc": {
-                    "Cavalry": "true"
-                },
                 "experience": 1
             }
         },

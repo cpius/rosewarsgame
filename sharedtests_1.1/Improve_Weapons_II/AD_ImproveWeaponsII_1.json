@@ -13,7 +13,10 @@
         "player1_units": {
             "B2": {
                 "name": "Knight",
-                "improved_weapons": [2, 1]
+                "improved_weapons": {
+                    "level": 2,
+                    "duration": 1
+                }
             },
             "A3": "Weaponsmith"
         },

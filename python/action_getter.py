@@ -45,7 +45,7 @@ def get_unit_actions(unit, start_at, gamestate):
         return moves_sets(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def generate_extra_moveset():
-        movement = unit.get(State.movement_remaining)
+        movement = unit.get_state(State.movement_remaining)
         return moves_set(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def attack_generator(moveset):
@@ -90,7 +90,7 @@ def get_unit_actions(unit, start_at, gamestate):
         def get_actions_combat_agility():
             for terms in attack_generator({start_at}):
                 if terms["move_with_attack"]:
-                    if unit.get(State.movement_remaining):
+                    if unit.get_state(State.movement_remaining):
                         attacks.append(Action(units, start_at, **terms))
                 else:
                     attacks.append(Action(units, start_at, **terms))
@@ -121,7 +121,7 @@ def get_unit_actions(unit, start_at, gamestate):
 
     def get_abilities():
         abilities = []
-        for ability, value in unit.abilities.items():
+        for ability in unit.get_abilities():
             if ability in [Ability.sabotage, Ability.poison, Ability.assassinate]:
                 target_positions = enemy_units
             elif ability in [Ability.improve_weapons]:
@@ -157,6 +157,7 @@ def get_unit_actions(unit, start_at, gamestate):
                     for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
 
     if unit.has(Trait.berserking):
+
         moveset_with_leftover, moveset_no_leftover = moves_sets(start_at, frozenset(units), zoc_blocks, 4, 4)
         attacks = melee_attack_actions(moveset_with_leftover | {start_at})
 
@@ -250,7 +251,7 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
 
 
 def can_use_unit(unit, is_extra_action):
-    is_frozen = unit.has(Effect.poisoned)
+    is_frozen = unit.has(Effect.poisoned, 1) or unit.has(Effect.poisoned, 2)
     is_bribed = unit.has(State.recently_bribed)
     is_used = unit.has(State.used) and not unit.has(State.extra_action)
 
@@ -261,7 +262,7 @@ def can_use_unit(unit, is_extra_action):
 
 
 def melee_frozen(enemy_units, start_at):
-    return any(pos for pos in start_at.adjacent_tiles() if unit_with_trait_at(pos, Trait.melee_freeze, enemy_units))
+    return any(pos for pos in start_at.adjacent_tiles() if unit_with_attribute_at(pos, Trait.melee_freeze, enemy_units))
 
 
 def can_attack_with_unit(gamestate, unit):

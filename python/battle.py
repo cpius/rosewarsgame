@@ -44,7 +44,7 @@ def get_defence_setters(attacking_unit, defending_unit):
     if attacking_unit.has(Trait.sharpshooting):
         defence_setters.append(1)
 
-    if defending_unit.has(Effect.sabotaged):
+    if defending_unit.has(Effect.sabotaged, 1) or defending_unit.has(Effect.sabotaged, 2):
         defence_setters.append(0)
 
     return defence_setters
@@ -79,21 +79,27 @@ def get_attack(action, gamestate, is_sub_action=False):
         attack += lancing(action)
 
     if flanking(action):
-        attack += 2 * attacking_unit.get(Trait.flanking)
+        attack += 2 * attacking_unit.get_level(Trait.flanking)
 
-    if "No_player_Crusader" not in gamestate.ai_factors and is_crusading_attack(action, gamestate.player_units):
+    if "No_player_Crusader" not in gamestate.ai_factors and is_crusading_attack(action, gamestate.player_units, 1):
+        attack += 1
+
+    if "No_player_Crusader" not in gamestate.ai_factors and is_crusading_attack(action, gamestate.player_units, 2):
         attack += 1
 
     if "No_FlagBearer" not in gamestate.ai_factors and has_high_morale(action, gamestate.player_units):
         attack += 2
 
-    if attacking_unit.has(Effect.bribed):
-        attack += attacking_unit.get(Effect.bribed)
+    if attacking_unit.has(Effect.bribed, 1):
+        attack += 1
 
-    if attacking_unit.has(Effect.improved_weapons, level=1):
+    if attacking_unit.has(Effect.bribed, 2):
+        attack += 2
+
+    if attacking_unit.has(Effect.improved_weapons, 1):
         attack += 3
 
-    if attacking_unit.has(Effect.improved_weapons, level=2):
+    if attacking_unit.has(Effect.improved_weapons, 2):
         attack += 2
 
     if defending_unit.type in attacking_unit.attack_bonuses:
@@ -136,11 +142,11 @@ def distance_to_target(action):
     return distance(action.start_at, action.target_at)
 
 
-def is_crusading_attack(action, units, level=None):
+def is_crusading_attack(action, units, level=1):
     return action.unit.is_melee() and (is_surrounding_unit_with(action, units, Trait.crusading, action.start_at, level))
 
 
-def is_crusading_defense(action, units, level=None):
+def is_crusading_defense(action, units, level=1):
     return action.unit.is_melee() and (is_surrounding_unit_with(action, units, Trait.crusading, action.target_at, level))
 
 
@@ -149,13 +155,13 @@ def has_high_morale(action, units):
                                        is_surrounding_unit_with(action, units, Trait.flag_bearing, action.end_at, 2))
 
 
-def is_surrounding_unit_with(action, units, trait, position, level=None):
-    return any(unit_with_trait_at(pos, trait, units, level) for pos in position.surrounding_tiles() if
+def is_surrounding_unit_with(action, units, attribute, position, level=1):
+    return any(unit_with_attribute_at(pos, attribute, units, level) for pos in position.surrounding_tiles() if
                pos != action.start_at)
 
 
-def is_adjacent_unit_with(action, units, trait, position, level=None):
-    return any(unit_with_trait_at(pos, trait, units, level) for pos in position.adjacent_tiles() if
+def is_adjacent_unit_with(action, units, attribute, position, level=1):
+    return any(unit_with_attribute_at(pos, attribute, units, level) for pos in position.adjacent_tiles() if
                pos != action.start_at)
 
 

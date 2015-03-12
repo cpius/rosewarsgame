@@ -3,6 +3,7 @@ from datetime import datetime
 import collections
 import functools
 from dictdiffer import DictDiffer
+from enum import Enum
 
 
 class Direction:
@@ -81,16 +82,24 @@ class Position:
         return set(pos for pos in direction.forward_and_sideways(self) if pos in board)
 
 
-def enum(n, *sequential, **named):
-    enums = dict(zip(sequential, range(n, len(sequential) + n)), **named)
-    reverse = dict((value, key) for key, value in enums.items())
-    reverse_print = dict((value, key.replace("_", " ").capitalize()) for key, value in enums.items())
-    enums["get_enum"] = enums
-    enums["name"] = reverse
-    enums["write"] = reverse_print
-    return type('Enum', (), enums)
+class AttributeValues():
+    def __init__(self, value=None, level=None, duration=None):
+        self.value = value
+        self.level = level
+        self.duration = duration
 
-trait_descriptions = {
+    def __repr__(self):
+        string = ""
+        if self.value:
+            string += "Value: " + str(self.value) + " "
+        if self.level:
+            string += "Level: " + str(self.level) + " "
+        if self.duration:
+            string += "Duration: " + str(self.duration) + " "
+        return string
+
+
+skill_descriptions = {
     "attack_cooldown": {
         1: "Can only attack every third turn.",
         2: "Can only attack every second turn"},
@@ -225,185 +234,130 @@ ai_descriptions = {
     "3": "Hard"
 }
 
-unit_descriptions = {
-    "Archer": "Archer",
-    "Ballista": "Ballista",
-    "Catapult": "Catapult",
-    "Knight": "Knight",
-    "Light_Cavalry": "Light Cavalry",
-    "Pikeman": "Pikeman",
-    "Berserker": "Berserker",
-    "Cannon": "Cannon",
-    "Crusader": "Crusader",
-    "Flag_Bearer": "Flag Bearer",
-    "Longswordsman": "Longswordsman",
-    "Saboteur": "Saboteur",
-    "Royal_Guard": "Royal Guard",
-    "Scout": "Scout",
-    "War_Elephant": "War Elephant",
-    "Weaponsmith": "Weaponsmith",
-    "Viking": "Viking",
-    "Diplomat": "Diplomat",
-    "Halberdier": "Halberdier",
-    "Hussar": "Hussar",
-    "Flanking_Cavalry": "Flanking Cavalry",
-    "Hobelar": "Hobelar",
-    "Lancer": "Lancer",
-    "Fencer": "Fencer",
-    "Assassin": "Assassin",
-    "Trebuchet": "Trebuchet",
-    "Javeliner": "Javeliner"
-}
+
+class Type(Enum):
+    Cavalry = 1
+    Infantry = 2
+    War_Machine = 3
+    Specialist = 4
 
 
-types = ["Cavalry", "Infantry", "War_Machine", "Specialist"]
+class State(Enum):
+    extra_action = 3
+    movement_remaining = 4
+    lost_extra_life = 6
+    experience = 7
+    used = 8
+    recently_bribed = 9
+    recently_upgraded = 10
+    javelin_thrown = 11
 
-Trait = enum(1000, *(trait for trait in dict(trait_descriptions)))
 
-State = enum(2000, *(state for state in dict(state_descriptions)))
+class Trait(Enum):
+    berserking = 1
+    big_shield = 2
+    combat_agility = 3
+    defence_maneuverability = 4
+    double_attack_cost = 5
+    extra_life = 6
+    melee_expert = 7
+    melee_freeze = 8
+    longsword = 9
+    push = 10
+    rage = 11
+    scouting = 12
+    sharpshooting = 13
+    swiftness = 14
+    tall_shield = 15
+    triple_attack = 16
+    lancing = 17
+    attack_cooldown = 18
+    far_sighted = 19
+    flag_bearing = 20
+    crusading = 21
+    pikeman_specialist = 22
+    attack_skill = 23
+    defence_skill = 24
+    range_skill = 25
+    movement_skill = 26
+    fire_arrows = 27
+    cavalry_specialist = 28
+    war_machine_specialist = 29
+    flanking = 30
+    flanked = 31
+    ride_through = 32
+    spread_attack = 33
+    javelin = 34
 
-Effect = enum(3000, *(effect for effect in dict(effect_descriptions)))
 
-Ability = enum(4000, *(ability for ability in ability_descriptions))
+class Ability(Enum):
+    bribe = 1
+    improve_weapons = 2
+    poison = 3
+    sabotage = 4
+    assassinate = 5
 
-Type = enum(1, *types)
 
-Unit = enum(1, *(unit for unit in unit_descriptions))
+class Effect(Enum):
+    attack_frozen = 1
+    bribed = 2
+    improved_weapons = 3
+    poisoned = 4
+    sabotaged = 5
 
-Opponent = enum(1, *(opponent for opponent in dict(opponent_descriptions)))
 
-AI = enum(1, *(ai for ai in dict(ai_descriptions)))
+class Unit(Enum):
+    Archer = 1
+    Ballista = 2
+    Catapult = 3
+    Knight = 4
+    Light_Cavalry = 5
+    Pikeman = 6
+    Berserker = 7
+    Cannon = 8
+    Crusader = 9
+    Flag_Bearer = 10
+    Longswordsman = 11
+    Saboteur = 12
+    Royal_Guard = 13
+    Scout = 14
+    War_Elephant = 15
+    Weaponsmith = 16
+    Viking = 17
+    Diplomat = 18
+    Halberdier = 19
+    Hussar = 20
+    Flanking_Cavalry = 21
+    Hobelar = 22
+    Lancer = 23
+    Fencer = 24
+    Assassin = 25
+    Trebuchet = 26
+    Javeliner = 27
 
-if 1 == 2:
-    class Type:
-        Cavalry = None
-        Infantry = None
-        War_Machine = None
-        Specialist = None
 
-        name = {}
-        write = {}
-        get_enum = {}
+class Opponent(Enum):
+    HotSeat = 1
+    AI = 2
+    Internet = 3
+    Load = 4
 
-    class State:
-        attack_cooldown = None
-        bribed = None
-        extra_action = None
-        improved_weapons = None
-        movement_remaining = None
-        lost_extra_life = None
-        experience = None
-        used = None
-        recently_bribed = None
-        sabotaged = None
-        recently_upgraded = None
-        javelin_thrown = None
 
-        name = None
-        write = None
+enum_from_string = {enum.name: enum for enum_type in [Trait, State, Effect, Ability, Unit] for enum in enum_type}
 
-    class Trait:
-        berserking = None
-        big_shield = None
-        combat_agility = None
-        defence_maneuverability = None
-        double_attack_cost = None
-        extra_life = None
-        melee_expert = None
-        melee_freeze = None
-        longsword = None
-        push = None
-        rage = None
-        scouting = None
-        sharpshooting = None
-        swiftness = None
-        tall_shield = None
-        triple_attack = None
-        lancing = None
-        attack_cooldown = None
-        far_sighted = None
-        flag_bearing = None
-        crusading = None
-        crusading = None
-        pikeman_specialist = None
-        attack_skill = None
-        defence_skill = None
-        range_skill = None
-        movement_skill = None
-        fire_arrows = None
-        cavalry_specialist = None
-        war_machine_specialist = None
-        flanking = None
-        flanked = None
-        ride_through = None
-        spread_attack = None
-        javelin = None
 
-        name = None
-        write = None
+def get_attribute_from_document(attribute_name, number):
 
-    class Ability:
-        bribe = None
-        improve_weapons = None
-        poison = None
-        sabotage = None
-        assassinate = None
-
-        name = {}
-        write = {}
-
-    class Effect:
-        attack_frozen = None
-        bribed = None
-        improved_weapons = None
-        poisoned = None
-        sabotaged = None
-
-        name = {}
-        write = {}
-
-    class Unit:
-        Archer = None
-        Ballista = None
-        Catapult = None
-        Knight = None
-        Light_Cavalry = None
-        Pikeman = None
-        Berserker = None
-        Cannon = None
-        Crusader = None
-        Flag_Bearer = None
-        Longswordsman = None
-        Saboteur = None
-        Royal_Guard = None
-        Scout = None
-        War_Elephant = None
-        Weaponsmith = None
-        Viking = None
-        Diplomat = None
-        Halberdier = None
-        Hussar = None
-        Flanking_Cavalry = None
-        Hobelar = None
-        Lancer = None
-        Fencer = None
-        Assassin = None
-        Trebuchet = None
-        Javeliner = None
-
-        name = {}
-        write = {}
-        get_enum = {}
-
-    class Opponent:
-        HotSeat = None
-        AI = None
-        Internet = None
-        Load = None
-
-        name = {}
-        write = {}
-
+    attribute = enum_from_string[attribute_name]
+    if attribute in State:
+        return attribute, AttributeValues(value=number)
+    elif attribute in Trait or attribute in Ability:
+        return attribute, AttributeValues(level=number)
+    elif attribute in Effect:
+        if type(number) is int or type(number) is bool:
+            return attribute, AttributeValues(level=1, duration=number)
+        else:
+            return attribute, AttributeValues(**number)
 
 board_height = 8
 board_width = 5
@@ -416,23 +370,7 @@ directions = four_directions_namedtuple(*(Direction(name) for name in ["Up", "Do
 
 
 def get_description(attribute, level=1):
-    if attribute in Effect.name:
-        return effect_descriptions[Effect.name[attribute]][level]
-    elif attribute in State.name:
-        return state_descriptions[State.name[attribute]][level]
-    elif attribute in Ability.name:
-        return ability_descriptions[Ability.name[attribute]][level]
-    elif attribute in Trait.name:
-        if attribute == Trait.attack_skill:
-            return str(level) + " added to base attack"
-        if attribute == Trait.defence_skill:
-            return str(level) + " added to base defence"
-        if attribute == Trait.movement_skill:
-            return str(level) + " added to base movement"
-        if attribute == Trait.range_skill:
-            return str(level) + " added to base range"
-
-        return trait_descriptions[Trait.name[attribute]][level]
+    return ""
 
 
 def distance(position1, position2):
@@ -460,6 +398,8 @@ class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        if isinstance(obj, Enum):
+            return obj.name
         return JSONEncoder.default(self, obj)
 
 
@@ -494,28 +434,14 @@ class memoized(object):
 
 
 def readable(attributes):
-    if isinstance(attributes, int):
-        if attributes in Trait.name:
-            return Trait.name[attributes].title()
-        if attributes in Ability.name:
-            return Ability.name[attributes].title()
-        if attributes in Effect.name:
-            return Effect.name[attributes].title()
-        if attributes in State.name:
-            return State.name[attributes].title()
-        if attributes in Unit.name:
-            return Unit.name[attributes].title()
-
     dictionary = {}
-    for attribute, value in attributes.items():
-        if attribute in Trait.name:
-            dictionary[Trait.name[attribute]] = value
-        elif attribute in Ability.name:
-            dictionary[Ability.name[attribute]] = value
-        elif attribute in State.name:
-            dictionary[State.name[attribute]] = value
-        elif attribute in Effect.name:
-            dictionary[Effect.name[attribute]] = list(value)
+    for attribute, attribute_values in attributes:
+        if attribute in Trait or attribute in Ability:
+            dictionary[attribute.name] = attribute_values.level
+        elif attribute in State:
+            dictionary[attribute.name] = attribute_values.value
+        if attribute in Effect:
+            dictionary[attribute.name] = {"duration": attribute_values.duration, "level": attribute_values.level}
 
     return dictionary
 
@@ -531,22 +457,6 @@ def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dic
         merged_dictionary.update(fourth_dictionary)
 
     return merged_dictionary
-
-
-def enum_attributes(attributes):
-    dictionary = {}
-
-    for attribute, value in attributes.items():
-        if attribute in Trait.name.values():
-            dictionary[getattr(Trait, attribute)] = value
-        elif attribute in Ability.name.values():
-            dictionary[getattr(Ability, attribute)] = value
-        elif attribute in Effect.name.values():
-            dictionary[getattr(Effect, attribute)] = value
-        else:
-            dictionary[getattr(State, attribute)] = value
-
-    return dictionary
 
 
 def attribute_key(attribute, value):
@@ -584,8 +494,8 @@ def get_setting(name):
                     return setting
 
 
-def unit_with_trait_at(pos, trait, units, level=None):
-    return pos in units and units[pos].has(trait, level)
+def unit_with_attribute_at(pos, attribute, units, level=1):
+    return pos in units and units[pos].has_skill(attribute, level)
 
 
 

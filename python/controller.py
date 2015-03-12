@@ -453,7 +453,7 @@ class Controller(object):
                 choice = self.get_input_upgrade(action.unit)
             else:
                 choice = self.game.current_player().ai.select_upgrade(self.game)
-            upgrade = self.get_upgrade(action.unit, choice)
+            upgrade = action.unit.get_upgrade(choice)
 
         if upgrade:
             position = action.end_at
@@ -463,6 +463,7 @@ class Controller(object):
             upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
 
+            upgrade = [(key, val) for key, val in upgrade.items()]
             readable_upgrade = readable(upgrade)
             self.game.save_option("upgrade", readable_upgrade)
 

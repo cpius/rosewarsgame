@@ -19,8 +19,8 @@ class Viewinfo:
         defence = unit.defence
         if unit.has(Effect.sabotaged):
             defence = 0
-        lines = ["A: " + str(unit.attack) + "  D: " + str(defence)
-                 + "  R: " + str(unit.range) + "  M: " + str(unit.movement), ""]
+        lines = ["Attack: " + str(unit.attack) + "  Defence: " + str(defence)
+                 + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement), ""]
 
         level = unit.get_unit_level()
         if level:
@@ -28,12 +28,12 @@ class Viewinfo:
             lines.append("")
 
         if unit.zoc:
-            lines.append("Zone of control against: " + ", ".join(Type.write[unit_type] for unit_type in unit.zoc))
+            lines.append("Zone of control against: " + ", ".join(unit_type.name for unit_type in unit.zoc))
             lines.append("")
 
         if unit.attack_bonuses:
             for unit_type, value in unit.attack_bonuses.items():
-                lines.append("+" + str(value) + " Attack against " + Type.write[unit_type])
+                lines.append("+" + str(value) + " Attack against " + unit_type.name)
                 lines.append("")
 
         if unit.defence_bonuses:
@@ -41,43 +41,45 @@ class Viewinfo:
                 if unit_type == Type.War_Machine:
                     lines.append("+" + str(value) + " Defence against War Machines")
                 else:
-                    lines.append("+" + str(value) + " Defence against " + Type.write[unit_type])
+                    lines.append("+" + str(value) + " Defence against " + unit_type.name)
                 lines.append("")
 
-        for trait, level in unit.traits.items():
-            if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill,
-                             Trait.extra_life]:
+        for skill in unit.get_skills():
+            if skill not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life]:
+                level = unit.get_level(skill)
                 if level == 1:
-                    lines.append(Trait.write[trait] + ":")
-                    lines.append(get_description(trait, 1))
+                    lines.append(skill.name + ":")
+                    lines.append(skill_descriptions[skill.name][1])
                     lines.append("")
                 elif level > 1:
-                    lines.append(Trait.write[trait] + ", level " + str(level) + ":")
-                    lines.append(get_description(trait, level))
+                    lines.append(skill.name + ", level " + str(level) + ":")
+                    lines.append(skill_descriptions[skill.name][1])
                     lines.append("")
 
-        for ability, level in unit.abilities.items():
+        for ability in unit.get_abilities():
+            level = unit.get_level(ability)
             if level == 1:
-                lines.append(Ability.write[ability] + ":")
+                lines.append(ability.name + ":")
                 lines.append(get_description(ability, 1))
                 lines.append("")
             else:
-                lines.append(Ability.write[ability] + ", " + "level " + str(level) + ":")
+                lines.append(ability.name + ", " + "level " + str(level) + ":")
                 lines.append(get_description(ability, level))
                 lines.append("")
 
-        for state, value in unit.states.items():
+        for state in unit.get_states():
+            value = unit.get_state(state)
             if value and state not in [State.used, State.recently_upgraded, State.experience, State.lost_extra_life,
                                        State.javelin_thrown]:
                 lines.append(State.name[state] + ": " + str(value))
 
-        for effect, info in unit.effects.items():
-            level = info[0]
-            duration = info[1]
+        for effect in unit.get_effects():
+            level = unit.get_level(effect)
+            duration = unit.get_level(effect)
             if level == 1:
-                lines.append(Effect.write[effect] + ": " + str(duration))
+                lines.append(effect.name + ": " + str(duration))
             else:
-                lines.append(Effect.write[effect] + ", level " + str(level) + ": " + str(duration))
+                lines.append(effect.name + ", level " + str(level) + ": " + str(duration))
             lines.append("")
 
         if unit.has(Trait.extra_life):
@@ -142,7 +144,7 @@ class Viewinfo:
         lines = ["Select ability:"]
         for i, ability in enumerate(unit.abilities):
             level = unit.abilities[ability]
-            description_string = str(i + 1) + ": " + Ability.write[ability] + ": " + get_description(ability, level)
+            description_string = str(i + 1) + ": " + ability.name + ": " + get_description(ability, level)
             lines += textwrap.wrap(description_string, self.interface.message_line_length)
 
         base = self.interface.ask_about_ability_location

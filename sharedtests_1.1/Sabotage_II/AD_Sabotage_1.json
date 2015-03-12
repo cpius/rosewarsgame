@@ -20,7 +20,10 @@
         "player2_units": {
             "B4": {
                 "name": "Archer",
-                "sabotaged": [1, 2]
+                "sabotaged": {
+                    "duration": 1,
+                    "level": 2
+                }
             }
         },
         "A5": "Weaponsmith"

@@ -6,7 +6,9 @@
         "player2_units": {
             "C3": {
                 "name": "Pikeman",
-                "improved_weapons": [2, 1],
+                "improved_weapons": {
+                    "level": 2,
+                    "duration": 1},
                 "experience": 1
             }
         },

@@ -66,7 +66,7 @@ def figure_out_player_profile(view):
 
 
 def decide_opponent(view):
-    menu = [str(i) + ". " + opponent_descriptions[Opponent.name[i]] for i in range(1, 5)]
+    menu = [str(i) + ". " + opponent_descriptions[Opponent(i).name] for i in range(1, 5)]
     return menu_choice(view, menu)
 
 
@@ -76,15 +76,15 @@ if __name__ == '__main__':
     opponent_choice = decide_opponent(view)
 
     controller = None
-    if opponent_choice == Opponent.Internet:
+    if Opponent(opponent_choice) == Opponent.Internet:
         player_profile = figure_out_player_profile(view)
         if not player_profile == "quit":
             controller = Controller.from_network(player_profile)
-    elif opponent_choice == Opponent.Load:
+    elif Opponent(opponent_choice) == Opponent.Load:
         controller = Controller.from_replay()
-    elif opponent_choice == Opponent.HotSeat:
+    elif Opponent(opponent_choice) == Opponent.HotSeat:
         controller = Controller.new_game("Human", "Human")
-    elif opponent_choice == Opponent.AI:
+    elif Opponent(opponent_choice) == Opponent.AI:
         coinflip = random.randint(0, 1)
         if coinflip == 0:
             controller = Controller.new_game("Human", "AI")
