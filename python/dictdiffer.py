@@ -33,7 +33,7 @@ class DictDiffer(object):
                     inner_diff = DictDiffer(self.current_dict[o], self.past_dict[o])
                     changes |= set(o + "." + inner for inner in inner_diff.differences_recursive())
                 elif isinstance(self.past_dict[o], list) and isinstance(self.current_dict[o], list):
-                    print ("grrr")
+                    print("grrr")
                     past_list_as_dict = zip(iter(self.past_dict[o]), self.past_dict[o])
                     current_list_as_dict = zip(iter(self.current_dict[o]), self.current_dict[o])
                     inner_diff = DictDiffer(current_list_as_dict, past_list_as_dict)
