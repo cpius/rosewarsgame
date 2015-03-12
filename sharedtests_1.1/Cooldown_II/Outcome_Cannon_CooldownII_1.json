@@ -27,8 +27,9 @@
         "player1_units": {
             "C3": {
                 "attack_frozen": {
-					"level": 2,
-					"duration": 2},
+                    "level": 2,
+                    "duration": 2
+                },
                 "attack_cooldown": 2,
                 "experience": 1,
                 "used": 1,

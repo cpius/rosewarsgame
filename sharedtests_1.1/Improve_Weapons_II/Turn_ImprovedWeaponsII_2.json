@@ -14,8 +14,9 @@
             "E3": {
                 "name": "Knight",
                 "improved_weapons": {
-					"level": 2,
-					"duration": 1}
+                    "level": 2,
+                    "duration": 1
+                }
             },
             "A4": "Ballista"
         }
