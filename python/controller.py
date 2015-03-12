@@ -463,7 +463,8 @@ class Controller(object):
             upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
 
-            upgrade = [(key, val) for key, val in upgrade.items()]
+            if not upgrade in Unit:
+                upgrade = [(key, val) for key, val in upgrade.items()]
             readable_upgrade = readable(upgrade)
             self.game.save_option("upgrade", readable_upgrade)
 
