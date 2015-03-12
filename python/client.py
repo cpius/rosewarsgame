@@ -1,5 +1,5 @@
 import json
-import urllib.request as urllib2
+import requests
 from common import *
 from action import Action
 from outcome import Outcome
@@ -7,14 +7,6 @@ from datetime import datetime
 from time import mktime
 from email.utils import parsedate
 from time import sleep
-
-
-class DefaultErrorHandler(urllib2.HTTPDefaultErrorHandler):
-    def http_error_default(self, req, fp, code, msg, headers):
-        result = urllib2.HTTPError(req.get_full_url(), code, msg, headers, fp)
-        result.status = code
-
-        return result
 
 
 class Client():
@@ -25,19 +17,19 @@ class Client():
 
     def get_game(self):
         if self.game_id:
-            request = urllib2.Request(get_setting("server") + "/games/view/" + self.game_id)
+            request_headers = {}
 
             formatted_time = httpdate(self.last_modified)
             if self.last_modified > datetime(1970, 1, 1):
-                request.add_header("If-Modified-Since", formatted_time)
+                request_headers["If-Modified-Since"] = formatted_time
 
-            opener = urllib2.build_opener(DefaultErrorHandler())
-            response = opener.open(request)
-            if response.getcode() == 304:
+            response = requests.get(get_setting("server") + "/games/view/" + self.game_id, headers=request_headers)
+
+            if response.status_code == 304:
                 return
 
-            last_modified_header = response.info().getheader("Last-Modified")
-            if last_modified_header:
+            if "last-modified" in response.headers:
+                last_modified_header = response.headers["last-modified"]
                 last_modified_tuple = parsedate(last_modified_header)
                 last_modified_timestamp = mktime(last_modified_tuple)
                 last_modified = datetime.fromtimestamp(last_modified_timestamp)
@@ -47,10 +39,10 @@ class Client():
                 else:
                     return
 
-            return json.load(response)
+            return response.json()
 
         else:
-            response = json.load(urllib2.urlopen(get_setting("server") + "/games/join_or_create/" + self.profilename))
+            response = requests.get(get_setting("server") + "/games/join_or_create/" + self.profilename).json()
             self.game_id = response["ID"]
 
             print(response["Message"], self.game_id)
@@ -119,12 +111,9 @@ class Client():
     def send_action(self, action):
         url = get_setting("server") + "/games/" + self.game_id + "/do_action"
         print("sending json:", document_to_string(action))
-        request = urllib2.Request(url, document_to_string(action), {"Content-Type": "application/json"})
-        response = urllib2.urlopen(request)
-        response_string = response.read()
-        print("received: " + response_string)
-        json_response = json.loads(response_string)
-        response.close()
+        request = requests.post(url, data=document_to_string(action), headers={"Content-Type": "application/json"})
+        print("received: " + request.text)
+        json_response = request.json()
         if json_response["Status"] == "OK":
             if "Action outcome" in json_response:
                 return Outcome.from_document(json_response["Action outcome"])
