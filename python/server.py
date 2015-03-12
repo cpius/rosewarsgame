@@ -12,11 +12,11 @@ import setup
 from common import *
 from outcome import Outcome
 import random
-import memcache
+import pylibmc
 import traceback
 from subprocess import call
 
-cache = memcache.Client(['127.0.0.1:11211'], debug=0)
+cache = pylibmc.Client(['127.0.0.1:11211'])
 
 app = Bottle()
 
