@@ -61,8 +61,12 @@ def is_attack_and_defence_correct(test_document):
     actual_attack = battle.get_attack(action, gamestate)
     actual_defence = battle.get_defence(action, actual_attack, gamestate)
 
-    return (attack == actual_attack and defence == actual_defence)
-
+    if attack == actual_attack and defence == actual_defence:
+        return True
+    else:
+        print("actual and expected attack:", actual_attack, attack)
+        print("actual and expected defence:", actual_defence, defence)
+        return False
 
 def is_outcome_correct(test_document):
     gamestate = Gamestate.from_document(test_document["pre_gamestate"])
