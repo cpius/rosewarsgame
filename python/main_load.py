@@ -1,10 +1,4 @@
-import sys
 from controller import Controller
-from common import *
-import random
-import pygame
-import view
-from viewcommon import *
 from view import View
 
 
