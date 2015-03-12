@@ -271,11 +271,11 @@ def deploy():
     if request.json["ref"] != "refs/heads/master":
         return "OK"  # We only care about pushes to master
 
-    print "deployment requested"
+    print("deployment requested")
     call(["git", "fetch"])
     call(["git", "reset", "--hard", "origin/master"])
 
-    print "deployment successful"
+    print("deployment successful")
     return "OK"
 
 
