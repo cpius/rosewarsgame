@@ -15,6 +15,7 @@ import random
 import pylibmc
 import traceback
 from subprocess import call
+from bson import ObjectId
 
 cache = pylibmc.Client(['127.0.0.1:11211'])
 
@@ -502,7 +503,21 @@ def construct_log_document(game_document):
 
     return replay_document
 
+class ServerJsonEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return str(obj.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        if isinstance(obj, Enum):
+            return obj.name
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return JSONEncoder.default(self, obj)
 
-app.install(JSONPlugin(json_dumps=lambda document: document_to_string(document)))
+
+def server_document_to_string(document):
+    return dumps(document, indent=4, cls=ServerJsonEncoder, sort_keys=False)
+
+
+app.install(JSONPlugin(json_dumps=lambda document: server_document_to_string(document)))
 
 # To run the server: uwsgi --http :8080 --wsgi-file server.py --callable app --master --py-autoreload=1
