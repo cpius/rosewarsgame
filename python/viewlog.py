@@ -82,6 +82,8 @@ class Viewlog:
     def get_outcome_string(action, rolls, gamestate, is_sub_action):
         if action_doer.is_win(action, rolls, gamestate, is_sub_action):
             return "WIN"
+        elif action_doer.attack_successful(action, rolls, gamestate, is_sub_action) and action.is_push():
+            return "PUSH"
         elif not action_doer.attack_successful(action, rolls, gamestate, is_sub_action):
             return "MISS"
         else:

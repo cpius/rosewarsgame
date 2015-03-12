@@ -132,17 +132,17 @@ class Controller(object):
             self.perform_move(position)
 
     def perform_ability(self, position):
-        if len(self.selected_unit.abilities) > 1:
+        if len(self.selected_unit.get_abilities()) > 1:
             index = self.get_input_abilities(self.selected_unit)
 
             if index == "escape":
                 self.clear_move()
                 return
 
-            ability = self.selected_unit.abilities.keys()[index]
+            ability = self.selected_unit.get_abilities()[index]
 
         else:
-            ability = list(self.selected_unit.abilities)[0]
+            ability = list(self.selected_unit.get_abilities())[0]
         action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
         if action in self.game.gamestate.get_actions():
             self.perform_action(action)
@@ -463,7 +463,8 @@ class Controller(object):
             upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
 
-            upgrade = [(key, val) for key, val in upgrade.items()]
+            if not upgrade in Unit:
+                upgrade = [(key, val) for key, val in upgrade.items()]
             readable_upgrade = readable(upgrade)
             self.game.save_option("upgrade", readable_upgrade)
 
@@ -526,11 +527,20 @@ class Controller(object):
             attack = min(attack, 6)
             defence = min(defence, 6)
 
-        return ["Attack hint:",
-                "Attack: " + str(attack),
-                "Defence: " + str(defence),
-                "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
-                str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36, 3) * 100) + "%"]
+        if action.is_ability():
+            return ""
+
+        attack_hint = ["Attack hint:",
+                       "Attack: " + str(attack),
+                       "Defence: " + str(defence),
+                       "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
+                       str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36 * 100, 1)) + "%"]
+
+        if action.is_push():
+            attack_hint.append("Chance of push: " + str(attack) + " / 6 * " + str(defence) + " / 6 = " +
+                               str(round((attack / 6) * (defence/6) * 100, 1)) + "%")
+
+        return attack_hint
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
@@ -566,7 +576,7 @@ class Controller(object):
         potential_actions = [action for action in self.game.gamestate.get_actions()
                              if action.start_at == self.start_at and action.target_at and action.target_at == position]
 
-        return position in self.game.gamestate.all_units() and self.selected_unit.abilities and potential_actions
+        return position in self.game.gamestate.all_units() and self.selected_unit.get_abilities() and potential_actions
 
     def selecting_ranged_target(self, position):
         if not self.start_at:

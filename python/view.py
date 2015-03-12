@@ -41,6 +41,8 @@ class View(object):
         pygame.image.save(self.screen, name)
 
     def draw_game_end(self, color):
+        self.clear_right()
+        self.viewlog.draw_logbook()
         write_message(self.screen, self.interface, color + " Wins")
         self.refresh()
 
@@ -51,12 +53,6 @@ class View(object):
 
     def clear_left(self):
         pygame.draw.rect(self.screen, Color.Light_grey, self.interface.left_side_rectangle)
-
-    def clear_right_tutorial(self):
-        pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
-        write(self.screen, "To Game", self.interface.help_area[0], self.interface.fonts["normal"])
-        write(self.screen, "To Menu", self.interface.to_help_menu_area[0], self.interface.fonts["normal"])
-        self.showing_unit_info = False
 
     def draw_game(self, game, start_at=None, actions=(), redraw_log=False):
         self.viewgame.draw_game(game, start_at, actions)
@@ -113,29 +109,6 @@ class View(object):
         write_message(self.screen, self.interface, message)
         self.refresh()
 
-    def draw_tutorial_message(self, message, draw_on_lower):
-        line_distances = self.interface.line_distances["medium"]
-        fonts = self.interface.fonts["medium"]
-        x_coordinate = 410 * settings.zoom
-        if draw_on_lower:
-            y_coordinate = 500 * settings.zoom
-        else:
-            y_coordinate = 10 * settings.zoom
-        show_lines(self.screen, message, 42 * settings.zoom, line_distances, fonts, x_coordinate, y_coordinate + 30)
-        self.refresh()
-
-    def draw_game_tutorial(self, game):
-        self.viewgame.draw_game(game)
-        self.clear_right_tutorial()
-        self.refresh()
-
-    def draw_tutorial_page_number(self, number, total):
-        write(self.screen, str(number) + "/" + str(total), (740, 20), self.interface.fonts["normal"])
-
-    def draw_action_tutorial(self, action, rolls):
-        self.viewgame.draw_action(action, rolls)
-        self.refresh()
-
     def play_sound(self, sound):
         sound = pygame.mixer.Sound("./../sounds/" + self.sounds[sound])
         sound.play()
@@ -145,25 +118,4 @@ class View(object):
         for i, item in enumerate(menu):
             write(self.screen, item, self.interface.help_menu[i], self.interface.fonts["normal"])
         write(self.screen, "To game", self.interface.help_area[0], self.interface.fonts["normal"])
-        self.refresh()
-
-    def show_upgrades_tutorial(self, upgrades):
-        self.clear_left()
-        message = []
-        for index, upgrade in enumerate(upgrades):
-            if isinstance(upgrade, int):
-                message.append(str(index + 1) + ". " + Unit.write[upgrade])
-            else:
-                message.append(str(index + 1) + ". ")
-                for attribute, level in upgrade.items():
-                    if attribute in Trait.name:
-                        message.append(Trait.write[attribute])
-                        message.append(get_description(attribute, level))
-                        message.append("")
-                    elif attribute in Ability.name:
-                        message.append(Ability.write[attribute])
-                        message.append(get_description(attribute, 2))
-                        message.append("")
-        show_lines(self.screen, message, 52 * settings.zoom, self.interface.line_distances["larger"],
-                   self.interface.fonts["normal"], 5, 5)
         self.refresh()

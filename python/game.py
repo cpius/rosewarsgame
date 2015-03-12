@@ -30,7 +30,7 @@ class Game:
             player2 = Player.from_document(log_document["player2"])
         else:
             player1 = Player("Green", "Human")
-            player2 = Player("Red", "AI")
+            player2 = Player("Red", "Human")
 
         if player_profile:
             if player1.profile == player_profile:
@@ -85,9 +85,9 @@ class Game:
             if options and "upgrade" in options:
                 upgrade = options["upgrade"]
                 if type(upgrade) is str:
-                    upgrade = Unit.get_enum[upgrade]
+                    upgrade = enum_from_string[upgrade]
                 else:
-                    upgrade = enum_attributes(upgrade)
+                    upgrade = {enum_from_string[key]: AttributeValues(level=value) for key, value in upgrade.items()}
 
                 position = action.end_at
                 if not position in game.gamestate.player_units:

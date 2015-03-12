@@ -2,9 +2,8 @@
     "type": "Is attack and defence correct",
     "description": "Ranged units do not get bonus from Flag Bearer",
     "attack": 2,
-    "defence": 2,
+    "defence": 3,
     "action": {
-        "action_number": 3,
         "start_at": "C3",
         "end_at": "C3",
         "target_at": "C7",
@@ -17,7 +16,7 @@
             "D3": "Flag Bearer"
         },
         "player2_units": {
-            "C7": "Weaponsmith"
+            "C7": "Knight"
         }
     }
 }

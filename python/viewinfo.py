@@ -60,11 +60,11 @@ class Viewinfo:
             level = unit.get_level(ability)
             if level == 1:
                 lines.append(ability.name + ":")
-                lines.append(get_description(ability, 1))
+                lines.append(get_ability_description(ability, 1))
                 lines.append("")
             else:
                 lines.append(ability.name + ", " + "level " + str(level) + ":")
-                lines.append(get_description(ability, level))
+                lines.append(get_ability_description(ability, level))
                 lines.append("")
 
         for state in unit.get_states():
@@ -142,9 +142,9 @@ class Viewinfo:
     def draw_ask_about_ability(self, unit):
         self.clear()
         lines = ["Select ability:"]
-        for i, ability in enumerate(unit.abilities):
-            level = unit.abilities[ability]
-            description_string = str(i + 1) + ": " + ability.name + ": " + get_description(ability, level)
+        for i, ability in enumerate(unit.get_abilities()):
+            level = unit.attributes[ability].level
+            description_string = str(i + 1) + ": " + ability.name + ": " + get_ability_description(ability, level)
             lines += textwrap.wrap(description_string, self.interface.message_line_length)
 
         base = self.interface.ask_about_ability_location
