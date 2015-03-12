@@ -478,7 +478,7 @@ def construct_log_document(game_document):
 
         if "created_at" in action_document:
             created_at = action_document["created_at"]
-            if isinstance(created_at, unicode):
+            if isinstance(created_at, str):
                 try:
                     created_at = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
                 except ValueError:
