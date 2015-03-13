@@ -40,9 +40,9 @@ class View(object):
     def save_screenshot(self, name):
         pygame.image.save(self.screen, name)
 
-    def draw_game_end(self, color):
+    def draw_game_end(self, color, game):
         self.clear_right()
-        self.viewlog.draw_logbook()
+        self.viewlog.draw_logbook(game.logbook)
         write_message(self.screen, self.interface, color + " Wins")
         self.refresh()
 
@@ -58,7 +58,7 @@ class View(object):
         self.viewgame.draw_game(game, start_at, actions)
         if redraw_log:
             self.clear_right()
-            self.viewlog.draw_logbook()
+            self.viewlog.draw_logbook(game.logbook)
         self.refresh()
 
     def show_unit_zoomed(self, unit, attack_hint):
@@ -67,10 +67,10 @@ class View(object):
         self.showing_unit_info = True
         self.refresh()
 
-    def hide_unit_zoomed(self):
+    def hide_unit_zoomed(self, game):
         if self.showing_unit_info:
             self.clear_right()
-            self.viewlog.draw_logbook()
+            self.viewlog.draw_logbook(game.logbook)
 
     @staticmethod
     def refresh():
@@ -85,8 +85,7 @@ class View(object):
         self.refresh()
 
     def draw_action(self, action, outcome, game, flip=False):
-        self.viewlog.add_log(action, outcome, game)
-        self.viewlog.draw_logbook()
+        self.viewlog.draw_logbook(game.logbook)
         self.viewgame.draw_action(action, outcome, flip)
         self.refresh()
 

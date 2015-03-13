@@ -1,16 +1,13 @@
 from __future__ import division
 import pygame
 import action_doer
-
-
-class ActionType:
-    Attack, Ability, Move = range(3)
+from viewcommon import *
+from common import *
 
 
 class Viewlog:
 
     def __init__(self, zoom, interface, screen):
-        self.logbook = []
         self.zoom = zoom
         self.interface = interface
         self.screen = screen
@@ -35,26 +32,17 @@ class Viewlog:
                                  "box_text": base.adjust(7, 0),
                                  "line": base.adjust(0, self.base_height - self.line_thickness / 2)}
 
-    class Log():
-        def __init__(self, action_type, unit, target_unit, action_number, colors, outcome_string=None):
-            self.action_type = action_type
-            self.unit = unit
-            self.target_unit = target_unit
-            self.outcome_string = outcome_string
-            self.action_number = action_number
-            self.colors = colors
-
-    def draw_logbook(self):
+    def draw_logbook(self, logbook):
 
         def clear_log():
             pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
 
         clear_log()
 
-        while len(self.logbook) > self.maximum_logs:
-            self.logbook.pop(0)
+        while len(logbook) > self.maximum_logs:
+            logbook.pop(0)
 
-        for lognumber, log in enumerate(self.logbook):
+        for lognumber, log in enumerate(logbook):
 
             locations = self.locations[lognumber]
 
@@ -138,3 +126,4 @@ class Viewlog:
 
     def draw_outcome(self, outcome_string, location):
         write(self.screen, outcome_string, location.tuple, self.interface.fonts["larger"])
+
