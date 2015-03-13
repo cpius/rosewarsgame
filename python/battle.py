@@ -173,3 +173,30 @@ def flanking(action):
         return False
 
     return True
+
+
+def is_win(action, rolls, gamestate, is_sub_action=False):
+    return attack_successful(action, rolls, gamestate, is_sub_action) and not \
+        defence_successful(action, rolls, gamestate, is_sub_action)
+
+
+def attack_successful(action, rolls, gamestate, is_sub_action=False):
+    attack = get_attack(action, gamestate, is_sub_action)
+    return rolls.attack <= attack
+
+
+def defence_successful(action, rolls, gamestate, is_sub_action=False):
+    attack = get_attack(action, gamestate, is_sub_action)
+    defence = get_defence(action, attack, gamestate)
+    return rolls.defence <= defence
+
+
+def get_outcome_string(action, outcome, gamestate, is_sub_action):
+    if is_win(action, outcome, gamestate, is_sub_action):
+        return "WIN"
+    elif attack_successful(action, outcome, gamestate, is_sub_action) and action.is_push():
+        return "PUSH"
+    elif not attack_successful(action, outcome, gamestate, is_sub_action):
+        return "MISS"
+    else:
+        return "DEFEND"
