@@ -184,8 +184,6 @@ skill_descriptions = {
            "turn, 2 is added to it's attack.",
         2: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
            "turn, 4 is added to it's attack."},
-    "flanked": {
-        1: "This unit was attacked by a unit with flanking last turn."},
     "ride_through": {
         1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where "
            "it ends up on this empty tile. Zone of control has no effect on this ability."},
@@ -203,7 +201,8 @@ state_descriptions = {
     "used": "Whether a unit has been used this turn.",
     "experience": "Experience.",
     "recently_upgraded": "Whether a unit was upgraded this turn",
-    "recently_bribed": "Whether a unit was bribed last turn."
+    "recently_bribed": "Whether a unit was bribed last turn.",
+    "flanked": "This unit was attacked by a unit with flanking last turn.",
 }
 
 
@@ -259,14 +258,15 @@ class Type(Enum):
 
 
 class State(Enum):
-    extra_action = 3
-    movement_remaining = 4
-    lost_extra_life = 6
-    experience = 7
-    used = 8
-    recently_bribed = 9
-    recently_upgraded = 10
-    javelin_thrown = 11
+    extra_action = 1
+    movement_remaining = 2
+    lost_extra_life = 3
+    experience = 4
+    used = 5
+    recently_bribed = 6
+    recently_upgraded = 7
+    javelin_thrown = 8
+    flanked = 9
 
 
 class Trait(Enum):
@@ -300,10 +300,9 @@ class Trait(Enum):
     cavalry_specialist = 28
     war_machine_specialist = 29
     flanking = 30
-    flanked = 31
-    ride_through = 32
-    spread_attack = 33
-    javelin = 34
+    ride_through = 31
+    spread_attack = 32
+    javelin = 33
 
 
 class Ability(Enum):

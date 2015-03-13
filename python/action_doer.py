@@ -25,6 +25,9 @@ def do_action(gamestate, action, outcome):
             else:
                 enemy_units[push_destination] = enemy_units.pop(action.target_at)
 
+        if battle.flanking(action) and action.target_at in enemy_units:
+            action.target_unit.set(State.flanked)
+
     def settle_ability(action):
         if action.ability == Ability.bribe:
             action.target_unit.set(Effect.bribed, duration=1)

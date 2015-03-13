@@ -166,7 +166,7 @@ def is_adjacent_unit_with(action, units, attribute, position, level=1):
 
 
 def flanking(action):
-    if not action.unit.has(Trait.flanking) or action.target_unit.has(Trait.flanked):
+    if not action.unit.has(Trait.flanking) or action.target_unit.has(State.flanked):
         return False
     attack_direction = action.end_at.get_direction_to(action.target_at)
     if attack_direction == Direction("Up"):
