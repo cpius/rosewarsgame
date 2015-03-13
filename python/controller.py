@@ -181,7 +181,7 @@ class Controller(object):
         self.perform_action(matching_actions[0])
 
     def perform_move(self, position):
-        action = Action(self.game.gamestate.all_units(), self.start_at, end_at=position)
+        action = Action(self.game.gamestate.all_units(), start_at=self.start_at, end_at=position)
         if action in self.game.gamestate.get_actions():
             self.perform_action(action)
         elif not self.selecting_extra_action():

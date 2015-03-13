@@ -30,16 +30,16 @@ def get_actions(gamestate):
 def get_unit_actions(unit, start_at, gamestate):
 
     def melee_attack_actions(moveset):
-        return [Action(units, start_at, **terms) for terms in attack_generator(moveset)]
+        return [Action(units, start_at=start_at, **terms) for terms in attack_generator(moveset)]
 
     def ranged_attack_actions(attackset):
-        return [Action(units, start_at, target_at=target_at) for target_at in attackset]
+        return [Action(units, start_at=start_at, end_at=start_at, target_at=target_at) for target_at in attackset]
 
     def ability_actions(abilityset, ability):
-        return [Action(units, start_at, target_at=position, ability=ability) for position in abilityset]
+        return [Action(units, start_at=start_at, end_at=start_at, target_at=position, ability=ability) for position in abilityset]
 
     def move_actions(moveset):
-        return [Action(units, start_at, end_at=end_at) for end_at in moveset]
+        return [Action(units, start_at=start_at, end_at=end_at) for end_at in moveset]
 
     def generate_movesets(movement):
         return moves_sets(start_at, frozenset(units), zoc_blocks, movement, movement)
@@ -91,9 +91,9 @@ def get_unit_actions(unit, start_at, gamestate):
             for terms in attack_generator({start_at}):
                 if terms["move_with_attack"]:
                     if unit.get_state(State.movement_remaining):
-                        attacks.append(Action(units, start_at, **terms))
+                        attacks.append(Action(units, start_at=start_at, **terms))
                 else:
-                    attacks.append(Action(units, start_at, **terms))
+                    attacks.append(Action(units, start_at=start_at, **terms))
             return attacks
 
         moveset = generate_extra_moveset()
@@ -106,7 +106,7 @@ def get_unit_actions(unit, start_at, gamestate):
             moves = []
 
         if moves or attacks:
-            moves.append(Action(units, start_at, start_at))  # Add an action for indicating pass on the extra action
+            moves.append(Action(units, start_at=start_at, end_at=start_at))  # Add an action for indicating pass on the extra action
 
         return moves, attacks
 
@@ -115,7 +115,7 @@ def get_unit_actions(unit, start_at, gamestate):
             one_tile_away = direction.move(start_at)
             two_tiles_away = direction.move(one_tile_away)
             if one_tile_away in enemy_units and two_tiles_away in board and two_tiles_away not in units:
-                attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
+                attacks.append(Action(units, start_at=start_at, end_at=two_tiles_away, target_at=one_tile_away,
                                move_with_attack=False))
         return attacks
 
@@ -153,7 +153,7 @@ def get_unit_actions(unit, start_at, gamestate):
     abilities = get_abilities()
 
     if unit.has(Trait.rage):
-        attacks += [Action(units, start_at, end_at=terms["end_at"], target_at=terms["target_at"], move_with_attack=False)
+        attacks += [Action(units, start_at=start_at, end_at=terms["end_at"], target_at=terms["target_at"], move_with_attack=False)
                     for terms in attack_generator_no_zoc_check(moveset_no_leftover)]
 
     if unit.has(Trait.berserking):
