@@ -1,6 +1,4 @@
 from __future__ import division
-import pygame
-import action_doer
 from viewcommon import *
 from common import *
 
@@ -64,34 +62,6 @@ class Viewlog:
             self.draw_symbol(symbol, locations["symbol"])
 
         write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"])
-
-    @staticmethod
-    def get_outcome_string(action, rolls, gamestate, is_sub_action):
-        if action_doer.is_win(action, rolls, gamestate, is_sub_action):
-            return "WIN"
-        elif action_doer.attack_successful(action, rolls, gamestate, is_sub_action) and action.is_push():
-            return "PUSH"
-        elif not action_doer.attack_successful(action, rolls, gamestate, is_sub_action):
-            return "MISS"
-        else:
-            return "DEFEND"
-
-    def add_log(self, action, outcome, game):
-
-        action_number = 3 - game.gamestate.get_actions_remaining()
-        colors = game.current_player().color, game.opponent_player().color
-
-        if action.is_attack():
-            for position in outcome.outcomes:
-                is_sub_action = action.target_at == position
-                outcome_string = self.get_outcome_string(action, outcome.outcomes[position], game.gamestate, is_sub_action)
-                target_unit = game.gamestate.all_units()[position]
-                self.logbook.append(self.Log(ActionType.Attack, action.unit, target_unit, action_number, colors, outcome_string))
-        elif action.is_ability():
-            target_unit = game.gamestate.all_units()[action.target_at]
-            self.logbook.append(self.Log(ActionType.Ability, action.unit, target_unit, action_number, colors))
-        else:
-            self.logbook.append(self.Log(ActionType.Move, action.unit, None, action_number, colors))
 
     def draw_unit(self, unit, location, color):
         unit_pic = get_unit_pic(self.interface, unit)
