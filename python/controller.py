@@ -1,22 +1,18 @@
 from __future__ import division
-import pygame
 import sys
-from pygame.locals import *
 import setup
 from gamestate import Gamestate
 import os
 import glob
-import interface_settings as settings
+import interface_settings  # Present to avoid circular import
 from player import Player
 from action import Action
 from client import Client
 from game import Game
 from outcome import Outcome
 import json
-from common import *
 import battle
 from view import View
-import rulebook
 from viewcommon import *
 
 
