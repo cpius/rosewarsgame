@@ -283,7 +283,7 @@ def deploy():
 def register_upgrade(action_document, gamestate, game_id):
     position, unit = gamestate.get_upgradeable_unit()
     upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
-    if isinstance(action_document["upgrade"], basestring):
+    if isinstance(action_document["upgrade"], str):
         upgrade = Unit.get_enum[action_document["upgrade"]]
     else:
         upgrade = enum_attributes(action_document["upgrade"])
