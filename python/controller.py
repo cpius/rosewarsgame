@@ -14,6 +14,8 @@ import json
 import battle
 from view import View
 from viewcommon import *
+from collections import namedtuple
+from operator import attrgetter
 
 
 class Controller(object):
@@ -513,29 +515,50 @@ class Controller(object):
             return
 
     def get_attack_hint(self, attack_position):
-        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=attack_position)
-        player_unit = self.game.gamestate.player_units[self.start_at]
-        if player_unit.name == Unit.Assassin:
-            attack = 6
-            defence = 2
-        else:
-            attack = battle.get_attack(action, self.game.gamestate)
-            defence = battle.get_defence(action, attack, self.game.gamestate)
-            attack = min(attack, 6)
-            defence = min(defence, 6)
+        actions = [action for action in self.game.gamestate.get_actions() if action.target_at == attack_position
+                   and action.start_at == self.start_at]
 
-        if action.is_ability():
+        if actions[0].is_ability():
             return ""
 
-        attack_hint = ["Attack hint:",
-                       "Attack: " + str(attack),
-                       "Defence: " + str(defence),
-                       "Chance of win: " + str(attack) + " / 6 * " + str(6 - defence) + " / 6 = " +
-                       str(attack * (6 - defence)) + " / 36 = " + str(round(attack * (6 - defence) / 36 * 100, 1)) + "%"]
+        BattleValues = namedtuple("BattleValues", ["attack", "defence", "chance_of_win", "chance_of_push"])
+        battle_values_list = []
 
-        if action.is_push():
-            attack_hint.append("Chance of push: " + str(attack) + " / 6 * " + str(defence) + " / 6 = " +
-                               str(round((attack / 6) * (defence/6) * 100, 1)) + "%")
+        for action in actions:
+            player_unit = self.game.gamestate.player_units[self.start_at]
+            if player_unit.name == Unit.Assassin:
+                attack = 6
+                defence = 2
+            else:
+                attack = battle.get_attack(action, self.game.gamestate)
+                defence = battle.get_defence(action, attack, self.game.gamestate)
+                attack, defence = min(attack, 6), min(defence, 6)
+
+            chance_of_push = (attack / 6) * (defence/6) if action.is_push() else 0
+            chance_of_win = attack * (6 - defence) / 36
+            battle_values_list.append(BattleValues(attack=attack, defence=defence, chance_of_push=chance_of_push,
+                                                   chance_of_win=chance_of_win))
+
+        best_battle = max(battle_values_list, key=attrgetter("chance_of_win"))
+        worst_battle = min(battle_values_list, key=attrgetter("chance_of_win"))
+        attack_hint = ["Attack hint:"]
+        if best_battle == worst_battle:
+            attack_hint += ["Attack: " + str(best_battle.attack),
+                            "Defence: " + str(best_battle.defence),
+                            "Chance of win: " + str(round(best_battle.chance_of_win * 100, 1)) + "%"]
+
+            if best_battle.chance_of_push > 0:
+                attack_hint += ["Chance of push: " + str(round(best_battle.chance_of_push* 100, 1)) + "%"]
+
+        else:
+            attack_hint += ["Attack: " + str(worst_battle.attack) + " - " + str(best_battle.attack),
+                            "Defence: " + str(worst_battle.defence) + " - " + str(best_battle.defence),
+                            "Chance of win: " + str(round(worst_battle.chance_of_win * 100, 1)) + "%" + " - " +
+                            str(round(best_battle.chance_of_win * 100)) + "%"]
+
+            if best_battle.chance_of_push > 0:
+                attack_hint += ["Chance of push: " + str(round(worst_battle.chance_of_push * 100, 1)) + "%" + " - " +
+                                str(round(best_battle.chance_of_push * 100)) + "%"]
 
         return attack_hint
 
