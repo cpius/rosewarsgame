@@ -1,4 +1,5 @@
 from __future__ import division
+import battle
 import action_doer
 import initializer
 import action_getter
@@ -230,6 +231,6 @@ class Gamestate:
             return False
 
         rolls = outcome.for_position(action.target_at)
-        push_possible = action.is_push() and action_doer.attack_successful(action, rolls, self)
+        push_possible = action.is_push() and battle.attack_successful(action, rolls, self)
 
-        return push_possible or action_doer.is_win(action, rolls, self)
+        return push_possible or battle.is_win(action, rolls, self)

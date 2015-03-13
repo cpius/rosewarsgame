@@ -4,34 +4,18 @@ from action import Action
 import battle
 
 
-def is_win(action, rolls, gamestate, is_sub_action=False):
-    return attack_successful(action, rolls, gamestate, is_sub_action) and not \
-        defence_successful(action, rolls, gamestate, is_sub_action)
-
-
-def attack_successful(action, rolls, gamestate, is_sub_action=False):
-    attack = battle.get_attack(action, gamestate, is_sub_action)
-    return rolls.attack <= attack
-
-
-def defence_successful(action, rolls, gamestate, is_sub_action=False):
-    attack = battle.get_attack(action, gamestate, is_sub_action)
-    defence = battle.get_defence(action, attack, gamestate)
-    return rolls.defence <= defence
-
-
 def do_action(gamestate, action, outcome):
 
     def settle_attack(action, attack_direction=None, is_sub_action=False):
         rolls = outcome.for_position(action.target_at)
 
-        if is_win(action, rolls, gamestate, is_sub_action):
+        if battle.is_win(action, rolls, gamestate, is_sub_action):
             if action.target_unit.has_extra_life():
                 action.target_unit.set(State.lost_extra_life)
             else:
                 del enemy_units[action.target_at]
 
-        elif action.is_push() and attack_successful(action, rolls, gamestate):
+        elif action.is_push() and battle.attack_successful(action, rolls, gamestate):
             if not attack_direction:
                 attack_direction = action.end_at.get_direction_to(action.target_at)
             push_destination = attack_direction.move(action.target_at)
@@ -62,7 +46,7 @@ def do_action(gamestate, action, outcome):
         elif action.is_attack():
             movement_remaining = unit.movement - distance(action.start_at, action.end_at) - 1
 
-            if unit.has(Trait.combat_agility) and action.is_attack() and not is_win(action, rolls, gamestate):
+            if unit.has(Trait.combat_agility) and action.is_attack() and not battle.is_win(action, rolls, gamestate):
                 movement_remaining += 1
 
             if movement_remaining:
@@ -136,7 +120,7 @@ def do_action(gamestate, action, outcome):
         if action.is_javelin_throw():
             unit.set(State.javelin_thrown)
 
-        if action.move_with_attack and attack_successful(action, rolls, gamestate):
+        if action.move_with_attack and battle.attack_successful(action, rolls, gamestate):
             move_melee_unit_to_target_tile(gamestate, rolls, action)
 
     elif action.is_ability():
@@ -150,8 +134,8 @@ def do_action(gamestate, action, outcome):
 
 def move_melee_unit_to_target_tile(gamestate, rolls, action):
 
-    if is_win(action, rolls, gamestate) and not action.target_unit.has_extra_life():
+    if battle.is_win(action, rolls, gamestate) and not action.target_unit.has_extra_life():
         gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)
 
-    elif action.is_push() and attack_successful(action, rolls, gamestate):
+    elif action.is_push() and battle.attack_successful(action, rolls, gamestate):
         gamestate.player_units[action.target_at] = gamestate.player_units.pop(action.end_at)

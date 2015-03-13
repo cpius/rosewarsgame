@@ -5,6 +5,7 @@ from outcome import Outcome
 from gamestate import Gamestate
 from action import Action
 from player import Player
+import battle
 
 
 class Game:
@@ -15,7 +16,7 @@ class Game:
         self.interaction_number = interaction_number
         self.turn = turn
         self.created_at = created_at
-
+        self.logbook = []
         self.actions = dict()
         self.outcomes = dict()
         self.options = dict()
@@ -96,11 +97,30 @@ class Game:
                 upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
                 game.gamestate.player_units[position] = upgraded_unit
 
+            game.add_log(action, outcome)
+
         if shift_turn:
             if game.is_turn_done():
                 game.shift_turn()
 
         return game
+
+    def add_log(self, action, outcome):
+
+        action_number = 3 - self.gamestate.get_actions_remaining()
+        colors = self.current_player().color, self.opponent_player().color
+        if action.is_attack():
+            for position in outcome.outcomes:
+                is_sub_action = action.target_at == position
+                outcome_string = battle.get_outcome_string(action, outcome.outcomes[position], self.gamestate, is_sub_action)
+                target_unit = self.gamestate.all_units()[position]
+                self.logbook.append(Log(ActionType.Attack, action.unit, target_unit, action_number, colors,
+                                        outcome_string))
+        elif action.is_ability():
+            target_unit = self.gamestate.all_units()[action.target_at]
+            self.logbook.append(Log(ActionType.Ability, action.unit, target_unit, action_number, colors))
+        else:
+            self.logbook.append(Log(ActionType.Move, action.unit, None, action_number, colors))
 
     def set_network_player(self, local_player):
         for player in range(2):
@@ -115,7 +135,8 @@ class Game:
         return self.players[1]
 
     def do_action(self, action, outcome):
-        return self.gamestate.do_action(action, outcome)
+        self.add_log(action, outcome)
+        self.gamestate.do_action(action, outcome)
 
     def shift_turn(self):
         self.gamestate.shift_turn()

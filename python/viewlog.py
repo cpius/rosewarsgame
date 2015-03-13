@@ -1,17 +1,11 @@
 from __future__ import division
 from viewcommon import *
-import pygame
-import action_doer
-
-
-class ActionType:
-    Attack, Ability, Move = range(3)
+from common import *
 
 
 class Viewlog:
 
     def __init__(self, zoom, interface, screen):
-        self.logbook = []
         self.zoom = zoom
         self.interface = interface
         self.screen = screen
@@ -36,26 +30,17 @@ class Viewlog:
                                  "box_text": base.adjust(7, 0),
                                  "line": base.adjust(0, self.base_height - self.line_thickness / 2)}
 
-    class Log():
-        def __init__(self, action_type, unit, target_unit, action_number, colors, outcome_string=None):
-            self.action_type = action_type
-            self.unit = unit
-            self.target_unit = target_unit
-            self.outcome_string = outcome_string
-            self.action_number = action_number
-            self.colors = colors
-
-    def draw_logbook(self):
+    def draw_logbook(self, logbook):
 
         def clear_log():
             pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
 
         clear_log()
 
-        while len(self.logbook) > self.maximum_logs:
-            self.logbook.pop(0)
+        while len(logbook) > self.maximum_logs:
+            logbook.pop(0)
 
-        for lognumber, log in enumerate(self.logbook):
+        for lognumber, log in enumerate(logbook):
 
             locations = self.locations[lognumber]
 
@@ -77,34 +62,6 @@ class Viewlog:
             self.draw_symbol(symbol, locations["symbol"])
 
         write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"])
-
-    @staticmethod
-    def get_outcome_string(action, rolls, gamestate, is_sub_action):
-        if action_doer.is_win(action, rolls, gamestate, is_sub_action):
-            return "WIN"
-        elif action_doer.attack_successful(action, rolls, gamestate, is_sub_action) and action.is_push():
-            return "PUSH"
-        elif not action_doer.attack_successful(action, rolls, gamestate, is_sub_action):
-            return "MISS"
-        else:
-            return "DEFEND"
-
-    def add_log(self, action, outcome, game):
-
-        action_number = 3 - game.gamestate.get_actions_remaining()
-        colors = game.current_player().color, game.opponent_player().color
-
-        if action.is_attack():
-            for position in outcome.outcomes:
-                is_sub_action = action.target_at == position
-                outcome_string = self.get_outcome_string(action, outcome.outcomes[position], game.gamestate, is_sub_action)
-                target_unit = game.gamestate.all_units()[position]
-                self.logbook.append(self.Log(ActionType.Attack, action.unit, target_unit, action_number, colors, outcome_string))
-        elif action.is_ability():
-            target_unit = game.gamestate.all_units()[action.target_at]
-            self.logbook.append(self.Log(ActionType.Ability, action.unit, target_unit, action_number, colors))
-        else:
-            self.logbook.append(self.Log(ActionType.Move, action.unit, None, action_number, colors))
 
     def draw_unit(self, unit, location, color):
         unit_pic = get_unit_pic(self.interface, unit)
@@ -139,3 +96,4 @@ class Viewlog:
 
     def draw_outcome(self, outcome_string, location):
         write(self.screen, outcome_string, location.tuple, self.interface.fonts["larger"])
+

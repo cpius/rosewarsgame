@@ -1,22 +1,18 @@
 from __future__ import division
-import pygame
 import sys
-from pygame.locals import *
 import setup
 from gamestate import Gamestate
 import os
 import glob
-import interface_settings as settings
+import interface_settings  # Present to avoid circular import
 from player import Player
 from action import Action
 from client import Client
 from game import Game
 from outcome import Outcome
 import json
-from common import *
 import battle
 from view import View
-import rulebook
 from viewcommon import *
 
 
@@ -295,7 +291,7 @@ class Controller(object):
                     position = position.flip()
 
                 if event.button == 1:
-                    self.view.hide_unit_zoomed()
+                    self.view.hide_unit_zoomed(self.game)
                     if self.game.is_player_human():
                         self.left_click(position)
                 elif event.button == 3:
@@ -499,6 +495,7 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
+
     def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
         unit = None
         position = start_at
@@ -554,7 +551,7 @@ class Controller(object):
         return event.type == KEYDOWN and event.key == K_ESCAPE
 
     def game_end(self):
-        self.view.draw_game_end(self.game.current_player().color)
+        self.view.draw_game_end(self.game.current_player().color, self.game)
         self.pause()
         self.exit_game()
 
@@ -593,5 +590,3 @@ class Controller(object):
     def selecting_move(self, position):
         return self.start_at and position not in self.game.gamestate.all_units()
 
-    def open_rulebook(self):
-        rulebook.run_tutorial(self.view)
