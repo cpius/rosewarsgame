@@ -284,9 +284,11 @@ def register_upgrade(action_document, gamestate, game_id):
     position, unit = gamestate.get_upgradeable_unit()
     upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
     if isinstance(action_document["upgrade"], str):
-        upgrade = Unit.get_enum[action_document["upgrade"]]
+        upgrade = enum_from_string[action_document["upgrade"]]
     else:
-        upgrade = enum_attributes(action_document["upgrade"])
+        upgrade = {
+            enum_from_string[key]: AttributeValue(level=value) for key, value in action_document["upgrade"].items()
+        }
 
     if upgrade in upgrade_options:
         new_unit = unit.get_upgraded_unit_from_upgrade(upgrade)
