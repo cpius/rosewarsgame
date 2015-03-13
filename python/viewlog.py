@@ -1,5 +1,4 @@
 from __future__ import division
-from viewcommon import *
 import pygame
 import action_doer
 
