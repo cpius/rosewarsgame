@@ -141,7 +141,8 @@ class Controller(object):
 
         else:
             ability = list(self.selected_unit.get_abilities())[0]
-        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position, ability=ability)
+        action = Action(self.game.gamestate.all_units(), self.start_at, end_at=self.start_at, target_at=position,
+                        ability=ability)
         if action in self.game.gamestate.get_actions():
             self.perform_action(action)
         else:

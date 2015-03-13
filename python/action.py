@@ -6,7 +6,6 @@ from common import *
 class Action(object):
     def __init__(self,
                  units,
-                 *,
                  start_at,
                  end_at,
                  target_at=None,
