@@ -291,7 +291,7 @@ class Controller(object):
                     position = position.flip()
 
                 if event.button == 1:
-                    self.view.hide_unit_zoomed()
+                    self.view.hide_unit_zoomed(self.game)
                     if self.game.is_player_human():
                         self.left_click(position)
                 elif event.button == 3:
@@ -495,6 +495,7 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
+
     def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
         unit = None
         position = start_at
@@ -550,7 +551,7 @@ class Controller(object):
         return event.type == KEYDOWN and event.key == K_ESCAPE
 
     def game_end(self):
-        self.view.draw_game_end(self.game.current_player().color)
+        self.view.draw_game_end(self.game.current_player().color, self.game)
         self.pause()
         self.exit_game()
 
