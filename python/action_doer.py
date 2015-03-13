@@ -46,7 +46,7 @@ def do_action(gamestate, action, outcome):
         elif action.is_attack():
             movement_remaining = unit.movement - distance(action.start_at, action.end_at) - 1
 
-            if unit.has(Trait.combat_agility) and action.is_attack() and not is_win(action, rolls, gamestate):
+            if unit.has(Trait.combat_agility) and action.is_attack() and not battle.is_win(action, rolls, gamestate):
                 movement_remaining += 1
 
             if movement_remaining:
