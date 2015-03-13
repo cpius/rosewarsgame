@@ -156,7 +156,7 @@ class Controller(object):
         self.view.draw_game(self.game, position, illustrate_actions, True)
 
     def perform_ranged_attack(self, position):
-        action = Action(self.game.gamestate.all_units(), self.start_at, target_at=position)
+        action = Action(self.game.gamestate.all_units(), self.start_at, end_at=self.start_at, target_at=position)
         if action in self.game.gamestate.get_actions():
             self.perform_action(action)
 
