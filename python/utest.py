@@ -161,8 +161,7 @@ def run():
         print()
 
     for key, value in results.items():
-        print(key + ": ", value)
-
+        print(key + ": " + str(value[True]) + " passed, " + str(value[False]) + " failed")
 
 
 except_exceptions = False
