@@ -48,7 +48,7 @@ class Position:
         return " ABCDE"[self.column] + str(self.row)
 
     def __eq__(self, other):
-        return self.column == other.column and self.row == other.row
+        return not other is None and self.column == other.column and self.row == other.row
 
     def __ne__(self, other):
         return not self.__eq__(other)

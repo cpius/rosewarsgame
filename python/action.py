@@ -7,7 +7,7 @@ class Action(object):
     def __init__(self,
                  units,
                  start_at,
-                 end_at=None,
+                 end_at,
                  target_at=None,
                  move_with_attack=False,
                  ability=None,
@@ -20,7 +20,7 @@ class Action(object):
 
         # If the action is a movement, the tile the unit ends its movement on.
         # If the action is an attack, tile the unit stops at while attacking an adjacent tile.
-        self.end_at = end_at if end_at else start_at
+        self.end_at = end_at
 
         # The tile a unit attacks or affects with an ability
         self.target_at = target_at
@@ -43,41 +43,18 @@ class Action(object):
 
     @classmethod
     def from_document(cls, units, document):
-        document_copy = copy(document)
 
-        meta_attributes = ["created_at", "game", "_id"]
-        for attribute in meta_attributes:
-            if attribute in document_copy:
-                del document_copy[attribute]
+        arguments = {
+            "start_at": Position.from_string(document["start_at"]),
+            "end_at": Position.from_string(document["end_at"]),
+            "target_at": Position.from_string(document["target_at"]) if "target_at" in document else None,
+            "move_with_attack": bool(document["move_with_attack"]) if "move_with_attack" in document else None,
+            "created_at": document["created_at"] if "created_at" in document else None,
+            "ability": enum_from_string[document["ability"]] if "ability" in document else None,
+            "number": int(document["number"]) if "number" in document else None
+        }
 
-        for attribute in ["start_at", "end_at", "target_at"]:
-            if attribute in document_copy:
-                document_copy[attribute] = Position.from_string(document_copy[attribute])
-
-        start_at = document_copy["start_at"]
-        end_at = document_copy["end_at"]
-
-        target_at = None
-        if "target_at" in document_copy:
-            target_at = document_copy["target_at"]
-
-        move_with_attack = None
-        if "move_with_attack" in document_copy:
-            move_with_attack = bool(document["move_with_attack"])
-
-        ability = None
-        if "ability" in document_copy:
-            ability = getattr(Ability, document_copy["ability"])
-
-        created_at = None
-        if "created_at" in document_copy:
-            created_at = document_copy["created_at"]
-
-        number = None
-        if "number" in document_copy:
-            number = int(document_copy["number"])
-
-        return cls(units, start_at, end_at, target_at, move_with_attack, ability, number=number, created_at=created_at)
+        return cls(units, **arguments)
 
     def __repr__(self):
         representation = str(self.unit) + " on " + str(self.start_at)

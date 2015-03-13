@@ -33,13 +33,13 @@ def get_unit_actions(unit, start_at, gamestate):
         return [Action(units, start_at, **terms) for terms in attack_generator(moveset)]
 
     def ranged_attack_actions(attackset):
-        return [Action(units, start_at, target_at=target_at) for target_at in attackset]
+        return [Action(units, start_at, end_at=start_at, target_at=target_at) for target_at in attackset]
 
     def ability_actions(abilityset, ability):
-        return [Action(units, start_at, target_at=position, ability=ability) for position in abilityset]
+        return [Action(units, start_at, end_at=start_at, target_at=position, ability=ability) for position in abilityset]
 
     def move_actions(moveset):
-        return [Action(units, start_at, end_at=end_at) for end_at in moveset]
+        return [Action(units, start_at, end_at) for end_at in moveset]
 
     def generate_movesets(movement):
         return moves_sets(start_at, frozenset(units), zoc_blocks, movement, movement)
@@ -106,7 +106,7 @@ def get_unit_actions(unit, start_at, gamestate):
             moves = []
 
         if moves or attacks:
-            moves.append(Action(units, start_at, start_at))  # Add an action for indicating pass on the extra action
+            moves.append(Action(units, start_at, end_at=start_at))  # Add an action for indicating pass on the extra action
 
         return moves, attacks
 
