@@ -99,6 +99,20 @@ class AttributeValues():
         return string
 
 
+class ActionType:
+    Attack, Ability, Move = range(3)
+
+
+class Log():
+    def __init__(self, action_type, unit, target_unit, action_number, colors, outcome_string=None):
+        self.action_type = action_type
+        self.unit = unit
+        self.target_unit = target_unit
+        self.outcome_string = outcome_string
+        self.action_number = action_number
+        self.colors = colors
+
+
 skill_descriptions = {
     "attack_cooldown": {
         1: "Can only attack every third turn.",
