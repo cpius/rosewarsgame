@@ -99,8 +99,10 @@ class AttributeValues():
         return string
 
 
-class ActionType:
-    Attack, Ability, Move = range(3)
+class ActionType(Enum):
+    Attack = 1
+    Ability = 2
+    Move = 3
 
 
 class Log():
