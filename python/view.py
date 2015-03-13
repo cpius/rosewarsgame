@@ -67,13 +67,6 @@ class View(object):
         self.showing_unit_info = True
         self.refresh()
 
-    def show_unit_zoomed_tutorial(self, unit, attack_hint):
-        self.clear_right_tutorial()
-        self.viewinfo.show_unit_zoomed(unit, attack_hint)
-        self.showing_unit_info = True
-        write(self.screen, "To Game", self.interface.help_area[0], self.interface.fonts["normal"])
-        self.refresh()
-
     def hide_unit_zoomed(self):
         if self.showing_unit_info:
             self.clear_right()

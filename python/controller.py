@@ -589,5 +589,3 @@ class Controller(object):
     def selecting_move(self, position):
         return self.start_at and position not in self.game.gamestate.all_units()
 
-    def open_rulebook(self):
-        rulebook.run_tutorial(self.view)
