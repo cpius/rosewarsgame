@@ -45,14 +45,15 @@ class Action(object):
     @classmethod
     def from_document(cls, units, document):
 
-        arguments = {"start_at": Position.from_string(document["start_at"]),
-                     "end_at": Position.from_string(document["end_at"]),
-                     "target_at": Position.from_string(document["target_at"]) if "target_at" in document else None,
-                     "move_with_attack": bool(document["move_with_attack"]) if "move_with_attack" in document else None,
-                     "created_at": document["created_at"] if "created_at" in document else None,
-                     "ability": enum_from_string[document["ability"]] if "ability" in document else None,
-                     "number": int(document["number"]) if "number" in document else None
-                     }
+        arguments = {
+            "start_at": Position.from_string(document["start_at"]),
+            "end_at": Position.from_string(document["end_at"]),
+            "target_at": Position.from_string(document["target_at"]) if "target_at" in document else None,
+            "move_with_attack": bool(document["move_with_attack"]) if "move_with_attack" in document else None,
+            "created_at": document["created_at"] if "created_at" in document else None,
+            "ability": enum_from_string[document["ability"]] if "ability" in document else None,
+            "number": int(document["number"]) if "number" in document else None
+        }
 
         return cls(units, **arguments)
 
