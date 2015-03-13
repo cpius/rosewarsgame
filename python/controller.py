@@ -542,26 +542,34 @@ class Controller(object):
 
         best_battle = max(battle_values_list, key=attrgetter("chance_of_win"))
         worst_battle = min(battle_values_list, key=attrgetter("chance_of_win"))
-        attack_hint = ["Attack hint:"]
+        battle_hint = ["Battle hint:"]
         if best_battle == worst_battle:
-            attack_hint += ["Attack: " + str(best_battle.attack),
+            battle_hint += ["Attack: " + str(best_battle.attack),
                             "Defence: " + str(best_battle.defence),
                             "Chance of win: " + str(round(best_battle.chance_of_win * 100, 1)) + "%"]
 
             if best_battle.chance_of_push > 0:
-                attack_hint += ["Chance of push: " + str(round(best_battle.chance_of_push* 100, 1)) + "%"]
+                battle_hint += ["Chance of push: " + str(round(best_battle.chance_of_push * 100, 1)) + "%"]
 
         else:
-            attack_hint += ["Attack: " + str(worst_battle.attack) + " - " + str(best_battle.attack),
-                            "Defence: " + str(worst_battle.defence) + " - " + str(best_battle.defence),
-                            "Chance of win: " + str(round(worst_battle.chance_of_win * 100, 1)) + "%" + " - " +
-                            str(round(best_battle.chance_of_win * 100)) + "%"]
+            if worst_battle.attack == best_battle.attack:
+                battle_hint += ["Attack: " + str(worst_battle.attack)]
+            else:
+                battle_hint += ["Attack: " + str(worst_battle.attack) + " – " + str(best_battle.attack)]
+
+            if worst_battle.defence == best_battle.defence:
+                battle_hint += ["Defence: " + str(worst_battle.defence)]
+            else:
+                battle_hint += ["Defence: " + str(worst_battle.defence) + " – " + str(best_battle.defence)]
+
+            battle_hint += ["Chance of win: " + str(round(worst_battle.chance_of_win * 100, 1)) + "%" + " – " + \
+                           str(round(best_battle.chance_of_win * 100, 1)) + "%"]
 
             if best_battle.chance_of_push > 0:
-                attack_hint += ["Chance of push: " + str(round(worst_battle.chance_of_push * 100, 1)) + "%" + " - " +
-                                str(round(best_battle.chance_of_push * 100)) + "%"]
+                battle_hint += ["Chance of push: " + str(round(worst_battle.chance_of_push * 100, 1)) + "%" + " – " +
+                                str(round(best_battle.chance_of_push * 100, 1)) + "%"]
 
-        return attack_hint
+        return battle_hint
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
