@@ -162,7 +162,8 @@ class Game:
         savegame_document = {
             "gamestate": self.gamestate.to_document(),
             "initial_gamestate": self.initial_gamestate.to_document(),
-            "action_count": action_count}
+            "action_count": action_count
+        }
 
         for action_number, action in self.actions.items():
             savegame_document[action_number] = action.to_document()
