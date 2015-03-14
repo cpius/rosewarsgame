@@ -72,9 +72,6 @@ class Gamestate:
         gamestate_document = self.to_document()
         return self.from_document(gamestate_document)
 
-    def __eq__(self, other):
-        pass
-
     def set_available_actions(self):
         self.available_actions = action_getter.get_actions(self)
 
