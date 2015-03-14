@@ -85,11 +85,7 @@ class Game:
             game.do_action(action, outcome)
 
             if options and "upgrade" in options:
-                upgrade = options["upgrade"]
-                if type(upgrade) is str:
-                    upgrade = enum_from_string[upgrade]
-                else:
-                    upgrade = {enum_from_string[key]: AttributeValues(level=value) for key, value in upgrade.items()}
+                upgrade = get_enum_upgrade(options["upgrade"])
 
                 position = action.end_at
                 if not position in game.gamestate.player_units:

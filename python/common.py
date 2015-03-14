@@ -471,7 +471,23 @@ def unit_with_attribute_at(pos, attribute, units, level=1):
     return pos in units and units[pos].has(attribute, level)
 
 
+def get_enum_upgrade(upgrade):
+    if type(upgrade) is str:
+        return enum_from_string[upgrade]
+    elif type(upgrade) is Unit:
+        return upgrade
+    else:
+        enum_dict = {}
+        for key, value in upgrade.items():
+            if type(key) is str:
+                key = enum_from_string[key]
+            if type(value) is str or type(value) is int:
+                value = AttributeValues(level=value)
+            enum_dict[key] = value
+        return(enum_dict)
 
 
+def get_string_upgrade(upgrade):
+    return {key.name: value.level for key, value in upgrade.items()}
 
 

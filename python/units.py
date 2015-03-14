@@ -128,7 +128,10 @@ class Unit_class():
         return self.range > 1
 
     def get_upgraded_unit_from_upgrade(self, upgrade):
-
+        """
+        :param upgrade: A unit enum or a dictionary with enums as keys and AttributeValues as values.
+        :return: An instance of a Unit_class object
+        """
         if type(upgrade) is Unit:
             upgraded_unit = self.make(upgrade)
             for attribute in self.attributes:
@@ -154,11 +157,19 @@ class Unit_class():
             return upgraded_unit
 
     def get_upgraded_unit_from_choice(self, choice):
+        """
+        :param choice: 0 or 1
+        :return: An instance of a Unit_class object
+        """
         upgrade = self.get_upgrade(choice)
         return self.get_upgraded_unit_from_upgrade(upgrade)
 
     def get_upgrade(self, choice):
-
+        """
+        :param choice: 0 or 1
+        :return: The chosen unit upgrade in enum upgrade format. (Dictionary with enums as keys and AttributeValues as
+        values.)
+        """
         if get_setting("version") == "1.0":
             if choice == 1:
                 return Trait.attack
@@ -171,16 +182,8 @@ class Unit_class():
             for attribute, level in upgrade.items():
                 return self.has(attribute, level) and not base_units[self.unit].has(attribute, level)
 
-        possible_upgrade_choices = [upgrade for upgrade in self.upgrades if not has_upgrade(upgrade)]
-        choice = possible_upgrade_choices[choice]
-        if choice not in Unit:
-            choice2 = dict(choice)
-            for key, val in choice2.items():
-                choice2[key] = AttributeValues(level=val)
-        else:
-            choice2 = choice
-
-        return choice2
+        possible_upgrade_choices = [get_enum_upgrade(upgrade) for upgrade in self.upgrades if not has_upgrade(upgrade)]
+        return possible_upgrade_choices[choice]
 
     def get_unit_level(self):
         experience = self.get_state(State.experience)
@@ -193,7 +196,8 @@ class Unit_class():
         return experience and experience % to_upgrade == 0 and not self.has(State.recently_upgraded)
 
     def to_document(self):
-        write_attributes = [(attribute, attribute_values) for attribute, attribute_values in self.attributes.items() if not base_units[self.unit].has(attribute)]
+        write_attributes = [(attribute, attribute_values) for attribute, attribute_values in self.attributes.items() if
+                            not base_units[self.unit].has(attribute)]
 
         if write_attributes:
             unit_dict = readable(write_attributes)

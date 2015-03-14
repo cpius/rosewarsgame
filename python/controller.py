@@ -384,13 +384,6 @@ class Controller(object):
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
-    @staticmethod
-    def get_upgrade(unit, choice):
-        if getattr(unit, "upgrades"):
-            return unit.upgrades[choice]
-        else:
-            return unit.get_upgrade_choice(choice)
-
     def perform_action(self, action, outcome=None, upgrade=None):
         self.view.draw_game(self.game)
 
@@ -457,13 +450,11 @@ class Controller(object):
             upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
 
-            if not upgrade in Unit:
-                upgrade = [(key, val) for key, val in upgrade.items()]
-            readable_upgrade = readable(upgrade)
-            self.game.save_option("upgrade", readable_upgrade)
+            string_upgrade = get_string_upgrade(upgrade)
+            self.game.save_option("upgrade", string_upgrade)
 
             if self.game.is_enemy_network():
-                self.client.send_upgrade_choice(readable_upgrade, self.game.gamestate.action_count)
+                self.client.send_upgrade_choice(string_upgrade, self.game.gamestate.action_count)
 
         self.game.save(self.view, action, outcome)
 
