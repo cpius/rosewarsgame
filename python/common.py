@@ -512,7 +512,7 @@ def get_setting(name):
 
 
 def unit_with_attribute_at(pos, attribute, units, level=1):
-    return pos in units and units[pos].has_trait(attribute, level)
+    return pos in units and units[pos].has(attribute, level)
 
 
 

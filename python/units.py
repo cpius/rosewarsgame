@@ -78,27 +78,13 @@ class Unit_class():
             else:
                 self.attributes[attribute].duration = duration
 
-    def has_trait(self, trait, level=1):
-        return trait in self.attributes and self.attributes[trait].level == level
-
-    def has_effect(self, effect, level=1):
-        return effect in self.attributes and self.attributes[effect].level == level
-
-    def has_ability(self, ability, level=1):
-        return ability in self.attributes and self.attributes[ability].level == level
-
-    def has_state(self, state, value=1):
-        return state in self.attributes and self.attributes[state].value == value
-
     def has(self, attribute, number=1):
-        if attribute in Trait:
-            return self.has_trait(attribute, number)
-        elif attribute in Effect:
-            return self.has_effect(attribute, number)
-        elif attribute in Ability:
-            return self.has_ability(attribute, number)
+        if attribute not in self.attributes:
+            return False
+        if attribute in Trait or attribute in Effect or attribute in Ability:
+            return self.attributes[attribute].level == number
         elif attribute in State:
-            return self.has_state(attribute, number)
+            return self.attributes[attribute].value == number
 
     def get_duration(self, attribute):
         return self.attributes[attribute].duration

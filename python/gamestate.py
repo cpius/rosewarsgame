@@ -216,7 +216,7 @@ class Gamestate:
 
     def is_extra_action(self):
         for position, unit in self.player_units.items():
-            if unit.has_state(State.extra_action):
+            if unit.has(State.extra_action):
                 return True
 
         return False
