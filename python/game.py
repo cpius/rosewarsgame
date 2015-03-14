@@ -164,10 +164,11 @@ class Game:
 
         view.save_screenshot(filename + ".jpeg")
 
-        savegame_document = dict()
-        savegame_document["gamestate"] = self.gamestate.to_document()
-        savegame_document["initial_gamestate"] = self.initial_gamestate.to_document()
-        savegame_document["action_count"] = self.gamestate.action_count
+        savegame_document = {
+            "gamestate": self.gamestate.to_document(),
+            "initial_gamestate": self.initial_gamestate.to_document(),
+            "action_count": action_count}
+
         for action_number, action in self.actions.items():
             savegame_document[action_number] = action.to_document()
 
