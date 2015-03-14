@@ -28,9 +28,7 @@ class Gamestate:
             self.ai_factors = {}
 
     def all_units(self):
-        all_units = self.units[0].copy()
-        all_units.update(self.units[1])
-        return all_units
+        return merge(*self.units)
 
     def do_action(self, action, outcome):
         action_doer.do_action(self, action, outcome)
@@ -69,8 +67,7 @@ class Gamestate:
         return actions_with_none
 
     def copy(self):
-        gamestate_document = self.to_document()
-        return self.from_document(gamestate_document)
+        return self.from_document(self.to_document())
 
     def set_available_actions(self):
         self.available_actions = action_getter.get_actions(self)
