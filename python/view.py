@@ -61,9 +61,9 @@ class View(object):
             self.viewlog.draw_logbook(game.logbook)
         self.refresh()
 
-    def show_unit_zoomed(self, unit, attack_hint):
+    def show_unit_zoomed(self, gamestate, unit, start_at, target_at):
         self.clear_right()
-        self.viewinfo.show_unit_zoomed(unit, attack_hint)
+        self.viewinfo.show_unit_zoomed(gamestate, unit, start_at, target_at)
         self.showing_unit_info = True
         self.refresh()
 

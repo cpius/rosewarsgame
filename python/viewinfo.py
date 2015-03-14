@@ -1,5 +1,8 @@
 from __future__ import division
 from viewcommon import *
+from collections import namedtuple
+import battle
+from operator import attrgetter
 
 
 class Viewinfo:
@@ -98,7 +101,7 @@ class Viewinfo:
 
         return lines
 
-    def show_unit_zoomed(self, unit, attack_hint):
+    def show_unit_zoomed(self, gamestate, unit, start_at, target_at):
 
         unit_pic = get_unit_pic(self.interface, unit)
         pic = get_image(unit_pic, self.unit_dimensions)
@@ -112,8 +115,8 @@ class Viewinfo:
         self.screen.blit(pic, image_location)
 
         lines = self.get_unit_lines(unit)
-        if attack_hint:
-            lines += attack_hint
+        if target_at:
+            lines += self.get_battle_hint(gamestate, start_at, target_at)
         line_length = 45
         show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
 
@@ -172,3 +175,60 @@ class Viewinfo:
         self.screen.blit(unit_image, location)
 
         draw_unit_box(self, location, color, resize)
+
+    @staticmethod
+    def get_battle_hint(gamestate, start_at, target_at):
+            actions = [action for action in gamestate.get_actions() if action.target_at == target_at
+                       and action.start_at == start_at]
+
+            if actions[0].is_ability():
+                return ""
+
+            BattleValues = namedtuple("BattleValues", ["attack", "defence", "chance_of_win", "chance_of_push"])
+            battle_values_list = []
+
+            for action in actions:
+                player_unit = gamestate.player_units[start_at]
+                if player_unit.name == Unit.Assassin:
+                    attack = 6
+                    defence = 2
+                else:
+                    attack = battle.get_attack(action, gamestate)
+                    defence = battle.get_defence(action, attack, gamestate)
+                    attack, defence = min(attack, 6), min(defence, 6)
+
+                chance_of_push = (attack / 6) * (defence/6) if action.is_push() else 0
+                chance_of_win = attack * (6 - defence) / 36
+                battle_values_list.append(BattleValues(attack=attack, defence=defence, chance_of_push=chance_of_push,
+                                                       chance_of_win=chance_of_win))
+
+            best_battle = max(battle_values_list, key=attrgetter("chance_of_win"))
+            worst_battle = min(battle_values_list, key=attrgetter("chance_of_win"))
+            battle_hint = ["Battle hint:"]
+            if best_battle == worst_battle:
+                battle_hint += ["Attack: " + str(best_battle.attack),
+                                "Defence: " + str(best_battle.defence),
+                                "Chance of win: " + str(round(best_battle.chance_of_win * 100, 1)) + "%"]
+
+                if best_battle.chance_of_push > 0:
+                    battle_hint += ["Chance of push: " + str(round(best_battle.chance_of_push * 100, 1)) + "%"]
+
+            else:
+                if worst_battle.attack == best_battle.attack:
+                    battle_hint += ["Attack: " + str(worst_battle.attack)]
+                else:
+                    battle_hint += ["Attack: " + str(worst_battle.attack) + " – " + str(best_battle.attack)]
+
+                if worst_battle.defence == best_battle.defence:
+                    battle_hint += ["Defence: " + str(worst_battle.defence)]
+                else:
+                    battle_hint += ["Defence: " + str(worst_battle.defence) + " – " + str(best_battle.defence)]
+
+                battle_hint += ["Chance of win: " + str(round(worst_battle.chance_of_win * 100, 1)) + "%" + " – " + \
+                               str(round(best_battle.chance_of_win * 100, 1)) + "%"]
+
+                if best_battle.chance_of_push > 0:
+                    battle_hint += ["Chance of push: " + str(round(worst_battle.chance_of_push * 100, 1)) + "%" + " – " +
+                                    str(round(best_battle.chance_of_push * 100, 1)) + "%"]
+
+            return battle_hint
