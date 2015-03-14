@@ -140,7 +140,7 @@ def get_unit_actions(unit, start_at, gamestate):
 
     player_units = gamestate.player_units
     enemy_units = gamestate.enemy_units
-    units = merge_units(player_units, enemy_units)
+    units = merge(player_units, enemy_units)
 
     zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
