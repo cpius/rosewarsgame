@@ -19,6 +19,14 @@ def does_action_exist(test_document):
     return actual == expected
 
 
+def is_the_game_over(test_document):
+    gamestate = Gamestate.from_document(test_document["gamestate"])
+    actual = gamestate.is_ended()
+    expected = test_document["result"]
+
+    return actual == expected
+
+
 def does_turn_shift_work(test_document):
     pre_gamestate = Gamestate.from_document(test_document["pre_gamestate"])
     post_gamestate = Gamestate.from_document(test_document["post_gamestate"])
