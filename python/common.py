@@ -450,17 +450,6 @@ def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dic
     return merged_dictionary
 
 
-def attribute_key(attribute, value):
-    if value == 1:
-        return attribute
-    elif value > 1:
-        attribute_key = attribute + "_"
-        for i in range(0, value):
-            attribute_key += "I"
-
-        return attribute_key
-
-
 def flip_units(units):
     return dict((position.flip(), unit) for position, unit in units.items())
 
