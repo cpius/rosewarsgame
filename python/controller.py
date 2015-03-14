@@ -13,8 +13,6 @@ from outcome import Outcome
 import json
 from view import View
 from viewcommon import *
-from collections import namedtuple
-from operator import attrgetter
 
 
 class Controller(object):

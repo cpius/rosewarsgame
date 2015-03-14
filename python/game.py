@@ -1,4 +1,3 @@
-from datetime import datetime
 from common import *
 import os
 from outcome import Outcome

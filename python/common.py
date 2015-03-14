@@ -1,7 +1,6 @@
 from json import JSONEncoder, dumps
 from datetime import datetime
 import collections
-import functools
 from dictdiffer import DictDiffer
 from enum import Enum
 
