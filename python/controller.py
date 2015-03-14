@@ -495,22 +495,12 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-
-    def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
-        unit = None
-        position = start_at
-        if target_at:
-            position = target_at
-
-        if position in self.game.gamestate.player_units:
-            unit = self.game.gamestate.player_units[position]
-        elif position in self.game.gamestate.enemy_units:
-            unit = self.game.gamestate.enemy_units[position]
-
-        if unit:
-            self.view.show_unit_zoomed(unit, attack_hint)
+    def show_unit(self, start_at, target_at=None, illustrate_actions=None):
+        position = target_at if target_at else start_at
+        if position in self.game.gamestate.all_units():
+            unit = self.game.gamestate.all_units()[position]
+            self.view.show_unit_zoomed(self.game.gamestate, unit, start_at, target_at)
             self.view.draw_game(self.game, start_at, illustrate_actions)
-            return
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
