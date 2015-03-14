@@ -100,14 +100,12 @@ class Unit_class():
             del self.attributes[attribute]
 
     def do(self, ability, level):
-        if ability == Ability.poison:
-            self.attributes[Effect.poisoned] = AttributeValues(level=level, duration=level)
+        effect_from_ability = {
+            Ability.poison: Effect.poisoned,
+            Ability.sabotage: Effect.sabotaged,
+            Ability.improve_weapons: Effect.improved_weapons}
 
-        if ability == Ability.sabotage:
-            self.attributes[Effect.sabotaged] = AttributeValues(level=level, duration=level)
-
-        if ability == Ability.improve_weapons:
-            self.attributes[Effect.improved_weapons] = AttributeValues(level=level, duration=level)
+        self.set(effect_from_ability[ability], level=level, duration=level)
 
     def gain_experience(self):
         if not self.has(State.used) and not get_setting("Beginner_mode"):
