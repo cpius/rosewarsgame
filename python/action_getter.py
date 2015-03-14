@@ -2,6 +2,7 @@ from __future__ import division
 from action import Action
 from common import *
 from itertools import product
+from functools import lru_cache
 
 
 def get_actions(gamestate):
@@ -191,7 +192,7 @@ def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
             yield new_position
 
 
-@memoized
+@lru_cache(maxsize=None)
 def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
     """
     Returns all the tiles a unit can move to, in two sets.
@@ -217,7 +218,7 @@ def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
     return moveset_with_leftover, moveset_no_leftover
 
 
-@memoized
+@lru_cache(maxsize=None)
 def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
     """Returns all the tiles a unit can move to. """
 
@@ -234,7 +235,7 @@ def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
     return moveset
 
 
-@memoized
+@lru_cache(maxsize=None)
 def ranged_attacks_set(position, enemy_units, range_remaining):
     """ Returns all the tiles a ranged unit can attack"""
 
