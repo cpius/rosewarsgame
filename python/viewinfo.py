@@ -44,16 +44,16 @@ class Viewinfo:
                     lines.append("+" + str(value) + " Defence against " + unit_type.name)
                 lines.append("")
 
-        for skill in unit.get_skills():
-            if skill not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life]:
-                level = unit.get_level(skill)
+        for trait in unit.get_traits():
+            if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life]:
+                level = unit.get_level(trait)
                 if level == 1:
-                    lines.append(skill.name + ":")
-                    lines.append(skill_descriptions[skill.name][1])
+                    lines.append(trait.name + ":")
+                    lines.append(trait_descriptions[trait.name][1])
                     lines.append("")
                 elif level > 1:
-                    lines.append(skill.name + ", level " + str(level) + ":")
-                    lines.append(skill_descriptions[skill.name][1])
+                    lines.append(trait.name + ", level " + str(level) + ":")
+                    lines.append(trait_descriptions[trait.name][1])
                     lines.append("")
 
         for ability in unit.get_abilities():

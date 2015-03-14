@@ -56,7 +56,7 @@ class Unit_class():
     def get_abilities(self):
         return [attribute for attribute in self.attributes if attribute in Ability]
 
-    def get_skills(self):
+    def get_traits(self):
         return [attribute for attribute in self.attributes if attribute in Trait]
 
     def get_states(self):
@@ -78,8 +78,8 @@ class Unit_class():
             else:
                 self.attributes[attribute].duration = duration
 
-    def has_skill(self, skill, level=1):
-        return skill in self.attributes and self.attributes[skill].level == level
+    def has_trait(self, trait, level=1):
+        return trait in self.attributes and self.attributes[trait].level == level
 
     def has_effect(self, effect, level=1):
         return effect in self.attributes and self.attributes[effect].level == level
@@ -92,7 +92,7 @@ class Unit_class():
 
     def has(self, attribute, number=1):
         if attribute in Trait:
-            return self.has_skill(attribute, number)
+            return self.has_trait(attribute, number)
         elif attribute in Effect:
             return self.has_effect(attribute, number)
         elif attribute in Ability:
@@ -130,7 +130,6 @@ class Unit_class():
             else:
                 self.attributes[State.experience] = AttributeValues(value=1)
             self.remove(State.recently_upgraded)
-
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)

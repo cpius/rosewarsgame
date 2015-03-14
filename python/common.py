@@ -115,7 +115,7 @@ class Log():
         self.colors = colors
 
 
-skill_descriptions = {
+trait_descriptions = {
     "attack_cooldown": {
         1: "Can only attack every third turn.",
         2: "Can only attack every second turn"},
@@ -512,7 +512,7 @@ def get_setting(name):
 
 
 def unit_with_attribute_at(pos, attribute, units, level=1):
-    return pos in units and units[pos].has_skill(attribute, level)
+    return pos in units and units[pos].has_trait(attribute, level)
 
 
 
