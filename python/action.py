@@ -87,12 +87,6 @@ class Action(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def to_document_no_created_at(self):
-        document = self.to_document()
-        if "created_at" in document:
-            del document["created_at"]
-        return document
-
     def to_document(self):
         attributes = ["start_at", "end_at", "target_at"]
         document = dict((attribute, str(getattr(self, attribute)))
