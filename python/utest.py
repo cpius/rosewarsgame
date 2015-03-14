@@ -162,12 +162,13 @@ def run():
             except Exception as e:
                 test = "ERROR"
         else:
-            print(file)
             test = utest(test_document)
+        if test is not True:
+            print(file)
 
         results[test_document["type"]][test] += 1
-        print()
 
+    print()
     total = Counter()
     for key, value in results.items():
         print(key + ": " + str(value[True]) + " passed, " + str(value[False]) + " failed")
