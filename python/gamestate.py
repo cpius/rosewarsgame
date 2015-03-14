@@ -180,25 +180,14 @@ class Gamestate:
         return self.to_document() == other.to_document()
 
     def is_ended(self):
-        for position, unit in self.player_units.items():
-            if not unit.has(Effect.bribed):
-                if position.row == 8:
-                    return True
+        def unit_on_opponents_backline():
+            return any(unit for position, unit in self.player_units.items() if position.row == 8
+                       and not unit.has(Effect.bribed))
 
-        for position, unit in self.enemy_units.items():
-            if not unit.has(Effect.bribed):
-                if position.row == 1:
-                    return True
+        def no_enemy_units():
+            return not self.enemy_units and not any(unit for unit in self.player_units.values() if unit.has(Effect.bribed))
 
-        if not self.enemy_units:
-            at_least_one_bribed = False
-            for position, unit in self.player_units.items():
-                if unit.has(Effect.bribed):
-                    at_least_one_bribed = True
-            if not at_least_one_bribed:
-                return True
-
-        return False
+        return unit_on_opponents_backline() or no_enemy_units()
 
     def get_unit_from_action_document(self, action_document):
         unit_position = Position.from_string(action_document["end_at"])
@@ -212,11 +201,7 @@ class Gamestate:
             return self.enemy_units[unit_position], unit_position
 
     def is_extra_action(self):
-        for position, unit in self.player_units.items():
-            if unit.has(State.extra_action):
-                return True
-
-        return False
+        return any(unit for unit in self.player_units.values() if unit.has(State.extra_action))
 
     def get_upgradeable_unit(self):
         for position, unit in self.player_units.items():
