@@ -1,0 +1,16 @@
+{
+    "type": "Is the game over",
+    "result": true,
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "E3": {
+                "name": "Archer",
+                "attack_skill": 1
+            },
+            "D4": "Knight"
+        },
+        "player2_units": {
+        }
+    }
+}
