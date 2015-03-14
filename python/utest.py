@@ -19,6 +19,14 @@ def does_action_exist(test_document):
     return actual == expected
 
 
+def is_the_game_over(test_document):
+    gamestate = Gamestate.from_document(test_document["gamestate"])
+    actual = gamestate.is_ended()
+    expected = test_document["result"]
+
+    return actual == expected
+
+
 def does_turn_shift_work(test_document):
     pre_gamestate = Gamestate.from_document(test_document["pre_gamestate"])
     post_gamestate = Gamestate.from_document(test_document["post_gamestate"])
@@ -154,14 +162,18 @@ def run():
             except Exception as e:
                 test = "ERROR"
         else:
-            print(file)
             test = utest(test_document)
+        if test is not True:
+            print(file)
 
         results[test_document["type"]][test] += 1
-        print()
 
+    print()
+    total = Counter()
     for key, value in results.items():
         print(key + ": " + str(value[True]) + " passed, " + str(value[False]) + " failed")
+        total += value
+    print("total: ", total)
 
 
 except_exceptions = False

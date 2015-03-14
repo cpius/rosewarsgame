@@ -11,11 +11,8 @@ from client import Client
 from game import Game
 from outcome import Outcome
 import json
-import battle
 from view import View
 from viewcommon import *
-from collections import namedtuple
-from operator import attrgetter
 
 
 class Controller(object):
@@ -244,7 +241,6 @@ class Controller(object):
     def right_click(self, position):
         start_at = position
         if self.start_at:
-            attack_hint = []
             target_at = None
 
             illustrate_actions = [action for action in self.game.gamestate.get_actions()
@@ -254,10 +250,9 @@ class Controller(object):
                 potential_actions = [action for action in illustrate_actions
                                      if action.target_at and action.target_at == position]
                 if potential_actions:
-                    attack_hint = self.get_attack_hint(position)
                     start_at = self.start_at
                     target_at = position
-            self.show_unit(start_at, target_at, attack_hint, illustrate_actions)
+            self.show_unit(start_at, target_at, illustrate_actions)
         else:
             self.show_unit(start_at)
 
@@ -389,13 +384,6 @@ class Controller(object):
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
-    @staticmethod
-    def get_upgrade(unit, choice):
-        if getattr(unit, "upgrades"):
-            return unit.upgrades[choice]
-        else:
-            return unit.get_upgrade_choice(choice)
-
     def perform_action(self, action, outcome=None, upgrade=None):
         self.view.draw_game(self.game)
 
@@ -462,13 +450,11 @@ class Controller(object):
             upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
             self.game.gamestate.player_units[position] = upgraded_unit
 
-            if not upgrade in Unit:
-                upgrade = [(key, val) for key, val in upgrade.items()]
-            readable_upgrade = readable(upgrade)
-            self.game.save_option("upgrade", readable_upgrade)
+            string_upgrade = get_string_upgrade(upgrade)
+            self.game.save_option("upgrade", string_upgrade)
 
             if self.game.is_enemy_network():
-                self.client.send_upgrade_choice(readable_upgrade, self.game.gamestate.action_count)
+                self.client.send_upgrade_choice(string_upgrade, self.game.gamestate.action_count)
 
         self.game.save(self.view, action, outcome)
 
@@ -498,78 +484,12 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-
-    def show_unit(self, start_at, target_at=None, attack_hint=None, illustrate_actions=None):
-        unit = None
-        position = start_at
-        if target_at:
-            position = target_at
-
-        if position in self.game.gamestate.player_units:
-            unit = self.game.gamestate.player_units[position]
-        elif position in self.game.gamestate.enemy_units:
-            unit = self.game.gamestate.enemy_units[position]
-
-        if unit:
-            self.view.show_unit_zoomed(unit, attack_hint)
+    def show_unit(self, start_at, target_at=None, illustrate_actions=None):
+        position = target_at if target_at else start_at
+        if position in self.game.gamestate.all_units():
+            unit = self.game.gamestate.all_units()[position]
+            self.view.show_unit_zoomed(self.game.gamestate, unit, start_at, target_at)
             self.view.draw_game(self.game, start_at, illustrate_actions)
-            return
-
-    def get_attack_hint(self, attack_position):
-        actions = [action for action in self.game.gamestate.get_actions() if action.target_at == attack_position
-                   and action.start_at == self.start_at]
-
-        if actions[0].is_ability():
-            return ""
-
-        BattleValues = namedtuple("BattleValues", ["attack", "defence", "chance_of_win", "chance_of_push"])
-        battle_values_list = []
-
-        for action in actions:
-            player_unit = self.game.gamestate.player_units[self.start_at]
-            if player_unit.name == Unit.Assassin:
-                attack = 6
-                defence = 2
-            else:
-                attack = battle.get_attack(action, self.game.gamestate)
-                defence = battle.get_defence(action, attack, self.game.gamestate)
-                attack, defence = min(attack, 6), min(defence, 6)
-
-            chance_of_push = (attack / 6) * (defence/6) if action.is_push() else 0
-            chance_of_win = attack * (6 - defence) / 36
-            battle_values_list.append(BattleValues(attack=attack, defence=defence, chance_of_push=chance_of_push,
-                                                   chance_of_win=chance_of_win))
-
-        best_battle = max(battle_values_list, key=attrgetter("chance_of_win"))
-        worst_battle = min(battle_values_list, key=attrgetter("chance_of_win"))
-        battle_hint = ["Battle hint:"]
-        if best_battle == worst_battle:
-            battle_hint += ["Attack: " + str(best_battle.attack),
-                            "Defence: " + str(best_battle.defence),
-                            "Chance of win: " + str(round(best_battle.chance_of_win * 100, 1)) + "%"]
-
-            if best_battle.chance_of_push > 0:
-                battle_hint += ["Chance of push: " + str(round(best_battle.chance_of_push * 100, 1)) + "%"]
-
-        else:
-            if worst_battle.attack == best_battle.attack:
-                battle_hint += ["Attack: " + str(worst_battle.attack)]
-            else:
-                battle_hint += ["Attack: " + str(worst_battle.attack) + " – " + str(best_battle.attack)]
-
-            if worst_battle.defence == best_battle.defence:
-                battle_hint += ["Defence: " + str(worst_battle.defence)]
-            else:
-                battle_hint += ["Defence: " + str(worst_battle.defence) + " – " + str(best_battle.defence)]
-
-            battle_hint += ["Chance of win: " + str(round(worst_battle.chance_of_win * 100, 1)) + "%" + " – " + \
-                           str(round(best_battle.chance_of_win * 100, 1)) + "%"]
-
-            if best_battle.chance_of_push > 0:
-                battle_hint += ["Chance of push: " + str(round(worst_battle.chance_of_push * 100, 1)) + "%" + " – " +
-                                str(round(best_battle.chance_of_push * 100, 1)) + "%"]
-
-        return battle_hint
 
     def quit_game_requested(self, event):
         return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))

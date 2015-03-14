@@ -1,4 +1,3 @@
-from datetime import datetime
 from copy import copy, deepcopy
 from common import *
 
@@ -87,12 +86,6 @@ class Action(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def to_document_no_created_at(self):
-        document = self.to_document()
-        if "created_at" in document:
-            del document["created_at"]
-        return document
-
     def to_document(self):
         attributes = ["start_at", "end_at", "target_at"]
         document = dict((attribute, str(getattr(self, attribute)))
@@ -135,7 +128,7 @@ class Action(object):
         return deepcopy(self)
 
     def update_references(self, gamestate):
-        units = merge_units(gamestate.player_units, gamestate.enemy_units)
+        units = merge(gamestate.player_units, gamestate.enemy_units)
         self.unit = units[self.start_at]
         if self.target_at and self.target_at in units:
             self.target_unit = units[self.target_at]

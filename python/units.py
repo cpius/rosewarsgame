@@ -56,7 +56,7 @@ class Unit_class():
     def get_abilities(self):
         return [attribute for attribute in self.attributes if attribute in Ability]
 
-    def get_skills(self):
+    def get_traits(self):
         return [attribute for attribute in self.attributes if attribute in Trait]
 
     def get_states(self):
@@ -78,27 +78,13 @@ class Unit_class():
             else:
                 self.attributes[attribute].duration = duration
 
-    def has_skill(self, skill, level=1):
-        return skill in self.attributes and self.attributes[skill].level == level
-
-    def has_effect(self, effect, level=1):
-        return effect in self.attributes and self.attributes[effect].level == level
-
-    def has_ability(self, ability, level=1):
-        return ability in self.attributes and self.attributes[ability].level == level
-
-    def has_state(self, state, value=1):
-        return state in self.attributes and self.attributes[state].value == value
-
     def has(self, attribute, number=1):
-        if attribute in Trait:
-            return self.has_skill(attribute, number)
-        elif attribute in Effect:
-            return self.has_effect(attribute, number)
-        elif attribute in Ability:
-            return self.has_ability(attribute, number)
+        if attribute not in self.attributes:
+            return False
+        if attribute in Trait or attribute in Effect or attribute in Ability:
+            return self.attributes[attribute].level == number
         elif attribute in State:
-            return self.has_state(attribute, number)
+            return self.attributes[attribute].value == number
 
     def get_duration(self, attribute):
         return self.attributes[attribute].duration
@@ -114,14 +100,12 @@ class Unit_class():
             del self.attributes[attribute]
 
     def do(self, ability, level):
-        if ability == Ability.poison:
-            self.attributes[Effect.poisoned] = AttributeValues(level=level, duration=level)
+        effect_from_ability = {
+            Ability.poison: Effect.poisoned,
+            Ability.sabotage: Effect.sabotaged,
+            Ability.improve_weapons: Effect.improved_weapons}
 
-        if ability == Ability.sabotage:
-            self.attributes[Effect.sabotaged] = AttributeValues(level=level, duration=level)
-
-        if ability == Ability.improve_weapons:
-            self.attributes[Effect.improved_weapons] = AttributeValues(level=level, duration=level)
+        self.set(effect_from_ability[ability], level=level, duration=level)
 
     def gain_experience(self):
         if not self.has(State.used) and not get_setting("Beginner_mode"):
@@ -130,7 +114,6 @@ class Unit_class():
             else:
                 self.attributes[State.experience] = AttributeValues(value=1)
             self.remove(State.recently_upgraded)
-
 
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
@@ -145,7 +128,10 @@ class Unit_class():
         return self.range > 1
 
     def get_upgraded_unit_from_upgrade(self, upgrade):
-
+        """
+        :param upgrade: A unit enum or a dictionary with enums as keys and AttributeValues as values.
+        :return: An instance of a Unit_class object
+        """
         if type(upgrade) is Unit:
             upgraded_unit = self.make(upgrade)
             for attribute in self.attributes:
@@ -171,11 +157,19 @@ class Unit_class():
             return upgraded_unit
 
     def get_upgraded_unit_from_choice(self, choice):
+        """
+        :param choice: 0 or 1
+        :return: An instance of a Unit_class object
+        """
         upgrade = self.get_upgrade(choice)
         return self.get_upgraded_unit_from_upgrade(upgrade)
 
     def get_upgrade(self, choice):
-
+        """
+        :param choice: 0 or 1
+        :return: The chosen unit upgrade in enum upgrade format. (Dictionary with enums as keys and AttributeValues as
+        values.)
+        """
         if get_setting("version") == "1.0":
             if choice == 1:
                 return Trait.attack
@@ -188,16 +182,8 @@ class Unit_class():
             for attribute, level in upgrade.items():
                 return self.has(attribute, level) and not base_units[self.unit].has(attribute, level)
 
-        possible_upgrade_choices = [upgrade for upgrade in self.upgrades if not has_upgrade(upgrade)]
-        choice = possible_upgrade_choices[choice]
-        if choice not in Unit:
-            choice2 = dict(choice)
-            for key, val in choice2.items():
-                choice2[key] = AttributeValues(level=val)
-        else:
-            choice2 = choice
-
-        return choice2
+        possible_upgrade_choices = [get_enum_upgrade(upgrade) for upgrade in self.upgrades if not has_upgrade(upgrade)]
+        return possible_upgrade_choices[choice]
 
     def get_unit_level(self):
         experience = self.get_state(State.experience)
@@ -210,7 +196,8 @@ class Unit_class():
         return experience and experience % to_upgrade == 0 and not self.has(State.recently_upgraded)
 
     def to_document(self):
-        write_attributes = [(attribute, attribute_values) for attribute, attribute_values in self.attributes.items() if not base_units[self.unit].has(attribute)]
+        write_attributes = [(attribute, attribute_values) for attribute, attribute_values in self.attributes.items() if
+                            not base_units[self.unit].has(attribute)]
 
         if write_attributes:
             unit_dict = readable(write_attributes)

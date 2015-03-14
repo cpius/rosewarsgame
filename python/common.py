@@ -1,7 +1,6 @@
 from json import JSONEncoder, dumps
 from datetime import datetime
 import collections
-import functools
 from dictdiffer import DictDiffer
 from enum import Enum
 
@@ -115,7 +114,7 @@ class Log():
         self.colors = colors
 
 
-skill_descriptions = {
+trait_descriptions = {
     "attack_cooldown": {
         1: "Can only attack every third turn.",
         2: "Can only attack every second turn"},
@@ -422,32 +421,6 @@ def document_to_string(document):
     return dumps(document, indent=4, cls=CustomJsonEncoder, sort_keys=False)
 
 
-class memoized(object):
-    """Decorator. Caches a function's return value each time it is called.
-    If called later with the same arguments, the cached value is returned
-    (not reevaluated).
-    """
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-
-    def __call__(self, *args):
-        if not isinstance(args, collections.Hashable):
-            return self.func(*args)
-        if args in self.cache:
-            return self.cache[args]
-        else:
-            value = self.func(*args)
-            self.cache[args] = value
-            return value
-
-    def __repr__(self):
-        return self.func.__doc__
-
-    def __get__(self, obj):
-        return functools.partial(self.__call__, obj)
-
-
 def readable(attributes):
     dictionary = {}
     if attributes in Unit:
@@ -476,25 +449,8 @@ def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dic
     return merged_dictionary
 
 
-def attribute_key(attribute, value):
-    if value == 1:
-        return attribute
-    elif value > 1:
-        attribute_key = attribute + "_"
-        for i in range(0, value):
-            attribute_key += "I"
-
-        return attribute_key
-
-
 def flip_units(units):
     return dict((position.flip(), unit) for position, unit in units.items())
-
-
-def merge_units(units1, units2):
-    units = units1.copy()
-    units.update(units2)
-    return units
 
 
 def get_setting(name):
@@ -512,10 +468,26 @@ def get_setting(name):
 
 
 def unit_with_attribute_at(pos, attribute, units, level=1):
-    return pos in units and units[pos].has_skill(attribute, level)
+    return pos in units and units[pos].has(attribute, level)
 
 
+def get_enum_upgrade(upgrade):
+    if type(upgrade) is str:
+        return enum_from_string[upgrade]
+    elif type(upgrade) is Unit:
+        return upgrade
+    else:
+        enum_dict = {}
+        for key, value in upgrade.items():
+            if type(key) is str:
+                key = enum_from_string[key]
+            if type(value) is str or type(value) is int:
+                value = AttributeValues(level=value)
+            enum_dict[key] = value
+        return(enum_dict)
 
 
+def get_string_upgrade(upgrade):
+    return {key.name: value.level for key, value in upgrade.items()}
 
 

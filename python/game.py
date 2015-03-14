@@ -1,4 +1,3 @@
-from datetime import datetime
 from common import *
 import os
 from outcome import Outcome
@@ -86,11 +85,7 @@ class Game:
             game.do_action(action, outcome)
 
             if options and "upgrade" in options:
-                upgrade = options["upgrade"]
-                if type(upgrade) is str:
-                    upgrade = enum_from_string[upgrade]
-                else:
-                    upgrade = {enum_from_string[key]: AttributeValues(level=value) for key, value in upgrade.items()}
+                upgrade = get_enum_upgrade(options["upgrade"])
 
                 position = action.end_at
                 if not position in game.gamestate.player_units:
@@ -164,10 +159,12 @@ class Game:
 
         view.save_screenshot(filename + ".jpeg")
 
-        savegame_document = dict()
-        savegame_document["gamestate"] = self.gamestate.to_document()
-        savegame_document["initial_gamestate"] = self.initial_gamestate.to_document()
-        savegame_document["action_count"] = self.gamestate.action_count
+        savegame_document = {
+            "gamestate": self.gamestate.to_document(),
+            "initial_gamestate": self.initial_gamestate.to_document(),
+            "action_count": action_count
+        }
+
         for action_number, action in self.actions.items():
             savegame_document[action_number] = action.to_document()
 
