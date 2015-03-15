@@ -1,4 +1,5 @@
 import ai
+from common import *
 
 
 class Player(object):
@@ -6,7 +7,7 @@ class Player(object):
         self.profile = profile
         self.color = color
         self.intelligence = intelligence
-        if intelligence not in ["Human", "Network"]:
+        if intelligence == Intelligence.AI:
             self.ai = ai.AI()
 
         if color == "Red":

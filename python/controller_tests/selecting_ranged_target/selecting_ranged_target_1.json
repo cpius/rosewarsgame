@@ -1,0 +1,17 @@
+{
+    "type": "selecting_ranged_target",
+	"position": "E6",
+	"start_at": "D4",
+	"return": true,
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C2": "Knight",
+            "D4": "Archer"
+        },
+        "player2_units": {
+            "E6": "Knight",
+            "B5": "Pikeman"
+        }
+    }
+}

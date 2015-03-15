@@ -29,14 +29,14 @@ class Game:
             player1 = Player.from_document(log_document["player1"])
             player2 = Player.from_document(log_document["player2"])
         else:
-            player1 = Player("Green", "Human")
-            player2 = Player("Red", "Human")
+            player1 = Player("Green", Intelligence.Human)
+            player2 = Player("Red", Intelligence.Human)
 
         if player_profile:
             if player1.profile == player_profile:
-                player2.intelligence = player2.ai = "Network"
+                player2.intelligence = player2.ai = Intelligence.Network
             elif player2.profile == player_profile:
-                player1.intelligence = player1.ai = "Network"
+                player1.intelligence = player1.ai = Intelligence.Network
             else:
                 print(player_profile, "is not playing this game.")
                 print("The players are:", player1.profile, "and", player2.profile)
@@ -197,13 +197,13 @@ class Game:
         }
 
     def is_player_human(self):
-        return self.current_player().intelligence == "Human"
+        return self.current_player().intelligence == Intelligence.Human
 
     def is_player_network(self):
-        return self.current_player().intelligence == "Network"
+        return self.current_player().intelligence == Intelligence.Network
 
     def is_enemy_network(self):
-        return self.opponent_player().intelligence == "Network"
+        return self.opponent_player().intelligence == Intelligence.Network
 
     def is_player_ai(self):
         return not (self.is_player_network() or self.is_player_human())

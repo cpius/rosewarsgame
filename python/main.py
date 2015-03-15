@@ -81,13 +81,13 @@ if __name__ == '__main__':
     elif Opponent(opponent_choice) == Opponent.Load:
         controller = Controller.from_replay()
     elif Opponent(opponent_choice) == Opponent.HotSeat:
-        controller = Controller.new_game("Human", "Human")
+        controller = Controller.new_game(Intelligence.Human, Intelligence.Human)
     elif Opponent(opponent_choice) == Opponent.AI:
         coinflip = random.randint(0, 1)
         if coinflip == 0:
-            controller = Controller.new_game("Human", "AI")
+            controller = Controller.new_game(Intelligence.Human, Intelligence.AI)
         else:
-            controller = Controller.new_game("AI", "Human")
+            controller = Controller.new_game(Intelligence.AI, Intelligence.Human)
 
     if controller:
         controller.run_game()
