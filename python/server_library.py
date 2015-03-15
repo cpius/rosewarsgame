@@ -1,5 +1,6 @@
 from common import *
 
+
 def validate_upgrade(action_document, gamestate):
     position, unit = gamestate.get_upgradeable_unit()
     upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
@@ -16,4 +17,4 @@ def validate_upgrade(action_document, gamestate):
         option2 = str(get_string_upgrade(upgrade_options[1]))
         message = "The upgrade must be one of " + option1 + " or " + option2
 
-        return False, message
+        return False, message, ""

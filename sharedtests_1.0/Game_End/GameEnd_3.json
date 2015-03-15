@@ -1,0 +1,18 @@
+{
+    "type": "Is the game over",
+    "result": false,
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "E8": {
+                "name": "Archer",
+                "bribed": 1
+            },
+            "D4": "Knight"
+        },
+        "player2_units": {
+            "C5": "Knight",
+            "B5": "Pikeman"
+        }
+    }
+}
