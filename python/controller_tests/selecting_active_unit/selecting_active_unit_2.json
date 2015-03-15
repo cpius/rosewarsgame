@@ -1,0 +1,20 @@
+{
+    "type": "selecting_active_unit",
+    "description": "If there is no available move with a unit, it can't be active.",
+	"position": "C2",
+	"return": false,
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C2": "Knight",
+            "C1": "Pikeman",
+            "C3": "Pikeman",
+            "B2": "Pikeman",
+            "D2": "Pikeman"
+        },
+        "player2_units": {
+            "D5": "Knight",
+            "B5": "Pikeman"
+        }
+    }
+}

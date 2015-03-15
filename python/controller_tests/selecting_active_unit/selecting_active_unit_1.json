@@ -1,0 +1,17 @@
+{
+    "type": "selecting_active_unit",
+    "description": "Opponents unit cant be active",
+	"position": "D5",
+	"return": false,
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C2": "Knight",
+            "D4": "Pikeman"
+        },
+        "player2_units": {
+            "D5": "Knight",
+            "B5": "Pikeman"
+        }
+    }
+}

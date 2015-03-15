@@ -1,0 +1,18 @@
+{
+    "type": "selecting_active_unit",
+    "description": "The active unit can be changed.",
+	"position": "C2",
+    "start_at": "D4",
+	"return": true,
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C2": "Knight",
+            "D4": "Pikeman"
+        },
+        "player2_units": {
+            "D5": "Knight",
+            "B5": "Pikeman"
+        }
+    }
+}
