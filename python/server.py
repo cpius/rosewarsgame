@@ -265,7 +265,7 @@ def calculate_ratings():
 
 @app.get("/ranking/chart")
 def ranking_chart():
-    return static_file("chart.html", "/home/ubuntu")
+    return static_file("chart.html", "/home/ubuntu/python")
 
 
 @app.post("/deploy")
