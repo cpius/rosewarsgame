@@ -54,8 +54,12 @@ class Gamestate:
     def initialize_turn(self):
         initializer.initialize_turn(self)
 
-    def get_actions(self):
-        return self.available_actions
+    def get_actions(self, positions=None):
+        if not positions:
+            return self.available_actions
+
+        return [action for action in self.available_actions if all(getattr(action, key) == value for
+                                                                   key, value in positions.items())]
 
     def get_actions_with_none(self):
         actions_with_none = copy(self.available_actions)

@@ -526,9 +526,8 @@ class Controller(object):
         if self.start_at and self.start_at == position:
             return False
 
-        potential_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
-
-        return position in self.game.gamestate.player_units and potential_actions
+        return position in self.game.gamestate.player_units and \
+            bool(self.game.gamestate.get_actions({"start_at": position}))
 
     def selecting_ability_target(self, position):
         if not self.start_at or position == self.start_at:
