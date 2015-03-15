@@ -18,7 +18,6 @@
         "player1_units": {
             "A3": {
                 "name": "Hobelar",
-                "experience": 4,
                 "recently_upgraded": 1
             }
         },
