@@ -41,17 +41,21 @@ class Viewgame:
                 location = self.interface.coordinates["base_box"].get(action.target_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
-                    draw_rectangle(self.screen, unit_dimensions, location, self.interface.attack_shading)
+                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.attack_shading, 0.2)
+
             elif action.is_ability():
                 location = self.interface.coordinates["base_box"].get(action.target_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
-                    draw_rectangle(self.screen, unit_dimensions, location, self.interface.ability_shading)
+                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.ability_shading, 0.2)
             else:
                 location = self.interface.coordinates["base_box"].get(action.end_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
-                    draw_rectangle(self.screen, unit_dimensions, location, self.interface.move_shading)
+                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.move_shading, 0.2)
 
     def draw_post_movement(self, action):
         pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.start_at), 10)
