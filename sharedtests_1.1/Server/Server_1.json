@@ -1,0 +1,32 @@
+{
+    "description": "Test that the server accepts a valid action",
+    "type": "server",
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": {
+                "name": "Flanking_Cavalry",
+                "experience": 4
+            },
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    },
+    "action": {
+        "upgrade": {
+            "flanking": 1
+        }
+    },
+    "response": {
+        "Status": true,
+        "Message": "Upgraded Flanking Cavalry on C3",
+        "Unit": {
+            "name": "Flanking_Cavalry",
+            "experience": 4,
+            "recently_upgraded": 1
+        },
+        "Daisy, Daisy Give me your answer, do": "A bicycle made for two"
+    }
+}

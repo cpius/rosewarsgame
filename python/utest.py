@@ -7,6 +7,7 @@ import action_getter
 import glob
 from collections import Counter
 from common import *
+from server_library import *
 
 
 def does_action_exist(test_document):
@@ -139,6 +140,18 @@ def upgrade(test_document):
     print("exp", expected)
     return False
 
+
+def server(test_document):
+    gamestate = Gamestate.from_document(test_document["gamestate"])
+    is_valid, validation_message, new_unit_string = validate_upgrade(test_document["action"], gamestate)
+    new_unit = json.loads(new_unit_string)
+    expected = test_document["response"]
+
+    if is_valid == expected["Status"] and validation_message == expected["Message"] and new_unit == expected["Unit"]:
+        return True
+
+    print("act", is_valid, validation_message, new_unit)
+    print("exp", expected["Status"], expected["Message"], expected["Unit"])
 
 def utest(test_document):
     return globals()[test_document["type"].lower().replace(" ", "_").replace(",", "")](test_document)
