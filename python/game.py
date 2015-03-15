@@ -197,13 +197,15 @@ class Game:
         }
 
     def is_player_human(self):
+        print("ishuman", self.current_player().intelligence, type(self.current_player().intelligence))
         return self.current_player().intelligence == Intelligence.Human
 
     def is_player_network(self):
+        print("isnetwork", self.current_player().intelligence)
         return self.current_player().intelligence == Intelligence.Network
 
     def is_enemy_network(self):
         return self.opponent_player().intelligence == Intelligence.Network
 
     def is_player_ai(self):
-        return not (self.is_player_network() or self.is_player_human())
+        return self.current_player().intelligence == Intelligence.AI
