@@ -144,6 +144,10 @@ def upgrade(test_document):
 def server(test_document):
     gamestate = Gamestate.from_document(test_document["gamestate"])
     is_valid, validation_message, new_unit_string = validate_upgrade(test_document["action"], gamestate)
+    if not is_valid:
+        print(validation_message)
+        return False
+
     new_unit = json.loads(new_unit_string)
     expected = test_document["response"]
 
