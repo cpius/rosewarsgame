@@ -1,7 +1,7 @@
 {
     "type": "selecting_melee_target",
-	"position": "D5",
-	"return": false,
+    "position": "D5",
+    "return": false,
     "gamestate": {
         "actions_remaining": 1,
         "player1_units": {
