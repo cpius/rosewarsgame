@@ -22,6 +22,7 @@ class Gamestate:
         self.action_count = 0
         self.created_at = created_at
         self.game_id = game_id
+        self.available_actions = []
         if ai_factors:
             self.ai_factors = ai_factors
         else:
