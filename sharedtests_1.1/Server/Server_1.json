@@ -17,7 +17,8 @@
     "action": {
         "upgrade": {
             "flanking": 1
-        }
+        },
+        "type": "options"
     },
     "response": {
         "Status": true,
@@ -26,7 +27,6 @@
             "name": "Flanking_Cavalry",
             "experience": 4,
             "recently_upgraded": 1
-        },
-        "Daisy, Daisy Give me your answer, do": "A bicycle made for two"
+        }
     }
 }
