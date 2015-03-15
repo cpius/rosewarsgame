@@ -249,6 +249,12 @@ ai_descriptions = {
 }
 
 
+class Intelligence(Enum):
+    Human = 1
+    AI = 2
+    Network = 3
+
+
 class Type(Enum):
     Cavalry = 1
     Infantry = 2
