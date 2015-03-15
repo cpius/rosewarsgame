@@ -372,7 +372,7 @@ class Opponent(Enum):
     Load = 4
 
 
-enum_from_string = {enum.name: enum for enum_type in [Trait, State, Effect, Ability, Unit] for enum in enum_type}
+enum_from_string = {enum.name: enum for enum_type in [Trait, State, Effect, Ability, Unit, Intelligence] for enum in enum_type}
 
 
 def get_attribute_from_document(attribute_name, number):
