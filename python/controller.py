@@ -20,9 +20,22 @@ class Controller(object):
         self.view = view
         self.game = None
         self.client = None
-        self.start_at = None
-        self.selected_unit = None
-        self.end_position = None
+        self.positions = {"start_at": None, "end_at": None}
+
+    @property
+    def selected_unit(self):
+        return self.game.gamestate.all_units()[self.start_at] if self.start_at else None
+
+    @property
+    def start_at(self):
+        return self.positions["start_at"]
+
+    @property
+    def has_start_at(self):
+        return not self.start_at is None
+
+    def set_start_at(self, start_at):
+        self.positions["start_at"] = start_at
 
     CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
 
@@ -147,8 +160,7 @@ class Controller(object):
             self.view.draw_game(self.game)
 
     def select_unit(self, position):
-        self.start_at = position
-        self.selected_unit = self.game.gamestate.player_units[self.start_at]
+        self.set_start_at(position)
         illustrate_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
         self.view.draw_game(self.game, position, illustrate_actions, True)
 
@@ -257,7 +269,7 @@ class Controller(object):
             self.show_unit(start_at)
 
     def clear_move(self):
-        self.start_at = self.end_position = self.selected_unit = None
+        self.positions = {"start_at": None, "end_at": None}
         self.view.draw_game(self.game, None, (), True)
 
     def run_game(self):
