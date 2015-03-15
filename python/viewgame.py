@@ -1,5 +1,6 @@
 from viewcommon import *
 from coordinates import Coordinates
+from rounded_rect import AAfilledRoundedRect
 
 
 class Viewgame:
@@ -40,17 +41,21 @@ class Viewgame:
                 location = self.interface.coordinates["base_box"].get(action.target_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
-                    draw_rectangle(self.screen, unit_dimensions, location, self.interface.attack_shading)
+                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.attack_shading, 0.2)
+
             elif action.is_ability():
                 location = self.interface.coordinates["base_box"].get(action.target_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
-                    draw_rectangle(self.screen, unit_dimensions, location, self.interface.ability_shading)
+                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.ability_shading, 0.2)
             else:
                 location = self.interface.coordinates["base_box"].get(action.end_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
-                    draw_rectangle(self.screen, unit_dimensions, location, self.interface.move_shading)
+                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.move_shading, 0.2)
 
     def draw_post_movement(self, action):
         pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.start_at), 10)
@@ -157,6 +162,9 @@ class Viewgame:
 
         base_coordinates = Coordinates(self.interface.base_coordinates, self.interface)
         base = base_coordinates.get(position)
+
+        self.draw_unit_box(self.screen, self.interface, base, color)
+
         self.screen.blit(pic, base)
 
         if selected:
@@ -174,8 +182,27 @@ class Viewgame:
             counters = self.get_yellow_counters(unit)
             self.draw_counters(counters, Color.Yellow, position, counter_coordinates, font_coordinates)
 
-        draw_unit_box(self.screen, self.interface, base, color)
         self.draw_symbols(unit, position)
+
+    def draw_unit_box(self, screen, interface, base, color, resize=1):
+        height = interface.unit_height * resize
+        width = interface.unit_width * resize
+
+        if color == "Red":
+            border_color = interface.red_player_color
+        else:
+            border_color = interface.green_player_color
+
+        thickness = int(5 * settings.zoom * resize)
+
+        rectangle_style = [base[0], base[1], width, height]
+        rectangle_style[0] -= thickness
+        rectangle_style[1] -= thickness
+        rectangle_style[2] += 2 * thickness
+        rectangle_style[3] += 2 * thickness
+
+        AAfilledRoundedRect(screen, rectangle_style, border_color, 0.2)
+
 
     def get_counter_coordinates(self, counters_drawn):
         return {

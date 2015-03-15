@@ -35,7 +35,7 @@ class Interface(object):
                       "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
                       "medium": pygame.font.SysFont(font_name, int(16 * zoom), bold=True),
                       "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
-                      "larger": pygame.font.SysFont(font_name, int(25 * zoom), bold=True),
+                      "larger": pygame.font.SysFont(font_name, int(25 * zoom), bold=False),
                       "experience": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)
                       }
@@ -130,7 +130,7 @@ class Rectangles(Interface):
         self.upgrade_1_area = [Point(410 * zoom, 370 * zoom), Point((410 + 118) * zoom, (370 + 165.5) * zoom)]
         self.upgrade_2_area = [Point(600 * zoom, 370 * zoom), Point((600 + 118) * zoom, (370 + 165.5) * zoom)]
 
-        self.help_area = [Point(715 * zoom, 720 * zoom), Point(780 * zoom, 740 * zoom)]
+        self.help_area = [Point(735 * zoom, 715 * zoom), Point(780 * zoom, 740 * zoom)]
 
         self.to_help_menu_area = [Point(395 * zoom, 720 * zoom), Point(490 * zoom, 740 * zoom)]
 

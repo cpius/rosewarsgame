@@ -1,6 +1,7 @@
 from __future__ import division
 from viewcommon import *
 from common import *
+from rounded_rect import AAfilledRoundedRect
 
 
 class Viewlog:
@@ -10,24 +11,24 @@ class Viewlog:
         self.interface = interface
         self.screen = screen
         self.maximum_logs = 5
-        self.base_height = 48
+        self.base_height = 49
 
         unit_height = int((self.base_height - 14) * self.zoom)
         unit_width = int((self.interface.unit_width * unit_height / self.interface.unit_height))
         self.unit_dimensions = (unit_width, unit_height)
 
-        self.box_dimensions = 40 * self.zoom, (self.base_height - 2) * self.zoom
-        self.line_thickness = int(3 * self.zoom)
+        self.box_dimensions = 40 * self.zoom, (self.base_height - 0) * self.zoom
+        self.line_thickness = int(1 * self.zoom)
 
         self.locations = {}
         for i in range(self.maximum_logs):
             base = Location(391, i * self.base_height, self.zoom)
-            self.locations[i] = {"unit1": base.adjust(65, 5),
-                                 "unit2": base.adjust(165, 5),
-                                 "symbol": base.adjust(118, 8),
-                                 "outcome": base.adjust(230, 5),
+            self.locations[i] = {"unit1": base.adjust(65, 6),
+                                 "unit2": base.adjust(165, 6),
+                                 "symbol": base.adjust(113, 8),
+                                 "outcome": base.adjust(230, 9),
                                  "box": base.adjust(0, 0),
-                                 "box_text": base.adjust(7, 0),
+                                 "box_text": base.adjust(10, 3),
                                  "line": base.adjust(0, self.base_height - self.line_thickness / 2)}
 
     def draw_logbook(self, logbook):
@@ -61,7 +62,7 @@ class Viewlog:
 
             self.draw_symbol(symbol, locations["symbol"])
 
-        write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"])
+        write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"], Color.Medium_grey)
 
     def draw_unit(self, unit, location, color):
         unit_pic = get_unit_pic(self.interface, unit)
@@ -81,19 +82,20 @@ class Viewlog:
 
         line_start = locations["line"]
         line_end = line_start.adjust(600, 0)
-        pygame.draw.line(self.screen, Color.Black, line_start.tuple, line_end.tuple, self.line_thickness)
+        pygame.draw.line(self.screen, Color.Medium_grey, line_start.tuple, line_end.tuple, self.line_thickness)
 
     def draw_unit_box(self, base, color):
-
         border_color = self.interface.green_player_color if color == "Green" else self.interface.red_player_color
         thickness = int(3 * self.zoom)
 
-        rectangle = pygame.Rect(base.tuple, self.unit_dimensions)
-        pygame.draw.rect(self.screen, Color.Black, rectangle, 1)
-        for i in range(1, thickness):
-            pygame.draw.rect(self.screen, border_color, rectangle.inflate(2*i, 2*i), 1)
-        pygame.draw.rect(self.screen, Color.Black, rectangle.inflate(2*thickness, 2*thickness), 1)
+        rectangle_style = [base.tuple[0], base.tuple[1], self.unit_dimensions[0], self.unit_dimensions[1]]
+        rectangle_style[0] -= thickness
+        rectangle_style[1] -= thickness
+        rectangle_style[2] += 2 * thickness
+        rectangle_style[3] += 2 * thickness
+
+        AAfilledRoundedRect(self.screen, tuple(rectangle_style), border_color, 0.2)
 
     def draw_outcome(self, outcome_string, location):
-        write(self.screen, outcome_string, location.tuple, self.interface.fonts["larger"])
+        write(self.screen, outcome_string, location.tuple, self.interface.fonts["larger"], Color.Dark_grey)
 
