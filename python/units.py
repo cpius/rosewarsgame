@@ -50,6 +50,10 @@ class Unit_class():
     def name(self):
         return self.unit.name
 
+    @property
+    def pretty_name(self):
+        return self.unit.name.replace("_", " ")
+
     def get_effects(self):
         return [attribute for attribute in self.attributes if attribute in Effect]
 

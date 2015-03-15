@@ -281,13 +281,9 @@ def deploy():
 
 
 def register_upgrade(action_document, gamestate, game_id):
-    position, unit = gamestate.get_upgradeable_unit()
-    upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
-    upgrade = get_enum_upgrade(action_document["upgrade"])
+    is_valid, validation_message, new_unit = validate_upgrade(action_document, gamestate)
 
-    if upgrade in upgrade_options:
-        new_unit = unit.get_upgraded_unit_from_upgrade(upgrade)
-
+    if is_valid:
         action_collection = get_collection("actions")
     
         existing_options = action_collection.find_one(
@@ -301,17 +297,15 @@ def register_upgrade(action_document, gamestate, game_id):
 
         return {
             "Status": "OK",
-            "Message": "Upgraded " + str(unit) + " on " + str(position),
-            "New unit": document_to_string(new_unit.to_document())}
+            "Message": validation_message,
+            "New unit": new_unit
+        }
 
     else:
-        message = "The upgrade must be one of "
-        for choice in range(0, 2):
-            message += str(readable(upgrade_options[choice]))
-            if choice == 0:
-                message += " and "
-
-        return {"Status": "Error", "Message": message}
+        return {
+            "Status": "Error",
+            "Message": validation_message
+        }
 
 
 @app.get("/games/remove/<game_id>")
