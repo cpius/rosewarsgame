@@ -176,9 +176,9 @@ class Unit_class():
         """
         if get_setting("version") == "1.0":
             if choice == 1:
-                return Trait.attack
+                return {Trait.attack_skill: AttributeValues(level=1)}
             else:
-                return Trait.defence
+                return {Trait.defence_skill: AttributeValues(level=1)}
 
         def has_upgrade(upgrade):
             if upgrade in Unit:
