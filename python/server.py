@@ -16,6 +16,7 @@ import pylibmc
 import traceback
 from subprocess import call
 from bson import ObjectId
+from server_library import *
 
 cache = pylibmc.Client(['127.0.0.1:11211'])
 
@@ -264,7 +265,7 @@ def calculate_ratings():
 
 @app.get("/ranking/chart")
 def ranking_chart():
-    return static_file("chart.html", "/home/ubuntu")
+    return static_file("chart.html", "/home/ubuntu/python")
 
 
 @app.post("/deploy")
