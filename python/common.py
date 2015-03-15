@@ -97,6 +97,15 @@ class AttributeValues():
             string += "Duration: " + str(self.duration) + " "
         return string
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        return self.value == other.value and self.level == other.level and self.duration == other.duration
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 
 class ActionType(Enum):
     Attack = 1
