@@ -397,25 +397,6 @@ def validate_input(log_document, gamestate, action_document):
         return {"Status": "Error", "Message": message}
 
 
-def validate_action(gamestate, action_document):
-
-    gamestate.set_available_actions()
-    available_actions = gamestate.get_actions_with_none()
-
-    if Position.from_string(action_document["start_at"]) not in gamestate.player_units:
-        return invalid_action(available_actions, request.json)
-
-    action = Action.from_document(gamestate.all_units(), action_document)
-
-    if not action:
-        return invalid_action(available_actions, request.json)
-
-    if not action in available_actions:
-        return invalid_action(available_actions, str(action))
-
-    return action
-
-
 def get_expected_action(log_document, gamestate):
     action_number = log_document["action_count"]
     if action_number == 0:
