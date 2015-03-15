@@ -503,6 +503,9 @@ def get_enum_upgrade(upgrade):
 
 
 def get_string_upgrade(upgrade):
-    return {key.name: value.level for key, value in upgrade.items()}
+    if upgrade in Unit:
+        return upgrade.name
+    else:
+        return {key.name: value.level for key, value in upgrade.items()}
 
 
