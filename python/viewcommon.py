@@ -101,46 +101,6 @@ def draw_rectangle(screen, dimensions, location, color):
     screen.blit(rectangle, location)
 
 
-def draw_unit_box(screen, interface, base, color, resize=1):
-
-    def scale_rectangle(corners, pixels):
-
-        corner1 = (corners[0][0] - pixels, corners[0][1] - pixels)
-        corner2 = (corners[1][0] + pixels, corners[1][1] - pixels)
-        corner3 = (corners[2][0] + pixels, corners[2][1] + pixels)
-        corner4 = (corners[3][0] - pixels, corners[3][1] + pixels)
-
-        return [corner1, corner2, corner3, corner4]
-
-    height = interface.unit_height * resize
-    width = interface.unit_width * resize
-
-    if color == "Red":
-        border_color = interface.red_player_color
-    else:
-        border_color = interface.green_player_color
-
-    corner1 = (base[0], base[1])
-    corner2 = (base[0] + width, base[1])
-    corner3 = (base[0] + width, base[1] + height)
-    corner4 = (base[0], base[1] + height)
-
-    base_corners = [corner1, corner2, corner3, corner4]
-
-    inner_corners = scale_rectangle(base_corners, -1)
-
-    pygame.draw.lines(screen, Color.Black, True, inner_corners)
-
-    thickness = int(5 * settings.zoom * resize)
-
-    for i in range(thickness):
-        middle_corners = scale_rectangle(base_corners, i)
-        pygame.draw.lines(screen, border_color, True, middle_corners)
-
-    outer_corners = scale_rectangle(base_corners, thickness)
-    pygame.draw.lines(screen, Color.Black, True, outer_corners)
-
-
 def get_position_from_mouseclick(interface, coordinates):
     x = int((coordinates[0] - interface.x_border) /
            (interface.unit_width + interface.unit_padding_width)) + 1

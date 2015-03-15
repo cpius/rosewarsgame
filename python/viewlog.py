@@ -1,6 +1,7 @@
 from __future__ import division
 from viewcommon import *
 from common import *
+from rounded_rect import AAfilledRoundedRect
 
 
 class Viewlog:
@@ -84,15 +85,16 @@ class Viewlog:
         pygame.draw.line(self.screen, Color.Black, line_start.tuple, line_end.tuple, self.line_thickness)
 
     def draw_unit_box(self, base, color):
-
         border_color = self.interface.green_player_color if color == "Green" else self.interface.red_player_color
         thickness = int(3 * self.zoom)
 
-        rectangle = pygame.Rect(base.tuple, self.unit_dimensions)
-        pygame.draw.rect(self.screen, Color.Black, rectangle, 1)
-        for i in range(1, thickness):
-            pygame.draw.rect(self.screen, border_color, rectangle.inflate(2*i, 2*i), 1)
-        pygame.draw.rect(self.screen, Color.Black, rectangle.inflate(2*thickness, 2*thickness), 1)
+        rectangle_style = [base.tuple[0], base.tuple[1], self.unit_dimensions[0], self.unit_dimensions[1]]
+        rectangle_style[0] -= thickness
+        rectangle_style[1] -= thickness
+        rectangle_style[2] += 2 * thickness
+        rectangle_style[3] += 2 * thickness
+
+        AAfilledRoundedRect(self.screen, tuple(rectangle_style), border_color, 0.2)
 
     def draw_outcome(self, outcome_string, location):
         write(self.screen, outcome_string, location.tuple, self.interface.fonts["larger"])
