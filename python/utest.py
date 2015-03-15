@@ -186,7 +186,8 @@ def run():
     for key, value in results.items():
         print(key + ": " + str(value[True]) + " passed, " + str(value[False]) + " failed")
         total += value
-    print("total: ", total)
+    print()
+    print("Total:", str(total[True]) + " passed, " + str(value[False]) + " failed")
 
 
 except_exceptions = False
