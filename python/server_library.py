@@ -1,4 +1,6 @@
 from common import *
+from action import Action
+from outcome import Outcome
 
 
 def validate_upgrade(action_document, gamestate):
@@ -18,3 +20,40 @@ def validate_upgrade(action_document, gamestate):
         message = "The upgrade must be one of " + option1 + " or " + option2
 
         return False, message, ""
+
+
+def validate_action(gamestate, action_document):
+
+    gamestate.set_available_actions()
+    available_actions = gamestate.get_actions_with_none()
+
+    if Position.from_string(action_document["start_at"]) not in gamestate.player_units:
+        return invalid_action(available_actions, request.json)
+
+    action = Action.from_document(gamestate.all_units(), action_document)
+
+    if not action:
+        return invalid_action(available_actions, request.json)
+
+    if not action in available_actions:
+        return invalid_action(available_actions, str(action))
+
+    return action
+
+
+def invalid_action(available_actions, requested_action):
+    return {
+        "Status": "Error",
+        "Message": "Invalid action",
+        "Action": requested_action,
+        "Available actions": ", ".join(str(action) for action in available_actions)
+    }
+
+
+def determine_outcome_if_any(action, gamestate):
+    outcome = None
+
+    if action.has_outcome():
+        outcome = Outcome.determine_outcome(action, gamestate)
+
+    return outcome

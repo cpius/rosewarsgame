@@ -143,19 +143,43 @@ def upgrade(test_document):
 
 def server(test_document):
     gamestate = Gamestate.from_document(test_document["gamestate"])
-    is_valid, validation_message, new_unit_string = validate_upgrade(test_document["action"], gamestate)
-    if not is_valid:
-        print(validation_message)
+    if "upgrade" in test_document["action"]:
+        is_valid, validation_message, new_unit_string = validate_upgrade(test_document["action"], gamestate)
+
+        new_unit = json.loads(new_unit_string)
+        expected = test_document["response"]
+
+        if is_valid == expected["Status"] and validation_message == expected["Message"] and new_unit == expected["Unit"]:
+            return True
+
+        print("act", is_valid, validation_message, new_unit)
+        print("exp", expected["Status"], expected["Message"], expected["Unit"])
+
+        return False
+    elif test_document["action"]["type"] == "action":
+        result = validate_action(gamestate, test_document["action"])
+        if isinstance(result, Action):
+            outcome = determine_outcome_if_any(result, gamestate)
+
+            if outcome and not test_document["response"]["Action outcome"]:
+                print("Did not expect an outcome")
+
+                return False
+            if not outcome and test_document["response"]["Action outcome"]:
+                print("Expected an outcome")
+
+                return False
+
+            return True
+        else:
+            print("Not implemented")
+
+            return False
+    else:
+        print("Not implemented")
+
         return False
 
-    new_unit = json.loads(new_unit_string)
-    expected = test_document["response"]
-
-    if is_valid == expected["Status"] and validation_message == expected["Message"] and new_unit == expected["Unit"]:
-        return True
-
-    print("act", is_valid, validation_message, new_unit)
-    print("exp", expected["Status"], expected["Message"], expected["Unit"])
 
 def utest(test_document):
     return globals()[test_document["type"].lower().replace(" ", "_").replace(",", "")](test_document)

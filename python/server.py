@@ -330,7 +330,6 @@ def register_move_with_attack(action_document, game_id, gamestate):
 
 
 def register_move_attack_ability(action_document, game_id, gamestate, action):
-    # gamestate_before = gamestate.copy()
     outcome = None
 
     if action.has_outcome():
@@ -396,25 +395,6 @@ def validate_input(log_document, gamestate, action_document):
     if action_type != expected_type or expected_number != int(action_document["number"]):
         message = "The next action must have type " + expected_type + " and have number " + str(expected_number)
         return {"Status": "Error", "Message": message}
-
-
-def validate_action(gamestate, action_document):
-
-    gamestate.set_available_actions()
-    available_actions = gamestate.get_actions_with_none()
-
-    if Position.from_string(action_document["start_at"]) not in gamestate.player_units:
-        return invalid_action(available_actions, request.json)
-
-    action = Action.from_document(gamestate.all_units(), action_document)
-
-    if not action:
-        return invalid_action(available_actions, request.json)
-
-    if not action in available_actions:
-        return invalid_action(available_actions, str(action))
-
-    return action
 
 
 def get_expected_action(log_document, gamestate):

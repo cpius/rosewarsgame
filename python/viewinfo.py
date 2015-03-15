@@ -74,7 +74,7 @@ class Viewinfo:
             value = unit.get_state(state)
             if value and state not in [State.used, State.recently_upgraded, State.experience, State.lost_extra_life,
                                        State.javelin_thrown]:
-                lines.append(State.name[state] + ": " + str(value))
+                lines.append(state.name + ": " + str(value))
 
         for effect in unit.get_effects():
             level = unit.get_level(effect)
