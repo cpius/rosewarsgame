@@ -63,7 +63,7 @@ class Viewgame:
         pic = get_image(self.interface.move_icon)
         self.screen.blit(pic, self.interface.coordinates["battle"].get(action.target_at))
 
-    def draw_action(self, action, outcome, flip=False):
+    def draw_action(self, action, flip=False):
         if flip:
             aligned_action = self.flip_action(action)
         else:

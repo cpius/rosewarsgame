@@ -32,7 +32,7 @@ class Controller(object):
 
     @property
     def has_start_at(self):
-        return not self.start_at is None
+        return self.start_at is not None
 
     def set_start_at(self, start_at):
         self.positions["start_at"] = start_at
@@ -45,18 +45,12 @@ class Controller(object):
             os.makedirs("./replay")
 
         controller = Controller(View())
-
         players = [Player("Green", green_intelligence), Player("Red", red_intelligence)]
-
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
-
         controller.game = Game(players, gamestate)
-
         controller.game.gamestate.initialize_turn()
-
         controller.game.gamestate.actions_remaining = 1
-
         controller.clear_move()
 
         return controller
@@ -70,12 +64,11 @@ class Controller(object):
         controller = cls(View())
         controller.game = Game.from_log_document(game_document, player, True)
         controller.client = client
-
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence, player.profile)
         controller.clear_move()
-
         controller.view.play_sound("your_turn")
+
         return controller
 
     @classmethod
@@ -127,128 +120,278 @@ class Controller(object):
             self.perform_action(action)
         else:
             self.game.shift_turn()
-            self.view.draw_game(self.game)
+            self.draw_game()
 
         if self.game.gamestate.is_extra_action():
             extra_action = self.game.current_player().ai.select_action(self.game)
             self.perform_action(extra_action)
 
-    def perform_extra_action(self, position):
-        if position in self.game.gamestate.enemy_units:
-            self.perform_melee_attack(position)
-        elif position == self.start_at or position not in self.game.gamestate.player_units:
-            self.perform_move(position)
+    def run_game(self):
 
-    def perform_ability(self, position):
-        if len(self.selected_unit.get_abilities()) > 1:
-            index = self.get_input_abilities(self.selected_unit)
+        self.game.gamestate.set_available_actions()
 
-            if index == "escape":
-                self.clear_move()
-                return
+        self.draw_game(redraw_log=True)
 
-            ability = self.selected_unit.get_abilities()[index]
+        if self.game.is_player_network():
+            self.trigger_network_player()
 
-        else:
-            ability = list(self.selected_unit.get_abilities())[0]
-        action = Action(self.game.gamestate.all_units(), self.start_at, end_at=self.start_at, target_at=position,
-                        ability=ability)
-        if action in self.game.gamestate.get_actions():
-            self.perform_action(action)
-        else:
-            self.clear_move()
-            self.view.draw_game(self.game)
-
-    def select_unit(self, position):
-        self.set_start_at(position)
-        illustrate_actions = [action for action in self.game.gamestate.get_actions() if action.start_at == position]
-        self.view.draw_game(self.game, position, illustrate_actions, True)
-
-    def perform_ranged_attack(self, position):
-        action = Action(self.game.gamestate.all_units(), self.start_at, end_at=self.start_at, target_at=position)
-        if action in self.game.gamestate.get_actions():
-            self.perform_action(action)
-
-    def perform_melee_attack(self, position):
-        all_actions = self.game.gamestate.get_actions()
-
-        matching_actions = [action for action in all_actions if self.is_same_start_and_target(action, position)]
-
-        if not matching_actions:
-            return
-
-        if len(matching_actions) == 1:
-            self.perform_action(matching_actions[0])
-            return
-
-        self.view.draw_game(self.game)
-
-        if len(set([action.end_at for action in matching_actions])) > 1:
-            matching_actions = self.pick_actions_end_position(matching_actions)
-
-        if any(action.move_with_attack for action in matching_actions):
-            # Human actions always start out with unknown move_with_attack (they are asked later)
-            matching_actions[0].move_with_attack = None
-
-        self.perform_action(matching_actions[0])
-
-    def perform_move(self, position):
-        action = Action(self.game.gamestate.all_units(), start_at=self.start_at, end_at=position)
-        if action in self.game.gamestate.get_actions():
-            self.perform_action(action)
-        elif not self.selecting_extra_action():
-            self.clear_move()
-            self.view.draw_game(self.game)
-
-    def left_click(self, position):
-        if self.selecting_extra_action():
-            self.perform_extra_action(position)
-
-        elif self.selecting_ability_target(position):
-            self.perform_ability(position)
-
-        elif self.selecting_active_unit(position):
-            self.select_unit(position)
-
-        elif self.selecting_ranged_target(position):
-            self.perform_ranged_attack(position)
-
-        elif self.selecting_melee_target(position):
-            self.perform_melee_attack(position)
-
-        elif self.selecting_move(position):
-            self.perform_move(position)
-
-        elif self.start_at and self.start_at == position:
-            self.clear_move()
-
-    def is_same_start_and_target(self, action, position):
-        same_start = action.start_at == self.start_at
-        same_target = action.target_at and action.target_at == position
-        return same_start and same_target
-
-    def pick_actions_end_position(self, actions):
-
-        end_positions = [action.end_at for action in actions]
-
-        self.view.shade_positions(end_positions)
+        if self.game.is_player_ai():
+            self.trigger_artificial_intelligence()
 
         while True:
             event = pygame.event.wait()
 
+            if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
+                self.trigger_network_player()
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 position = self.view.get_position_from_mouse_click(event.pos)
+                if not self.game.is_player_human():
+                    position = position.flip()
 
                 if event.button == 1:
-                    matching_actions = [action for action in actions if action.end_at == position]
-                    if matching_actions:
-                        return matching_actions
+                    self.view.hide_unit_zoomed(self.game)
+                    if self.game.is_player_human():
+                        self.left_click(position)
+                elif event.button == 3:
+                    self.right_click(position)
 
-            elif self.escape(event):
+            if event.type == KEYDOWN and event.key == K_ESCAPE and self.game.is_player_human():
                 self.clear_move()
+
+            elif event.type == KEYDOWN and event.key == K_g:
+                print(self.game.gamestate)
+
+            elif event.type == KEYDOWN and event.key == K_a:
+                print(self.game.gamestate.available_actions)
 
             elif self.quit_game_requested(event):
                 self.exit_game()
+
+            self.view.refresh()
+
+    def left_click(self, position):
+
+        # Clear greyed out tiles
+        self.draw_game()
+
+        # If the Unit is clicked again, deselect the unit.
+        if self.start_at == position:
+            self.clear_move()
+            return
+
+        # If start_at is not set, and a suitable start_at is chosen, set start_at.
+        if not self.start_at and position in self.game.gamestate.player_units:
+            possible_actions = self.game.gamestate.get_actions({"start_at": position})
+            if possible_actions:
+                self.set_start_at(position)
+                self.view.draw_game(self.game, position, possible_actions, True)
+                return
+
+        # Determine possible actions
+        if position in self.game.gamestate.all_units():
+            possible_actions = self.game.gamestate.get_actions_with_move_with_attack_as_none({"start_at": self.start_at,
+                                                                                              "target_at": position})
+        else:
+            possible_actions = self.game.gamestate.get_actions({"start_at": self.start_at, "end_at": position,
+                                                                "target_at": None})
+
+        # If there are no possible actions, deselect the unit.
+        if not possible_actions:
+            self.clear_move()
+            return
+
+        # If there is exactly one action, perform that action.
+        if len(possible_actions) == 1:
+            self.perform_action(possible_actions[0])
+
+        # If more than one action is possible, get user feedback to specify which action should be performed.
+        else:
+            # If the unit is melee, the user may need to specify an end_at.
+            unit = self.selected_unit
+            if unit.is_melee():
+                end_at = self.pick_end_at(possible_actions)
+                if end_at:
+                    action, = (action for action in possible_actions if action.end_at == end_at)
+                    self.perform_action(action)
+
+            # If the unit is a specialist, the user may need to specify an ability.
+            if unit.type is Type.Specialist:
+                ability = self.pick_ability(unit)
+                if ability:
+                    action, = (action for action in possible_actions if action.ability == ability)
+                    self.perform_action(action)
+
+        # If a unit is selected, and the left click does not select an action, deselect the selected unit.
+        self.clear_move()
+
+    def get_choice(self, keyevents, mouseevents):
+        while True:
+            event = pygame.event.wait()
+
+            if event.type == KEYDOWN:
+                if event.key in keyevents:
+                    return keyevents[event.key]
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                for mouse_click_position, result in mouseevents:
+                    if within(event.pos, mouse_click_position):
+                        return result
+
+            elif self.quit_game_requested(event):
+                self.exit_game()
+
+    def get_choice_position(self, mouseevents):
+        while True:
+            event = pygame.event.wait()
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                position = self.view.get_position_from_mouse_click(event.pos)
+                if position in mouseevents:
+                    return mouseevents[position]
+
+            elif self.quit_game_requested(event):
+                self.exit_game()
+
+    def pick_end_at(self, actions):
+        end_ats = [action.end_at for action in actions]
+        self.view.shade_positions(end_ats)
+        return self.get_choice_position({position: position for position in end_ats})
+
+    def pick_upgrade(self, unit):
+        self.view.draw_upgrade_options(unit)
+        choice = self.get_choice({K_1: 0, K_2: 1},
+                                 [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]])
+        return unit.get_upgrade(choice)
+
+    def pick_ability(self, unit):
+        self.view.draw_ask_about_ability(unit)
+        choice = self.get_choice({K_1: 0, K_2: 1}, [])
+        return unit.get_abilities()[choice]
+
+    def ask_about_move_with_attack(self, action):
+        self.view.draw_ask_about_move_with_attack(action.target_at)
+        return self.get_choice_position({action.target_at: True, action.end_at: False})
+
+    def clear_move(self):
+        self.positions = {"start_at": None, "end_at": None}
+        self.draw_game(redraw_log=True)
+
+    def upgrade_should_be_performed(self, action):
+        return action.unit.should_be_upgraded() and not self.game.is_player_network() and not action.unit.has(State.extra_action)
+
+    def perform_upgrade(self, action, upgrade):
+
+        if upgrade is None:
+            if self.game.is_player_human():
+                upgrade = self.pick_upgrade(action.unit)
+            else:
+                choice = self.game.current_player().ai.select_upgrade(self.game)
+                upgrade = action.unit.get_upgrade(choice)
+
+        position = action.end_at if action.end_at in self.game.gamestate.player_units else action.target_at
+        self.game.gamestate.player_units[position] = action.unit.get_upgraded_unit_from_upgrade(upgrade)
+
+        string_upgrade = get_string_upgrade(upgrade)
+        self.game.save_option("upgrade", string_upgrade)
+
+        if self.game.is_enemy_network():
+            self.client.send_upgrade_choice(string_upgrade, self.game.gamestate.action_count)
+
+    def select_move_with_attack(self, action, outcome):
+        move_with_attack = self.ask_about_move_with_attack(action)
+
+        self.game.save_option("move_with_attack", move_with_attack)
+        if self.game.is_enemy_network():
+            self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
+
+        if move_with_attack:
+            self.view.draw_post_movement(action)
+            self.game.gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
+
+        self.game.gamestate.set_available_actions()
+
+    def move_with_attack_should_be_selected(self, action, outcome):
+        return action.move_with_attack is None and self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
+
+    def determine_outcome(self, action):
+        if self.game.is_enemy_network():
+            return self.client.send_action(action.to_network(self.game.gamestate.action_count))
+        else:
+            return Outcome.determine_outcome(action, self.game.gamestate)
+
+    def perform_action(self, action, outcome=None, upgrade=None):
+        self.draw_game()
+
+        if not outcome:
+            outcome = self.determine_outcome(action)
+
+        self.view.draw_action(action, self.game)
+        self.game.do_action(action, outcome)
+        self.draw_game()
+
+        pygame.time.delay(settings.pause_for_animation_attack if action.is_attack() else settings.pause_for_animation)
+
+        if self.move_with_attack_should_be_selected(action, outcome):
+            self.select_move_with_attack(action, outcome)
+
+        if self.game.gamestate.is_ended():
+            self.game_end()
+            return
+
+        if self.upgrade_should_be_performed(action):
+            self.perform_upgrade(action, upgrade)
+
+        self.game.save(self.view, action, outcome)
+
+        if self.game.is_turn_done():
+            self.game.shift_turn()
+
+        self.draw_game(redraw_log=True)
+
+        self.clear_move()
+
+        print("Action performed. Expecting action from", self.game.current_player().intelligence)
+
+        if self.game.is_player_human():
+            return
+        elif self.game.is_player_network():
+            print("Waiting for network action from network with number", self.game.gamestate.action_count + 1)
+            self.trigger_network_player()
+        else:
+            self.trigger_artificial_intelligence()
+
+    def draw_game(self, redraw_log=False):
+        self.view.draw_game(self.game, redraw_log=redraw_log)
+
+    def pause(self):
+        while True:
+            event = pygame.event.wait()
+
+            if self.quit_game_requested(event):
+                self.exit_game()
+            elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                return
+
+    def quit_game_requested(self, event):
+        return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
+
+    @staticmethod
+    def command_q_down(key):
+        return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
+
+    @staticmethod
+    def escape(event):
+        return event.type == KEYDOWN and event.key == K_ESCAPE
+
+    @staticmethod
+    def exit_game():
+        sys.exit()
+
+    def game_end(self):
+        self.view.draw_game_end(self.game.current_player().color, self.game)
+        self.pause()
+        self.exit_game()
 
     def right_click(self, position):
         start_at = position
@@ -268,282 +411,10 @@ class Controller(object):
         else:
             self.show_unit(start_at)
 
-    def clear_move(self):
-        self.positions = {"start_at": None, "end_at": None}
-        self.view.draw_game(self.game, None, (), True)
-
-    def run_game(self):
-
-        self.game.gamestate.set_available_actions()
-
-        self.view.draw_game(self.game, None, (), True)
-
-        if self.game.is_player_network():
-            self.trigger_network_player()
-
-        if self.game.is_player_ai():
-            self.trigger_artificial_intelligence()
-
-        while True:
-            event = pygame.event.wait()
-
-            if event.type == self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID:
-                self.trigger_network_player()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if within(event.pos, self.view.interface.help_area):
-                    exit = self.open_rulebook()
-                    if exit:
-                        self.exit_game()
-                    self.view.draw_game(self.game, None, (), True)
-                position = self.view.get_position_from_mouse_click(event.pos)
-                if not self.game.is_player_human():
-                    position = position.flip()
-
-                if event.button == 1:
-                    self.view.hide_unit_zoomed(self.game)
-                    if self.game.is_player_human():
-                        self.left_click(position)
-                elif event.button == 3:
-                    self.right_click(position)
-
-            if event.type == KEYDOWN and event.key == K_ESCAPE and self.game.is_player_human():
-                self.clear_move()
-                self.view.draw_game(self.game)
-
-            elif event.type == KEYDOWN and event.key == K_g:
-                print(self.game.gamestate)
-
-            elif event.type == KEYDOWN and event.key == K_a:
-                print(self.game.gamestate.available_actions)
-
-            elif self.quit_game_requested(event):
-                self.exit_game()
-
-            self.view.refresh()
-
-    @staticmethod
-    def exit_game():
-        sys.exit()
-
-    def get_input_upgrade(self, unit):
-        self.view.draw_upgrade_options(unit)
-
-        while True:
-            event = pygame.event.wait()
-
-            if event.type == KEYDOWN and event.key == K_1:
-                return 0
-
-            if event.type == KEYDOWN and event.key == K_2:
-                return 1
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if within(event.pos, self.view.interface.upgrade_1_area):
-                        return 0
-                    elif within(event.pos, self.view.interface.upgrade_2_area):
-                        return 1
-
-            elif self.quit_game_requested(event):
-                self.exit_game()
-
-    def get_input_abilities(self, unit):
-        self.view.draw_ask_about_ability(unit)
-
-        while True:
-            event = pygame.event.wait()
-
-            if event.type == KEYDOWN and event.key == K_1:
-                return 0
-
-            elif event.type == KEYDOWN and event.key == K_2:
-                return 1
-
-            elif self.escape(event):
-                self.clear_move()
-                return "escape"
-
-            elif self.quit_game_requested(event):
-                self.exit_game()
-
-    def ask_about_move_with_attack(self, action):
-
-        self.view.draw_ask_about_move_with_attack(action.target_at)
-
-        while True:
-            event = pygame.event.wait()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                position = self.view.get_position_from_mouse_click(event.pos)
-
-                if event.button == 1:
-                    if position == action.target_at:
-                        return True
-                    if position == action.end_at:
-                        return False
-
-            elif self.quit_game_requested(event):
-                self.exit_game()
-
-    def pause(self):
-        while True:
-            event = pygame.event.wait()
-
-            if self.quit_game_requested(event):
-                self.exit_game()
-
-            elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                return
-
-    def perform_action(self, action, outcome=None, upgrade=None):
-        self.view.draw_game(self.game)
-
-        if self.game.is_player_human():
-
-            if self.game.is_enemy_network():
-                outcome = self.client.send_action(action.to_network(self.game.gamestate.action_count))
-            else:
-                outcome = Outcome.determine_outcome(action, self.game.gamestate)
-
-            self.view.draw_action(action, outcome, self.game)
-
-            self.game.do_action(action, outcome)
-
-            self.view.draw_game(self.game)
-
-            if action.move_with_attack is None:
-                if self.game.gamestate.is_post_move_with_attack_possible(action, outcome):
-                    move_with_attack = self.ask_about_move_with_attack(action)
-    
-                    self.game.save_option("move_with_attack", move_with_attack)
-                    if self.game.is_enemy_network():
-                        self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
-
-                    if move_with_attack:
-                        self.view.draw_post_movement(action)
-                        rolls = outcome.for_position(action.target_at)
-                        self.game.gamestate.move_melee_unit_to_target_tile(rolls, action)
-
-                self.game.gamestate.set_available_actions()
-
-        else:
-            if not outcome:
-                outcome = Outcome.determine_outcome(action, self.game.gamestate)
-
-            self.view.draw_action(action, outcome, self.game, flip=True)
-            self.game.do_action(action, outcome)
-
-        if action.is_attack():
-            if settings.pause_for_attack_until_click:
-                self.pause()
-            else:
-                pygame.time.delay(settings.pause_for_animation_attack)
-        else:
-            pygame.time.delay(settings.pause_for_animation)
-
-        if self.game.gamestate.is_ended():
-            self.game_end()
-            return
-
-        if action.unit.should_be_upgraded() and not self.game.is_player_network() and not \
-                action.unit.has(State.extra_action):
-            if self.game.is_player_human():
-                choice = self.get_input_upgrade(action.unit)
-            else:
-                choice = self.game.current_player().ai.select_upgrade(self.game)
-            upgrade = action.unit.get_upgrade(choice)
-
-        if upgrade:
-            position = action.end_at
-            if not position in self.game.gamestate.player_units:
-                position = action.target_at
-
-            upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
-            self.game.gamestate.player_units[position] = upgraded_unit
-
-            string_upgrade = get_string_upgrade(upgrade)
-            self.game.save_option("upgrade", string_upgrade)
-
-            if self.game.is_enemy_network():
-                self.client.send_upgrade_choice(string_upgrade, self.game.gamestate.action_count)
-
-        self.game.save(self.view, action, outcome)
-
-        self.view.draw_game(self.game)
-
-        if self.game.is_turn_done():
-            self.game.shift_turn()
-
-        self.view.draw_game(self.game, None, (), True)
-
-        self.clear_move()
-
-        if action.unit.has(State.extra_action) and self.game.is_player_human():
-            position = action.end_at
-            if not position in self.game.gamestate.player_units:
-                position = action.target_at
-
-            self.select_unit(position)
-
-        print("Action performed. Expecting action from", self.game.current_player().intelligence)
-
-        if self.game.is_player_human():
-            return
-        elif self.game.is_player_network():
-            print("Waiting for network action from network with number", self.game.gamestate.action_count + 1)
-            self.trigger_network_player()
-        else:
-            self.trigger_artificial_intelligence()
-
     def show_unit(self, start_at, target_at=None, illustrate_actions=None):
+
         position = target_at if target_at else start_at
         if position in self.game.gamestate.all_units():
             unit = self.game.gamestate.all_units()[position]
             self.view.show_unit_zoomed(self.game.gamestate, unit, start_at, target_at)
             self.view.draw_game(self.game, start_at, illustrate_actions)
-
-    def quit_game_requested(self, event):
-        return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
-
-    @staticmethod
-    def command_q_down(key):
-        return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
-
-    @staticmethod
-    def escape(event):
-        return event.type == KEYDOWN and event.key == K_ESCAPE
-
-    def game_end(self):
-        self.view.draw_game_end(self.game.current_player().color, self.game)
-        self.pause()
-        self.exit_game()
-
-    def selecting_extra_action(self):
-        return self.selected_unit and self.selected_unit.has(State.extra_action)
-
-    def selecting_active_unit(self, position):
-        if self.start_at and self.start_at == position:
-            return False
-
-        return position in self.game.gamestate.player_units and \
-            bool(self.game.gamestate.get_actions({"start_at": position}))
-
-    def selecting_ability_target(self, position):
-        if not self.start_at or position == self.start_at:
-            return False
-
-        potential_actions = [action for action in self.game.gamestate.get_actions()
-                             if action.start_at == self.start_at and action.target_at and action.target_at == position]
-
-        return position in self.game.gamestate.all_units() and self.selected_unit.get_abilities() and potential_actions
-
-    def selecting_ranged_target(self, position):
-        return self.has_start_at and position in self.game.gamestate.enemy_units and self.selected_unit.is_ranged()
-
-    def selecting_melee_target(self, position):
-        return self.has_start_at and position in self.game.gamestate.enemy_units and self.selected_unit.is_melee()
-
-    def selecting_move(self, position):
-        return self.start_at and position not in self.game.gamestate.all_units()
-
