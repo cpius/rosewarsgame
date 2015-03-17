@@ -499,7 +499,7 @@ def get_enum_upgrade(upgrade):
             if type(value) is str or type(value) is int:
                 value = AttributeValues(level=value)
             enum_dict[key] = value
-        return(enum_dict)
+        return enum_dict
 
 
 def get_string_upgrade(upgrade):

@@ -22,6 +22,7 @@ class Gamestate:
         self.action_count = 0
         self.created_at = created_at
         self.game_id = game_id
+        self.available_actions = []
         if ai_factors:
             self.ai_factors = ai_factors
         else:
@@ -54,17 +55,27 @@ class Gamestate:
     def initialize_turn(self):
         initializer.initialize_turn(self)
 
-    def get_actions(self):
-        return self.available_actions
+    def get_actions(self, positions=None):
+        if not positions:
+            return self.available_actions
 
-    def get_actions_with_none(self):
-        actions_with_none = copy(self.available_actions)
-        for action in self.available_actions:
-            if action.move_with_attack:
-                action_option = action.copy()
-                action_option.move_with_attack = None
-                actions_with_none.append(action_option)
+        return [action for action in self.available_actions if all(getattr(action, key) == value for
+                                                                   key, value in positions.items())]
+
+    def get_actions_with_move_with_attack_as_none(self, positions=None):
+        actions_with_none = []
+        for action in self.get_actions(positions):
+            if action.is_attack():
+                if not action.move_with_attack:
+                    new_action = action.copy()
+                    new_action.move_with_attack = None
+                    actions_with_none.append(new_action)
+            else:
+                actions_with_none.append(action)
         return actions_with_none
+
+    def get_actions_including_move_with_attack_none(self, positions=None):
+        return self.get_actions(positions) + self.get_actions_with_move_with_attack_as_none(positions)
 
     def copy(self):
         return self.from_document(self.to_document())
@@ -182,14 +193,15 @@ class Gamestate:
                        and not unit.has(Effect.bribed))
 
         def no_enemy_units():
-            return not self.enemy_units and not any(unit for unit in self.player_units.values() if unit.has(Effect.bribed))
+            return not self.enemy_units and not any(unit for unit in self.player_units.values() if
+                                                    unit.has(Effect.bribed))
 
         return unit_on_opponents_backline() or no_enemy_units()
 
     def get_unit_from_action_document(self, action_document):
         unit_position = Position.from_string(action_document["end_at"])
 
-        if not unit_position in self.player_units and not unit_position in self.enemy_units:
+        if unit_position not in self.all_units():
             unit_position = Position.from_string(action_document["target_at"])
 
         if unit_position in self.player_units:

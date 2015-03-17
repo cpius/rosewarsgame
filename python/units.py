@@ -142,6 +142,7 @@ class Unit_class():
                 if attribute in State or attribute in Effect:
                     upgraded_unit.attributes[attribute] = self.attributes[attribute]
             upgraded_unit.set(State.recently_upgraded)
+            upgraded_unit.remove(State.experience)
             return upgraded_unit
         else:
             upgraded_unit = Unit_class.make(self.unit)
