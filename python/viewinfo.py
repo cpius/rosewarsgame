@@ -101,7 +101,14 @@ class Viewinfo:
 
         return lines
 
-    def show_unit_zoomed(self, gamestate, unit, start_at, target_at):
+    def show_battle_hint(self, gamestate, start_at, target_at):
+        lines = self.get_battle_hint(gamestate, start_at, target_at)
+        line_length = 45
+        base = self.interface.show_unit_location
+        text_location = [base[0], base[1] + 500 * self.zoom]
+        show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
+
+    def show_unit_zoomed(self, unit):
 
         unit_pic = get_unit_pic(self.interface, unit)
         pic = get_image(unit_pic, self.unit_dimensions)
@@ -115,8 +122,6 @@ class Viewinfo:
         self.screen.blit(pic, image_location)
 
         lines = self.get_unit_lines(unit)
-        if target_at:
-            lines += self.get_battle_hint(gamestate, start_at, target_at)
         line_length = 45
         show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
 

@@ -1,5 +1,5 @@
 {
-    "description": "Test the assissination result",
+    "description": "The Assassin attacks unsuccesfully, and survives",
     "type": "Is outcome correct",
     "pre_gamestate": {
         "actions_remaining": 2,
@@ -19,7 +19,8 @@
         "ability": "assassinate"
     },
     "outcome": {
-        "D4": [1, 1]
+        "D4": [1, 1],
+        "C3": [1, 1]
     },
     "post_gamestate": {
         "actions_remaining": 1,

@@ -13,7 +13,10 @@ def do_action(gamestate, action, outcome):
             if action.target_unit.has_extra_life():
                 action.target_unit.set(State.lost_extra_life)
             else:
-                del enemy_units[action.target_at]
+                if action.target_at in player_units:
+                    del player_units[action.target_at]
+                else:
+                    del enemy_units[action.target_at]
 
         elif action.is_push() and battle.attack_successful(action, rolls, gamestate):
             if not attack_direction:
@@ -33,9 +36,9 @@ def do_action(gamestate, action, outcome):
             action.target_unit.set(Effect.bribed, duration=1)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         elif action.ability == Ability.assassinate:
-            if outcome.outcomes[action.target_at].attack > 2:
-                del enemy_units[action.target_at]
             if outcome.outcomes[action.target_at].defence > 2:
+                del enemy_units[action.target_at]
+            if outcome.outcomes[action.start_at].defence > 3:
                 del player_units[action.start_at]
         else:
             level = action.unit.get_level(action.ability)
@@ -84,7 +87,7 @@ def do_action(gamestate, action, outcome):
             settle_attack(sub_action, attack_direction, True)
 
     def spread_attack():
-        for position in action.target_at.adjacent_tiles() & set(enemy_units):
+        for position in action.target_at.adjacent_tiles() & set(all_units):
             sub_action = Action(all_units, action.start_at, action.end_at, target_at=position)
             settle_attack(sub_action, None, True)
 

@@ -215,7 +215,7 @@ def run():
         print(key + ": " + str(value[True]) + " passed, " + str(value[False]) + " failed")
         total += value
     print()
-    print("Total:", str(total[True]) + " passed, " + str(value[False]) + " failed")
+    print("Total:", str(total[True]) + " passed, " + str(total[False]) + " failed")
 
 
 except_exceptions = False

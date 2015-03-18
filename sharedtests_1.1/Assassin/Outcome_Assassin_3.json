@@ -1,5 +1,5 @@
 {
-    "description": "Test the assassination result",
+    "description": "Assassin attacks successfully and dies",
     "type": "Is outcome correct",
     "pre_gamestate": {
         "actions_remaining": 2,
@@ -19,7 +19,8 @@
         "ability": "assassinate"
     },
     "outcome": {
-        "D4": [3, 3]
+        "D4": [3, 3],
+        "C3": [4, 4]
     },
     "post_gamestate": {
         "actions_remaining": 1,

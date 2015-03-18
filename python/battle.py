@@ -123,9 +123,6 @@ def get_attack(action, gamestate, is_sub_action=False):
     if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.War_Machine:
         attack += 3
 
-    if attacking_unit.has(Trait.spread_attack) and is_sub_action:
-        attack -= 1
-
     return attack
 
 

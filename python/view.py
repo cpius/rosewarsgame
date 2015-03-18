@@ -17,8 +17,6 @@ class View(object):
         self.viewlog = Viewlog(self.zoom, self.interface, self.screen)
         self.viewgame = Viewgame(self.interface, self.screen)
         self.viewinfo = Viewinfo(self.interface, self.screen, self.zoom)
-        self.counter_size = self.interface.counter_size
-        self.showing_unit_info = False
 
         self.sounds = {
             "sword": "sword_sound.wav",
@@ -49,7 +47,6 @@ class View(object):
     def clear_right(self):
         pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
         write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"])
-        self.showing_unit_info = False
 
     def clear_left(self):
         pygame.draw.rect(self.screen, Color.Light_grey, self.interface.left_side_rectangle)
@@ -60,17 +57,6 @@ class View(object):
             self.clear_right()
             self.viewlog.draw_logbook(game.logbook)
         self.refresh()
-
-    def show_unit_zoomed(self, gamestate, unit, start_at, target_at):
-        self.clear_right()
-        self.viewinfo.show_unit_zoomed(gamestate, unit, start_at, target_at)
-        self.showing_unit_info = True
-        self.refresh()
-
-    def hide_unit_zoomed(self, game):
-        if self.showing_unit_info:
-            self.clear_right()
-            self.viewlog.draw_logbook(game.logbook)
 
     @staticmethod
     def refresh():
@@ -105,9 +91,16 @@ class View(object):
         sound = pygame.mixer.Sound("./../sounds/" + self.sounds[sound])
         sound.play()
 
-    def draw_help_menu(self, menu):
-        self.screen.fill(Color.Light_grey)
-        for i, item in enumerate(menu):
-            write(self.screen, item, self.interface.help_menu[i], self.interface.fonts["normal"])
-        write(self.screen, "To game", self.interface.help_area[0], self.interface.fonts["normal"])
+    def shade_actions(self, actions):
+        self.viewgame.shade_actions(actions)
         self.refresh()
+
+    def show_battle_hint(self, gamestate, start_at, target_at):
+        self.viewinfo.show_battle_hint(gamestate, start_at, target_at)
+        self.refresh()
+
+    def show_unit_zoomed(self, unit):
+        self.clear_right()
+        self.viewinfo.show_unit_zoomed(unit)
+        self.refresh()
+

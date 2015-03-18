@@ -196,7 +196,7 @@ trait_descriptions = {
         1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where "
            "it ends up on this empty tile. Zone of control has no effect on this ability."},
     "spread_attack": {
-        1: "Also attacks the adjacent tiles with -1A."},
+        1: "Also attacks the adjacent tiles, even if your units are standing there."},
     "javelin": {
         1: "Can one time make a ranged attack with range 3. The defending unit has it's defence reduced by 1."}
 }
@@ -240,8 +240,9 @@ ability_descriptions = {
         1: "Reduces a units defence to 0 this turn.",
         2: "Reduces a units defence to 0 for two turns."},
     "assassinate": {
-        1: "Assassin attacks an enemy unit, and it's defence is reduced to 2. Assassin is attacked. This ability can "
-           "only be performed on your second action."}
+        1: "Attempt to assassinate any unit on the board with a 66% probability of success."
+           "After the attempt there is a 50% risk that Assassin is discovered and killed. "
+           "Assassination can only be performed on the second action."}
 }
 
 opponent_descriptions = {
