@@ -150,7 +150,6 @@ class Controller(object):
                     position = position.flip()
 
                 if event.button == 1:
-                    self.view.hide_unit_zoomed(self.game)
                     if self.game.is_player_human():
                         self.left_click(position)
                 elif event.button == 3:
@@ -171,6 +170,11 @@ class Controller(object):
             self.view.refresh()
 
     def left_click(self, position):
+        """
+        :param position: The position of the left click
+        :return: None
+        Selects units or carries out actions if one is identified.
+        """
 
         # Clear greyed out tiles
         self.draw_game()
@@ -207,8 +211,9 @@ class Controller(object):
 
         # If more than one action is possible, get user feedback to specify which action should be performed.
         else:
-            # If the unit is melee, the user may need to specify an end_at.
             unit = self.selected_unit
+
+            # If the unit is melee, the user may need to specify an end_at.
             if unit.is_melee():
                 end_at = self.pick_end_at(possible_actions)
                 if end_at:
@@ -275,7 +280,7 @@ class Controller(object):
 
     def clear_move(self):
         self.positions = {"start_at": None, "end_at": None}
-        self.draw_game(redraw_log=True)
+        self.draw_game()
 
     def upgrade_should_be_performed(self, action):
         return action.unit.should_be_upgraded() and not self.game.is_player_network() and not action.unit.has(State.extra_action)
@@ -328,16 +333,15 @@ class Controller(object):
 
         self.view.draw_action(action, self.game)
         self.game.do_action(action, outcome)
-        self.draw_game()
 
         pygame.time.delay(settings.pause_for_animation_attack if action.is_attack() else settings.pause_for_animation)
+        self.draw_game()
 
         if self.move_with_attack_should_be_selected(action, outcome):
             self.select_move_with_attack(action, outcome)
 
         if self.game.gamestate.is_ended():
             self.game_end()
-            return
 
         if self.upgrade_should_be_performed(action):
             self.perform_upgrade(action, upgrade)
@@ -367,7 +371,6 @@ class Controller(object):
     def pause(self):
         while True:
             event = pygame.event.wait()
-
             if self.quit_game_requested(event):
                 self.exit_game()
             elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
@@ -394,27 +397,23 @@ class Controller(object):
         self.exit_game()
 
     def right_click(self, position):
-        start_at = position
+        """
+        :param position: The position that is right clicked
+        :return: None
+        Shows the details of the unit being right clicked. If a friendly unit is selected and it can perform an action
+        on the right clicked position, show info for this action.
+        """
+        self.draw_game()
+
+        if position not in self.game.gamestate.all_units():
+            self.clear_move()
+            return
+
+        self.view.show_unit_zoomed(self.game.gamestate.all_units()[position])
+
         if self.start_at:
-            target_at = None
-
-            illustrate_actions = [action for action in self.game.gamestate.get_actions()
-                                  if action.start_at == self.start_at]
-
-            if position in self.game.gamestate.enemy_units:
-                potential_actions = [action for action in illustrate_actions
-                                     if action.target_at and action.target_at == position]
-                if potential_actions:
-                    start_at = self.start_at
-                    target_at = position
-            self.show_unit(start_at, target_at, illustrate_actions)
-        else:
-            self.show_unit(start_at)
-
-    def show_unit(self, start_at, target_at=None, illustrate_actions=None):
-
-        position = target_at if target_at else start_at
-        if position in self.game.gamestate.all_units():
-            unit = self.game.gamestate.all_units()[position]
-            self.view.show_unit_zoomed(self.game.gamestate, unit, start_at, target_at)
-            self.view.draw_game(self.game, start_at, illustrate_actions)
+            actions = self.game.gamestate.get_actions({"start_at": self.start_at, "target_at": position})
+            if actions:
+                self.view.shade_actions(actions)
+                self.view.show_battle_hint(self.game.gamestate, self.start_at, position)
+            self.positions = {"start_at": None, "end_at": None}
