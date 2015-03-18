@@ -2,8 +2,8 @@ import interfaces
 from common import *
 
 
-pause_for_animation_attack = 100
-pause_for_animation = 200
+pause_for_animation_attack = 150
+pause_for_animation = 150
 
 show_dice_game = False
 show_dice_log = False
