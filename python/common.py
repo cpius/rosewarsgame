@@ -240,8 +240,9 @@ ability_descriptions = {
         1: "Reduces a units defence to 0 this turn.",
         2: "Reduces a units defence to 0 for two turns."},
     "assassinate": {
-        1: "Assassin attacks an enemy unit, and it's defence is reduced to 2. Assassin is attacked. This ability can "
-           "only be performed on your second action."}
+        1: "Attempt to assassinate any unit on the board. There is a 66% chance that it is successful. "
+           "Whenever an Assassination attempt is performed there is a 50% chance Assassin is killed itself. "
+           "This ability can only be performed on your second action."}
 }
 
 opponent_descriptions = {

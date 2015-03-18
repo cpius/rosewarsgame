@@ -33,9 +33,9 @@ def do_action(gamestate, action, outcome):
             action.target_unit.set(Effect.bribed, duration=1)
             player_units[action.target_at] = enemy_units.pop(action.target_at)
         elif action.ability == Ability.assassinate:
-            if outcome.outcomes[action.target_at].attack > 2:
-                del enemy_units[action.target_at]
             if outcome.outcomes[action.target_at].defence > 2:
+                del enemy_units[action.target_at]
+            if outcome.outcomes[action.start_at].defence > 3:
                 del player_units[action.start_at]
         else:
             level = action.unit.get_level(action.ability)
