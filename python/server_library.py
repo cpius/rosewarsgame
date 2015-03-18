@@ -25,7 +25,7 @@ def validate_upgrade(action_document, gamestate):
 def validate_action(gamestate, action_document):
 
     gamestate.set_available_actions()
-    available_actions = gamestate.get_actions_with_none()
+    available_actions = gamestate.get_actions_including_move_with_attack_none()
 
     if Position.from_string(action_document["start_at"]) not in gamestate.player_units:
         return invalid_action(available_actions, request.json)
