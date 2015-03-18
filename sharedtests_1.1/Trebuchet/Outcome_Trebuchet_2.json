@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct",
-    "description": "Trebuchet doesnt get -1A on adjacent tiles.",
+    "description": "Trebuchet doesn't get -1A on adjacent tiles.",
     "outcome": {
         "C5": [3, 6],
         "C6": [2, 6],
