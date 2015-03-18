@@ -49,7 +49,7 @@ class Outcome:
 
         if action.ability == Ability.assassinate:
             outcome.set_suboutcome(action.end_at, cls.get_rolls())
-            
+
         attack_direction = None
         if action.is_attack() and action.unit.is_melee() and not action.is_javelin_throw():
             attack_direction = action.end_at.get_direction_to(action.target_at)
@@ -59,7 +59,7 @@ class Outcome:
                 outcome.set_suboutcome(position, rolls(random.randint(1, 6), random.randint(1, 6)))
 
         if action.unit.has(Trait.spread_attack):
-            for position in action.target_at.adjacent_tiles() & set(gamestate.enemy_units):
+            for position in action.target_at.adjacent_tiles() & set(gamestate.all_units()):
                 outcome.set_suboutcome(position, rolls(random.randint(1, 6), random.randint(1, 6)))
 
         if action.unit.has(Trait.longsword):

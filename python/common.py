@@ -196,7 +196,7 @@ trait_descriptions = {
         1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where "
            "it ends up on this empty tile. Zone of control has no effect on this ability."},
     "spread_attack": {
-        1: "Also attacks the adjacent tiles with -1A."},
+        1: "Also attacks the adjacent tiles, even if your units are standing there."},
     "javelin": {
         1: "Can one time make a ranged attack with range 3. The defending unit has it's defence reduced by 1."}
 }

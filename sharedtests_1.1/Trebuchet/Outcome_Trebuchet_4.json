@@ -1,37 +1,33 @@
 {
     "type": "Is outcome correct",
-    "description": "Trebuchet doesnt get -1A on adjacent tiles.",
+    "description": "Trebuchet can kill itself",
     "outcome": {
-        "C5": [3, 6],
-        "C6": [2, 6],
-        "B5": [3, 6]
+        "C4": [1, 6],
+        "C5": [1, 6],
+        "C6": [1, 6],
+        "B5": [1, 6]
     },
     "action": {
-        "start_at": "C2",
-        "end_at": "C2",
+        "start_at": "C4",
+        "end_at": "C4",
         "target_at": "C5",
         "move_with_attack": false
     },
     "pre_gamestate": {
         "player1_units": {
-            "C2": "Trebuchet",
-            "B2": "Archer"
+            "C4": "Trebuchet",
+            "B2": "Archer",
+            "B5": "Pikeman"
         },
         "actions_remaining": 2,
         "player2_units": {
             "C5": "Pikeman",
             "C6": "Pikeman",
-            "B5": "Pikeman",
             "B8": "Knight"
         }
     },
     "post_gamestate": {
         "player1_units": {
-            "C2": {
-                "name": "Trebuchet",
-                "used": 1,
-                "experience": 1
-            },
             "B2": "Archer"
         },
         "actions_remaining": 1,
