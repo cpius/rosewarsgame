@@ -242,7 +242,7 @@ ability_descriptions = {
     "assassinate": {
         1: "Attempt to assassinate any unit on the board with a 66% probability of success."
            "After the attempt there is a 50% risk that Assassin is discovered and killed. "
-           "Assassination can only be performed on your second action."}
+           "Assassination can only be performed on the second action."}
 }
 
 opponent_descriptions = {
