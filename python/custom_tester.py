@@ -162,7 +162,7 @@ def run_test(test_file):
             expected_gamestate_document = expected_gamestate.to_document()
 
             if actual_gamestate_document == expected_gamestate_document:
-                if not action.is_attack():
+                if not action.is_attack:
                     return "pass"
             else:
                 write_message_outcome()
@@ -204,7 +204,7 @@ def run_test(test_file):
             gamestate = Gamestate.from_document(test_document["pre_gamestate"])
             expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
             action = Action.from_document(gamestate.all_units(), test_document["action"])
-            if action.is_attack() and action.move_with_attack:
+            if action.is_attack and action.move_with_attack:
                 outcome = None
                 if "outcome" in test_document:
                     outcome = Outcome.from_document(test_document["outcome"])

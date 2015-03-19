@@ -53,7 +53,7 @@ def invalid_action(available_actions, requested_action):
 def determine_outcome_if_any(action, gamestate):
     outcome = None
 
-    if action.has_outcome():
+    if action.has_outcome:
         outcome = Outcome.determine_outcome(action, gamestate)
 
     return outcome

@@ -63,7 +63,7 @@ class Gamestate:
     def get_actions_with_move_with_attack_as_none(self, positions=None):
         actions_with_none = []
         for action in self.get_actions(positions):
-            if action.is_attack():
+            if action.is_attack:
                 if not action.move_with_attack:
                     new_action = action.copy()
                     new_action.move_with_attack = None
@@ -217,11 +217,11 @@ class Gamestate:
                 return position, unit
 
     def is_post_move_with_attack_possible(self, action, outcome):
-        if not action.is_attack() or not action.unit.is_melee():
+        if not action.is_attack or not action.unit.is_melee:
             return False
 
         rolls = outcome.for_position(action.target_at)
-        push_possible = action.is_push() and battle.attack_successful(action, rolls, self)
+        push_possible = action.is_push and battle.attack_successful(action, rolls, self)
 
         return push_possible or battle.is_win(action, rolls, self)
 

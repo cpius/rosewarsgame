@@ -54,7 +54,7 @@ def get_unit_actions(unit, start_at, gamestate):
             new_position = direction.move(position)
             if new_position in enemy_units:
                 if not zoc_block(position, direction, zoc_blocks) and \
-                        (not enemy_units[new_position].has_extra_life() or unit.has(Trait.push)):
+                        (not enemy_units[new_position].has_extra_life or unit.has(Trait.push)):
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": True}
                 yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
 
@@ -63,7 +63,7 @@ def get_unit_actions(unit, start_at, gamestate):
         for position, direction in product(moveset, directions):
             new_position = direction.move(position)
             if new_position in enemy_units:
-                if enemy_units[new_position].has_extra_life() and not unit.has(Trait.push):
+                if enemy_units[new_position].has_extra_life and not unit.has(Trait.push):
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
                 else:
                     yield {"end_at": position, "target_at": new_position}
@@ -121,11 +121,11 @@ def get_unit_actions(unit, start_at, gamestate):
 
     def get_abilities():
         abilities = []
-        for ability in unit.get_abilities():
+        for ability in unit.abilities:
             if ability in [Ability.sabotage, Ability.poison, Ability.assassinate]:
                 target_positions = enemy_units
             elif ability in [Ability.improve_weapons]:
-                target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
+                target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee]
             elif ability == Ability.bribe:
                 target_positions = [pos for pos, target in enemy_units.items() if not target.has(Effect.bribed)]
             else:
@@ -146,7 +146,7 @@ def get_unit_actions(unit, start_at, gamestate):
     moveset_with_leftover, moveset_no_leftover = generate_movesets(unit.movement)
     moveset = moveset_with_leftover | moveset_no_leftover
     moves = move_actions(moveset)
-    if unit.is_ranged():
+    if unit.is_ranged:
         attacks = ranged_attack_actions(action_sets.ranged_attacks_set(start_at, frozenset(enemy_units), unit.range))
     else:
         attacks = melee_attack_actions(moveset_with_leftover | {start_at})
@@ -173,7 +173,7 @@ def get_unit_actions(unit, start_at, gamestate):
     if unit.has(Trait.ride_through):
         attacks = get_ride_through_attacks(attacks)
 
-    if unit.has_javelin():
+    if unit.has_javelin:
         attacks += get_javelin_attacks()
 
     return moves, attacks, abilities

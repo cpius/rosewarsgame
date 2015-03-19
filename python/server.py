@@ -332,7 +332,7 @@ def register_move_with_attack(action_document, game_id, gamestate):
 def register_move_attack_ability(action_document, game_id, gamestate, action):
     outcome = None
 
-    if action.has_outcome():
+    if action.has_outcome:
         outcome = Outcome.determine_outcome(action, gamestate)
 
     gamestate.do_action(action, outcome)

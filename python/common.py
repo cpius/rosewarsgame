@@ -510,3 +510,6 @@ def get_string_upgrade(upgrade):
         return {key.name: value.level for key, value in upgrade.items()}
 
 
+def prettify(string):
+    return string.replace("_", " ")
+

@@ -51,12 +51,14 @@ class Unit_class():
 
     @property
     def pretty_name(self):
-        return self.unit.name.replace("_", " ")
+        return prettify(self.unit.name)
 
-    def get_effects(self):
+    @property
+    def effects(self):
         return [attribute for attribute in self.attributes if attribute in Effect]
 
-    def get_abilities(self):
+    @property
+    def abilities(self):
         return [attribute for attribute in self.attributes if attribute in Ability]
 
     def get_traits(self):
@@ -121,15 +123,19 @@ class Unit_class():
                 self.attributes[State.experience] = AttributeValues(value=1)
             self.remove(State.recently_upgraded)
 
+    @property
     def has_extra_life(self):
         return self.has(Trait.extra_life) and not self.has(State.lost_extra_life)
 
+    @property
     def has_javelin(self):
         return self.has(Trait.javelin) and not self.has(State.javelin_thrown)
 
+    @property
     def is_melee(self):
         return self.range == 1
 
+    @property
     def is_ranged(self):
         return self.range > 1
 
@@ -191,7 +197,8 @@ class Unit_class():
         possible_upgrade_choices = [get_enum_upgrade(upgrade) for upgrade in self.upgrades if not has_upgrade(upgrade)]
         return possible_upgrade_choices[choice]
 
-    def get_unit_level(self):
+    @property
+    def unit_level(self):
         experience = self.get_state(State.experience)
         to_upgrade = self.experience_to_upgrade
         return experience // to_upgrade

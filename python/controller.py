@@ -213,7 +213,7 @@ class Controller(object):
             unit = self.selected_unit
 
             # If the unit is melee, the user may need to specify an end_at.
-            if unit.is_melee():
+            if unit.is_melee:
                 end_at = self.pick_end_at(possible_actions)
                 if end_at:
                     action, = (action for action in possible_actions if action.end_at == end_at)
@@ -271,7 +271,7 @@ class Controller(object):
     def pick_ability(self, unit):
         self.view.draw_ask_about_ability(unit)
         choice = self.get_choice({K_1: 0, K_2: 1}, [])
-        return unit.get_abilities()[choice]
+        return unit.abilities[choice]
 
     def ask_about_move_with_attack(self, action):
         self.view.draw_ask_about_move_with_attack(action.target_at)
@@ -332,7 +332,7 @@ class Controller(object):
         self.view.draw_action(action, self.game)
         self.game.do_action(action, outcome)
 
-        pygame.time.delay(settings.pause_for_animation_attack if action.is_attack() else settings.pause_for_animation)
+        pygame.time.delay(settings.pause_for_animation_attack if action.is_attack else settings.pause_for_animation)
         self.draw_game()
 
         if self.move_with_attack_should_be_performed(action, outcome):

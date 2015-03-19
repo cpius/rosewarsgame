@@ -24,7 +24,7 @@ class Viewinfo:
         lines = ["Attack: " + str(unit.attack) + "  Defence: " + str(defence)
                  + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement), ""]
 
-        level = unit.get_unit_level()
+        level = unit.unit_level
         if level:
             lines.append("Level: " + str(level + 1))
             lines.append("")
@@ -58,7 +58,7 @@ class Viewinfo:
                     lines.append(trait_descriptions[trait.name][1])
                     lines.append("")
 
-        for ability in unit.get_abilities():
+        for ability in unit.abilities:
             level = unit.get_level(ability)
             if level == 1:
                 lines.append(ability.name + ":")
@@ -75,7 +75,7 @@ class Viewinfo:
                                        State.javelin_thrown]:
                 lines.append(state.name + ": " + str(value))
 
-        for effect in unit.get_effects():
+        for effect in unit.effects:
             level = unit.get_level(effect)
             duration = unit.get_level(effect)
             if level == 1:
@@ -117,7 +117,7 @@ class Viewinfo:
         image_location = [base[0], base[1] + 20 * self.zoom]
         text_location = [base[0], base[1] + 290 * self.zoom]
 
-        write(self.screen, unit.name.replace("_", " "), title_location, self.interface.fonts["normal"])
+        write(self.screen, unit.pretty_name, title_location, self.interface.fonts["normal"])
         self.screen.blit(pic, image_location)
 
         lines = self.get_unit_lines(unit)
@@ -149,7 +149,7 @@ class Viewinfo:
     def draw_ask_about_ability(self, unit):
         self.clear()
         lines = ["Select ability:"]
-        for i, ability in enumerate(unit.get_abilities()):
+        for i, ability in enumerate(unit.abilities):
             level = unit.attributes[ability].level
             description_string = str(i + 1) + ": " + ability.name + ": " + get_ability_description(ability, level)
             lines += textwrap.wrap(description_string, self.interface.message_line_length)
@@ -161,7 +161,7 @@ class Viewinfo:
 
     def draw_unit_lower_right(self, action, color, index, base_x, base_y):
 
-        if not action.is_attack():
+        if not action.is_attack:
             unit = action.unit.name
         elif index == 0:
             unit = action.unit.name
@@ -201,7 +201,7 @@ class Viewinfo:
                     defence = battle.get_defence(action, attack, gamestate)
                     attack, defence = min(attack, 6), min(defence, 6)
 
-                chance_of_push = (attack / 6) * (defence/6) if action.is_push() else 0
+                chance_of_push = (attack / 6) * (defence/6) if action.is_push else 0
                 chance_of_win = attack * (6 - defence) / 36
                 battle_values_list.append(BattleValues(attack=attack, defence=defence, chance_of_push=chance_of_push,
                                                        chance_of_win=chance_of_win))
