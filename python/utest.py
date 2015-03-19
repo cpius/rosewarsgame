@@ -92,6 +92,7 @@ def is_outcome_correct(test_document):
         return True
     print("act", actual)
     print("exp", expected)
+    print()
     return False
 
 
@@ -103,14 +104,19 @@ def is_outcome_correct_extra_action(test_document):
     outcome = Outcome.from_document(test_document["outcome1"]) if "outcome1" in test_document else None
     gamestate.do_action(action, outcome)
 
-    action = Action.from_document(gamestate.all_units(), test_document["extra_action"])
+    extra_action = Action.from_document(gamestate.all_units(), test_document["extra_action"])
     outcome = Outcome.from_document(test_document["outcome2"]) if "outcome2" in test_document else None
-    gamestate.do_action(action, outcome)
+    gamestate.do_action(extra_action, outcome)
 
-    gamestate_document = gamestate.to_document()
-    expected_gamestate_document = expected_gamestate.to_document()
+    actual = gamestate.to_document()
+    expected = expected_gamestate.to_document()
 
-    return gamestate_document == expected_gamestate_document
+    if actual == expected:
+        return True
+    print("act", actual)
+    print("exp", expected)
+    print()
+    return False
 
 
 def upgrade(test_document):
