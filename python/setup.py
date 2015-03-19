@@ -43,7 +43,7 @@ if get_setting("version") == "1.1":
                              Unit.Javeliner, Unit.Trebuchet, Unit.War_Elephant, Unit.Fencer, Unit.Saboteur,
                              Unit.Diplomat, Unit.Assassin, Unit.Weaponsmith]
     allowed_basic_units = [Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman]
-    required_special_units = [Unit.Fencer]
+    required_special_units = []
 
 if get_setting("version") == "1.0":
     allowed_special_units = [Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman,
