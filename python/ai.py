@@ -1,4 +1,3 @@
-from __future__ import division
 from operator import attrgetter
 import random as rnd
 from common import *

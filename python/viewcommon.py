@@ -1,4 +1,3 @@
-from __future__ import division
 import pygame
 import textwrap
 import interface_settings as settings

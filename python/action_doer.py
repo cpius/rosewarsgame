@@ -1,4 +1,3 @@
-from __future__ import division
 from common import *
 from action import Action
 import battle

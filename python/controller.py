@@ -1,4 +1,3 @@
-from __future__ import division
 import sys
 import setup
 from gamestate import Gamestate

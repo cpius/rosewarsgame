@@ -1,4 +1,3 @@
-from __future__ import division
 import battle
 import action_doer
 import initializer
