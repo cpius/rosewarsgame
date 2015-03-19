@@ -206,8 +206,10 @@ class Gamestate:
 
         if unit_position in self.player_units:
             return self.player_units[unit_position], unit_position
-        else:
+        elif unit_position in self.enemy_units:
             return self.enemy_units[unit_position], unit_position
+        else:
+            return None, None
 
     def is_extra_action(self):
         return any(unit for unit in self.player_units.values() if unit.has(State.extra_action))
