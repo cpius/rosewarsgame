@@ -66,6 +66,7 @@ def is_attack_and_defence_correct(test_document):
     defence = test_document["defence"]
 
     action.unit = gamestate.player_units[action.start_at]
+    gamestate.move_unit(action.start_at, action.end_at)
 
     actual_attack = battle.get_attack(action, gamestate)
     actual_defence = battle.get_defence(action, actual_attack, gamestate)
