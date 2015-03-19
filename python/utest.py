@@ -28,16 +28,25 @@ def is_the_game_over(test_document):
     return actual == expected
 
 
+def give_output(actual, expected):
+    if actual == expected:
+        return True
+    print("act", actual)
+    print("exp", expected)
+    print()
+    return False
+
+
 def does_turn_shift_work(test_document):
     pre_gamestate = Gamestate.from_document(test_document["pre_gamestate"])
     post_gamestate = Gamestate.from_document(test_document["post_gamestate"])
     pre_gamestate.shift_turn()
     pre_gamestate.flip_all_units()
 
-    gamestate_document = pre_gamestate.to_document()
-    expected_gamestate_document = post_gamestate.to_document()
+    actual = pre_gamestate.to_document()
+    expected = post_gamestate.to_document()
 
-    return gamestate_document == expected_gamestate_document
+    return give_output(actual, expected)
 
 
 def does_upgrade_exist(test_document):
