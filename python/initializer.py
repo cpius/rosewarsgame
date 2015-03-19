@@ -4,27 +4,34 @@ remove_states = {State.used, State.recently_bribed}
 wear_off_in_opponents_turn = {Effect.poisoned}
 
 
-def initialize_turn(gamestate):
-    def resolve_bribe(unit):
+def return_bribed_units(gamestate):
+    for position, unit in list(gamestate.enemy_units.items()):
         if unit.has(Effect.bribed):
-            unit.decrease_duration(Effect.bribed)
-            gamestate.player_units[position] = gamestate.enemy_units.pop(position)
+            unit.remove(Effect.bribed)
+            gamestate.change_unit_owner(position)
             unit.set(State.recently_bribed)
 
-    gamestate.set_actions_remaining(2)
+
+def adjust_states_and_effects(gamestate):
 
     for position, unit in gamestate.player_units.items():
         for state in remove_states:
             unit.remove(state)
-        for effect in set(unit.get_effects()) - wear_off_in_opponents_turn:
+        for effect in set(unit.effects) - wear_off_in_opponents_turn:
             unit.decrease_duration(effect)
 
     for position, unit in gamestate.enemy_units.items():
         for effect in wear_off_in_opponents_turn:
             unit.decrease_duration(effect)
+        for state in remove_states:
+            unit.remove(state)
 
-    # We just got the turn. Any bribed units we own is still controlled by the enemy,
-    # at least until we take it back at the start of our turn (now)
-    for position, unit in list(gamestate.enemy_units.items()):
-        resolve_bribe(unit)
-        unit.remove(State.used)
+
+def initialize_turn(gamestate):
+
+    gamestate.set_actions_remaining(2)
+
+    adjust_states_and_effects(gamestate)
+
+    return_bribed_units(gamestate)
+
