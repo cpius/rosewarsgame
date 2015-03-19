@@ -14,15 +14,7 @@ def get_actions(gamestate):
     actions = []
     for position, unit in gamestate.player_units.items():
         if can_use_unit(unit, is_extra_action):
-            moves, attacks, abilities = get_unit_actions(unit, position, gamestate)
-
-            if not can_attack_with_unit(gamestate, unit) or unit.attack == 0:
-                attacks = []
-
-            if melee_frozen(gamestate.enemy_units, position):
-                moves = []
-
-            actions += moves + attacks + abilities
+            actions += get_unit_actions(unit, position, gamestate)
 
     return actions
 
@@ -176,23 +168,32 @@ def get_unit_actions(unit, start_at, gamestate):
     if unit.has_javelin:
         attacks += get_javelin_attacks()
 
-    return moves, attacks, abilities
+    if not can_attack_with_unit(gamestate, unit) or unit.attack == 0:
+        attacks = []
+
+    if melee_frozen(gamestate.enemy_units, start_at):
+        moves = []
+
+    return moves + attacks + abilities
 
 
 def zoc_block(position, direction, zoc_blocks):
-    """ Returns whether an enemy unit exerting ZOC prevents you from going in 'direction' from 'position'. """
+    """
+    :param position: The starting position of the unit
+    :param direction: The Direction the unit wants to move
+    :param zoc_blocks: Positions occupied by enemy units with ZOC against the unit
+    :return: Whether the unit is prevented from going in the direction by a ZOC block
+    """
     return any(pos in zoc_blocks for pos in direction.perpendicular(position))
 
 
 def can_use_unit(unit, is_extra_action):
-    is_frozen = unit.has(Effect.poisoned)
-    is_bribed = unit.has(State.recently_bribed)
-    is_used = unit.has(State.used) and not unit.has(State.extra_action)
-
-    if is_extra_action:
-        return unit.has(State.extra_action) and not is_frozen and not is_bribed
+    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
+        return False
+    elif is_extra_action:
+        return unit.has(State.extra_action)
     else:
-        return not is_frozen and not is_bribed and not is_used
+        return not unit.has(State.used)
 
 
 def melee_frozen(enemy_units, start_at):
