@@ -82,9 +82,11 @@ class Unit_class():
             else:
                 self.attributes[attribute].duration = duration
 
-    def has(self, attribute, number=1):
+    def has(self, attribute, number=None):
         if attribute not in self.attributes:
             return False
+        if number is None:
+            return True
         if attribute in Trait or attribute in Effect or attribute in Ability:
             return self.attributes[attribute].level == number
         elif attribute in State:
