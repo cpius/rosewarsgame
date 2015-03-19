@@ -5,7 +5,7 @@ from common import *
 def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
     for direction in directions:
         new_position = direction.move(position)
-        if new_position in board and new_position not in units and not zoc_block(position, direction, zoc_blocks):
+        if new_position in board_tiles and new_position not in units and not zoc_block(position, direction, zoc_blocks):
             yield new_position
 
 

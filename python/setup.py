@@ -58,7 +58,7 @@ board_columns = [1, 2, 3, 4, 5]
 
 class Tiles_bag(object):
     def __init__(self):
-        self.tiles = board.copy()
+        self.tiles = board_tiles.copy()
         
     def pick_from_row(self, rows):
         pick = random.choice([tile for tile in self.tiles if tile.row in rows])

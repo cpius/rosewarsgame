@@ -69,16 +69,16 @@ class Position:
         return Position(self.column, board_height - self.row + 1)
 
     def four_forward_tiles(self, direction):
-        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board)
+        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board_tiles)
 
     def surrounding_tiles(self):
-        return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board)
+        return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board_tiles)
 
     def adjacent_tiles(self):
-        return set(pos for pos in [direction.move(self) for direction in directions] if pos in board)
+        return set(pos for pos in [direction.move(self) for direction in directions] if pos in board_tiles)
 
     def two_forward_tiles(self, direction):
-        return set(pos for pos in direction.forward_and_sideways(self) if pos in board)
+        return set(pos for pos in direction.forward_and_sideways(self) if pos in board_tiles)
 
 
 class AttributeValues():
@@ -391,7 +391,7 @@ def get_attribute_from_document(attribute_name, number):
 
 board_height = 8
 board_width = 5
-board = set(Position(column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
+board_tiles = set(Position(column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
 
 eight_directions_namedtuple = collections.namedtuple("eight_directions", [name for name in Direction.to_coordinates])
 eight_directions = eight_directions_namedtuple(*(Direction(name) for name in Direction.to_coordinates))

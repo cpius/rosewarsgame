@@ -106,7 +106,7 @@ def get_unit_actions(unit, start_at, gamestate):
         for direction in directions:
             one_tile_away = direction.move(start_at)
             two_tiles_away = direction.move(one_tile_away)
-            if one_tile_away in enemy_units and two_tiles_away in board and two_tiles_away not in units:
+            if one_tile_away in enemy_units and two_tiles_away in board_tiles and two_tiles_away not in units:
                 attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
                                move_with_attack=False))
         return attacks

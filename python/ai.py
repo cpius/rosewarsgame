@@ -22,8 +22,8 @@ class AI():
 
         self.select_upgrade = select_upgrade
 
-success = Outcome(dict((key, rolls(1, 6)) for key in board))
-failure = Outcome(dict((key, rolls(6, 1)) for key in board))
+success = Outcome(dict((key, rolls(1, 6)) for key in board_tiles))
+failure = Outcome(dict((key, rolls(6, 1)) for key in board_tiles))
 
 
 values = {"Backline": [10000, 10000],
