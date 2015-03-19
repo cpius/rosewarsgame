@@ -55,6 +55,7 @@ class Client():
     def select_action(self, gamestate):
         game = self.get_game()
         if not game:
+            print("No new data on the server. By the way, our last update was from", self.last_modified)
             # No new data on the server
             return None, None, None
         expected_action = str(gamestate.action_count + 1)
