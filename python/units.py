@@ -70,7 +70,8 @@ class Unit_class():
         if attribute in State:
             if value is None:
                 value = 1
-            self.attributes[attribute] = AttributeValues(value=value)
+            if value is not 0:
+                self.attributes[attribute] = AttributeValues(value=value)
         else:
             self.attributes[attribute] = AttributeValues(value=value, duration=duration, level=level)
 
@@ -154,7 +155,6 @@ class Unit_class():
                         del upgraded_unit.attributes[key]
                     else:
                         upgraded_unit.attributes[key] = AttributeValues(level=attributes.level + upgraded_unit.attributes[key].level)
-
                 else:
                     upgraded_unit.attributes[key] = attributes
             upgraded_unit.set(State.recently_upgraded, value=1)

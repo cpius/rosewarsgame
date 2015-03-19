@@ -6,7 +6,6 @@ import action_getter
 from units import Unit_class
 import json
 from common import *
-from copy import copy
 
 
 class Gamestate:
@@ -173,9 +172,10 @@ class Gamestate:
         self.units = self.units[::-1]
         self.initialize_turn()
 
-    def move_melee_unit_to_target_tile(self, rolls, action):
-        action_doer.move_melee_unit_to_target_tile(self, rolls, action)
+    def move_melee_unit_to_target_tile(self, action):
+        self.move_unit(action.end_at, action.target_at)
         self.set_available_actions()
+
         self.decrement_actions_if_none_available(action)
 
     def __str__(self):
@@ -225,3 +225,18 @@ class Gamestate:
         push_possible = action.is_push() and battle.attack_successful(action, rolls, self)
 
         return push_possible or battle.is_win(action, rolls, self)
+
+    def delete_unit_at(self, position):
+        if position in self.player_units:
+            del self.player_units[position]
+        else:
+            del self.enemy_units[position]
+
+    def move_unit(self, start_position, end_position):
+        if start_position in self.player_units:
+            self.player_units[end_position] = self.player_units.pop(start_position)
+        else:
+            self.enemy_units[end_position] = self.enemy_units.pop(start_position)
+
+    def change_unit_owner(self, position):
+        self.player_units[position] = self.enemy_units.pop(position)
