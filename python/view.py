@@ -1,4 +1,3 @@
-from __future__ import division
 from viewlog import Viewlog
 from viewgame import Viewgame
 from viewinfo import Viewinfo

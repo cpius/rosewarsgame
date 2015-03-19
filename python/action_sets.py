@@ -1,3 +1,4 @@
+from __future__ import division
 from action import Action
 from common import *
 from itertools import product

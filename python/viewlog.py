@@ -1,4 +1,3 @@
-from __future__ import division
 from viewcommon import *
 from common import *
 from rounded_rect import AAfilledRoundedRect

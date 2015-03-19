@@ -1,4 +1,3 @@
-from __future__ import division
 from viewcommon import Color
 import pygame
 from coordinates import Coordinates

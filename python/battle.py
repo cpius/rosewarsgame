@@ -197,3 +197,13 @@ def get_outcome_string(action, outcome, gamestate, is_sub_action):
         return "MISS"
     else:
         return "DEFEND"
+
+
+def assassin_kills_target(rolls):
+    return rolls.defence > 2
+
+
+def assassin_dies(rolls):
+    return rolls.defence > 3
+
+

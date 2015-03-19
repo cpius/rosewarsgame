@@ -1,4 +1,3 @@
-from __future__ import division
 import sys
 import setup
 from gamestate import Gamestate
@@ -303,20 +302,19 @@ class Controller(object):
         if self.game.is_enemy_network():
             self.client.send_upgrade_choice(string_upgrade, self.game.gamestate.action_count)
 
-    def select_move_with_attack(self, action, outcome):
+    def perform_move_with_attack(self, action, outcome):
         move_with_attack = self.ask_about_move_with_attack(action)
 
         self.game.save_option("move_with_attack", move_with_attack)
         if self.game.is_enemy_network():
             self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
 
-        if move_with_attack:
-            self.view.draw_post_movement(action)
-            self.game.gamestate.move_melee_unit_to_target_tile(outcome.for_position(action.target_at), action)
+        self.view.draw_post_movement(action)
+        self.game.gamestate.move_melee_unit_to_target_tile(action)
 
         self.game.gamestate.set_available_actions()
 
-    def move_with_attack_should_be_selected(self, action, outcome):
+    def move_with_attack_should_be_performed(self, action, outcome):
         return action.move_with_attack is None and self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
 
     def determine_outcome(self, action):
@@ -337,8 +335,8 @@ class Controller(object):
         pygame.time.delay(settings.pause_for_animation_attack if action.is_attack() else settings.pause_for_animation)
         self.draw_game()
 
-        if self.move_with_attack_should_be_selected(action, outcome):
-            self.select_move_with_attack(action, outcome)
+        if self.move_with_attack_should_be_performed(action, outcome):
+            self.perform_move_with_attack(action, outcome)
 
         if self.game.gamestate.is_ended():
             self.game_end()

@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct",
-    "description": "Hobelar attacks unsuccessfully and gets an extra action",
+    "description": "Hobelar attacks successfully and gets an extra action",
     "outcome": {
         "E4": [1, 6]
     },
