@@ -215,11 +215,21 @@ state_descriptions = {
 
 
 effect_descriptions = {
-    "attack_frozen": "Unit cannot attack",
-    "bribed": "Whether a unit is bribed by a Diplomat.",
-    "poisoned": "Unit cannot perform any actions.",
-    "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
-    "sabotaged": "Whether a unit is sabotaged by a Saboteur."
+    "attack_frozen": {
+        1: "Unit cannot attack.",
+        2: "Unit cannot attack."},
+    "bribed": {
+        1: "Unit is controlled by opponent and has +1 attack.",
+        2: "Unit is controlled by opponent and has +2 attack."},
+    "poisoned": {
+        1: "Unit cannot perform any actions.",
+        2: "Unit cannot perform any actions."},
+    "improved_weapons": {
+        1: "Unit has +3 attack, +1 defence",
+        2: "Unit has +2 attack, +1 defence"},
+    "sabotaged": {
+        1: "Units defence is reduced to 0.",
+        2: "Units defence is reduced to 0"}
 }
 
 ability_descriptions = {
@@ -240,9 +250,9 @@ ability_descriptions = {
         1: "Reduces a units defence to 0 this turn.",
         2: "Reduces a units defence to 0 for two turns."},
     "assassinate": {
-        1: "Attempt to assassinate any unit on the board with a 66% probability of success."
-           "After the attempt there is a 50% risk that Assassin is discovered and killed. "
-           "Assassination can only be performed on the second action."}
+        1: "Attempt to assassinate any unit on the board with a 66% probability of success After the attempt there is "
+           "a 50% risk that Assassin is discovered and killed. "
+           "Assassinate can only be performed on the second action."}
 }
 
 opponent_descriptions = {
@@ -399,6 +409,17 @@ four_directions_namedtuple = collections.namedtuple("directions", [name for name
 directions = four_directions_namedtuple(*(Direction(name) for name in ["Up", "Down", "Left", "Right"]))
 
 
+def get_description(attribute, level):
+    if attribute in Ability:
+        return ability_descriptions[attribute.name][level]
+    elif attribute in Trait:
+        return trait_descriptions[attribute.name][level]
+    elif attribute in Effect:
+        return effect_descriptions[attribute.name][level]
+    elif attribute in State:
+        return state_descriptions[attribute.name]
+
+
 def get_ability_description(ability, level=1):
     return ability_descriptions[ability.name][level]
 
@@ -511,5 +532,5 @@ def get_string_upgrade(upgrade):
 
 
 def prettify(string):
-    return string.replace("_", " ")
+    return string.replace("_", " ").title()
 

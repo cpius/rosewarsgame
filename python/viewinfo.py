@@ -2,6 +2,7 @@ from viewcommon import *
 from collections import namedtuple
 import battle
 from operator import attrgetter
+from common import *
 
 
 class Viewinfo:
@@ -24,79 +25,51 @@ class Viewinfo:
         lines = ["Attack: " + str(unit.attack) + "  Defence: " + str(defence)
                  + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement), ""]
 
-        level = unit.unit_level
-        if level:
-            lines.append("Level: " + str(level + 1))
-            lines.append("")
+        if unit.unit_level:
+            lines += ["Level: " + str(unit.unit_level + 1), ""]
 
         if unit.zoc:
-            lines.append("Zone of control against: " + ", ".join(unit_type.name for unit_type in unit.zoc))
-            lines.append("")
+            lines += ["Zone of control against: " + ", ".join(unit_type.name for unit_type in unit.zoc), ""]
 
         if unit.attack_bonuses:
             for unit_type, value in unit.attack_bonuses.items():
-                lines.append("+" + str(value) + " Attack against " + unit_type.name)
-                lines.append("")
+                lines += ["+" + str(value) + " Attack against " + unit_type.name, ""]
 
         if unit.defence_bonuses:
             for unit_type, value in unit.defence_bonuses.items():
-                if unit_type == Type.War_Machine:
-                    lines.append("+" + str(value) + " Defence against War Machines")
+                lines += ["+" + str(value) + " Defence against " + prettify(unit_type.name), ""]
+
+        dont_show = {State.used, State.recently_upgraded, State.experience, State.lost_extra_life, State.javelin_thrown,
+                     Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life,
+                     Trait.javelin}
+
+        for attribute in set(unit.attributes) - dont_show:
+            if attribute in State:
+                if unit.has(attribute):
+                    lines.append(prettify(attribute.name))
+
+            elif attribute in Trait or attribute in Ability:
+                lines += [prettify(attribute.name) + ":", get_description(attribute, unit.get_level(attribute)), ""]
+
+            elif attribute in Effect:
+                lines += [prettify(attribute.name) + ":", get_description(attribute, unit.get_level(attribute))]
+                duration = unit.get_duration(attribute)
+                if duration == 1:
+                    lines += ["Duration: " + str(unit.get_duration(attribute)) + " turn.", ""]
                 else:
-                    lines.append("+" + str(value) + " Defence against " + unit_type.name)
-                lines.append("")
-
-        for trait in unit.get_traits():
-            if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life]:
-                level = unit.get_level(trait)
-                if level == 1:
-                    lines.append(trait.name + ":")
-                    lines.append(trait_descriptions[trait.name][1])
-                    lines.append("")
-                elif level > 1:
-                    lines.append(trait.name + ", level " + str(level) + ":")
-                    lines.append(trait_descriptions[trait.name][1])
-                    lines.append("")
-
-        for ability in unit.abilities:
-            level = unit.get_level(ability)
-            if level == 1:
-                lines.append(ability.name + ":")
-                lines.append(get_ability_description(ability, 1))
-                lines.append("")
-            else:
-                lines.append(ability.name + ", " + "level " + str(level) + ":")
-                lines.append(get_ability_description(ability, level))
-                lines.append("")
-
-        for state in unit.get_states():
-            value = unit.get_state(state)
-            if value and state not in [State.used, State.recently_upgraded, State.experience, State.lost_extra_life,
-                                       State.javelin_thrown]:
-                lines.append(state.name + ": " + str(value))
-
-        for effect in unit.effects:
-            level = unit.get_level(effect)
-            duration = unit.get_level(effect)
-            if level == 1:
-                lines.append(effect.name + ": " + str(duration))
-            else:
-                lines.append(effect.name + ", level " + str(level) + ": " + str(duration))
-            lines.append("")
+                    lines += ["Duration: " + str(unit.get_duration(attribute)) + " turns.", ""]
 
         if unit.has(Trait.extra_life):
             if unit.has(State.lost_extra_life):
-                lines.append("No extra life")
+                lines += ["No extra life", ""]
             else:
-                lines.append("Has extra life")
-            lines.append("")
+                lines += ["Has extra life", ""]
 
         if unit.has(Trait.javelin):
             if unit.has(State.javelin_thrown):
-                lines.append("Javelin thrown")
+                lines += ["Javelin thrown", ""]
             else:
-                lines.append("Has javelin")
-            lines.append("")
+                lines += ["Has javelin", ""]
 
         return lines
 
