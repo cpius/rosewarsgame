@@ -44,20 +44,20 @@ class Viewinfo:
                      Trait.javelin}
 
         for attribute in set(unit.attributes) - dont_show:
+            values = unit.attributes[attribute]
             if attribute in State:
                 if unit.has(attribute):
                     lines.append(prettify(attribute.name))
 
             elif attribute in Trait or attribute in Ability:
-                lines += [prettify(attribute.name) + ":", get_description(attribute, unit.get_level(attribute)), ""]
+                lines += [prettify(attribute.name) + ":", get_description(attribute, values.level), ""]
 
             elif attribute in Effect:
-                lines += [prettify(attribute.name) + ":", get_description(attribute, unit.get_level(attribute))]
-                duration = unit.get_duration(attribute)
-                if duration == 1:
-                    lines += ["Duration: " + str(unit.get_duration(attribute)) + " turn.", ""]
+                lines += [prettify(attribute.name) + ":", get_description(attribute, values.level)]
+                if values.duration == 1:
+                    lines += ["Duration: " + str(values.duration) + " turn.", ""]
                 else:
-                    lines += ["Duration: " + str(unit.get_duration(attribute)) + " turns.", ""]
+                    lines += ["Duration: " + str(values.duration) + " turns.", ""]
 
         if unit.has(Trait.extra_life):
             if unit.has(State.lost_extra_life):
