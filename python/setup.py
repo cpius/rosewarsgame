@@ -37,19 +37,23 @@ units_info = {Unit.Archer: Info({2, 3}, 3, False),
               Unit.Weaponsmith: Info({2, 3}, 1, True)}
 
 if get_setting("version") == "1.1":
-    allowed_special_units = [Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman,
-                             Unit.Scout, Unit.Viking, Unit.Hobelar,
-                             Unit.Halberdier, Unit.Flanking_Cavalry, Unit.Hussar, Unit.Lancer, Unit.Royal_Guard,
-                             Unit.Javeliner, Unit.Trebuchet, Unit.War_Elephant, Unit.Fencer, Unit.Saboteur,
-                             Unit.Diplomat, Unit.Assassin, Unit.Weaponsmith]
-    allowed_basic_units = [Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman]
-    required_special_units = []
+    allowed_special_units = {
+        Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman, Unit.Scout, Unit.Viking,
+        Unit.Hobelar, Unit.Halberdier, Unit.Flanking_Cavalry, Unit.Hussar, Unit.Lancer, Unit.Royal_Guard,
+        Unit.Javeliner, Unit.Trebuchet, Unit.War_Elephant, Unit.Fencer, Unit.Saboteur, Unit.Diplomat, Unit.Assassin,
+        Unit.Weaponsmith}
+    allowed_basic_units = {
+        Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman}
+    required_special_units = {
+        Unit.Weaponsmith, Unit.Saboteur}
 
 if get_setting("version") == "1.0":
-    allowed_special_units = [Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman,
-                             Unit.Scout, Unit.Viking, Unit.Hobelar]
-    allowed_basic_units = [Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman]
-    required_special_units = []
+    allowed_special_units = {
+        Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman, Unit.Scout, Unit.Viking,
+        Unit.Hobelar}
+    allowed_basic_units = {
+        Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman}
+    required_special_units = {}
 
 if get_setting("Beginner_mode"):
     basic_unit_count, special_unit_count = 9, 0
