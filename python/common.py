@@ -6,7 +6,8 @@ from enum import Enum
 
 
 class Direction:
-    """ A direction is one move up, down, left or right.
+    """
+    A direction is one move up, down, left or right.
     The class contains methods for returning the tile going one step in the direction will lead you to,
     and for returning the tiles you should check for zone of control.
     """
@@ -47,7 +48,7 @@ class Position:
         return " ABCDE"[self.column] + str(self.row)
 
     def __eq__(self, other):
-        return not other is None and self.column == other.column and self.row == other.row
+        return other is not None and self.column == other.column and self.row == other.row
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -69,7 +70,8 @@ class Position:
         return Position(self.column, board_height - self.row + 1)
 
     def four_forward_tiles(self, direction):
-        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board_tiles)
+        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in
+                   board_tiles)
 
     def surrounding_tiles(self):
         return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board_tiles)
@@ -225,11 +227,11 @@ effect_descriptions = {
         1: "Unit cannot perform any actions.",
         2: "Unit cannot perform any actions."},
     "improved_weapons": {
-        1: "Unit has +3 attack, +1 defence",
-        2: "Unit has +2 attack, +1 defence"},
+        1: "Unit has +3 attack, +1 defence.",
+        2: "Unit has +2 attack, +1 defence."},
     "sabotaged": {
         1: "Units defence is reduced to 0.",
-        2: "Units defence is reduced to 0"}
+        2: "Units defence is reduced to 0."}
 }
 
 ability_descriptions = {
@@ -383,7 +385,7 @@ class Opponent(Enum):
     Load = 4
 
 
-enum_from_string = {enum.name: enum for enum_type in [Trait, State, Effect, Ability, Unit, Intelligence] for enum in enum_type}
+enum_from_string = {enum.name: enum for type in [Trait, State, Effect, Ability, Unit, Intelligence] for enum in type}
 
 
 def get_attribute_from_document(attribute_name, info):
@@ -530,6 +532,10 @@ def get_enum_upgrade(upgrade):
 
 
 def get_string_upgrade(upgrade):
+    """
+    :param upgrade: Either a Unit enum or a dictionary with attribute enums as keys and AttributeValues as items.
+    :return: A unit name as a string or a dictionary with strings as items and values, respectively.
+    """
     if upgrade in Unit:
         return upgrade.name
     else:
