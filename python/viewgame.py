@@ -37,14 +37,14 @@ class Viewgame:
         unit_dimensions = (self.interface.unit_box_width, self.interface.unit_box_height)
         drawn_tiles = set()
         for action in actions:
-            if action.is_attack():
+            if action.is_attack:
                 location = self.interface.coordinates["base_box"].get(action.target_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
                     rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
                     AAfilledRoundedRect(self.screen, rectangle_style, self.interface.attack_shading, 0.2)
 
-            elif action.is_ability():
+            elif action.is_ability:
                 location = self.interface.coordinates["base_box"].get(action.target_at)
                 if location not in drawn_tiles:
                     drawn_tiles.add(location)
@@ -74,13 +74,13 @@ class Viewgame:
         pygame.draw.circle(self.screen, Color.Black, coordinates["center"].get(aligned_action.start_at), 10)
         self.draw_line(aligned_action.start_at, aligned_action.end_at)
 
-        if aligned_action.is_attack():
+        if aligned_action.is_attack:
             self.draw_line(aligned_action.end_at, aligned_action.target_at)
 
             pic = get_image(self.interface.attack_icon)
             self.screen.blit(pic, coordinates["battle"].get(aligned_action.target_at))
 
-        elif aligned_action.is_ability():
+        elif aligned_action.is_ability:
             self.draw_line(aligned_action.end_at, aligned_action.target_at)
             pic = get_image(self.interface.ability_icon)
             self.screen.blit(pic, coordinates["battle"].get(aligned_action.target_at))
@@ -142,7 +142,7 @@ class Viewgame:
         if unit.has(Effect.bribed):
             self.draw_bribed(position)
 
-        level = unit.get_unit_level()
+        level = unit.unit_level
         if not unit.should_be_upgraded() and level:
             if level > 3:
                 level = 3
@@ -228,7 +228,7 @@ class Viewgame:
 
     @staticmethod
     def get_yellow_counters(unit):
-        return 1 if (unit.has_extra_life() or unit.has(Effect.improved_weapons)) else 0
+        return 1 if (unit.has_extra_life or unit.has(Effect.improved_weapons)) else 0
 
     @staticmethod
     def get_blue_counters(unit):

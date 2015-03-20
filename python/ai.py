@@ -22,8 +22,8 @@ class AI():
 
         self.select_upgrade = select_upgrade
 
-success = Outcome(dict((key, rolls(1, 6)) for key in board))
-failure = Outcome(dict((key, rolls(6, 1)) for key in board))
+success = Outcome(dict((key, rolls(1, 6)) for key in board_tiles))
+failure = Outcome(dict((key, rolls(6, 1)) for key in board_tiles))
 
 
 values = {"Backline": [10000, 10000],
@@ -76,11 +76,11 @@ def document_actions(actions, game):
     with open(get_path(), 'w') as out:
         for a in actions:
             out.write(" -- " + str(a) + " -- \n")
-            if a.is_attack():
+            if a.is_attack:
                 out.write("Chance of success: " + str(round(a.chance * 100)) + "%\n\n")
                 if hasattr(a, "a2_if_win"):
                     out.write("- Second action if win: " + str(a.a2_if_win) + " -\n")
-                    if a.a2_if_win.is_attack():
+                    if a.a2_if_win.is_attack:
                         out.write("Chance of success: " + str(round(a.a2_if_win.chance * 100)) + "%\n\n")
                         write_attack_results(a.a2_if_win)
                     else:
@@ -88,7 +88,7 @@ def document_actions(actions, game):
                         out.write("\n")
 
                     out.write("- Second action if loss: " + str(a.a2_if_loss) + " -\n")
-                    if a.a2_if_loss.is_attack():
+                    if a.a2_if_loss.is_attack:
                         out.write("Chance of success: " + str(round(a.a2_if_loss.chance * 100)) + "%\n\n")
                         write_attack_results(a.a2_if_loss)
                     else:
@@ -104,7 +104,7 @@ def document_actions(actions, game):
                 out.write("\n")
                 if hasattr(a, "a2"):
                     out.write("Second action: " + str(a.a2) + "\n")
-                    if a.a2.is_attack():
+                    if a.a2.is_attack:
                         out.write("Chance of success: " + str(round(a.a2.chance * 100)) + "%\n")
                         out.write("\n")
                         write_attack_results(a.a2)
@@ -133,7 +133,7 @@ def score_actions_considering_one_action(g0):
 def score_actions_considering_one_more_action(g1, g0):
     actions = g1.get_actions()
     for a in actions:
-        if a.has_outcome():
+        if a.has_outcome:
             g2_win = one_action_forward(a, g1, success)
             g2_loss = one_action_forward(a, g1, failure)
             a.chance = chance_of_win(g1, a)
@@ -170,7 +170,7 @@ def score_actions_considering_two_actions(g0):
 
     actions = g0.get_actions()
     for a in actions:
-        if a.is_attack():
+        if a.is_attack:
             g1_if_win = one_action_forward(a, g0, success)
             g1_if_loss = one_action_forward(a, g0, failure)
             a.chance = chance_of_win(g0, a)
@@ -217,7 +217,7 @@ def get_unit_factors(unit, position, gamestate, backline):
         if moves_to_backline == 0:
             return "Backline"
 
-        if unit.has_extra_life():
+        if unit.has_extra_life:
             if moves_to_backline < 4:
                 return str(int(moves_to_backline)) + " move(s) from backline, extra life"
 
@@ -317,7 +317,7 @@ def score_actions_simple(g):
 
     if go_for == "attack":
         for a in actions:
-            if a.is_attack():
+            if a.is_attack:
                 a.score = chance_of_win(g, a)
                 if a.double_cost:
                     a.score /= 2
@@ -329,7 +329,7 @@ def score_actions_simple(g):
             action.score = action.end_at.row
             if action.end_at.row > action.start_at.row:
                 action.score += 1
-            if action.is_attack():
+            if action.is_attack:
                 action.score += 0.25
                 if action.target_at.row > action.end_at.row and action.move_with_attack:
                     action.score += 0.5

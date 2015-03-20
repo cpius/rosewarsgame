@@ -1,7 +1,7 @@
 from action import Action
 from common import *
 from itertools import product
-from functools import lru_cache
+import action_sets
 
 
 def get_actions(gamestate):
@@ -14,15 +14,7 @@ def get_actions(gamestate):
     actions = []
     for position, unit in gamestate.player_units.items():
         if can_use_unit(unit, is_extra_action):
-            moves, attacks, abilities = get_unit_actions(unit, position, gamestate)
-
-            if not can_attack_with_unit(gamestate, unit) or unit.attack == 0:
-                attacks = []
-
-            if melee_frozen(gamestate.enemy_units, position):
-                moves = []
-
-            actions += moves + attacks + abilities
+            actions += get_unit_actions(unit, position, gamestate)
 
     return actions
 
@@ -42,11 +34,11 @@ def get_unit_actions(unit, start_at, gamestate):
         return [Action(units, start_at, end_at) for end_at in moveset]
 
     def generate_movesets(movement):
-        return moves_sets(start_at, frozenset(units), zoc_blocks, movement, movement)
+        return action_sets.moves_sets(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def generate_extra_moveset():
         movement = unit.get_state(State.movement_remaining)
-        return moves_set(start_at, frozenset(units), zoc_blocks, movement, movement)
+        return action_sets.moves_set(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def attack_generator(moveset):
         """ Generates all the tiles a unit can attack based on the places it can move to. """
@@ -54,7 +46,7 @@ def get_unit_actions(unit, start_at, gamestate):
             new_position = direction.move(position)
             if new_position in enemy_units:
                 if not zoc_block(position, direction, zoc_blocks) and \
-                        (not enemy_units[new_position].has_extra_life() or unit.has(Trait.push)):
+                        (not enemy_units[new_position].has_extra_life or unit.has(Trait.push)):
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": True}
                 yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
 
@@ -63,7 +55,7 @@ def get_unit_actions(unit, start_at, gamestate):
         for position, direction in product(moveset, directions):
             new_position = direction.move(position)
             if new_position in enemy_units:
-                if enemy_units[new_position].has_extra_life() and not unit.has(Trait.push):
+                if enemy_units[new_position].has_extra_life and not unit.has(Trait.push):
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
                 else:
                     yield {"end_at": position, "target_at": new_position}
@@ -81,7 +73,7 @@ def get_unit_actions(unit, start_at, gamestate):
         return moves, attacks
 
     def get_javelin_attacks():
-        javelin_attacks = ranged_attack_actions(ranged_attacks_set(start_at, frozenset(enemy_units), 3))
+        javelin_attacks = ranged_attack_actions(action_sets.ranged_attacks_set(start_at, frozenset(enemy_units), 3))
         javelin_attacks = [attack for attack in javelin_attacks if distance(attack.end_at, attack.target_at) > 1]
         return javelin_attacks
 
@@ -114,24 +106,24 @@ def get_unit_actions(unit, start_at, gamestate):
         for direction in directions:
             one_tile_away = direction.move(start_at)
             two_tiles_away = direction.move(one_tile_away)
-            if one_tile_away in enemy_units and two_tiles_away in board and two_tiles_away not in units:
+            if one_tile_away in enemy_units and two_tiles_away in board_tiles and two_tiles_away not in units:
                 attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
                                move_with_attack=False))
         return attacks
 
     def get_abilities():
         abilities = []
-        for ability in unit.get_abilities():
+        for ability in unit.abilities:
             if ability in [Ability.sabotage, Ability.poison, Ability.assassinate]:
                 target_positions = enemy_units
             elif ability in [Ability.improve_weapons]:
-                target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee()]
+                target_positions = [pos for pos, target in player_units.items() if target.attack and target.is_melee]
             elif ability == Ability.bribe:
                 target_positions = [pos for pos, target in enemy_units.items() if not target.has(Effect.bribed)]
             else:
                 target_positions = []
 
-            abilityset = ranged_attacks_set(start_at, frozenset(target_positions), unit.range)
+            abilityset = action_sets.ranged_attacks_set(start_at, frozenset(target_positions), unit.range)
             if ability != Ability.assassinate or gamestate.actions_remaining == 1:
                 abilities += ability_actions(abilityset, ability)
 
@@ -146,8 +138,8 @@ def get_unit_actions(unit, start_at, gamestate):
     moveset_with_leftover, moveset_no_leftover = generate_movesets(unit.movement)
     moveset = moveset_with_leftover | moveset_no_leftover
     moves = move_actions(moveset)
-    if unit.is_ranged():
-        attacks = ranged_attack_actions(ranged_attacks_set(start_at, frozenset(enemy_units), unit.range))
+    if unit.is_ranged:
+        attacks = ranged_attack_actions(action_sets.ranged_attacks_set(start_at, frozenset(enemy_units), unit.range))
     else:
         attacks = melee_attack_actions(moveset_with_leftover | {start_at})
     abilities = get_abilities()
@@ -158,11 +150,11 @@ def get_unit_actions(unit, start_at, gamestate):
 
     if unit.has(Trait.berserking):
 
-        moveset_with_leftover, moveset_no_leftover = moves_sets(start_at, frozenset(units), zoc_blocks, 4, 4)
+        moveset_with_leftover, moveset_no_leftover = action_sets.moves_sets(start_at, frozenset(units), zoc_blocks, 4, 4)
         attacks = melee_attack_actions(moveset_with_leftover | {start_at})
 
     if unit.has(Trait.scouting):
-        moves = move_actions(moves_set(start_at, frozenset(units), frozenset([]), unit.movement, unit.movement))
+        moves = move_actions(action_sets.moves_set(start_at, frozenset(units), frozenset([]), unit.movement, unit.movement))
 
     if unit.has(Trait.defence_maneuverability):
         moves, attacks = get_defence_maneuverability_actions()
@@ -173,92 +165,35 @@ def get_unit_actions(unit, start_at, gamestate):
     if unit.has(Trait.ride_through):
         attacks = get_ride_through_attacks(attacks)
 
-    if unit.has_javelin():
+    if unit.has_javelin:
         attacks += get_javelin_attacks()
 
-    return moves, attacks, abilities
+    if not can_attack_with_unit(gamestate, unit) or unit.attack == 0:
+        attacks = []
+
+    if melee_frozen(gamestate.enemy_units, start_at):
+        moves = []
+
+    return moves + attacks + abilities
 
 
 def zoc_block(position, direction, zoc_blocks):
-    """ Returns whether an enemy unit exerting ZOC prevents you from going in 'direction' from 'position'. """
+    """
+    :param position: The starting position of the unit
+    :param direction: The Direction the unit wants to move
+    :param zoc_blocks: Positions occupied by enemy units with ZOC against the unit
+    :return: Whether the unit is prevented from going in the direction by a ZOC block
+    """
     return any(pos in zoc_blocks for pos in direction.perpendicular(position))
 
 
-def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
-    for direction in directions:
-        new_position = direction.move(position)
-        if new_position in board and new_position not in units and not zoc_block(position, direction, zoc_blocks):
-            yield new_position
-
-
-@lru_cache(maxsize=None)
-def moves_sets(position, units, zoc_blocks, total_movement, movement_remaining):
-    """
-    Returns all the tiles a unit can move to, in two sets.
-
-    moveset_with_leftover: The tiles it can move to, and still have leftover movement to make an attack.
-    moveset_no_leftover: The tiles it can move to, with no leftover movement to make an attack.
-    """
-
-    if movement_remaining == 0:
-        return set(), {position}
-    elif movement_remaining < total_movement:
-        moveset_with_leftover = {position}
-    else:
-        moveset_with_leftover = set()
-
-    moveset_no_leftover = set()
-
-    for new_position in adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
-        movesets = moves_sets(new_position, units, zoc_blocks, total_movement, movement_remaining - 1)
-        moveset_with_leftover |= movesets[0]
-        moveset_no_leftover |= movesets[1]
-
-    return moveset_with_leftover, moveset_no_leftover
-
-
-@lru_cache(maxsize=None)
-def moves_set(position, units, zoc_blocks, total_movement, movement_remaining):
-    """Returns all the tiles a unit can move to. """
-
-    if movement_remaining <= 0:
-        return {position}
-    elif movement_remaining < total_movement:
-        moveset = {position}
-    else:
-        moveset = set()
-
-    for new_position in adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
-        moveset |= moves_set(new_position, units, zoc_blocks, total_movement, movement_remaining - 1)
-
-    return moveset
-
-
-@lru_cache(maxsize=None)
-def ranged_attacks_set(position, enemy_units, range_remaining):
-    """ Returns all the tiles a ranged unit can attack"""
-
-    attackset = set()
-
-    if position in enemy_units:
-        attackset.add(position)
-
-    if range_remaining:
-        for new_position in position.adjacent_tiles():
-            attackset |= ranged_attacks_set(new_position, enemy_units, range_remaining - 1)
-
-    return attackset
-
-
 def can_use_unit(unit, is_extra_action):
-    is_frozen = unit.has(Effect.poisoned, 1) or unit.has(Effect.poisoned, 2)
-    is_bribed = unit.has(State.recently_bribed)
-    is_used = unit.has(State.used) and not unit.has(State.extra_action)
-
-    if is_extra_action:
-        return unit.has(State.extra_action) and not is_frozen and not is_bribed
+    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
+        return False
+    elif is_extra_action:
+        return unit.has(State.extra_action)
     else:
-        return not is_frozen and not is_bribed and not is_used
+        return not unit.has(State.used)
 
 
 def melee_frozen(enemy_units, start_at):

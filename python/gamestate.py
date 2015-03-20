@@ -5,6 +5,7 @@ import action_getter
 from units import Unit_class
 import json
 from common import *
+from board import Board
 
 
 class Gamestate:
@@ -15,7 +16,7 @@ class Gamestate:
                  created_at=None,
                  game_id=None,
                  ai_factors=None):
-        self.units = [player1_units, player2_units]
+        self.board = Board([player1_units, player2_units])
         self.actions_remaining = actions_remaining
         self.action_count = 0
         self.created_at = created_at
@@ -27,7 +28,7 @@ class Gamestate:
             self.ai_factors = {}
 
     def all_units(self):
-        return merge(*self.units)
+        return self.board.all_units()
 
     def do_action(self, action, outcome):
         action_doer.do_action(self, action, outcome)
@@ -63,7 +64,7 @@ class Gamestate:
     def get_actions_with_move_with_attack_as_none(self, positions=None):
         actions_with_none = []
         for action in self.get_actions(positions):
-            if action.is_attack():
+            if action.is_attack:
                 if not action.move_with_attack:
                     new_action = action.copy()
                     new_action.move_with_attack = None
@@ -83,11 +84,11 @@ class Gamestate:
 
     @property
     def player_units(self):
-        return self.units[0]
+        return self.board.player_units
 
     @property
     def enemy_units(self):
-        return self.units[1]
+        return self.board.enemy_units
 
     def get_actions_remaining(self):
         return self.actions_remaining
@@ -158,8 +159,8 @@ class Gamestate:
         if self.ai_factors:
             document["ai_factors"] = self.ai_factors
 
-        document["player1_units"] = {str(position): unit.to_document() for (position, unit) in self.units[0].items()}
-        document["player2_units"] = {str(position): unit.to_document() for (position, unit) in self.units[1].items()}
+        document["player1_units"] = {str(position): unit.to_document() for (position, unit) in self.board.units[0].items()}
+        document["player2_units"] = {str(position): unit.to_document() for (position, unit) in self.board.units[1].items()}
 
         return document
 
@@ -168,7 +169,7 @@ class Gamestate:
 
     def shift_turn(self):
         self.flip_all_units()
-        self.units = self.units[::-1]
+        self.board.units = self.board.units[::-1]
         self.initialize_turn()
 
     def move_melee_unit_to_target_tile(self, action):
@@ -181,21 +182,13 @@ class Gamestate:
         return document_to_string(self.to_document())
 
     def flip_all_units(self):
-        self.units = [flip_units(self.player_units), flip_units(self.enemy_units)]
+        self.board.flip_all_units()
 
     def __eq__(self, other):
         return self.to_document() == other.to_document()
 
     def is_ended(self):
-        def unit_on_opponents_backline():
-            return any(unit for position, unit in self.player_units.items() if position.row == 8
-                       and not unit.has(Effect.bribed))
-
-        def no_enemy_units():
-            return not self.enemy_units and not any(unit for unit in self.player_units.values() if
-                                                    unit.has(Effect.bribed))
-
-        return unit_on_opponents_backline() or no_enemy_units()
+        return self.board.is_ended()
 
     def get_unit_from_action_document(self, action_document):
         unit_position = Position.from_string(action_document["end_at"])
@@ -211,33 +204,25 @@ class Gamestate:
             return None, None
 
     def is_extra_action(self):
-        return any(unit for unit in self.player_units.values() if unit.has(State.extra_action))
+        return self.board.is_extra_action()
 
     def get_upgradeable_unit(self):
-        for position, unit in self.player_units.items():
-            if unit.should_be_upgraded():
-                return position, unit
+        return self.board.get_upgradeable_unit()
 
     def is_post_move_with_attack_possible(self, action, outcome):
-        if not action.is_attack() or not action.unit.is_melee():
+        if not action.is_attack or not action.unit.is_melee:
             return False
 
         rolls = outcome.for_position(action.target_at)
-        push_possible = action.is_push() and battle.attack_successful(action, rolls, self)
+        push_possible = action.is_push and battle.attack_successful(action, rolls, self)
 
         return push_possible or battle.is_win(action, rolls, self)
 
     def delete_unit_at(self, position):
-        if position in self.player_units:
-            del self.player_units[position]
-        else:
-            del self.enemy_units[position]
+        self.board.delete_unit_at(position)
 
     def move_unit(self, start_position, end_position):
-        if start_position in self.player_units:
-            self.player_units[end_position] = self.player_units.pop(start_position)
-        else:
-            self.enemy_units[end_position] = self.enemy_units.pop(start_position)
+        self.board.move_unit(start_position, end_position)
 
     def change_unit_owner(self, position):
-        self.player_units[position] = self.enemy_units.pop(position)
+        self.board.change_unit_owner(position)

@@ -16,15 +16,15 @@ def settle_attack(action, gamestate, outcome, attack_direction, is_sub_action=Fa
     rolls = outcome.for_position(action.target_at)
 
     if battle.is_win(action, rolls, gamestate, is_sub_action):
-        if action.target_unit.has_extra_life():
+        if action.target_unit.has_extra_life:
             action.target_unit.set(State.lost_extra_life)
         else:
             gamestate.delete_unit_at(action.target_at)
 
-    elif action.is_push() and battle.attack_successful(action, rolls, gamestate):  # Unit is pushed
+    elif action.is_push and battle.attack_successful(action, rolls, gamestate):  # Unit is pushed
         push_destination = attack_direction.move(action.target_at)
 
-        if push_destination in all_units or push_destination not in board:
+        if push_destination in all_units or push_destination not in board_tiles:
             gamestate.delete_unit_at(action.target_at)
         else:
             gamestate.move_unit(action.target_at, push_destination)
@@ -32,7 +32,7 @@ def settle_attack(action, gamestate, outcome, attack_direction, is_sub_action=Fa
     if battle.flanking(action):
         action.target_unit.set(State.flanked)
 
-    if action.is_javelin_throw():
+    if action.is_javelin_throw:
         action.unit.set(State.javelin_thrown)
 
 
@@ -72,7 +72,7 @@ def do_action(gamestate, action, outcome):
             return
 
         # If the action is a move with a Hobelar, there is no reason to allow an extra action.
-        if unit.has(Trait.swiftness) and not action.is_attack():
+        if unit.has(Trait.swiftness) and not action.is_attack:
             return
 
         # Determine the movement points the unit can use on its extra action.
@@ -94,21 +94,18 @@ def do_action(gamestate, action, outcome):
 
         gamestate.decrement_actions_remaining()
 
-        if action.double_cost():
+        if action.double_cost:
             gamestate.decrement_actions_remaining()
 
     def apply_unit_effects():
-        if unit.has(Trait.attack_cooldown) and action.is_attack():
+        if unit.has(Trait.attack_cooldown) and action.is_attack:
             unit.set(Effect.attack_frozen, duration=3)
 
-        if unit.has(Trait.attack_cooldown, 2) and action.is_attack():
+        if unit.has(Trait.attack_cooldown, 2) and action.is_attack:
             unit.set(Effect.attack_frozen, level=2, duration=2)
 
     def unit_should_gain_experience():
-        return action.is_attack() or unit.type == Type.Cavalry or action.is_ability()
-
-    def has_attack_direction():
-        return unit.is_melee() and not action.is_javelin_throw()
+        return action.is_attack or unit.type == Type.Cavalry or action.is_ability
 
     def get_subattack_targets():
         targets = []
@@ -146,8 +143,8 @@ def do_action(gamestate, action, outcome):
     if unit_should_gain_experience():
         unit.gain_experience()
 
-    if action.is_attack():
-        attack_direction = end_at.get_direction_to(target_at) if has_attack_direction() else None
+    if action.is_attack:
+        attack_direction = action.attack_direction
         settle_attack(action, gamestate, outcome, attack_direction, False)
 
         if action.move_with_attack and action.target_at not in enemy_units:
@@ -159,7 +156,7 @@ def do_action(gamestate, action, outcome):
                 sub_attack = Action(all_units, start_at, end_at, target)
                 settle_attack(sub_attack, gamestate, outcome, attack_direction, True)
 
-    elif action.is_ability():
+    elif action.is_ability:
         settle_ability()
 
     if unit_has_extra_action_trait():

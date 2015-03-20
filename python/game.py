@@ -73,7 +73,7 @@ class Game:
 
             outcome = None
             outcome_document = None
-            if action.has_outcome():
+            if action.has_outcome:
                 outcome_document = log_document[str(action_number) + "_outcome"]
                 outcome = Outcome.from_document(outcome_document)
                 if options and "move_with_attack" in options:
@@ -104,7 +104,7 @@ class Game:
 
         action_number = 3 - self.gamestate.get_actions_remaining()
         colors = self.current_player().color, self.opponent_player().color
-        if action.is_attack():
+        if action.is_attack:
             for position in outcome.outcomes:
                 if position in self.gamestate.enemy_units:
                     colors = self.current_player().color, self.opponent_player().color
@@ -115,7 +115,7 @@ class Game:
                 target_unit = self.gamestate.all_units()[position]
                 self.logbook.append(Log(ActionType.Attack, action.unit, target_unit, action_number, colors,
                                         outcome_string))
-        elif action.is_ability():
+        elif action.is_ability:
             if action.target_at in self.gamestate.enemy_units:
                 colors = self.current_player().color, self.opponent_player().color
             else:

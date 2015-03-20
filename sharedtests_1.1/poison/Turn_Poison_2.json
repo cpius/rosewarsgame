@@ -1,6 +1,6 @@
 {
     "type": "Does turn shift work",
-    "description": "Poisoned only increases in your turns",
+    "description": "Poisoned only decreases in your turns",
     "pre_gamestate": {
         "actions_remaining": 0,
         "player1_units": {

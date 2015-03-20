@@ -2,6 +2,7 @@ from viewcommon import *
 from collections import namedtuple
 import battle
 from operator import attrgetter
+from common import *
 
 
 class Viewinfo:
@@ -24,79 +25,51 @@ class Viewinfo:
         lines = ["Attack: " + str(unit.attack) + "  Defence: " + str(defence)
                  + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement), ""]
 
-        level = unit.get_unit_level()
-        if level:
-            lines.append("Level: " + str(level + 1))
-            lines.append("")
+        if unit.unit_level:
+            lines += ["Level: " + str(unit.unit_level + 1), ""]
 
         if unit.zoc:
-            lines.append("Zone of control against: " + ", ".join(unit_type.name for unit_type in unit.zoc))
-            lines.append("")
+            lines += ["Zone of control against: " + ", ".join(unit_type.name for unit_type in unit.zoc), ""]
 
         if unit.attack_bonuses:
             for unit_type, value in unit.attack_bonuses.items():
-                lines.append("+" + str(value) + " Attack against " + unit_type.name)
-                lines.append("")
+                lines += ["+" + str(value) + " Attack against " + unit_type.name, ""]
 
         if unit.defence_bonuses:
             for unit_type, value in unit.defence_bonuses.items():
-                if unit_type == Type.War_Machine:
-                    lines.append("+" + str(value) + " Defence against War Machines")
+                lines += ["+" + str(value) + " Defence against " + prettify(unit_type.name), ""]
+
+        dont_show = {State.used, State.recently_upgraded, State.experience, State.lost_extra_life, State.javelin_thrown,
+                     Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life,
+                     Trait.javelin}
+
+        for attribute in set(unit.attributes) - dont_show:
+            if attribute in State:
+                if unit.has(attribute):
+                    lines.append(prettify(attribute.name))
+
+            elif attribute in Trait or attribute in Ability:
+                lines += [prettify(attribute.name) + ":", get_description(attribute, unit.get_level(attribute)), ""]
+
+            elif attribute in Effect:
+                lines += [prettify(attribute.name) + ":", get_description(attribute, unit.get_level(attribute))]
+                duration = unit.get_duration(attribute)
+                if duration == 1:
+                    lines += ["Duration: " + str(unit.get_duration(attribute)) + " turn.", ""]
                 else:
-                    lines.append("+" + str(value) + " Defence against " + unit_type.name)
-                lines.append("")
-
-        for trait in unit.get_traits():
-            if trait not in [Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life]:
-                level = unit.get_level(trait)
-                if level == 1:
-                    lines.append(trait.name + ":")
-                    lines.append(trait_descriptions[trait.name][1])
-                    lines.append("")
-                elif level > 1:
-                    lines.append(trait.name + ", level " + str(level) + ":")
-                    lines.append(trait_descriptions[trait.name][1])
-                    lines.append("")
-
-        for ability in unit.get_abilities():
-            level = unit.get_level(ability)
-            if level == 1:
-                lines.append(ability.name + ":")
-                lines.append(get_ability_description(ability, 1))
-                lines.append("")
-            else:
-                lines.append(ability.name + ", " + "level " + str(level) + ":")
-                lines.append(get_ability_description(ability, level))
-                lines.append("")
-
-        for state in unit.get_states():
-            value = unit.get_state(state)
-            if value and state not in [State.used, State.recently_upgraded, State.experience, State.lost_extra_life,
-                                       State.javelin_thrown]:
-                lines.append(state.name + ": " + str(value))
-
-        for effect in unit.get_effects():
-            level = unit.get_level(effect)
-            duration = unit.get_level(effect)
-            if level == 1:
-                lines.append(effect.name + ": " + str(duration))
-            else:
-                lines.append(effect.name + ", level " + str(level) + ": " + str(duration))
-            lines.append("")
+                    lines += ["Duration: " + str(unit.get_duration(attribute)) + " turns.", ""]
 
         if unit.has(Trait.extra_life):
             if unit.has(State.lost_extra_life):
-                lines.append("No extra life")
+                lines += ["No extra life", ""]
             else:
-                lines.append("Has extra life")
-            lines.append("")
+                lines += ["Has extra life", ""]
 
         if unit.has(Trait.javelin):
             if unit.has(State.javelin_thrown):
-                lines.append("Javelin thrown")
+                lines += ["Javelin thrown", ""]
             else:
-                lines.append("Has javelin")
-            lines.append("")
+                lines += ["Has javelin", ""]
 
         return lines
 
@@ -117,7 +90,7 @@ class Viewinfo:
         image_location = [base[0], base[1] + 20 * self.zoom]
         text_location = [base[0], base[1] + 290 * self.zoom]
 
-        write(self.screen, unit.name.replace("_", " "), title_location, self.interface.fonts["normal"])
+        write(self.screen, unit.pretty_name, title_location, self.interface.fonts["normal"])
         self.screen.blit(pic, image_location)
 
         lines = self.get_unit_lines(unit)
@@ -149,7 +122,7 @@ class Viewinfo:
     def draw_ask_about_ability(self, unit):
         self.clear()
         lines = ["Select ability:"]
-        for i, ability in enumerate(unit.get_abilities()):
+        for i, ability in enumerate(unit.abilities):
             level = unit.attributes[ability].level
             description_string = str(i + 1) + ": " + ability.name + ": " + get_ability_description(ability, level)
             lines += textwrap.wrap(description_string, self.interface.message_line_length)
@@ -161,7 +134,7 @@ class Viewinfo:
 
     def draw_unit_lower_right(self, action, color, index, base_x, base_y):
 
-        if not action.is_attack():
+        if not action.is_attack:
             unit = action.unit.name
         elif index == 0:
             unit = action.unit.name
@@ -201,7 +174,7 @@ class Viewinfo:
                     defence = battle.get_defence(action, attack, gamestate)
                     attack, defence = min(attack, 6), min(defence, 6)
 
-                chance_of_push = (attack / 6) * (defence/6) if action.is_push() else 0
+                chance_of_push = (attack / 6) * (defence/6) if action.is_push else 0
                 chance_of_win = attack * (6 - defence) / 36
                 battle_values_list.append(BattleValues(attack=attack, defence=defence, chance_of_push=chance_of_push,
                                                        chance_of_win=chance_of_win))

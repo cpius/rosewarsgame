@@ -70,7 +70,7 @@ class Client():
             print("received action", document_to_string(game[expected_action]))
             action = Action.from_document(gamestate.all_units(), game[expected_action])
             outcome = None
-            if action.is_attack():
+            if action.is_attack:
                 outcome = Outcome.from_document(game[expected_action + "_outcome"])
 
             upgrade = None

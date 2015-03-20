@@ -69,16 +69,16 @@ class Position:
         return Position(self.column, board_height - self.row + 1)
 
     def four_forward_tiles(self, direction):
-        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board)
+        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board_tiles)
 
     def surrounding_tiles(self):
-        return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board)
+        return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board_tiles)
 
     def adjacent_tiles(self):
-        return set(pos for pos in [direction.move(self) for direction in directions] if pos in board)
+        return set(pos for pos in [direction.move(self) for direction in directions] if pos in board_tiles)
 
     def two_forward_tiles(self, direction):
-        return set(pos for pos in direction.forward_and_sideways(self) if pos in board)
+        return set(pos for pos in direction.forward_and_sideways(self) if pos in board_tiles)
 
 
 class AttributeValues():
@@ -215,11 +215,21 @@ state_descriptions = {
 
 
 effect_descriptions = {
-    "attack_frozen": "Unit cannot attack",
-    "bribed": "Whether a unit is bribed by a Diplomat.",
-    "poisoned": "Unit cannot perform any actions.",
-    "improved_weapons": "Whether a unit currently has been the target of an improve_weapons function by a Weaponsmith.",
-    "sabotaged": "Whether a unit is sabotaged by a Saboteur."
+    "attack_frozen": {
+        1: "Unit cannot attack.",
+        2: "Unit cannot attack."},
+    "bribed": {
+        1: "Unit is controlled by opponent and has +1 attack.",
+        2: "Unit is controlled by opponent and has +2 attack."},
+    "poisoned": {
+        1: "Unit cannot perform any actions.",
+        2: "Unit cannot perform any actions."},
+    "improved_weapons": {
+        1: "Unit has +3 attack, +1 defence",
+        2: "Unit has +2 attack, +1 defence"},
+    "sabotaged": {
+        1: "Units defence is reduced to 0.",
+        2: "Units defence is reduced to 0"}
 }
 
 ability_descriptions = {
@@ -240,9 +250,9 @@ ability_descriptions = {
         1: "Reduces a units defence to 0 this turn.",
         2: "Reduces a units defence to 0 for two turns."},
     "assassinate": {
-        1: "Attempt to assassinate any unit on the board with a 66% probability of success."
-           "After the attempt there is a 50% risk that Assassin is discovered and killed. "
-           "Assassination can only be performed on the second action."}
+        1: "Attempt to assassinate any unit on the board with a 66% probability of success After the attempt there is "
+           "a 50% risk that Assassin is discovered and killed. "
+           "Assassinate can only be performed on the second action."}
 }
 
 opponent_descriptions = {
@@ -391,12 +401,23 @@ def get_attribute_from_document(attribute_name, number):
 
 board_height = 8
 board_width = 5
-board = set(Position(column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
+board_tiles = set(Position(column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
 
 eight_directions_namedtuple = collections.namedtuple("eight_directions", [name for name in Direction.to_coordinates])
 eight_directions = eight_directions_namedtuple(*(Direction(name) for name in Direction.to_coordinates))
 four_directions_namedtuple = collections.namedtuple("directions", [name for name in ["Up", "Down", "Left", "Right"]])
 directions = four_directions_namedtuple(*(Direction(name) for name in ["Up", "Down", "Left", "Right"]))
+
+
+def get_description(attribute, level):
+    if attribute in Ability:
+        return ability_descriptions[attribute.name][level]
+    elif attribute in Trait:
+        return trait_descriptions[attribute.name][level]
+    elif attribute in Effect:
+        return effect_descriptions[attribute.name][level]
+    elif attribute in State:
+        return state_descriptions[attribute.name]
 
 
 def get_ability_description(ability, level=1):
@@ -509,4 +530,7 @@ def get_string_upgrade(upgrade):
     else:
         return {key.name: value.level for key, value in upgrade.items()}
 
+
+def prettify(string):
+    return string.replace("_", " ").title()
 

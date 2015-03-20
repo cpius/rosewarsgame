@@ -34,7 +34,7 @@ class Action(object):
         self.unit = units[self.start_at]
         self.target_unit = units[self.target_at] if self.target_at and self.target_at in units else None
 
-        is_move_with_attack_feasible = self.is_attack() and self.unit.is_melee()
+        is_move_with_attack_feasible = self.is_attack and self.unit.is_melee
         if self.move_with_attack is None and not is_move_with_attack_feasible:
             self.move_with_attack = False
 
@@ -60,9 +60,9 @@ class Action(object):
         if self.ability:
             representation += " " + self.ability.name
             representation += " " + str(self.target_unit) + " on " + str(self.target_at)
-        elif self.is_attack() and self.move_with_attack:
+        elif self.is_attack and self.move_with_attack:
             representation += " attack-move " + str(self.target_unit) + " on " + str(self.target_at)
-        elif self.is_attack():
+        elif self.is_attack:
             if hasattr(self, "target_unit"):
                 target = str(self.target_unit)
             else:
@@ -107,20 +107,25 @@ class Action(object):
 
         return document
 
+    @property
     def is_attack(self):
         return bool(self.target_at) and not self.ability
 
+    @property
     def is_ability(self):
         return bool(self.ability)
 
+    @property
     def is_push(self):
-        return self.unit.has(Trait.push) and self.is_attack()
+        return self.unit.has(Trait.push) and self.is_attack
 
+    @property
     def is_javelin_throw(self):
-        return self.unit.has_javelin() and distance(self.end_at, self.target_at) > 1
+        return self.unit.has_javelin and distance(self.end_at, self.target_at) > 1
 
+    @property
     def double_cost(self):
-        return self.unit.has(Trait.double_attack_cost) and self.is_attack()
+        return self.unit.has(Trait.double_attack_cost) and self.is_attack
 
     def copy(self):
         return deepcopy(self)
@@ -131,5 +136,12 @@ class Action(object):
         if self.target_at and self.target_at in units:
             self.target_unit = units[self.target_at]
 
+    @property
     def has_outcome(self):
-        return self.is_attack() or self.ability == Ability.assassinate
+        return self.is_attack or self.ability == Ability.assassinate
+
+    @property
+    def attack_direction(self):
+        if not self.unit.is_melee or self.is_javelin_throw:
+            return None
+        return self.end_at.get_direction_to(self.target_at)

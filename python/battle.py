@@ -5,7 +5,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
 
     defence_adjusters = 0
 
-    if attacking_unit.is_melee() and defending_unit.has(Trait.big_shield):
+    if attacking_unit.is_melee and defending_unit.has(Trait.big_shield):
         defence_adjusters += 2
 
     if "No_Crusader" not in gamestate.ai_factors and is_crusading_defense(action, gamestate.enemy_units, level=2):
@@ -17,13 +17,13 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.has(Effect.improved_weapons):
         defence_adjusters += 1
 
-    if attacking_unit.is_melee() and defending_unit.has(Trait.melee_expert):
+    if attacking_unit.is_melee and defending_unit.has(Trait.melee_expert):
         defence_adjusters += 1
 
     if attacking_unit.has(Trait.pikeman_specialist) and defending_unit == Unit.Pikeman:
         defence_adjusters += 1
 
-    if attacking_unit.is_ranged() and defending_unit.has(Trait.tall_shield):
+    if attacking_unit.is_ranged and defending_unit.has(Trait.tall_shield):
         defence_adjusters += 1
 
     if defending_unit.has(Trait.cavalry_specialist) and attacking_unit.type == Type.Cavalry:
@@ -32,7 +32,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.has(Trait.war_machine_specialist) and attacking_unit.type == Type.War_Machine:
         defence_adjusters += 1
 
-    if action.is_javelin_throw():
+    if action.is_javelin_throw:
         defence_adjusters -= 1
 
     return defence_adjusters
@@ -108,7 +108,7 @@ def get_attack(action, gamestate, is_sub_action=False):
     if defending_unit.has(Trait.pikeman_specialist) and attacking_unit == Unit.Pikeman:
         attack += 1
 
-    if defending_unit.is_melee() and attacking_unit.has(Trait.melee_expert):
+    if defending_unit.is_melee and attacking_unit.has(Trait.melee_expert):
         attack += 1
 
     if attacking_unit.has(Trait.far_sighted) and distance(action.end_at, action.target_at) < 4:
@@ -127,9 +127,9 @@ def get_attack(action, gamestate, is_sub_action=False):
 
 
 def lancing(action):
-    if action.unit.has(Trait.lancing, 1) and action.is_attack() and distance_to_target(action) >= 3:
+    if action.unit.has(Trait.lancing, 1) and action.is_attack and distance_to_target(action) >= 3:
         return 2
-    elif action.unit.has(Trait.lancing, 2) and action.is_attack() and distance_to_target(action) >= 4:
+    elif action.unit.has(Trait.lancing, 2) and action.is_attack and distance_to_target(action) >= 4:
         return 3
     else:
         return 0
@@ -140,26 +140,26 @@ def distance_to_target(action):
 
 
 def is_crusading_attack(action, units, level=1):
-    return action.unit.is_melee() and (is_surrounding_unit_with(action, units, Trait.crusading, action.start_at, level))
+    return action.unit.is_melee and (is_surrounding_unit_with(action.start_at, Trait.crusading, units, action.end_at,
+                                                                level))
 
 
 def is_crusading_defense(action, units, level=1):
-    return action.unit.is_melee() and (is_surrounding_unit_with(action, units, Trait.crusading, action.target_at, level))
+    return action.unit.is_melee and (is_surrounding_unit_with(action.target_at, Trait.crusading, units, None, level))
 
 
 def has_high_morale(action, units):
-    return action.unit.is_melee() and (is_adjacent_unit_with(action, units, Trait.flag_bearing, action.end_at) or
-                                       is_surrounding_unit_with(action, units, Trait.flag_bearing, action.end_at, 2))
+    return action.unit.is_melee and (is_adjacent_unit_with(action.end_at, Trait.flag_bearing, units) or
+                                       is_surrounding_unit_with(action.end_at, Trait.flag_bearing, units, None, 2))
 
 
-def is_surrounding_unit_with(action, units, attribute, position, level=1):
+def is_surrounding_unit_with(position, attribute, units, exclude_position, level=1):
     return any(unit_with_attribute_at(pos, attribute, units, level) for pos in position.surrounding_tiles() if
-               pos != action.start_at)
+               pos != exclude_position)
 
 
-def is_adjacent_unit_with(action, units, attribute, position, level=1):
-    return any(unit_with_attribute_at(pos, attribute, units, level) for pos in position.adjacent_tiles() if
-               pos != action.start_at)
+def is_adjacent_unit_with(position, attribute, units, level=1):
+    return any(unit_with_attribute_at(pos, attribute, units, level) for pos in position.adjacent_tiles())
 
 
 def flanking(action):
@@ -191,7 +191,7 @@ def defence_successful(action, rolls, gamestate, is_sub_action=False):
 def get_outcome_string(action, outcome, gamestate, is_sub_action):
     if is_win(action, outcome, gamestate, is_sub_action):
         return "WIN"
-    elif attack_successful(action, outcome, gamestate, is_sub_action) and action.is_push():
+    elif attack_successful(action, outcome, gamestate, is_sub_action) and action.is_push:
         return "PUSH"
     elif not attack_successful(action, outcome, gamestate, is_sub_action):
         return "MISS"
