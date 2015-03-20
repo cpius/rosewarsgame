@@ -13,7 +13,10 @@
         "player2_units": {
             "E3": {
                 "name": "Knight",
-                "improved_weapons": 1
+                "improved_weapons": {
+                    "level": 1,
+                    "duration": 1
+                }
             },
             "A4": "Ballista"
         }

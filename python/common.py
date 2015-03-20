@@ -386,18 +386,23 @@ class Opponent(Enum):
 enum_from_string = {enum.name: enum for enum_type in [Trait, State, Effect, Ability, Unit, Intelligence] for enum in enum_type}
 
 
-def get_attribute_from_document(attribute_name, number):
+def get_attribute_from_document(attribute_name, info):
+    """
+    :param attribute_name: string
+    :param info: A number or dictionary that contains info about the attribute.
+                 If the attribute is a state, info is the value of the state.
+                 If the attribute is a trait or ability, info is the level of the trait or ability.
+                 If the attribute is an effect, info is a dictionary containing the level and duration of the effect.
+    :return: An attribute enum, and its AttributeValues
+    """
 
     attribute = enum_from_string[attribute_name]
     if attribute in State:
-        return attribute, AttributeValues(value=number)
+        return attribute, AttributeValues(value=info)
     elif attribute in Trait or attribute in Ability:
-        return attribute, AttributeValues(level=number)
+        return attribute, AttributeValues(level=info)
     elif attribute in Effect:
-        if type(number) is int or type(number) is bool:
-            return attribute, AttributeValues(level=1, duration=number)
-        else:
-            return attribute, AttributeValues(**number)
+        return attribute, AttributeValues(**info)
 
 board_height = 8
 board_width = 5

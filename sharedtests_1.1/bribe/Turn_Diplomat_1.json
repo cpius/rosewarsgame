@@ -8,7 +8,10 @@
             "E4": "Light Cavalry",
             "C6": {
                 "name": "Knight",
-                "bribed": true
+                "bribed": {
+                    "level": 1,
+                    "duration": 1
+                }
             }
         },
         "player2_units": {

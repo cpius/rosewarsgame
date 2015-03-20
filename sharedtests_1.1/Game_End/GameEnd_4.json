@@ -6,7 +6,10 @@
         "player1_units": {
             "E8": {
                 "name": "Archer",
-                "bribed": 1
+                "bribed": {
+                    "level": 1,
+                    "duration": 1
+                }
             },
             "D8": "Knight"
         },

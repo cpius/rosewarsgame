@@ -20,7 +20,10 @@
         "player2_units": {
             "B4": {
                 "name": "Royal_Guard",
-                "improved_weapons": 1
+                "improved_weapons": {
+                    "level": 1,
+                    "duration": 1
+                }
             },
             "E5": "Ballista"
         }

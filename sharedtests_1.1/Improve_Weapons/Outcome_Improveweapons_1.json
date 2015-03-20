@@ -27,7 +27,10 @@
             },
             "A3": {
                 "name": "Pikeman",
-                "improved_weapons": 1
+                "improved_weapons": {
+                    "level": 1,
+                    "duration": 1
+                }
             }
         },
         "player2_units": {
