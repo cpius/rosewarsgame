@@ -1,8 +1,32 @@
 from viewcommon import *
-from collections import namedtuple
 import battle
-from operator import attrgetter
 from common import *
+from functools import total_ordering
+
+
+@total_ordering
+class BattleValues:
+    def __init__(self, attack, defence, chance_of_push, chance_of_win):
+        self.attack = attack
+        self.defence = defence
+        self.chance_of_push = chance_of_push
+        self.chance_of_win = chance_of_win
+
+    @staticmethod
+    def show_chance(value):
+        return str(round(value * 100, 1)) + "%"
+
+    def show_chance_of_win(self):
+        return self.show_chance(self.chance_of_win)
+
+    def show_chance_of_push(self):
+        return self.show_chance(self.chance_of_push)
+
+    def __eq__(self, other):
+        return self.chance_of_win == other.chance_of_win
+
+    def __gt__(self, other):
+        return self.chance_of_win > other.chance_of_win
 
 
 class Viewinfo:
@@ -134,57 +158,48 @@ class Viewinfo:
 
     @staticmethod
     def get_battle_hint(gamestate, start_at, target_at):
-            actions = [action for action in gamestate.get_actions() if action.target_at == target_at
-                       and action.start_at == start_at]
+        actions = [action for action in gamestate.get_actions({"target_at": target_at, "start_at": start_at})]
 
-            if actions[0].is_ability():
-                return ""
+        if actions[0].is_ability:
+            return ""
 
-            BattleValues = namedtuple("BattleValues", ["attack", "defence", "chance_of_win", "chance_of_push"])
-            battle_values_list = []
+        battle_values_list = []
 
-            for action in actions:
-                player_unit = gamestate.player_units[start_at]
-                if player_unit.name == Unit.Assassin:
-                    attack = 6
-                    defence = 2
-                else:
-                    attack = battle.get_attack(action, gamestate)
-                    defence = battle.get_defence(action, attack, gamestate)
-                    attack, defence = min(attack, 6), min(defence, 6)
+        for action in actions:
+            attack = battle.get_attack(action, gamestate)
+            defence = battle.get_defence(action, attack, gamestate)
+            attack, defence = min(attack, 6), min(defence, 6)
+            chance_of_push = (attack / 6) * (defence/6) if action.is_push else 0
+            chance_of_win = attack * (6 - defence) / 36
+            battle_values_list.append(BattleValues(attack, defence, chance_of_push, chance_of_win))
 
-                chance_of_push = (attack / 6) * (defence/6) if action.is_push else 0
-                chance_of_win = attack * (6 - defence) / 36
-                battle_values_list.append(BattleValues(attack=attack, defence=defence, chance_of_push=chance_of_push,
-                                                       chance_of_win=chance_of_win))
+        best_battle = max(battle_values_list)
+        worst_battle = min(battle_values_list)
+        battle_hint = ["Battle hint:"]
+        if best_battle == worst_battle:
+            battle_hint += ["Attack: " + str(best_battle.attack),
+                            "Defence: " + str(best_battle.defence),
+                            "Chance of win: " + best_battle.show_chance_of_win()]
 
-            best_battle = max(battle_values_list, key=attrgetter("chance_of_win"))
-            worst_battle = min(battle_values_list, key=attrgetter("chance_of_win"))
-            battle_hint = ["Battle hint:"]
-            if best_battle == worst_battle:
-                battle_hint += ["Attack: " + str(best_battle.attack),
-                                "Defence: " + str(best_battle.defence),
-                                "Chance of win: " + str(round(best_battle.chance_of_win * 100, 1)) + "%"]
+            if best_battle.chance_of_push > 0:
+                battle_hint += ["Chance of push: " + best_battle.show_chance_of_push]
 
-                if best_battle.chance_of_push > 0:
-                    battle_hint += ["Chance of push: " + str(round(best_battle.chance_of_push * 100, 1)) + "%"]
-
+        else:
+            if worst_battle.attack == best_battle.attack:
+                battle_hint += ["Attack: " + str(worst_battle.attack)]
             else:
-                if worst_battle.attack == best_battle.attack:
-                    battle_hint += ["Attack: " + str(worst_battle.attack)]
-                else:
-                    battle_hint += ["Attack: " + str(worst_battle.attack) + " – " + str(best_battle.attack)]
+                battle_hint += ["Attack: " + str(worst_battle.attack) + " – " + str(best_battle.attack)]
 
-                if worst_battle.defence == best_battle.defence:
-                    battle_hint += ["Defence: " + str(worst_battle.defence)]
-                else:
-                    battle_hint += ["Defence: " + str(worst_battle.defence) + " – " + str(best_battle.defence)]
+            if worst_battle.defence == best_battle.defence:
+                battle_hint += ["Defence: " + str(worst_battle.defence)]
+            else:
+                battle_hint += ["Defence: " + str(worst_battle.defence) + " – " + str(best_battle.defence)]
 
-                battle_hint += ["Chance of win: " + str(round(worst_battle.chance_of_win * 100, 1)) + "%" + " – " + \
-                               str(round(best_battle.chance_of_win * 100, 1)) + "%"]
+            battle_hint += ["Chance of win: " + worst_battle.show_chance_of_win() + " – " +
+                            best_battle.show_chance_of_win()]
 
-                if best_battle.chance_of_push > 0:
-                    battle_hint += ["Chance of push: " + str(round(worst_battle.chance_of_push * 100, 1)) + "%" + " – " +
-                                    str(round(best_battle.chance_of_push * 100, 1)) + "%"]
+            if best_battle.chance_of_push > 0:
+                battle_hint += ["Chance of push: " + worst_battle.show_chance_of_push + " – " +
+                                best_battle.show_chance_of_push()]
 
-            return battle_hint
+        return battle_hint
