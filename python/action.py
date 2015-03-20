@@ -33,7 +33,7 @@ class Action(object):
         self.created_at = created_at if created_at else datetime.utcnow()
 
         self.unit = units[self.start_at]
-        self.target_unit = units[self.target_at] if self.target_at and self.target_at in units else None
+        self.target_unit = units[self.target_at] if self.target_at else None
 
         is_move_with_attack_feasible = self.is_attack and self.unit.is_melee
         if self.move_with_attack is None and not is_move_with_attack_feasible:
