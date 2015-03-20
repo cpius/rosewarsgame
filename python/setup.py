@@ -60,7 +60,7 @@ board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
 
 
-class Tiles_bag(object):
+class TilesBag(object):
     def __init__(self):
         self.tiles = board_tiles.copy()
         
@@ -79,7 +79,7 @@ class Tiles_bag(object):
         return pick
 
 
-class Unit_bag(object):
+class UnitBag(object):
     def __init__(self, units):
         self.units = list(units)
     
@@ -93,9 +93,11 @@ class Unit_bag(object):
 
 
 def at_least_two_column_blocks(units):
-    """ Tests whether there on each column are at least two 'blocks'.
-    A block is either a unit, or a Pikeman zoc tile. """
-    
+    """
+    :param units: The units of one player
+    :return: Boolean of whether each column has at least two blocks. A block is either a unit, or a tile next to a
+    Pikeman
+    """
     blocks = [pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.zoc] + \
              [pos.column for pos in units]
 
@@ -117,7 +119,7 @@ def at_most_two_war_machines(units):
 
 def at_least_five_melee_with_weaponsmith(units):
     return not any(unit.unit == Unit.Weaponsmith for unit in units.values()) or \
-        sum(1 for unit in units.values() if unit.range == 1) >=5
+        sum(1 for unit in units.values() if unit.range == 1) >= 5
 
 
 def place_units_on_board(units_list, tiles_bag):
@@ -154,10 +156,10 @@ def select_special_units(special_units_first_bag, special_units_second_bag):
 
 def fill_bags():
 
-    basic_units_bag = Unit_bag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
-    special_units_first_bag = Unit_bag(required_special_units)
-    special_units_second_bag = Unit_bag(set(allowed_special_units) - set(required_special_units))
-    tiles_bag = Tiles_bag()
+    basic_units_bag = UnitBag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
+    special_units_first_bag = UnitBag(required_special_units)
+    special_units_second_bag = UnitBag(set(allowed_special_units) - set(required_special_units))
+    tiles_bag = TilesBag()
 
     return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
 
