@@ -132,27 +132,6 @@ class Viewinfo:
         line_length = 80
         show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
 
-    def draw_unit_lower_right(self, action, color, index, base_x, base_y):
-
-        if not action.is_attack:
-            unit = action.unit.name
-        elif index == 0:
-            unit = action.unit.name
-        else:
-            unit = action.target_unit.name
-
-        resize = 0.2 * self.zoom
-        location = (base_x + (65 + index * 100) * self.zoom, base_y + 8 * self.zoom)
-        unit_pic = get_unit_pic(self.interface, unit)
-        unit_image = get_image(unit_pic)
-
-        unit_image = pygame.transform.scale(unit_image, (int(self.interface.unit_width * resize),
-                                            int(self.interface.unit_height * resize)))
-
-        self.screen.blit(unit_image, location)
-
-        draw_unit_box(self, location, color, resize)
-
     @staticmethod
     def get_battle_hint(gamestate, start_at, target_at):
             actions = [action for action in gamestate.get_actions() if action.target_at == target_at
