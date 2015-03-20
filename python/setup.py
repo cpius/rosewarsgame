@@ -51,6 +51,10 @@ if get_setting("version") == "1.0":
     allowed_basic_units = [Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman]
     required_special_units = []
 
+if get_setting("Beginner_mode"):
+    basic_unit_count, special_unit_count = 9, 0
+else:
+    basic_unit_count, special_unit_count = 6, 3
 
 board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
@@ -99,8 +103,8 @@ def at_least_two_column_blocks(units):
      
 
 def at_most_one_pikeman_per_column(units):
-    return not any(column for column in board_columns if sum(1 for pos, unit in units.items() if
-                                                             pos.column == column and unit.zoc) > 1)
+    return not any(column for column in board_columns if
+                   sum(1 for pos, unit in units.items() if pos.column == column and unit.zoc) > 1)
 
 
 def at_least_one_war_machine(units):
@@ -116,50 +120,49 @@ def at_least_five_melee_with_weaponsmith(units):
         sum(1 for unit in units.values() if unit.range == 1) >=5
 
 
+def place_units_on_board(units_list, tiles_bag):
+
+    units = {}
+    unprotected_units = [unit for unit in units_list if not units_info[unit].protection_required]
+    protected_units = [unit for unit in units_list if units_info[unit].protection_required]
+
+    for unit in unprotected_units:
+        position = tiles_bag.pick_from_row(units_info[unit].allowed_rows)
+        units[position] = unit
+
+    for unit in protected_units:
+        position = tiles_bag.pick_protected_tile(units_info[unit].allowed_rows)
+        units[position] = unit
+
+    return units
+
+
+def select_basic_units(basic_units_bag):
+    return [basic_units_bag.pick() for _ in range(basic_unit_count)]
+
+
+def select_special_units(special_units_first_bag, special_units_second_bag):
+    special_units = []
+    while len(special_units) < special_unit_count and special_units_first_bag.has_units():
+        special_units.append(special_units_first_bag.pick())
+
+    while len(special_units) < special_unit_count:
+        special_units.append(special_units_second_bag.pick())
+
+    return special_units
+
+
+def fill_bags():
+
+    basic_units_bag = Unit_bag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
+    special_units_first_bag = Unit_bag(required_special_units)
+    special_units_second_bag = Unit_bag(set(allowed_special_units) - set(required_special_units))
+    tiles_bag = Tiles_bag()
+
+    return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
+
+
 def get_units():
-
-    if get_setting("Beginner_mode"):
-        basic_unit_count, special_unit_count = 9, 0
-    else:
-        basic_unit_count, special_unit_count = 6, 3
-    
-    def select_basic_units(basic_units_bag):
-        return [basic_units_bag.pick() for _ in range(basic_unit_count)]
-
-    def select_special_units(special_units_first_bag, special_units_second_bag):
-        special_units = []
-        while len(special_units) < special_unit_count and special_units_first_bag.has_units():
-            special_units.append(special_units_first_bag.pick())
-
-        while len(special_units) < special_unit_count:
-            special_units.append(special_units_second_bag.pick())
-
-        return special_units
-
-    def fill_bags():
-        
-        basic_units_bag = Unit_bag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
-        special_units_first_bag = Unit_bag(required_special_units)
-        special_units_second_bag = Unit_bag(set(allowed_special_units) - set(required_special_units))
-        tiles_bag = Tiles_bag()
-        
-        return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
-
-    def place_units_on_board(units_list, tiles_bag):
-
-        units = {}
-        unprotected_units = [unit for unit in units_list if not units_info[unit].protection_required]
-        protected_units = [unit for unit in units_list if units_info[unit].protection_required]
-
-        for unit in unprotected_units:
-            position = tiles_bag.pick_from_row(units_info[unit].allowed_rows)
-            units[position] = unit
-
-        for unit in protected_units:
-            position = tiles_bag.pick_protected_tile(units_info[unit].allowed_rows)
-            units[position] = unit
-
-        return units
 
     while True:
 
