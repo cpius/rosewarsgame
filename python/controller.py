@@ -5,7 +5,6 @@ import os
 import glob
 import interface_settings  # Present to avoid circular import
 from player import Player
-from action import Action
 from client import Client
 from game import Game
 from outcome import Outcome

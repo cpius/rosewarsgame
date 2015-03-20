@@ -1,16 +1,12 @@
 from bottle import run, get, post, install, JSONPlugin, request, response, static_file, Bottle
 from pymongo import MongoClient
-import socket
 from time import mktime, time
 from wsgiref.handlers import format_date_time
 from email.utils import parsedate
 from gamestate import Gamestate
 from game import Game
-from action import Action
 from player import Player
 import setup
-from common import *
-from outcome import Outcome
 import random
 import pylibmc
 import traceback
