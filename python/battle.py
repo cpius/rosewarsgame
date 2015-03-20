@@ -166,7 +166,7 @@ def flanking(action):
     if not action.unit.has(Trait.flanking) or action.target_unit.has(State.flanked):
         return False
     attack_direction = action.end_at.get_direction_to(action.target_at)
-    if attack_direction == Direction("Up"):
+    if attack_direction == Direction.up:
         return False
 
     return True
@@ -205,5 +205,4 @@ def assassin_kills_target(rolls):
 
 def assassin_dies(rolls):
     return rolls.defence > 3
-
 

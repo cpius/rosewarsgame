@@ -43,7 +43,7 @@ def get_unit_actions(unit, start_at, gamestate):
     def attack_generator(moveset):
         """ Generates all the tiles a unit can attack based on the places it can move to. """
         for position, direction in product(moveset, directions):
-            new_position = direction.move(position)
+            new_position = position.move(direction)
             if new_position in enemy_units:
                 if not zoc_block(position, direction, zoc_blocks) and \
                         (not enemy_units[new_position].has_extra_life or unit.has(Trait.push)):
@@ -53,7 +53,7 @@ def get_unit_actions(unit, start_at, gamestate):
     def attack_generator_no_zoc_check(moveset):
         """ Generates all the tiles a unit can attack based on the places it can move to, without accounting for ZOC """
         for position, direction in product(moveset, directions):
-            new_position = direction.move(position)
+            new_position = position.move(direction)
             if new_position in enemy_units:
                 if enemy_units[new_position].has_extra_life and not unit.has(Trait.push):
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
@@ -104,8 +104,8 @@ def get_unit_actions(unit, start_at, gamestate):
 
     def get_ride_through_attacks(attacks):
         for direction in directions:
-            one_tile_away = direction.move(start_at)
-            two_tiles_away = direction.move(one_tile_away)
+            one_tile_away = start_at.move(direction)
+            two_tiles_away = one_tile_away.move(direction)
             if one_tile_away in enemy_units and two_tiles_away in board_tiles and two_tiles_away not in units:
                 attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
                                move_with_attack=False))
@@ -184,7 +184,7 @@ def zoc_block(position, direction, zoc_blocks):
     :param zoc_blocks: Positions occupied by enemy units with ZOC against the unit
     :return: Whether the unit is prevented from going in the direction by a ZOC block
     """
-    return any(pos in zoc_blocks for pos in direction.perpendicular(position))
+    return any(pos in zoc_blocks for pos in position.perpendicular(direction))
 
 
 def can_use_unit(unit, is_extra_action):

@@ -22,7 +22,7 @@ def settle_attack(action, gamestate, outcome, attack_direction, is_sub_action=Fa
             gamestate.delete_unit_at(action.target_at)
 
     elif action.is_push and battle.attack_successful(action, rolls, gamestate):  # Unit is pushed
-        push_destination = attack_direction.move(action.target_at)
+        push_destination = action.target_at.move(attack_direction)
 
         if push_destination in all_units or push_destination not in board_tiles:
             gamestate.delete_unit_at(action.target_at)

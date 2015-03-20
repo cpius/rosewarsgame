@@ -4,14 +4,14 @@ from common import *
 
 def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
     for direction in directions:
-        new_position = direction.move(position)
+        new_position = position.move(direction)
         if new_position in board_tiles and new_position not in units and not zoc_block(position, direction, zoc_blocks):
             yield new_position
 
 
 def zoc_block(position, direction, zoc_blocks):
     """ Returns whether an enemy unit exerting ZOC prevents you from going in 'direction' from 'position'. """
-    return any(pos in zoc_blocks for pos in direction.perpendicular(position))
+    return any(pos in zoc_blocks for pos in position.perpendicular(direction))
 
 
 @lru_cache(maxsize=None)
