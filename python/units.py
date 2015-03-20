@@ -107,14 +107,6 @@ class Unit_class():
         if attribute in self.attributes:
             del self.attributes[attribute]
 
-    def do(self, ability, level):
-        effect_from_ability = {
-            Ability.poison: Effect.poisoned,
-            Ability.sabotage: Effect.sabotaged,
-            Ability.improve_weapons: Effect.improved_weapons}
-
-        self.set(effect_from_ability[ability], level=level, duration=level)
-
     def gain_experience(self):
         if not self.has(State.used) and not get_setting("Beginner_mode"):
             if State.experience in self.attributes:
@@ -142,7 +134,7 @@ class Unit_class():
     def get_upgraded_unit_from_upgrade(self, upgrade):
         """
         :param upgrade: A unit enum or a dictionary with enums as keys and AttributeValues as values.
-        :return: An instance of a Unit_class object
+        :return: An instance of a Unit_class object, based on the unit and with the upgrade.
         """
         if type(upgrade) is Unit:
             upgraded_unit = self.make(upgrade)
@@ -170,15 +162,15 @@ class Unit_class():
 
     def get_upgraded_unit_from_choice(self, choice):
         """
-        :param choice: 0 or 1
-        :return: An instance of a Unit_class object
+        :param choice: upgrade choice 0 or 1.
+        :return: An instance of a Unit_class object, based on the unit and with the upgrade.
         """
         upgrade = self.get_upgrade(choice)
         return self.get_upgraded_unit_from_upgrade(upgrade)
 
     def get_upgrade(self, choice):
         """
-        :param choice: 0 or 1
+        :param choice: upgrade choice 0 or 1.
         :return: The chosen unit upgrade in enum upgrade format. (Dictionary with enums as keys and AttributeValues as
         values.)
         """
@@ -199,14 +191,11 @@ class Unit_class():
 
     @property
     def unit_level(self):
-        experience = self.get_state(State.experience)
-        to_upgrade = self.experience_to_upgrade
-        return experience // to_upgrade
+        return self.get_state(State.experience) // self.experience_to_upgrade
 
     def should_be_upgraded(self):
         experience = self.get_state(State.experience)
-        to_upgrade = self.experience_to_upgrade
-        return experience and experience % to_upgrade == 0 and not self.has(State.recently_upgraded)
+        return experience and experience % self.experience_to_upgrade == 0 and not self.has(State.recently_upgraded)
 
     def to_document(self):
         write_attributes = [(attribute, attribute_values) for attribute, attribute_values in self.attributes.items() if

@@ -150,7 +150,7 @@ def is_crusading_defense(action, units, level=1):
 
 def has_high_morale(action, units):
     return action.unit.is_melee and (is_adjacent_unit_with(action.end_at, Trait.flag_bearing, units) or
-                                       is_surrounding_unit_with(action.end_at, Trait.flag_bearing, units, None, 2))
+                                     is_surrounding_unit_with(action.end_at, Trait.flag_bearing, units, None, 2))
 
 
 def is_surrounding_unit_with(position, attribute, units, exclude_position, level=1):
