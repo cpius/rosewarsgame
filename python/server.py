@@ -216,9 +216,9 @@ def calculate_ratings():
             if game.gamestate.is_ended():
                 winner = game.current_player().profile
                 loser = game.opponent_player().profile
-                if not winner in ranking:
+                if winner not in ranking:
                     ranking[winner] = [1000]
-                if not loser in ranking:
+                if loser not in ranking:
                     ranking[loser] = [1000]
 
                 ranking_winner = ranking[winner][-1]
@@ -404,13 +404,13 @@ def get_expected_action(log_document, gamestate):
     if str(action_number) + "_options" in log_document:
         last_action_options = log_document[str(action_number) + "_options"]
 
-    if not "move_with_attack" in last_action_document:
-        if not last_action_options or not "move_with_attack" in last_action_options:
+    if "move_with_attack" not in last_action_document:
+        if not last_action_options or "move_with_attack" not in last_action_options:
             return action_number, "move_with_attack"
 
     unit, position = gamestate.get_unit_from_action_document(last_action_document)
     if unit and unit.should_be_upgraded():
-        if not last_action_options or not "upgrade" in last_action_options:
+        if not last_action_options or "upgrade" not in last_action_options:
             return action_number, "upgrade",
 
     return action_number + 1, "action"
@@ -470,6 +470,7 @@ def construct_log_document(game_document):
     replay_document["last_modified"] = last_modified
 
     return replay_document
+
 
 class ServerJsonEncoder(JSONEncoder):
     def default(self, obj):

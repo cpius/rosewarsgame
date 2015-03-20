@@ -8,7 +8,7 @@ def get_actions(gamestate):
 
     is_extra_action = gamestate.is_extra_action()
 
-    if not gamestate.get_actions_remaining() and not is_extra_action:
+    if not gamestate.actions_remaining and not is_extra_action:
         return []
 
     actions = []
@@ -201,5 +201,5 @@ def melee_frozen(enemy_units, start_at):
 
 
 def can_attack_with_unit(gamestate, unit):
-    return not (gamestate.get_actions_remaining() == 1 and unit.has(Trait.double_attack_cost)) \
+    return not (gamestate.actions_remaining == 1 and unit.has(Trait.double_attack_cost)) \
         and not unit.has(Effect.attack_frozen)

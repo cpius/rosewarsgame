@@ -18,7 +18,8 @@ class Action(object):
         self.start_at = start_at
 
         # If the action is a movement, the tile the unit ends its movement on.
-        # If the action is an attack, tile the unit stops at while attacking an adjacent tile.
+        # If the action is a ranged attack, the tile the unit stands on.
+        # If the action is a melee attack, tile the unit stops at while attacking an adjacent tile.
         self.end_at = end_at
 
         # The tile a unit attacks or affects with an ability

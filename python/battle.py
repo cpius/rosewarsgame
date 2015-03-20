@@ -141,7 +141,7 @@ def distance_to_target(action):
 
 def is_crusading_attack(action, units, level=1):
     return action.unit.is_melee and (is_surrounding_unit_with(action.start_at, Trait.crusading, units, action.end_at,
-                                                                level))
+                                                              level))
 
 
 def is_crusading_defense(action, units, level=1):
