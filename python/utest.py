@@ -180,12 +180,16 @@ def server(test_document):
 
 
 def utest(test_document):
-    return globals()[test_document["type"].lower().replace(" ", "_").replace(",", "")](test_document)
+    test_name = test_document["type"].lower().replace(" ", "_").replace(",", "")
+
+    return globals()[test_name](test_document)
 
 
 def run():
     testcase_files = glob.glob("./../sharedtests_1.1/*/*.json")
-    #testcase_files = ["./../sharedtests_1.1/Poison_II/Turn_PoisonII_1.json"] #running just 1 test.
+
+    # Running just 1 test.
+    # testcase_files = ["./../sharedtests_1.1/Hobelar/Outcome_Hobelar_9.json"]
 
     results = {}
     for file in testcase_files:
@@ -198,7 +202,7 @@ def run():
         if except_exceptions:
             try:
                 test = utest(test_document)
-            except Exception as e:
+            except Exception:
                 test = "ERROR"
         else:
             test = utest(test_document)
@@ -220,4 +224,3 @@ except_exceptions = False
 
 if __name__ == "__main__":
     run()
-
