@@ -133,7 +133,7 @@ class Viewinfo:
         image_location = [base[0], base[1] + 25 * self.zoom]
         text_location = [base[0], base[1] + 160 * self.zoom]
 
-        write(self.screen, unit.name, title_location, self.interface.fonts["normal"])
+        write(self.screen, unit.pretty_name, title_location, self.interface.fonts["normal"])
         self.screen.blit(pic, image_location)
 
         lines = self.get_unit_lines(unit)
