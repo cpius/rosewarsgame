@@ -1,13 +1,15 @@
 from functools import lru_cache
+from common import *
+from itertools import product
 
 
 def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
     for direction, new_position in position.adjacent_moves().items():
-        if new_position not in units and not zoc_block(position, direction, zoc_blocks):
+        if new_position not in units and not is_zoc_block(zoc_blocks, position, direction):
             yield new_position
 
 
-def zoc_block(position, direction, zoc_blocks):
+def is_zoc_block(zoc_blocks, position, direction):
     """ Returns whether an enemy unit exerting ZOC prevents you from going in 'direction' from 'position'. """
     return any(pos in zoc_blocks for pos in position.perpendicular(direction))
 
@@ -69,3 +71,25 @@ def ranged_attacks_set(position, enemy_units, range_remaining):
             attackset |= ranged_attacks_set(new_position, enemy_units, range_remaining - 1)
 
     return attackset
+
+
+def attack_generator_no_zoc_check(enemy_units, unit, moveset):
+    """ Generates all the tiles a unit can attack based on the places it can move to, without accounting for ZOC """
+    for position, direction in product(moveset, directions):
+        new_position = position.move(direction)
+        if new_position in enemy_units:
+            if enemy_units[new_position].has_extra_life and not unit.has(Trait.push):
+                yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
+            else:
+                yield {"end_at": position, "target_at": new_position}
+
+
+def attack_generator(enemy_units, unit, is_zoc_block_local, moveset):
+    """ Generates all the tiles a unit can attack based on the places it can move to. """
+    for position, direction in product(moveset, directions):
+        new_position = position.move(direction)
+        if new_position in enemy_units:
+            if not is_zoc_block_local(position, direction) and \
+                    (not enemy_units[new_position].has_extra_life or unit.has(Trait.push)):
+                yield {"end_at": position, "target_at": new_position, "move_with_attack": True}
+            yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
