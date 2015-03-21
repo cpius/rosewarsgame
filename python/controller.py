@@ -193,11 +193,18 @@ class Controller(object):
 
         # Determine possible actions
         if position in self.game.gamestate.all_units():
-            possible_actions = self.game.gamestate.get_actions_with_move_with_attack_as_none({"start_at": self.start_at,
-                                                                                              "target_at": position})
+            criteria = {
+                "start_at": self.start_at,
+                "target_at": position
+            }
+            possible_actions = self.game.gamestate.get_actions_with_move_with_attack_as_none(criteria)
         else:
-            possible_actions = self.game.gamestate.get_actions({"start_at": self.start_at, "end_at": position,
-                                                                "target_at": None})
+            criteria = {
+                "start_at": self.start_at,
+                "end_at": position,
+                "target_at": None
+            }
+            possible_actions = self.game.gamestate.get_actions(criteria)
 
         # If there are no possible actions, deselect the unit.
         if not possible_actions:
@@ -320,6 +327,7 @@ class Controller(object):
 
     def move_with_attack_should_be_performed(self, action, outcome):
         is_mwa_possible = self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
+
         return action.move_with_attack is None and is_mwa_possible
 
     def determine_outcome(self, action):
