@@ -69,8 +69,8 @@ class View(object):
         self.viewinfo.draw_ask_about_ability(unit)
         self.refresh()
 
-    def draw_action(self, action, game, flip=False):
-        self.viewlog.draw_logbook(game.logbook)
+    def draw_action(self, action, logbook, flip=False):
+        self.viewlog.draw_logbook(logbook)
         self.viewgame.draw_action(action, flip)
         self.refresh()
 
