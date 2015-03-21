@@ -334,7 +334,7 @@ class Controller(object):
         if not outcome:
             outcome = self.determine_outcome(action)
 
-        self.view.draw_action(action, self.game.logbook, self.game.is_player_ai())
+        self.view.draw_action(action, self.game.logbook, not self.game.is_player_human())
         self.game.do_action(action, outcome)
 
         animation_delay = interface_settings.pause_for_animation
