@@ -24,7 +24,7 @@ def settle_attack(action, gamestate, outcome, attack_direction, is_sub_action=Fa
     elif action.is_push and battle.attack_successful(action, rolls, gamestate):  # Unit is pushed
         push_destination = action.target_at.move(attack_direction)
 
-        if push_destination in all_units or push_destination not in board_tiles:
+        if push_destination in all_units or not push_destination:
             gamestate.delete_unit_at(action.target_at)
         else:
             gamestate.move_unit(action.target_at, push_destination)
@@ -110,7 +110,7 @@ def do_action(gamestate, action, outcome):
     def get_subattack_targets():
         targets = []
         if unit.has(Trait.triple_attack):
-            targets = [position for position in action.end_at.two_forward_tiles(attack_direction) & set(enemy_units)]
+                targets = action.end_at.two_forward_tiles(attack_direction) & set(enemy_units)
         elif unit.has(Trait.spread_attack):
             targets = [position for position in action.target_at.adjacent_tiles() & set(all_units)]
         elif unit.has(Trait.longsword):

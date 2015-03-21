@@ -4,7 +4,6 @@ from collections import namedtuple
 from dictdiffer import DictDiffer
 from enum import Enum
 
-
 coordinates = namedtuple("coordinates", ["x", "y"])
 
 
@@ -48,32 +47,37 @@ class Position:
         return abs(self.column - other.column) + abs(self.row - other.row)
 
     def get_direction_to(self, other):
-        return list(direction for direction in directions if self.move(direction) == other)[0]
+        return next(direction for direction in directions if self.move(direction) == other)
 
     def flip(self):
         return Position(self.column, board_height - self.row + 1)
 
     def four_forward_tiles(self, direction):
-        return self.perpendicular(direction) | {pos for pos in self.forward_and_sideways(direction) if pos in board_tiles}
+        return self.perpendicular(direction) | self.forward_and_sideways(direction)
 
     def surrounding_tiles(self):
-        return set(pos for pos in [self.move(direction) for direction in eight_directions] if pos in board_tiles)
+        return set(pos for pos in [self.move(direction) for direction in eight_directions] if pos)
 
     def adjacent_tiles(self):
-        return set(pos for pos in [self.move(direction) for direction in directions] if pos in board_tiles)
+        return {pos for pos in [self.move(direction) for direction in directions] if pos}
+
+    def adjacent_moves(self):
+        return {direction: self.move(direction) for direction in directions if self.move(direction)}
 
     def two_forward_tiles(self, direction):
-        return set(pos for pos in self.forward_and_sideways(direction) if pos in board_tiles)
+        return self.forward_and_sideways(direction)
 
     def move(self, direction):
-        return Position(self.column + direction.x, self.row + direction.y)
+        pos = Position(self.column + direction.x, self.row + direction.y)
+        if pos in board_tiles:
+            return pos
 
     def perpendicular(self, direction):
-        return {Position(self.column + i * direction.y, self.row + i * direction.x) for i in [-1, 1]}
+        return {Position(self.column + i * direction.y, self.row + i * direction.x) for i in [-1, 1]} & board_tiles
 
     def forward_and_sideways(self, direction):
         return {Position(self.column + i, self.row + direction.y) for i in (-1, 1)} if direction.x == 0 else \
-            {Position(self.column + direction.x, self.row + i) for i in (-1, 1)}
+            {Position(self.column + direction.x, self.row + i) for i in (-1, 1)} & board_tiles
 
 
 class AttributeValues():

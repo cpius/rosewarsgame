@@ -102,14 +102,19 @@ def get_unit_actions(unit, start_at, gamestate):
 
         return moves, attacks
 
-    def get_ride_through_attacks(attacks):
+    def get_ride_through_attacks():
+        ride_through_attacks = []
         for direction in directions:
             one_tile_away = start_at.move(direction)
+            if not one_tile_away:
+                continue
             two_tiles_away = one_tile_away.move(direction)
-            if one_tile_away in enemy_units and two_tiles_away in board_tiles and two_tiles_away not in units:
-                attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
-                               move_with_attack=False))
-        return attacks
+            if not two_tiles_away:
+                continue
+            if one_tile_away in enemy_units and two_tiles_away not in units:
+                ride_through_attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
+                                                   move_with_attack=False))
+        return ride_through_attacks
 
     def get_abilities():
         abilities = []
@@ -163,7 +168,7 @@ def get_unit_actions(unit, start_at, gamestate):
         moves, attacks = get_extra_actions()
 
     if unit.has(Trait.ride_through):
-        attacks = get_ride_through_attacks(attacks)
+        attacks += get_ride_through_attacks()
 
     if unit.has_javelin:
         attacks += get_javelin_attacks()
