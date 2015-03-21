@@ -1,4 +1,4 @@
-from common import *
+from common import State, Effect, Ability, Trait, Type, board_tiles, distance
 from action import Action
 import battle
 
@@ -9,7 +9,8 @@ def settle_attack(action, gamestate, outcome, attack_direction, is_sub_action=Fa
     :param gamestate: The Gamestate
     :param outcome: The Outcome
     :param attack_direction: The direction from end_at to target_at of the main action
-    :param is_sub_action: Whether or not the action is a sub_action. (Doesn't make any difference with current rules.)
+    :param is_sub_action: Whether or not the action is a sub_action.
+    (Doesn't make any difference with current rules.)
     :return: None
     """
     all_units = gamestate.all_units()
@@ -110,16 +111,18 @@ def do_action(gamestate, action, outcome):
     def get_subattack_targets():
         targets = []
         if unit.has(Trait.triple_attack):
-                targets = action.end_at.two_forward_tiles(attack_direction) & set(enemy_units)
+            targets = action.end_at.two_forward_tiles(attack_direction) & set(enemy_units)
         elif unit.has(Trait.spread_attack):
-            targets = [position for position in action.target_at.adjacent_tiles() & set(all_units)]
+            targets = list(action.target_at.adjacent_tiles() & set(all_units))
         elif unit.has(Trait.longsword):
-            targets = [position for position in action.end_at.four_forward_tiles(attack_direction) & set(enemy_units)]
+            targets = list(action.end_at.four_forward_tiles(attack_direction) & set(enemy_units))
 
         return targets
 
     def unit_has_subattacks():
-        return any(unit.has(trait) for trait in [Trait.triple_attack, Trait.spread_attack, Trait.longsword])
+        subattack_traits = [Trait.triple_attack, Trait.spread_attack, Trait.longsword]
+
+        return any(unit.has(trait) for trait in subattack_traits)
 
     def unit_has_extra_action_trait():
         return any(unit.has(attribute) for attribute in [Trait.swiftness, Trait.combat_agility])
