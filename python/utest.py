@@ -16,16 +16,14 @@ def does_action_exist(test_document):
     available_actions = action_getter.get_actions(gamestate)
     actual = (action in available_actions)
     expected = test_document["result"]
-
-    return actual == expected
+    return give_output(actual, expected)
 
 
 def is_the_game_over(test_document):
     gamestate = Gamestate.from_document(test_document["gamestate"])
     actual = gamestate.is_ended()
     expected = test_document["result"]
-
-    return actual == expected
+    return give_output(actual, expected)
 
 
 def give_output(actual, expected):
@@ -45,7 +43,6 @@ def does_turn_shift_work(test_document):
 
     actual = pre_gamestate.to_document()
     expected = post_gamestate.to_document()
-
     return give_output(actual, expected)
 
 
@@ -87,6 +84,7 @@ def is_attack_and_defence_correct(test_document):
         print("actual and expected defence:", actual_defence, defence)
         return False
 
+
 def is_outcome_correct(test_document):
     gamestate = Gamestate.from_document(test_document["pre_gamestate"])
     expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
@@ -97,13 +95,7 @@ def is_outcome_correct(test_document):
 
     actual = gamestate.to_document()
     expected = expected_gamestate.to_document()
-
-    if actual == expected:
-        return True
-    print("act", actual)
-    print("exp", expected)
-    print()
-    return False
+    return give_output(actual, expected)
 
 
 def is_outcome_correct_extra_action(test_document):
@@ -120,13 +112,7 @@ def is_outcome_correct_extra_action(test_document):
 
     actual = gamestate.to_document()
     expected = expected_gamestate.to_document()
-
-    if actual == expected:
-        return True
-    print("act", actual)
-    print("exp", expected)
-    print()
-    return False
+    return give_output(actual, expected)
 
 
 def upgrade(test_document):
@@ -150,11 +136,7 @@ def upgrade(test_document):
 
     expected = expected_gamestate.to_document()
     actual = gamestate.to_document()
-    if actual == expected:
-        return True
-    print("act", actual)
-    print("exp", expected)
-    return False
+    return give_output(actual, expected)
 
 
 def server(test_document):

@@ -28,7 +28,10 @@
             "A2": "Pikeman",
             "E4": {
                 "name": "Archer",
-                "bribed": 1
+                "bribed": {
+                    "level": 1,
+                    "duration": 1
+                }
             }
         },
         "player2_units": {

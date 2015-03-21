@@ -12,7 +12,10 @@
             "B2": "Crusader",
             "D3": {
                 "name": "Knight",
-                "poisoned": 1
+                "poisoned": {
+                    "level": 1,
+                    "duration": 1
+                }
             }
         },
         "player2_units": {

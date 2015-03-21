@@ -19,8 +19,14 @@
         "player2_units": {
             "B4": {
                 "name": "Archer",
-                "sabotaged": 1,
-                "improved_weapons": 1
+                "sabotaged": {
+                    "level": 1,
+                    "duration": 1
+                },
+                "improved_weapons": {
+                    "level": 1,
+                    "duration": 1
+                }
             },
             "A5": {
                 "name": "Crusader",

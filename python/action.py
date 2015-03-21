@@ -1,4 +1,4 @@
-from copy import copy, deepcopy
+from copy import deepcopy
 from common import *
 
 
@@ -18,7 +18,8 @@ class Action(object):
         self.start_at = start_at
 
         # If the action is a movement, the tile the unit ends its movement on.
-        # If the action is an attack, tile the unit stops at while attacking an adjacent tile.
+        # If the action is a ranged attack, the tile the unit stands on.
+        # If the action is a melee attack, tile the unit stops at while attacking an adjacent tile.
         self.end_at = end_at
 
         # The tile a unit attacks or affects with an ability
@@ -32,7 +33,7 @@ class Action(object):
         self.created_at = created_at if created_at else datetime.utcnow()
 
         self.unit = units[self.start_at]
-        self.target_unit = units[self.target_at] if self.target_at and self.target_at in units else None
+        self.target_unit = units[self.target_at] if self.target_at else None
 
         is_move_with_attack_feasible = self.is_attack and self.unit.is_melee
         if self.move_with_attack is None and not is_move_with_attack_feasible:

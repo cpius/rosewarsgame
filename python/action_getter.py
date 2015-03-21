@@ -8,7 +8,7 @@ def get_actions(gamestate):
 
     is_extra_action = gamestate.is_extra_action()
 
-    if not gamestate.get_actions_remaining() and not is_extra_action:
+    if not gamestate.actions_remaining and not is_extra_action:
         return []
 
     actions = []
@@ -43,7 +43,7 @@ def get_unit_actions(unit, start_at, gamestate):
     def attack_generator(moveset):
         """ Generates all the tiles a unit can attack based on the places it can move to. """
         for position, direction in product(moveset, directions):
-            new_position = direction.move(position)
+            new_position = position.move(direction)
             if new_position in enemy_units:
                 if not zoc_block(position, direction, zoc_blocks) and \
                         (not enemy_units[new_position].has_extra_life or unit.has(Trait.push)):
@@ -53,7 +53,7 @@ def get_unit_actions(unit, start_at, gamestate):
     def attack_generator_no_zoc_check(moveset):
         """ Generates all the tiles a unit can attack based on the places it can move to, without accounting for ZOC """
         for position, direction in product(moveset, directions):
-            new_position = direction.move(position)
+            new_position = position.move(direction)
             if new_position in enemy_units:
                 if enemy_units[new_position].has_extra_life and not unit.has(Trait.push):
                     yield {"end_at": position, "target_at": new_position, "move_with_attack": False}
@@ -102,14 +102,19 @@ def get_unit_actions(unit, start_at, gamestate):
 
         return moves, attacks
 
-    def get_ride_through_attacks(attacks):
+    def get_ride_through_attacks():
+        ride_through_attacks = []
         for direction in directions:
-            one_tile_away = direction.move(start_at)
-            two_tiles_away = direction.move(one_tile_away)
-            if one_tile_away in enemy_units and two_tiles_away in board_tiles and two_tiles_away not in units:
-                attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
-                               move_with_attack=False))
-        return attacks
+            one_tile_away = start_at.move(direction)
+            if not one_tile_away:
+                continue
+            two_tiles_away = one_tile_away.move(direction)
+            if not two_tiles_away:
+                continue
+            if one_tile_away in enemy_units and two_tiles_away not in units:
+                ride_through_attacks.append(Action(units, start_at, end_at=two_tiles_away, target_at=one_tile_away,
+                                                   move_with_attack=False))
+        return ride_through_attacks
 
     def get_abilities():
         abilities = []
@@ -163,7 +168,7 @@ def get_unit_actions(unit, start_at, gamestate):
         moves, attacks = get_extra_actions()
 
     if unit.has(Trait.ride_through):
-        attacks = get_ride_through_attacks(attacks)
+        attacks += get_ride_through_attacks()
 
     if unit.has_javelin:
         attacks += get_javelin_attacks()
@@ -184,7 +189,7 @@ def zoc_block(position, direction, zoc_blocks):
     :param zoc_blocks: Positions occupied by enemy units with ZOC against the unit
     :return: Whether the unit is prevented from going in the direction by a ZOC block
     """
-    return any(pos in zoc_blocks for pos in direction.perpendicular(position))
+    return any(pos in zoc_blocks for pos in position.perpendicular(direction))
 
 
 def can_use_unit(unit, is_extra_action):
@@ -201,5 +206,5 @@ def melee_frozen(enemy_units, start_at):
 
 
 def can_attack_with_unit(gamestate, unit):
-    return not (gamestate.get_actions_remaining() == 1 and unit.has(Trait.double_attack_cost)) \
+    return not (gamestate.actions_remaining == 1 and unit.has(Trait.double_attack_cost)) \
         and not unit.has(Effect.attack_frozen)

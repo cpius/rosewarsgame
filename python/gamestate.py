@@ -104,15 +104,8 @@ class Gamestate:
         player1_units = cls.units_from_document(document["player1_units"])
         player2_units = cls.units_from_document(document["player2_units"])
         actions_remaining = document["actions_remaining"]
-        if "ai_factors" in document:
-            ai_factors = document["ai_factors"]
-        else:
-            ai_factors = None
-
-        if "created_at" in document:
-            created_at = document["created_at"]
-        else:
-            created_at = None
+        ai_factors = document["ai_factors"] if "ai_factors" in document else None
+        created_at = document["created_at"] if "created_at" in document else None
 
         return cls(player1_units, player2_units, actions_remaining, created_at, ai_factors=ai_factors)
 
@@ -150,17 +143,17 @@ class Gamestate:
             return ai_module.AI(name)
 
     def to_document(self):
-        document = {}
+        document = {
+            "actions_remaining": self.actions_remaining,
+            "player1_units": {str(position): unit.to_document() for (position, unit) in self.board.units[0].items()},
+            "player2_units": {str(position): unit.to_document() for (position, unit) in self.board.units[1].items()}
+        }
         if self.created_at:
             document["created_at"] = self.created_at
-        document["actions_remaining"] = self.actions_remaining
         if self.game_id:
             document["game"] = self.game_id
         if self.ai_factors:
             document["ai_factors"] = self.ai_factors
-
-        document["player1_units"] = {str(position): unit.to_document() for (position, unit) in self.board.units[0].items()}
-        document["player2_units"] = {str(position): unit.to_document() for (position, unit) in self.board.units[1].items()}
 
         return document
 

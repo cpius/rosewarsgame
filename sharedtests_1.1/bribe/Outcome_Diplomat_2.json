@@ -33,7 +33,10 @@
             "C4": {
                 "name": "Viking",
                 "lost_extra_life": 1,
-                "bribed": 1
+                "bribed": {
+                    "level": 1,
+                    "duration": 1
+                }
             }
         },
         "player2_units": {

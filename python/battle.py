@@ -141,7 +141,7 @@ def distance_to_target(action):
 
 def is_crusading_attack(action, units, level=1):
     return action.unit.is_melee and (is_surrounding_unit_with(action.start_at, Trait.crusading, units, action.end_at,
-                                                                level))
+                                                              level))
 
 
 def is_crusading_defense(action, units, level=1):
@@ -150,7 +150,7 @@ def is_crusading_defense(action, units, level=1):
 
 def has_high_morale(action, units):
     return action.unit.is_melee and (is_adjacent_unit_with(action.end_at, Trait.flag_bearing, units) or
-                                       is_surrounding_unit_with(action.end_at, Trait.flag_bearing, units, None, 2))
+                                     is_surrounding_unit_with(action.end_at, Trait.flag_bearing, units, None, 2))
 
 
 def is_surrounding_unit_with(position, attribute, units, exclude_position, level=1):
@@ -166,7 +166,7 @@ def flanking(action):
     if not action.unit.has(Trait.flanking) or action.target_unit.has(State.flanked):
         return False
     attack_direction = action.end_at.get_direction_to(action.target_at)
-    if attack_direction == Direction("Up"):
+    if attack_direction == Direction.up:
         return False
 
     return True
@@ -205,5 +205,4 @@ def assassin_kills_target(rolls):
 
 def assassin_dies(rolls):
     return rolls.defence > 3
-
 

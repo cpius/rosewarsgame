@@ -1,41 +1,25 @@
 from json import JSONEncoder, dumps
 from datetime import datetime
-import collections
+from collections import namedtuple
 from dictdiffer import DictDiffer
 from enum import Enum
 
+coordinates = namedtuple("coordinates", ["x", "y"])
 
-class Direction:
-    """ A direction is one move up, down, left or right.
-    The class contains methods for returning the tile going one step in the direction will lead you to,
-    and for returning the tiles you should check for zone of control.
-    """
 
-    to_coordinates = {"Left": (-1, 0), "Right": (1, 0), "Down": (0, -1), "Up": (0, 1),
-                      "Up_Left": (1, -1), "Up_Right": (1, 1), "Down_Left": (-1, -1), "Down_Right": (-1, 1)}
+class Direction():
+    left = coordinates(-1, 0)
+    right = coordinates(1, 0)
+    down = coordinates(0, -1)
+    up = coordinates(0, 1)
+    up_left = coordinates(-1, 1)
+    up_right = coordinates(1, 1)
+    down_left = coordinates(-1, -1)
+    down_right = coordinates(1, -1)
 
-    def __init__(self, name):
-        self.x, self.y = self.to_coordinates[name]
-        self.name = name
 
-    def move(self, position):
-        return Position(position.column + self.x, position.row + self.y)
-
-    def perpendicular(self, position):
-        return [Position(position.column + i * self.y, position.row + i * self.x) for i in [-1, 1]]
-
-    def forward_and_sideways(self, position):
-        return [Position(position.column + i, position.row + self.y) for i in (-1, 1)] if self.x == 0 else \
-            [Position(position.column + self.x, position.row + i) for i in (-1, 1)]
-
-    def __repr__(self):
-        return self.name
-
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
+directions = {Direction.up, Direction.down, Direction.left, Direction.right}
+eight_directions = directions | {Direction.up_left, Direction.up_right, Direction.down_left, Direction.down_right}
 
 
 class Position:
@@ -47,7 +31,7 @@ class Position:
         return " ABCDE"[self.column] + str(self.row)
 
     def __eq__(self, other):
-        return not other is None and self.column == other.column and self.row == other.row
+        return other is not None and self.column == other.column and self.row == other.row
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -63,22 +47,37 @@ class Position:
         return abs(self.column - other.column) + abs(self.row - other.row)
 
     def get_direction_to(self, other):
-        return list(direction for direction in directions if direction.move(self) == other)[0]
+        return next(direction for direction in directions if self.move(direction) == other)
 
     def flip(self):
         return Position(self.column, board_height - self.row + 1)
 
     def four_forward_tiles(self, direction):
-        return set(pos for pos in direction.perpendicular(self) + direction.forward_and_sideways(self) if pos in board_tiles)
+        return self.perpendicular(direction) | self.forward_and_sideways(direction)
 
     def surrounding_tiles(self):
-        return set(pos for pos in [direction.move(self) for direction in eight_directions] if pos in board_tiles)
+        return {pos for pos in [self.move(direction) for direction in eight_directions] if pos}
 
     def adjacent_tiles(self):
-        return set(pos for pos in [direction.move(self) for direction in directions] if pos in board_tiles)
+        return {pos for pos in [self.move(direction) for direction in directions] if pos}
+
+    def adjacent_moves(self):
+        return {direction: self.move(direction) for direction in directions if self.move(direction)}
 
     def two_forward_tiles(self, direction):
-        return set(pos for pos in direction.forward_and_sideways(self) if pos in board_tiles)
+        return self.forward_and_sideways(direction)
+
+    def move(self, direction):
+        pos = Position(self.column + direction.x, self.row + direction.y)
+        if pos in board_tiles:
+            return pos
+
+    def perpendicular(self, direction):
+        return {Position(self.column + i * direction.y, self.row + i * direction.x) for i in [-1, 1]} & board_tiles
+
+    def forward_and_sideways(self, direction):
+        return {Position(self.column + i, self.row + direction.y) for i in (-1, 1)} if direction.x == 0 else \
+            {Position(self.column + direction.x, self.row + i) for i in (-1, 1)} & board_tiles
 
 
 class AttributeValues():
@@ -225,11 +224,11 @@ effect_descriptions = {
         1: "Unit cannot perform any actions.",
         2: "Unit cannot perform any actions."},
     "improved_weapons": {
-        1: "Unit has +3 attack, +1 defence",
-        2: "Unit has +2 attack, +1 defence"},
+        1: "Unit has +3 attack, +1 defence.",
+        2: "Unit has +2 attack, +1 defence."},
     "sabotaged": {
         1: "Units defence is reduced to 0.",
-        2: "Units defence is reduced to 0"}
+        2: "Units defence is reduced to 0."}
 }
 
 ability_descriptions = {
@@ -383,30 +382,30 @@ class Opponent(Enum):
     Load = 4
 
 
-enum_from_string = {enum.name: enum for enum_type in [Trait, State, Effect, Ability, Unit, Intelligence] for enum in enum_type}
+enum_from_string = {enum.name: enum for type in [Trait, State, Effect, Ability, Unit, Intelligence] for enum in type}
 
 
-def get_attribute_from_document(attribute_name, number):
+def get_attribute_from_document(attribute_name, info):
+    """
+    :param attribute_name: string
+    :param info: A number or dictionary that contains info about the attribute.
+                 If the attribute is a state, info is the value of the state.
+                 If the attribute is a trait or ability, info is the level of the trait or ability.
+                 If the attribute is an effect, info is a dictionary containing the level and duration of the effect.
+    :return: An attribute enum, and its AttributeValues
+    """
 
     attribute = enum_from_string[attribute_name]
     if attribute in State:
-        return attribute, AttributeValues(value=number)
+        return attribute, AttributeValues(value=info)
     elif attribute in Trait or attribute in Ability:
-        return attribute, AttributeValues(level=number)
+        return attribute, AttributeValues(level=info)
     elif attribute in Effect:
-        if type(number) is int or type(number) is bool:
-            return attribute, AttributeValues(level=1, duration=number)
-        else:
-            return attribute, AttributeValues(**number)
+        return attribute, AttributeValues(**info)
 
 board_height = 8
 board_width = 5
 board_tiles = set(Position(column, row) for column in range(1, board_width + 1) for row in range(1, board_height + 1))
-
-eight_directions_namedtuple = collections.namedtuple("eight_directions", [name for name in Direction.to_coordinates])
-eight_directions = eight_directions_namedtuple(*(Direction(name) for name in Direction.to_coordinates))
-four_directions_namedtuple = collections.namedtuple("directions", [name for name in ["Up", "Down", "Left", "Right"]])
-directions = four_directions_namedtuple(*(Direction(name) for name in ["Up", "Down", "Left", "Right"]))
 
 
 def get_description(attribute, level):
@@ -459,6 +458,10 @@ def document_to_string(document):
 
 
 def readable(attributes):
+    """
+    :param attributes: ?
+    :return: ?
+    """
     dictionary = {}
     if attributes in Unit:
         return attributes.name
@@ -509,6 +512,10 @@ def unit_with_attribute_at(pos, attribute, units, level=1):
 
 
 def get_enum_upgrade(upgrade):
+    """
+    :param upgrade: ?
+    :return: ?
+    """
     if type(upgrade) is str:
         return enum_from_string[upgrade]
     elif type(upgrade) is Unit:
@@ -525,6 +532,10 @@ def get_enum_upgrade(upgrade):
 
 
 def get_string_upgrade(upgrade):
+    """
+    :param upgrade: Either a Unit enum or a dictionary with attribute enums as keys and AttributeValues as items.
+    :return: A unit name as a string or a dictionary with strings as items and values, respectively.
+    """
     if upgrade in Unit:
         return upgrade.name
     else:

@@ -14,8 +14,10 @@
         "player1_units": {
             "B2": {
                 "name": "Light Cavalry",
-                "bribed": true
-            },
+                "bribed": {
+                    "level": 1,
+                    "duration": 1}
+                },
             "A3": "Archer"
         },
         "player2_units": {
