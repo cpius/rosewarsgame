@@ -323,8 +323,9 @@ class Controller(object):
         if self.game.is_enemy_network():
             self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
 
-        self.view.draw_post_movement(action)
-        self.game.gamestate.move_melee_unit_to_target_tile(action)
+        if move_with_attack:
+            self.view.draw_post_movement(action)
+            self.game.gamestate.move_melee_unit_to_target_tile(action)
 
         self.game.gamestate.set_available_actions()
 
