@@ -139,4 +139,4 @@ class Rectangles(Interface):
                           for i in range(15)]
 
         self.opponent_menu = [[Point(100 * zoom, (40 + 40 * i) * zoom), Point(510 * zoom, (70 + 40 * i) * zoom)]
-                          for i in range(15)]
+                              for i in range(15)]
