@@ -208,6 +208,7 @@ def run():
             test = utest(test_document)
         if test is not True:
             print(file)
+            print()
 
         results[test_document["type"]][test] += 1
 
