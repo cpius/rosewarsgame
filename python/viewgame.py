@@ -234,7 +234,11 @@ class Viewgame:
     def get_blue_counters(unit):
         return max(unit.get_level(Effect.poisoned), unit.get_level(Effect.attack_frozen), unit.has(State.recently_bribed))
 
-    def draw_ask_about_move_with_attack(self, position):
-        base = self.interface.coordinates["base"].get(position)
+    def draw_ask_about_move_with_attack(self, end_at, target_at):
         dimensions = (self.interface.unit_width, self.interface.unit_height)
+
+        base = self.interface.coordinates["base"].get(end_at)
+        draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+
+        base = self.interface.coordinates["base"].get(target_at)
         draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
