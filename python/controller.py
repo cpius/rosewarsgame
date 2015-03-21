@@ -271,8 +271,10 @@ class Controller(object):
 
     def pick_upgrade(self, unit):
         self.view.draw_upgrade_options(unit)
-        choice = self.get_choice({K_1: 0, K_2: 1},
-                                 [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]])
+        buttons = {K_1: 0, K_2: 1}
+        areas = [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]]
+        choice = self.get_choice(buttons, areas)
+
         return unit.get_upgrade(choice)
 
     def pick_ability(self, unit):
