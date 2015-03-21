@@ -1,4 +1,4 @@
-from common import *
+from common import Trait, Ability, Position, datetime, enum_from_string, distance, merge
 
 
 class Action(object):
@@ -94,7 +94,7 @@ class Action(object):
             document["number"] = self.number
         if self.ability:
             document["ability"] = self.ability.name
-        if not self.move_with_attack is None:
+        if self.move_with_attack is not None:
             document["move_with_attack"] = self.move_with_attack
 
         return document
