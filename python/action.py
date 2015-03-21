@@ -1,4 +1,3 @@
-from copy import deepcopy
 from common import *
 
 
@@ -127,9 +126,6 @@ class Action(object):
     @property
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack
-
-    def copy(self):
-        return deepcopy(self)
 
     def update_references(self, gamestate):
         units = merge(gamestate.player_units, gamestate.enemy_units)
