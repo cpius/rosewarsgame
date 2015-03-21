@@ -441,7 +441,10 @@ def assert_equal_documents(testcase, expected, actual, testcase_file):
     if difference.changed_recursive():
         message += "Changed " + str(difference.changed_recursive())
 
-    testcase.assertEqual(expected, actual, message)
+    if actual == expected:
+        return True, "Everything is swell"
+    else:
+        return False, message
 
 
 class CustomJsonEncoder(JSONEncoder):

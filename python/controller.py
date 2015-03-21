@@ -10,7 +10,8 @@ from game import Game
 from outcome import Outcome
 import json
 from view import View
-from viewcommon import *
+from viewcommon import (USEREVENT, KEYDOWN, QUIT, K_ESCAPE, KMOD_LMETA, KMOD_RMETA, K_a, K_g, K_q, K_1, K_2,
+                        pygame, Type, State, within, get_string_upgrade)
 
 
 class Controller(object):
@@ -281,7 +282,11 @@ class Controller(object):
         self.draw_game()
 
     def upgrade_should_be_performed(self, action):
-        return action.unit.should_be_upgraded() and not self.game.is_player_network() and not action.unit.has(State.extra_action)
+        is_player_network = self.game.is_player_network()
+        unit_has_extra_action = action.unit.has(State.extra_action)
+        unit_should_be_upgraded = action.unit.should_be_upgraded()
+
+        return unit_should_be_upgraded and not unit_has_extra_action and not is_player_network
 
     def perform_upgrade(self, action, upgrade):
 
@@ -314,7 +319,8 @@ class Controller(object):
         self.game.gamestate.set_available_actions()
 
     def move_with_attack_should_be_performed(self, action, outcome):
-        return action.move_with_attack is None and self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
+        is_mwa_possible = self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
+        return action.move_with_attack is None and is_mwa_possible
 
     def determine_outcome(self, action):
         if self.game.is_enemy_network():
@@ -328,10 +334,13 @@ class Controller(object):
         if not outcome:
             outcome = self.determine_outcome(action)
 
-        self.view.draw_action(action, self.game)
+        self.view.draw_action(action, self.game.logbook, self.game.is_player_ai())
         self.game.do_action(action, outcome)
 
-        pygame.time.delay(settings.pause_for_animation_attack if action.is_attack else settings.pause_for_animation)
+        animation_delay = interface_settings.pause_for_animation
+        if action.is_attack:
+            animation_delay = interface_settings.pause_for_animation_attack
+        pygame.time.delay(animation_delay)
         self.draw_game()
 
         if self.move_with_attack_should_be_performed(action, outcome):
@@ -357,7 +366,8 @@ class Controller(object):
         if self.game.is_player_human():
             return
         elif self.game.is_player_network():
-            print("Waiting for network action from network with number", self.game.gamestate.action_count + 1)
+            expected_action_number = self.game.gamestate.action_count + 1
+            print("Waiting for network action from network with number", expected_action_number)
             self.trigger_network_player()
         else:
             self.trigger_artificial_intelligence()
@@ -378,7 +388,8 @@ class Controller(object):
 
     @staticmethod
     def command_q_down(key):
-        return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
+        is_meta = pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA
+        return key == K_q and is_meta
 
     @staticmethod
     def escape(event):
@@ -397,8 +408,8 @@ class Controller(object):
         """
         :param position: The position that is right clicked
         :return: None
-        Shows the details of the unit being right clicked. If a friendly unit is selected and it can perform an action
-        on the right clicked position, show info for this action.
+        Shows the details of the unit being right clicked. If a friendly unit is selected and it can
+        perform an action on the right clicked position, show info for this action.
         """
         self.draw_game()
 
@@ -409,7 +420,8 @@ class Controller(object):
         self.view.show_unit_zoomed(self.game.gamestate.all_units()[position])
 
         if self.start_at:
-            actions = self.game.gamestate.get_actions({"start_at": self.start_at, "target_at": position})
+            actions = self.game.gamestate.get_actions(
+                {"start_at": self.start_at, "target_at": position})
             if actions:
                 self.view.shade_actions(actions)
                 self.view.show_battle_hint(self.game.gamestate, self.start_at, position)

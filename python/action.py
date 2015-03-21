@@ -1,5 +1,5 @@
-from copy import deepcopy
-from common import *
+import copy
+from common import Trait, Ability, Position, datetime, enum_from_string, distance, merge
 
 
 class Action(object):
@@ -95,7 +95,7 @@ class Action(object):
             document["number"] = self.number
         if self.ability:
             document["ability"] = self.ability.name
-        if not self.move_with_attack is None:
+        if self.move_with_attack is not None:
             document["move_with_attack"] = self.move_with_attack
 
         return document
@@ -128,9 +128,6 @@ class Action(object):
     def double_cost(self):
         return self.unit.has(Trait.double_attack_cost) and self.is_attack
 
-    def copy(self):
-        return deepcopy(self)
-
     def update_references(self, gamestate):
         units = merge(gamestate.player_units, gamestate.enemy_units)
         self.unit = units[self.start_at]
@@ -146,3 +143,6 @@ class Action(object):
         if not self.unit.is_melee or self.is_javelin_throw:
             return None
         return self.end_at.get_direction_to(self.target_at)
+
+    def copy(self):
+        return copy.copy(self)
