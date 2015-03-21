@@ -130,14 +130,14 @@ class Viewinfo:
 
         base = self.interface.upgrade_locations[index]
         title_location = base
-        image_location = [base[0], base[1] + 20 * self.zoom]
+        image_location = [base[0], base[1] + 25 * self.zoom]
         text_location = [base[0], base[1] + 160 * self.zoom]
 
         write(self.screen, unit.name, title_location, self.interface.fonts["normal"])
         self.screen.blit(pic, image_location)
 
         lines = self.get_unit_lines(unit)
-        line_length = 30
+        line_length = 25
         show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *text_location)
 
     def draw_upgrade_options(self, unit):
