@@ -1,6 +1,6 @@
  {
     "type": "Does action exist",
-    "description": "Fencer can always use its second action to attack if its not a move_with_attack",
+    "description": "Fencer can always use its second action to attack if it isn't a move_with_attack",
     "result": true,
     "action": {
         "start_at": "E4",

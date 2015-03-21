@@ -1,6 +1,6 @@
 {
     "type": "Is outcome correct",
-    "description": "Fencer wins it attack, and gets an extra_action, with no movement remaining.",
+    "description": "Fencer wins its attack, and gets an extra_action, with no movement remaining.",
     "outcome": {
         "E4": [1, 6]
     },
