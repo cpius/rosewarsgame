@@ -111,7 +111,7 @@ class Viewinfo:
 
         base = self.interface.show_unit_location
         title_location = base
-        image_location = [base[0], base[1] + 20 * self.zoom]
+        image_location = [base[0], base[1] + 25 * self.zoom]
         text_location = [base[0], base[1] + 290 * self.zoom]
 
         write(self.screen, unit.pretty_name, title_location, self.interface.fonts["normal"])
