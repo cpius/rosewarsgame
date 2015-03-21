@@ -56,7 +56,7 @@ class Position:
         return self.perpendicular(direction) | self.forward_and_sideways(direction)
 
     def surrounding_tiles(self):
-        return set(pos for pos in [self.move(direction) for direction in eight_directions] if pos)
+        return {pos for pos in [self.move(direction) for direction in eight_directions] if pos}
 
     def adjacent_tiles(self):
         return {pos for pos in [self.move(direction) for direction in directions] if pos}
