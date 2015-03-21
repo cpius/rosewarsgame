@@ -363,7 +363,7 @@ class Controller(object):
         elif self.game.is_player_network():
             expected_action_number = self.game.gamestate.action_count + 1
             print("Waiting for network action from network with number", expected_action_number)
-            sel.trigger_network_player()
+            self.trigger_network_player()
         else:
             self.trigger_artificial_intelligence()
 
