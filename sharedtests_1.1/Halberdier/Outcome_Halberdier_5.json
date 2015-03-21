@@ -1,0 +1,38 @@
+{
+    "type": "Is outcome correct",
+    "description": "Pushed units should die even on backline",
+    "outcome": {
+        "B8": [1, 1]
+    },
+    "action": {
+        "start_at": "B7",
+        "end_at": "B7",
+        "target_at": "B8",
+        "move_with_attack": 1
+    },
+    "pre_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
+            "B7": "Halberdier"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B5": "Archer",
+            "B8": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
+            "B8": {
+                "name": "Halberdier",
+                "used": true,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "B5": "Archer"
+        }
+    }
+}
