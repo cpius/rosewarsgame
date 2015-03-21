@@ -1,6 +1,6 @@
-from viewcommon import *
+from viewcommon import pygame, Color, show_lines, get_unit_pic, get_image, write, textwrap
 import battle
-from common import *
+from common import Effect, State, Trait, Ability, prettify, get_description, get_ability_description
 from functools import total_ordering
 
 
@@ -37,6 +37,8 @@ class Viewinfo:
         self.zoom = zoom
         self.unit_dimensions = (int(236 * zoom), int(271 * zoom))
         self.upgrade_unit_dimensions = (int(118 * zoom), int(135.5 * zoom))
+        self.small_line_height = self.interface.line_distances["small"]
+        self.small_font = self.interface.fonts["small"]
 
     def clear(self):
         pygame.draw.rect(self.screen, Color.Light_grey, self.interface.lower_right_rectangle)
@@ -102,7 +104,7 @@ class Viewinfo:
         line_length = 45
         base = self.interface.show_unit_location
         text_location = [base[0], base[1] + 500 * self.zoom]
-        show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
+        show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *text_location)
 
     def show_unit_zoomed(self, unit):
 
@@ -111,7 +113,7 @@ class Viewinfo:
 
         base = self.interface.show_unit_location
         title_location = base
-        image_location = [base[0], base[1] + 20 * self.zoom]
+        image_location = [base[0], base[1] + 25 * self.zoom]
         text_location = [base[0], base[1] + 290 * self.zoom]
 
         write(self.screen, unit.pretty_name, title_location, self.interface.fonts["normal"])
@@ -119,7 +121,7 @@ class Viewinfo:
 
         lines = self.get_unit_lines(unit)
         line_length = 45
-        show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
+        show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *text_location)
 
     def show_unit_upgrade_choice(self, unit, index):
 
@@ -128,15 +130,15 @@ class Viewinfo:
 
         base = self.interface.upgrade_locations[index]
         title_location = base
-        image_location = [base[0], base[1] + 20 * self.zoom]
+        image_location = [base[0], base[1] + 25 * self.zoom]
         text_location = [base[0], base[1] + 160 * self.zoom]
 
-        write(self.screen, unit.name, title_location, self.interface.fonts["normal"])
+        write(self.screen, unit.pretty_name, title_location, self.interface.fonts["normal"])
         self.screen.blit(pic, image_location)
 
         lines = self.get_unit_lines(unit)
-        line_length = 30
-        show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
+        line_length = 25
+        show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *text_location)
 
     def draw_upgrade_options(self, unit):
         for i in range(2):
@@ -154,7 +156,7 @@ class Viewinfo:
         base = self.interface.ask_about_ability_location
         text_location = [base[0], base[1] + 160 * self.zoom]
         line_length = 80
-        show_lines(self.screen, lines, line_length, self.interface.line_distances["small"], self.interface.fonts["small"], *text_location)
+        show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *text_location)
 
     @staticmethod
     def get_battle_hint(gamestate, start_at, target_at):

@@ -33,7 +33,7 @@ class Interface(object):
                       "very_small": pygame.font.SysFont(font_name, int(11 * zoom), bold=True),
                       "small": pygame.font.SysFont(font_name, int(14 * zoom), bold=True),
                       "medium": pygame.font.SysFont(font_name, int(16 * zoom), bold=True),
-                      "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
+                      "normal": pygame.font.SysFont(font_name, int(18 * zoom), bold=False),
                       "larger": pygame.font.SysFont(font_name, int(25 * zoom), bold=False),
                       "experience": pygame.font.SysFont(font_name, int(18 * zoom), bold=True),
                       "big": pygame.font.SysFont(font_name, int(36 * zoom), bold=True)
@@ -116,18 +116,18 @@ class Rectangles(Interface):
 
         self.show_unit_location = (410 * zoom, 25 * zoom)
 
-        self.upgrade_locations = [(410 * zoom, 370 * zoom), (600 * zoom, 370 * zoom)]
+        self.upgrade_locations = [(410 * zoom, 300 * zoom), (600 * zoom, 300 * zoom)]
         self.ask_about_ability_location = (410 * zoom, 230 * zoom)
 
-        self.upgrade_text_locations = [(410 * zoom, 510 * zoom), (600 * zoom, 510 * zoom)]
+        self.upgrade_text_locations = [(410 * zoom, 400 * zoom), (600 * zoom, 400 * zoom)]
 
         self.small_line_distance = 18 * zoom
 
         super(Rectangles, self).__init__(zoom)
 
         Point = namedtuple('Point', ['x', 'y'])
-        self.upgrade_1_area = [Point(410 * zoom, 370 * zoom), Point((410 + 118) * zoom, (370 + 165.5) * zoom)]
-        self.upgrade_2_area = [Point(600 * zoom, 370 * zoom), Point((600 + 118) * zoom, (370 + 165.5) * zoom)]
+        self.upgrade_1_area = [Point(410 * zoom, 300 * zoom), Point((410 + 118) * zoom, (300 + 165.5) * zoom)]
+        self.upgrade_2_area = [Point(600 * zoom, 300 * zoom), Point((600 + 118) * zoom, (300 + 165.5) * zoom)]
 
         self.help_area = [Point(735 * zoom, 715 * zoom), Point(780 * zoom, 740 * zoom)]
 
@@ -139,4 +139,4 @@ class Rectangles(Interface):
                           for i in range(15)]
 
         self.opponent_menu = [[Point(100 * zoom, (40 + 40 * i) * zoom), Point(510 * zoom, (70 + 40 * i) * zoom)]
-                          for i in range(15)]
+                              for i in range(15)]

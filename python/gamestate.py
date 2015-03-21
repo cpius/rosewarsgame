@@ -67,7 +67,7 @@ class Gamestate:
             if action.is_attack:
                 if not action.move_with_attack:
                     new_action = action.copy()
-                    new_action.move_with_attack = False
+                    new_action.move_with_attack = None
                     actions_with_none.append(new_action)
             else:
                 actions_with_none.append(action)

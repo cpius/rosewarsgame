@@ -1,4 +1,4 @@
-from viewcommon import *
+from viewcommon import get_image, pygame, Color, draw_rectangle, write, State, Effect, get_unit_pic, settings
 from coordinates import Coordinates
 from rounded_rect import AAfilledRoundedRect
 
@@ -58,7 +58,7 @@ class Viewgame:
                     AAfilledRoundedRect(self.screen, rectangle_style, self.interface.move_shading, 0.2)
 
     def draw_post_movement(self, action):
-        pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.start_at), 10)
+        pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.end_at), 10)
         self.draw_line(action.end_at, action.target_at)
         pic = get_image(self.interface.move_icon)
         self.screen.blit(pic, self.interface.coordinates["battle"].get(action.target_at))
@@ -203,7 +203,6 @@ class Viewgame:
 
         AAfilledRoundedRect(screen, rectangle_style, border_color, 0.2)
 
-
     def get_counter_coordinates(self, counters_drawn):
         return {
             0: Coordinates(self.interface.first_counter_coordinates, self.interface),
@@ -232,9 +231,17 @@ class Viewgame:
 
     @staticmethod
     def get_blue_counters(unit):
-        return max(unit.get_level(Effect.poisoned), unit.get_level(Effect.attack_frozen), unit.has(State.recently_bribed))
+        poisoned_level = unit.get_level(Effect.poisoned)
+        frozen_level = unit.get_level(Effect.attack_frozen)
+        bribed = unit.has(State.recently_bribed)
 
-    def draw_ask_about_move_with_attack(self, position):
-        base = self.interface.coordinates["base"].get(position)
+        return max(poisoned_level, frozen_level, bribed)
+
+    def draw_ask_about_move_with_attack(self, end_at, target_at):
         dimensions = (self.interface.unit_width, self.interface.unit_height)
+
+        base = self.interface.coordinates["base"].get(end_at)
+        draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+
+        base = self.interface.coordinates["base"].get(target_at)
         draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)

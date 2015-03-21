@@ -125,79 +125,112 @@ class Log():
 trait_descriptions = {
     "attack_cooldown": {
         1: "Can only attack every third turn.",
-        2: "Can only attack every second turn"},
+        2: "Can only attack every second turn"
+    },
     "berserking": {
-        1: "Can move 4 tiles if movement ends with an attack."},
+        1: "Can move 4 tiles if movement ends with an attack."
+    },
     "big_shield": {
-        1: "+2D v melee"},
+        1: "+2D v melee"
+    },
     "combat_agility": {
-        1: "Can make an attack after its first action. (But not a second move.)"},
+        1: "Can make an attack after its first action. (But not a second move.)"
+    },
     "crusading": {
         1: "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A.",
-        2: "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A, +1D"},
+        2: "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A, +1D"
+    },
     "defence_maneuverability": {
-        1: "Can move two tiles if one of them is sideways."},
+        1: "Can move two tiles if one of them is sideways."
+    },
     "double_attack_cost": {
-        1: "Attack takes two actions."},
+        1: "Attack takes two actions."
+    },
     "extra_life": {
-        1: "It takes two successful hits to kill this unit."},
+        1: "It takes two successful hits to kill this unit."
+    },
     "far_sighted": {
-        1: "-1A if target is less than 4 tiles away."},
+        1: "-1A if target is less than 4 tiles away."
+    },
     "flag_bearing": {
         1: "Friendly melee units receive +2A if attacking from a tile adjacent to Flag Bearer.",
-        2: "Friendly melee units receive +2A if attacking from a tile surrounding Flag Bearer."},
+        2: "Friendly melee units receive +2A if attacking from a tile surrounding Flag Bearer."
+    },
     "melee_expert": {
-        1: "+1A, +1D vs melee units."},
+        1: "+1A, +1D vs melee units."
+    },
     "melee_freeze": {
-        1: "Units adjacent to it can only attack it, not move."},
+        1: "Units adjacent to it can only attack it, not move."
+    },
     "pikeman_specialist": {
-        1: "Pikemen do not get +1A/+1D against it."},
+        1: "Pikemen do not get +1A/+1D against it."
+    },
     "lancing": {
         1: "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A.",
-        2: "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."},
+        2: "If it starts movement with 3 empty tiles between lancer and the unit it attacks, +3A."
+    },
     "longsword": {
-        1: "Also hits the 4 nearby tiles in the attack direction."},
+        1: "Also hits the 4 nearby tiles in the attack direction."
+    },
     "push": {
         1: "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
-        "must retreat directly backwards or die."},
+        "must retreat directly backwards or die."
+    },
     "rage": {
-        1: "Can make an attack after it's move. (But not a second move.)"},
+        1: "Can make an attack after it's move. (But not a second move.)"
+    },
     "scouting": {
-        1: "Can move past all units."},
+        1: "Can move past all units."
+    },
     "sharpshooting": {
-        1: "Targets have their defence reduced to 1 during the attack."},
+        1: "Targets have their defence reduced to 1 during the attack."
+    },
     "swiftness": {
-        1: "Can use remaining moves after attacking."},
+        1: "Can use remaining moves after attacking."
+    },
     "tall_shield": {
-        1: "+1D against ranged attacks."},
+        1: "+1D against ranged attacks."
+    },
     "triple_attack": {
-        1: "Also hits the two diagonally nearby tiles in the attack direction."},
+        1: "Also hits the two diagonally nearby tiles in the attack direction."
+    },
     "attack_skill": {
-        1: "Is added to the units base attack"},
+        1: "Is added to the units base attack"
+    },
     "defence_skill": {
-        1: "Is added to the units base defence"},
+        1: "Is added to the units base defence"
+    },
     "range_skill": {
-        1: "Is added to the units base range"},
+        1: "Is added to the units base range"
+    },
     "movement_skill": {
-        1: "Is added to the units base movement"},
+        1: "Is added to the units base movement"
+    },
     "fire_arrows": {
-        1: "+3A vs War Machines"},
+        1: "+3A vs War Machines"
+    },
     "cavalry_specialist": {
-        1: "+1A +1D vs Cavalry"},
+        1: "+1A +1D vs Cavalry"
+    },
     "war_machine_specialist": {
-        1: "+1A +1D vs War Machines"},
+        1: "+1A +1D vs War Machines"
+    },
     "flanking": {
-        1: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
-           "turn, 2 is added to it's attack.",
-        2: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
-           "turn, 4 is added to it's attack."},
+        1: "If it attacks from the side or the rear, and it did not attack the defending unit last turn, "
+           "2 is added to its attack.",
+        2: "If it attacks from the side or the rear, and it did not attack the defending unit last turn, "
+           "4 is added to its attack."
+    },
     "ride_through": {
         1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where "
-           "it ends up on this empty tile. Zone of control has no effect on this ability."},
+           "it ends up on this empty tile. Zone of control has no effect on this ability."
+    },
     "spread_attack": {
-        1: "Also attacks the adjacent tiles, even if your units are standing there."},
+        1: "Also attacks the adjacent tiles, even if your units are standing there."
+    },
     "javelin": {
-        1: "Can one time make a ranged attack with range 3. The defending unit has it's defence reduced by 1."}
+        1: "Can one time make a ranged attack with range 3. The defending unit has it's defence reduced by 1."
+    }
 }
 
 state_descriptions = {
@@ -216,19 +249,24 @@ state_descriptions = {
 effect_descriptions = {
     "attack_frozen": {
         1: "Unit cannot attack.",
-        2: "Unit cannot attack."},
+        2: "Unit cannot attack."
+    },
     "bribed": {
         1: "Unit is controlled by opponent and has +1 attack.",
-        2: "Unit is controlled by opponent and has +2 attack."},
+        2: "Unit is controlled by opponent and has +2 attack."
+    },
     "poisoned": {
         1: "Unit cannot perform any actions.",
-        2: "Unit cannot perform any actions."},
+        2: "Unit cannot perform any actions."
+    },
     "improved_weapons": {
         1: "Unit has +3 attack, +1 defence.",
-        2: "Unit has +2 attack, +1 defence."},
+        2: "Unit has +2 attack, +1 defence."
+    },
     "sabotaged": {
         1: "Units defence is reduced to 0.",
-        2: "Units defence is reduced to 0."}
+        2: "Units defence is reduced to 0."
+    }
 }
 
 ability_descriptions = {
@@ -236,22 +274,28 @@ ability_descriptions = {
         1: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. The unit gets +1A "
            "until end of turn.",
         2: "You can use an opponent's unit this turn. Your opponent can't use it on his next turn. The unit gets +2A "
-           "until end of turn."},
+           "until end of turn."
+        },
     "improve_weapons": {
         1: "Give melee unit +3 attack, +1 defence until your next turn.",
-        2: "Give melee unit +2 attack, +1 defence for two turns."},
+        2: "Give melee unit +2 attack, +1 defence for two turns."
+    },
     "pikeman_specialist": {
-        1: "Pikemen do not get +1D against Hussar."},
+        1: "Pikemen do not get +1D against Hussar."
+    },
     "poison": {
         1: "Makes a unit unable to perform actions until your next turn.",
-        2: "Makes a unit unable to perform actions for two turns."},
+        2: "Makes a unit unable to perform actions for two turns."
+    },
     "sabotage": {
         1: "Reduces a units defence to 0 this turn.",
-        2: "Reduces a units defence to 0 for two turns."},
+        2: "Reduces a units defence to 0 for two turns."
+    },
     "assassinate": {
         1: "Attempt to assassinate any unit on the board with a 66% probability of success After the attempt there is "
            "a 50% risk that Assassin is discovered and killed. "
-           "Assassinate can only be performed on the second action."}
+           "Assassinate can only be performed on the second action."
+    }
 }
 
 opponent_descriptions = {

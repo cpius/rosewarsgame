@@ -193,11 +193,18 @@ class Controller(object):
 
         # Determine possible actions
         if position in self.game.gamestate.all_units():
-            possible_actions = self.game.gamestate.get_actions_with_move_with_attack_as_none({"start_at": self.start_at,
-                                                                                              "target_at": position})
+            criteria = {
+                "start_at": self.start_at,
+                "target_at": position
+            }
+            possible_actions = self.game.gamestate.get_actions_with_move_with_attack_as_none(criteria)
         else:
-            possible_actions = self.game.gamestate.get_actions({"start_at": self.start_at, "end_at": position,
-                                                                "target_at": None})
+            criteria = {
+                "start_at": self.start_at,
+                "end_at": position,
+                "target_at": None
+            }
+            possible_actions = self.game.gamestate.get_actions(criteria)
 
         # If there are no possible actions, deselect the unit.
         if not possible_actions:
@@ -264,8 +271,10 @@ class Controller(object):
 
     def pick_upgrade(self, unit):
         self.view.draw_upgrade_options(unit)
-        choice = self.get_choice({K_1: 0, K_2: 1},
-                                 [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]])
+        buttons = {K_1: 0, K_2: 1}
+        areas = [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]]
+        choice = self.get_choice(buttons, areas)
+
         return unit.get_upgrade(choice)
 
     def pick_ability(self, unit):
@@ -274,7 +283,8 @@ class Controller(object):
         return unit.abilities[choice]
 
     def ask_about_move_with_attack(self, action):
-        self.view.draw_ask_about_move_with_attack(action.target_at)
+        self.view.draw_ask_about_move_with_attack(action.end_at, action.target_at)
+
         return self.get_choice_position({action.target_at: True, action.end_at: False})
 
     def clear_move(self):
@@ -309,17 +319,21 @@ class Controller(object):
     def perform_move_with_attack(self, action, outcome):
         move_with_attack = self.ask_about_move_with_attack(action)
 
+        self.draw_game(redraw_log=True)
+
         self.game.save_option("move_with_attack", move_with_attack)
         if self.game.is_enemy_network():
             self.client.send_move_with_attack(move_with_attack, self.game.gamestate.action_count)
 
-        self.view.draw_post_movement(action)
-        self.game.gamestate.move_melee_unit_to_target_tile(action)
+        if move_with_attack:
+            self.view.draw_post_movement(action)
+            self.game.gamestate.move_melee_unit_to_target_tile(action)
 
         self.game.gamestate.set_available_actions()
 
     def move_with_attack_should_be_performed(self, action, outcome):
         is_mwa_possible = self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
+
         return action.move_with_attack is None and is_mwa_possible
 
     def determine_outcome(self, action):
@@ -334,7 +348,7 @@ class Controller(object):
         if not outcome:
             outcome = self.determine_outcome(action)
 
-        self.view.draw_action(action, self.game.logbook, self.game.is_player_ai())
+        self.view.draw_action(action, self.game.logbook, not self.game.is_player_human())
         self.game.do_action(action, outcome)
 
         animation_delay = interface_settings.pause_for_animation
