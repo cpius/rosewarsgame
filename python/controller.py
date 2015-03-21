@@ -176,7 +176,7 @@ class Controller(object):
         """
 
         # Clear greyed out tiles
-        self.draw_game()
+        self.draw_game(redraw_log=True)
 
         # If the Unit is clicked again, deselect the unit.
         if self.start_at == position:
