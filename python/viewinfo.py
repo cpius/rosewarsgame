@@ -1,6 +1,6 @@
-from viewcommon import *
+from viewcommon import pygame, Color, show_lines, get_unit_pic, get_image, write, textwrap
 import battle
-from common import *
+from common import Effect, State, Trait, Ability, prettify, get_description, get_ability_description
 from functools import total_ordering
 
 
