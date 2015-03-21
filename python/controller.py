@@ -314,7 +314,8 @@ class Controller(object):
         self.game.gamestate.set_available_actions()
 
     def move_with_attack_should_be_performed(self, action, outcome):
-        return action.move_with_attack is None and self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
+        is_mwa_possible = self.game.gamestate.is_post_move_with_attack_possible(action, outcome)
+        return action.move_with_attack is None and is_mwa_possible
 
     def determine_outcome(self, action):
         if self.game.is_enemy_network():
@@ -331,7 +332,10 @@ class Controller(object):
         self.view.draw_action(action, self.game.logbook)
         self.game.do_action(action, outcome)
 
-        pygame.time.delay(settings.pause_for_animation_attack if action.is_attack else settings.pause_for_animation)
+        animation_delay = settings.pause_for_animation
+        if action.is_attack:
+            animation_delay = settings.pause_for_animation_attack
+        pygame.time.delay(animation_delay)
         self.draw_game()
 
         if self.move_with_attack_should_be_performed(action, outcome):
@@ -357,8 +361,9 @@ class Controller(object):
         if self.game.is_player_human():
             return
         elif self.game.is_player_network():
-            print("Waiting for network action from network with number", self.game.gamestate.action_count + 1)
-            self.trigger_network_player()
+            expected_action_number = self.game.gamestate.action_count + 1
+            print("Waiting for network action from network with number", expected_action_number)
+            sel.trigger_network_player()
         else:
             self.trigger_artificial_intelligence()
 
@@ -378,7 +383,8 @@ class Controller(object):
 
     @staticmethod
     def command_q_down(key):
-        return key == K_q and (pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA)
+        is_meta = pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA
+        return key == K_q and is_meta
 
     @staticmethod
     def escape(event):
@@ -397,8 +403,8 @@ class Controller(object):
         """
         :param position: The position that is right clicked
         :return: None
-        Shows the details of the unit being right clicked. If a friendly unit is selected and it can perform an action
-        on the right clicked position, show info for this action.
+        Shows the details of the unit being right clicked. If a friendly unit is selected and it can
+        perform an action on the right clicked position, show info for this action.
         """
         self.draw_game()
 
@@ -409,7 +415,8 @@ class Controller(object):
         self.view.show_unit_zoomed(self.game.gamestate.all_units()[position])
 
         if self.start_at:
-            actions = self.game.gamestate.get_actions({"start_at": self.start_at, "target_at": position})
+            actions = self.game.gamestate.get_actions(
+                {"start_at": self.start_at, "target_at": position})
             if actions:
                 self.view.shade_actions(actions)
                 self.view.show_battle_hint(self.game.gamestate, self.start_at, position)
