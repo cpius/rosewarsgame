@@ -1,3 +1,4 @@
+import copy
 from common import Trait, Ability, Position, datetime, enum_from_string, distance, merge
 
 
@@ -142,3 +143,6 @@ class Action(object):
         if not self.unit.is_melee or self.is_javelin_throw:
             return None
         return self.end_at.get_direction_to(self.target_at)
+
+    def copy(self):
+        return copy.copy(self)
