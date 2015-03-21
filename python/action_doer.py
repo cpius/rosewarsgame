@@ -52,7 +52,7 @@ def do_action(gamestate, action, outcome):
 
         elif ability == Ability.assassinate:
             rolls = outcome.for_position(action.target_at)
-            if battle.assassin_kills_target(rolls):
+            if battle.assassin_kills_target(rolls, level):
                 gamestate.delete_unit_at(target_at)
 
             rolls = outcome.for_position(action.start_at)
