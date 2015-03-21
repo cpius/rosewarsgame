@@ -1,7 +1,7 @@
 from viewlog import Viewlog
 from viewgame import Viewgame
 from viewinfo import Viewinfo
-from viewcommon import *
+from viewcommon import get_position_from_mouseclick, write_message, write, pygame, settings, Color
 
 
 class View(object):
@@ -102,4 +102,3 @@ class View(object):
         self.clear_right()
         self.viewinfo.show_unit_zoomed(unit)
         self.refresh()
-
