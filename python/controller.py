@@ -10,7 +10,8 @@ from game import Game
 from outcome import Outcome
 import json
 from view import View
-from viewcommon import *
+from viewcommon import (USEREVENT, KEYDOWN, QUIT, K_ESCAPE, KMOD_LMETA, KMOD_RMETA, K_a, K_g, K_q, K_1, K_2,
+                        pygame, Type, State, within, get_string_upgrade)
 
 
 class Controller(object):
@@ -281,7 +282,11 @@ class Controller(object):
         self.draw_game()
 
     def upgrade_should_be_performed(self, action):
-        return action.unit.should_be_upgraded() and not self.game.is_player_network() and not action.unit.has(State.extra_action)
+        is_player_network = self.game.is_player_network()
+        unit_has_extra_action = action.unit.has(State.extra_action)
+        unit_should_be_upgraded = action.unit.should_be_upgraded()
+
+        return unit_should_be_upgraded and not unit_has_extra_action and not is_player_network
 
     def perform_upgrade(self, action, upgrade):
 
@@ -332,9 +337,9 @@ class Controller(object):
         self.view.draw_action(action, self.game.logbook)
         self.game.do_action(action, outcome)
 
-        animation_delay = settings.pause_for_animation
+        animation_delay = interface_settings.pause_for_animation
         if action.is_attack:
-            animation_delay = settings.pause_for_animation_attack
+            animation_delay = interface_settings.pause_for_animation_attack
         pygame.time.delay(animation_delay)
         self.draw_game()
 
