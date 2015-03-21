@@ -187,10 +187,11 @@ trait_descriptions = {
     "war_machine_specialist": {
         1: "+1A +1D vs War Machines"},
     "flanking": {
-        1: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
-           "turn, 2 is added to it's attack.",
-        2: "If it attacks a unit from a direction that is not the front, and it did not attack the defending unit last "
-           "turn, 4 is added to it's attack."},
+        1: "If it attacks from the side or the rear, and it did not attack the defending unit last turn, "
+           "2 is added to its attack.",
+        2: "If it attacks from the side or the rear, and it did not attack the defending unit last turn, "
+           "4 is added to its attack."
+    },
     "ride_through": {
         1: "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where "
            "it ends up on this empty tile. Zone of control has no effect on this ability."},
