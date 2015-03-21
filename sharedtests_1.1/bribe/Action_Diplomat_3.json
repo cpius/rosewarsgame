@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "description": "You can't use a unit that's recently bribed",
+    "result": false,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C4"
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": {
+                "name": "Ballista",
+                "recently_bribed": 1
+            },
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "C6": "Diplomat"
+        }
+    }
+}
