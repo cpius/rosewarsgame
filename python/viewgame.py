@@ -58,7 +58,7 @@ class Viewgame:
                     AAfilledRoundedRect(self.screen, rectangle_style, self.interface.move_shading, 0.2)
 
     def draw_post_movement(self, action):
-        pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.start_at), 10)
+        pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.end_at), 10)
         self.draw_line(action.end_at, action.target_at)
         pic = get_image(self.interface.move_icon)
         self.screen.blit(pic, self.interface.coordinates["battle"].get(action.target_at))
