@@ -1,0 +1,42 @@
+{
+    "type": "Is outcome correct",
+    "description": "If Halberdier Pushes a Viking, and it cant retreat, it loses 1 life",
+    "outcome": {
+        "A7": [1, 1]
+    },
+    "action": {
+        "start_at": "B7",
+        "end_at": "B7",
+        "target_at": "A7",
+        "move_with_attack": 1
+    },
+    "pre_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
+            "B7": "Halberdier"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B5": "Archer",
+            "A7": "Viking"
+        }
+    },
+    "post_gamestate": {
+        "player1_units": {
+            "E2": "Pikeman",
+            "B7": {
+                "name": "Halberdier",
+                "used": true,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "B5": "Archer",
+            "A7": {
+                "name": "Viking",
+                "lost_extra_life": 1
+            }
+        }
+    }
+}

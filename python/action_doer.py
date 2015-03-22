@@ -26,7 +26,10 @@ def settle_attack(action, gamestate, outcome, attack_direction, is_sub_action=Fa
         push_destination = action.target_at.move(attack_direction)
 
         if push_destination in all_units or not push_destination:
-            gamestate.delete_unit_at(action.target_at)
+            if action.target_unit.has_extra_life:
+                action.target_unit.set(State.lost_extra_life)
+            else:
+                gamestate.delete_unit_at(action.target_at)
         else:
             gamestate.move_unit(action.target_at, push_destination)
 
@@ -49,7 +52,7 @@ def do_action(gamestate, action, outcome):
 
         elif ability == Ability.assassinate:
             rolls = outcome.for_position(action.target_at)
-            if battle.assassin_kills_target(rolls):
+            if battle.assassin_kills_target(rolls, level):
                 gamestate.delete_unit_at(target_at)
 
             rolls = outcome.for_position(action.start_at)

@@ -199,8 +199,11 @@ def get_outcome_string(action, outcome, gamestate, is_sub_action):
         return "DEFEND"
 
 
-def assassin_kills_target(rolls):
-    return rolls.defence > 2
+def assassin_kills_target(rolls, level):
+    if level == 1:
+        return rolls.defence > 2
+    else:
+        return True
 
 
 def assassin_dies(rolls):

@@ -173,9 +173,8 @@ trait_descriptions = {
         1: "Also hits the 4 nearby tiles in the attack direction."
     },
     "push": {
-        1: "If attack and defence rolls both succeed, it can still move forward. If not on back line, opponents units "
-        "must retreat directly backwards or die."
-    },
+        1: "If attack and defence rolls both succeed, it can still move forward. Opponents units must retreat directly "
+           "backwards or die."},
     "rage": {
         1: "Can make an attack after it's move. (But not a second move.)"
     },

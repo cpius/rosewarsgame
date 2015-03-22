@@ -596,8 +596,8 @@ class Assassin(Unit_class):
     base_defence = 2
     base_movement = 1
     base_range = 11
-    upgrades = [{Trait.defence_skill: 1}, {Trait.defence_skill: 1}]
-    experience_to_upgrade = 4
+    upgrades = [{Ability.assassinate: 1}, {Trait.defence_skill: 1}, {Trait.defence_skill: 1}]
+    experience_to_upgrade = 2
 
 
 class Weaponsmith(Unit_class):

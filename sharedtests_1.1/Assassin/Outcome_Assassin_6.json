@@ -1,0 +1,43 @@
+{
+    "description": "The Assassin attacks succesfully because of assasinate level 2",
+    "type": "Is outcome correct",
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "C3": {
+                "name": "Assassin",
+                "assassinate": 2
+            },
+            "A1": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer",
+            "E7": "Pikeman"
+        }
+    },
+    "action": {
+        "target_at": "D4",
+        "end_at": "C3",
+        "start_at": "C3",
+        "ability": "assassinate"
+    },
+    "outcome": {
+        "D4": [1, 1],
+        "C3": [1, 1]
+    },
+    "post_gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Pikeman",
+            "C3": {
+                "experience": 1,
+                "used": 1,
+                "name": "Assassin",
+                "assassinate": 2
+            }
+        },
+        "player2_units": {
+            "E7": "Pikeman"
+        }
+    }
+}
