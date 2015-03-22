@@ -3,8 +3,6 @@ from common import *
 from units import Unit_class
 from collections import namedtuple
 
-requirements = ["at_least_two_column_blocks", "at_most_one_pikeman_per_column", "at_least_one_war_machine",
-                "at_most_two_war_machines", "at_least_five_melee_with_weaponsmith"]
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
@@ -41,11 +39,12 @@ if get_setting("version") == "1.1":
         Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman, Unit.Scout, Unit.Viking,
         Unit.Hobelar, Unit.Halberdier, Unit.Flanking_Cavalry, Unit.Hussar, Unit.Lancer, Unit.Royal_Guard,
         Unit.Javeliner, Unit.Trebuchet, Unit.War_Elephant, Unit.Fencer, Unit.Saboteur, Unit.Diplomat, Unit.Assassin,
-        Unit.Weaponsmith}
+        Unit.Weaponsmith
+    }
     allowed_basic_units = {
-        Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman}
-    required_special_units = {
-        Unit.Weaponsmith, Unit.Saboteur}
+        Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman
+    }
+    required_special_units = {}
 
 if get_setting("version") == "1.0":
     allowed_special_units = {
@@ -96,36 +95,6 @@ class UnitBag(object):
         return self.units
 
 
-def at_least_two_column_blocks(units):
-    """
-    :param units: The units of one player
-    :return: Boolean of whether each column has at least two blocks. A block is either a unit, or a tile next to a
-    Pikeman
-    """
-    blocks = [pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.zoc] + \
-             [pos.column for pos in units]
-
-    return all(blocks.count(column) >= 2 for column in board_columns)
-     
-
-def at_most_one_pikeman_per_column(units):
-    return not any(column for column in board_columns if
-                   sum(1 for pos, unit in units.items() if pos.column == column and unit.zoc) > 1)
-
-
-def at_least_one_war_machine(units):
-    return any(unit.type == Type.War_Machine for unit in units.values())
-
-
-def at_most_two_war_machines(units):
-    return sum(1 for unit in units.values() if unit.type == Type.War_Machine) <= 2
-
-
-def at_least_five_melee_with_weaponsmith(units):
-    return not any(unit.unit == Unit.Weaponsmith for unit in units.values()) or \
-        sum(1 for unit in units.values() if unit.range == 1) >= 5
-
-
 def place_units_on_board(units_list, tiles_bag):
 
     units = {}
@@ -158,25 +127,69 @@ def select_special_units(special_units_first_bag, special_units_second_bag):
     return special_units
 
 
-def fill_bags():
+def fill_unit_bags():
 
-    basic_units_bag = UnitBag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
-    special_units_first_bag = UnitBag(required_special_units)
-    special_units_second_bag = UnitBag(set(allowed_special_units) - set(required_special_units))
-    tiles_bag = TilesBag()
+    basic_unit_bag = UnitBag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
+    special_unit_required_bag = UnitBag(required_special_units)
+    special_unit_bag = UnitBag(set(allowed_special_units) - set(required_special_units))
 
-    return basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag
+    return basic_unit_bag, special_unit_required_bag, special_unit_bag
+
+
+def at_least_two_column_blocks(units):
+    """
+    :param units: The units of one player
+    :return: Boolean of whether each column has at least two blocks. A block is either a unit, or a tile that is under
+    ZOC by a Pikeman.
+    """
+    blocks = [pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.name == "Pikeman"] + \
+             [pos.column for pos in units]
+
+    return all(blocks.count(column) >= 2 for column in board_columns)
+     
+
+def at_most_one_pikeman_per_column(units):
+    return not any(column for column in board_columns if
+                   sum(1 for pos, unit in units.items() if pos.column == column and unit.zoc) > 1)
+
+
+def at_least_one_war_machine(units):
+    return any(unit.type == Type.War_Machine for unit in units.values())
+
+
+def at_most_two_war_machines(units):
+    return sum(1 for unit in units.values() if unit.type == Type.War_Machine) <= 2
+
+
+def at_least_five_melee_with_weaponsmith(units):
+    """
+    :param units: The units of one player
+    :return: False if Weaponsmith is in the units, and there is not at least 5 melee units it can be used on.
+    """
+    return not any(unit.unit == Unit.Weaponsmith for unit in units.values()) or \
+        sum(1 for unit in units.values() if unit.range == 1) >= 5
+
+requirements = [at_least_two_column_blocks, at_most_one_pikeman_per_column, at_least_one_war_machine,
+                at_most_two_war_machines, at_least_five_melee_with_weaponsmith]
 
 
 def get_units():
+    """
+    :return: The units of one player, drawn semi-randomly and placed on the board semi-randomly.
+    """
 
     while True:
 
-        basic_units_bag, special_units_first_bag, special_units_second_bag, tiles_bag = fill_bags()
-        
+        # Special units that can be picked and placed on the board.
+        basic_unit_bag, special_unit_required_bag, special_unit_bag = fill_unit_bags()
+
+        # The tiles on the board
+        tiles_bag = TilesBag()
+
+        # Selects units from the bags and place them on board.
         try:
-            basic_units = select_basic_units(basic_units_bag)
-            special_units = select_special_units(special_units_first_bag, special_units_second_bag)
+            special_units = select_special_units(special_unit_required_bag, special_unit_bag)
+            basic_units = select_basic_units(basic_unit_bag)
 
             units = place_units_on_board(basic_units + special_units, tiles_bag)
 
@@ -184,10 +197,12 @@ def get_units():
         except IndexError:
             continue
 
+        # After successful placement, Unit objects are created.
         for position, unit in units.items():
             units[position] = Unit_class.make(unit)
 
-        if any(not globals()[requirement](units) for requirement in requirements):
+        # Test if all requirements for the setup are fulfilled, otherwise try again.
+        if any(not requirement(units) for requirement in requirements):
             continue
 
         return units
