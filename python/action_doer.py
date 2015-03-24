@@ -79,15 +79,6 @@ def do_action(gamestate, action, outcome):
         if unit.has(Trait.swiftness) and not action.is_attack:
             return
 
-        # Determine the movement points the unit can use on its extra action.
-        movement_remaining = unit.movement - distance(start_at, final_position)
-
-        # An attack requires a movement point even if it doesn't succeed. But not for Fencer.
-        if action.is_attack and not unit.has(Trait.combat_agility) and target_at != final_position:
-            movement_remaining -= 1
-
-        unit.set(State.movement_remaining, movement_remaining)
-
         if movement_remaining or unit.has(Trait.combat_agility):
             unit.set(State.extra_action)
 
@@ -164,6 +155,15 @@ def do_action(gamestate, action, outcome):
 
     elif action.is_ability:
         settle_ability()
+
+    # Determine the movement points the unit can use on its extra action.
+    movement_remaining = unit.movement - distance(start_at, final_position)
+
+    # An attack requires a movement point even if it doesn't succeed. But not for Fencer.
+    if action.is_attack and not unit.has(Trait.combat_agility) and target_at != final_position:
+        movement_remaining -= 1
+
+    unit.set(State.movement_remaining, value=movement_remaining)
 
     if unit_has_extra_action_trait():
         prepare_extra_actions()

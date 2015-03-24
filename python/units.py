@@ -54,6 +54,10 @@ class Unit_class():
         return prettify(self.unit.name)
 
     @property
+    def states(self):
+        return [attribute for attribute in self.attributes if attribute in State]
+
+    @property
     def effects(self):
         return [attribute for attribute in self.attributes if attribute in Effect]
 
@@ -71,8 +75,7 @@ class Unit_class():
         if attribute in State:
             if value is None:
                 value = 1
-            if value is not 0:
-                self.attributes[attribute] = AttributeValues(value=value)
+            self.attributes[attribute] = AttributeValues(value=value)
         else:
             self.attributes[attribute] = AttributeValues(value=value, duration=duration, level=level)
 
@@ -114,6 +117,14 @@ class Unit_class():
             else:
                 self.attributes[State.experience] = AttributeValues(value=1)
             self.remove(State.recently_upgraded)
+
+    def remove_states_with_value_zero(self):
+        removestates = []
+        for state in self.states:
+            if self.get_state(state) == 0:
+                removestates.append(state)
+        for state in removestates:
+            self.remove(state)
 
     @property
     def has_extra_life(self):

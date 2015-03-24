@@ -178,8 +178,18 @@ class Controller(object):
         # Clear greyed out tiles
         self.draw_game(redraw_log=True)
 
+
         # If the Unit is clicked again, deselect the unit.
         if self.start_at == position:
+            if self.game.gamestate.is_extra_action():
+                self.game.gamestate.player_units[position].remove(State.movement_remaining)
+                self.game.gamestate.player_units[position].remove(State.extra_action)
+                if self.game.is_turn_done():
+                    self.game.shift_turn()
+                self.game.gamestate.set_available_actions()
+
+            self.draw_game(redraw_log=True)
+
             self.clear_move()
             return
 
@@ -233,8 +243,11 @@ class Controller(object):
                     action, = (action for action in possible_actions if action.ability == ability)
                     self.perform_action(action)
 
-        # If a unit is selected, and the left click does not select an action, deselect the selected unit.
-        self.clear_move()
+        if self.game.gamestate.is_extra_action():
+            actions = self.game.gamestate.get_actions()
+            if actions:
+                self.positions["start_at"] = actions[0].start_at
+                self.view.draw_game(self.game, actions[0].start_at, actions, False)
 
     def get_choice(self, keyevents, mouseevents):
         while True:
@@ -373,7 +386,11 @@ class Controller(object):
 
         self.draw_game(redraw_log=True)
 
-        self.clear_move()
+        if not self.game.gamestate.is_extra_action():
+            self.clear_move()
+            action.unit.remove(State.movement_remaining)
+
+        action.unit.remove_states_with_value_zero()
 
         print("Action performed. Expecting action from", self.game.current_player().intelligence)
 
