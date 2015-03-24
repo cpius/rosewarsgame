@@ -62,13 +62,16 @@ class Gamestate:
                                                                    key, value in positions.items())]
 
     def get_actions_with_move_with_attack_as_none(self, positions=None):
+
+        actions = action_getter.get_actions(self)
+        if positions:
+            actions = [action for action in actions if all(getattr(action, key) == value for key, value in positions.items())]
         actions_with_none = []
-        for action in self.get_actions(positions):
+        for action in actions:
             if action.is_attack:
                 if not action.move_with_attack:
-                    new_action = action.copy()
-                    new_action.move_with_attack = None
-                    actions_with_none.append(new_action)
+                    action.move_with_attack = None
+                    actions_with_none.append(action)
             else:
                 actions_with_none.append(action)
         return actions_with_none
