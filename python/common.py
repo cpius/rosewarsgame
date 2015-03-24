@@ -444,7 +444,10 @@ def get_attribute_from_document(attribute_name, info):
     elif attribute in Trait or attribute in Ability:
         return attribute, AttributeValues(level=info)
     elif attribute in Effect:
-        return attribute, AttributeValues(**info)
+        if get_setting("version") == "1.1":
+            return attribute, AttributeValues(**info)
+        elif get_setting("version") == "1.0":
+            return attribute, AttributeValues(duration=info, level=info)
 
 board_height = 8
 board_width = 5

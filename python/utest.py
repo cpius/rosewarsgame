@@ -170,7 +170,10 @@ def utest(test_document):
 
 
 def run():
-    testcase_files = glob.glob("./../sharedtests_1.1/*/*.json")
+    if get_setting("version") == "1.0":
+        testcase_files = glob.glob("./../sharedtests_1.0/*/*.json")
+    else:
+        testcase_files = glob.glob("./../sharedtests_1.1/*/*.json")
 
     # Running just 1 test.
     # testcase_files = ["./../sharedtests_1.1/Hobelar/Outcome_Hobelar_9.json"]
