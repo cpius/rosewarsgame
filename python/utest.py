@@ -1,12 +1,9 @@
 import json
 from gamestate import Gamestate
-from action import Action
-from outcome import Outcome
 import battle
 import action_getter
 import glob
 from collections import Counter
-from common import *
 from server_library import *
 
 
