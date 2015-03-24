@@ -1,19 +1,18 @@
 {
     "type": "Is Outcome Correct",
-    "description": "Test Cannon attack",
-    "click_position": "E5",
+    "description": "If Hobelar uses all its movement, the extra_action should be removed.",
+    "click_position": "E7",
     "action_count": 0,
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E4": "Cannon"
+            "A2": "Ballista",
+            "E4": "Hobelar"
         },
         "actions_remaining": 2,
         "player2_units": {
-            "E5": "Pikeman",
-            "E6": "Pikeman",
-            "E7": "Pikeman"
+            "A6": "Archer",
+            "C5": "Pikeman"
         }
     },
     "pre_positions": {
@@ -23,21 +22,17 @@
     "post_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E4": {
-                "name": "Cannon",
-                "attack_frozen": {
-                    "level": 1,
-                    "duration": 3
-                },
+            "A2": "Ballista",
+            "E7": {
+                "name": "Hobelar",
+                "experience": 1,
                 "used": 1
             }
         },
-        "actions_remaining": 2,
+        "actions_remaining": 1,
         "player2_units": {
-            "E5": "Pikeman",
-            "E6": "Pikeman",
-            "E7": "Pikeman"
+            "A6": "Archer",
+            "C5": "Pikeman"
         }
     },
     "post_positions": {

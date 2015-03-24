@@ -1,0 +1,42 @@
+{
+    "type": "Is Outcome Correct",
+    "description": "Test Scout movement",
+    "click_position": "E5",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E2": "Scout"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "A6": "Archer",
+            "E7": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E2",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E5": {
+                "name": "Scout",
+                "experience": 1,
+                "used": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E7": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "type": "Is Outcome Correct",
+    "description": "Test a move_with_attack",
+    "click_position": "C5",
+    "move_with_attack": "true",
+    "action_count": 0,
+    "outcome":{
+        "C5": [1, 6]
+    },
+    "result": "win",
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "C4": "Knight",
+            "E4": "Ballista"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "C5": "Pikeman",
+            "A6": "Archer"
+        }
+    },
+    "pre_positions": {
+        "start_at": "C4",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "E4": "Ballista",
+            "C5": {
+                "name": "Knight",
+                "used": 1,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer"
+        }
+    },
+    "post_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    }
+}
