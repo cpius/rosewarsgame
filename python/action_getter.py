@@ -97,9 +97,6 @@ def get_unit_actions(unit, start_at, gamestate):
             attacks = get_actions_combat_agility()
             moves = []
 
-        if moves or attacks:
-            moves.append(Action(units, start_at, end_at=start_at))  # Add an action for indicating pass on the extra action
-
         return moves, attacks
 
     def get_ride_through_attacks():
