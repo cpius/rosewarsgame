@@ -6,9 +6,11 @@ from server_library import *
 from game import Game
 from controller import Controller
 from outcome import Outcome
+from functools import partial
 
 
 rolls = namedtuple("rolls", ["attack", "defence"])
+
 
 class View:
     def draw_game(self, *args, **kwargs):
@@ -20,18 +22,34 @@ class View:
     def save_screenshot(self, *args, **kwargs):
         pass
 
+    def shade_positions(self, *args, **kwargs):
+        pass
 
-def determine_outcome(*args):
-    return Outcome({Position.from_string("E5"): rolls(6, 1)})
+    def draw_ask_about_move_with_attack(self, *args, **kwargs):
+        pass
+
+    def draw_post_movement(*args):
+        pass
+
+
+def determine_outcome(outcome, *args):
+    return outcome
+
+
+def pick_end_at(end_at, *args):
+    return end_at
 
 
 def add_log(*args):
     pass
 
 
+def ask_about_move_with_attack(answer, *args):
+    return answer
+
+
 def give_output(actual_gamestate, expected_gamestate, actual_positions, expected_positions):
 
-    print(actual_positions, expected_positions)
     if actual_gamestate == expected_gamestate:
         if actual_positions == expected_positions:
             return True
@@ -66,8 +84,20 @@ def is_outcome_correct(test_document):
 
     controller.game = game
     click_position = Position.from_string(test_document["click_position"])
+
+    if "outcome" in test_document:
+        outcome = Outcome.from_document(test_document["outcome"])
+        controller.determine_outcome = partial(determine_outcome, outcome)
+
+    if "end_at" in test_document:
+        end_at = test_document["end_at"]
+        controller.pick_end_at = partial(pick_end_at, end_at)
+
+    if "move_with_attack" in test_document:
+        controller.ask_about_move_with_attack = partial(ask_about_move_with_attack, test_document["move_with_attack"] == "true")
+
     controller.game.gamestate.set_available_actions()
-    controller.determine_outcome = determine_outcome
+
     controller.add_log = add_log
 
     controller.left_click(click_position)
@@ -77,7 +107,6 @@ def is_outcome_correct(test_document):
 
     actual_positions = controller.positions
     expected_positions = read_positions(test_document["post_positions"])
-
 
     return give_output(actual_gamestate, expected_gamestate, actual_positions, expected_positions)
 
@@ -105,7 +134,7 @@ def utest(test_document):
 
 def run():
     testcase_files = glob.glob("./controller_tests/*.json")
-    #testcase_files = ["./../sharedtests_1.1/Poison_II/Turn_PoisonII_1.json"] #running just 1 test.
+    #testcase_files = ["./controller_tests\Test Cannon attack.json"] #running just 1 test.
 
     results = {}
     for file in testcase_files:
@@ -113,6 +142,7 @@ def run():
         results[str(test_document["type"])] = Counter()
 
     for file in testcase_files:
+        print(file)
         test_document = json.loads(open(file).read())
 
         if except_exceptions:
