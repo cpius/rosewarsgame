@@ -93,22 +93,9 @@ def is_outcome_correct(test_document):
 
     gamestate.do_action(action, outcome)
 
-    actual = gamestate.to_document()
-    expected = expected_gamestate.to_document()
-    return give_output(actual, expected)
-
-
-def is_outcome_correct_extra_action(test_document):
-    gamestate = Gamestate.from_document(test_document["pre_gamestate"])
-    expected_gamestate = Gamestate.from_document(test_document["post_gamestate"])
-
-    action = Action.from_document(gamestate.all_units(), test_document["action"])
-    outcome = Outcome.from_document(test_document["outcome1"]) if "outcome1" in test_document else None
-    gamestate.do_action(action, outcome)
-
-    extra_action = Action.from_document(gamestate.all_units(), test_document["extra_action"])
-    outcome = Outcome.from_document(test_document["outcome2"]) if "outcome2" in test_document else None
-    gamestate.do_action(extra_action, outcome)
+    action.unit.remove_states_with_value_zero()
+    if not gamestate.is_extra_action():
+        action.unit.remove(State.movement_remaining)
 
     actual = gamestate.to_document()
     expected = expected_gamestate.to_document()
