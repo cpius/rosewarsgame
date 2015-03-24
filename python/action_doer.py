@@ -103,10 +103,10 @@ def do_action(gamestate, action, outcome):
 
     def apply_unit_effects():
         if unit.has(Trait.attack_cooldown) and action.is_attack:
-            unit.set(Effect.attack_frozen, duration=3)
+            unit.set(State.attack_frozen, value=3)
 
         if unit.has(Trait.attack_cooldown, 2) and action.is_attack:
-            unit.set(Effect.attack_frozen, level=2, duration=2)
+            unit.set(State.attack_frozen, value=2)
 
     def unit_should_gain_experience():
         return action.is_attack or unit.type == Type.Cavalry or action.is_ability

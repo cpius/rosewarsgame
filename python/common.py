@@ -334,6 +334,7 @@ class State(Enum):
     recently_upgraded = 7
     javelin_thrown = 8
     flanked = 9
+    attack_frozen = 10
 
 
 class Trait(Enum):
@@ -381,7 +382,6 @@ class Ability(Enum):
 
 
 class Effect(Enum):
-    attack_frozen = 1
     bribed = 2
     improved_weapons = 3
     poisoned = 4

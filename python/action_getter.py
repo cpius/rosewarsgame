@@ -204,4 +204,4 @@ def melee_frozen(enemy_units, start_at):
 
 def can_attack_with_unit(gamestate, unit):
     return not (gamestate.actions_remaining == 1 and unit.has(Trait.double_attack_cost)) \
-        and not unit.has(Effect.attack_frozen)
+        and not unit.has(State.attack_frozen)

@@ -232,7 +232,7 @@ class Viewgame:
     @staticmethod
     def get_blue_counters(unit):
         poisoned_level = unit.get_level(Effect.poisoned)
-        frozen_level = unit.get_level(Effect.attack_frozen)
+        frozen_level = unit.get_state(State.attack_frozen)
         bribed = unit.has(State.recently_bribed)
 
         return max(poisoned_level, frozen_level, bribed)
