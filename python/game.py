@@ -80,7 +80,6 @@ class Game:
                     action.move_with_attack = bool(options["move_with_attack"])
 
             game.outcomes[str(action_number)] = outcome_document
-            game.add_log(action, outcome)
 
             game.do_action(action, outcome)
 
