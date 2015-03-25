@@ -4,7 +4,7 @@ from viewinfo import Viewinfo
 from viewcommon import get_position_from_mouseclick, write_message, write, pygame, settings, Color
 
 
-class View(object):
+class View():
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
