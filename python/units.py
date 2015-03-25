@@ -331,8 +331,7 @@ class Lancer(Unit_class):
     base_movement = 3
     base_range = 1
     attack_bonuses = {Type.Cavalry: 1}
-    upgrades = [{Trait.cavalry_specialist: 1}, {Trait.lancing: 1, Trait.movement_skill: 1}, {Trait.attack_skill: 1},
-                {Trait.defence_skill: 1}]
+    upgrades = [{Trait.lancing: 1, Trait.movement_skill: 1}, {Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 
 
@@ -347,7 +346,7 @@ class Hobelar(Unit_class):
     base_defence = 3
     base_movement = 3
     base_range = 1
-    upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
+    upgrades = [{Trait.cavalry_specialist: 1}, {Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 
 
@@ -390,8 +389,7 @@ class Royal_Guard(Unit_class):
     base_movement = 1
     base_range = 1
     zoc = [Type.Cavalry, Type.Infantry, Type.War_Machine, Type.Specialist]
-    upgrades = [{Trait.melee_expert: 1}, {Trait.tall_shield: 1, Trait.melee_freeze: 1}, {Trait.attack_skill: 1},
-                {Trait.defence_skill: 1}]
+    upgrades = [{Trait.melee_expert: 1}, {Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 3
 
 
