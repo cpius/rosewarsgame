@@ -119,10 +119,7 @@ class Unit_class():
             self.remove(State.recently_upgraded)
 
     def remove_states_with_value_zero(self):
-        removestates = []
-        for state in self.states:
-            if self.get_state(state) == 0:
-                removestates.append(state)
+        removestates = [state for state in self.states if self.get_state(state) == 0]
         for state in removestates:
             self.remove(state)
 
