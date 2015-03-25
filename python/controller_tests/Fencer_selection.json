@@ -1,0 +1,40 @@
+{
+    "type": "Is outcome correct",
+    "description": "Test Fencer selection",
+    "click_position": "E4",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": "Fencer"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "E5": "Pikeman",
+            "E6": "Pikeman",
+            "E7": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": "Fencer"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "E5": "Pikeman",
+            "E6": "Pikeman",
+            "E7": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "E4",
+        "end_at": "None"
+    }
+}

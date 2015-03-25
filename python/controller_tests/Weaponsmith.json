@@ -1,30 +1,36 @@
 {
-    "type": "Is Outcome Correct",
-    "description": "Test Scout movement",
-    "click_position": "E5",
+    "type": "Is outcome correct",
+    "description": "Test Weaponsmith",
+    "click_position": "C2",
     "action_count": 0,
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E2": "Scout"
+            "C2": "Knight",
+            "E3": "Weaponsmith"
         },
         "actions_remaining": 2,
         "player2_units": {
             "A6": "Archer",
-            "E7": "Pikeman"
+            "E5": "Pikeman"
         }
     },
     "pre_positions": {
-        "start_at": "E2",
+        "start_at": "E3",
         "end_at": "None"
     },
     "post_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E5": {
-                "name": "Scout",
+            "C2": {
+                "name": "Knight",
+                "improved_weapons": {
+                    "level": 1,
+                    "duration": 1
+                }
+            },
+            "E3": {
+                "name": "Weaponsmith",
                 "experience": 1,
                 "used": 1
             }
@@ -32,7 +38,7 @@
         "actions_remaining": 1,
         "player2_units": {
             "A6": "Archer",
-            "E7": "Pikeman"
+            "E5": "Pikeman"
         }
     },
     "post_positions": {

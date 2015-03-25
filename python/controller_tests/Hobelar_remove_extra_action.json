@@ -1,17 +1,18 @@
 {
-    "type": "Is Outcome Correct",
-    "description": "Test Fencer move",
-    "click_position": "E5",
+    "type": "Is outcome correct",
+    "description": "If Hobelar uses all its movement, the extra_action should be removed.",
+    "click_position": "E7",
     "action_count": 0,
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E4": "Fencer"
+            "A2": "Ballista",
+            "E4": "Hobelar"
         },
         "actions_remaining": 2,
         "player2_units": {
-            "E6": "Pikeman"
+            "A6": "Archer",
+            "C5": "Pikeman"
         }
     },
     "pre_positions": {
@@ -21,20 +22,21 @@
     "post_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E5": {
-                "name": "Fencer",
-                "extra_action": 1,
+            "A2": "Ballista",
+            "E7": {
+                "name": "Hobelar",
+                "experience": 1,
                 "used": 1
             }
         },
         "actions_remaining": 1,
         "player2_units": {
-            "E6": "Pikeman"
+            "A6": "Archer",
+            "C5": "Pikeman"
         }
     },
     "post_positions": {
-        "start_at": "E5",
+        "start_at": "None",
         "end_at": "None"
     }
 }

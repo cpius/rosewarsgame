@@ -1,5 +1,5 @@
 {
-    "type": "Is Outcome Correct",
+    "type": "Is outcome correct",
     "click_position": "E4",
     "action_count": 0,
     "initial_gamestate": {
@@ -14,7 +14,7 @@
                 "extra_action": 1
             }
         },
-        "actions_remaining": 1,
+        "actions_remaining": 0,
         "player2_units": {
             "A6": "Archer",
             "E5": "Pikeman"
@@ -26,18 +26,17 @@
     },
     "post_gamestate": {
         "turn": 1,
-        "player1_units": {
-            "A2": "Ballista",
-            "E4": {
+        "player2_units": {
+            "A7": "Ballista",
+            "E5": {
                 "name": "Hobelar",
-                "experience": 1,
-                "used": 1
+                "experience": 1
             }
         },
-        "actions_remaining": 1,
-        "player2_units": {
-            "A6": "Archer",
-            "E5": "Pikeman"
+        "actions_remaining": 2,
+        "player1_units": {
+            "A3": "Archer",
+            "E4": "Pikeman"
         }
     },
     "post_positions": {

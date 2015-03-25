@@ -1,49 +1,42 @@
 {
-    "type": "Is Outcome Correct",
-    "description": "Test Fencer attack",
+    "type": "Is outcome correct",
+    "description": "Test Scout movement",
     "click_position": "E5",
-    "outcome":{
-        "E5": [6, 1]
-    },
     "action_count": 0,
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
             "A2": "Knight",
-            "E4": "Fencer"
+            "E2": "Scout"
         },
         "actions_remaining": 2,
         "player2_units": {
-            "E5": "Pikeman",
-            "E6": "Pikeman",
+            "A6": "Archer",
             "E7": "Pikeman"
         }
     },
     "pre_positions": {
-        "start_at": "E4",
+        "start_at": "E2",
         "end_at": "None"
     },
     "post_gamestate": {
         "turn": 1,
         "player1_units": {
             "A2": "Knight",
-            "E4": {
-                "name": "Fencer",
-                "extra_action": 1,
-                "movement_remaining": 1,
-                "used": 1,
-                "experience": 1
+            "E5": {
+                "name": "Scout",
+                "experience": 1,
+                "used": 1
             }
         },
         "actions_remaining": 1,
         "player2_units": {
-            "E5": "Pikeman",
-            "E6": "Pikeman",
+            "A6": "Archer",
             "E7": "Pikeman"
         }
     },
     "post_positions": {
-        "start_at": "E4",
+        "start_at": "None",
         "end_at": "None"
     }
 }

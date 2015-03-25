@@ -1,44 +1,42 @@
 {
-    "type": "Is Outcome Correct",
-    "description": "Test Cannon attack",
-    "click_position": "E5",
+    "type": "Is outcome correct",
+    "description": "Test a move_with_attack",
+    "click_position": "C5",
+    "move_with_attack": "true",
     "action_count": 0,
     "outcome":{
-        "E5": [6, 1]
+        "C5": [1, 6]
     },
+    "result": "win",
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E4": "Cannon"
+            "C4": "Knight",
+            "E4": "Ballista"
         },
         "actions_remaining": 2,
         "player2_units": {
-            "E5": "Pikeman",
-            "E6": "Pikeman",
-            "E7": "Pikeman"
+            "C5": "Pikeman",
+            "A6": "Archer"
         }
     },
     "pre_positions": {
-        "start_at": "E4",
+        "start_at": "C4",
         "end_at": "None"
     },
     "post_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E4": {
-                "name": "Cannon",
-                "attack_frozen": 3,
+            "E4": "Ballista",
+            "C5": {
+                "name": "Knight",
                 "used": 1,
                 "experience": 1
             }
         },
         "actions_remaining": 1,
         "player2_units": {
-            "E5": "Pikeman",
-            "E6": "Pikeman",
-            "E7": "Pikeman"
+            "A6": "Archer"
         }
     },
     "post_positions": {

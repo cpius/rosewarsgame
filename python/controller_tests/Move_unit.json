@@ -1,7 +1,7 @@
 {
-    "type": "Is Outcome Correct",
-    "description": "Test if left click can deselect a unit",
-    "click_position": "E6",
+    "type": "Is outcome correct",
+    "description": "Test if left click can move a unit",
+    "click_position": "E5",
     "action_count": 0,
     "initial_gamestate": {
         "turn": 1,
@@ -22,9 +22,12 @@
         "turn": 1,
         "player1_units": {
             "A2": "Knight",
-            "E4": "Catapult"
+            "E5": {
+                "name": "Catapult",
+                "used": 1
+            }
         },
-        "actions_remaining": 2,
+        "actions_remaining": 1,
         "player2_units": {
             "B4": "Pikeman"
         }

@@ -1,7 +1,7 @@
 {
-    "type": "Is Outcome Correct",
-    "description": "Test if left click selects a unit",
-    "click_position": "E4",
+    "type": "Is outcome correct",
+    "description": "Test if left click can deselect a unit",
+    "click_position": "E6",
     "action_count": 0,
     "initial_gamestate": {
         "turn": 1,
@@ -15,7 +15,7 @@
         }
     },
     "pre_positions": {
-        "start_at": "None",
+        "start_at": "E4",
         "end_at": "None"
     },
     "post_gamestate": {
@@ -30,7 +30,7 @@
         }
     },
     "post_positions": {
-        "start_at": "E4",
+        "start_at": "None",
         "end_at": "None"
     }
 }
