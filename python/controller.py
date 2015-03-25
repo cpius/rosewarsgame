@@ -10,14 +10,17 @@ from game import Game
 from outcome import Outcome
 import json
 from view import View
-from viewcommon import (USEREVENT, KEYDOWN, QUIT, K_ESCAPE, KMOD_LMETA, KMOD_RMETA, K_a, K_g, K_q, K_1, K_2,
-                        pygame, Type, State, within, get_string_upgrade)
+from sound import Sound
+from common import get_setting
+from viewcommon import (USEREVENT, KEYDOWN, QUIT, K_ESCAPE, KMOD_LMETA, KMOD_RMETA, K_a, K_g, K_q, K_1, K_2, pygame,
+                        Type, State, within, get_string_upgrade)
 
 
 class Controller(object):
-    def __init__(self, view):
+    def __init__(self, view, sound):
         self.view = view
         self.game = None
+        self.sound = sound
         self.client = None
         self.positions = {"start_at": None, "end_at": None}
 
@@ -43,7 +46,7 @@ class Controller(object):
         if not os.path.exists("./replay"):
             os.makedirs("./replay")
 
-        controller = Controller(View())
+        controller = Controller(View(), Sound())
         players = [Player("Green", green_intelligence), Player("Red", red_intelligence)]
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
@@ -51,6 +54,9 @@ class Controller(object):
         controller.game.gamestate.initialize_turn()
         controller.game.gamestate.actions_remaining = 1
         controller.clear_move()
+
+        if get_setting("play_fanfare"):
+            controller.sound.play_fanfare()
 
         return controller
 
@@ -66,7 +72,9 @@ class Controller(object):
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence, player.profile)
         controller.clear_move()
-        controller.view.play_sound("your_turn")
+
+        if get_setting("play_fanfare"):
+            controller.sound.play_fanfare()
 
         return controller
 
@@ -86,6 +94,9 @@ class Controller(object):
 
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence)
+
+        if get_setting("play_fanfare"):
+            controller.sound.play_fanfare()
 
         return controller
 
@@ -109,7 +120,8 @@ class Controller(object):
         if self.game.is_player_human():
             # The turn changed. Stop listening for network actions
             pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, 0)
-            self.view.play_sound("your_turn")
+            if get_setting("play_fanfare"):
+                self.sound.play_fanfare()
 
     def trigger_artificial_intelligence(self):
 
@@ -363,6 +375,9 @@ class Controller(object):
 
         self.view.draw_action(action, self.game.logbook, not self.game.is_player_human())
         self.game.do_action(action, outcome)
+
+        if get_setting("play_action_sounds"):
+            self.sound.play_action(action)
 
         animation_delay = interface_settings.pause_for_animation
         if action.is_attack:
