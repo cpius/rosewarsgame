@@ -150,7 +150,7 @@ class Unit_class():
         :param upgrade: A unit enum or a dictionary with enums as keys and AttributeValues as values.
         :return: An instance of a Unit_class object, based on the unit and with the upgrade.
         """
-        if type(upgrade) is Unit:
+        if upgrade in Unit:
             upgraded_unit = self.make(upgrade)
             for attribute in self.attributes:
                 if attribute in State or attribute in Effect:
@@ -200,7 +200,20 @@ class Unit_class():
             for attribute, level in upgrade.items():
                 return self.has(attribute, level) and not base_units[self.unit].has(attribute, level)
 
-        possible_upgrade_choices = [get_enum_upgrade(upgrade) for upgrade in self.upgrades if not has_upgrade(upgrade)]
+        def translate_to_enum_format(upgrade):
+            if upgrade in Unit:
+                return upgrade
+            else:
+                upgrade_enum_format = {}
+                for attribute_enum, number in upgrade.items():
+                    upgrade_enum_format[attribute_enum] = AttributeValues(level=number)
+                return upgrade_enum_format
+
+        possible_upgrade_choices = []
+        for upgrade in self.upgrades:
+            if not has_upgrade(upgrade):
+                possible_upgrade_choices.append(translate_to_enum_format(upgrade))
+
         return possible_upgrade_choices[choice]
 
     @property
@@ -212,11 +225,11 @@ class Unit_class():
         return experience and experience % self.experience_to_upgrade == 0 and not self.has(State.recently_upgraded)
 
     def to_document(self):
-        write_attributes = [(attribute, attribute_values) for attribute, attribute_values in self.attributes.items() if
-                            not base_units[self.unit].has(attribute)]
+        write_attributes = {attribute: attribute_values for attribute, attribute_values in self.attributes.items() if
+                            not base_units[self.unit].has(attribute)}
 
         if write_attributes:
-            unit_dict = readable(write_attributes)
+            unit_dict = get_string_attributes(write_attributes)
             unit_dict["name"] = self.name
             return unit_dict
         else:
