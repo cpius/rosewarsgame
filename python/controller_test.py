@@ -32,6 +32,13 @@ class View:
         pass
 
 
+class Sound:
+    def play_fanfare(self):
+        pass
+
+    def play_action(self, *args):
+        pass
+
 def determine_outcome(outcome, *args):
     return outcome
 
@@ -79,7 +86,7 @@ def read_positions(positions):
 
 def is_outcome_correct(test_document):
     game = Game.from_log_document(test_document)
-    controller = Controller(View())
+    controller = Controller(View(), Sound())
     controller.positions = read_positions(test_document["pre_positions"])
 
     controller.game = game
@@ -134,7 +141,7 @@ def utest(test_document):
 
 def run():
     testcase_files = glob.glob("./controller_tests/*.json")
-    #testcase_files = ["./controller_tests\Test Cannon attack.json"] #running just 1 test.
+    #testcase_files = ["./controller_tests\Test Diplomat.json"] #running just 1 test.
 
     results = {}
     for file in testcase_files:
