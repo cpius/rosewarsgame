@@ -84,7 +84,7 @@ class Game:
             game.do_action(action, outcome)
 
             if options and "upgrade" in options:
-                upgrade = get_enum_upgrade(options["upgrade"])
+                upgrade = get_enum_attributes(options["upgrade"])
 
                 position = action.end_at
                 if not position in game.gamestate.player_units:
