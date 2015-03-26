@@ -88,6 +88,12 @@ class Unit_class():
                 self.attributes[attribute].duration = duration
 
     def has(self, attribute, number=None):
+        """
+        :param attribute: A Trait, Effect, Ability or State
+        :param number: A level or value depending on the attribute type
+        :return: If a number is not given, returns whether the unit has the attribute.
+                 If a number is given, returns whether the unit has the attribute at that specific level / value.
+        """
         if attribute not in self.attributes:
             return False
         if number is None:
