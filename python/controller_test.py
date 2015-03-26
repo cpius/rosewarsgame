@@ -96,6 +96,10 @@ def read_positions(positions):
     return positions
 
 
+def pick_upgrade(choice, unit):
+    return unit.get_upgrade(choice)
+
+
 def is_outcome_correct(test_document):
     game = Game.from_log_document(test_document)
     controller = Controller(View(), Sound())
@@ -111,6 +115,10 @@ def is_outcome_correct(test_document):
     if "end_at" in test_document:
         end_at = test_document["end_at"]
         controller.pick_end_at = partial(pick_end_at, end_at)
+
+    if "upgrade_choice" in test_document:
+        upgrade_choice = int(test_document["upgrade_choice"])
+        controller.pick_upgrade = partial(pick_upgrade, upgrade_choice)
 
     if "move_with_attack" in test_document:
         controller.ask_about_move_with_attack = partial(ask_about_move_with_attack, test_document["move_with_attack"] == "true")
