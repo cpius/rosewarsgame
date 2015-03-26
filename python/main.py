@@ -1,7 +1,6 @@
 import sys
 from controller import Controller
 import random
-import view.view_module as view
 from view.viewcommon import *
 from view.view_module import View
 
