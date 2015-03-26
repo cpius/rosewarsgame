@@ -39,7 +39,7 @@ class View():
 
     def draw_game_end(self, color, game):
         self.clear_right()
-        self.viewlog.draw_logbook(game.logbook)
+        self.viewlog.draw_logbook(game)
         write_message(self.screen, self.interface, color + " Wins")
         self.refresh()
 
@@ -54,7 +54,7 @@ class View():
         self.viewgame.draw_game(game, start_at, actions)
         if redraw_log:
             self.clear_right()
-            self.viewlog.draw_logbook(game.logbook)
+            self.viewlog.draw_logbook(game)
         self.refresh()
 
     @staticmethod
@@ -69,8 +69,9 @@ class View():
         self.viewinfo.draw_ask_about_ability(unit)
         self.refresh()
 
-    def draw_action(self, action, logbook, flip=False):
-        self.viewlog.draw_logbook(logbook)
+    def draw_action(self, action, game):
+        self.viewlog.draw_logbook(game)
+        flip = not game.is_player_human()
         self.viewgame.draw_action(action, flip)
         self.refresh()
 

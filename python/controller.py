@@ -373,7 +373,7 @@ class Controller(object):
         if not outcome:
             outcome = self.determine_outcome(action)
 
-        self.view.draw_action(action, self.game.logbook, not self.game.is_player_human())
+        self.view.draw_action(action, self.game)
         self.game.do_action(action, outcome)
 
         if get_setting("play_action_sounds"):

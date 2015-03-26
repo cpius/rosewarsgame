@@ -30,17 +30,17 @@ class Viewlog:
                                  "box_text": base.adjust(10, 3),
                                  "line": base.adjust(0, self.base_height - self.line_thickness / 2)}
 
-    def draw_logbook(self, logbook):
+    def draw_logbook(self, game):
 
         def clear_log():
             pygame.draw.rect(self.screen, Color.Light_grey, self.interface.right_side_rectangle)
 
         clear_log()
 
-        while len(logbook) > self.maximum_logs:
-            logbook.pop(0)
+        while len(game.logbook) > self.maximum_logs:
+            game.logbook.pop(0)
 
-        for lognumber, log in enumerate(logbook):
+        for lognumber, log in enumerate(game.logbook):
 
             locations = self.locations[lognumber]
 
@@ -61,6 +61,9 @@ class Viewlog:
 
             self.draw_symbol(symbol, locations["symbol"])
 
+        locations = self.locations[len(game.logbook)]
+        self.draw_turn_box(game.current_player().color, None, locations)
+
         write(self.screen, "Help", self.interface.help_area[0], self.interface.fonts["normal"], Color.Medium_grey)
 
     def draw_unit(self, unit, location, color):
@@ -77,11 +80,11 @@ class Viewlog:
         border_color = self.interface.green_player_color if color == "Green" else self.interface.red_player_color
 
         pygame.draw.rect(self.screen, border_color, (locations["box"].tuple, self.box_dimensions))
-        write(self.screen, str(action_number), locations["box_text"].tuple, self.interface.fonts["big"])
-
-        line_start = locations["line"]
-        line_end = line_start.adjust(600, 0)
-        pygame.draw.line(self.screen, Color.Medium_grey, line_start.tuple, line_end.tuple, self.line_thickness)
+        if action_number:
+            write(self.screen, str(action_number), locations["box_text"].tuple, self.interface.fonts["big"])
+            line_start = locations["line"]
+            line_end = line_start.adjust(600, 0)
+            pygame.draw.line(self.screen, Color.Medium_grey, line_start.tuple, line_end.tuple, self.line_thickness)
 
     def draw_unit_box(self, base, color):
         border_color = self.interface.green_player_color if color == "Green" else self.interface.red_player_color
