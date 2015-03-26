@@ -11,7 +11,7 @@ from gamestate.gamestate_library import opponent_descriptions, Opponent, Intelli
 
 def pause():
     while True:
-        event = event.wait()
+        event = pygame.event.wait()
 
         if event.type == pygame.QUIT:
             exit_game()
