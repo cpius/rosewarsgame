@@ -1,0 +1,18 @@
+# server = "http://localhost:8080"
+server = http://firstred.rosewarsgame.com:8080
+
+AI_level = 2
+
+Beginner_mode = no
+
+Document_AI_decisions = yes
+
+zoom = 1
+
+version = 1.1
+
+profile = jona
+
+play_action_sounds = yes
+
+play_fanfare = yes

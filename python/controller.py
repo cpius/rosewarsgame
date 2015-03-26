@@ -1,19 +1,17 @@
 import sys
-import setup
-from gamestate import Gamestate
+import game.setup as setup
+from gamestate.gamestate_module import Gamestate
 import os
 import glob
-import interface_settings  # Present to avoid circular import
-from player import Player
-from client import Client
-from game import Game
-from outcome import Outcome
+import view.interface_settings as interface_settings # Present to avoid circular import
+from game.player import Player
+from game.client import Client
+from game.game_module import Game
+from gamestate.outcome import Outcome
 import json
-from view import View
-from sound import Sound
-from common import get_setting
-from viewcommon import *
-from controller_library import *
+from view.view_module import View
+from game.sound import Sound
+from view.viewcommon import *
 
 
 class Controller(object):

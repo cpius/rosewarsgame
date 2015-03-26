@@ -1,0 +1,56 @@
+{
+    "action_count": 1,
+    "1": {
+        "created_at": "2015-03-26T13:56:06Z",
+        "ability": "improve_weapons",
+        "target_at": "C2",
+        "end_at": "E3",
+        "move_with_attack": false,
+        "start_at": "E3"
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        },
+        "player1_units": {
+            "E3": {
+                "name": "Weaponsmith",
+                "movement_remaining": 1,
+                "used": 1,
+                "experience": 1
+            },
+            "C2": {
+                "name": "Knight",
+                "improved_weapons": {
+                    "duration": 1,
+                    "level": 1
+                }
+            }
+        }
+    },
+    "1_outcome": {},
+    "initial_gamestate": {
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        },
+        "player1_units": {
+            "E3": {
+                "name": "Weaponsmith",
+                "movement_remaining": 1,
+                "used": 1,
+                "experience": 1
+            },
+            "C2": {
+                "name": "Knight",
+                "improved_weapons": {
+                    "duration": 1,
+                    "level": 1
+                }
+            }
+        }
+    }
+}
