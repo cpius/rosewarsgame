@@ -206,3 +206,6 @@ class Viewinfo:
                                 best_battle.show_chance_of_push()]
 
         return battle_hint
+
+    def draw_pass_action_button(self):
+        write(self.screen, "Pass action", self.interface.pass_action_area[0], self.interface.fonts["normal"])

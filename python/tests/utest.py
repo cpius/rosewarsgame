@@ -6,9 +6,8 @@ from glob import glob
 from collections import Counter
 from gamestate.action import Action
 from gamestate.outcome import Outcome
-from game.game_library import get_setting
 from game.server import validate_action, determine_outcome_if_any, validate_upgrade
-from gamestate.gamestate_library import State, get_attribute_from_document, enum_from_string
+from gamestate.gamestate_library import *
 
 
 def does_action_exist(test_document):

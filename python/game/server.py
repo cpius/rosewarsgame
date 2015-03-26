@@ -8,13 +8,13 @@ from game.game_module import Game
 from game.player import Player
 import game.setup as setup
 import random
-import pylibmc
+#import pylibmc
 import traceback
 from subprocess import call
 from bson import ObjectId
 from game.server_library import *
 
-cache = pylibmc.Client(['127.0.0.1:11211'])
+#cache = pylibmc.Client(['127.0.0.1:11211'])
 
 app = Bottle()
 

@@ -52,3 +52,8 @@ class Board():
 
     def change_unit_owner(self, position):
         self.player_units[position] = self.enemy_units.pop(position)
+
+    def pass_extra_action(self):
+        for unit in self.player_units.values():
+            unit.remove(State.extra_action)
+            unit.remove(State.movement_remaining)

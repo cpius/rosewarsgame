@@ -20,7 +20,7 @@ class Viewlog:
         self.line_thickness = int(1 * self.zoom)
 
         self.locations = {}
-        for i in range(self.maximum_logs):
+        for i in range(self.maximum_logs + 1):
             base = Location(391, i * self.base_height, self.zoom)
             self.locations[i] = {"unit1": base.adjust(65, 6),
                                  "unit2": base.adjust(165, 6),

@@ -1,8 +1,8 @@
 import sys
 from controller import Controller
 import random
-from view.view_control_library import quit_game_requested, within
-from view.view_display_library import Color, write
+from view.view_control_library import *
+from view.view_display_library import *
 from view.view_module import View
 from game.game_library import get_setting
 import pygame

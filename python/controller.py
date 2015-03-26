@@ -10,9 +10,8 @@ from game.game_module import Game
 from gamestate.outcome import Outcome
 from view.view_module import View
 from game.sound import Sound
-from game.game_library import get_setting
-from gamestate.gamestate_library import Type, State, get_string_attributes
-from view.view_control_library import within
+from gamestate.gamestate_library import *
+from view.view_control_library import *
 import pygame
 import view.interface_settings as interface_settings
 
@@ -157,15 +156,26 @@ class Controller(object):
                 self.trigger_network_player()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                position = self.view.get_position_from_mouse_click(event.pos)
-                if not self.game.is_player_human():
-                    position = position.flip()
+                if self.view.click_is_on_board(event.pos):
+                    position = self.view.get_position_from_mouse_click(event.pos)
+                    if not self.game.is_player_human():
+                        position = position.flip()
 
-                if event.button == 1:
-                    if self.game.is_player_human():
-                        self.left_click(position)
-                elif event.button == 3:
-                    self.right_click(position)
+                    if event.button == 1:
+                        if self.game.is_player_human():
+                            self.left_click(position)
+                    elif event.button == 3:
+                        self.right_click(position)
+                else:
+                    clicked_item = self.view.get_item_from_mouse_click(event.pos)
+                    if clicked_item == Item.Help:
+                        pass
+                    elif clicked_item == Item.Pass_action:
+                        self.game.gamestate.pass_extra_action()
+                        if self.game.gamestate.is_turn_done():
+                            self.game.shift_turn()
+                        self.draw_game(redraw_log=True)
+                        pass
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and self.game.is_player_human():
                 self.clear_move()
@@ -176,7 +186,7 @@ class Controller(object):
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
                 print(self.game.gamestate.available_actions)
 
-            elif self.quit_game_requested(event):
+            elif quit_game_requested(event):
                 self.exit_game()
 
             self.view.refresh()
@@ -251,7 +261,7 @@ class Controller(object):
 
             # If the unit is a specialist, the user may need to specify an ability.
             if unit.type is Type.Specialist:
-                ability = self.pick_ability(unit)
+                ability = self.view.pick_ability(unit)
                 if ability:
                     action, = (action for action in possible_actions if action.ability == ability)
                     self.perform_action(action)
@@ -260,7 +270,7 @@ class Controller(object):
             actions = self.game.gamestate.get_actions()
             if actions:
                 self.positions["start_at"] = actions[0].start_at
-                self.view.draw_game(self.game, actions[0].start_at, actions, False)
+                self.view.draw_game(self.game, actions[0].start_at, actions, redraw_log=False, draw_pass_action=True)
 
     def get_choice(self, keyevents, mouseevents):
         while True:
@@ -275,7 +285,7 @@ class Controller(object):
                     if within(event.pos, mouse_click_position):
                         return result
 
-            elif self.quit_game_requested(event):
+            elif quit_game_requested(event):
                 self.exit_game()
 
     def get_choice_position(self, mouseevents):
@@ -287,7 +297,7 @@ class Controller(object):
                 if position in mouseevents:
                     return mouseevents[position]
 
-            elif self.quit_game_requested(event):
+            elif quit_game_requested(event):
                 self.exit_game()
 
     def pick_end_at(self, actions):
@@ -310,7 +320,6 @@ class Controller(object):
 
     def ask_about_move_with_attack(self, action):
         self.view.draw_ask_about_move_with_attack(action.end_at, action.target_at)
-
         return self.get_choice_position({action.target_at: True, action.end_at: False})
 
     def clear_move(self):
@@ -419,28 +428,16 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-    def draw_game(self, redraw_log=False):
-        self.view.draw_game(self.game, redraw_log=redraw_log)
+    def draw_game(self, redraw_log=False, draw_pass_action=False):
+        self.view.draw_game(self.game, redraw_log=redraw_log, draw_pass_action=draw_pass_action)
 
     def pause(self):
         while True:
             event = pygame.event.wait()
-            if self.quit_game_requested(event):
+            if quit_game_requested(event):
                 self.exit_game()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
-
-    def quit_game_requested(self, event):
-        return event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and self.command_q_down(event.key))
-
-    @staticmethod
-    def command_q_down(key):
-        is_meta = pygame.key.get_mods() & pygame.KMOD_LMETA or pygame.key.get_mods() & pygame.KMOD_RMETA
-        return key == pygame.K_q and is_meta
-
-    @staticmethod
-    def escape(event):
-        return event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
 
     @staticmethod
     def exit_game():

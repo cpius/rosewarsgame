@@ -5,7 +5,6 @@ from view.view_control_library import *
 from view.view_display_library import *
 
 
-
 class View():
     def __init__(self):
         pygame.init()
@@ -52,11 +51,13 @@ class View():
     def clear_left(self):
         pygame.draw.rect(self.screen, Color.Light_grey, self.interface.left_side_rectangle)
 
-    def draw_game(self, game, start_at=None, actions=(), redraw_log=False):
+    def draw_game(self, game, start_at=None, actions=(), redraw_log=False, draw_pass_action=False):
         self.viewgame.draw_game(game, start_at, actions)
         if redraw_log:
             self.clear_right()
             self.viewlog.draw_logbook(game)
+        if draw_pass_action:
+            self.viewinfo.draw_pass_action_button()
         self.refresh()
 
     @staticmethod
@@ -105,3 +106,14 @@ class View():
         self.clear_right()
         self.viewinfo.show_unit_zoomed(unit)
         self.refresh()
+
+    def click_is_on_board(self, coordinates):
+        return click_is_on_board(self.interface, coordinates)
+
+    def get_item_from_mouse_click(self, coordinates):
+        return get_item_from_mouse_click(self.interface, coordinates)
+
+    def draw_pass_action_button(self):
+        self.viewinfo.draw_pass_action_button()
+        self.refresh()
+

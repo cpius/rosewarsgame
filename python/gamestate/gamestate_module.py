@@ -227,3 +227,6 @@ class Gamestate:
 
     def change_unit_owner(self, position):
         self.board.change_unit_owner(position)
+
+    def pass_extra_action(self):
+        self.board.pass_extra_action()
