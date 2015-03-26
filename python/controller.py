@@ -12,8 +12,8 @@ import json
 from view import View
 from sound import Sound
 from common import get_setting
-from viewcommon import (USEREVENT, KEYDOWN, QUIT, K_ESCAPE, KMOD_LMETA, KMOD_RMETA, K_a, K_g, K_q, K_1, K_2, pygame,
-                        Type, State, within, get_string_attributes)
+from viewcommon import *
+from controller_library import *
 
 
 class Controller(object):
