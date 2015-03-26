@@ -68,6 +68,7 @@ def is_attack_and_defence_correct(test_document):
     attack = test_document["attack"]
     defence = test_document["defence"]
 
+    gamestate.set_available_actions()
     action.unit = gamestate.player_units[action.start_at]
     gamestate.move_unit(action.start_at, action.end_at)
 
@@ -88,6 +89,7 @@ def is_outcome_correct(test_document):
     action = Action.from_document(gamestate.all_units(), test_document["action"])
     outcome = Outcome.from_document(test_document["outcome"]) if "outcome" in test_document else None
 
+    gamestate.set_available_actions()
     gamestate.do_action(action, outcome)
 
     action.unit.remove_states_with_value_zero()

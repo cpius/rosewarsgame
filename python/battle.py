@@ -8,9 +8,6 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if attacking_unit.is_melee and defending_unit.has(Trait.big_shield):
         defence_adjusters += 2
 
-    if "No_Crusader" not in gamestate.ai_factors and is_crusading_defense(action, gamestate.enemy_units, level=2):
-        defence_adjusters += 1
-
     if attacking_unit.type in defending_unit.defence_bonuses:
         defence_adjusters += defending_unit.defence_bonuses[attacking_unit.type]
 
@@ -81,13 +78,17 @@ def get_attack(action, gamestate, is_sub_action=False):
     if flanking(action):
         attack += 2 * attacking_unit.get_level(Trait.flanking)
 
-    if "No_player_Crusader" not in gamestate.ai_factors and is_crusading_attack(action, gamestate.player_units, 1):
+    if action.start_at in gamestate.bonus_tiles[Trait.crusading][1]:
         attack += 1
 
-    if "No_player_Crusader" not in gamestate.ai_factors and is_crusading_attack(action, gamestate.player_units, 2):
-        attack += 1
+    if action.start_at in gamestate.bonus_tiles[Trait.crusading][2]:
+        attack += 2
 
-    if "No_FlagBearer" not in gamestate.ai_factors and has_high_morale(action, gamestate.player_units):
+    if attacking_unit.is_melee and action.end_at in gamestate.bonus_tiles[Trait.flag_bearing] \
+            and not attacking_unit.unit == Unit.Flag_Bearer:
+        attack += 2
+
+    if hasattr(action, "high_morale"):
         attack += 2
 
     if attacking_unit.has(Effect.bribed, 1):
@@ -137,29 +138,6 @@ def lancing(action):
 
 def distance_to_target(action):
     return distance(action.start_at, action.target_at)
-
-
-def is_crusading_attack(action, units, level=1):
-    return action.unit.is_melee and (is_surrounding_unit_with(action.start_at, Trait.crusading, units, action.end_at,
-                                                              level))
-
-
-def is_crusading_defense(action, units, level=1):
-    return action.unit.is_melee and (is_surrounding_unit_with(action.target_at, Trait.crusading, units, None, level))
-
-
-def has_high_morale(action, units):
-    return action.unit.is_melee and (is_adjacent_unit_with(action.end_at, Trait.flag_bearing, units) or
-                                     is_surrounding_unit_with(action.end_at, Trait.flag_bearing, units, None, 2))
-
-
-def is_surrounding_unit_with(position, attribute, units, exclude_position, level=1):
-    return any(unit_with_attribute_at(pos, attribute, units, level) for pos in position.surrounding_tiles() if
-               pos != exclude_position)
-
-
-def is_adjacent_unit_with(position, attribute, units, level=1):
-    return any(unit_with_attribute_at(pos, attribute, units, level) for pos in position.adjacent_tiles())
 
 
 def flanking(action):

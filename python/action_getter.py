@@ -4,6 +4,32 @@ from itertools import product
 import action_sets
 
 
+def get_bonus_tiles(gamestate):
+    """
+    :param gamestate: The gamestate
+    :return: The set of tiles that are affected by a friendly Crusader or Flag Bearer.
+    """
+    bonus_tiles = {
+        Trait.crusading: {
+            1: set(),
+            2: set()
+        },
+        Trait.flag_bearing: set()
+    }
+
+    for pos, unit in gamestate.player_units.items():
+        if unit.has(Trait.crusading, 1):
+            bonus_tiles[Trait.crusading][1] |= pos.surrounding_tiles()
+        if unit.has(Trait.crusading, 2):
+            bonus_tiles[Trait.crusading][2] |= pos.surrounding_tiles()
+        if unit.has(Trait.flag_bearing, 1):
+            bonus_tiles[Trait.flag_bearing] |= pos.adjacent_tiles()
+        if unit.has(Trait.flag_bearing, 2):
+            bonus_tiles[Trait.flag_bearing] |= pos.surrounding_tiles()
+
+    return bonus_tiles
+
+
 def get_actions(gamestate):
 
     is_extra_action = gamestate.is_extra_action()

@@ -22,6 +22,7 @@ class Gamestate:
         self.created_at = created_at
         self.game_id = game_id
         self.available_actions = []
+        self.bonus_tiles = {}
         if ai_factors:
             self.ai_factors = ai_factors
         else:
@@ -84,6 +85,7 @@ class Gamestate:
 
     def set_available_actions(self):
         self.available_actions = action_getter.get_actions(self)
+        self.bonus_tiles = action_getter.get_bonus_tiles(self)
 
     @property
     def player_units(self):
