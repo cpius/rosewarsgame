@@ -506,21 +506,25 @@ def document_to_string(document):
     return dumps(document, indent=4, cls=CustomJsonEncoder, sort_keys=False)
 
 
-def readable(attributes):
+def get_string_attributes(attributes):
     """
-    :param attributes: ?
-    :return: ?
+    :param attributes: A Unit enum or a dictionary with enums as keys and attributevalues as values.
+    :return: If input is a Unit enum, the unit name
+             Otherwise: If the enum is of type Trait, Ability or State, a dictionary with strings as keys and numbers as
+             values
+                        If the enum is of type Effect, a dictionary with strings as keys and a dictionaries as values
     """
-    dictionary = {}
     if attributes in Unit:
         return attributes.name
-    for attribute, attribute_values in attributes:
-        if attribute in Trait or attribute in Ability:
-            dictionary[attribute.name] = attribute_values.level
-        elif attribute in State:
-            dictionary[attribute.name] = attribute_values.value
-        if attribute in Effect:
-            dictionary[attribute.name] = {"duration": attribute_values.duration, "level": attribute_values.level}
+
+    dictionary = {}
+    for attribute_enum, attribute_values in attributes.items():
+        if attribute_enum in Trait or attribute_enum in Ability:
+            dictionary[attribute_enum.name] = attribute_values.level
+        elif attribute_enum in State:
+            dictionary[attribute_enum.name] = attribute_values.value
+        if attribute_enum in Effect:
+            dictionary[attribute_enum.name] = {"duration": attribute_values.duration, "level": attribute_values.level}
 
     return dictionary
 
@@ -560,35 +564,23 @@ def unit_with_attribute_at(pos, attribute, units, level=1):
     return pos in units and units[pos].has(attribute, level)
 
 
-def get_enum_upgrade(upgrade):
+def get_enum_attributes(attributes):
     """
-    :param upgrade: ?
-    :return: ?
+    :param attributes: A string or a dictionary
+    :return: If input is a string, returns an enum.
+             If input is a dictionary, returns a dictionary with enums as keys and Attributevalues as values.
     """
-    if type(upgrade) is str:
-        return enum_from_string[upgrade]
-    elif type(upgrade) is Unit:
-        return upgrade
+    if type(attributes) is str:
+        return enum_from_string[attributes]
     else:
         enum_dict = {}
-        for key, value in upgrade.items():
+        for key, value in attributes.items():
             if type(key) is str:
                 key = enum_from_string[key]
             if type(value) is str or type(value) is int:
                 value = AttributeValues(level=value)
             enum_dict[key] = value
         return enum_dict
-
-
-def get_string_upgrade(upgrade):
-    """
-    :param upgrade: Either a Unit enum or a dictionary with attribute enums as keys and AttributeValues as items.
-    :return: A unit name as a string or a dictionary with strings as items and values, respectively.
-    """
-    if upgrade in Unit:
-        return upgrade.name
-    else:
-        return {key.name: value.level for key, value in upgrade.items()}
 
 
 def prettify(string):
