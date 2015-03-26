@@ -7,7 +7,7 @@ from game import Game
 from controller import Controller
 from outcome import Outcome
 from functools import partial
-
+from dictdiffer import DictDiffer
 
 rolls = namedtuple("rolls", ["attack", "defence"])
 
@@ -55,6 +55,17 @@ def ask_about_move_with_attack(answer, *args):
     return answer
 
 
+def difference_between_dictionaries(d1, d2):
+    dictdiffer = DictDiffer(d1, d2)
+    message = ""
+    if dictdiffer.added():
+        message += "Added " + str(dictdiffer.added())
+    if dictdiffer.removed():
+        message += "Removed " + str(dictdiffer.removed())
+    if dictdiffer.changed_recursive():
+        message += "Changed " + str(dictdiffer.changed_recursive())
+    return message
+
 def give_output(actual_gamestate, expected_gamestate, actual_positions, expected_positions):
 
     if actual_gamestate == expected_gamestate:
@@ -64,6 +75,7 @@ def give_output(actual_gamestate, expected_gamestate, actual_positions, expected
     if actual_gamestate != expected_gamestate:
         print("act gamestate", actual_gamestate)
         print("exp gamestate", expected_gamestate)
+        print(difference_between_dictionaries(actual_gamestate, expected_gamestate))
         print()
 
     if actual_positions != expected_positions:
