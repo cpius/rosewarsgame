@@ -1,7 +1,7 @@
 {
     "type": "Is attack and defence correct",
     "description": "Test if the attack bonus from crusading level 2 is correct",
-    "attack": 3,
+    "attack": 4,
     "defence": 2,
     "action": {
         "start_at": "A3",

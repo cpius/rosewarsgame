@@ -1,8 +1,8 @@
 {
     "type": "Is attack and defence correct",
-    "description": "Test if the defence bonus from crusading level 2 applies",
+    "description": "Crusader doesn't change defence",
     "attack": 3,
-    "defence": 4,
+    "defence": 3,
     "action": {
         "start_at": "A3",
         "end_at": "A3",
