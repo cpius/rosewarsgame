@@ -1,7 +1,8 @@
 import random
-from gamestate.gamestate_library import *
+from gamestate.gamestate_library import Unit, Position, board_tiles, Type, flip_units
 from gamestate.units import Unit_class
 from collections import namedtuple
+from game.game_library import *
 
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])

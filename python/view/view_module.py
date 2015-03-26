@@ -1,7 +1,9 @@
 from view.viewlog import Viewlog
 from view.viewgame import Viewgame
 from view.viewinfo import Viewinfo
-from view.viewcommon import get_position_from_mouseclick, write_message, write, pygame, settings, Color
+from view.view_control_library import *
+from view.view_display_library import *
+
 
 
 class View():

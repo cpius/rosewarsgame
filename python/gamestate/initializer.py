@@ -1,4 +1,4 @@
-from gamestate.gamestate_library import *
+from gamestate.gamestate_library import Effect, State
 
 remove_states = {State.used, State.recently_bribed}
 wear_off_in_opponents_turn = {Effect.poisoned}

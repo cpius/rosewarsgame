@@ -3,9 +3,8 @@ from gamestate.gamestate_library import *
 from gamestate.action import Action
 from gamestate.outcome import Outcome
 from datetime import datetime
-from time import mktime
+from time import mktime, sleep
 from email.utils import parsedate
-from time import sleep
 
 
 class Client():

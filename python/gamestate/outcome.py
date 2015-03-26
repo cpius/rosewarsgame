@@ -1,4 +1,4 @@
-from gamestate.gamestate_library import *
+from gamestate.gamestate_library import Ability, Trait, Position
 from collections import namedtuple
 import random
 

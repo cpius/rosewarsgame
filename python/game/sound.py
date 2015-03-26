@@ -1,6 +1,5 @@
-from view.viewcommon import pygame
-from enum import Enum
-from gamestate.gamestate_library import Unit, Type
+import pygame
+from gamestate.gamestate_library import *
 
 
 class SoundSample(Enum):

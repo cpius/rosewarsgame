@@ -1,17 +1,20 @@
+import os
 import sys
+import json
+import glob
 import game.setup as setup
 from gamestate.gamestate_module import Gamestate
-import os
-import glob
-import view.interface_settings as interface_settings # Present to avoid circular import
 from game.player import Player
 from game.client import Client
 from game.game_module import Game
 from gamestate.outcome import Outcome
-import json
 from view.view_module import View
 from game.sound import Sound
-from view.viewcommon import *
+from game.game_library import get_setting
+from gamestate.gamestate_library import Type, State, get_string_attributes
+from view.view_control_library import within
+import pygame
+import view.interface_settings as interface_settings
 
 
 class Controller(object):
@@ -37,7 +40,7 @@ class Controller(object):
     def set_start_at(self, start_at):
         self.positions["start_at"] = start_at
 
-    CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
+    CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = pygame.USEREVENT + 1
 
     @classmethod
     def new_game(cls, green_intelligence, red_intelligence):
@@ -164,13 +167,13 @@ class Controller(object):
                 elif event.button == 3:
                     self.right_click(position)
 
-            if event.type == KEYDOWN and event.key == K_ESCAPE and self.game.is_player_human():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and self.game.is_player_human():
                 self.clear_move()
 
-            elif event.type == KEYDOWN and event.key == K_g:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_g:
                 print(self.game.gamestate)
 
-            elif event.type == KEYDOWN and event.key == K_a:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
                 print(self.game.gamestate.available_actions)
 
             elif self.quit_game_requested(event):
@@ -263,7 +266,7 @@ class Controller(object):
         while True:
             event = pygame.event.wait()
 
-            if event.type == KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.key in keyevents:
                     return keyevents[event.key]
 
@@ -294,7 +297,7 @@ class Controller(object):
 
     def pick_upgrade(self, unit):
         self.view.draw_upgrade_options(unit)
-        buttons = {K_1: 0, K_2: 1}
+        buttons = {pygame.K_1: 0, pygame.K_2: 1}
         areas = [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]]
         choice = self.get_choice(buttons, areas)
 
@@ -302,7 +305,7 @@ class Controller(object):
 
     def pick_ability(self, unit):
         self.view.draw_ask_about_ability(unit)
-        choice = self.get_choice({K_1: 0, K_2: 1}, [])
+        choice = self.get_choice({pygame.K_1: 0, pygame.K_2: 1}, [])
         return unit.abilities[choice]
 
     def ask_about_move_with_attack(self, action):
@@ -424,20 +427,20 @@ class Controller(object):
             event = pygame.event.wait()
             if self.quit_game_requested(event):
                 self.exit_game()
-            elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
     def quit_game_requested(self, event):
-        return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
+        return event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and self.command_q_down(event.key))
 
     @staticmethod
     def command_q_down(key):
-        is_meta = pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA
-        return key == K_q and is_meta
+        is_meta = pygame.key.get_mods() & pygame.KMOD_LMETA or pygame.key.get_mods() & pygame.KMOD_RMETA
+        return key == pygame.K_q and is_meta
 
     @staticmethod
     def escape(event):
-        return event.type == KEYDOWN and event.key == K_ESCAPE
+        return event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
 
     @staticmethod
     def exit_game():

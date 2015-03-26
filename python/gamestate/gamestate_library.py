@@ -2,6 +2,7 @@ from json import JSONEncoder, dumps
 from datetime import datetime
 from collections import namedtuple
 from enum import Enum
+from game.game_library import get_setting
 
 coordinates = namedtuple("coordinates", ["x", "y"])
 
@@ -545,20 +546,6 @@ def flip_units(units):
     return dict((position.flip(), unit) for position, unit in units.items())
 
 
-def get_setting(name):
-    with open("settings.txt") as input:
-        for line in input:
-            line = line.split()
-            if len(line) > 1 and line[0] == name:
-                setting = line[2].strip()
-                if setting in ["yes", "no"]:
-                    return setting == "yes"
-                elif setting in [str(i) for i in range(10)]:
-                    return int(setting)
-                else:
-                    return setting
-
-
 def unit_with_attribute_at(pos, attribute, units, level=1):
     return pos in units and units[pos].has(attribute, level)
 
@@ -580,8 +567,4 @@ def get_enum_attributes(attributes):
                 value = AttributeValues(level=value)
             enum_dict[key] = value
         return enum_dict
-
-
-def prettify(string):
-    return string.replace("_", " ").title()
 

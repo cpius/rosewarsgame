@@ -1,4 +1,4 @@
-from view.viewcommon import *
+from view.view_display_library import *
 from gamestate.gamestate_library import *
 from view.rounded_rect import AAfilledRoundedRect
 

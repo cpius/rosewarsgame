@@ -1,6 +1,7 @@
-from view.viewcommon import pygame, Color, show_lines, get_unit_pic, get_image, write, textwrap
+from view.view_display_library import *
 import gamestate.battle as battle
-from gamestate.gamestate_library import Effect, State, Trait, Ability, prettify, get_description, get_ability_description
+from gamestate.gamestate_library import *
+from game.game_library import prettify
 from functools import total_ordering
 
 

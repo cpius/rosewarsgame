@@ -1,5 +1,5 @@
-import pygame
-from view.viewcommon import *
+from view.view_display_library import *
+from pygame import Rect, SRCALPHA, BLEND_RGBA_MAX, BLEND_RGBA_MIN
 
 
 def AAfilledRoundedRect(surface, rect, color, radius=0.4):

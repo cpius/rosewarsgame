@@ -1,6 +1,7 @@
-from view.viewcommon import get_image, pygame, Color, draw_rectangle, write, State, Effect, get_unit_pic, settings
+from view.view_display_library import get_image, pygame, Color, draw_rectangle, write, get_unit_pic, settings
 from view.coordinates import Coordinates
 from view.rounded_rect import AAfilledRoundedRect
+from gamestate.gamestate_library import *
 
 
 class Viewgame:

@@ -2,10 +2,13 @@ import json
 from gamestate.gamestate_module import Gamestate
 import gamestate.battle as battle
 import gamestate.action_getter as action_getter
-import glob
+from glob import glob
 from collections import Counter
-from game.server_library import *
 from gamestate.action import Action
+from gamestate.outcome import Outcome
+from game.game_library import get_setting
+from game.server import validate_action, determine_outcome_if_any, validate_upgrade
+from gamestate.gamestate_library import State, get_attribute_from_document, enum_from_string
 
 
 def does_action_exist(test_document):
@@ -174,9 +177,9 @@ def utest(test_document):
 
 def run():
     if get_setting("version") == "1.0":
-        testcase_files = glob.glob("./../../sharedtests_1.0/*/*.json")
+        testcase_files = glob("./../../sharedtests_1.0/*/*.json")
     else:
-        testcase_files = glob.glob("./../../sharedtests_1.1/*/*.json")
+        testcase_files = glob("./../../sharedtests_1.1/*/*.json")
 
     # Running just 1 test.
     # testcase_files = ["./../sharedtests_1.1/Hobelar/Outcome_Hobelar_9.json"]
