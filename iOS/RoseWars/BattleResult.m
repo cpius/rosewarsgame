@@ -71,8 +71,8 @@
     
     _attackRoll = [[dictionary objectForKey:@"attackroll"] integerValue];
     _defenseRoll = [[dictionary objectForKey:@"defenseroll"] integerValue];
-    _combatOutcome = [[dictionary objectForKey:@"combatoutcome"] integerValue];
-    _meleeAttackType = [[dictionary objectForKey:@"meleeattacktype"] integerValue];
+    _combatOutcome = (CombatOutcome)[[dictionary objectForKey:@"combatoutcome"] integerValue];
+    _meleeAttackType = (MeleeAttackTypes)[[dictionary objectForKey:@"meleeattacktype"] integerValue];
 }
 
 @end

@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RangeAttribute.h"
 
+@class HKAttribute;
 @interface BonusSprite : SKSpriteNode {
     
 }
 
 @property (nonatomic, copy) NSString *bonusText;
-@property (nonatomic, readonly) RangeAttribute *attribute;
+@property (nonatomic, readonly) HKAttribute *attribute;
 
 - (void)setBonusText:(NSString*)bonusText;
 
-- (id)initWithAttribute:(RangeAttribute*)attribute;
+- (id)initWithAttribute:(HKAttribute*)attribute;
 
 @end

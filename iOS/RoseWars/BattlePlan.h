@@ -21,11 +21,12 @@
 
 - (instancetype)initWithGame:(GameManager*)gamemanager;
 
-- (NSArray*)createBattlePlanForCard:(Card*)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray*)enemyUnits unitLayout:(NSDictionary*)unitLayout;
+- (NSArray*)createBattlePlanForCard:(Card*)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray*)enemyUnits;
 - (Action*)getActionToGridLocation:(GridLocation*)gridLocation;
 
-- (NSDictionary *)getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:(NSDictionary*)unitLayout;
+- (NSDictionary *)getAttackDirectionsAction:(MeleeAttackAction*)action;
 
 - (BOOL)hasActions;
+- (NSInteger)totalNumberOfActions;
 
 @end

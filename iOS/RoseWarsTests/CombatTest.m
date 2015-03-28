@@ -130,11 +130,11 @@
     BattlePlan *battlePlan = [[BattlePlan alloc] initWithGame:self.gamemanager];
     PathFinder *pathFinder = [[PathFinder alloc ] initWithGameManager:self.gamemanager];
     
-    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender1.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender1.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy]];
     
     MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:path[0] andCardInAction:attacker enemyCard:defender1];
     
-    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:self.gamemanager.currentGame.unitLayout];
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction];
     
     XCTAssertTrue(attackDirections.count == 4, @"Should be 4 attackdirections");
 
@@ -163,11 +163,11 @@
     BattlePlan *battlePlan = [[BattlePlan alloc] initWithGame:self.gamemanager];
     PathFinder *pathFinder = [[PathFinder alloc ] initWithGameManager:self.gamemanager];
     
-    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender2.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy]];
         
     MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:path[0] andCardInAction:attacker enemyCard:defender2];
     
-    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:self.gamemanager.currentGame.unitLayout];
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction];
     
     XCTAssertTrue(attackDirections.count == 3, @"Should be 3 attackdirections");
     
@@ -191,11 +191,11 @@
     BattlePlan *battlePlan = [[BattlePlan alloc] initWithGame:self.gamemanager];
     PathFinder *pathFinder = [[PathFinder alloc ] initWithGameManager:self.gamemanager];
     
-    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender1.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy] allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *path = [pathFinder getPathForCard:attacker fromGridLocation:attacker.cardLocation toGridLocation:defender1.cardLocation usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategy]];
     
     MeleeAttackAction *meleeAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:path[0] andCardInAction:attacker enemyCard:defender1];
     
-    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction withUnitLayout:self.gamemanager.currentGame.unitLayout];
+    NSDictionary *attackDirections = [battlePlan getAttackDirectionsAction:meleeAction];
     
     XCTAssertTrue(attackDirections.count == 4, @"Should be 4 attackdirections");
     
@@ -232,7 +232,7 @@
                                     player2Units:[NSArray arrayWithObjects:royalguard, pikeman, nil]];
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
-    NSArray *meleeActions = [pathFinder getMeleeAttackActionsFromLocation:longswordsman.cardLocation forCard:longswordsman enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeActions = [pathFinder getMeleeAttackActionsFromLocation:longswordsman.cardLocation forCard:longswordsman enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(meleeActions.count == 2, @"Longswordsman should be able to attack royalguard and pikeman");
     
@@ -262,7 +262,7 @@
                                     player2Units:[NSArray arrayWithObjects:archer, pikeman, nil]];
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
-    NSArray *meleeActions = [pathFinder getMeleeAttackActionsFromLocation:flagbearer.cardLocation forCard:flagbearer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeActions = [pathFinder getMeleeAttackActionsFromLocation:flagbearer.cardLocation forCard:flagbearer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(meleeActions.count == 1, @"FlagBearer should only be able to attack pikeman");
 }
@@ -372,8 +372,8 @@
     
     self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager withPlayer1Units:@[lightCavalry] player2Units:@[archer, pikeman]];
     
-    PathFinder *finder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
-    NSArray *actions = [finder getMeleeAttackActionsFromLocation:lightCavalry.cardLocation forCard:lightCavalry enemyUnits:@[archer, pikeman] allLocations:self.gamemanager.currentGame.unitLayout];
+//    PathFinder *finder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
+//    NSArray *actions = [finder getMeleeAttackActionsFromLocation:lightCavalry.cardLocation forCard:lightCavalry enemyUnits:@[archer, pikeman] allLocations:self.gamemanager.currentGame.unitLayout];
 }
 
 - (void)testLightCavalryCanAttackArcherFromThreeDirections {
@@ -386,12 +386,12 @@
     self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager withPlayer1Units:@[lightCavalry] player2Units:@[archer]];
     
     BattlePlan *battleplan = [[BattlePlan alloc] initWithGame:self.gamemanager];
-    [battleplan createBattlePlanForCard:lightCavalry friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards unitLayout:self.gamemanager.currentGame.unitLayout];
+    [battleplan createBattlePlanForCard:lightCavalry friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
   
     XCTAssertTrue(battleplan.meleeActions.count == 1, @"LightCavalry should be able to attack archer");
     
     MeleeAttackAction *action = battleplan.meleeActions[0];
-    NSDictionary *attackDirections = [battleplan getAttackDirectionsAction:action withUnitLayout:self.gamemanager.currentGame.unitLayout];
+    NSDictionary *attackDirections = [battleplan getAttackDirectionsAction:action];
     
     XCTAssertTrue(attackDirections.count == 3, @"LightCavalry should be able to attack archer from 3 directions");
 }
@@ -410,7 +410,7 @@
     self.gamemanager.currentGame = [TestHelper setupGame:self.gamemanager.currentGame gamemanager:self.gamemanager withPlayer1Units:@[lancer] player2Units:@[cavalry]];
     
     PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
-    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:lancer againstEnemyUnit:cavalry allLocations:self.gamemanager.currentGame.unitLayout];
+    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:lancer againstEnemyUnit:cavalry];
     action.delegate = mock;
     
     [action performActionWithCompletion:^{

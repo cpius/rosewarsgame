@@ -71,7 +71,7 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(meleeAttacks.count == 1, @"Berserker should be able to attack cannon");
 }
@@ -119,11 +119,11 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
 
     XCTAssertTrue(meleeAttacks.count == 1, @"Berserker should be able to attack chariot");
     
-    NSArray *moveActions = [pathFinder getMoveActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *moveActions = [pathFinder getMoveActionsFromLocation:berserker.cardLocation forCard:berserker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(moveActions.count == 4, @"Berserker should only be able to move to adjacent nodes");
 }
@@ -144,7 +144,7 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
 
     XCTAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
     
@@ -176,7 +176,7 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
     
@@ -207,7 +207,7 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeAttacks = [pathFinder getMeleeAttackActionsFromLocation:lancer.cardLocation forCard:lancer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(meleeAttacks.count == 1, @"Lancer should be able to attack archer");
     
@@ -257,7 +257,7 @@
 
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *pathWithSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:3 column:4] usingStrategy:[MovePathFinderStrategy strategy] allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *pathWithSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:3 column:4] usingStrategy:[MovePathFinderStrategy strategy]];
     
     XCTAssertTrue([royalguard allowPath:pathWithSidewaysMovement forActionType:kActionTypeMove allLocations:self.gamemanager.currentGame.unitLayout], @"RoyalGuard should be able to move 2 nodes when one of them is sideways");
 }
@@ -276,7 +276,7 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *pathWithoutSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:4 column:3] usingStrategy:[MovePathFinderStrategy strategy] allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *pathWithoutSidewaysMovement = [pathFinder getPathForCard:royalguard fromGridLocation:royalguard.cardLocation toGridLocation:[GridLocation gridLocationWithRow:4 column:3] usingStrategy:[MovePathFinderStrategy strategy]];
     
     XCTAssertFalse([royalguard allowPath:pathWithoutSidewaysMovement forActionType:kActionTypeMove allLocations:self.gamemanager.currentGame.unitLayout], @"RoyalGuard shouldn't be able to move 2 tiles when none of them is sideways");
 }
@@ -684,7 +684,7 @@
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     
-    NSArray *meleeAactions = [pathFinder getMeleeAttackActionsFromLocation:viking.cardLocation forCard:viking enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *meleeAactions = [pathFinder getMeleeAttackActionsFromLocation:viking.cardLocation forCard:viking enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(meleeAactions.count == 1, @"Viking should be able to attack warelephant in range 2");
 
@@ -714,7 +714,7 @@
     archer.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:5];
 
     PathFinder *pathfinder = [[PathFinder alloc ]initWithGameManager:self.gamemanager];
-    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:pikeman allLocations:self.gamemanager.currentGame.unitLayout];
+    MeleeAttackAction *action = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:pikeman];
     action.delegate = mock;
 
     samurai.battleStrategy.attackerDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:2];
@@ -724,7 +724,7 @@
     
     [action performActionWithCompletion:^{
         
-        MeleeAttackAction *secondaryAttack = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:archer allLocations:self.gamemanager.currentGame.unitLayout];
+        MeleeAttackAction *secondaryAttack = [pathfinder getMeleeAttackActionForCard:samurai againstEnemyUnit:archer];
         
         XCTAssertNotNil(secondaryAttack, @"Samurai should be able to make a secondary attack");
         XCTAssertTrue(secondaryAttack.meleeAttackType == kMeleeAttackTypeNormal, @"Samurai shouldn't be able to attack&conquer archer");
@@ -751,8 +751,7 @@
     NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation
                                                          forCard:diplomat
                                                    friendlyUnits:self.gamemanager.currentGame.myDeck.cards
-                                                      enemyUnits:self.gamemanager.currentGame.enemyDeck.cards
-                                                    allLocations:self.gamemanager.currentGame.unitLayout];
+                                                      enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertNotNil(actions, @"Diplomat should be able to bribe pikeman");
     
@@ -905,7 +904,7 @@
     self.gamemanager.currentPlayersTurn = kPlayerGreen;
     
     PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
-    NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation forCard:diplomat friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *actions = [pathfinder getAbilityActionsFromLocation:diplomat.cardLocation forCard:diplomat friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     
     XCTAssertTrue(actions.count == 1, @"Diplomat should be able to bribe heavycavalry");
     
@@ -916,10 +915,10 @@
         [self.gamemanager endTurn];
         XCTAssertTrue([heavycavalry isAffectedByAbility:kAbilityCoolDown], @"Heavycavalry should be affected by cooldown");
         
-        NSArray *archerActions = [pathfinder getMoveActionsFromLocation:archer.cardLocation forCard:archer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+        NSArray *archerActions = [pathfinder getMoveActionsFromLocation:archer.cardLocation forCard:archer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
         XCTAssertTrue(archerActions.count > 0, @"Archer should be able to move");
         
-        NSArray *heavycavalryActions = [pathfinder getMoveActionsFromLocation:heavycavalry.cardLocation forCard:heavycavalry enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+        NSArray *heavycavalryActions = [pathfinder getMoveActionsFromLocation:heavycavalry.cardLocation forCard:heavycavalry enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
         XCTAssertTrue(heavycavalryActions.count == 0, @"Heavycavalry shouldn't be able to move because of cooldown");
         
         MoveAction *moveAction = archerActions[0];

@@ -152,6 +152,7 @@ typedef NS_ENUM(NSInteger, ExtraActionTypes) {
 - (BOOL)isOwnedByMe;
 - (BOOL)isOwnedByEnemy;
 - (BOOL)isOwnedByPlayerWithColor:(PlayerColors)playerColor;
+- (BOOL)isOwnedByCurrentPlayer;
 
 - (void)combatStartingAgainstDefender:(Card*)defender;
 - (void)combatStartingAgainstAttacker:(Card*)attacker;

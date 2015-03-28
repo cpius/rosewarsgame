@@ -18,8 +18,7 @@
 }
 
 - (LevelIncreaseAbilities)cardIncreasedInLevel:(Card *)card {
-    
-    LevelIncreaseAbilities ability;
+    LevelIncreaseAbilities ability = kLevelIncreaseAbilityIndeterminate;
 
     switch (_levelIncreaseAbility) {
         case kLevelIncreaseAbilityAttack:

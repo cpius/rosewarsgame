@@ -64,7 +64,7 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"%d-%d", _row.integerValue, _column.integerValue];
+    return [NSString stringWithFormat:@"%ld-%ld", (long)_row.integerValue, (long)_column.integerValue];
 } 
 
 @end

@@ -58,7 +58,7 @@
     if (action.cardInAction.cardColor != self.cardColor) return;
     
     BOOL aoeIsApplicable = NO;
-    NSArray *surroundingLocations = [self.cardLocation surroundingEightGridLocations];
+    NSArray *surroundingLocations = [self.cardLocation surroundingGridLocations];
     
     if (action.actionType == kActionTypeMelee) {
 

@@ -136,8 +136,8 @@
     NSUInteger count = [tempArray count];
     for (NSUInteger i = 0; i < count; ++i) {
         // Select a random element between i and end of array to swap with.
-        int nElements = count - i;
-        int n = (arc4random() % nElements) + i;
+        NSUInteger nElements = count - i;
+        NSUInteger n = (arc4random() % nElements) + i;
         [tempArray exchangeObjectAtIndex:i withObjectAtIndex:n];
     }
     

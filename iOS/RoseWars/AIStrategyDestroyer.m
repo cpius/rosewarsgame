@@ -54,11 +54,11 @@
     
     for (Action *action in actions) {
         
-        PathFinderStep *startPositionStep = action.path[0];
-        GridLocation *startPosition =  startPositionStep.location;
-        
-        PathFinderStep *endPositionStep = action.path.lastObject;
-        GridLocation *endPosition = endPositionStep.location;
+//        PathFinderStep *startPositionStep = action.path[0];
+//        GridLocation *startPosition =  startPositionStep.location;
+//        
+//        PathFinderStep *endPositionStep = action.path.lastObject;
+//        GridLocation *endPosition = endPositionStep.location;
         
         if (action.isAttack) {
             action.score = [self chanceOfAttacker:action.cardInAction winningOverDefender:action.enemyCard withAction:action] * 10;

@@ -19,6 +19,7 @@
 #import "HKBattleResultNode.h"
 #import "HKGameOptionsDialog.h"
 #import "HKConquerButton.h"
+#import "HKCardInfoView.h"
 
 static float const kCardSpriteScaleFactor = 0.33;
 static float const kCardSpriteScaleFactorExtendedHeight = 0.40;
@@ -30,35 +31,6 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
 
 @property (strong, nonatomic) MeleeAttackAction *conquerAction;
 @property (strong, nonatomic) GameBoardNode *conquerNode;
-
-- (void)addDeckToScene:(Deck*)deck;
-
-- (void)showToolsPanel;
-- (void)hideToolsPanel;
-
-- (void)resetUserInterface;
-- (void)resetAttackDirection;
-
-- (void)checkForEndTurnAfterAction:(Action*)action;
-- (void)doEnemyPlayerTurn;
-
-- (void)updateRemainingActions:(NSUInteger)remainingActions;
-
-- (void)showCardDetail;
-- (void)hideCardDetail;
-
-- (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType;
-
-- (void)displayCombatOutcome:(BattleResult*)result;
-
-- (BOOL)isAttackDirection:(GameBoardNode*)node;
-
-- (void)layoutMyDeck;
-- (void)layoutEnemyDeck;
-
-- (void)handleTouchEndedWithTouch:(UITouch*)touch;
-
-- (BattlePlan*)createBattlePlanForNode:(GameBoardNode *)node;
 
 @end
 
@@ -114,7 +86,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
     
     _actionCountLabel = [[SKLabelNode alloc] initWithFontNamed:APP_FONT];
     _actionCountLabel.fontSize = 32.0f;
-    _actionCountLabel.text = [NSString stringWithFormat:@"%d", _gameManager.currentGame.numberOfAvailableActions];
+    _actionCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)_gameManager.currentGame.numberOfAvailableActions];
     _actionCountLabel.position = ccp(size.width - 30, size.height - 50);
     _actionCountLabel.zPosition = kOverlayZOrder;
     [self addChild:_actionCountLabel];
@@ -144,7 +116,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
     
     [_gameManager.currentGame populateUnitLayout];
     
-    _battlePlan = [[BattlePlan alloc] initWithGame:_gameManager.currentGame];
+    _battlePlan = [[BattlePlan alloc] initWithGame:_gameManager];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardIncreasedInLevel:) name:GAMEEVENT_LEVEL_INCREASED object:nil];
     
@@ -260,8 +232,6 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
         if ([_showingDetailOfNode.card.model isOwnedByEnemy]) {
             [_gameboard deselectActiveNode];
         }
-        
-        [self hideCardDetail];
     }
     
     GameBoardNode *targetNode = [_gameboard getGameBoardNodeForPosition:[touch locationInNode:_gameboard]];
@@ -355,7 +325,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
                     
                     _leftPanel.selectedAction = action;
                     
-                    _attackDirections = [_battlePlan getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:_gameManager.currentGame.unitLayout];
+                    _attackDirections = [_battlePlan getAttackDirectionsAction:(MeleeAttackAction*)action];
                     
                     if (_attackDirections.count - 1 > 1) {
                         [_gameboard highlightNodesForAttackDirectionAtLocations:_attackDirections.allKeys];
@@ -396,7 +366,6 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
             }
             else {
                 [_gameboard selectCardInGameBoardNode:targetNode useHighlighting:NO];
-                [self showCardDetail];
             }
         }
     }
@@ -404,12 +373,12 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
 
 - (BattlePlan*)createBattlePlanForNode:(GameBoardNode *)node {
     
-    BattlePlan *battleplan = [[BattlePlan alloc] init];
+    BattlePlan *battleplan = [[BattlePlan alloc] initWithGame:_gameManager];
     
     if (node.hasCard && [node.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
         [_gameboard selectCardInGameBoardNode:node useHighlighting:NO];
         
-        [battleplan createBattlePlanForCard:node.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
+        [battleplan createBattlePlanForCard:node.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards];
         
         for (Action *moveAction in battleplan.moveActions) {
             [_gameboard highlightNodeAtLocation:[moveAction getLastLocationInPath] withColor:RGB(0, 235, 0)];
@@ -680,7 +649,7 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
 
 - (void)updateRemainingActions:(NSUInteger)remainingActions {
     
-    _actionCountLabel.text = [NSString stringWithFormat:@"%d", remainingActions];
+    _actionCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remainingActions];
 }
 
 - (void)showToolsPanel {
@@ -698,39 +667,12 @@ static NSString* const kEndTurnButton = @"EndTurnButton";
 }
 
 - (void)leftPanelInfoButtonPressed:(LeftPanel *)leftPanel {
-    
-    if (_showingDetailOfNode != nil) {
-        [self hideCardDetail];
-    }
-    else {
-        [self showCardDetail];
-    }
-}
-
-- (void)showCardDetail {
-    
     GameBoardNode *activeNode = [_gameboard activeNode];
-    
     if (activeNode != nil && activeNode.hasCard) {
-        
-        activeNode.card.zPosition = 10000;
-        _showingDetailOfNode = activeNode;
-        
-        [_gameboard deselectActiveNode];
-        [activeNode.card toggleDetailWithScale:2.0];
-        [activeNode.card runAction:[SKAction moveTo:ccp(self.size.width / 2, self.size.height / 2) duration:0.2]];
+        HKCardInfoView *infoView = [[HKCardInfoView alloc] initWithCard:activeNode.card.model inScene:self];
+        infoView.position = CGPointMake(self.size.width / 2.0, self.size.height / 2.0);
+        [self addChild:infoView];
     }
-}
-
-- (void)hideCardDetail {
-    
-    [_showingDetailOfNode.card toggleDetailWithScale:0.4];
-    
-    [_showingDetailOfNode.card runAction:[SKAction moveTo:[self convertPoint:_showingDetailOfNode.position fromNode:_gameboard] duration:0.5]];
-    
-    [_gameboard selectCardInGameBoardNode:_showingDetailOfNode useHighlighting:NO];
-    _showingDetailOfNode.card.zPosition = kOverlayZOrder;
-    _showingDetailOfNode = nil;
 }
 
 - (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType {

@@ -83,7 +83,7 @@
 
     PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
 
-    NSArray *moveActions = [pathfinder getMoveActionsFromLocation:pikeman.cardLocation forCard:pikeman enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *moveActions = [pathfinder getMoveActionsFromLocation:pikeman.cardLocation forCard:pikeman enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     XCTAssertTrue(moveActions.count > 0, @"Cavalry should be able to move");
     MoveAction *moveAction = moveActions[0];
     moveAction.delegate = mock;
@@ -91,7 +91,7 @@
         XCTAssertTrue(pikeman.experience == 1, @"Pikeman should have been awarded an experience point by moving");
     }];
     
-    NSArray *rangedActions = [pathfinder getRangedAttackActionsFromLocation:archer.cardLocation forCard:archer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *rangedActions = [pathfinder getRangedAttackActionsFromLocation:archer.cardLocation forCard:archer enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     XCTAssertTrue(rangedActions.count > 0, @"Archer should be able to attack");
     RangedAttackAction *rangedAction = rangedActions[0];
     rangedAction.delegate = mock;
@@ -103,14 +103,14 @@
     [self.gamemanager endTurn];
     [self.gamemanager endTurn];
     
-    NSArray *abilityActions = [pathfinder getAbilityActionsFromLocation:weaponsmith.cardLocation forCard:weaponsmith friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *abilityActions = [pathfinder getAbilityActionsFromLocation:weaponsmith.cardLocation forCard:weaponsmith friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     AbilityAction *abilityAction = abilityActions[0];
     abilityAction.delegate = mock;
     [abilityAction performActionWithCompletion:^{
         XCTAssertTrue(weaponsmith.experience == 1, @"Weaponsmith should be awarded an experience point for using ability");
     }];
     
-    MeleeAttackAction *meleeAction = [pathfinder getMeleeAttackActionForCard:cavalry againstEnemyUnit:enemy2 allLocations:self.gamemanager.currentGame.unitLayout];
+    MeleeAttackAction *meleeAction = [pathfinder getMeleeAttackActionForCard:cavalry againstEnemyUnit:enemy2];
     meleeAction.delegate = mock;
     [meleeAction performActionWithCompletion:^{
         XCTAssertTrue(cavalry.experience == 1, @"Cavalry should be awarded an experience point by attacking");
@@ -133,7 +133,7 @@
     defender1.battleStrategy.defenderDiceStrategy = [FixedDiceStrategy strategyWithFixedValue:1];
 
     PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
-    MeleeAttackAction *attack = [pathfinder getMeleeAttackActionForCard:attacker againstEnemyUnit:defender1 allLocations:self.gamemanager.currentGame.unitLayout];
+    MeleeAttackAction *attack = [pathfinder getMeleeAttackActionForCard:attacker againstEnemyUnit:defender1];
     GameBoardMockup *mock = [GameBoardMockup new];
     attack.delegate = mock;
     XCTAssertNotNil(attack, @"Samurai should be able to attack");
@@ -141,7 +141,7 @@
     [attack performActionWithCompletion:^{
         XCTAssertTrue(attacker.experience == 1, @"Attacker should have gained 1 XP");
         
-        MeleeAttackAction *attack = [pathfinder getMeleeAttackActionForCard:attacker againstEnemyUnit:defender1 allLocations:self.gamemanager.currentGame.unitLayout];
+        MeleeAttackAction *attack = [pathfinder getMeleeAttackActionForCard:attacker againstEnemyUnit:defender1];
         XCTAssertNotNil(attack, @"Samurai should be able to attack");
         attack.delegate = mock;
         [attack performActionWithCompletion:^{
@@ -170,7 +170,7 @@
     PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
     
-    NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+    NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
     XCTAssertTrue(actions.count == 1, @"Archer should be able to attack");
     RangedAttackAction *attack = actions[0];
     attack.delegate = mock;
@@ -178,7 +178,7 @@
         XCTAssertTrue(attacker.experience == 1, @"Should have gained 1 xp");
         [self.gamemanager endTurn];
 
-        NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+        NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
         XCTAssertTrue(actions.count == 1, @"Archer should be able to attack");
         RangedAttackAction *attack = actions[0];
         attack.delegate = mock;
@@ -186,7 +186,7 @@
             XCTAssertTrue(attacker.experience == 2, @"Should have gained 2 xp");
             [self.gamemanager endTurn];
 
-            NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+            NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
             XCTAssertTrue(actions.count == 1, @"Archer should be able to attack");
             RangedAttackAction *attack = actions[0];
             attack.delegate = mock;
@@ -194,7 +194,7 @@
                 XCTAssertTrue(attacker.experience == 3, @"Should have gained 3 xp");
                 [self.gamemanager endTurn];
 
-                NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards allLocations:self.gamemanager.currentGame.unitLayout];
+                NSArray *actions = [pathfinder getRangedAttackActionsFromLocation:attacker.cardLocation forCard:attacker enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
                 XCTAssertTrue(actions.count == 1, @"Archer should be able to attack");
                 RangedAttackAction *attack = actions[0];
                 attack.delegate = mock;

@@ -10,21 +10,12 @@
 #import "BonusSprite.h"
 #import "SKSpriteNode+NodePosition.h"
 
-@interface CardSprite() {
+@interface CardSprite() <AttributeDelegate> {
     
     SKSpriteNode *_cardImageNode;
 }
 
 @property (nonatomic, assign) CGPoint originalPosition;
-
-- (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated;
-- (void)updateBonusSprite:(BonusSprite*)bonusSprite;
-- (void)updateBonusSpriteForAttribute:(RangeAttribute*)rangeAttribute;
-- (void)updateAllBonusSprites;
-- (void)updateSpritePositions;
-- (BonusSprite*)getBonusSpriteForAttribute:(RangeAttribute*)attribute;
-
-- (void)setCardColorIndicator;
 
 @end
 
@@ -111,35 +102,35 @@
     [self addChild:_cardIndicator];
 }
 
-- (void)rangeAttribute:(RangeAttribute *)attribute addedRawBonus:(RawBonus *)rawBonus {
+- (void)rangeAttribute:(HKAttribute *)attribute addedRawBonus:(RawBonus *)rawBonus {
     
     NSLog(@"Card: %@ added raw bonus: %@", self.model, rawBonus);
     
     [self addBonusSprite:attribute bonusValue:rawBonus.bonusValue animated:YES];
 }
 
-- (void)rangeAttribute:(RangeAttribute *)attribute removedRawBonus:(RawBonus *)rawBonus {
+- (void)rangeAttribute:(HKAttribute*)attribute removedRawBonus:(RawBonus *)rawBonus {
     
     NSLog(@"Card: %@ removed raw bonus: %@", self.model, rawBonus);
     
     [self updateBonusSpriteForAttribute:attribute];
 }
 
-- (void)rangeAttribute:(RangeAttribute *)attribute addedTimedBonus:(TimedBonus *)timedBonus {
+- (void)rangeAttribute:(HKAttribute*)attribute addedTimedBonus:(TimedBonus *)timedBonus {
     
     NSLog(@"Card: %@ added timed bonus: %@", self.model, timedBonus);
     
     [self addBonusSprite:attribute bonusValue:timedBonus.bonusValue animated:YES];
 }
 
-- (void)rangeAttribute:(RangeAttribute *)attribute removedTimedBonus:(TimedBonus *)timedBonus {
+- (void)rangeAttribute:(HKAttribute*)attribute removedTimedBonus:(TimedBonus *)timedBonus {
     
     NSLog(@"Card: %@ removed timed bonus: %@", self.model, timedBonus);
 
     [self updateBonusSpriteForAttribute:attribute];
 }
 
-- (BonusSprite *)getBonusSpriteForAttribute:(RangeAttribute *)attribute {
+- (BonusSprite *)getBonusSpriteForAttribute:(HKAttribute*)attribute {
     
     for (BonusSprite* bonusSprite in _bonusSprites) {
         if (bonusSprite.attribute == attribute) {
@@ -157,15 +148,15 @@
     }
 }
 
-- (void)updateBonusSpriteForAttribute:(RangeAttribute *)rangeAttribute {
+- (void)updateBonusSpriteForAttribute:(HKAttribute*)attribute {
     
-    BonusSprite *bonusSprite = [self getBonusSpriteForAttribute:rangeAttribute];
+    BonusSprite *bonusSprite = [self getBonusSpriteForAttribute:attribute];
     
     if (bonusSprite == nil) {
-        NSUInteger bonusValue = [rangeAttribute getRawBonusValue] + [rangeAttribute getTimedBonusValue];
+        NSUInteger bonusValue = [attribute getRawBonusValue] + [attribute getTimedBonusValue];
         
         if (bonusValue > 0) {
-            [self addBonusSprite:rangeAttribute bonusValue:bonusValue animated:YES];
+            [self addBonusSprite:attribute bonusValue:bonusValue animated:YES];
         }
     }
     else {
@@ -178,8 +169,8 @@
     NSUInteger bonusValue = [bonusSprite.attribute getRawBonusValue] + [bonusSprite.attribute getTimedBonusValue];
     
     if (bonusValue != 0) {
-        [bonusSprite setBonusText:[NSString stringWithFormat:@"+%d%@",
-                                   bonusValue,
+        [bonusSprite setBonusText:[NSString stringWithFormat:@"+%lu%@",
+                                   (unsigned long)bonusValue,
                                    bonusSprite.attribute.attributeAbbreviation]];
     }
     else {
@@ -188,15 +179,15 @@
     }
 }
 
-- (void)addBonusSprite:(RangeAttribute*)rangeAttribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated {
+- (void)addBonusSprite:(HKAttribute*)attribute bonusValue:(NSUInteger)bonusValue animated:(BOOL)animated {
     
-    BonusSprite *bonusSprite = [self getBonusSpriteForAttribute:rangeAttribute];
+    BonusSprite *bonusSprite = [self getBonusSpriteForAttribute:attribute];
     
     if (bonusSprite != nil) {
         [self updateBonusSprite:bonusSprite];
     }
     else {
-        BonusSprite *bonusSprite = [[BonusSprite alloc] initWithAttribute:rangeAttribute];
+        BonusSprite *bonusSprite = [[BonusSprite alloc] initWithAttribute:attribute];
         
         bonusSprite.name = BONUSSPRITE_TAG;
         bonusSprite.position = [_cardImageNode positionForChildNode:bonusSprite position:kNodePositionUpperLeft insets:UIEdgeInsetsMake(bonusSprite.size.height * _bonusSprites.count, 0, 0, 0)];

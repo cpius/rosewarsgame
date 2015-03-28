@@ -32,7 +32,7 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"Fixed dice: %d", fixedDieValue];
+    return [NSString stringWithFormat:@"Fixed dice: %lu", (unsigned long)fixedDieValue];
 }
 
 @end

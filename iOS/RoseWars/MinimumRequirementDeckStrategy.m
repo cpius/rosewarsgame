@@ -86,7 +86,7 @@
         
     } while (![self deckContainsRequiredUnits]);
     
-    NSLog(@"%d retries before deck contained required units", retries);
+    NSLog(@"%lu retries before deck contained required units", (unsigned long)retries);
     
     return [[Deck alloc] initWithCards:_cards];
 }
@@ -140,7 +140,7 @@
     
     for (int column = 1; column <= 5; column++) {
         unitsInColumn = 0;
-        for (int row = rowStart; row <= rowEnd; row++) {
+        for (NSUInteger row = rowStart; row <= rowEnd; row++) {
 
             Card *unit = [self unitAtGridLocation:[GridLocation gridLocationWithRow:row column:column]];
             
@@ -212,7 +212,7 @@
     NSUInteger rowEnd = _placeCardsInSide == kGameBoardLower ?  GetBacklineForGameBoardSide(_placeCardsInSide) : GetFrontlineForGameBoardSide(_placeCardsInSide);
     
     for (int column = 1; column <= 5; column++) {
-        for (int row = rowStart; row <= rowEnd; row++) {
+        for (NSUInteger row = rowStart; row <= rowEnd; row++) {
             
             Card *card = [self unitAtGridLocation:[GridLocation gridLocationWithRow:row column:column]];
             if (card != nil && card.unitName == kPikeman) {
@@ -266,6 +266,6 @@
         
     } while (![self deckPlacedAccordingToRequirements]);
     
-    NSLog(@"%d retries before deck was placed according to requirements", retries);
+    NSLog(@"%lu retries before deck was placed according to requirements", (unsigned long)retries);
 }
 @end

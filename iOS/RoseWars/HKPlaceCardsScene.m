@@ -89,7 +89,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
 
 - (void)presentCards {
     
-    CGSize screenSize = self.size;
+ //   CGSize screenSize = self.size;
     
     self.userInteractionEnabled = YES;
     
@@ -353,7 +353,7 @@ static NSString* const nextArrowTag = @"NEXT_ARROW_TAG";
 
 - (void)toggleDetailForCard:(CardSprite *)card {
     
-    CGSize screenSize = self.size;
+//    CGSize screenSize = self.size;
     
  /*   CCCallFunc *sound = [CCCallFunc actionWithTarget:self selector:@selector(playSwooshSound)];
     

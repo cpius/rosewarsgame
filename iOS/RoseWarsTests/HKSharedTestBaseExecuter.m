@@ -28,7 +28,9 @@
 
 - (BOOL)executeSharedTestWithData:(NSDictionary *)data {
 
-    NSLog(@"Executing shared test: '%@'", data[@"description"]);
+    if (data[@"description"]) {
+        NSLog(@"Executing shared test: '%@'", data[@"description"]);
+    }
     
     NSDictionary *gamestate = data[@"gamestate"];
     if (gamestate[@"actions_remaining"] != nil) {

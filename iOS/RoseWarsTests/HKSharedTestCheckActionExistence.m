@@ -31,7 +31,7 @@
     
     Card *cardLocatedAtStartLocation = [self.gamemanager cardLocatedAtGridLocation:startLocation];
     
-    [battleplan createBattlePlanForCard:cardLocatedAtStartLocation friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards unitLayout:self.gamemanager.currentGame.unitLayout];
+    [battleplan createBattlePlanForCard:cardLocatedAtStartLocation friendlyUnits:self.gamemanager.currentGame.myDeck.cards enemyUnits:self.gamemanager.currentGame.enemyDeck.cards];
 
     Action *action;
     

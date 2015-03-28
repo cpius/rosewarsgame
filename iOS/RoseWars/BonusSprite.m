@@ -7,6 +7,7 @@
 //
 
 #import "BonusSprite.h"
+#import "HKAttribute.h"
 
 static NSString* const kBonusLabelName = @"bonuslabel";
 
@@ -15,7 +16,7 @@ static NSString* const kBonusLabelName = @"bonuslabel";
 @synthesize bonusText = _bonusText;
 @synthesize attribute = _attribute;
 
-- (id)initWithAttribute:(RangeAttribute *)attribute {
+- (id)initWithAttribute:(HKAttribute*)attribute {
     
     self = [super initWithImageNamed:@"bonus"];
     
@@ -24,8 +25,8 @@ static NSString* const kBonusLabelName = @"bonuslabel";
         
         NSUInteger bonusValue = [_attribute getRawBonusValue] + [_attribute getTimedBonusValue];
 
-        [self setBonusText:[NSString stringWithFormat:@"+%d%@",
-                            bonusValue,
+        [self setBonusText:[NSString stringWithFormat:@"+%lu%@",
+                            (unsigned long)bonusValue,
                             _attribute.attributeAbbreviation]];
     }
     

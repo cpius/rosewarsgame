@@ -33,9 +33,9 @@
 
 -(NSString *)description {
     
-    return [NSString stringWithFormat:@"Location in grid: row: %d column: %d",
-            self.locationInGrid.row,
-            self.locationInGrid.column];
+    return [NSString stringWithFormat:@"Location in grid: row: %lu column: %lu",
+            (unsigned long)self.locationInGrid.row,
+            (unsigned long)self.locationInGrid.column];
 }
 
 - (void)deHighlight {

@@ -46,8 +46,8 @@
         NSString *testcaseType = testcase[@"type"];
         NSString *testcaseDescription = testcase[@"description"];
         
-        if ([testcaseDescription isEqualToString:@"Hobelar can move to it's own position (to pass on its option to move after attack)"]) {
-            continue;
+        if ([testcaseDescription isEqualToString:@"War Machines do not get an xp for movement"]) {
+            NSLog(@"break");
         }
         
         id<HKSharedTestExecuter> testExecuter = [HKSharedTestFactory createSharedTestExecuterOfType:testcaseType];

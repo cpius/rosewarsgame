@@ -10,8 +10,6 @@
 
 @implementation GridLocation
 
-@synthesize row = _row, column = _column;
-
 - (id)initWithRow:(NSUInteger)row column:(NSUInteger)column {
     
     self = [super init];
@@ -41,7 +39,7 @@
 
 - (NSUInteger)dictanceToGridLocation:(GridLocation*)gridLocation {
     
-    return abs(gridLocation.column - self.column) + abs(gridLocation.row - self.row);
+    return (NSUInteger)abs(gridLocation.column - self.column) + (NSUInteger)abs(gridLocation.row - self.row);
 }
 
 - (NSString *)description {
@@ -51,7 +49,7 @@
 
 - (NSUInteger)hash {
     
-    return [[NSString stringWithFormat:@"%d%d", self.row, self.column] hash];
+    return [[NSString stringWithFormat:@"%lu%lu", (unsigned long)self.row, (long)self.column] hash];
 }
 
 - (BOOL)isEqual:(id)object {

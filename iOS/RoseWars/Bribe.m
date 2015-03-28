@@ -68,7 +68,7 @@
 
 - (void)fromDictionary:(NSDictionary*)dictionary {
     
-    _originalColorOfBribedUnit = [[dictionary valueForKey:@"original_color_of_bribed_unit"] integerValue];
+    _originalColorOfBribedUnit = (CardColors)[[dictionary valueForKey:@"original_color_of_bribed_unit"] integerValue];
 }
 
 @end

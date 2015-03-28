@@ -375,6 +375,11 @@ const NSInteger kNumberOfExperiencePointsToIncreaseLevel = 4;
         (self.cardColor == kCardColorRed && self.gamemanager.currentGame.myColor == kPlayerRed);
 }
 
+- (BOOL)isOwnedByCurrentPlayer {
+    return (self.gamemanager.currentPlayersTurn == kPlayerGreen && self.cardColor == kCardColorGreen) ||
+    (self.gamemanager.currentPlayersTurn == kPlayerRed && self.cardColor == kCardColorRed);
+}
+
 - (BOOL)isOwnedByEnemy {
     
     return ![self isOwnedByMe];

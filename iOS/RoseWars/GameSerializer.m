@@ -167,13 +167,13 @@
     NSError *error = nil;
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:gameData options:NSJSONReadingMutableContainers error:&error];
     
-    game.state = [[data objectForKey:@"gamestate"] integerValue];
+    game.state = (GameStates)[[data objectForKey:@"gamestate"] integerValue];
     game.numberOfAvailableActions = [[data objectForKey:@"numberofactions"] integerValue];
     game.currentRound = [[data objectForKey:@"currentround"] integerValue];
     game.turnCounter = [[data objectForKey:@"turncounter"] integerValue];
     BOOL gameover = [[data objectForKey:@"gameover"] boolValue];
-    game.currentPlayersTurn = [[data objectForKey:@"currentplayersturn"] integerValue];
-    PlayerColors creator = [[data objectForKey:@"gamedata_created_by"] integerValue];
+    game.currentPlayersTurn = (PlayerColors)[[data objectForKey:@"currentplayersturn"] integerValue];
+    PlayerColors creator = (PlayerColors)[[data objectForKey:@"gamedata_created_by"] integerValue];
     
     for (NSString *playerName in allPlayers) {
         
@@ -217,8 +217,8 @@
             
             for (NSDictionary *carddata in cards) {
                 
-                CardColors cardColor = [[carddata objectForKey:@"cardcolor"] integerValue];
-                Card *card = [CardPool createCardOfName:[[carddata objectForKey:@"unitname"] integerValue] withCardColor:cardColor gamemanager:self.gamemanager];
+                CardColors cardColor = (CardColors)[[carddata objectForKey:@"cardcolor"] integerValue];
+                Card *card = [CardPool createCardOfName:(UnitName)[[carddata objectForKey:@"unitname"] integerValue] withCardColor:cardColor gamemanager:self.gamemanager];
                 
                 card.cardLocation = [GridLocation gridLocationWithRow:[[carddata objectForKey:@"row"] integerValue]
                                                                column:[[carddata objectForKey:@"column"] integerValue]];
@@ -232,7 +232,7 @@
                 NSArray *abilities = [carddata objectForKey:@"abilities"];
                 
                 for (NSDictionary *ability in abilities) {
-                    [AbilityFactory reapplyExistingAbilityOfType:[[ability objectForKey:@"abilitytype"] integerValue] onCard:card withAbilityData:ability];
+                    [AbilityFactory reapplyExistingAbilityOfType:(AbilityTypes)[[ability objectForKey:@"abilitytype"] integerValue] onCard:card withAbilityData:ability];
                 }
                 
                 [card fromDictionary:[carddata objectForKey:@"card_specific_stats"]];
@@ -283,7 +283,7 @@
     
     Action *action;
     
-    ActionTypes actionType = [[dictionary valueForKey:@"actiontype"] integerValue];
+    ActionTypes actionType = (ActionTypes)[[dictionary valueForKey:@"actiontype"] integerValue];
     NSArray *pathTaken = [self deserializePathFromDictionary:[dictionary objectForKey:@"path"]];
         
     // Get card in action from enemy deck
@@ -293,7 +293,7 @@
     BOOL levelIncreased = [[dictionary valueForKey:@"level_increased"] boolValue];
     
     if (levelIncreased) {
-        LevelIncreaseAbilities abilityIncreased = [[dictionary valueForKey:@"ability_increased"] integerValue];
+        LevelIncreaseAbilities abilityIncreased = (LevelIncreaseAbilities)[[dictionary valueForKey:@"ability_increased"] integerValue];
         
         FixedLevelIncreaseStrategy *levelIncreaseStrategy = [[FixedLevelIncreaseStrategy alloc] init];
         levelIncreaseStrategy.levelIncreaseAbility = abilityIncreased;

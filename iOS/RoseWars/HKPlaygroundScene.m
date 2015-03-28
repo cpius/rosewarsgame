@@ -19,7 +19,8 @@
 #import "HKBattleResultNode.h"
 #import "HKGameOptionsDialog.h"
 #import "HKConquerButton.h"
-
+#import "HKCardInfoView.h"
+#import "CardPool.h"
 #import "Archer.h"
 
 static float const kCardSpriteScaleFactor = 0.33;
@@ -28,35 +29,6 @@ static float const kCardSpriteScaleFactorExtendedHeight = 0.40;
 static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
 
 @interface HKPlaygroundScene()
-
-- (void)addDeckToScene:(Deck*)deck;
-
-- (void)showToolsPanel;
-- (void)hideToolsPanel;
-
-- (void)resetUserInterface;
-- (void)resetAttackDirection;
-
-- (void)checkForEndTurnAfterAction:(Action*)action;
-- (void)doEnemyPlayerTurn;
-
-- (void)updateRemainingActions:(NSUInteger)remainingActions;
-
-- (void)showCardDetail;
-- (void)hideCardDetail;
-
-- (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType;
-
-- (void)displayCombatOutcome:(BattleResult*)result;
-
-- (BOOL)isAttackDirection:(GameBoardNode*)node;
-
-- (void)layoutMyDeck;
-- (void)layoutEnemyDeck;
-
-- (void)handleTouchEndedWithTouch:(UITouch*)touch;
-
-- (BattlePlan*)createBattlePlanForNode:(GameBoardNode *)node;
 
 @end
 
@@ -112,7 +84,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     
     _actionCountLabel = [[SKLabelNode alloc] initWithFontNamed:APP_FONT];
     _actionCountLabel.fontSize = 32.0f;
-    _actionCountLabel.text = [NSString stringWithFormat:@"%d", _gameManager.currentGame.numberOfAvailableActions];
+    _actionCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)_gameManager.currentGame.numberOfAvailableActions];
     _actionCountLabel.position = ccp(size.width - 30, size.height - 50);
     _actionCountLabel.zPosition = kOverlayZOrder;
     [self addChild:_actionCountLabel];
@@ -161,6 +133,13 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     [self addChild:archer];
     
     [archer runAction:[SKAction repeatActionForever:[SKAction animateWithTextures:frames timePerFrame:0.1 resize:NO restore:YES]]];
+    
+    Archer *card = [CardPool createCardOfName:kArcher withCardColor:kCardColorGreen gamemanager:_gameManager];
+    
+    HKCardInfoView *infoview = [[HKCardInfoView alloc] initWithCard:card inScene:self];
+    infoview.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    [self addChild:infoview];
+
     
   /*  [_gameboard layoutBoard];
     [self layoutMyDeck];
@@ -270,8 +249,6 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
         if ([_showingDetailOfNode.card.model isOwnedByEnemy]) {
             [_gameboard deselectActiveNode];
         }
-        
-        [self hideCardDetail];
     }
     
     GameBoardNode *node = [_gameboard getGameBoardNodeForGridLocation:[GridLocation gridLocationWithRow:2 column:3]];
@@ -347,7 +324,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
                     
                     _leftPanel.selectedAction = action;
                     
-                    _attackDirections = [_battlePlan getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:_gameManager.currentGame.unitLayout];
+                    _attackDirections = [_battlePlan getAttackDirectionsAction:(MeleeAttackAction*)action];
                     
                     if (_attackDirections.count > 1) {
                         [_gameboard highlightNodesForAttackDirectionAtLocations:_attackDirections.allKeys];
@@ -390,7 +367,6 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
             }
             else {
                 [_gameboard selectCardInGameBoardNode:targetNode useHighlighting:NO];
-                [self showCardDetail];
             }
         }
     }
@@ -403,7 +379,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
     if (node.hasCard && [node.card.model isOwnedByPlayerWithColor:_gameManager.currentGame.myColor]) {
         [_gameboard selectCardInGameBoardNode:node useHighlighting:NO];
         
-        [battleplan createBattlePlanForCard:node.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards unitLayout:_gameManager.currentGame.unitLayout];
+        [battleplan createBattlePlanForCard:node.card.model friendlyUnits:_gameManager.currentGame.myDeck.cards enemyUnits:_gameManager.currentGame.enemyDeck.cards];
         
         for (Action *moveAction in battleplan.moveActions) {
             [_gameboard highlightNodeAtLocation:[moveAction getLastLocationInPath] withColor:RGB(0, 235, 0)];
@@ -654,7 +630,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
 
 - (void)updateRemainingActions:(NSUInteger)remainingActions {
     
-    _actionCountLabel.text = [NSString stringWithFormat:@"%d", remainingActions];
+    _actionCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remainingActions];
 }
 
 - (void)showToolsPanel {
@@ -672,39 +648,7 @@ static NSString* const kDialogNodeTagGameEnded = @"DialogNodeTagGameEnded";
 }
 
 - (void)leftPanelInfoButtonPressed:(LeftPanel *)leftPanel {
-    
-    if (_showingDetailOfNode != nil) {
-        [self hideCardDetail];
-    }
-    else {
-        [self showCardDetail];
-    }
-}
 
-- (void)showCardDetail {
-    
-    GameBoardNode *activeNode = [_gameboard activeNode];
-    
-    if (activeNode != nil && activeNode.hasCard) {
-        
-        activeNode.card.zPosition = 10000;
-        _showingDetailOfNode = activeNode;
-        
-        [_gameboard deselectActiveNode];
-        [activeNode.card toggleDetailWithScale:2.0];
-        [activeNode.card runAction:[SKAction moveTo:ccp(self.size.width / 2, self.size.height / 2) duration:0.2]];
-    }
-}
-
-- (void)hideCardDetail {
-    
-    [_showingDetailOfNode.card toggleDetailWithScale:0.4];
-    
-    [_showingDetailOfNode.card runAction:[SKAction moveTo:[self convertPoint:_showingDetailOfNode.position fromNode:_gameboard] duration:0.5]];
-    
-    [_gameboard selectCardInGameBoardNode:_showingDetailOfNode useHighlighting:NO];
-    _showingDetailOfNode.card.zPosition = kOverlayZOrder;
-    _showingDetailOfNode = nil;
 }
 
 - (void)performQueuedMeleeActionWithAttackType:(MeleeAttackTypes)attackType {

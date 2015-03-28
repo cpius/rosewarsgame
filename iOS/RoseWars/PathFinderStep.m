@@ -29,7 +29,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"%@  pos=[Column %d; Row %d]  g=%d  h=%d  f=%d", [super description], self.location.column, self.location.row, self.gScore, self.hScore, [self fScore]];
+	return [NSString stringWithFormat:@"%@  pos=[Column %lu; Row %lu]  g=%d  h=%d  f=%d", [super description], (unsigned long)self.location.column, (unsigned long)self.location.row, self.gScore, self.hScore, [self fScore]];
 }
 
 - (BOOL)isEqual:(PathFinderStep *)other

@@ -12,7 +12,7 @@
 #define BONUSSPRITE_TAG  @"BonusSprite"
 #define COLOR_INDICATOR_TAG @"ColorIndicator"
 
-@interface CardSprite : SKNode <RangeAttributeDelegate> {
+@interface CardSprite : SKNode <AttributeDelegate> {
     
     NSMutableArray *_bonusSprites;
     SKSpriteNode *_cardIndicator;

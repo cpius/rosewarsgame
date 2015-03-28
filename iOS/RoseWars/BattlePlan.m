@@ -44,7 +44,7 @@
     return NO;
 }
 
-- (NSDictionary *)getAttackDirectionsAction:(MeleeAttackAction*)action withUnitLayout:(NSDictionary*)unitLayout {
+- (NSDictionary *)getAttackDirectionsAction:(MeleeAttackAction*)action {
     
     NSMutableDictionary *attackDirections = [NSMutableDictionary dictionary];
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
@@ -56,11 +56,11 @@
     
     for (GridLocation *location in surroundingLocations) {
         
-        Card *cardInLocation = [unitLayout objectForKey:location];
+        Card *cardInLocation = [self.gamemanager.currentGame.unitLayout objectForKey:location];
         
         if (cardInLocation == nil && [location isInsideGameBoard]) {
 
-            NSArray *path = [pathFinder getPathForCard:action.cardInAction fromGridLocation:action.cardInAction.cardLocation toGridLocation:location usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategyWithMeleeAttackType:action.meleeAttackType] allLocations:self.gamemanager.currentGame.unitLayout];
+            NSArray *path = [pathFinder getPathForCard:action.cardInAction fromGridLocation:action.cardInAction.cardLocation toGridLocation:location usingStrategy:[PathFinderStrategyFactory getMeleeAttackStrategyWithMeleeAttackType:action.meleeAttackType]];
             
             if (path != nil) {
                 NSMutableArray *newPath = [NSMutableArray arrayWithArray:path];
@@ -69,7 +69,7 @@
                 
                 MeleeAttackAction *tempAction = [[MeleeAttackAction alloc] initWithGameManager:self.gamemanager path:newPath andCardInAction:action.cardInAction enemyCard:action.enemyCard meleeAttackType:action.meleeAttackType];
                 
-                if ([action.cardInAction allowAction:tempAction allLocations:unitLayout]) {
+                if ([action.cardInAction allowAction:tempAction allLocations:self.gamemanager.currentGame.unitLayout]) {
                     [attackDirections setObject:newPath forKey:location];
                 }
             }
@@ -114,28 +114,28 @@
     return foundAction;
 }
 
-- (NSArray *)createBattlePlanForCard:(Card *)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray *)enemyUnits unitLayout:(NSDictionary *)unitLayout {
+- (NSArray *)createBattlePlanForCard:(Card *)card friendlyUnits:(NSArray*)friendlyUnits enemyUnits:(NSArray *)enemyUnits {
     
-    if (![card isOwnedByMe]) return [NSArray array];
+    if (![card isOwnedByCurrentPlayer]) return [NSArray array];
     
     PathFinder *pathFinder = [[PathFinder alloc] initWithGameManager:_gamemanager];
     
     NSUInteger remainingActionCount = self.gamemanager.currentGame.numberOfAvailableActions;
     
     if ([card canPerformActionOfType:kActionTypeMove withRemainingActionCount:remainingActionCount]) {
-        _moveActions = [pathFinder getMoveActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
+        _moveActions = [pathFinder getMoveActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits];
     }
     
     if ([card canPerformActionOfType:kActionTypeMelee withRemainingActionCount:remainingActionCount]) {
-        _meleeActions = [pathFinder getMeleeAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
+        _meleeActions = [pathFinder getMeleeAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits];
     }
 
     if ([card canPerformActionOfType:kActionTypeRanged withRemainingActionCount:remainingActionCount]) {
-        _rangeActions = [pathFinder getRangedAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits allLocations:unitLayout];
+        _rangeActions = [pathFinder getRangedAttackActionsFromLocation:card.cardLocation forCard:card enemyUnits:enemyUnits];
     }
     
     if ([card canPerformActionOfType:kActionTypeAbility withRemainingActionCount:remainingActionCount]) {
-        _abilityActions = [pathFinder getAbilityActionsFromLocation:card.cardLocation forCard:card friendlyUnits:friendlyUnits enemyUnits:enemyUnits allLocations:unitLayout];
+        _abilityActions = [pathFinder getAbilityActionsFromLocation:card.cardLocation forCard:card friendlyUnits:friendlyUnits enemyUnits:enemyUnits];
     }
     
     return [[[_moveActions arrayByAddingObjectsFromArray:_meleeActions] arrayByAddingObjectsFromArray:_rangeActions] arrayByAddingObjectsFromArray:_abilityActions];
@@ -147,6 +147,13 @@
     _meleeActions.count > 0 ||
     _rangeActions.count > 0 ||
     _abilityActions.count > 0;
+}
+
+- (NSInteger)totalNumberOfActions {
+    return _moveActions.count +
+    _meleeActions.count +
+    _rangeActions.count +
+    _abilityActions.count;
 }
 
 @end

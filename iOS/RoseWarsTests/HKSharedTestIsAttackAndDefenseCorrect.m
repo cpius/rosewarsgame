@@ -27,7 +27,6 @@
     NSInteger minimumDefenceRequired = [data[@"defence"] integerValue];
     
     GridLocation *startLocation = [self convertLocation:actiondata[@"start_at"]];
-    GridLocation *endLocation = [self convertLocation:actiondata[@"end_at"]];
     GridLocation *targetLocation = [self convertLocation:actiondata[@"target_at"]];
     
     PathFinder *pathfinder = [[PathFinder alloc] initWithGameManager:self.gamemanager];
@@ -39,13 +38,11 @@
     
     if (attacker.isMelee) {
         action = [pathfinder getMeleeAttackActionForCard:attacker
-                                       againstEnemyUnit:defender
-                                           allLocations:self.gamemanager.currentGame.unitLayout];
+                                       againstEnemyUnit:defender];
     }
     else if(attacker.isRanged) {
         action = (Action*)[pathfinder getRangedAttackActionForCard:attacker
-                                         againstEnemyUnit:defender
-                                             allLocations:self.gamemanager.currentGame.unitLayout];
+                                         againstEnemyUnit:defender];
     }
 
     GameBoardMockup *mock = [[GameBoardMockup alloc] init];
