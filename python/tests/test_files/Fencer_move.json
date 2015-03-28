@@ -25,7 +25,8 @@
             "E5": {
                 "name": "Fencer",
                 "extra_action": 1,
-                "used": 1
+                "used": 1,
+                "movement_remaining": 0
             }
         },
         "actions_remaining": 1,

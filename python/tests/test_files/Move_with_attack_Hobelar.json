@@ -1,48 +1,48 @@
 {
     "type": "Is outcome correct",
-    "click_position": "E5",
+    "description": "Move with attack should only remove one movement point",
+    "click_position": "C5",
+    "move_with_attack": "true",
     "action_count": 0,
     "outcome":{
-        "E5": [6, 1]
+        "C5": [1, 6]
     },
-    "upgrade_choice": 1,
+    "result": "win",
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E4": {
-                "name": "Knight",
-                "experience": 3
-            }
+            "C4": "Hobelar",
+            "E4": "Ballista"
         },
         "actions_remaining": 2,
         "player2_units": {
-            "A6": "Archer",
-            "E5": "Pikeman"
+            "C5": "Pikeman",
+            "A6": "Archer"
         }
     },
     "pre_positions": {
-        "start_at": "E4",
+        "start_at": "C4",
         "end_at": "None"
     },
     "post_gamestate": {
         "turn": 1,
         "player1_units": {
-            "A2": "Knight",
-            "E4": {
+            "E4": "Ballista",
+            "C5": {
                 "name": "Hobelar",
                 "used": 1,
-                "recently_upgraded": 1
+                "experience": 1,
+                "extra_action": 1,
+                "movement_remaining": 2
             }
         },
         "actions_remaining": 1,
         "player2_units": {
-            "A6": "Archer",
-            "E5": "Pikeman"
+            "A6": "Archer"
         }
     },
     "post_positions": {
-        "start_at": "None",
+        "start_at": "C5",
         "end_at": "None"
     }
 }
