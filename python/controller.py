@@ -165,8 +165,8 @@ class Controller(object):
                     if self.game.gamestate.is_turn_done():
                         self.game.shift_turn()
                     self.clear_move()
+                    self.game.gamestate.set_available_actions()
                     self.draw_game(redraw_log=True)
-                    pass
                 else:
                     position = self.view.get_position_from_mouse_click(event.pos)
                     if not self.game.is_player_human():
@@ -249,6 +249,7 @@ class Controller(object):
 
         # If more than one action is possible, get user feedback to specify which action should be performed.
         else:
+            self.draw_game(shade_actions=False)
             unit = self.selected_unit
 
             # If the unit is melee, the user may need to specify an end_at.
@@ -353,7 +354,7 @@ class Controller(object):
     def perform_move_with_attack(self, action, outcome):
         move_with_attack = self.ask_about_move_with_attack(action)
 
-        self.draw_game(redraw_log=True)
+        self.draw_game(redraw_log=True, shade_actions=False)
 
         self.game.save_option("move_with_attack", move_with_attack)
         if self.game.is_enemy_network():
@@ -424,12 +425,16 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-    def draw_game(self, redraw_log=False):
-        if self.positions["start_at"] is not None:
+    def draw_game(self, redraw_log=False, shade_actions=True):
+        if shade_actions and self.positions["start_at"] is not None:
             actions = self.game.gamestate.get_actions(self.positions)
         else:
             actions = None
-        self.view.draw_game(self.game, self.positions["start_at"], actions, redraw_log)
+        if shade_actions:
+            shade_position = self.positions["start_at"]
+        else:
+            shade_position = None
+        self.view.draw_game(self.game, shade_position, actions, redraw_log)
 
     def pause(self):
         while True:
