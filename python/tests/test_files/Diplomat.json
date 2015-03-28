@@ -1,0 +1,47 @@
+{
+    "type": "Is outcome correct",
+    "click_position": "E5",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "C2": "Knight",
+            "E3": "Diplomat"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E3",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "C2": "Knight",
+            "E3": {
+                "name": "Diplomat",
+                "experience": 1,
+                "used": 1
+            },
+            "E5": {
+                "name": "Pikeman",
+                "bribed": {
+                    "level": 1,
+                    "duration": 1
+                }
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer"
+        }
+    },
+    "post_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    }
+}

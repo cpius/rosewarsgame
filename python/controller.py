@@ -1,23 +1,26 @@
-import sys
-import setup
-from gamestate import Gamestate
 import os
-import glob
-import interface_settings  # Present to avoid circular import
-from player import Player
-from client import Client
-from game import Game
-from outcome import Outcome
+import sys
 import json
-from view import View
-from viewcommon import (USEREVENT, KEYDOWN, QUIT, K_ESCAPE, KMOD_LMETA, KMOD_RMETA, K_a, K_g, K_q, K_1, K_2,
-                        pygame, Type, State, within, get_string_upgrade)
+import glob
+import game.setup as setup
+from gamestate.gamestate_module import Gamestate
+from game.player import Player
+from game.client import Client
+from game.game_module import Game
+from gamestate.outcome import Outcome
+from view.view_module import View
+from game.sound import Sound
+from gamestate.gamestate_library import *
+from view.view_control_library import *
+import pygame
+import view.interface_settings as interface_settings
 
 
 class Controller(object):
-    def __init__(self, view):
+    def __init__(self, view, sound):
         self.view = view
         self.game = None
+        self.sound = sound
         self.client = None
         self.positions = {"start_at": None, "end_at": None}
 
@@ -36,14 +39,14 @@ class Controller(object):
     def set_start_at(self, start_at):
         self.positions["start_at"] = start_at
 
-    CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = USEREVENT + 1
+    CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = pygame.USEREVENT + 1
 
     @classmethod
     def new_game(cls, green_intelligence, red_intelligence):
         if not os.path.exists("./replay"):
             os.makedirs("./replay")
 
-        controller = Controller(View())
+        controller = Controller(View(), Sound())
         players = [Player("Green", green_intelligence), Player("Red", red_intelligence)]
         player1_units, player2_units = setup.get_start_units()
         gamestate = Gamestate(player1_units, player2_units, 1)
@@ -51,6 +54,9 @@ class Controller(object):
         controller.game.gamestate.initialize_turn()
         controller.game.gamestate.actions_remaining = 1
         controller.clear_move()
+
+        if get_setting("play_fanfare"):
+            controller.sound.play_fanfare()
 
         return controller
 
@@ -66,7 +72,9 @@ class Controller(object):
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence, player.profile)
         controller.clear_move()
-        controller.view.play_sound("your_turn")
+
+        if get_setting("play_fanfare"):
+            controller.sound.play_fanfare()
 
         return controller
 
@@ -76,16 +84,20 @@ class Controller(object):
         if not savegame_file:
             savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
 
-        controller = cls(View())
+        controller = cls(View(), Sound())
         savegame_document = json.loads(open(savegame_file).read())
         controller.game = Game.from_log_document(savegame_document)
         controller.clear_move()
 
         if controller.game.is_turn_done():
             controller.game.shift_turn()
+        controller.game.gamestate.set_available_actions()
 
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence)
+
+        if get_setting("play_fanfare"):
+            controller.sound.play_fanfare()
 
         return controller
 
@@ -109,7 +121,8 @@ class Controller(object):
         if self.game.is_player_human():
             # The turn changed. Stop listening for network actions
             pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, 0)
-            self.view.play_sound("your_turn")
+            if get_setting("play_fanfare"):
+                self.sound.play_fanfare()
 
     def trigger_artificial_intelligence(self):
 
@@ -144,26 +157,38 @@ class Controller(object):
                 self.trigger_network_player()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                position = self.view.get_position_from_mouse_click(event.pos)
-                if not self.game.is_player_human():
-                    position = position.flip()
+                clicked_item = self.view.get_item_from_mouse_click(event.pos)
+                if clicked_item == Item.Help:
+                    pass
+                elif clicked_item == Item.Pass_action:
+                    self.game.gamestate.pass_extra_action()
+                    if self.game.gamestate.is_turn_done():
+                        self.game.shift_turn()
+                    self.clear_move()
+                    self.draw_game(redraw_log=True)
+                    pass
+                else:
+                    position = self.view.get_position_from_mouse_click(event.pos)
+                    if not self.game.is_player_human():
+                        position = position.flip()
 
-                if event.button == 1:
-                    if self.game.is_player_human():
-                        self.left_click(position)
-                elif event.button == 3:
-                    self.right_click(position)
+                    if event.button == 1:
+                        if self.game.is_player_human():
+                            self.left_click(position)
+                    elif event.button == 3:
+                        self.right_click(position)
 
-            if event.type == KEYDOWN and event.key == K_ESCAPE and self.game.is_player_human():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and self.game.is_player_human():
                 self.clear_move()
 
-            elif event.type == KEYDOWN and event.key == K_g:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+                print("positions:", self.positions)
                 print(self.game.gamestate)
 
-            elif event.type == KEYDOWN and event.key == K_a:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
                 print(self.game.gamestate.available_actions)
 
-            elif self.quit_game_requested(event):
+            elif quit_game_requested(event):
                 self.exit_game()
 
             self.view.refresh()
@@ -178,6 +203,13 @@ class Controller(object):
         # Clear greyed out tiles
         self.draw_game(redraw_log=True)
 
+        # If it's during an extra action, make it not possible to deselect the unit.
+        if self.game.gamestate.is_extra_action():
+            actions = self.game.gamestate.get_actions()
+            clickable_positions = [action.target_at for action in actions if action.is_attack] + [action.end_at for action in actions if not action.is_attack]
+            if position not in clickable_positions:
+                return
+
         # If the Unit is clicked again, deselect the unit.
         if self.start_at == position:
             self.clear_move()
@@ -188,7 +220,7 @@ class Controller(object):
             possible_actions = self.game.gamestate.get_actions({"start_at": position})
             if possible_actions:
                 self.set_start_at(position)
-                self.view.draw_game(self.game, position, possible_actions, True)
+                self.draw_game()
                 return
 
         # Determine possible actions
@@ -228,19 +260,22 @@ class Controller(object):
 
             # If the unit is a specialist, the user may need to specify an ability.
             if unit.type is Type.Specialist:
-                ability = self.pick_ability(unit)
+                ability = self.view.pick_ability(unit)
                 if ability:
                     action, = (action for action in possible_actions if action.ability == ability)
                     self.perform_action(action)
 
-        # If a unit is selected, and the left click does not select an action, deselect the selected unit.
-        self.clear_move()
+        if self.game.gamestate.is_extra_action():
+            actions = self.game.gamestate.get_actions()
+            if actions:
+                self.positions["start_at"] = actions[0].start_at
+                self.draw_game()
 
     def get_choice(self, keyevents, mouseevents):
         while True:
             event = pygame.event.wait()
 
-            if event.type == KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.key in keyevents:
                     return keyevents[event.key]
 
@@ -249,7 +284,7 @@ class Controller(object):
                     if within(event.pos, mouse_click_position):
                         return result
 
-            elif self.quit_game_requested(event):
+            elif quit_game_requested(event):
                 self.exit_game()
 
     def get_choice_position(self, mouseevents):
@@ -261,7 +296,7 @@ class Controller(object):
                 if position in mouseevents:
                     return mouseevents[position]
 
-            elif self.quit_game_requested(event):
+            elif quit_game_requested(event):
                 self.exit_game()
 
     def pick_end_at(self, actions):
@@ -271,7 +306,7 @@ class Controller(object):
 
     def pick_upgrade(self, unit):
         self.view.draw_upgrade_options(unit)
-        buttons = {K_1: 0, K_2: 1}
+        buttons = {pygame.K_1: 0, pygame.K_2: 1}
         areas = [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]]
         choice = self.get_choice(buttons, areas)
 
@@ -279,12 +314,11 @@ class Controller(object):
 
     def pick_ability(self, unit):
         self.view.draw_ask_about_ability(unit)
-        choice = self.get_choice({K_1: 0, K_2: 1}, [])
+        choice = self.get_choice({pygame.K_1: 0, pygame.K_2: 1}, [])
         return unit.abilities[choice]
 
     def ask_about_move_with_attack(self, action):
         self.view.draw_ask_about_move_with_attack(action.end_at, action.target_at)
-
         return self.get_choice_position({action.target_at: True, action.end_at: False})
 
     def clear_move(self):
@@ -310,7 +344,7 @@ class Controller(object):
         position = action.end_at if action.end_at in self.game.gamestate.player_units else action.target_at
         self.game.gamestate.player_units[position] = action.unit.get_upgraded_unit_from_upgrade(upgrade)
 
-        string_upgrade = get_string_upgrade(upgrade)
+        string_upgrade = get_string_attributes(upgrade)
         self.game.save_option("upgrade", string_upgrade)
 
         if self.game.is_enemy_network():
@@ -348,8 +382,11 @@ class Controller(object):
         if not outcome:
             outcome = self.determine_outcome(action)
 
-        self.view.draw_action(action, self.game.logbook, not self.game.is_player_human())
+        self.view.draw_action(action, self.game)
         self.game.do_action(action, outcome)
+
+        if get_setting("play_action_sounds"):
+            self.sound.play_action(action)
 
         animation_delay = interface_settings.pause_for_animation
         if action.is_attack:
@@ -373,7 +410,8 @@ class Controller(object):
 
         self.draw_game(redraw_log=True)
 
-        self.clear_move()
+        if not self.game.gamestate.is_extra_action():
+            self.clear_move()
 
         print("Action performed. Expecting action from", self.game.current_player().intelligence)
 
@@ -387,27 +425,19 @@ class Controller(object):
             self.trigger_artificial_intelligence()
 
     def draw_game(self, redraw_log=False):
-        self.view.draw_game(self.game, redraw_log=redraw_log)
+        if self.positions["start_at"] is not None:
+            actions = self.game.gamestate.get_actions(self.positions)
+        else:
+            actions = None
+        self.view.draw_game(self.game, self.positions["start_at"], actions, redraw_log)
 
     def pause(self):
         while True:
             event = pygame.event.wait()
-            if self.quit_game_requested(event):
+            if quit_game_requested(event):
                 self.exit_game()
-            elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return
-
-    def quit_game_requested(self, event):
-        return event.type == QUIT or (event.type == KEYDOWN and self.command_q_down(event.key))
-
-    @staticmethod
-    def command_q_down(key):
-        is_meta = pygame.key.get_mods() & KMOD_LMETA or pygame.key.get_mods() & KMOD_RMETA
-        return key == K_q and is_meta
-
-    @staticmethod
-    def escape(event):
-        return event.type == KEYDOWN and event.key == K_ESCAPE
 
     @staticmethod
     def exit_game():

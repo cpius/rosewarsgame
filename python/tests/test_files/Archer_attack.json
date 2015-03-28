@@ -1,0 +1,45 @@
+{
+    "type": "Is outcome correct",
+    "description": "Test Archer attack",
+    "click_position": "E5",
+    "action_count": 0,
+    "outcome":{
+        "E5": [6, 1]
+    },
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E3": "Archer"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E3",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E3": {
+                "name": "Archer",
+                "experience": 1,
+                "used": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    }
+}

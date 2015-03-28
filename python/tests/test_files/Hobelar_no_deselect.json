@@ -1,0 +1,50 @@
+{
+    "type": "Is outcome correct",
+    "description": "Make it not possible to deselect Hobelar during its extra action by clicking itself.",
+    "click_position": "E4",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E4": {
+                "name": "Hobelar",
+                "experience": 1,
+                "used": 1,
+                "movement_remaining": 1,
+                "extra_action": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E4",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E4": {
+                "name": "Hobelar",
+                "experience": 1,
+                "used": 1,
+                "movement_remaining": 1,
+                "extra_action": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "E4",
+        "end_at": "None"
+    }
+}

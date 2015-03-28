@@ -1,0 +1,48 @@
+{
+    "type": "Is outcome correct",
+    "description": "Test Weaponsmith",
+    "click_position": "C2",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "C2": "Knight",
+            "E3": "Weaponsmith"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E3",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "C2": {
+                "name": "Knight",
+                "improved_weapons": {
+                    "level": 1,
+                    "duration": 1
+                }
+            },
+            "E3": {
+                "name": "Weaponsmith",
+                "experience": 1,
+                "used": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    }
+}

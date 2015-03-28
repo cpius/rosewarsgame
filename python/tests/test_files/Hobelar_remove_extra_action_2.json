@@ -1,0 +1,45 @@
+{
+    "type": "Is outcome correct",
+    "description": "If Hobelar uses all its movement in an attack, the extra_action should be removed.",
+    "click_position": "E7",
+    "action_count": 0,
+    "outcome":{
+        "E7": [6, 1]
+    },
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E4": "Hobelar"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "A6": "Archer",
+            "E7": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E4",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E6": {
+                "name": "Hobelar",
+                "experience": 1,
+                "used": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E7": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    }
+}

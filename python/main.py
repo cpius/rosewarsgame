@@ -1,19 +1,22 @@
 import sys
 from controller import Controller
 import random
-import view
-from viewcommon import *
-from view import View
+from view.view_control_library import *
+from view.view_display_library import *
+from view.view_module import View
+from game.game_library import get_setting
+import pygame
+from gamestate.gamestate_library import opponent_descriptions, Opponent, Intelligence
 
 
 def pause():
     while True:
         event = pygame.event.wait()
 
-        if event.type == QUIT:
+        if event.type == pygame.QUIT:
             exit_game()
 
-        elif event.type == KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
             return
 
 
@@ -43,9 +46,9 @@ def menu_choice(view, menu):
                 if within(event.pos, view.interface.opponent_menu[i]):
                     return i + 1
 
-        keys = {K_1: 1, K_2: 2, K_3: 3, K_4: 4}
+        keys = {pygame.K_1: 1, pygame.K_2: 2, pygame.K_3: 3, pygame.K_4: 4}
         for key, item in keys.items():
-            if event.type == KEYDOWN and event.key == key:
+            if event.type == pygame.KEYDOWN and event.key == key:
                 return item
 
 

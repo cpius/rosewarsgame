@@ -1,7 +1,7 @@
 {
     "type": "Does action exist",
-    "description": "Hobelar can move to it's own position (to pass on its option to move after attack)",
-    "result": true,
+    "description": "Hobelar cannot move to it's own position",
+    "result": false,
     "action": {
         "start_at": "E4",
         "end_at": "E4"
