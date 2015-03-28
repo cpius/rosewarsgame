@@ -66,7 +66,7 @@ class Controller(object):
         client = Client(player)
         game_document = client.get_game()
 
-        controller = cls(View())
+        controller = cls(View(), Sound())
         controller.game = Game.from_log_document(game_document, player, True)
         controller.client = client
         player = controller.game.current_player()
