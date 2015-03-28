@@ -26,7 +26,7 @@ class Viewgame:
 
     def draw_units(self, player_units, player_color, enemy_units, opponent_color, start_position, actions):
         for position, unit in player_units.items():
-            if actions and position == start_position:
+            if position == start_position:
                 self.draw_unit(unit, position, player_color, selected=True)
             else:
                 self.draw_unit(unit, position, player_color)

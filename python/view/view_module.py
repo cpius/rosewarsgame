@@ -56,7 +56,7 @@ class View():
         if redraw_log:
             self.clear_right()
             self.viewlog.draw_logbook(game)
-        if draw_pass_action:
+        if game.gamestate.is_extra_action():
             self.viewinfo.draw_pass_action_button()
         self.refresh()
 

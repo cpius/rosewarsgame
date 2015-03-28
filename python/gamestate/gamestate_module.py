@@ -59,8 +59,7 @@ class Gamestate:
         if not positions:
             return self.available_actions
 
-        return [action for action in self.available_actions if all(getattr(action, key) == value for
-                                                                   key, value in positions.items())]
+        return [action for action in self.available_actions if all(getattr(action, key) == value for key, value in positions.items() if value is not None)]
 
     def get_actions_with_move_with_attack_as_none(self, positions=None):
 
@@ -172,6 +171,8 @@ class Gamestate:
 
     def move_melee_unit_to_target_tile(self, action):
         self.move_unit(action.end_at, action.target_at)
+        if not action.unit.has(Trait.swiftness):
+            action.unit.remove(State.movement_remaining)
         self.set_available_actions()
 
         self.decrement_actions_if_none_available(action)
@@ -214,7 +215,7 @@ class Gamestate:
         rolls = outcome.for_position(action.target_at)
         push_possible = action.is_push and battle.attack_successful(action, rolls, self)
 
-        if not action.unit.get_state(State.movement_remaining):
+        if self.is_extra_action() and not action.unit.get_state(State.movement_remaining):
             return False
 
         return push_possible or battle.is_win(action, rolls, self)

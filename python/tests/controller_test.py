@@ -39,6 +39,7 @@ class Sound:
     def play_action(self, *args):
         pass
 
+
 def determine_outcome(outcome, *args):
     return outcome
 
@@ -55,6 +56,10 @@ def ask_about_move_with_attack(answer, *args):
     return answer
 
 
+def save(*args):
+    pass
+
+
 def difference_between_dictionaries(d1, d2):
     dictdiffer = DictDiffer(d1, d2)
     message = ""
@@ -65,6 +70,7 @@ def difference_between_dictionaries(d1, d2):
     if dictdiffer.changed_recursive():
         message += "Changed " + str(dictdiffer.changed_recursive())
     return message
+
 
 def give_output(actual_gamestate, expected_gamestate, actual_positions, expected_positions):
 
@@ -125,6 +131,8 @@ def is_outcome_correct(test_document):
 
     controller.game.gamestate.set_available_actions()
 
+    controller.game.save = save
+
     controller.add_log = add_log
 
     controller.left_click(click_position)
@@ -161,7 +169,7 @@ def utest(test_document):
 
 def run():
     testcase_files = glob.glob("./test_files/*.json")
-    #testcase_files = ["./controller_tests\Test Diplomat.json"] #running just 1 test.
+    #testcase_files = ["./test_files\Hobelar_no_deselect2.json"] #running just 1 test.
 
     results = {}
     for file in testcase_files:

@@ -77,10 +77,13 @@ def do_action(gamestate, action, outcome):
 
         # If the action is a move with a Hobelar, there is no reason to allow an extra action.
         if unit.has(Trait.swiftness) and not action.is_attack:
+            unit.remove(State.movement_remaining)
             return
 
         if movement_remaining or unit.has(Trait.combat_agility):
             unit.set(State.extra_action)
+        else:
+            unit.remove(State.movement_remaining)
 
     def update_actions_remaining():
 
@@ -156,16 +159,14 @@ def do_action(gamestate, action, outcome):
     elif action.is_ability:
         settle_ability()
 
-    # Determine the movement points the unit can use on its extra action.
-    movement_remaining = unit.movement - distance(start_at, final_position)
-
-    # An attack requires a movement point even if it doesn't succeed. But not for Fencer.
-    if action.is_attack and not unit.has(Trait.combat_agility) and target_at != final_position:
-        movement_remaining -= 1
-
-    unit.set(State.movement_remaining, value=movement_remaining)
-
     if unit_has_extra_action_trait():
+        # Determine the movement points the unit can use on its extra action.
+        movement_remaining = unit.movement - distance(start_at, final_position)
+
+        # An attack requires a movement point even if it doesn't succeed. But not for Fencer.
+        if action.is_attack and not unit.has(Trait.combat_agility) and target_at != final_position:
+            movement_remaining -= 1
+        unit.set(State.movement_remaining, value=movement_remaining)
         prepare_extra_actions()
 
     unit.set(State.used, value=1)

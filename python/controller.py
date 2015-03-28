@@ -91,6 +91,7 @@ class Controller(object):
 
         if controller.game.is_turn_done():
             controller.game.shift_turn()
+        controller.game.gamestate.set_available_actions()
 
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence)
@@ -156,7 +157,17 @@ class Controller(object):
                 self.trigger_network_player()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.view.click_is_on_board(event.pos):
+                clicked_item = self.view.get_item_from_mouse_click(event.pos)
+                if clicked_item == Item.Help:
+                    pass
+                elif clicked_item == Item.Pass_action:
+                    self.game.gamestate.pass_extra_action()
+                    if self.game.gamestate.is_turn_done():
+                        self.game.shift_turn()
+                    self.clear_move()
+                    self.draw_game(redraw_log=True)
+                    pass
+                else:
                     position = self.view.get_position_from_mouse_click(event.pos)
                     if not self.game.is_player_human():
                         position = position.flip()
@@ -166,21 +177,12 @@ class Controller(object):
                             self.left_click(position)
                     elif event.button == 3:
                         self.right_click(position)
-                else:
-                    clicked_item = self.view.get_item_from_mouse_click(event.pos)
-                    if clicked_item == Item.Help:
-                        pass
-                    elif clicked_item == Item.Pass_action:
-                        self.game.gamestate.pass_extra_action()
-                        if self.game.gamestate.is_turn_done():
-                            self.game.shift_turn()
-                        self.draw_game(redraw_log=True)
-                        pass
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and self.game.is_player_human():
                 self.clear_move()
 
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+                print("positions:", self.positions)
                 print(self.game.gamestate)
 
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
@@ -201,18 +203,15 @@ class Controller(object):
         # Clear greyed out tiles
         self.draw_game(redraw_log=True)
 
+        # If it's during an extra action, make it not possible to deselect the unit.
+        if self.game.gamestate.is_extra_action():
+            actions = self.game.gamestate.get_actions()
+            clickable_positions = [action.target_at for action in actions if action.is_attack] + [action.end_at for action in actions if not action.is_attack]
+            if position not in clickable_positions:
+                return
 
         # If the Unit is clicked again, deselect the unit.
         if self.start_at == position:
-            if self.game.gamestate.is_extra_action():
-                self.game.gamestate.player_units[position].remove(State.movement_remaining)
-                self.game.gamestate.player_units[position].remove(State.extra_action)
-                if self.game.is_turn_done():
-                    self.game.shift_turn()
-                self.game.gamestate.set_available_actions()
-
-            self.draw_game(redraw_log=True)
-
             self.clear_move()
             return
 
@@ -221,7 +220,7 @@ class Controller(object):
             possible_actions = self.game.gamestate.get_actions({"start_at": position})
             if possible_actions:
                 self.set_start_at(position)
-                self.view.draw_game(self.game, position, possible_actions, True)
+                self.draw_game()
                 return
 
         # Determine possible actions
@@ -270,7 +269,7 @@ class Controller(object):
             actions = self.game.gamestate.get_actions()
             if actions:
                 self.positions["start_at"] = actions[0].start_at
-                self.view.draw_game(self.game, actions[0].start_at, actions, redraw_log=False, draw_pass_action=True)
+                self.draw_game()
 
     def get_choice(self, keyevents, mouseevents):
         while True:
@@ -413,9 +412,6 @@ class Controller(object):
 
         if not self.game.gamestate.is_extra_action():
             self.clear_move()
-            action.unit.remove(State.movement_remaining)
-
-        action.unit.remove_states_with_value_zero()
 
         print("Action performed. Expecting action from", self.game.current_player().intelligence)
 
@@ -428,8 +424,12 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-    def draw_game(self, redraw_log=False, draw_pass_action=False):
-        self.view.draw_game(self.game, redraw_log=redraw_log, draw_pass_action=draw_pass_action)
+    def draw_game(self, redraw_log=False):
+        if self.positions["start_at"] is not None:
+            actions = self.game.gamestate.get_actions(self.positions)
+        else:
+            actions = None
+        self.view.draw_game(self.game, self.positions["start_at"], actions, redraw_log)
 
     def pause(self):
         while True:
