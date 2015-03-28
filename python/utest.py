@@ -121,7 +121,8 @@ def upgrade(test_document):
             upgrade_choice[attribute] = attributes
 
     for position, unit in gamestate.player_units.items():
-        gamestate.player_units[position] = unit.get_upgraded_unit_from_upgrade(upgrade_choice)
+        if unit.should_be_upgraded():
+            gamestate.player_units[position] = unit.get_upgraded_unit_from_upgrade(upgrade_choice)
 
     expected = expected_gamestate.to_document()
     actual = gamestate.to_document()
