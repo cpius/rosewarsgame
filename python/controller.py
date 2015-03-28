@@ -230,13 +230,15 @@ class Controller(object):
                 "target_at": position
             }
             possible_actions = self.game.gamestate.get_actions_with_move_with_attack_as_none(criteria)
-        else:
+        elif self.start_at:
             criteria = {
                 "start_at": self.start_at,
                 "end_at": position,
                 "target_at": None
             }
             possible_actions = self.game.gamestate.get_actions(criteria)
+        else:
+            possible_actions = []
 
         # If there are no possible actions, deselect the unit.
         if not possible_actions:
