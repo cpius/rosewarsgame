@@ -354,7 +354,7 @@ class Controller(object):
     def perform_move_with_attack(self, action, outcome):
         move_with_attack = self.ask_about_move_with_attack(action)
 
-        self.draw_game(redraw_log=True)
+        self.draw_game(redraw_log=True, shade_actions=False)
 
         self.game.save_option("move_with_attack", move_with_attack)
         if self.game.is_enemy_network():
