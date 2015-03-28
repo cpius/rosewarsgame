@@ -422,7 +422,8 @@ class Controller(object):
         if not self.game.gamestate.is_extra_action():
             self.clear_move()
 
-        print("Action performed. Expecting action from", self.game.current_player().intelligence)
+        if get_setting("verbose"):
+            print("Action performed. Expecting action from", self.game.current_player().intelligence)
 
         if self.game.is_player_human():
             return
