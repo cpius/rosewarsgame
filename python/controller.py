@@ -205,6 +205,10 @@ class Controller(object):
         # Clear greyed out tiles
         self.draw_game(redraw_log=True)
 
+        # If there is no start_at, and a unit is not clicked, do nothing
+        if self.positions["start_at"] is None and position not in self.game.gamestate.player_units:
+            return
+
         # If it's during an extra action, make it not possible to deselect the unit.
         if self.game.gamestate.is_extra_action():
             actions = self.game.gamestate.get_actions()

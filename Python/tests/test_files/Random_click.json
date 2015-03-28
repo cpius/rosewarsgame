@@ -1,0 +1,36 @@
+{
+    "type": "Is outcome correct",
+    "description": "Random clicks do nothing",
+    "click_position": "D4",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "D3": "Knight",
+            "E4": "Archer"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "E5": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "D3": "Knight",
+            "E4": "Archer"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "E5": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "None",
+        "end_at": "None"
+    }
+}
