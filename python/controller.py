@@ -261,7 +261,7 @@ class Controller(object):
 
             # If the unit is a specialist, the user may need to specify an ability.
             if unit.type is Type.Specialist:
-                ability = self.view.pick_ability(unit)
+                ability = self.pick_ability(unit)
                 if ability:
                     action, = (action for action in possible_actions if action.ability == ability)
                     self.perform_action(action)
