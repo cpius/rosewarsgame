@@ -59,9 +59,13 @@ class Game:
             if game.is_turn_done():
                 game.shift_turn()
 
+            game.gamestate.set_available_actions()
+
             action_document = log_document[str(action_number)]
 
-            action = Action.from_document(gamestate.all_units(), action_document)
+            action_from_document = Action.from_document(gamestate.all_units(), action_document)
+
+            action = next(action for action in gamestate.get_actions() if action == action_from_document)
 
             game.actions[str(action_number)] = action
 
