@@ -6,7 +6,7 @@ from glob import glob
 from collections import Counter
 from gamestate.action import Action
 from gamestate.outcome import Outcome
-from game.server import validate_action, determine_outcome_if_any, validate_upgrade
+from game.server_library import validate_action, determine_outcome_if_any, validate_upgrade
 from gamestate.gamestate_library import *
 
 
