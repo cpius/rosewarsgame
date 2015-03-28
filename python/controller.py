@@ -165,8 +165,8 @@ class Controller(object):
                     if self.game.gamestate.is_turn_done():
                         self.game.shift_turn()
                     self.clear_move()
+                    self.game.gamestate.set_available_actions()
                     self.draw_game(redraw_log=True)
-                    pass
                 else:
                     position = self.view.get_position_from_mouse_click(event.pos)
                     if not self.game.is_player_human():
