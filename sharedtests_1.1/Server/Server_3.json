@@ -1,0 +1,25 @@
+{
+    "description": "Test that assassination has an outcome",
+    "type": "server",
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C3": "Knight",
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "D4": "Archer"
+        }
+    },
+    "action": {
+        "start_at": "C3",
+        "end_at": "C4",
+        "target_at": "D4",
+        "type": "action"
+    },
+    "response": {
+        "Status": true,
+        "Message": "Action recorded",
+        "Action outcome": true
+    }
+}
