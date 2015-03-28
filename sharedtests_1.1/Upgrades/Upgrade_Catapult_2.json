@@ -12,7 +12,8 @@
                 "name": "Catapult",
                 "experience": 6,
                 "attack_skill": 1
-            }
+            },
+            "C1": "Knight"
         },
         "player2_units": {
             "B4": "Archer"
@@ -26,7 +27,8 @@
                 "experience": 6,
                 "range_skill": 1,
                 "recently_upgraded": 1
-            }
+            },
+            "C1": "Knight"
         },
         "player2_units": {
             "B4": "Archer"
