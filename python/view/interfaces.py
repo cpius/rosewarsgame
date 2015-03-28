@@ -160,6 +160,6 @@ class Rectangles(Interface):
         self.opponent_menu = [[Point(100 * zoom, (40 + 40 * i) * zoom), Point(510 * zoom, (70 + 40 * i) * zoom)]
                               for i in range(15)]
 
-        self.pass_action_area = [Point(535 * zoom, 365 * zoom), Point(640 * zoom, 440 * zoom)]
+        self.pass_action_area = [Point(535 * zoom, 365 * zoom), Point(630 * zoom, 395 * zoom)]
 
         self.board = [Point(0, 0), Point(391 * zoom, 743 * zoom)]

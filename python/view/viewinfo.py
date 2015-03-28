@@ -3,6 +3,7 @@ import gamestate.battle as battle
 from gamestate.gamestate_library import *
 from game.game_library import prettify
 from functools import total_ordering
+from view.rounded_rect import AAfilledRoundedRect
 
 
 @total_ordering
@@ -208,4 +209,6 @@ class Viewinfo:
         return battle_hint
 
     def draw_pass_action_button(self):
-        write(self.screen, "Pass action", self.interface.pass_action_area[0], self.interface.fonts["normal"])
+        area = self.interface.pass_action_area
+        draw_rounded_rectangle_from_area(self.screen, area)
+        write(self.screen, "Pass action", (area[0][0] + 9, area[0][1] + 4), self.interface.fonts["normal"])

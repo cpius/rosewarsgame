@@ -1,6 +1,7 @@
 import pygame
 import textwrap
 import view.interface_settings as settings
+from view.rounded_rect import AAfilledRoundedRect
 
 
 class Location(object):
@@ -98,3 +99,12 @@ def draw_rectangle(screen, dimensions, location, color):
     rectangle = pygame.Surface(dimensions, pygame.SRCALPHA, 32)
     rectangle.fill(color)
     screen.blit(rectangle, location)
+
+
+def draw_rounded_rectangle_from_area(screen, area):
+    upper_left = area[0]
+    width = area[1][0] - area[0][0]
+    length = area[1][1] - area[0][1]
+    rectangle = pygame.Rect(upper_left, (width, length))
+    return AAfilledRoundedRect(screen, rectangle, Color.Light_blue, 0.2)
+
