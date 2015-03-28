@@ -175,6 +175,8 @@ class Controller(object):
                     if event.button == 1:
                         if self.game.is_player_human():
                             self.left_click(position)
+                        else:
+                            self.draw_game(redraw_log=True)
                     elif event.button == 3:
                         self.right_click(position)
 
