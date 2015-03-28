@@ -84,7 +84,7 @@ class Controller(object):
         if not savegame_file:
             savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
 
-        controller = cls(View())
+        controller = cls(View(), Sound())
         savegame_document = json.loads(open(savegame_file).read())
         controller.game = Game.from_log_document(savegame_document)
         controller.clear_move()
