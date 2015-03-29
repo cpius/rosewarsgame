@@ -1,5 +1,7 @@
 import copy
 from gamestate.gamestate_library import *
+from game.game_library import merge
+from datetime import datetime
 
 
 class Action(object):
@@ -48,7 +50,7 @@ class Action(object):
             "target_at": Position.from_string(document["target_at"]) if "target_at" in document else None,
             "move_with_attack": bool(document["move_with_attack"]) if "move_with_attack" in document else None,
             "created_at": document["created_at"] if "created_at" in document else None,
-            "ability": enum_from_string[document["ability"]] if "ability" in document else None,
+            "ability": Ability[document["ability"]] if "ability" in document else None,
             "number": int(document["number"]) if "number" in document else None
         }
 

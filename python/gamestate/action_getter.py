@@ -1,5 +1,6 @@
 from gamestate.action import Action
 from gamestate.gamestate_library import *
+from game.game_library import merge
 from itertools import product
 import gamestate.action_sets as action_sets
 

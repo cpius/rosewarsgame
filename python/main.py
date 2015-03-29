@@ -3,10 +3,11 @@ from controller import Controller
 import random
 from view.view_control_library import *
 from view.view_display_library import *
+from game.game_library import *
+from game.enums import *
 from view.view_module import View
-from game.game_library import get_setting
 import pygame
-from gamestate.gamestate_library import opponent_descriptions, Opponent, Intelligence
+
 
 
 def pause():

@@ -6,6 +6,7 @@ from gamestate.units import Unit_class
 import json
 from gamestate.gamestate_library import *
 from gamestate.board import Board
+from game.game_library import document_to_string
 
 
 class Gamestate:

@@ -5,6 +5,7 @@ from gamestate.outcome import Outcome
 from datetime import datetime
 from time import mktime, sleep
 from email.utils import parsedate
+from game.game_library import document_to_string
 
 
 class Client():

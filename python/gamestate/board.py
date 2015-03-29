@@ -1,4 +1,5 @@
 from gamestate.gamestate_library import *
+from game.game_library import merge
 
 
 class Board():

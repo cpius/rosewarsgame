@@ -152,7 +152,7 @@ class Viewinfo:
         lines = ["Select ability:"]
         for i, ability in enumerate(unit.abilities):
             level = unit.attributes[ability].level
-            description_string = str(i + 1) + ": " + ability.name + ": " + get_ability_description(ability, level)
+            description_string = str(i + 1) + ": " + ability.name + ": " + get_description(ability, level)
             lines += textwrap.wrap(description_string, self.interface.message_line_length)
 
         base = self.interface.ask_about_ability_location

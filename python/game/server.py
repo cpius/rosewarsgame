@@ -13,6 +13,8 @@ import traceback
 from subprocess import call
 from bson import ObjectId
 from game.server_library import *
+from game.game_library import document_to_string
+
 
 cache = pylibmc.Client(['127.0.0.1:11211'])
 
