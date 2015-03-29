@@ -1,17 +1,17 @@
 {
     "type": "Upgrade",
-    "description": "The Catapult upgrades a 2nd time",
+    "description": "The catapult upgrades for a fourth time",
     "upgrade": {
-        "attack_skill": -1,
-        "range_skill": 1
+        "attack_skill": 1
     },
     "pre_gamestate": {
         "actions_remaining": 1,
         "player1_units": {
             "A3": {
                 "name": "Catapult",
-                "experience": 6,
-                "attack_skill": 1
+                "experience": 12,
+                "attack_skill": 1,
+                "range_skill": 1
             },
             "C1": "Knight"
         },
@@ -24,7 +24,8 @@
         "player1_units": {
             "A3": {
                 "name": "Catapult",
-                "experience": 6,
+                "experience": 12,
+                "attack_skill": 2,
                 "range_skill": 1,
                 "recently_upgraded": 1
             },

@@ -201,6 +201,12 @@ class Unit_class():
             for attribute, level in upgrade.items():
                 return self.has(attribute, level) and not base_units[self.unit].has(attribute, level)
 
+        def is_final_upgrade(upgrade):
+            upgrade_index = self.upgrades.index(upgrade)
+            upgrades_count = len(self.upgrades)
+
+            return upgrade_index == upgrades_count - 1 or upgrade_index == upgrades_count - 2
+
         def translate_to_enum_format(upgrade):
             if upgrade in Unit:
                 return upgrade
@@ -212,7 +218,7 @@ class Unit_class():
 
         possible_upgrade_choices = []
         for upgrade in self.upgrades:
-            if not has_upgrade(upgrade):
+            if not has_upgrade(upgrade) or is_final_upgrade(upgrade):
                 possible_upgrade_choices.append(translate_to_enum_format(upgrade))
 
         return possible_upgrade_choices[choice]

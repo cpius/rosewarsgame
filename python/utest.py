@@ -121,7 +121,8 @@ def upgrade(test_document):
             upgrade_choice[attribute] = attributes
 
     for position, unit in gamestate.player_units.items():
-        gamestate.player_units[position] = unit.get_upgraded_unit_from_upgrade(upgrade_choice)
+        if unit.should_be_upgraded():
+            gamestate.player_units[position] = unit.get_upgraded_unit_from_upgrade(upgrade_choice)
 
     expected = expected_gamestate.to_document()
     actual = gamestate.to_document()
@@ -176,9 +177,9 @@ def utest(test_document):
 
 def run():
     if get_setting("version") == "1.0":
-        testcase_files = glob("./../../sharedtests_1.0/*/*.json")
+        testcase_files = glob("./../sharedtests_1.0/*/*.json")
     else:
-        testcase_files = glob("./../../sharedtests_1.1/*/*.json")
+        testcase_files = glob("./../sharedtests_1.1/*/*.json")
 
     # Running just 1 test.
     # testcase_files = ["./../sharedtests_1.1/Hobelar/Outcome_Hobelar_9.json"]
