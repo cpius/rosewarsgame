@@ -1,9 +1,8 @@
-import json
 from gamestate.gamestate_module import Gamestate
 import gamestate.battle as battle
 import gamestate.action_getter as action_getter
 from glob import glob
-from collections import Counter
+from tests.test_library import *
 from gamestate.action import Action
 from gamestate.outcome import Outcome
 from game.server_library import validate_action, determine_outcome_if_any, validate_upgrade
@@ -176,7 +175,6 @@ def utest(test_document):
 
 
 def run():
-    except_exceptions = False
 
     if get_setting("version") == "1.0":
         testcase_files = glob("./../sharedtests_1.0/*/*.json")
@@ -186,31 +184,4 @@ def run():
     # Running just 1 test.
     # testcase_files = ["./../sharedtests_1.1/Hobelar/Outcome_Hobelar_9.json"]
 
-    results = {}
-    for file in testcase_files:
-        test_document = json.loads(open(file).read())
-        results[str(test_document["type"])] = Counter()
-
-    for file in testcase_files:
-        test_document = json.loads(open(file).read())
-
-        if except_exceptions:
-            try:
-                test = utest(test_document)
-            except Exception:
-                test = "ERROR"
-        else:
-            test = utest(test_document)
-        if test is not True:
-            print(file)
-            print()
-
-        results[test_document["type"]][test] += 1
-
-    print()
-    total = Counter()
-    for key, value in results.items():
-        print(key + ": " + str(value[True]) + " passed, " + str(value[False]) + " failed")
-        total += value
-    print()
-    print("Total:", str(total[True]) + " passed, " + str(total[False]) + " failed")
+    run_method(testcase_files, utest)

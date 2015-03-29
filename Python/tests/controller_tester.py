@@ -1,13 +1,13 @@
-import json
 from gamestate.gamestate_module import Gamestate, Position
 import glob
-from collections import Counter, namedtuple
+from collections import namedtuple
 from game.game_module import Game
 from controller import Controller
 from gamestate.outcome import Outcome
 from functools import partial
 from tests.dictdiffer import DictDiffer
 from gamestate.action import Action
+from tests.test_library import *
 
 rolls = namedtuple("rolls", ["attack", "defence"])
 
@@ -166,32 +166,9 @@ def utest(test_document):
 
 
 def run():
+
     testcase_files = glob.glob("./tests/test_files/*.json")
-    #testcase_files = ["./test_files\Hobelar_no_deselect2.json"] #running just 1 test.
+    #testcase_files = ["./tests/test_files\Fencer_attack2.json"] #running just 1 test.
 
-    results = {}
-    for file in testcase_files:
-        test_document = json.loads(open(file).read())
-        results[str(test_document["type"])] = Counter()
+    run_method(testcase_files, utest)
 
-    for file in testcase_files:
-        test_document = json.loads(open(file).read())
-
-        try:
-            exception_flag = True
-            test = utest(test_document)
-            exception_flag = False
-        finally:
-            if exception_flag or not test:
-                print(file)
-                print()
-
-        results[test_document["type"]][test] += 1
-
-    print()
-    total = Counter()
-    for key, value in results.items():
-        print(key + ": " + str(value[True]) + " passed, " + str(value[False]) + " failed")
-        total += value
-    print()
-    print("Total:", str(total[True]) + " passed, " + str(total[False]) + " failed")
