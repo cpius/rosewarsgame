@@ -82,12 +82,10 @@ def give_output(actual_gamestate, expected_gamestate, actual_positions, expected
         print("act gamestate", actual_gamestate)
         print("exp gamestate", expected_gamestate)
         print(difference_between_dictionaries(actual_gamestate, expected_gamestate))
-        print()
 
     if actual_positions != expected_positions:
         print("act position", actual_positions)
         print("exp position", expected_positions)
-        print()
 
     return False
 
@@ -177,18 +175,16 @@ def run():
         results[str(test_document["type"])] = Counter()
 
     for file in testcase_files:
-        print(file)
         test_document = json.loads(open(file).read())
 
-        if except_exceptions:
-            try:
-                test = utest(test_document)
-            except Exception as e:
-                test = "ERROR"
-        else:
+        try:
+            exception_flag = True
             test = utest(test_document)
-        if test is not True:
-            print(file)
+            exception_flag = False
+        finally:
+            if exception_flag or not test:
+                print(file)
+                print()
 
         results[test_document["type"]][test] += 1
 
