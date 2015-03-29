@@ -1,24 +1,17 @@
 {
     "type": "Is outcome correct",
-    "click_position": "E5",
+    "description": "Clicking the same unit again should deselect it",
+    "click_position": "E4",
     "action_count": 0,
-    "outcome":{
-        "E5": [6, 1]
-    },
-    "upgrade_choice": 1,
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
             "A2": "Knight",
-            "E4": {
-                "name": "Knight",
-                "experience": 3
-            }
+            "E4": "Catapult"
         },
         "actions_remaining": 2,
         "player2_units": {
-            "A6": "Archer",
-            "E5": "Pikeman"
+            "B4": "Pikeman"
         }
     },
     "pre_positions": {
@@ -28,16 +21,11 @@
         "turn": 1,
         "player1_units": {
             "A2": "Knight",
-            "E4": {
-                "name": "Hobelar",
-                "used": 1,
-                "recently_upgraded": 1
-            }
+            "E4": "Catapult"
         },
-        "actions_remaining": 1,
+        "actions_remaining": 2,
         "player2_units": {
-            "A6": "Archer",
-            "E5": "Pikeman"
+            "B4": "Pikeman"
         }
     },
     "post_positions": {

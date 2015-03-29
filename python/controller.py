@@ -1,7 +1,7 @@
 import os
 import sys
-import json
 import glob
+import json
 import game.setup as setup
 from gamestate.gamestate_module import Gamestate
 from game.player import Player
@@ -22,7 +22,7 @@ class Controller(object):
         self.game = None
         self.sound = sound
         self.client = None
-        self.positions = {"start_at": None, "end_at": None}
+        self.positions = {}
 
     @property
     def selected_unit(self):
@@ -30,14 +30,7 @@ class Controller(object):
 
     @property
     def start_at(self):
-        return self.positions["start_at"]
-
-    @property
-    def has_start_at(self):
-        return self.start_at is not None
-
-    def set_start_at(self, start_at):
-        self.positions["start_at"] = start_at
+        return self.positions["start_at"] if "start_at" in self.positions else None
 
     CHECK_FOR_NETWORK_ACTIONS_EVENT_ID = pygame.USEREVENT + 1
 
@@ -201,52 +194,52 @@ class Controller(object):
         :return: None
         Selects units or carries out actions if one is identified.
         """
+        # Introduce variables
+        gamestate = self.game.gamestate
+        actions = gamestate.get_actions_with_move_with_attack_as_none()
 
         # Clear greyed out tiles
         self.draw_game(redraw_log=True)
 
-        # If there is no start_at, and a unit is not clicked, do nothing
-        if self.positions["start_at"] is None and position not in self.game.gamestate.player_units:
+        # If it's during an extra action, only tiles that indicate possible actions are clickable. If one of those are
+        # clicked, perform that action.
+        if gamestate.is_extra_action():
+            if position in gamestate.enemy_units:
+                actions = filter_actions(actions, {"start_at": self.start_at, "target_at": position})
+            else:
+                actions = filter_actions(actions, {"start_at": self.start_at, "target_at": position})
+            if actions:
+                self.perform_action(actions[0])
             return
 
-        # If it's during an extra action, make it not possible to deselect the unit.
-        if self.game.gamestate.is_extra_action():
-            actions = self.game.gamestate.get_actions()
-            clickable_positions = [action.target_at for action in actions if action.is_attack] + [action.end_at for action in actions if not action.is_attack]
-            if position not in clickable_positions:
-                return
+        # If start_at is not set, and a friendly_unit that can take an action is clicked, choose that as start_at.
+        if not self.start_at:
+            if position in gamestate.player_units:
+                if filter_actions(actions, {"start_at": position}):
+                    self.positions["start_at"] = position
+                    self.draw_game()
+            return
 
-        # If the Unit is clicked again, deselect the unit.
+        # If the selected Unit is clicked again, deselect it.
         if self.start_at == position:
             self.clear_move()
             return
 
-        # If start_at is not set, and a suitable start_at is chosen, set start_at.
-        if not self.start_at and position in self.game.gamestate.player_units:
-            possible_actions = self.game.gamestate.get_actions({"start_at": position})
-            if possible_actions:
-                self.set_start_at(position)
-                self.draw_game()
-                return
-
-        # Determine possible actions
+        # In the following a unit is selected and its not an extra action. If an action is indicated it is performed.
         if position in self.game.gamestate.all_units():
             criteria = {
                 "start_at": self.start_at,
                 "target_at": position
             }
-            possible_actions = self.game.gamestate.get_actions_with_move_with_attack_as_none(criteria)
-        elif self.start_at:
+        else:
             criteria = {
                 "start_at": self.start_at,
                 "end_at": position,
                 "target_at": None
             }
-            possible_actions = self.game.gamestate.get_actions(criteria)
-        else:
-            possible_actions = []
+        possible_actions = filter_actions(actions, criteria)
 
-        # If there are no possible actions, deselect the unit.
+        # If the click doesnt indicate a possible action, deselect the unit.
         if not possible_actions:
             self.clear_move()
             return
@@ -274,8 +267,9 @@ class Controller(object):
                     action, = (action for action in possible_actions if action.ability == ability)
                     self.perform_action(action)
 
-        if self.game.gamestate.is_extra_action():
-            actions = self.game.gamestate.get_actions()
+        # If after the action, there is an extra action, shade the board appropriately.
+        if gamestate.is_extra_action():
+            actions = gamestate.get_actions()
             if actions:
                 self.positions["start_at"] = actions[0].start_at
                 self.draw_game()
@@ -331,7 +325,7 @@ class Controller(object):
         return self.get_choice_position({action.target_at: True, action.end_at: False})
 
     def clear_move(self):
-        self.positions = {"start_at": None, "end_at": None}
+        self.positions = {}
         self.draw_game()
 
     def upgrade_should_be_performed(self, action):
@@ -434,12 +428,12 @@ class Controller(object):
             self.trigger_artificial_intelligence()
 
     def draw_game(self, redraw_log=False, shade_actions=True):
-        if shade_actions and self.positions["start_at"] is not None:
+        if shade_actions and self.start_at:
             actions = self.game.gamestate.get_actions(self.positions)
         else:
             actions = None
         if shade_actions:
-            shade_position = self.positions["start_at"]
+            shade_position = self.start_at
         else:
             shade_position = None
         self.view.draw_game(self.game, shade_position, actions, redraw_log)

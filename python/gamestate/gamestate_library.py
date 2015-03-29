@@ -416,3 +416,8 @@ def get_enum_attributes(attributes):
             enum_dict[key] = value
         return enum_dict
 
+
+def filter_actions(actions, positions):
+    if not positions:
+        return actions
+    return [action for action in actions if all(getattr(action, key) == value for key, value in positions.items())]

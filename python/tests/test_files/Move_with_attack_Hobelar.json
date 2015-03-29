@@ -21,8 +21,7 @@
         }
     },
     "pre_positions": {
-        "start_at": "C4",
-        "end_at": "None"
+        "start_at": "C4"
     },
     "post_gamestate": {
         "turn": 1,
@@ -42,7 +41,6 @@
         }
     },
     "post_positions": {
-        "start_at": "C5",
-        "end_at": "None"
+        "start_at": "C5"
     }
 }

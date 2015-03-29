@@ -56,18 +56,12 @@ class Gamestate:
         initializer.initialize_turn(self)
 
     def get_actions(self, positions=None):
-        if not positions:
-            return self.available_actions
+        return filter_actions(self.available_actions, positions)
 
-        return [action for action in self.available_actions if all(getattr(action, key) == value for key, value in positions.items() if value is not None)]
+    def get_actions_with_move_with_attack_as_none(self):
 
-    def get_actions_with_move_with_attack_as_none(self, positions=None):
-
-        actions = action_getter.get_actions(self)
-        if positions:
-            actions = [action for action in actions if all(getattr(action, key) == value for key, value in positions.items())]
         actions_with_none = []
-        for action in actions:
+        for action in action_getter.get_actions(self):
             if action.is_attack:
                 if not action.move_with_attack:
                     action.move_with_attack = None
@@ -76,8 +70,8 @@ class Gamestate:
                 actions_with_none.append(action)
         return actions_with_none
 
-    def get_actions_including_move_with_attack_none(self, positions=None):
-        return self.get_actions(positions) + self.get_actions_with_move_with_attack_as_none(positions)
+    def get_actions_including_move_with_attack_none(self):
+        return self.get_actions() + self.get_actions_with_move_with_attack_as_none()
 
     def copy(self):
         return self.from_document(self.to_document())
@@ -209,6 +203,16 @@ class Gamestate:
         return self.board.get_upgradeable_unit()
 
     def is_post_move_with_attack_possible(self, action, outcome):
+
+        action_is_possible = False
+        for possible_action in self.get_actions():
+            if possible_action.start_at == action.start_at and possible_action.end_at == action.end_at and \
+                            possible_action.target_at == action.target_at and possible_action.move_with_attack:
+                action_is_possible = True
+
+        if not action_is_possible:
+            return False
+
         if not action.is_attack or not action.unit.is_melee:
             return False
 
