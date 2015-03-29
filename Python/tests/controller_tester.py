@@ -166,7 +166,7 @@ def utest(test_document):
 
 
 def run():
-    testcase_files = glob.glob("./test_files/*.json")
+    testcase_files = glob.glob("./tests/test_files/*.json")
     #testcase_files = ["./test_files\Hobelar_no_deselect2.json"] #running just 1 test.
 
     results = {}
@@ -195,10 +195,3 @@ def run():
         total += value
     print()
     print("Total:", str(total[True]) + " passed, " + str(total[False]) + " failed")
-
-
-except_exceptions = False
-
-if __name__ == "__main__":
-    run()
-
