@@ -1,10 +1,11 @@
-from tests import utester, setup_tester, controller_tester
+from tests import utester, setup_tester, controller_tester, speed_tester2
 
 
 testdict = {
     1:  ("Utester", utester.run),
     2:  ("Setup tester", setup_tester.run),
-    3: ("Controller tester", controller_tester.run)
+    3: ("Controller tester", controller_tester.run),
+    4: ("Speed Tester", speed_tester2.run)
 }
 
 

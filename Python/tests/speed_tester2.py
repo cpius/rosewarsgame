@@ -1,27 +1,19 @@
-import profile
-import gamestate
 import json
-from gamestate import Gamestate
-from player import Player
-from game import Game
-from common import Intelligence
-from glob import glob
+from gamestate.gamestate_module import Gamestate
+from time import time
+from gamestate import action_getter
 
 
-games = []
-for path in glob("./keep_replays/*.json"):
+def run():
+    path = "./../Version_1.0/Tests/General/Action_1.json"
     document = json.loads(open(path).read())
     gamestate = Gamestate.from_document(document["gamestate"])
-    gamestate.actions_remaining = 2
-    gamestate.set_available_actions()
-    players = [Player("Green", Intelligence.AI), Player("Red", Intelligence.AI)]
-    games.append(Game(players, gamestate))
 
+    nloops = 100
+    total_time = 0
+    for _ in range(nloops):
+        t = time()
+        action_getter.get_actions(gamestate)
+        total_time += time() - t
 
-def a():
-    for game in games:
-        game.current_player().ai.select_action(game)
-
-
-profile.run('a()')
-
+    print("Time used to find all actions", str(nloops), "times:", str(round(total_time, 3)))
