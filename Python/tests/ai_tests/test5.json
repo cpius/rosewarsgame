@@ -1,4 +1,5 @@
 {
+    "type": "Is action correct",
     "gamestate":
     {
         "actions_remaining": 2,
