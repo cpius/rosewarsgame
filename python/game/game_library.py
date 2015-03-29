@@ -48,6 +48,7 @@ def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dic
 
     return merged_dictionary
 
+
 def assert_equal_documents(testcase, expected, actual, testcase_file):
     message = "Wrong document for " + testcase_file + "\n\n"
 

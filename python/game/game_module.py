@@ -10,7 +10,6 @@ from game.game_library import document_to_string
 from datetime import datetime
 
 
-
 class Game:
     def __init__(self, players, gamestate, interaction_number=0, turn=0, created_at=datetime.utcnow()):
         self.gamestate = gamestate.copy()
