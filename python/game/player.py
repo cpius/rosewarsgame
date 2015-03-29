@@ -1,4 +1,4 @@
-import game.ai as ai
+import ai.ai as ai
 from game.enums import Intelligence
 
 
