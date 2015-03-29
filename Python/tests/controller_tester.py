@@ -82,12 +82,10 @@ def give_output(actual_gamestate, expected_gamestate, actual_positions, expected
         print("act gamestate", actual_gamestate)
         print("exp gamestate", expected_gamestate)
         print(difference_between_dictionaries(actual_gamestate, expected_gamestate))
-        print()
 
     if actual_positions != expected_positions:
         print("act position", actual_positions)
         print("exp position", expected_positions)
-        print()
 
     return False
 
@@ -168,8 +166,7 @@ def utest(test_document):
 
 
 def run():
-
-    testcase_files = glob.glob("./tests/test_files/*.json")
+    testcase_files = glob.glob("./test_files/*.json")
     #testcase_files = ["./test_files\Hobelar_no_deselect2.json"] #running just 1 test.
 
     results = {}
@@ -185,8 +182,9 @@ def run():
             test = utest(test_document)
             exception_flag = False
         finally:
-            if exception_flag:
+            if exception_flag or not test:
                 print(file)
+                print()
 
         results[test_document["type"]][test] += 1
 
