@@ -1,0 +1,59 @@
+{
+    "traits":
+    {
+        "attack_cooldown": {
+            "1": "Can only attack every third turn."
+        },
+        "berserking": {
+            "1": "Can move 4 tiles if movement ends with an attack."
+        },
+        "crusading": {
+            "1": "Friendly melee units starting their movement in one of the 8 tiles surrounding Crusader get +1A."
+        },
+        "double_attack_cost": {
+            "1": "Attack takes two actions."
+        },
+        "extra_life": {
+            "1": "It takes two successful hits to kill this unit."
+        },
+        "flag_bearing": {
+            "1": "Friendly melee units receive +2A if attacking from a tile adjacent to Flag Bearer."
+        },
+        "longsword": {
+            "1": "Also hits the 4 nearby tiles in the attack direction."
+        },
+        "rage": {
+            "1": "Can make an attack after it's move. (But not a second move.)"
+        },
+        "scouting": {
+            "1": "Can move past all units."
+        },
+        "swiftness": {
+            "1": "Can use remaining moves after attacking."
+        },
+        "attack_skill": {
+            "1": "Is added to the units base attack."
+        },
+        "defence_skill": {
+            "1": "Is added to the units base defence."
+        },
+        "range_skill": {
+            "1": "Is added to the units base range."
+        },
+        "movement_skill": {
+            "1": "Is added to the units base movement."
+        },
+        "cavalry_specialist": {
+            "1": "+1A +1D vs Cavalry."
+        }
+    },
+    "states":
+    {
+        "extra_action": "Whether the unit is doing its extra action.",
+        "lost_extra_life": "Whether the unit has lost its extra life",
+        "movement_remaining": "Movement points left for doing an extra action",
+        "used": "Whether a unit has been used this turn.",
+        "experience": "Experience.",
+        "recently_upgraded": "Whether a unit was upgraded this turn."
+    }
+}
