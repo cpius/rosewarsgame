@@ -95,3 +95,6 @@ def convert_quoted_integers_to_integers(document):
             new_document[key] = convert_quoted_integers_to_integers(value)
         return new_document
 
+
+def read_json(json_file):
+    return loads(open(json_file).read())
