@@ -360,9 +360,8 @@ class Controller(object):
             self.client.send_upgrade_choice(string_upgrade, self.game.gamestate.action_count)
 
     def perform_move_with_attack(self, action, outcome):
-        move_with_attack = self.ask_about_move_with_attack(action)
-
         self.draw_game(redraw_log=True, shade_actions=False)
+        move_with_attack = self.ask_about_move_with_attack(action)
 
         self.game.save_option("move_with_attack", move_with_attack)
         if self.game.is_enemy_network():
