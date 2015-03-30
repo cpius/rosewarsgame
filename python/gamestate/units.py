@@ -651,7 +651,10 @@ class Weaponsmith(Unit_class):
     experience_to_upgrade = 4
 
 
-def make_unit_subclasses_from_document2(document):  # Doesnt work!
+attributes_units = {}
+
+
+def make_unit_subclasses_from_document(document):
     unit_class_dictionary = {}
     for name, unit_class_content in document.items():
 
@@ -660,10 +663,12 @@ def make_unit_subclasses_from_document2(document):  # Doesnt work!
             if key in ["attack", "defence", "movement", "range"]:
                 unit_class_content["base_" + key] = value
                 del unit_class_content[key]
-        attributes = {get_enum_attributes(key): AttributeValues(level=value) for key, value in unit_class_content["attributes"].items()}
+        attributes_units[name] = {get_enum_attributes(key): value for key, value in unit_class_content["attributes"].items()}
 
         def init(self):
-            self.attributes = attributes
+            super(type(self), self).__init__()
+            for attribute, level in attributes_units[self.name].items():
+                self.set(attribute, level=level)
 
         del unit_class_content["attributes"]
         unit_class_content["__init__"] = init
@@ -675,15 +680,7 @@ def make_unit_subclasses_from_document2(document):  # Doesnt work!
     return unit_class_dictionary
 
 
-def make_unit_subclasses_from_document1(document):
-    unit_class_dictionary = {}
-    for name in document:
-        unit_class_dictionary[Unit[name]] = globals()[name]
-
-    return unit_class_dictionary
-
-
 unit_document = read_json("./../Version_1.1/Units.json")
 
 
-base_units = make_unit_subclasses_from_document1(unit_document)
+base_units = make_unit_subclasses_from_document(unit_document)
