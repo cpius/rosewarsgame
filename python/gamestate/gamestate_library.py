@@ -1,7 +1,8 @@
 from json import loads
 from collections import namedtuple
-from game.game_library import get_setting, convert_quoted_integers_to_integers, merge
+from game.game_library import convert_quoted_integers_to_integers, merge
 from gamestate.enums import *
+from game.settings import version
 
 coordinates = namedtuple("coordinates", ["x", "y"])
 
@@ -134,9 +135,9 @@ def get_attribute_from_document(attribute_name, info):
     elif attribute in Trait or attribute in Ability:
         return attribute, AttributeValues(level=info)
     elif attribute in Effect:
-        if get_setting("version") == "1.1":
+        if version == 1.1:
             return attribute, AttributeValues(**info)
-        elif get_setting("version") == "1.0":
+        elif version == 1.0:
             return attribute, AttributeValues(duration=info, level=info)
 
 board_height = 8

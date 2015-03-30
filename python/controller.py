@@ -14,6 +14,7 @@ from gamestate.gamestate_library import *
 from view.view_control_library import *
 import pygame
 import view.interface_settings as interface_settings
+from game.settings import play_fanfare, play_action_sounds, verbose
 
 
 class Controller(object):
@@ -48,7 +49,7 @@ class Controller(object):
         controller.game.gamestate.actions_remaining = 1
         controller.clear_move()
 
-        if get_setting("play_fanfare"):
+        if play_fanfare:
             controller.sound.play_fanfare()
 
         return controller
@@ -66,7 +67,7 @@ class Controller(object):
         print("current player is", player.color, player.intelligence, player.profile)
         controller.clear_move()
 
-        if get_setting("play_fanfare"):
+        if play_fanfare:
             controller.sound.play_fanfare()
 
         return controller
@@ -89,7 +90,7 @@ class Controller(object):
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence)
 
-        if get_setting("play_fanfare"):
+        if play_fanfare:
             controller.sound.play_fanfare()
 
         return controller
@@ -114,7 +115,7 @@ class Controller(object):
         if self.game.is_player_human():
             # The turn changed. Stop listening for network actions
             pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, 0)
-            if get_setting("play_fanfare"):
+            if play_fanfare:
                 self.sound.play_fanfare()
 
     def trigger_artificial_intelligence(self):
@@ -387,7 +388,7 @@ class Controller(object):
         self.view.draw_action(action, self.game)
         self.game.do_action(action, outcome)
 
-        if get_setting("play_action_sounds"):
+        if play_action_sounds:
             self.sound.play_action(action)
 
         animation_delay = interface_settings.pause_for_animation
@@ -415,7 +416,7 @@ class Controller(object):
         if not self.game.gamestate.is_extra_action():
             self.clear_move()
 
-        if get_setting("verbose"):
+        if verbose:
             print("Action performed. Expecting action from", self.game.current_player().intelligence)
 
         if self.game.is_player_human():

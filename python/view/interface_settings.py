@@ -1,5 +1,5 @@
 import view.interfaces as interfaces
-from game.game_library import get_setting
+from game.settings import zoom
 
 
 pause_for_animation_attack = 150
@@ -11,7 +11,6 @@ show_chance_of_win = False
 
 pause_for_attack_until_click = False
 
-zoom = float(get_setting("zoom"))
 interface = interfaces.Rectangles(zoom)
 
 document_ai_actions = False

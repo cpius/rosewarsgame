@@ -7,6 +7,7 @@ from gamestate.action import Action
 from gamestate.outcome import Outcome
 from game.server_library import validate_action, determine_outcome_if_any, validate_upgrade
 from gamestate.gamestate_library import *
+from game.settings import version
 
 
 def does_action_exist(test_document):
@@ -176,12 +177,9 @@ def utest(test_document):
 
 def run():
 
-    if get_setting("version") == "1.0":
-        testcase_files = glob("./../sharedtests_1.0/*/*.json")
-    else:
-        testcase_files = glob("./../Version_1.1/Tests/*/*.json")
+    testcase_files = glob("./../Version_" + str(version) + "/Tests/*/*.json")
 
     # Running just 1 test.
-    # testcase_files = ["./../sharedtests_1.1/Hobelar/Outcome_Hobelar_9.json"]
+    # testcase_files = ["./../Version_1.1/Tests/Upgrades/Upgrade_existence_Scout_1.json"]
 
     run_method(testcase_files, utest)

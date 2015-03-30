@@ -3,6 +3,7 @@ from gamestate.gamestate_library import Unit, Position, board_tiles, Type, flip_
 from gamestate.units import Unit_class
 from collections import namedtuple
 from game.game_library import *
+from game.settings import version, required_special_units, required_basic_units, beginner_mode
 
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
@@ -35,7 +36,7 @@ units_info = {Unit.Archer: Info({2, 3}, 3, False),
               Unit.War_Elephant: Info({4}, 1, False),
               Unit.Weaponsmith: Info({2, 3}, 1, True)}
 
-if get_setting("version") == "1.1":
+if version == 1.1:
     allowed_special_units = {
         Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman, Unit.Scout, Unit.Viking,
         Unit.Hobelar, Unit.Halberdier, Unit.Flanking_Cavalry, Unit.Hussar, Unit.Lancer, Unit.Royal_Guard,
@@ -45,17 +46,15 @@ if get_setting("version") == "1.1":
     allowed_basic_units = {
         Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman
     }
-    required_special_units = {}
 
-if get_setting("version") == "1.0":
+if version == 1.0:
     allowed_special_units = {
         Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman, Unit.Scout, Unit.Viking,
         Unit.Hobelar}
     allowed_basic_units = {
         Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman}
-    required_special_units = {}
 
-if get_setting("Beginner_mode"):
+if beginner_mode:
     basic_unit_count, special_unit_count = 9, 0
 else:
     basic_unit_count, special_unit_count = 6, 3

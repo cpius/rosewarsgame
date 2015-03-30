@@ -7,6 +7,7 @@ from game.game_library import *
 from game.enums import *
 from view.view_module import View
 import pygame
+from game.settings import profile
 
 
 def pause():
@@ -53,7 +54,6 @@ def menu_choice(view, menu):
 
 
 def figure_out_player_profile(view):
-    profile = get_setting("profile")
 
     if profile:
         return profile
