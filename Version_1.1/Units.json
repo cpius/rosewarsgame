@@ -1,0 +1,427 @@
+{
+    "Archer": {
+        "type": "Infantry",
+        "attack": 2,
+        "defence": 2,
+        "movement": 1,
+        "range": 4,
+        "attributes": {
+            "arrows": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"sharpshooting": 1},
+            "repeat_1": {"range_skill": 1},
+            "repeat_2": {"attack_skill": 1}
+        }
+    },
+    "Pikeman": {
+        "type": "Infantry",
+        "attack": 2,
+        "defence": 2,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "cavalry_specialist": 1,
+            "zoc_cavalry": 1
+        },
+        "experience_to_upgrade": 3,
+        "upgrades": {
+            "unit_1": "Halberdier",
+            "unit_2": "Royal_Guard"
+        }
+    },
+    "Halberdier": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 2,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "push": 1,
+            "cavalry_specialist": 1,
+            "zoc_cavalry": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"flag_bearing": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Light_Cavalry": {
+        "type": "Cavalry",
+        "attack": 2,
+        "defence": 2,
+        "movement": 4,
+        "range": 1,
+        "attributes": {},
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "unit_1": "Flanking_Cavalry",
+            "unit_2": "Hussar"
+        }
+    },
+    "Flanking_Cavalry": {
+        "type": "Cavalry",
+        "attack": 2,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "flanking": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"flanking": 1},
+            "repeat_1": {"movement_skill": 1},
+            "repeat_2": {"attack_skill": 1}
+        }
+    },
+    "Hussar": {
+        "type": "Cavalry",
+        "attack": 2,
+        "defence": 2,
+        "movement": 4,
+        "range": 1,
+        "attributes": {
+            "ride_through": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"movement_skill": 1}
+        }
+    },
+    "Knight": {
+        "type": "Cavalry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 2,
+        "range": 1,
+        "attributes": {},
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "unit_1": "Lancer",
+            "unit_2": "Hobelar"}
+    },
+    "Lancer": {
+        "type": "Cavalry",
+        "attack": 2,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "lancing": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"lancing": 1, "movement_skill": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Hobelar": {
+        "type": "Cavalry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "swiftness": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"cavalry_specialist": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Ballista": {
+        "type": "War Machine",
+        "attack": 4,
+        "defence": 1,
+        "movement": 1,
+        "range": 3,
+        "attributes": {
+            "attack_cooldown": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"fire_arrows": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"range_skill": 1}
+        }
+    },
+    "Catapult": {
+        "type": "War_Machine",
+        "attack": 6,
+        "defence": 2,
+        "movement": 1,
+        "range": 3,
+        "attributes": {
+            "double_attack_cost": 1
+        },
+        "experience_to_upgrade": 3,
+        "upgrades": {
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"range_skill": 1, "attack_skill": -1}
+        }
+    },
+    "Royal_Guard": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "defence_maneuverability": 1,
+            "rage": 1,
+            "zoc_all": 1
+        },
+        "experience_to_upgrade": 3,
+        "upgrades": {
+            "once_1": {"melee_expert": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Scout": {
+        "type": "Cavalry",
+        "attack": 0,
+        "defence": 2,
+        "movement": 4,
+        "range": 1,
+        "attributes": {
+            "scouting": 1
+        },
+        "experience_to_upgrade": 2,
+        "upgrades": {
+            "once_1": {"tall_shield": 1},
+            "once_2": {"attack_skill": 2},
+            "repeat_1": {"movement_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Viking": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 2,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "extra_life": 1,
+            "rage": 1,
+            "helmet": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"war_machine_specialist": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Javeliner": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "javelin": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Cannon": {
+        "type": "War Machine",
+        "attack": 5,
+        "defence": 1,
+        "movement": 1,
+        "range": 3,
+        "attributes": {
+            "attack_cooldown": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"far_sighted": 1, "attack_cooldown": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"range_skill": 1}
+        }
+    },
+    "Trebuchet": {
+        "type": "War_Machine",
+        "attack": 3,
+        "defence": 1,
+        "movement": 1,
+        "range": 3,
+        "attributes": {
+            "spread_attack": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"range_skill": 1}
+        }
+    },
+    "Flag_Bearer": {
+        "type": "Cavalry",
+        "attack": 2,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "flag_bearing": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"flag_bearing": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Longswordsman": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "longsword": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"rage": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Crusader": {
+        "type": "Cavalry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "crusading": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"crusading": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Berserker": {
+        "type": "Infantry",
+        "attack": 5,
+        "defence": 1,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "berserking": 1
+        },
+        "experience_to_upgrade": 3,
+        "upgrades": {
+            "once_1": {"big_shield": 1},
+            "once_2": {"attack_skill": 2},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "War_Elephant": {
+        "type": "Cavalry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 2,
+        "range": 1,
+        "attributes": {
+            "double_attack_cost": 1,
+            "triple_attack": 1,
+            "push": 1
+        },
+        "experience_to_upgrade": 3,
+        "upgrades": {
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Fencer": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "combat_agility": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"defence_skill": 1}
+        }
+    },
+    "Saboteur": {
+        "type": "Specialist",
+        "attack": 0,
+        "defence": 2,
+        "movement": 1,
+        "range": 3,
+        "attributes": {
+            "bribe": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"sabotage": 1},
+            "once_2": {"poison": 1},
+            "repeat_1": {"range_skill": 1}
+        }
+    },
+    "Diplomat": {
+        "type": "Specialist",
+        "attack": 0,
+        "defence": 2,
+        "movement": 1,
+        "range": 3,
+        "attributes": {
+            "bribe": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"bribe": 1},
+            "repeat_1": {"range_skill": 1}
+        }
+    },
+    "Assassin": {
+        "type": "Specialist",
+        "attack": 0,
+        "defence": 2,
+        "movement": 1,
+        "range": 11,
+        "attributes": {
+            "assassinate": 1
+        },
+        "experience_to_upgrade": 2,
+        "upgrades": {
+            "once_1": {"assassinate": 1}
+        }
+    },
+    "Weaponsmith": {
+        "type": "Specialist",
+        "attack": 0,
+        "defence": 2,
+        "movement": 1,
+        "range": 4,
+        "attributes": {
+            "improve_weapons": 1
+        },
+        "experience_to_upgrade": 4,
+        "upgrades": {
+            "once_1": {"improve_weapons": 1},
+            "repeat_1": {"range_skill": 1}
+        }
+    }
+}
