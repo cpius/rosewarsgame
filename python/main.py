@@ -9,7 +9,6 @@ from view.view_module import View
 import pygame
 
 
-
 def pause():
     while True:
         event = pygame.event.wait()
