@@ -18,7 +18,6 @@
         "actions_remaining": 0,
         "player1_units": {
             "E4": {
-                "experience": 0,
                 "used": 1,
                 "name": "Ballista"
             }
