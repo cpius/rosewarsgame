@@ -4,110 +4,110 @@ from enum import Enum
 class Type(Enum):
     Cavalry = 1
     Infantry = 2
-    War_Machine = 3
-    Specialist = 4
+    Specialist = 3
+    War_Machine = 4
 
 
 class State(Enum):
-    extra_action = 1
-    movement_remaining = 2
-    lost_extra_life = 3
-    experience = 4
-    used = 5
-    recently_bribed = 6
-    recently_upgraded = 7
-    javelin_thrown = 8
-    flanked = 9
-    attack_frozen = 10
+    attack_frozen = 1
+    experience = 2
+    extra_action = 3
+    flanked = 4
+    javelin_thrown = 5
+    lost_extra_life = 6
+    movement_remaining = 7
+    recently_bribed = 8
+    recently_upgraded = 9
+    used = 10
 
 
 class Trait(Enum):
-    berserking = 1
-    big_shield = 2
-    combat_agility = 3
-    defence_maneuverability = 4
-    double_attack_cost = 5
-    extra_life = 6
-    melee_expert = 7
-    melee_freeze = 8
-    longsword = 9
-    push = 10
-    rage = 11
-    scouting = 12
-    sharpshooting = 13
-    swiftness = 14
-    tall_shield = 15
-    triple_attack = 16
-    lancing = 17
-    attack_cooldown = 18
-    far_sighted = 19
-    flag_bearing = 20
-    crusading = 21
-    pikeman_specialist = 22
-    attack_skill = 23
-    defence_skill = 24
-    range_skill = 25
-    movement_skill = 26
-    fire_arrows = 27
-    cavalry_specialist = 28
-    war_machine_specialist = 29
-    flanking = 30
-    ride_through = 31
+    arrows = 1
+    attack_cooldown = 2
+    attack_skill = 3
+    berserking = 4
+    big_shield = 5
+    cavalry_specialist = 6
+    combat_agility = 7
+    crusading = 8
+    defence_maneuverability = 9
+    defence_skill = 10
+    double_attack_cost = 11
+    extra_life = 12
+    far_sighted = 13
+    fire_arrows = 14
+    flag_bearing = 15
+    flanking = 16
+    helmet = 17
+    javelin = 18
+    lancing = 19
+    longsword = 20
+    melee_expert = 21
+    melee_freeze = 22
+    movement_skill = 23
+    pikeman_specialist = 24
+    push = 25
+    rage = 26
+    range_skill = 27
+    rapier = 28
+    ride_through = 29
+    scouting = 30
+    sharpshooting = 31
     spread_attack = 32
-    javelin = 33
-    zoc_cavalry = 34
-    zoc_all = 35
-    arrows = 36
-    helmet = 37
-    rapier = 38
+    swiftness = 33
+    tall_shield = 34
+    triple_attack = 35
+    war_machine_specialist = 36
+    zoc_all = 37
+    zoc_cavalry = 38
 
 
 class Ability(Enum):
-    bribe = 1
-    improve_weapons = 2
-    poison = 3
-    sabotage = 4
-    assassinate = 5
+    assassinate = 1
+    bribe = 2
+    improve_weapons = 3
+    poison = 4
+    sabotage = 5
 
 
 class Effect(Enum):
-    bribed = 2
-    improved_weapons = 3
-    poisoned = 4
-    sabotaged = 5
+    bribed = 1
+    improved_weapons = 2
+    poisoned = 3
+    sabotaged = 4
 
 
 class Unit(Enum):
     Archer = 1
-    Ballista = 2
-    Catapult = 3
-    Knight = 4
-    Light_Cavalry = 5
-    Pikeman = 6
-    Berserker = 7
-    Cannon = 8
-    Crusader = 9
+    Assassin = 2
+    Ballista = 3
+    Berserker = 4
+    Cannon = 5
+    Catapult = 6
+    Crusader = 7
+    Diplomat = 8
+    Fencer = 9
     Flag_Bearer = 10
-    Longswordsman = 11
-    Saboteur = 12
-    Royal_Guard = 13
-    Scout = 14
-    War_Elephant = 15
-    Weaponsmith = 16
-    Viking = 17
-    Diplomat = 18
-    Halberdier = 19
-    Hussar = 20
-    Flanking_Cavalry = 21
-    Hobelar = 22
-    Lancer = 23
-    Fencer = 24
-    Assassin = 25
-    Trebuchet = 26
-    Javeliner = 27
+    Flanking_Cavalry = 11
+    Halberdier = 12
+    Hobelar = 13
+    Hussar = 14
+    Javeliner = 15
+    Knight = 16
+    Lancer = 17
+    Light_Cavalry = 18
+    Longswordsman = 19
+    Pikeman = 20
+    Royal_Guard = 21
+    Saboteur = 22
+    Scout = 23
+    Trebuchet = 24
+    Viking = 25
+    War_Elephant = 26
+    Weaponsmith = 27
 
 
 class ActionType(Enum):
-    Attack = 1
-    Ability = 2
+    Ability = 1
+    Attack = 2
     Move = 3
