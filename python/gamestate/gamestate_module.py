@@ -2,7 +2,7 @@ import gamestate.battle as battle
 import gamestate.action_doer as action_doer
 import gamestate.initializer as initializer
 import gamestate.action_getter as action_getter
-from gamestate.units import Unit_class
+from gamestate.units import Unit_class, base_units
 import json
 from gamestate.gamestate_library import *
 from gamestate.board import Board
@@ -120,9 +120,12 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if type(unit_document) is str:
-                unit = Unit_class.make(Unit[unit_document.replace(" ", "_")])
+                unit_class = base_units[Unit[unit_document.replace(" ", "_")]]
+                unit = unit_class()
+
             else:
-                unit = Unit_class.make(Unit[unit_document["name"].replace(" ", "_")])
+                unit_class = base_units[Unit[unit_document["name"].replace(" ", "_")]]
+                unit = unit_class()
 
                 for attribute_name, number in unit_document.items():
                     if type(number) is bool:

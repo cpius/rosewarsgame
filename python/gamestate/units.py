@@ -195,7 +195,7 @@ class Unit_class():
             if upgrade in Unit:
                 return False
             for attribute, level in upgrade.items():
-                return self.has(attribute, level) and not base_units[self.unit].has(attribute, level)
+                return self.has(attribute, level) and not base_units[self.unit]().has(attribute, level)
 
         def is_final_upgrade(upgrade):
             upgrade_index = self.upgrades.index(upgrade)
@@ -231,7 +231,7 @@ class Unit_class():
 
     def to_document(self):
         write_attributes = {attribute: attribute_values for attribute, attribute_values in self.attributes.items() if
-                            not base_units[self.unit].has(attribute)}
+                            not base_units[self.unit]().has(attribute)}
 
         if write_attributes:
             unit_dict = get_string_attributes(write_attributes)
@@ -651,4 +651,39 @@ class Weaponsmith(Unit_class):
     experience_to_upgrade = 4
 
 
-base_units = {unit: Unit_class.make(unit) for unit in list(Unit)}
+def make_unit_subclasses_from_document2(document):  # Doesnt work!
+    unit_class_dictionary = {}
+    for name, unit_class_content in document.items():
+
+        unit_class_content["unit"] = Unit[name]
+        for key, value in unit_class_content.items():
+            if key in ["attack", "defence", "movement", "range"]:
+                unit_class_content["base_" + key] = value
+                del unit_class_content[key]
+        attributes = {get_enum_attributes(key): AttributeValues(level=value) for key, value in unit_class_content["attributes"].items()}
+
+        def init(self):
+            self.attributes = attributes
+
+        del unit_class_content["attributes"]
+        unit_class_content["__init__"] = init
+        unit_class_content["type"] = Type[unit_class_content["type"]]
+        unit_class = type(name, (Unit_class,), unit_class_content)
+
+        unit_class_dictionary[Unit[name]] = unit_class
+
+    return unit_class_dictionary
+
+
+def make_unit_subclasses_from_document1(document):
+    unit_class_dictionary = {}
+    for name in document:
+        unit_class_dictionary[Unit[name]] = globals()[name]
+
+    return unit_class_dictionary
+
+
+unit_document = read_json("./../Version_1.1/Units.json")
+
+
+base_units = make_unit_subclasses_from_document1(unit_document)
