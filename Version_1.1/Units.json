@@ -112,7 +112,8 @@
         "movement": 3,
         "range": 1,
         "attributes": {
-            "lancing": 1
+            "lancing": 1,
+            "cavalry_specialist": 1
         },
         "experience_to_upgrade": 4,
         "upgrades": {
@@ -138,7 +139,7 @@
         }
     },
     "Ballista": {
-        "type": "War Machine",
+        "type": "War_Machine",
         "attack": 4,
         "defence": 1,
         "movement": 1,
@@ -237,7 +238,7 @@
         }
     },
     "Cannon": {
-        "type": "War Machine",
+        "type": "War_Machine",
         "attack": 5,
         "defence": 1,
         "movement": 1,
@@ -356,7 +357,8 @@
         "movement": 1,
         "range": 1,
         "attributes": {
-            "combat_agility": 1
+            "combat_agility": 1,
+            "rapier": 1
         },
         "experience_to_upgrade": 4,
         "upgrades": {
