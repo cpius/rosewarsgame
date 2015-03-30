@@ -1,6 +1,7 @@
 from gamestate.gamestate_library import *
 from game.game_library import *
 from gamestate.enums import *
+from game.settings import beginner_mode
 
 
 class Unit_class():
@@ -15,7 +16,7 @@ class Unit_class():
     base_range = 0
     base_movement = 0
     level = 0
-    upgrades = []
+    upgrades = {}
 
     @property
     def attack(self):
@@ -114,7 +115,7 @@ class Unit_class():
             del self.attributes[attribute]
 
     def gain_experience(self):
-        if not self.has(State.used) and not get_setting("Beginner_mode"):
+        if not self.has(State.used) and not beginner_mode:
             if State.experience in self.attributes:
                 self.attributes[State.experience].value += 1
             else:
@@ -148,7 +149,7 @@ class Unit_class():
         :return: An instance of a Unit_class object, based on the unit and with the upgrade.
         """
         if upgrade in Unit:
-            upgraded_unit = self.make(upgrade)
+            upgraded_unit = base_units[upgrade]()
             for attribute in self.attributes:
                 if attribute in State or attribute in Effect:
                     upgraded_unit.attributes[attribute] = self.attributes[attribute]
@@ -156,7 +157,7 @@ class Unit_class():
             upgraded_unit.remove(State.experience)
             return upgraded_unit
         else:
-            upgraded_unit = Unit_class.make(self.unit)
+            upgraded_unit = base_units[self.unit]()
             upgraded_unit.attributes = dict(self.attributes)
             for key, attributes in upgrade.items():
                 if key in upgraded_unit.attributes:
@@ -185,7 +186,7 @@ class Unit_class():
         :return: The chosen unit upgrade in enum upgrade format. (Dictionary with enums as keys and AttributeValues as
         values.)
         """
-        if get_setting("version") == "1.0":
+        if version == 1.0:
             if choice == 1:
                 return {Trait.attack_skill: AttributeValues(level=1)}
             else:
@@ -194,14 +195,10 @@ class Unit_class():
         def has_upgrade(upgrade):
             if upgrade in Unit:
                 return False
-            for attribute, level in upgrade.items():
+            for attribute, attribute_values in upgrade.items():
+                level = attribute_values.level
                 return self.has(attribute, level) and not base_units[self.unit]().has(attribute, level)
 
-        def is_final_upgrade(upgrade):
-            upgrade_index = self.upgrades.index(upgrade)
-            upgrades_count = len(self.upgrades)
-
-            return upgrade_index == upgrades_count - 1 or upgrade_index == upgrades_count - 2
 
         def translate_to_enum_format(upgrade):
             if upgrade in Unit:
@@ -209,14 +206,29 @@ class Unit_class():
             else:
                 upgrade_enum_format = {}
                 for attribute_enum, number in upgrade.items():
-                    upgrade_enum_format[attribute_enum] = AttributeValues(level=number)
+                    upgrade_enum_format[get_enum_attributes(attribute_enum)] = AttributeValues(level=number)
                 return upgrade_enum_format
 
         possible_upgrade_choices = []
-        for upgrade in self.upgrades:
-            if not has_upgrade(upgrade) or is_final_upgrade(upgrade):
-                possible_upgrade_choices.append(translate_to_enum_format(upgrade))
+        if "unit_1" in self.upgrades:
+            possible_upgrade_choices.append(Unit[self.upgrades["unit_1"]])
+        if "unit_2" in self.upgrades:
+            possible_upgrade_choices.append(Unit[self.upgrades["unit_2"]])
+        if "once_1" in self.upgrades:
+            upgrade = translate_to_enum_format(self.upgrades["once_1"])
+            if not has_upgrade(upgrade):
+                possible_upgrade_choices.append(upgrade)
+        if "once_2" in self.upgrades:
+            upgrade = translate_to_enum_format(self.upgrades["once_2"])
+            if not has_upgrade(upgrade):
+                possible_upgrade_choices.append(upgrade)
+        if "repeat_1" in self.upgrades:
+            possible_upgrade_choices.append(translate_to_enum_format(self.upgrades["repeat_1"]))
+        if "repeat_2" in self.upgrades:
+            possible_upgrade_choices.append(translate_to_enum_format(self.upgrades["repeat_2"]))
 
+        print(self.attributes)
+        print(possible_upgrade_choices)
         return possible_upgrade_choices[choice]
 
 

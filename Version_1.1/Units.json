@@ -244,7 +244,7 @@
         "attributes": {
             "attack_cooldown": 1
         },
-        "experience_to_upgrade": 4,
+        "experience_to_upgrade": 3,
         "upgrades": {
             "once_1": {"far_sighted": 1, "attack_cooldown": 1},
             "repeat_1": {"attack_skill": 1},
