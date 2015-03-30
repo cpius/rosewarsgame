@@ -162,7 +162,15 @@ def get_unit_actions(unit, start_at, gamestate):
     enemy_units = gamestate.enemy_units
     units = merge(player_units, enemy_units)
 
-    zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
+    zoc_blocks = set()
+    for position, enemy_unit in enemy_units.items():
+        if enemy_unit.has(Trait.zoc_all):
+            zoc_blocks.add(position)
+        elif enemy_unit.has(Trait.zoc_cavalry) and unit.type == Type.Cavalry:
+            zoc_blocks.add(position)
+    zoc_blocks = frozenset(zoc_blocks)
+
+    #zoc_blocks = frozenset(position for position, enemy_unit in enemy_units.items() if unit.type in enemy_unit.zoc)
 
     moveset_with_leftover, moveset_no_leftover = generate_movesets(unit.movement)
     moveset = moveset_with_leftover | moveset_no_leftover

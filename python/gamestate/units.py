@@ -1,5 +1,6 @@
 from gamestate.gamestate_library import *
 from game.game_library import *
+from gamestate.enums import *
 
 
 class Unit_class():
@@ -7,17 +8,12 @@ class Unit_class():
         self.attributes = {}
 
     unit = None
-    zoc = []
-    abilities = []
+    type = None
     experience_to_upgrade = 0
-    attack_bonuses = {}
-    defence_bonuses = {}
-    attributes = {}
     base_attack = 0
     base_defence = 0
     base_range = 0
     base_movement = 0
-    type = None
     level = 0
     upgrades = []
 
@@ -223,6 +219,8 @@ class Unit_class():
 
         return possible_upgrade_choices[choice]
 
+
+
     @property
     def unit_level(self):
         return self.get_state(State.experience) // self.experience_to_upgrade
@@ -246,16 +244,22 @@ class Unit_class():
     def make(cls, unit):
         return globals()[unit.name]()
 
+    @classmethod
+    def from_document(cls, document):
+        unit = Unit_class(attributes={"rage": 1, "helmet": 1})
+        return unit
+
 
 class Archer(Unit_class):
-
+    def __init__(self):
+        super(Archer, self).__init__()
+        self.set(Trait.arrows, level=1)
     unit = Unit.Archer
     type = Type.Infantry
     base_attack = 2
     base_defence = 2
     base_movement = 1
     base_range = 4
-    attack_bonuses = {Type.Infantry: 1}
     upgrades = [{Trait.sharpshooting: 1}, {Trait.fire_arrows: 1}, {Trait.range_skill: 1}, {Trait.attack_skill: 1}]
     experience_to_upgrade = 4
 
@@ -264,13 +268,13 @@ class Pikeman(Unit_class):
     def __init__(self):
         super(Pikeman, self).__init__()
         self.set(Trait.cavalry_specialist, level=1)
+        self.set(Trait.zoc_cavalry, level=1)
     unit = Unit.Pikeman
     type = Type.Infantry
     base_attack = 2
     base_defence = 2
     base_movement = 1
     base_range = 1
-    zoc = [Type.Cavalry]
     upgrades = [Unit.Halberdier, Unit.Royal_Guard]
     experience_to_upgrade = 3
 
@@ -280,13 +284,13 @@ class Halberdier(Unit_class):
         super(Halberdier, self).__init__()
         self.set(Trait.push, level=1)
         self.set(Trait.cavalry_specialist, level=1)
+        self.set(Trait.zoc_cavalry, level=1)
     unit = Unit.Halberdier
     type = Type.Infantry
     base_attack = 3
     base_defence = 2
     base_movement = 1
     base_range = 1
-    zoc = [Type.Cavalry]
     upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 
@@ -349,6 +353,7 @@ class Lancer(Unit_class):
     def __init__(self):
         super(Lancer, self).__init__()
         self.set(Trait.lancing, level=1)
+        self.set(Trait.cavalry_specialist, level=1)
 
     unit = Unit.Lancer
     type = Type.Cavalry
@@ -356,7 +361,6 @@ class Lancer(Unit_class):
     base_defence = 3
     base_movement = 3
     base_range = 1
-    attack_bonuses = {Type.Cavalry: 1}
     upgrades = [{Trait.lancing: 1, Trait.movement_skill: 1}, {Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 
@@ -407,6 +411,7 @@ class Royal_Guard(Unit_class):
     def __init__(self):
         super(Royal_Guard, self).__init__()
         self.set(Trait.defence_maneuverability, level=1)
+        self.set(Trait.zoc_all)
   
     unit = Unit.Royal_Guard
     type = Type.Infantry
@@ -414,7 +419,6 @@ class Royal_Guard(Unit_class):
     base_defence = 3
     base_movement = 1
     base_range = 1
-    zoc = [Type.Cavalry, Type.Infantry, Type.War_Machine, Type.Specialist]
     upgrades = [{Trait.melee_expert: 1}, {Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 3
 
@@ -439,6 +443,7 @@ class Viking(Unit_class):
         super(Viking, self).__init__()
         self.set(Trait.rage, level=1)
         self.set(Trait.extra_life, level=1)
+        self.set(Trait.helmet, level=1)
 
     unit = Unit.Viking
     type = Type.Infantry
@@ -446,7 +451,6 @@ class Viking(Unit_class):
     base_defence = 2
     base_movement = 1
     base_range = 1
-    defence_bonuses = {Type.War_Machine: 1}
     upgrades = [{Trait.war_machine_specialist: 1}, {Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 
@@ -577,6 +581,7 @@ class Fencer(Unit_class):
     def __init__(self):
         super(Fencer, self).__init__()
         self.set(Trait.combat_agility, level=1)
+        self.set(Trait.rapier, level=1)
 
     unit = Unit.Fencer
     type = Type.Infantry
@@ -584,7 +589,6 @@ class Fencer(Unit_class):
     base_defence = 3
     base_movement = 1
     base_range = 1
-    attack_bonuses = {Type.Infantry: 1}
     upgrades = [{Trait.attack_skill: 1}, {Trait.defence_skill: 1}]
     experience_to_upgrade = 4
 

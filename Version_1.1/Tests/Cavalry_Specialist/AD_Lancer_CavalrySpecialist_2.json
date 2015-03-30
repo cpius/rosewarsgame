@@ -12,8 +12,7 @@
         "actions_remaining": 1,
         "player1_units": {
             "B2": {
-                "name": "Lancer",
-                "cavalry_specialist": 1
+                "name": "Lancer"
             },
             "A3": "Archer"
         },

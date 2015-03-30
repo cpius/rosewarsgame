@@ -55,6 +55,11 @@ class Trait(Enum):
     ride_through = 31
     spread_attack = 32
     javelin = 33
+    zoc_cavalry = 34
+    zoc_all = 35
+    arrows = 36
+    helmet = 37
+    rapier = 38
 
 
 class Ability(Enum):
