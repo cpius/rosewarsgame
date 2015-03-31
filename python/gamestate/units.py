@@ -192,40 +192,19 @@ class Unit_class():
             else:
                 return {Trait.defence_skill: AttributeValues(level=1)}
 
-        def has_upgrade(upgrade):
-            if upgrade in Unit:
+        def has_upgrade(check_upgrade):
+            if check_upgrade in Unit:
                 return False
-            for attribute, attribute_values in upgrade.items():
+            for attribute, attribute_values in check_upgrade.items():
                 level = attribute_values.level
                 return self.has(attribute, level) and not base_units[self.unit]().has(attribute, level)
 
-
-        def translate_to_enum_format(upgrade):
-            if upgrade in Unit:
-                return upgrade
-            else:
-                upgrade_enum_format = {}
-                for attribute_enum, number in upgrade.items():
-                    upgrade_enum_format[get_enum_attributes(attribute_enum)] = AttributeValues(level=number)
-                return upgrade_enum_format
-
         possible_upgrade_choices = []
-        if "unit_1" in self.upgrades:
-            possible_upgrade_choices.append(Unit[self.upgrades["unit_1"]])
-        if "unit_2" in self.upgrades:
-            possible_upgrade_choices.append(Unit[self.upgrades["unit_2"]])
-        if "once_1" in self.upgrades:
-            upgrade = translate_to_enum_format(self.upgrades["once_1"])
-            if not has_upgrade(upgrade):
-                possible_upgrade_choices.append(upgrade)
-        if "once_2" in self.upgrades:
-            upgrade = translate_to_enum_format(self.upgrades["once_2"])
-            if not has_upgrade(upgrade):
-                possible_upgrade_choices.append(upgrade)
-        if "repeat_1" in self.upgrades:
-            possible_upgrade_choices.append(translate_to_enum_format(self.upgrades["repeat_1"]))
-        if "repeat_2" in self.upgrades:
-            possible_upgrade_choices.append(translate_to_enum_format(self.upgrades["repeat_2"]))
+        for upgrade_category in ["once_1", "once_2", "unit_1", "unit_2", "repeat_1", "repeat_2"]:
+            if upgrade_category in self.upgrades:
+                upgrade = get_enum_attributes(self.upgrades[upgrade_category])
+                if not (upgrade_category in ["once_1", "once_2"] and has_upgrade(upgrade)):
+                    possible_upgrade_choices.append(upgrade)
 
         return possible_upgrade_choices[choice]
 
