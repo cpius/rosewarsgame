@@ -3,6 +3,8 @@ from view.viewgame import Viewgame
 from view.viewinfo import Viewinfo
 from view.view_control_library import *
 from view.view_display_library import *
+import game.settings as settings
+import view.interfaces as interfaces
 
 
 class View():
@@ -11,7 +13,7 @@ class View():
         pygame.mixer.init()
 
         self.zoom = settings.zoom
-        self.interface = settings.interface
+        self.interface = getattr(interfaces, settings.interface_name)(settings.zoom)
         self.interface.load_fonts(self.zoom)
         self.screen = pygame.display.set_mode(self.interface.board_size)
         self.viewlog = Viewlog(self.zoom, self.interface, self.screen)

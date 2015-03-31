@@ -13,8 +13,7 @@ from game.sound import Sound
 from gamestate.gamestate_library import *
 from view.view_control_library import *
 import pygame
-import view.interface_settings as interface_settings
-from game.settings import play_fanfare, play_action_sounds, verbose
+from game.settings import *
 
 
 class Controller(object):
@@ -391,9 +390,9 @@ class Controller(object):
         if play_action_sounds:
             self.sound.play_action(action)
 
-        animation_delay = interface_settings.pause_for_animation
+        animation_delay = pause_for_animation
         if action.is_attack:
-            animation_delay = interface_settings.pause_for_animation_attack
+            animation_delay = pause_for_animation_attack
         pygame.time.delay(animation_delay)
         self.draw_game()
 
