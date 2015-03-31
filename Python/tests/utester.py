@@ -7,7 +7,7 @@ from gamestate.action import Action
 from gamestate.outcome import Outcome
 from game.server_library import validate_action, determine_outcome_if_any, validate_upgrade
 from gamestate.gamestate_library import *
-from game.settings import version
+from game import settings
 
 
 def does_action_exist(test_document):
@@ -185,3 +185,17 @@ def run():
     # testcase_files = ["./../Version_1.1/Tests/Upgrades/Upgrade_existence_Scout_1.json"]
 
     run_method(testcase_files, utest)
+
+
+def run10():
+    global version
+    version = 1.0
+
+    run()
+
+
+def run11():
+    global version
+    version = 1.1
+
+    run()
