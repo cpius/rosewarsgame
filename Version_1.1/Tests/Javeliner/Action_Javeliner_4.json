@@ -1,0 +1,23 @@
+{
+    "type": "Does action exist",
+    "description": "Javeliner is blocked from making a move_with_attack by Royal Guard",
+    "result": false,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C3",
+        "target_at": "C4",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A1": "Archer",
+            "C3": "Javeliner"
+        },
+        "player2_units": {
+            "C4": "Longswordsman",
+            "E4": "Knight",
+            "D3": "Royal_Guard"
+        }
+    }
+}
