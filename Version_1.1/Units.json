@@ -163,8 +163,8 @@
         },
         "experience_to_upgrade": 3,
         "upgrades": {
-            "repeat_1": {"attack_skill": 1},
-            "repeat_2": {"range_skill": 1, "attack_skill": -1}
+            "once_1": {"defence_skill": 1},
+            "repeat_1": {"attack_skill": 1}
         }
     },
     "Royal_Guard": {
