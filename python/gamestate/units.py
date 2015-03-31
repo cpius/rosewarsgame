@@ -208,8 +208,6 @@ class Unit_class():
 
         return possible_upgrade_choices[choice]
 
-
-
     @property
     def unit_level(self):
         return self.get_state(State.experience) // self.experience_to_upgrade
@@ -228,10 +226,6 @@ class Unit_class():
             return unit_dict
         else:
             return self.name
-
-    @classmethod
-    def make(cls, unit):
-        return globals()[unit.name]()
 
 
 attributes_units = {}
