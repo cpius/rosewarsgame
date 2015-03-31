@@ -1,0 +1,25 @@
+{
+    "type": "Is action correct",
+    "gamestate":
+    {
+        "actions_remaining": 2,
+        "player1_units": {
+            "B6": "Light Cavalry",
+            "B4": "Ballista"
+        },
+        "player2_units": {
+            "B7": "Pikeman",
+            "A7": "Knight",
+            "C7": "Knight",
+            "D7": "Archer",
+            "E7": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "B4",
+        "end_at": "B4",
+        "target_at": "B7"
+    }
+}
+

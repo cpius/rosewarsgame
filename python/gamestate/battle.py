@@ -8,10 +8,10 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if attacking_unit.is_melee and defending_unit.has(Trait.big_shield):
         defence_adjusters += 2
 
-    if attacking_unit.type in defending_unit.defence_bonuses:
-        defence_adjusters += defending_unit.defence_bonuses[attacking_unit.type]
-
     if defending_unit.has(Effect.improved_weapons):
+        defence_adjusters += 1
+
+    if attacking_unit.type == Type.War_Machine and defending_unit.has(Trait.sturdy_helmet):
         defence_adjusters += 1
 
     if attacking_unit.is_melee and defending_unit.has(Trait.melee_expert):
@@ -76,7 +76,7 @@ def get_attack(action, gamestate, is_sub_action=False):
         attack += lancing(action)
 
     if flanking(action):
-        attack += 2 * attacking_unit.get_level(Trait.flanking)
+        attack += 2 * attacking_unit.get(Trait.flanking)
 
     if action.start_at in gamestate.bonus_tiles[Trait.crusading][1]:
         attack += 1
@@ -103,8 +103,8 @@ def get_attack(action, gamestate, is_sub_action=False):
     if attacking_unit.has(Effect.improved_weapons, 2):
         attack += 2
 
-    if defending_unit.type in attacking_unit.attack_bonuses:
-        attack += attacking_unit.attack_bonuses[defending_unit.type]
+    if attacking_unit.has(Trait.arrows) and defending_unit.type == Type.Infantry:
+        attack += 1
 
     if defending_unit.has(Trait.pikeman_specialist) and attacking_unit == Unit.Pikeman:
         attack += 1

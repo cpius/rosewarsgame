@@ -1,0 +1,23 @@
+{
+    "type": "Does action exist",
+    "description": "If viking is pushed but can't retreat, the pushing unit can't move forward.",
+    "result": false,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C3",
+        "target_at": "C4",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A2": "Archer",
+            "C3": "Halberdier"
+        },
+        "player2_units": {
+            "C5": "Longswordsman",
+            "E4": "Knight",
+            "C4": "Viking"
+        }
+    }
+}

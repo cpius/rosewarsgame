@@ -1,0 +1,21 @@
+{
+    "type": "Is action correct",
+    "gamestate":
+    {
+        "actions_remaining": 1,
+        "player1_units": {
+            "D6": "Viking",
+            "B6": "Pikeman"
+        },
+        "player2_units": {
+            "A4": "Knight",
+            "C5": "Archer"
+        }
+    },
+    "action":
+    {
+        "start_at": "D6",
+        "end_at": "D7"
+    }
+}
+

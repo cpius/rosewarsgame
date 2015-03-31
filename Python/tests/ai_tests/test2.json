@@ -1,0 +1,20 @@
+{
+    "type": "Is action correct",
+    "gamestate":
+    {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B6": "Pikeman",
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "B5": "Pikeman",
+            "E5": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "B6",
+        "end_at": "B7"
+    }
+}

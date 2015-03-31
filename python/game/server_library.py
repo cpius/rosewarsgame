@@ -1,6 +1,7 @@
 from gamestate.gamestate_library import *
 from gamestate.action import Action
 from gamestate.outcome import Outcome
+from game.game_library import document_to_string
 
 
 def validate_upgrade(action_document, gamestate):

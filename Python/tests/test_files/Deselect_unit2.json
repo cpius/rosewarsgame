@@ -1,0 +1,33 @@
+{
+    "type": "Is outcome correct",
+    "description": "Clicking the same unit again should deselect it",
+    "click_position": "E4",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": "Catapult"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B4": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E4"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": "Catapult"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B4": "Pikeman"
+        }
+    },
+    "post_positions": {
+    }
+}

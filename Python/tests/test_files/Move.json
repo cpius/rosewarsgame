@@ -1,0 +1,41 @@
+{
+    "type": "Is outcome correct",
+    "click_position": "B4",
+    "action_count": 0,
+    "result": "win",
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "C4": "Knight",
+            "B3": "Light Cavalry"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "E7": "Pikeman",
+            "A6": "Archer",
+            "B5": "Knight"
+        }
+    },
+    "pre_positions": {
+        "start_at": "B3"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "C4": "Knight",
+            "B4": {
+                "name": "Light Cavalry",
+                "used": 1,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "E7": "Pikeman",
+            "A6": "Archer",
+            "B5": "Knight"
+        }
+    },
+    "post_positions": {
+    }
+}

@@ -2,7 +2,7 @@
     "type": "Is outcome correct",
     "description": "Test a move_with_attack",
     "click_position": "C5",
-    "move_with_attack": "true",
+    "move_with_attack": true,
     "action_count": 0,
     "outcome":{
         "C5": [1, 6]
@@ -21,8 +21,7 @@
         }
     },
     "pre_positions": {
-        "start_at": "C4",
-        "end_at": "None"
+        "start_at": "C4"
     },
     "post_gamestate": {
         "turn": 1,
@@ -40,7 +39,5 @@
         }
     },
     "post_positions": {
-        "start_at": "None",
-        "end_at": "None"
     }
 }

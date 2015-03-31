@@ -1,0 +1,29 @@
+{
+    "type": "Is outcome correct",
+    "description": "Infantry do not get an xp for movement",
+    "action": {
+        "start_at": "E3",
+        "end_at": "E4"
+    },
+    "pre_gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E3": "Archer"
+        },
+        "player2_units": {
+            "D7": "Ballista"
+        }
+    },
+    "post_gamestate": {
+        "actions_remaining": 0,
+        "player1_units": {
+            "E4": {
+                "used": 1,
+                "name": "Archer"
+            }
+        },
+        "player2_units": {
+            "D7": "Ballista"
+        }
+    }
+}

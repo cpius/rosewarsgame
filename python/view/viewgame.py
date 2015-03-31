@@ -1,7 +1,8 @@
-from view.view_display_library import get_image, pygame, Color, draw_rectangle, write, get_unit_pic, settings
+from view.view_display_library import get_image, pygame, Color, draw_rectangle, write, get_unit_pic
 from view.coordinates import Coordinates
 from view.rounded_rect import AAfilledRoundedRect
 from gamestate.gamestate_library import *
+import game.settings as settings
 
 
 class Viewgame:
@@ -133,7 +134,7 @@ class Viewgame:
             draw_rectangle(self.screen, (3, 6), (base[0] + 1, base[1] + 1), color)
 
         total_boxes = unit.experience_to_upgrade
-        blue_boxes = unit.get_state(State.experience) % unit.experience_to_upgrade
+        blue_boxes = unit.get(State.experience) % unit.experience_to_upgrade
         for index in range(blue_boxes):
             draw_box(index, Color.Light_blue)
 
@@ -232,8 +233,8 @@ class Viewgame:
 
     @staticmethod
     def get_blue_counters(unit):
-        poisoned_level = unit.get_level(Effect.poisoned)
-        frozen_level = unit.get_state(State.attack_frozen)
+        poisoned_level = unit.get(Effect.poisoned)
+        frozen_level = unit.get(State.attack_frozen)
         bribed = unit.has(State.recently_bribed)
 
         return max(poisoned_level, frozen_level, bribed)

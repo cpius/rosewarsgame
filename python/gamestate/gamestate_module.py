@@ -2,10 +2,11 @@ import gamestate.battle as battle
 import gamestate.action_doer as action_doer
 import gamestate.initializer as initializer
 import gamestate.action_getter as action_getter
-from gamestate.units import Unit_class
+from gamestate.units import base_units
 import json
 from gamestate.gamestate_library import *
 from gamestate.board import Board
+from game.game_library import document_to_string
 
 
 class Gamestate:
@@ -56,28 +57,22 @@ class Gamestate:
         initializer.initialize_turn(self)
 
     def get_actions(self, positions=None):
-        if not positions:
-            return self.available_actions
+        return filter_actions(self.available_actions, positions)
 
-        return [action for action in self.available_actions if all(getattr(action, key) == value for key, value in positions.items() if value is not None)]
+    def get_actions_with_move_with_attack_as_none(self):
 
-    def get_actions_with_move_with_attack_as_none(self, positions=None):
-
-        actions = action_getter.get_actions(self)
-        if positions:
-            actions = [action for action in actions if all(getattr(action, key) == value for key, value in positions.items())]
-        actions_with_none = []
-        for action in actions:
+        actions_with_none = set()
+        for action in action_getter.get_actions(self):
             if action.is_attack:
                 if not action.move_with_attack:
                     action.move_with_attack = None
-                    actions_with_none.append(action)
+                    actions_with_none.add(action)
             else:
-                actions_with_none.append(action)
+                actions_with_none.add(action)
         return actions_with_none
 
-    def get_actions_including_move_with_attack_none(self, positions=None):
-        return self.get_actions(positions) + self.get_actions_with_move_with_attack_as_none(positions)
+    def get_actions_including_move_with_attack_none(self):
+        return self.get_actions() | self.get_actions_with_move_with_attack_as_none()
 
     def copy(self):
         return self.from_document(self.to_document())
@@ -125,9 +120,12 @@ class Gamestate:
             position = Position.from_string(position_string)
 
             if type(unit_document) is str:
-                unit = Unit_class.make(Unit[unit_document.replace(" ", "_")])
+                unit_class = base_units[Unit[unit_document.replace(" ", "_")]]
+                unit = unit_class()
+
             else:
-                unit = Unit_class.make(Unit[unit_document["name"].replace(" ", "_")])
+                unit_class = base_units[Unit[unit_document["name"].replace(" ", "_")]]
+                unit = unit_class()
 
                 for attribute_name, number in unit_document.items():
                     if type(number) is bool:
@@ -209,13 +207,19 @@ class Gamestate:
         return self.board.get_upgradeable_unit()
 
     def is_post_move_with_attack_possible(self, action, outcome):
+
+        action_copy = action.copy()
+        action_copy.move_with_attack = True
+        if action_copy not in self.get_actions():
+            return False
+
         if not action.is_attack or not action.unit.is_melee:
             return False
 
         rolls = outcome.for_position(action.target_at)
         push_possible = action.is_push and battle.attack_successful(action, rolls, self)
 
-        if self.is_extra_action() and not action.unit.get_state(State.movement_remaining):
+        if self.is_extra_action() and not action.unit.get(State.movement_remaining):
             return False
 
         return push_possible or battle.is_win(action, rolls, self)

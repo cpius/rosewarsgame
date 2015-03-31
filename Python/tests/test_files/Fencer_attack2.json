@@ -1,0 +1,50 @@
+{
+    "type": "Is outcome correct",
+    "description": "Fencer can attack after its move",
+    "click_position": "E5",
+    "outcome":{
+        "E5": [6, 1]
+    },
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": {
+                "name": "Fencer",
+                "extra_action": 1,
+                "movement_remaining": 0,
+                "used": 1,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "E5": "Pikeman",
+            "E6": "Pikeman",
+            "E7": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E4"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": {
+                "name": "Fencer",
+                "used": 1,
+                "experience": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "E5": "Pikeman",
+            "E6": "Pikeman",
+            "E7": "Pikeman"
+        }
+    },
+    "post_positions": {
+    }
+}

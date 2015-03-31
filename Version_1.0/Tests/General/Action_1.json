@@ -1,0 +1,40 @@
+{
+    "type": "Does action exist",
+    "description": "Test if a full board can read and applied correctly.",
+    "result": false,
+    "action": {
+        "action_number": 3,
+        "start_at": "C7",
+        "end_at": "B7"
+    },
+    "gamestate": {
+        "turn": 1,
+        "player2_units": {
+            "D5": "Flag Bearer",
+            "B6": "Catapult",
+            "B7": "Ballista",
+            "A5": "Longswordsman",
+            "A6": "Knight",
+            "E7": "Light Cavalry",
+            "E6": "Light Cavalry",
+            "C7": "Pikeman",
+            "C5": "Knight"
+        },
+        "actions_remaining": 1,
+        "created_at": "2013-07-23T11:42:00Z",
+        "player1_units": {
+            "B4": "Longswordsman",
+            "A3": "Archer",
+            "A2": "Ballista",
+            "A4": "Knight",
+            "C3": "Pikeman",
+            "C2": "Knight",
+            "D4": {
+                "used": true,
+                "name": "Catapult"
+            },
+            "E3": "Light Cavalry",
+            "E2": "Pikeman"
+        }
+    }
+}

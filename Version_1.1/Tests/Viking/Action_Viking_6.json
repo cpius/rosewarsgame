@@ -1,0 +1,23 @@
+{
+    "type": "Does action exist",
+    "description": "A pushing unit can attack a Viking without move_with_attack.",
+    "result": true,
+    "action": {
+        "start_at": "C3",
+        "end_at": "C3",
+        "target_at": "C4",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "A2": "Archer",
+            "C3": "Halberdier"
+        },
+        "player2_units": {
+            "C5": "Longswordsman",
+            "E4": "Knight",
+            "C4": "Viking"
+        }
+    }
+}

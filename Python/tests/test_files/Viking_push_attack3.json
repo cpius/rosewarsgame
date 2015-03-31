@@ -1,0 +1,45 @@
+{
+    "type": "Is outcome correct",
+    "description": "If Halberdier pushes a Viking with no extra life, and it can't retreat, it dies.",
+    "click_position": "E4",
+    "action_count": 0,
+    "move_with_attack": true,
+    "outcome":{
+        "E4": [1, 6]
+    },
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E3": "Halberdier"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "E5": "Archer",
+            "E4": {
+                "name": "Viking",
+                "lost_extra_life": 1
+            }
+        }
+    },
+    "pre_positions": {
+        "start_at": "E3"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E4": {
+                "name": "Halberdier",
+                "experience": 1,
+                "used": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "E5": "Archer"
+        }
+    },
+    "post_positions": {
+    }
+}

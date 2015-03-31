@@ -44,7 +44,7 @@ def do_action(gamestate, action, outcome):
 
     def settle_ability():
         ability = action.ability
-        level = unit.get_level(action.ability)
+        level = unit.get(action.ability)
 
         if ability == Ability.bribe:
             target_unit.set(Effect.bribed, duration=1)

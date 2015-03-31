@@ -1,0 +1,23 @@
+{
+    "type": "Does action exist",
+    "description": "If you are locked in position by a Pikeman, you can still attack, but not move with attack",
+    "result": false,
+    "action": {
+        "start_at": "A4",
+        "end_at": "A4",
+        "target_at": "A3",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A4": "Knight",
+            "E6": "Catapult"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B4": "Pikeman",
+            "A3": "Archer"
+        }
+    }
+}

@@ -1,0 +1,153 @@
+{
+    "Archer": {
+        "type": "Infantry",
+        "attack": 2,
+        "defence": 2,
+        "movement": 1,
+        "range": 4,
+        "attributes": {
+            "arrows": 1
+        },
+        "experience_to_upgrade": 4
+    },
+    "Pikeman": {
+        "type": "Infantry",
+        "attack": 2,
+        "defence": 2,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "cavalry_specialist": 1,
+            "zoc_cavalry": 1
+        },
+        "experience_to_upgrade": 3
+    },
+    "Light_Cavalry": {
+        "type": "Cavalry",
+        "attack": 2,
+        "defence": 2,
+        "movement": 4,
+        "range": 1,
+        "attributes": {},
+        "experience_to_upgrade": 3
+    },
+    "Knight": {
+        "type": "Cavalry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 2,
+        "range": 1,
+        "attributes": {},
+        "experience_to_upgrade": 4
+    },
+    "Hobelar": {
+        "type": "Cavalry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "swiftness": 1
+        },
+        "experience_to_upgrade": 4
+    },
+    "Ballista": {
+        "type": "War_Machine",
+        "attack": 4,
+        "defence": 1,
+        "movement": 1,
+        "range": 3,
+        "attributes": {},
+        "experience_to_upgrade": 4
+    },
+    "Catapult": {
+        "type": "War_Machine",
+        "attack": 6,
+        "defence": 2,
+        "movement": 1,
+        "range": 3,
+        "attributes": {
+            "double_attack_cost": 1
+        },
+        "experience_to_upgrade": 3
+    },
+    "Scout": {
+        "type": "Cavalry",
+        "attack": 0,
+        "defence": 2,
+        "movement": 4,
+        "range": 1,
+        "attributes": {
+            "scouting": 1
+        },
+        "experience_to_upgrade": 2
+    },
+    "Viking": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 2,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "extra_life": 1,
+            "rage": 1,
+            "sturdy_helmet": 1
+        },
+        "experience_to_upgrade": 4
+    },
+    "Cannon": {
+        "type": "War_Machine",
+        "attack": 5,
+        "defence": 1,
+        "movement": 1,
+        "range": 4,
+        "attributes": {
+            "attack_cooldown": 1
+        },
+        "experience_to_upgrade": 3
+    },
+    "Flag_Bearer": {
+        "type": "Cavalry",
+        "attack": 2,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "flag_bearing": 1
+        },
+        "experience_to_upgrade": 4
+    },
+    "Longswordsman": {
+        "type": "Infantry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "longsword": 1
+        },
+        "experience_to_upgrade": 4
+    },
+    "Crusader": {
+        "type": "Cavalry",
+        "attack": 3,
+        "defence": 3,
+        "movement": 3,
+        "range": 1,
+        "attributes": {
+            "crusading": 1
+        },
+        "experience_to_upgrade": 4
+    },
+    "Berserker": {
+        "type": "Infantry",
+        "attack": 5,
+        "defence": 1,
+        "movement": 1,
+        "range": 1,
+        "attributes": {
+            "berserking": 1
+        },
+        "experience_to_upgrade": 3
+    }
+}

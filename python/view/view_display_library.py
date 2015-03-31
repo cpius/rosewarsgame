@@ -1,7 +1,7 @@
 import pygame
 import textwrap
-import view.interface_settings as settings
 from view.rounded_rect import AAfilledRoundedRect
+from game.settings import zoom
 
 
 class Location(object):
@@ -63,8 +63,8 @@ def get_image(path, dimensions=None):
     image = _image_library.get(path)
     if not image:
         image = pygame.image.load(path).convert()
-        image = pygame.transform.scale(image, (int(image.get_size()[0] * settings.zoom),
-                                               int(image.get_size()[1] * settings.zoom)))
+        image = pygame.transform.scale(image, (int(image.get_size()[0] * zoom),
+                                               int(image.get_size()[1] * zoom)))
         _image_library[path] = image
     return image
 

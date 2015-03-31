@@ -5,6 +5,9 @@ from gamestate.gamestate_module import Gamestate
 from gamestate.action import Action
 from game.player import Player
 import gamestate.battle as battle
+from game.enums import Intelligence
+from game.game_library import document_to_string
+from datetime import datetime
 
 
 class Game:

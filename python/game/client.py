@@ -5,6 +5,8 @@ from gamestate.outcome import Outcome
 from datetime import datetime
 from time import mktime, sleep
 from email.utils import parsedate
+from game.game_library import document_to_string
+from game.settings import server
 
 
 class Client():
@@ -21,7 +23,7 @@ class Client():
             if self.last_modified > datetime(1970, 1, 1):
                 request_headers["If-Modified-Since"] = formatted_time
 
-            response = requests.get(get_setting("server") + "/games/view/" + self.game_id, headers=request_headers)
+            response = requests.get(server + "/games/view/" + self.game_id, headers=request_headers)
 
             if response.status_code == 304:
                 return
@@ -40,7 +42,7 @@ class Client():
             return response.json()
 
         else:
-            response = requests.get(get_setting("server") + "/games/join_or_create/" + self.profilename).json()
+            response = requests.get(server + "/games/join_or_create/" + self.profilename).json()
             self.game_id = response["ID"]
 
             print(response["Message"], self.game_id)
@@ -104,7 +106,7 @@ class Client():
         return
 
     def send_action(self, action):
-        url = get_setting("server") + "/games/" + self.game_id + "/do_action"
+        url = server + "/games/" + self.game_id + "/do_action"
         print("sending json:", document_to_string(action))
         request = requests.post(url, data=document_to_string(action), headers={"Content-Type": "application/json"})
         print("received: " + request.text)
