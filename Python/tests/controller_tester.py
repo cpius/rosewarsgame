@@ -60,18 +60,6 @@ def save(*args):
     pass
 
 
-def difference_between_dictionaries(d1, d2):
-    dictdiffer = DictDiffer(d1, d2)
-    message = ""
-    if dictdiffer.added():
-        message += "Added " + str(dictdiffer.added())
-    if dictdiffer.removed():
-        message += "Removed " + str(dictdiffer.removed())
-    if dictdiffer.changed_recursive():
-        message += "Changed " + str(dictdiffer.changed_recursive())
-    return message
-
-
 def give_output(actual_gamestate, expected_gamestate, actual_positions, expected_positions):
 
     if actual_gamestate == expected_gamestate:

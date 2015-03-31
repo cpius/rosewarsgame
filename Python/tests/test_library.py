@@ -1,5 +1,19 @@
 import json
 from collections import Counter
+from tests.dictdiffer import DictDiffer
+
+
+
+def difference_between_dictionaries(d1, d2):
+    dictdiffer = DictDiffer(d1, d2)
+    message = ""
+    if dictdiffer.added():
+        message += "Added " + str(dictdiffer.added())
+    if dictdiffer.removed():
+        message += "Removed " + str(dictdiffer.removed())
+    if dictdiffer.changed_recursive():
+        message += "Changed " + str(dictdiffer.changed_recursive())
+    return message
 
 
 def run_method(testcase_files, test_method):

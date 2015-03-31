@@ -31,6 +31,8 @@ def give_output(actual, expected):
         return True
     print("act", actual)
     print("exp", expected)
+    if type(actual) is dict:
+        print(difference_between_dictionaries(actual, expected))
     print()
     return False
 

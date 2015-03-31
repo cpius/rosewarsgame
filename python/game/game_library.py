@@ -35,26 +35,6 @@ def merge(first_dictionary, second_dictionary, third_dictionary=None, fourth_dic
     return merged_dictionary
 
 
-def assert_equal_documents(testcase, expected, actual, testcase_file):
-    message = "Wrong document for " + testcase_file + "\n\n"
-
-    message += "Expected:\n" + document_to_string(expected)
-    message += "\nActual:\n" + document_to_string(actual) + "\n"
-
-    difference = DictDiffer(actual, expected)
-    if difference.added():
-        message += "Added " + str(difference.added())
-    if difference.removed():
-        message += "Removed " + str(difference.removed())
-    if difference.changed_recursive():
-        message += "Changed " + str(difference.changed_recursive())
-
-    if actual == expected:
-        return True, "Everything is swell"
-    else:
-        return False, message
-
-
 class CustomJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
