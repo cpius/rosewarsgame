@@ -38,7 +38,6 @@ class Trait(Enum):
     fire_arrows = 14
     flag_bearing = 15
     flanking = 16
-    helmet = 17
     javelin = 18
     lancing = 19
     longsword = 20
@@ -54,6 +53,7 @@ class Trait(Enum):
     scouting = 30
     sharpshooting = 31
     spread_attack = 32
+    sturdy_helmet = 17
     swiftness = 33
     tall_shield = 34
     triple_attack = 35
