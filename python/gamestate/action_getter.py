@@ -64,7 +64,7 @@ def get_unit_actions(unit, start_at, gamestate):
         return action_sets.moves_sets(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def generate_extra_moveset():
-        movement = unit.get_state(State.movement_remaining)
+        movement = unit.get(State.movement_remaining)
         return action_sets.moves_set(start_at, frozenset(units), zoc_blocks, movement, movement)
 
     def attack_generator(moveset):
@@ -109,7 +109,7 @@ def get_unit_actions(unit, start_at, gamestate):
         def get_actions_combat_agility():
             for terms in attack_generator({start_at}):
                 if terms["move_with_attack"]:
-                    if unit.get_state(State.movement_remaining):
+                    if unit.get(State.movement_remaining):
                         attacks.append(Action(units, start_at, **terms))
                 else:
                     attacks.append(Action(units, start_at, **terms))

@@ -20,19 +20,19 @@ class Unit_class():
 
     @property
     def attack(self):
-        return self.base_attack + self.get_level(Trait.attack_skill)
+        return self.base_attack + self.get(Trait.attack_skill)
 
     @property
     def defence(self):
-        return self.base_defence + self.get_level(Trait.defence_skill)
+        return self.base_defence + self.get(Trait.defence_skill)
 
     @property
     def range(self):
-        return self.base_range + self.get_level(Trait.range_skill)
+        return self.base_range + self.get(Trait.range_skill)
 
     @property
     def movement(self):
-        return self.base_movement + self.get_level(Trait.movement_skill)
+        return self.base_movement + self.get(Trait.movement_skill)
 
     def __repr__(self):
         return self.unit.name
@@ -101,14 +101,11 @@ class Unit_class():
         elif attribute in State:
             return self.attributes[attribute].value == number
 
-    def get_duration(self, attribute):
-        return self.attributes[attribute].duration
-
-    def get_level(self, attribute):
-        return self.attributes[attribute].level if attribute in self.attributes else 0
-
-    def get_state(self, attribute):
-        return self.attributes[attribute].value if attribute in self.attributes else 0
+    def get(self, attribute):
+        if attribute in State:
+            return self.attributes[attribute].value if attribute in self.attributes else 0
+        else:
+            return self.attributes[attribute].level if attribute in self.attributes else 0
 
     def remove(self, attribute):
         if attribute in self.attributes:
@@ -123,7 +120,7 @@ class Unit_class():
             self.remove(State.recently_upgraded)
 
     def remove_states_with_value_zero(self):
-        removestates = [state for state in self.states if self.get_state(state) == 0]
+        removestates = [state for state in self.states if self.get(state) == 0]
         for state in removestates:
             self.remove(state)
 
@@ -146,7 +143,7 @@ class Unit_class():
     def get_upgraded_unit_from_upgrade(self, upgrade):
         """
         :param upgrade: A unit enum or a dictionary with enums as keys and AttributeValues as values.
-        :return: An instance of a Unit_class object, based on the unit and with the upgrade.
+        :return: A new UnitClass object, based on the unit and with the upgrade.
         """
         if upgrade in Unit:
             upgraded_unit = base_units[upgrade]()
@@ -210,10 +207,10 @@ class Unit_class():
 
     @property
     def unit_level(self):
-        return self.get_state(State.experience) // self.experience_to_upgrade
+        return self.get(State.experience) // self.experience_to_upgrade
 
     def should_be_upgraded(self):
-        experience = self.get_state(State.experience)
+        experience = self.get(State.experience)
         return experience and experience % self.experience_to_upgrade == 0 and not self.has(State.recently_upgraded)
 
     def to_document(self):

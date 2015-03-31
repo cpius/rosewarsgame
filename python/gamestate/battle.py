@@ -76,7 +76,7 @@ def get_attack(action, gamestate, is_sub_action=False):
         attack += lancing(action)
 
     if flanking(action):
-        attack += 2 * attacking_unit.get_level(Trait.flanking)
+        attack += 2 * attacking_unit.get(Trait.flanking)
 
     if action.start_at in gamestate.bonus_tiles[Trait.crusading][1]:
         attack += 1

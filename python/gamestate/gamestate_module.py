@@ -223,7 +223,7 @@ class Gamestate:
         rolls = outcome.for_position(action.target_at)
         push_possible = action.is_push and battle.attack_successful(action, rolls, self)
 
-        if self.is_extra_action() and not action.unit.get_state(State.movement_remaining):
+        if self.is_extra_action() and not action.unit.get(State.movement_remaining):
             return False
 
         return push_possible or battle.is_win(action, rolls, self)
