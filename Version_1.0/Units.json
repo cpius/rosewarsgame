@@ -100,7 +100,7 @@
         "attack": 5,
         "defence": 1,
         "movement": 1,
-        "range": 3,
+        "range": 4,
         "attributes": {
             "attack_cooldown": 1
         },
