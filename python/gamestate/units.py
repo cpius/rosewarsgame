@@ -4,7 +4,7 @@ from gamestate.enums import *
 from game.settings import beginner_mode
 
 
-class Unit_class():
+class UnitClass():
     def __init__(self):
         self.attributes = {}
 
@@ -172,7 +172,7 @@ class Unit_class():
     def get_upgraded_unit_from_choice(self, choice):
         """
         :param choice: upgrade choice 0 or 1.
-        :return: An instance of a Unit_class object, based on the unit and with the upgrade.
+        :return: A new UnitClass object, based on the unit and with the upgrade.
         """
         upgrade = self.get_upgrade(choice)
         return self.get_upgraded_unit_from_upgrade(upgrade)
@@ -246,7 +246,7 @@ def make_unit_subclasses_from_document(document):
         del unit_class_content["attributes"]
         unit_class_content["__init__"] = init
         unit_class_content["type"] = Type[unit_class_content["type"]]
-        unit_class = type(name, (Unit_class,), unit_class_content)
+        unit_class = type(name, (UnitClass,), unit_class_content)
 
         unit_class_dictionary[Unit[name]] = unit_class
 

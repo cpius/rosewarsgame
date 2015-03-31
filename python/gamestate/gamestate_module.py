@@ -2,7 +2,7 @@ import gamestate.battle as battle
 import gamestate.action_doer as action_doer
 import gamestate.initializer as initializer
 import gamestate.action_getter as action_getter
-from gamestate.units import Unit_class, base_units
+from gamestate.units import UnitClass, base_units
 import json
 from gamestate.gamestate_library import *
 from gamestate.board import Board
