@@ -56,17 +56,6 @@ class Viewinfo:
         if unit.unit_level:
             lines += ["Level: " + str(unit.unit_level + 1), ""]
 
-        if unit.zoc:
-            lines += ["Zone of control against: " + ", ".join(unit_type.name for unit_type in unit.zoc), ""]
-
-        if unit.attack_bonuses:
-            for unit_type, value in unit.attack_bonuses.items():
-                lines += ["+" + str(value) + " Attack against " + unit_type.name, ""]
-
-        if unit.defence_bonuses:
-            for unit_type, value in unit.defence_bonuses.items():
-                lines += ["+" + str(value) + " Defence against " + prettify(unit_type.name), ""]
-
         dont_show = {State.used, State.recently_upgraded, State.experience, State.lost_extra_life, State.javelin_thrown,
                      Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life,
                      Trait.javelin}
