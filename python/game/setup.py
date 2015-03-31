@@ -132,7 +132,7 @@ def select_units():
     are filled normally.
     """
     basic_units_bag = fill_bag(basic_unit_set)
-    special_units_bag = fill_bag(special_unit_set)
+    special_units_bag = fill_bag(special_unit_set - required_special_unit_set)
     required_special_units_bag = fill_bag(required_special_unit_set)
 
     basic_units = basic_units_bag.pick(basic_unit_count)
