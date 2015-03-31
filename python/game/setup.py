@@ -1,10 +1,8 @@
 import random
 from gamestate.gamestate_library import Unit, Position, board_tiles, Type, flip_units
-from gamestate.units import Unit_class
+from gamestate.units import base_units
 from collections import namedtuple
-from game.game_library import *
-from game.settings import version, required_special_units, required_basic_units, beginner_mode
-
+from game.settings import version, required_special_unit_set, beginner_mode
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
@@ -36,30 +34,26 @@ units_info = {Unit.Archer: Info({2, 3}, 3, False),
               Unit.War_Elephant: Info({4}, 1, False),
               Unit.Weaponsmith: Info({2, 3}, 1, True)}
 
+basic_unit_set = {
+    Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman}
+
 if version == 1.1:
-    allowed_special_units = {
+    special_unit_set = {
         Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman, Unit.Scout, Unit.Viking,
         Unit.Hobelar, Unit.Halberdier, Unit.Flanking_Cavalry, Unit.Hussar, Unit.Lancer, Unit.Royal_Guard,
         Unit.Javeliner, Unit.Trebuchet, Unit.War_Elephant, Unit.Fencer, Unit.Saboteur, Unit.Diplomat, Unit.Assassin,
-        Unit.Weaponsmith
-    }
-    allowed_basic_units = {
-        Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman
-    }
+        Unit.Weaponsmith}
 
 if version == 1.0:
-    allowed_special_units = {
+    special_unit_set = {
         Unit.Berserker, Unit.Cannon, Unit.Crusader, Unit.Flag_Bearer, Unit.Longswordsman, Unit.Scout, Unit.Viking,
         Unit.Hobelar}
-    allowed_basic_units = {
-        Unit.Archer, Unit.Ballista, Unit.Catapult, Unit.Knight, Unit.Light_Cavalry, Unit.Pikeman}
 
 if beginner_mode:
     basic_unit_count, special_unit_count = 9, 0
 else:
     basic_unit_count, special_unit_count = 6, 3
 
-board_rows = [1, 2, 3, 4]
 board_columns = [1, 2, 3, 4, 5]
 
 
@@ -86,17 +80,25 @@ class UnitBag(object):
     def __init__(self, units):
         self.units = list(units)
     
-    def pick(self):
-        pick = random.choice(self.units)
-        self.units.remove(pick)
-        return pick
+    def pick(self, n=1):
+        units = []
+        for _ in range(n):
+            pick = random.choice(self.units)
+            self.units.remove(pick)
+            units.append(pick)
+        return units
     
     def has_units(self):
         return self.units
 
 
-def place_units_on_board(units_list, tiles_bag):
-
+def place_units_on_board(units_list):
+    """
+    :param units_list: A list of players units
+    :return: A dictionary with board positions as keys and the units placed there as values.
+    Units with protection_required has to stand behind a friendly unit.
+    """
+    tiles_bag = TilesBag()
     units = {}
     unprotected_units = [unit for unit in units_list if not units_info[unit].protection_required]
     protected_units = [unit for unit in units_list if units_info[unit].protection_required]
@@ -112,62 +114,82 @@ def place_units_on_board(units_list, tiles_bag):
     return units
 
 
-def select_basic_units(basic_units_bag):
-    return [basic_units_bag.pick() for _ in range(basic_unit_count)]
+def fill_bag(unit_set):
+    """
+    :param unit_set: A set of units
+    :return: A UnitBag with the desired number of copies of each unit.
+    """
+    return UnitBag([unit for unit in unit_set for _ in range(units_info[unit].copies)])
 
 
-def select_special_units(special_units_first_bag, special_units_second_bag):
+def select_units():
+    """
+    :return: A list of units to be placed on the board.
+    Basic units are drawn from a bag with 2-3 copies of each unit, thus decreasing the chance of getting many of the
+    same unit. Special units are drawn in the same manner, but the number of copies is currently set to 1 for all special
+    units.
+    required_special_units can be specified in settings. If so these are drawn first, and remaining special unit slots
+    are filled normally.
+    """
+    basic_units_bag = fill_bag(basic_unit_set)
+    special_units_bag = fill_bag(special_unit_set)
+    required_special_units_bag = fill_bag(required_special_unit_set)
+
+    basic_units = basic_units_bag.pick(basic_unit_count)
+
     special_units = []
-    while len(special_units) < special_unit_count and special_units_first_bag.has_units():
-        special_units.append(special_units_first_bag.pick())
-
+    while len(special_units) < special_unit_count and required_special_units_bag.has_units():
+        special_units += required_special_units_bag.pick()
     while len(special_units) < special_unit_count:
-        special_units.append(special_units_second_bag.pick())
+        special_units += special_units_bag.pick()
 
-    return special_units
-
-
-def fill_unit_bags():
-
-    basic_unit_bag = UnitBag([name for name in allowed_basic_units for _ in range(units_info[name].copies)])
-    special_unit_required_bag = UnitBag(required_special_units)
-    special_unit_bag = UnitBag(set(allowed_special_units) - set(required_special_units))
-
-    return basic_unit_bag, special_unit_required_bag, special_unit_bag
+    return basic_units + special_units
 
 
 def at_least_two_column_blocks(units):
     """
     :param units: The units of one player
-    :return: Boolean of whether each column has at least two blocks. A block is either a unit, or a tile that is under
-    ZOC by a Pikeman.
+    :return: False if there is a column that has less than two "blocks". A block is either a unit, or a tile that is
+    under ZOC by a Pikeman.
     """
-    blocks = [pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.name == "Pikeman"] + \
-             [pos.column for pos in units]
+    blocks = ([pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.unit == Unit.Pikeman] +
+              [pos.column for pos in units])
 
     return all(blocks.count(column) >= 2 for column in board_columns)
      
 
 def at_most_one_pikeman_per_column(units):
+    """
+    :param units: The units of one player
+    :return: False if there is a column with more than one Pikeman.
+    """
     return not any(column for column in board_columns if
-                   sum(1 for pos, unit in units.items() if pos.column == column and unit.zoc) > 1)
+                   sum(1 for pos, unit in units.items() if pos.column == column and unit.unit == Unit.Pikeman) > 1)
 
 
 def at_least_one_war_machine(units):
-    return any(unit.type == Type.War_Machine for unit in units.values())
+    """
+    :param units: The units of one player
+    :return: False if there are no War Machines
+    """
+    return Type.War_Machine in {unit.type for unit in units.values()}
 
 
 def at_most_two_war_machines(units):
+    """
+    :param units: The units of one player
+    :return: False if there are more than two War Machines
+    """
     return sum(1 for unit in units.values() if unit.type == Type.War_Machine) <= 2
 
 
 def at_least_five_melee_with_weaponsmith(units):
     """
     :param units: The units of one player
-    :return: False if Weaponsmith is in the units, and there is not at least 5 melee units it can be used on.
+    :return: False if Weaponsmith is in the units and there is less than 5 melee units it can be used on.
     """
-    return not any(unit.unit == Unit.Weaponsmith for unit in units.values()) or \
-        sum(1 for unit in units.values() if unit.range == 1) >= 5
+    return not (Unit.Weaponsmith in {unit.unit for unit in units.values()} and
+                sum(1 for unit in units.values() if unit.is_melee) < 5)
 
 requirements = [at_least_two_column_blocks, at_most_one_pikeman_per_column, at_least_one_war_machine,
                 at_most_two_war_machines, at_least_five_melee_with_weaponsmith]
@@ -177,31 +199,20 @@ def get_units():
     """
     :return: The units of one player, drawn semi-randomly and placed on the board semi-randomly.
     """
-
     while True:
-
-        # Special units that can be picked and placed on the board.
-        basic_unit_bag, special_unit_required_bag, special_unit_bag = fill_unit_bags()
-
-        # The tiles on the board
-        tiles_bag = TilesBag()
-
-        # Selects units from the bags and place them on board.
         try:
-            special_units = select_special_units(special_unit_required_bag, special_unit_bag)
-            basic_units = select_basic_units(basic_unit_bag)
+            units_list = select_units()
+            units = place_units_on_board(units_list)
 
-            units = place_units_on_board(basic_units + special_units, tiles_bag)
-
-        # This happens if a unit is picked from the unit bag, but there isn't any tile it can be placed on
+        # If there isn't an appropriate tile to place the unit on, start over.
         except IndexError:
             continue
 
         # After successful placement, Unit objects are created.
         for position, unit in units.items():
-            units[position] = Unit_class.make(unit)
+            units[position] = base_units[unit]()
 
-        # Test if all requirements for the setup are fulfilled, otherwise try again.
+        # Test if all requirements for the setup are fulfilled, otherwise start over.
         if any(not requirement(units) for requirement in requirements):
             continue
 
