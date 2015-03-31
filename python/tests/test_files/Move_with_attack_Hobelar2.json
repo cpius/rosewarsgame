@@ -2,7 +2,7 @@
     "type": "Is outcome correct",
     "description": "Move with attack with Hobelar that uses all movement should remove its movement_remaining",
     "click_position": "C7",
-    "move_with_attack": "true",
+    "move_with_attack": true,
     "action_count": 0,
     "outcome":{
         "C7": [1, 6]

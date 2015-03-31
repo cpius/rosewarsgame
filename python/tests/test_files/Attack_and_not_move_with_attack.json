@@ -2,7 +2,7 @@
     "type": "Is outcome correct",
     "description": "Test a not move_with_attack",
     "click_position": "C5",
-    "move_with_attack": "false",
+    "move_with_attack": false,
     "action_count": 0,
     "outcome":{
         "C5": [1, 6]

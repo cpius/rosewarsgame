@@ -2,7 +2,7 @@
     "type": "Is outcome correct",
     "description": "Move with attack can't move past ZOC",
     "click_position": "C5",
-    "move_with_attack": "true",
+    "move_with_attack": true,
     "action_count": 0,
     "outcome":{
         "C5": [1, 6]
