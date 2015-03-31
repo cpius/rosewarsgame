@@ -227,8 +227,6 @@ class Unit_class():
         if "repeat_2" in self.upgrades:
             possible_upgrade_choices.append(translate_to_enum_format(self.upgrades["repeat_2"]))
 
-        print(self.attributes)
-        print(possible_upgrade_choices)
         return possible_upgrade_choices[choice]
 
 
