@@ -148,3 +148,6 @@ class Action(object):
 
     def copy(self):
         return copy.copy(self)
+
+    def __hash__(self):
+        return hash(frozenset([self.start_at, self.end_at, self.target_at, self.move_with_attack, self.ability]))

@@ -61,18 +61,18 @@ class Gamestate:
 
     def get_actions_with_move_with_attack_as_none(self):
 
-        actions_with_none = []
+        actions_with_none = set()
         for action in action_getter.get_actions(self):
             if action.is_attack:
                 if not action.move_with_attack:
                     action.move_with_attack = None
-                    actions_with_none.append(action)
+                    actions_with_none.add(action)
             else:
-                actions_with_none.append(action)
+                actions_with_none.add(action)
         return actions_with_none
 
     def get_actions_including_move_with_attack_none(self):
-        return self.get_actions() + self.get_actions_with_move_with_attack_as_none()
+        return self.get_actions() | self.get_actions_with_move_with_attack_as_none()
 
     def copy(self):
         return self.from_document(self.to_document())
@@ -208,13 +208,9 @@ class Gamestate:
 
     def is_post_move_with_attack_possible(self, action, outcome):
 
-        action_is_possible = False
-        for possible_action in self.get_actions():
-            if possible_action.start_at == action.start_at and possible_action.end_at == action.end_at and \
-                            possible_action.target_at == action.target_at and possible_action.move_with_attack:
-                action_is_possible = True
-
-        if not action_is_possible:
+        action_copy = action.copy()
+        action_copy.move_with_attack = True
+        if action_copy not in self.get_actions():
             return False
 
         if not action.is_attack or not action.unit.is_melee:

@@ -271,7 +271,7 @@ class Controller(object):
         if gamestate.is_extra_action():
             actions = gamestate.get_actions()
             if actions:
-                self.positions["start_at"] = actions[0].start_at
+                self.positions["start_at"] = next(iter(actions)).start_at
                 self.draw_game()
 
     def get_choice(self, keyevents, mouseevents):

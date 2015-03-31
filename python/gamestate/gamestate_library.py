@@ -211,3 +211,25 @@ def filter_actions(actions, positions):
     if not positions:
         return actions
     return [action for action in actions if all(getattr(action, key) == value for key, value in positions.items())]
+
+
+def zoc_block(position, direction, zoc_blocks):
+    """
+    :param position: The starting position of the unit
+    :param direction: The Direction the unit wants to move
+    :param zoc_blocks: Positions occupied by enemy units with ZOC against the unit
+    :return: Whether the unit is prevented from going in the direction by a ZOC block
+    """
+    return any(pos in zoc_blocks for pos in position.perpendicular(direction))
+
+
+def adjacent_tiles_the_unit_can_move_to(position, units, zoc_blocks):
+    """
+    :param position: The position the unit is standing on
+    :param units: The unit
+    :param zoc_blocks: Positions on the board with enemy units exerting ZOC against the unit
+    :return: The adjacent tiles the unit can move to unhindered by ZOC
+    """
+    for direction, new_position in position.adjacent_moves().items():
+        if new_position not in units and not zoc_block(position, direction, zoc_blocks):
+            yield new_position
