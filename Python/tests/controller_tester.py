@@ -113,7 +113,7 @@ def is_outcome_correct(test_document):
         controller.pick_upgrade = partial(pick_upgrade, upgrade_choice)
 
     if "move_with_attack" in test_document:
-        controller.ask_about_move_with_attack = partial(ask_about_move_with_attack, test_document["move_with_attack"] == "true")
+        controller.ask_about_move_with_attack = partial(ask_about_move_with_attack, test_document["move_with_attack"])
 
     controller.game.gamestate.set_available_actions()
 
