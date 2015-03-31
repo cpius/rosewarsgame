@@ -211,7 +211,7 @@
         "attributes": {
             "extra_life": 1,
             "rage": 1,
-            "helmet": 1
+            "sturdy_helmet": 1
         },
         "experience_to_upgrade": 4,
         "upgrades": {

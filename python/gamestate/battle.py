@@ -11,7 +11,7 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
     if defending_unit.has(Effect.improved_weapons):
         defence_adjusters += 1
 
-    if attacking_unit.type == Type.War_Machine and defending_unit.has(Trait.helmet):
+    if attacking_unit.type == Type.War_Machine and defending_unit.has(Trait.sturdy_helmet):
         defence_adjusters += 1
 
     if attacking_unit.is_melee and defending_unit.has(Trait.melee_expert):
