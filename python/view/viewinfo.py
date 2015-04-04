@@ -51,8 +51,9 @@ class Viewinfo:
         if unit.has(Effect.sabotaged):
             defence = 0
         lines = ["Attack: " + str(unit.attack) + "  Defence: " + str(defence)
-                 + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement), ""]
+                 + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement)]
 
+        lines += [unit.type.name, ""]
         if unit.unit_level:
             lines += ["Level: " + str(unit.unit_level + 1), ""]
 
