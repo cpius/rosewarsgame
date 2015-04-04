@@ -124,7 +124,7 @@ class Rectangles(Interface):
 
         self.lower_right_rectangle = (391 * zoom, 391 * zoom, 391 * zoom, 391 * zoom)
 
-        self.shading = pygame.Color(130, 0, 0, 150)
+        self.shading = pygame.Color(30, 30, 30, 200)
 
         self.counter_size = int(7 * zoom)
 
