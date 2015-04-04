@@ -118,7 +118,7 @@ class Game:
                     colors = self.current_player().color, self.current_player().color
                 is_sub_action = action.target_at == position
                 outcome_string = battle.get_outcome_string(action, outcome.outcomes[position], self.gamestate, is_sub_action)
-                self.logbook.append(Log(ActionType.Attack, action.unit, action.target_unit, action_number, colors,
+                self.logbook.append(Log(ActionType.Attack, action.unit, self.gamestate.enemy_units[position], action_number, colors,
                                         outcome_string))
         elif action.is_ability:
             if action.target_at in self.gamestate.enemy_units:
