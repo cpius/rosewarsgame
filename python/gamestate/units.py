@@ -77,8 +77,15 @@ class UnitClass():
         else:
             self.attributes[attribute] = AttributeValues(value=value, duration=duration, level=level)
 
-    def decrease_duration(self, attribute):
-        if attribute in self.attributes:
+    def decrease(self, attribute):
+        if attribute in self.states:
+            value = self.attributes[attribute].value - 1
+            if value == 0:
+                del self.attributes[attribute]
+            else:
+                self.attributes[attribute].value = value
+
+        if attribute in self.effects:
             duration = self.attributes[attribute].duration - 1
             if duration == 0:
                 del self.attributes[attribute]
