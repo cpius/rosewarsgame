@@ -41,8 +41,7 @@ class View():
         pygame.image.save(self.screen, name)
 
     def draw_game_end(self, color, game):
-        self.clear_right()
-        self.viewlog.draw_logbook(game)
+        self.draw_game(game, actions=None, shade_positions=None, redraw_log=True)
         write_message(self.screen, self.interface, color + " Wins")
         self.refresh()
 
@@ -53,8 +52,8 @@ class View():
     def clear_left(self):
         pygame.draw.rect(self.screen, Color.Light_grey, self.interface.left_side_rectangle)
 
-    def draw_game(self, game, start_at=None, actions=(), redraw_log=False, draw_pass_action=False):
-        self.viewgame.draw_game(game, start_at, actions)
+    def draw_game(self, game, actions, shade_positions, redraw_log):
+        self.viewgame.draw_game(game, actions, shade_positions)
         if redraw_log:
             self.clear_right()
             self.viewlog.draw_logbook(game)

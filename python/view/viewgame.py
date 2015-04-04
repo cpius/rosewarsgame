@@ -11,53 +11,45 @@ class Viewgame:
         self.interface = interface
         self.screen = screen
 
-    def draw_game(self, game, start_at=None, actions=()):
-
+    def draw_game(self, game, actions, shade_positions):
         self.screen.blit(get_image(self.interface.board_image), (0, 0))
 
         gamestate = game.gamestate.copy()
         if not game.is_player_human():
             gamestate.flip_all_units()
 
-        self.draw_units(gamestate.player_units, game.current_player().color,
-                        gamestate.enemy_units, game.opponent_player().color, start_at, actions)
+        self.draw_units(game)
 
+        if not shade_positions:
+            shade_positions = set()
         if actions:
-            self.shade_actions(actions)
+            shade_positions |= self.get_shade_actions(actions)
 
-    def draw_units(self, player_units, player_color, enemy_units, opponent_color, start_position, actions):
-        for position, unit in player_units.items():
-            if position == start_position:
-                self.draw_unit(unit, position, player_color, selected=True)
-            else:
-                self.draw_unit(unit, position, player_color)
+        self.shade_tiles(shade_positions)
 
-        for position, unit in enemy_units.items():
-            self.draw_unit(unit, position, opponent_color)
-
-    def shade_actions(self, actions):
+    def shade_tiles(self, shade_positions):
         unit_dimensions = (self.interface.unit_box_width, self.interface.unit_box_height)
-        drawn_tiles = set()
-        for action in actions:
-            if action.is_attack:
-                location = self.interface.coordinates["base_box"].get(action.target_at)
-                if location not in drawn_tiles:
-                    drawn_tiles.add(location)
-                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
-                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.attack_shading, 0.2)
+        for position in shade_positions:
+            location = self.interface.coordinates["base_box"].get(position)
+            rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+            AAfilledRoundedRect(self.screen, rectangle_style, self.interface.shading, 0.2)
 
-            elif action.is_ability:
-                location = self.interface.coordinates["base_box"].get(action.target_at)
-                if location not in drawn_tiles:
-                    drawn_tiles.add(location)
-                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
-                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.ability_shading, 0.2)
+    def draw_units(self, game):
+        for position, unit in game.gamestate.player_units.items():
+            self.draw_unit(unit, position, game.current_player().color)
+
+        for position, unit in game.gamestate.enemy_units.items():
+            self.draw_unit(unit, position, game.opponent_player().color)
+
+    @staticmethod
+    def get_shade_actions(actions):
+        shade_positions = set()
+        for action in actions:
+            if action.is_attack or action.is_ability:
+                shade_positions.add(action.target_at)
             else:
-                location = self.interface.coordinates["base_box"].get(action.end_at)
-                if location not in drawn_tiles:
-                    drawn_tiles.add(location)
-                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
-                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.move_shading, 0.2)
+                shade_positions.add(action.end_at)
+        return shade_positions
 
     def draw_post_movement(self, action):
         pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.end_at), 10)
@@ -168,9 +160,6 @@ class Viewgame:
         self.draw_unit_box(self.screen, self.interface, base, color)
 
         self.screen.blit(pic, base)
-
-        if selected:
-            draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
 
         if self.get_blue_counters(unit):
             counter_coordinates = self.get_counter_coordinates(counters_drawn)

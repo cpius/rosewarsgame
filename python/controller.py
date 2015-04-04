@@ -250,7 +250,7 @@ class Controller(object):
 
         # If more than one action is possible, get user feedback to specify which action should be performed.
         else:
-            self.draw_game(shade_actions=False)
+            self.draw_game()
             unit = self.selected_unit
 
             # If the unit is melee, the user may need to specify an end_at.
@@ -303,8 +303,8 @@ class Controller(object):
                 self.exit_game()
 
     def pick_end_at(self, actions):
-        end_ats = [action.end_at for action in actions]
-        self.view.shade_positions(end_ats)
+        end_ats = {action.end_at for action in actions}
+        #self.draw_game(shade_positions=end_ats)
         return self.get_choice_position({position: position for position in end_ats})
 
     def pick_upgrade(self, unit):
@@ -312,7 +312,6 @@ class Controller(object):
         buttons = {pygame.K_1: 0, pygame.K_2: 1}
         areas = [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]]
         choice = self.get_choice(buttons, areas)
-
         return unit.get_upgrade(choice)
 
     def pick_ability(self, unit):
@@ -354,7 +353,7 @@ class Controller(object):
             self.client.send_upgrade_choice(string_upgrade, self.game.gamestate.action_count)
 
     def perform_move_with_attack(self, action, outcome):
-        self.draw_game(redraw_log=True, shade_actions=False)
+        self.draw_game(redraw_log=True)
         move_with_attack = self.ask_about_move_with_attack(action)
 
         self.game.save_option("move_with_attack", move_with_attack)
@@ -427,16 +426,12 @@ class Controller(object):
         else:
             self.trigger_artificial_intelligence()
 
-    def draw_game(self, redraw_log=False, shade_actions=True):
-        if shade_actions and self.start_at:
+    def draw_game(self, redraw_log=False, shade_actions=True, shade_positions=None):
+        if shade_actions and "start_at" in self.positions:
             actions = self.game.gamestate.get_actions(self.positions)
         else:
             actions = None
-        if shade_actions:
-            shade_position = self.start_at
-        else:
-            shade_position = None
-        self.view.draw_game(self.game, shade_position, actions, redraw_log)
+        self.view.draw_game(self.game, actions, shade_positions, redraw_log)
 
     def pause(self):
         while True:
@@ -474,6 +469,6 @@ class Controller(object):
             actions = self.game.gamestate.get_actions(
                 {"start_at": self.start_at, "target_at": position})
             if actions:
-                self.view.shade_actions(actions)
+                self.draw_game(shade_actions=actions)
                 self.view.show_battle_hint(self.game.gamestate, self.start_at, position)
             self.positions = {"start_at": None, "end_at": None}
