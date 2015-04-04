@@ -207,7 +207,7 @@ class Controller(object):
             if position in gamestate.enemy_units:
                 actions = filter_actions(actions, {"start_at": self.start_at, "target_at": position})
             else:
-                actions = filter_actions(actions, {"start_at": self.start_at, "target_at": position})
+                actions = filter_actions(actions, {"start_at": self.start_at, "end_at": position})
             if actions:
                 self.perform_action(actions[0])
             return
