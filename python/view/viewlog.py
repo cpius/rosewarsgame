@@ -21,7 +21,7 @@ class Viewlog:
 
         self.locations = {}
         for i in range(self.maximum_logs + 1):
-            base = Location(391, i * self.base_height, self.zoom)
+            base = Location(391 * zoom, i * self.base_height * zoom, zoom)
             self.locations[i] = {"unit1": base.adjust(65, 6),
                                  "unit2": base.adjust(165, 6),
                                  "symbol": base.adjust(113, 8),
