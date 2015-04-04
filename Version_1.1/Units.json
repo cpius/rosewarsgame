@@ -10,9 +10,9 @@
         },
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"sharpshooting": 1},
-            "repeat_1": {"range_skill": 1},
-            "repeat_2": {"attack_skill": 1}
+            "once_1": {"fire_arrows": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"range_skill": 1}
         }
     },
     "Pikeman": {
@@ -147,9 +147,9 @@
         "attributes": {},
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"fire_arrows": 1},
-            "repeat_1": {"attack_skill": 1},
-            "repeat_2": {"range_skill": 1}
+            "once_1": {"attack_skill": 2},
+            "repeat_1": {"range_skill": 1},
+            "repeat_2": {"attack_skill": 1}
         }
     },
     "Catapult": {
