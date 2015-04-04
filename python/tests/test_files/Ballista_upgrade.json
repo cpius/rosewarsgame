@@ -5,7 +5,7 @@
     "outcome":{
         "E5": [6, 1]
     },
-    "upgrade_choice": 1,
+    "upgrade_choice": 2,
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
