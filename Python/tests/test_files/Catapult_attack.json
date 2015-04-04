@@ -1,0 +1,38 @@
+{
+    "type": "Is outcome correct",
+    "description": "Catapult can't attack in the first turn.",
+    "click_position": "E5",
+    "action_count": 0,
+    "outcome":{
+        "E5": [6, 1]
+    },
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E3": "Catapult"
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E3"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E3": "Catapult"
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "E5": "Pikeman"
+        }
+    },
+    "post_positions": {
+    }
+}

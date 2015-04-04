@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "description": "A Catapult can't attack if there is only one action.",
+    "result": false,
+    "action": {
+        "start_at": "B3",
+        "end_at": "B3",
+        "target_at": "B4",
+        "move_with_attack": false
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B3": "Catapult",
+            "C3": "Pikeman"
+        },
+        "player2_units": {
+            "C4": "Knight",
+            "B4": "Knight"
+        }
+    }
+}

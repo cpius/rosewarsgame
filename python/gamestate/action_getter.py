@@ -238,25 +238,25 @@ def get_bonus_tiles(gamestate):
 
 def get_actions(gamestate):
 
-    is_extra_action = gamestate.is_extra_action()
-
-    if not gamestate.actions_remaining and not is_extra_action:
+    if not gamestate.actions_remaining and not gamestate.is_extra_action():
         return []
 
     bonus_tiles = get_bonus_tiles(gamestate)
     actions = set()
     for position, unit in gamestate.player_units.items():
-        if can_use_unit(unit, is_extra_action):
+        if can_use_unit(unit, gamestate):
             unit_actions = UnitActions(unit, position, gamestate, bonus_tiles)
             actions |= unit_actions.get_all_actions()
 
     return actions
 
 
-def can_use_unit(unit, is_extra_action):
+def can_use_unit(unit, gamestate):
     if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
         return False
-    elif is_extra_action:
+    elif unit.has(Trait.double_attack_cost) and gamestate.actions_remaining < 2:
+        return False
+    elif gamestate.is_extra_action():
         return unit.has(State.extra_action)
     else:
         return not unit.has(State.used)
