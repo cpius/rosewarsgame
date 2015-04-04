@@ -14,8 +14,7 @@
         "player2_units": {
             "B4": {
                 "name": "Royal_Guard",
-                "tall_shield": 1,
-                "melee_freeze": 1
+                "tall_shield": 1
             },
             "C2": "Knight"
         },

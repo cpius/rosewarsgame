@@ -42,7 +42,6 @@ class Trait(Enum):
     lancing = 19
     longsword = 20
     melee_expert = 21
-    melee_freeze = 22
     movement_skill = 23
     pikeman_specialist = 24
     push = 25

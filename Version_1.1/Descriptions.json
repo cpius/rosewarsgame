@@ -68,9 +68,6 @@
         "melee_expert": {
             "1": "+1A, +1D vs melee units."
         },
-        "melee_freeze": {
-            "1": "Units adjacent to it can only attack it, not move."
-        },
         "pikeman_specialist": {
             "1": "Pikemen do not get +1A/+1D against it."
         },
