@@ -252,9 +252,8 @@ def get_actions(gamestate):
 
 
 def can_use_unit(unit, gamestate):
-    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
-        return False
-    elif unit.has(Trait.double_attack_cost) and gamestate.actions_remaining < 2:
+    if ((unit.has(Trait.double_attack_cost) and gamestate.actions_remaining < 2) or
+            unit.has(Effect.poisoned) or unit.has(State.recently_bribed)):
         return False
     elif gamestate.is_extra_action():
         return unit.has(State.extra_action)
