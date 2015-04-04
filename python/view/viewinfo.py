@@ -134,8 +134,16 @@ class Viewinfo:
 
     def draw_upgrade_options(self, unit):
         for i in range(2):
-            upgraded_unit = unit.get_upgraded_unit_from_choice(i)
-            self.show_unit_upgrade_choice(upgraded_unit, i)
+            upgrade = unit.get_upgrade(i)
+            if upgrade in Unit:
+                upgraded_unit = unit.get_upgraded_unit_from_choice(i)
+                self.show_unit_upgrade_choice(upgraded_unit, i)
+            else:
+                base = self.interface.upgrade_locations[i]
+                (attribute, values), = upgrade.items()
+                lines = [prettify(attribute.name) + ":" + get_description(attribute, values.level)]
+                line_length = 25
+                show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *base)
 
     def draw_ask_about_ability(self, unit):
         self.clear()

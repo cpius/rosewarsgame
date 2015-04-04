@@ -2,16 +2,16 @@
     "traits":
     {
         "attack_skill": {
-            "1": "Is added to the units base attack"
+            "1": "1 Is added to the units base attack"
         },
         "defence_skill": {
-            "1": "Is added to the units base defence"
+            "1": "1 Is added to the units base defence"
         },
         "range_skill": {
-            "1": "Is added to the units base range"
+            "1": "1 Is added to the units base range"
         },
         "movement_skill": {
-            "1": "Is added to the units base movement"
+            "1": "1 Is added to the units base movement"
         },
         "arrows": {
             "1": "+1A against infantry."
