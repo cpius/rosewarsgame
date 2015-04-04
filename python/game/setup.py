@@ -146,17 +146,30 @@ def select_units():
     return basic_units + special_units
 
 
+def at_least_n_column_blocks(units, n):
+    blocks = ([pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.unit == Unit.Pikeman] +
+              [pos.column for pos in units])
+
+    return all(blocks.count(column) >= n for column in board_columns)
+
+
 def at_least_two_column_blocks(units):
     """
     :param units: The units of one player
     :return: False if there is a column that has less than two "blocks". A block is either a unit, or a tile that is
     under ZOC by a Pikeman.
     """
-    blocks = ([pos.column + n for n in [-1, +1] for pos, unit in units.items() if unit.unit == Unit.Pikeman] +
-              [pos.column for pos in units])
+    return at_least_n_column_blocks(units, 2)
 
-    return all(blocks.count(column) >= 2 for column in board_columns)
-     
+
+def at_least_one_column_block(units):
+    """
+    :param units: The units of one player
+    :return: False if there is a column that has less than one "blocks". A block is either a unit, or a tile that is
+    under ZOC by a Pikeman.
+    """
+    return at_least_n_column_blocks(units, 1)
+
 
 def at_most_one_pikeman_per_column(units):
     """
@@ -175,12 +188,32 @@ def at_least_one_war_machine(units):
     return Type.War_Machine in {unit.type for unit in units.values()}
 
 
+def at_most_n_war_machines(units, n):
+    return sum(1 for unit in units.values() if unit.type == Type.War_Machine) <= n
+
+
 def at_most_two_war_machines(units):
     """
     :param units: The units of one player
     :return: False if there are more than two War Machines
     """
-    return sum(1 for unit in units.values() if unit.type == Type.War_Machine) <= 2
+    return at_most_n_war_machines(units, 2)
+
+
+def at_most_one_war_machine(units):
+    """
+    :param units: The units of one player
+    :return: False if there are more than one War Machines
+    """
+    return at_most_n_war_machines(units, 1)
+
+
+def at_most_one_basic_war_machine(units):
+    """
+    :param units: The units of one player
+    :return: False if there are more than one War Machines
+    """
+    return sum(1 for unit in units.values() if unit.unit in [Unit.Catapult, Unit.Ballista]) <= 1
 
 
 def at_least_five_melee_with_weaponsmith(units):
@@ -191,8 +224,8 @@ def at_least_five_melee_with_weaponsmith(units):
     return not (Unit.Weaponsmith in {unit.unit for unit in units.values()} and
                 sum(1 for unit in units.values() if unit.is_melee) < 5)
 
-requirements = [at_least_two_column_blocks, at_most_one_pikeman_per_column, at_least_one_war_machine,
-                at_most_two_war_machines, at_least_five_melee_with_weaponsmith]
+requirements = [at_least_one_column_block, at_most_one_pikeman_per_column, at_least_one_war_machine,
+                at_most_one_basic_war_machine, at_least_five_melee_with_weaponsmith]
 
 
 def get_units():
