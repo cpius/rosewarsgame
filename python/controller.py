@@ -404,8 +404,6 @@ class Controller(object):
         if self.upgrade_should_be_performed(action):
             self.perform_upgrade(action, upgrade)
 
-        self.game.save(self.view, action, outcome)
-
         if self.game.is_turn_done():
             self.game.shift_turn()
 
@@ -413,6 +411,8 @@ class Controller(object):
 
         if not self.game.gamestate.is_extra_action():
             self.clear_move()
+
+        self.game.save(self.view, action, outcome)
 
         if verbose:
             print("Action performed. Expecting action from", self.game.current_player().intelligence)
