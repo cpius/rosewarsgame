@@ -1,0 +1,26 @@
+{
+    "type": "Does action exist",
+    "description": "A Knight can move past a sabotaged Pikeman",
+    "result": true,
+    "action": {
+        "start_at": "A3",
+        "end_at": "A5"
+    },
+    "gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A3": "Knight",
+            "E6": "Catapult"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "B4": {
+                "name": "Pikeman",
+                "sabotaged": {
+                    "level": 1,
+                    "duration": 1
+                }
+            }
+        }
+    }
+}

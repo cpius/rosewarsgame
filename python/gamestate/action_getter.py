@@ -82,9 +82,9 @@ class UnitActions:
         """
         zoc_blocks = set()
         for position, enemy_unit in self.enemy_units.items():
-            if enemy_unit.has(Trait.zoc_all):
+            if enemy_unit.has(Trait.zoc_all) and not enemy_unit.has(Effect.sabotaged):
                 zoc_blocks.add(position)
-            elif enemy_unit.has(Trait.zoc_cavalry) and self.unit.type == Type.Cavalry:
+            elif enemy_unit.has(Trait.zoc_cavalry) and self.unit.type == Type.Cavalry and not enemy_unit.has(Effect.sabotaged):
                 zoc_blocks.add(position)
         self.zoc_blocks = frozenset(zoc_blocks)
 
