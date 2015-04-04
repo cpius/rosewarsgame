@@ -9,11 +9,11 @@ Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 units_info = {Unit.Archer: Info({2, 3}, 3, False),
               Unit.Assassin: Info({1}, 1, True),
               Unit.Trebuchet: Info({3}, 1, True),
-              Unit.Ballista: Info({2, 3}, 2, True),
-              Unit.Catapult: Info({2, 3}, 2, False),
+              Unit.Ballista: Info({2, 3}, 1, True),
+              Unit.Catapult: Info({2, 3}, 1, False),
               Unit.Knight: Info({4}, 3, False),
               Unit.Light_Cavalry: Info({2, 3}, 3, False),
-              Unit.Pikeman: Info({2, 3, 4}, 3, False),
+              Unit.Pikeman: Info({2, 3, 4}, 2, False),
               Unit.Berserker: Info({2, 3}, 1, False),
               Unit.Cannon: Info({2}, 1, True),
               Unit.Halberdier: Info({4}, 1, False),
@@ -188,32 +188,12 @@ def at_least_one_war_machine(units):
     return Type.War_Machine in {unit.type for unit in units.values()}
 
 
-def at_most_n_war_machines(units, n):
-    return sum(1 for unit in units.values() if unit.type == Type.War_Machine) <= n
-
-
-def at_most_two_war_machines(units):
+def at_least_one_pikeman(units):
     """
     :param units: The units of one player
-    :return: False if there are more than two War Machines
+    :return: False if there are no Pikemen
     """
-    return at_most_n_war_machines(units, 2)
-
-
-def at_most_one_war_machine(units):
-    """
-    :param units: The units of one player
-    :return: False if there are more than one War Machines
-    """
-    return at_most_n_war_machines(units, 1)
-
-
-def at_most_one_basic_war_machine(units):
-    """
-    :param units: The units of one player
-    :return: False if there are more than one War Machines
-    """
-    return sum(1 for unit in units.values() if unit.unit in [Unit.Catapult, Unit.Ballista]) <= 1
+    return Unit.Pikeman in {unit.unit for unit in units.values()}
 
 
 def at_least_five_melee_with_weaponsmith(units):
@@ -225,7 +205,7 @@ def at_least_five_melee_with_weaponsmith(units):
                 sum(1 for unit in units.values() if unit.is_melee) < 5)
 
 requirements = [at_least_one_column_block, at_most_one_pikeman_per_column, at_least_one_war_machine,
-                at_most_one_basic_war_machine, at_least_five_melee_with_weaponsmith]
+                at_least_five_melee_with_weaponsmith, at_least_one_pikeman]
 
 
 def get_units():
