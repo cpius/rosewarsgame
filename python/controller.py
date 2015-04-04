@@ -304,7 +304,7 @@ class Controller(object):
 
     def pick_end_at(self, actions):
         end_ats = {action.end_at for action in actions}
-        #self.draw_game(shade_positions=end_ats)
+        self.draw_game(shade_positions=end_ats)
         return self.get_choice_position({position: position for position in end_ats})
 
     def pick_upgrade(self, unit):
