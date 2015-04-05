@@ -66,9 +66,7 @@ class Game:
 
             action_document = log_document[str(action_number)]
 
-            action_from_document = Action.from_document(gamestate.all_units(), action_document)
-
-            action = next(action for action in gamestate.get_actions() if action == action_from_document)
+            action = Action.from_document(gamestate.all_units(), action_document)
 
             game.actions[str(action_number)] = action
 
