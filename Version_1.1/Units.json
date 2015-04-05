@@ -112,12 +112,11 @@
         "movement": 3,
         "range": 1,
         "attributes": {
-            "lancing": 1,
-            "cavalry_specialist": 1
+            "lancing": 1
         },
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"lancing": 1, "movement_skill": 1},
+            "once_1": {"lancing": 1},
             "repeat_1": {"attack_skill": 1},
             "repeat_2": {"defence_skill": 1}
         }

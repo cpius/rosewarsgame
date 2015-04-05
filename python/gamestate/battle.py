@@ -56,7 +56,7 @@ def get_attack(action, gamestate, is_sub_action=False):
     attack = attacking_unit.attack
 
     if lancing(action):
-        attack += lancing(action)
+        attack += 3
 
     if flanking(action):
         attack += 2 * attacking_unit.get(Trait.flanking)
@@ -101,7 +101,7 @@ def get_attack(action, gamestate, is_sub_action=False):
 def lancing(action):
     if action.unit.has(Trait.lancing, 1) and action.is_attack and distance_to_target(action) >= 3:
         return 2
-    elif action.unit.has(Trait.lancing, 2) and action.is_attack and distance_to_target(action) >= 4:
+    elif action.unit.has(Trait.lancing, 2) and action.is_attack and distance_to_target(action) >= 2:
         return 3
     else:
         return 0
