@@ -180,9 +180,8 @@
         },
         "experience_to_upgrade": 3,
         "upgrades": {
-            "once_1": {"melee_expert": 1},
-            "repeat_1": {"attack_skill": 1},
-            "repeat_2": {"defence_skill": 1}
+            "once_1": {"defence_skill": 1},
+            "repeat_1": {"attack_skill": 1}
         }
     },
     "Scout": {
@@ -196,10 +195,9 @@
         },
         "experience_to_upgrade": 2,
         "upgrades": {
-            "once_1": {"tall_shield": 1},
+            "once_1": {"sturdy_helmet": 1},
             "once_2": {"attack_skill": 2},
-            "repeat_1": {"movement_skill": 1},
-            "repeat_2": {"defence_skill": 1}
+            "repeat_1": {"movement_skill": 1}
         }
     },
     "Viking": {
@@ -215,7 +213,6 @@
         },
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"war_machine_specialist": 1},
             "repeat_1": {"attack_skill": 1},
             "repeat_2": {"defence_skill": 1}
         }
@@ -246,7 +243,7 @@
         },
         "experience_to_upgrade": 3,
         "upgrades": {
-            "once_1": {"far_sighted": 1, "attack_cooldown": 1},
+            "once_1": {"attack_cooldown": 1},
             "repeat_1": {"attack_skill": 1},
             "repeat_2": {"range_skill": 1}
         }
@@ -325,10 +322,9 @@
         },
         "experience_to_upgrade": 3,
         "upgrades": {
-            "once_1": {"big_shield": 1},
-            "once_2": {"attack_skill": 2},
-            "repeat_1": {"attack_skill": 1},
-            "repeat_2": {"defence_skill": 1}
+            "once_1": {"attack_skill": 2},
+            "repeat_1": {"defence_skill": 1},
+            "repeat_2": {"attack_skill": 1}
         }
     },
     "War_Elephant": {

@@ -26,7 +26,6 @@ class Trait(Enum):
     attack_cooldown = 2
     attack_skill = 3
     berserking = 4
-    big_shield = 5
     cavalry_specialist = 6
     combat_agility = 7
     crusading = 8
@@ -34,29 +33,23 @@ class Trait(Enum):
     defence_skill = 10
     double_attack_cost = 11
     extra_life = 12
-    far_sighted = 13
     fire_arrows = 14
     flag_bearing = 15
     flanking = 16
     javelin = 18
     lancing = 19
     longsword = 20
-    melee_expert = 21
     movement_skill = 23
-    pikeman_specialist = 24
     push = 25
     rage = 26
     range_skill = 27
     rapier = 28
     ride_through = 29
     scouting = 30
-    sharpshooting = 31
     spread_attack = 32
     sturdy_helmet = 17
     swiftness = 33
-    tall_shield = 34
     triple_attack = 35
-    war_machine_specialist = 36
     zoc_all = 37
     zoc_cavalry = 38
 

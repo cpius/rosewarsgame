@@ -23,9 +23,6 @@
         "berserking": {
             "1": "Can move 4 tiles if movement ends with an attack."
         },
-        "big_shield": {
-            "1": "+2D v melee"
-        },
         "cavalry_specialist": {
             "1": "+1A +1D vs Cavalry"
         },
@@ -45,9 +42,6 @@
         "extra_life": {
             "1": "It takes two successful hits to kill this unit."
         },
-        "far_sighted": {
-            "1": "-1A if target is less than 4 tiles away."
-        },
         "fire_arrows": {
             "1": "+3A vs War machines."
         },
@@ -64,12 +58,6 @@
         },
         "javelin": {
             "1": "Can one time make a ranged attack with range 3. The defending unit has it's defence reduced by 1."
-        },
-        "melee_expert": {
-            "1": "+1A, +1D vs melee units."
-        },
-        "pikeman_specialist": {
-            "1": "Pikemen do not get +1A/+1D against it."
         },
         "lancing": {
             "1": "If it starts movement with 2 empty tiles between lancer and the unit it attacks, +2A.",
@@ -88,13 +76,10 @@
             "1": "+1A against infantry."
         },
         "ride_through": {
-            "1": "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where it ends up on this empty tile. Zone of control has no effect on this ability."
+            "1": "If there is an enemy unit next to it, and the tile behind that unit is empty, it can make an attack where it ends up on this empty tile."
         },
         "scouting": {
             "1": "Can move past all units."
-        },
-        "sharpshooting": {
-            "1": "Targets have their defence reduced to 1 during the attack."
         },
         "spread_attack": {
             "1": "Also attacks the adjacent tiles, even if your units are standing there."
@@ -102,14 +87,8 @@
         "swiftness": {
             "1": "Can use remaining moves after attacking."
         },
-        "tall_shield": {
-            "1": "+1D against ranged attacks."
-        },
         "triple_attack": {
             "1": "Also hits the two diagonally nearby tiles in the attack direction."
-        },
-        "war_machine_specialist": {
-            "1": "+1A +1D vs War Machines"
         },
         "zoc_all": {
             "1": "No enemy units can move past unit."
@@ -163,9 +142,6 @@
         "improve_weapons": {
             "1": "Give melee unit +3 attack, +1 defence until your next turn.",
             "2": "Give melee unit +2 attack, +1 defence for two turns."
-        },
-        "pikeman_specialist": {
-            "1": "Pikemen do not get +1D against Hussar."
         },
         "poison": {
             "1": "Makes a unit unable to perform actions until your next turn.",

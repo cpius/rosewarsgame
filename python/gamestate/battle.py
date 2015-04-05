@@ -5,28 +5,13 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
 
     defence_adjusters = 0
 
-    if attacking_unit.is_melee and defending_unit.has(Trait.big_shield):
-        defence_adjusters += 2
-
     if defending_unit.has(Effect.improved_weapons):
         defence_adjusters += 1
 
     if attacking_unit.type == Type.War_Machine and defending_unit.has(Trait.sturdy_helmet):
         defence_adjusters += 1
 
-    if attacking_unit.is_melee and defending_unit.has(Trait.melee_expert):
-        defence_adjusters += 1
-
-    if attacking_unit.has(Trait.pikeman_specialist) and defending_unit == Unit.Pikeman:
-        defence_adjusters += 1
-
-    if attacking_unit.is_ranged and defending_unit.has(Trait.tall_shield):
-        defence_adjusters += 1
-
     if defending_unit.has(Trait.cavalry_specialist) and attacking_unit.type == Type.Cavalry:
-        defence_adjusters += 1
-
-    if defending_unit.has(Trait.war_machine_specialist) and attacking_unit.type == Type.War_Machine:
         defence_adjusters += 1
 
     if action.is_javelin_throw:
@@ -38,8 +23,6 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
 def get_defence_setters(attacking_unit, defending_unit):
 
     defence_setters = []
-    if attacking_unit.has(Trait.sharpshooting):
-        defence_setters.append(1)
 
     if defending_unit.has(Effect.sabotaged, 1) or defending_unit.has(Effect.sabotaged, 2):
         defence_setters.append(0)
@@ -106,19 +89,7 @@ def get_attack(action, gamestate, is_sub_action=False):
     if attacking_unit.has(Trait.arrows) and defending_unit.type == Type.Infantry:
         attack += 1
 
-    if defending_unit.has(Trait.pikeman_specialist) and attacking_unit == Unit.Pikeman:
-        attack += 1
-
-    if defending_unit.is_melee and attacking_unit.has(Trait.melee_expert):
-        attack += 1
-
-    if attacking_unit.has(Trait.far_sighted) and distance(action.end_at, action.target_at) < 4:
-        attack -= 1
-
     if attacking_unit.has(Trait.cavalry_specialist) and defending_unit.type == Type.Cavalry:
-        attack += 1
-
-    if attacking_unit.has(Trait.war_machine_specialist) and defending_unit.type == Type.War_Machine:
         attack += 1
 
     if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.War_Machine:

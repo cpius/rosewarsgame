@@ -179,10 +179,10 @@ class UnitActions:
         attacks = set()
         for direction in directions:
             one_tile_away = self.start_at.move(direction)
-            if not one_tile_away:
+            if zoc_block(self.start_at, direction, self.zoc_blocks) or not one_tile_away:
                 continue
             two_tiles_away = one_tile_away.move(direction)
-            if not two_tiles_away:
+            if zoc_block(one_tile_away, direction, self.zoc_blocks) or not two_tiles_away:
                 continue
             if one_tile_away in self.enemy_units and two_tiles_away not in self.units:
                 attacks.add(self.make_action(end_at=two_tiles_away, target_at=one_tile_away, move_with_attack=False))

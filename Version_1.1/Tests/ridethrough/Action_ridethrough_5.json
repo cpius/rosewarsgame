@@ -1,0 +1,22 @@
+{
+    "type": "Does action exist",
+    "description": "ride through is blocked by ZOC next to starting spot.",
+    "result": false,
+    "action": {
+        "move_with_attack": false,
+        "start_at": "E7",
+        "end_at": "E5",
+        "target_at": "E6"
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E7": "Hussar",
+            "A3": "Pikeman"
+        },
+        "player2_units": {
+            "E6": "Archer",
+            "D7": "Pikeman"
+        }
+    }
+}
