@@ -20,12 +20,11 @@ class Viewgame:
 
         self.draw_units(game)
 
-        if not shade_positions:
-            shade_positions = set()
-        if actions:
-            shade_positions |= self.get_shade_actions(actions)
+        if actions and not shade_positions:
+            shade_positions = self.get_shade_actions(actions)
 
-        self.shade_tiles(shade_positions)
+        if shade_positions:
+            self.shade_tiles(shade_positions)
 
     def shade_tiles(self, shade_positions):
         unit_dimensions = (self.interface.unit_box_width, self.interface.unit_box_height)
