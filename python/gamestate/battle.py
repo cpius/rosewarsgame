@@ -61,14 +61,14 @@ def get_attack(action, gamestate, is_sub_action=False):
     if flanking(action):
         attack += 2 * attacking_unit.get(Trait.flanking)
 
-    if action.start_at in gamestate.bonus_tiles[Trait.crusading][1]:
+    if not attacking_unit.type == Type.War_Machine and action.start_at in gamestate.bonus_tiles[Trait.crusading][1]:
         attack += 1
 
-    if action.start_at in gamestate.bonus_tiles[Trait.crusading][2]:
+    if not attacking_unit.type == Type.War_Machine and action.start_at in gamestate.bonus_tiles[Trait.crusading][2]:
         attack += 2
 
-    if attacking_unit.is_melee and action.end_at in gamestate.bonus_tiles[Trait.flag_bearing] \
-            and not attacking_unit.unit == Unit.Flag_Bearer:
+    if (action.end_at in gamestate.bonus_tiles[Trait.flag_bearing] and not attacking_unit.unit == Unit.Flag_Bearer
+            and not (action.is_javelin_throw or attacking_unit.is_ranged)):
         attack += 2
 
     if hasattr(action, "high_morale"):

@@ -1,6 +1,6 @@
 {
     "type": "Is attack and defence correct",
-    "description": "Ranged units do not get bonus from Flag Bearer",
+    "description": "Archers do not get bonus from Flag Bearer",
     "attack": 2,
     "defence": 3,
     "action": {
