@@ -22,8 +22,7 @@
             "A3": {
                 "name": "Scout",
                 "experience": 4,
-                "attack_skill": 2,
-                "recently_upgraded": 1
+                "attack_skill": 2
             }
         },
         "player2_units": {

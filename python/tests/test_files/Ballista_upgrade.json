@@ -32,8 +32,7 @@
                 "name": "Ballista",
                 "experience": 4,
                 "used": 1,
-                "attack_skill": 1,
-                "recently_upgraded": 1
+                "attack_skill": 1
             }
         },
         "actions_remaining": 1,

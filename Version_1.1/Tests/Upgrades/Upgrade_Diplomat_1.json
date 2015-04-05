@@ -22,8 +22,7 @@
             "A3": {
                 "name": "Diplomat",
                 "experience": 4,
-                "bribe": 2,
-                "recently_upgraded": 1
+                "bribe": 2
             }
         },
         "player2_units": {

@@ -24,8 +24,7 @@
                 "name": "Catapult",
                 "experience": 3,
                 "attack_skill": -1,
-                "range_skill": 1,
-                "recently_upgraded": 1
+                "range_skill": 1
             }
         },
         "player2_units": {

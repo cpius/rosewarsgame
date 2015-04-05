@@ -26,8 +26,7 @@
                 "name": "Catapult",
                 "experience": 12,
                 "attack_skill": 2,
-                "range_skill": 1,
-                "recently_upgraded": 1
+                "range_skill": 1
             },
             "C1": "Knight"
         },

@@ -57,7 +57,7 @@ class Viewinfo:
         if unit.unit_level:
             lines += ["Level: " + str(unit.unit_level + 1), ""]
 
-        dont_show = {State.used, State.recently_upgraded, State.experience, State.lost_extra_life, State.javelin_thrown,
+        dont_show = {State.used, State.experience, State.lost_extra_life, State.javelin_thrown,
                      Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life,
                      Trait.javelin}
 

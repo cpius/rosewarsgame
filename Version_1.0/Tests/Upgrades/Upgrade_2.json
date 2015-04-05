@@ -24,8 +24,7 @@
                 "name": "Catapult",
                 "experience": 6,
                 "attack_skill": 1,
-                "defence_skill": 1,
-                "recently_upgraded": 1
+                "defence_skill": 1
             }
         },
         "player2_units": {

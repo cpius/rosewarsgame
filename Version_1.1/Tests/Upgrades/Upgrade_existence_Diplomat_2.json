@@ -19,8 +19,7 @@
             "A3": {
                 "name": "Diplomat",
                 "experience": 4,
-                "defence_skill": 1,
-                "recently_upgraded": 1
+                "defence_skill": 1
             }
         },
         "player2_units": {

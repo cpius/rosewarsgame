@@ -25,8 +25,7 @@
         "Message": "Upgraded Flanking Cavalry on C3",
         "Unit": {
             "name": "Flanking_Cavalry",
-            "experience": 4,
-            "recently_upgraded": 1
+            "experience": 4
         }
     }
 }

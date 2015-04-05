@@ -25,8 +25,7 @@
             "A3": {
                 "name": "Catapult",
                 "experience": 6,
-                "range_skill": 1,
-                "recently_upgraded": 1
+                "range_skill": 1
             },
             "C1": "Knight"
         },

@@ -106,7 +106,6 @@
         "movement_remaining": "Movement points left for doing an extra action",
         "used": "Whether a unit has been used this turn.",
         "experience": "Experience.",
-        "recently_upgraded": "Whether a unit was upgraded this turn",
         "recently_bribed": "Whether a unit was bribed last turn.",
         "flanked": "This unit was attacked by a unit with flanking last turn."
     },

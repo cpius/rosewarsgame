@@ -97,7 +97,6 @@ def is_outcome_correct(test_document):
     gamestate.set_available_actions()
     gamestate.do_action(action, outcome)
 
-    action.unit.remove_states_with_value_zero()
     if not gamestate.is_extra_action():
         action.unit.remove(State.movement_remaining)
 

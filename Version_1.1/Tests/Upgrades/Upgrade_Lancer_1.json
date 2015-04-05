@@ -22,8 +22,7 @@
             "A3": {
                 "name": "Lancer",
                 "experience": 4,
-                "cavalry_specialist": 1,
-                "recently_upgraded": 1
+                "cavalry_specialist": 1
             }
         },
         "player2_units": {
