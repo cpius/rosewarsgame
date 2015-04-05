@@ -121,15 +121,21 @@ class UnitClass():
         if attribute in self.attributes:
             del self.attributes[attribute]
 
-    def increase(self, state):
+    def increase(self, attribute, n=1):
         """
-        :param state: A state.
-        :return: Increase the state value by 1.
+        :param attribute: An attribute
+        :return: If the attribute is a state, increase the value by n. Otherwise increase the level by n.
         """
-        if self.has(state):
-            self.attributes[state].value += 1
+        if attribute in State:
+            if self.has(attribute):
+                self.attributes[attribute].value += n
+            else:
+                self.attributes[attribute] = AttributeValues(value=n)
         else:
-            self.attributes[state] = AttributeValues(value=1)
+            if self.has(attribute):
+                self.attributes[attribute].level += n
+            else:
+                self.attributes[attribute] = AttributeValues(level=n)
 
     def gain_experience(self):
         if not self.has(State.used) and not beginner_mode:
@@ -158,25 +164,16 @@ class UnitClass():
         """
         if upgrade in Unit:
             upgraded_unit = base_units[upgrade]()
-            for attribute in self.attributes:
-                if attribute in State or attribute in Effect:
-                    upgraded_unit.attributes[attribute] = self.attributes[attribute]
+            for attribute in self.states + self.effects:
+                upgraded_unit.attributes[attribute] = self.attributes[attribute]
             upgraded_unit.remove(State.experience)
-            return upgraded_unit
         else:
             upgraded_unit = base_units[self.unit]()
             upgraded_unit.attributes = dict(self.attributes)
-            for key, attributes in upgrade.items():
-                if key in upgraded_unit.attributes:
-                    level = attributes.level + upgraded_unit.attributes[key].level
-                    if level == 0:
-                        del upgraded_unit.attributes[key]
-                    else:
-                        upgraded_unit.attributes[key] = AttributeValues(level=attributes.level + upgraded_unit.attributes[key].level)
-                else:
-                    upgraded_unit.attributes[key] = attributes
+            for attribute, attribute_values in upgrade.items():
+                upgraded_unit.increase(attribute, attribute_values.level)
 
-            return upgraded_unit
+        return upgraded_unit
 
     def get_upgraded_unit_from_choice(self, choice):
         """
