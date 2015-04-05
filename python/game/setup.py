@@ -11,9 +11,9 @@ units_info = {Unit.Archer: Info({2, 3}, 3, False),
               Unit.Trebuchet: Info({3}, 1, True),
               Unit.Ballista: Info({2, 3}, 1, True),
               Unit.Catapult: Info({2, 3}, 1, False),
-              Unit.Knight: Info({4}, 3, False),
+              Unit.Knight: Info({3, 4}, 3, False),
               Unit.Light_Cavalry: Info({2, 3}, 3, False),
-              Unit.Pikeman: Info({2, 3, 4}, 2, False),
+              Unit.Pikeman: Info({2, 3}, 2, False),
               Unit.Berserker: Info({2, 3}, 1, False),
               Unit.Cannon: Info({2}, 1, True),
               Unit.Halberdier: Info({4}, 1, False),
@@ -55,6 +55,8 @@ else:
     basic_unit_count, special_unit_count = 6, 3
 
 board_columns = [1, 2, 3, 4, 5]
+
+melee_units = [unit for unit in special_unit_set & basic_unit_set if base_units[unit].range == 1]
 
 
 class TilesBag(object):
@@ -180,42 +182,67 @@ def at_most_one_pikeman_per_column(units):
                    sum(1 for pos, unit in units.items() if pos.column == column and unit.unit == Unit.Pikeman) > 1)
 
 
-def at_least_one_war_machine(units):
+def no_pikemen_on_the_edges(units):
     """
     :param units: The units of one player
-    :return: False if there are no War Machines
+    :return: False if there is a Pikeman on the first or fifth column.
     """
-    return Type.War_Machine in {unit.type for unit in units.values()}
+    return not any(pos.column in [1, 5] and unit.unit == Unit.Pikeman for pos, unit in units.items())
 
 
-def at_least_one_pikeman(units):
+def at_least_one_war_machine(unit_list):
     """
-    :param units: The units of one player
+    :param unit_list: A list of unit enums
+    :return: False if there are no basic War Machines
+    """
+    return Unit.Ballista in unit_list or Unit.Catapult in unit_list
+
+
+def at_least_one_pikeman(unit_list):
+    """
+    :param unit_list: A list of unit enums
     :return: False if there are no Pikemen
     """
-    return Unit.Pikeman in {unit.unit for unit in units.values()}
+    return Unit.Pikeman in unit_list
 
 
-def at_least_five_melee_with_weaponsmith(units):
+def at_least_five_melee_with_weaponsmith(unit_list):
     """
-    :param units: The units of one player
+    :param unit_list: A list of unit enums
     :return: False if Weaponsmith is in the units and there is less than 5 melee units it can be used on.
     """
-    return not (Unit.Weaponsmith in {unit.unit for unit in units.values()} and
-                sum(1 for unit in units.values() if unit.is_melee) < 5)
-
-requirements = [at_least_one_column_block, at_most_one_pikeman_per_column, at_least_one_war_machine,
-                at_least_five_melee_with_weaponsmith, at_least_one_pikeman]
+    return not (Unit.Weaponsmith in unit_list and sum(1 for unit in unit_list if unit in melee_units) < 5)
 
 
-def get_units():
+draw_requirements = {at_least_one_war_machine, at_least_five_melee_with_weaponsmith, at_least_one_pikeman}
+
+placement_requirements = {at_least_two_column_blocks, at_most_one_pikeman_per_column, no_pikemen_on_the_edges}
+
+
+def draw_units():
     """
-    :return: The units of one player, drawn semi-randomly and placed on the board semi-randomly.
+    :return: A list of unit enums fulfilling draw_requirements
     """
     while True:
+        unit_list = select_units()
+        if all(requirement(unit_list) for requirement in draw_requirements):
+            return unit_list
+
+
+def place_units(unit_list):
+    """
+    :param unit_list: A list of unit enums
+    :return: A list of units placed on the board, fulfilling placement_requirements. If unsuccesful after 1000 attemps,
+    return an empty list.
+    """
+    attempts_at_placement = 0
+    while True:
+        attempts_at_placement += 1
+        if attempts_at_placement > 1000:
+            return None
+
         try:
-            units_list = select_units()
-            units = place_units_on_board(units_list)
+            units = place_units_on_board(unit_list)
 
         # If there isn't an appropriate tile to place the unit on, start over.
         except IndexError:
@@ -226,7 +253,21 @@ def get_units():
             units[position] = base_units[unit]()
 
         # Test if all requirements for the setup are fulfilled, otherwise start over.
-        if any(not requirement(units) for requirement in requirements):
+        if any(not requirement(units) for requirement in placement_requirements):
+            continue
+
+        return units
+
+
+def get_units():
+    """
+    :return: The units of one player, drawn semi-randomly and placed on the board semi-randomly.
+    """
+    while True:
+        unit_list = draw_units()
+
+        units = place_units(unit_list)
+        if not units:
             continue
 
         return units
