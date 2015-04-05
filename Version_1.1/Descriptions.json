@@ -150,8 +150,8 @@
             "2": "Unit has +2 attack, +1 defence."
         },
         "sabotaged": {
-            "1": "Units defence is reduced to 0.",
-            "2": "Units defence is reduced to 0."
+            "1": "Units defence is reduced to 0, and it has no zone of control.",
+            "2": "Units defence is reduced to 0, and it has no zone of control."
         }
     },
     "abilities":
