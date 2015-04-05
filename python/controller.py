@@ -471,4 +471,4 @@ class Controller(object):
             if actions:
                 self.draw_game(shade_actions=actions)
                 self.view.show_battle_hint(self.game.gamestate, self.start_at, position)
-            self.positions = {"start_at": None, "end_at": None}
+            self.positions = {}
