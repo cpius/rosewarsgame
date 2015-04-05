@@ -95,7 +95,7 @@ class Viewgame:
             if color:
                 draw_rectangle(self.screen, dimensions, base, color)
             else:
-                draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+                draw_rectangle(self.screen, dimensions, base, self.interface.shading)
 
     def draw_counters(self, counters, color, position, counter_coordinates, font_coordinates):
         self.draw_bordered_circle(counter_coordinates.get(position), self.interface.counter_size, color)
@@ -232,7 +232,7 @@ class Viewgame:
         dimensions = (self.interface.unit_width, self.interface.unit_height)
 
         base = self.interface.coordinates["base"].get(end_at)
-        draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+        draw_rectangle(self.screen, dimensions, base, self.interface.shading)
 
         base = self.interface.coordinates["base"].get(target_at)
-        draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+        draw_rectangle(self.screen, dimensions, base, self.interface.shading)
