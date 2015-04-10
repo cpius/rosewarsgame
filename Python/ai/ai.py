@@ -1,308 +1,50 @@
-from operator import attrgetter
-import random as rnd
 from gamestate.gamestate_library import *
+from gamestate import battle
 from gamestate.gamestate_module import Gamestate
-from gamestate.outcome import Outcome, rolls
-import math
-from itertools import product
-from collections import Counter
-import os
-import gamestate.battle as battle
+from functools import partial
+from ai import ai_factors
+from operator import attrgetter
+from ai.ai_library import Result, success, failure
+import gamestate.action_getter as action_getter
+import ai.documenter as documenter
 
 
 class AI():
     def __init__(self):
-        level = get_setting("AI_level")
-        if level == 1:
-            self.select_action = get_select_action_function(score_actions_simple)
-        elif level == 2:
-            self.select_action = get_select_action_function(score_actions_considering_one_action)
-        elif level == 3:
-            self.select_action = get_select_action_function(score_actions_considering_two_actions)
-
+        self.select_action = select_action
         self.select_upgrade = select_upgrade
 
-success = Outcome(dict((key, rolls(1, 6)) for key in board_tiles))
-failure = Outcome(dict((key, rolls(6, 1)) for key in board_tiles))
+
+def document_actions(actions, path):
+    documenter.document_actions(actions, path)
 
 
-values = {"Backline": [10000, 10000],
-          "1 action from backline": [200, 5000],
-          "1 action from backline, extra life": [280, 5000],
-          "1 attack from backline": [100, 400],
-          "1 attack from backline, extra_life": [140, 500],
-          "1 move(s) from backline, extra life": [90, 90],
-          "2 move(s) from backline, extra life": [40, 40],
-          "3 move(s) from backline, extra life": [20, 20],
-          "1 move(s) from backline, defence 1": [35, 35],
-          "1 move(s) from backline, defence 2": [40, 40],
-          "1 move(s) from backline, defence 3": [60, 60],
-          "1 move(s) from backline, defence 4": [80, 80],
-          "2 move(s) from backline, defence 1": [8, 8],
-          "2 move(s) from backline, defence 2": [10, 10],
-          "2 move(s) from backline, defence 3": [20, 20],
-          "2 move(s) from backline, defence 4": [30, 30],
-          "Basic unit": [40, 40],
-          "Special unit": [90, 90]
-          }
+def select_upgrade(gamestate):
+    return 1
 
 
-def document_actions(actions, game):
-    def get_path():
-        if not os.path.exists(game.savegame_folder()):
-            os.makedirs(game.savegame_folder())
-
-        return game.savegame_folder() + "/" + str(game.gamestate.action_count + 1) + ".txt"
-
-    def write_factors(factors):
-        for player, aspect in product(["player", "opponent"], ["gain", "loss"]):
-            if factors[player][aspect]:
-                out.write(player + " " + aspect + ": " + str(factors[player][aspect]) + "\n")
-
-    def write_score(score):
-        out.write("Score: " + str(round(score, 2)) + "\n")
-
-    def write_attack_results(a):
-        out.write("factors if win\n")
-        write_factors(a.factors_if_win)
-        out.write("\n")
-        out.write("factors if loss\n")
-        if any(a.factors_if_loss[player][aspect] for player, aspect in product(["player", "opponent"], ["gain", "loss"])):
-            write_factors(a.factors_if_loss)
-        else:
-            out.write("None\n")
-        out.write("\n")
-
-    with open(get_path(), 'w') as out:
-        for a in actions:
-            out.write(" -- " + str(a) + " -- \n")
-            if a.is_attack:
-                out.write("Chance of success: " + str(round(a.chance * 100)) + "%\n\n")
-                if hasattr(a, "a2_if_win"):
-                    out.write("- Second action if win: " + str(a.a2_if_win) + " -\n")
-                    if a.a2_if_win.is_attack:
-                        out.write("Chance of success: " + str(round(a.a2_if_win.chance * 100)) + "%\n\n")
-                        write_attack_results(a.a2_if_win)
-                    else:
-                        write_factors(a.a2_if_win.factors)
-                        out.write("\n")
-
-                    out.write("- Second action if loss: " + str(a.a2_if_loss) + " -\n")
-                    if a.a2_if_loss.is_attack:
-                        out.write("Chance of success: " + str(round(a.a2_if_loss.chance * 100)) + "%\n\n")
-                        write_attack_results(a.a2_if_loss)
-                    else:
-                        write_factors(a.a2_if_loss.factors)
-
-                    write_score(a.score)
-
-                else:
-                    write_attack_results(a)
-                    write_score(a.score)
-
-            else:
-                out.write("\n")
-                if hasattr(a, "a2"):
-                    out.write("Second action: " + str(a.a2) + "\n")
-                    if a.a2.is_attack:
-                        out.write("Chance of success: " + str(round(a.a2.chance * 100)) + "%\n")
-                        out.write("\n")
-                        write_attack_results(a.a2)
-                    else:
-                        write_factors(a.a2.factors)
-                    write_score(a.score)
-                else:
-
-                    write_factors(a.factors)
-                    write_score(a.score)
-
-            out.write("\n----------------------------------------------------------------------------------\n\n")
-
-
-def one_action_forward(action, g0, outcome=None):
-    g1 = Gamestate.copy(g0)
-    action.update_references(g1)
-    g1.do_action(action, outcome)
-    return g1
-
-
-def score_actions_considering_one_action(g0):
-    return score_actions_considering_one_more_action(g0, g0)
-
-
-def score_actions_considering_one_more_action(g1, g0):
-    actions = g1.get_actions()
-    for a in actions:
-        if a.has_outcome:
-            g2_win = one_action_forward(a, g1, success)
-            g2_loss = one_action_forward(a, g1, failure)
-            a.chance = chance_of_win(g1, a)
-            g0_factors = get_gamestate_factors(g0)
-            a.factors_if_win = get_differences(g0_factors, g2_win)
-            a.factors_if_loss = get_differences(g0_factors, g2_loss)
-            a.score = a.chance * get_score(a.factors_if_win) + (1 - a.chance) * get_score(a.factors_if_loss)
-        else:
-            g2 = one_action_forward(a, g1)
-            g0_factors = get_gamestate_factors(g0)
-            a.factors = get_differences(g0_factors, g2)
-            a.score = get_score(a.factors)
-    return actions
-
-
-def get_gamestate_factors(g):
-    factors = {"player": Counter(), "opponent": Counter()}
-    for pos, unit in g.player_units.items():
-        factors["player"] += get_unit_factors(unit, pos, g, 8)
-    for pos, unit in g.enemy_units.items():
-        factors["opponent"] += get_unit_factors(unit, pos, g, 1)
-
-    return factors
-
-
-def score_actions_considering_two_actions(g0):
-    g0.ai_factors = {}
-    if not any(unit.name == Unit.Crusader for unit in g0.player_units.values()):
-        g0.ai_factors["No_player_Crusader"] = 1
-    if not any(unit.name == "Flag Bearer" for unit in g0.player_units.values()):
-        g0.ai_factors["No_FlagBearer"] = 1
-
-    g0_factors = get_gamestate_factors(g0)
-
-    actions = g0.get_actions()
-    for a in actions:
-        if a.is_attack:
-            g1_if_win = one_action_forward(a, g0, success)
-            g1_if_loss = one_action_forward(a, g0, failure)
-            a.chance = chance_of_win(g0, a)
-            if g1_if_win.actions_remaining:
-                a.a2_if_win = max(score_actions_considering_one_more_action(g1_if_win, g0_factors), key=attrgetter("score"))
-                a.a2_if_loss = max(score_actions_considering_one_more_action(g1_if_loss, g0_factors), key=attrgetter("score"))
-                a.score = a.chance * a.a2_if_win.score + (1 - a.chance) * a.a2_if_loss.score
-            else:
-                a.factors_if_win = get_differences(g0_factors, g1_if_win)
-                a.factors_if_loss = get_differences(g0_factors, g1_if_loss)
-                a.score = a.chance * get_score(a.factors_if_win) + (1 - a.chance) * get_score(a.factors_if_loss)
-        else:
-            g1 = one_action_forward(a, g0)
-            if g1.actions_remaining:
-                a.a2 = max(score_actions_considering_one_more_action(g1, g0_factors), key=attrgetter("score"))
-                a.score = a.a2.score
-            else:
-                a.factors = get_differences(g0_factors, g1)
-                a.score = get_score(a.factors)
-    return actions
-
-
-def get_unit_factors(unit, position, gamestate, backline):
-
-    enemy_units = gamestate.enemy_units
-
-    def get_backline_value():
-
-        def get_coloumn_blocks():
-            coloumn_blocks = 0
-            for row in range(position.row, backline + 1):
-                if Position(position.column, row) in enemy_units:
-                    coloumn_blocks += 1
-                for i in [-1, +1]:
-                    zoc_position = Position(position.column + i, row)
-                    if zoc_position in enemy_units and unit.type in enemy_units[zoc_position].zoc:
-                        coloumn_blocks += 1
-
-            return coloumn_blocks
-
-        moves_to_backline = get_moves_to_backline(unit, position, backline)
-        coloumn_blocks = get_coloumn_blocks()
-
-        if moves_to_backline == 0:
-            return "Backline"
-
-        if unit.has_extra_life:
-            if moves_to_backline < 4:
-                return str(int(moves_to_backline)) + " move(s) from backline, extra life"
-
-        if moves_to_backline == 1 and coloumn_blocks <= 1:
-            defence = unit.defence
-            if defence > 3:
-                defence = 4
-            return "1 move(s) from backline, defence " + str(defence)
-
-        if moves_to_backline == 2 and coloumn_blocks <= 1:
-            defence = unit.defence
-            if defence > 3:
-                defence = 4
-            return "2 move(s) from backline, defence " + str(defence)
-
-    def get_unit_value():
-        if unit.name in ["Archer", "Pikeman", "Catapult", "Ballista", "Knight", "Light Cavalry"]:
-            return "Basic unit"
-        else:
-            return "Special unit"
-
-    factors = Counter()
-    for function in [get_backline_value, get_unit_value]:
-        factor = function()
-        if factor:
-            factors[factor] += 1
-    return factors
-
-
-def get_moves_to_backline(unit, position, backline):
-    if backline == 8:
-        return math.ceil((8 - position.row) / unit.movement)
+def select_action(gamestate):
+    scorer = ai_factors.FactorScorer()
+    actions = score_actions(gamestate, set(), scorer)
+    win_actions = {action for action in actions if action.score >= 10000}
+    if win_actions:
+        for action in win_actions:
+            action.move_distance = distance(action.start_at, action.end_at)
+        return min(win_actions, key=attrgetter("move_distance"))
     else:
-        return math.ceil(position.row / unit.movement)
-
-
-def get_differences(g0_factors, g1):
-
-    def give_back_bribed_units():
-        for position, unit in g1.enemy_units.items():
-            if hasattr(unit, "bribed"):
-                g1.player_units[position] = g1.enemy_units.pop(position)
-
-    g1_factors = {"player": Counter(), "opponent": Counter()}
-
-    give_back_bribed_units()
-
-    for pos, unit in g1.player_units.items():
-        g1_factors["player"] += get_unit_factors(g1.player_units[pos], pos, g1, 8)
-
-    for pos, unit in g1.enemy_units.items():
-        g1_factors["opponent"] += get_unit_factors(g1.enemy_units[pos], pos, g1, 1)
-
-    factors = {"player": {"gain": {}, "loss": {}}, "opponent": {"gain": {}, "loss": {}}}
-    player_intersection = g0_factors["player"] & g1_factors["player"]
-    factors["player"]["gain"] = g1_factors["player"] - player_intersection
-    factors["player"]["loss"] = g0_factors["player"] - player_intersection
-
-    opponent_intersection = g0_factors["opponent"] & g1_factors["opponent"]
-    factors["opponent"]["gain"] = g1_factors["opponent"] - opponent_intersection
-    factors["opponent"]["loss"] = g0_factors["opponent"] - opponent_intersection
-
-    return factors
-
-
-def get_score(factors):
-    return sum(values[key][0] * value for key, value in factors["player"]["gain"].items()) -\
-        sum(values[key][0] * value for key, value in factors["player"]["loss"].items()) -\
-        sum(values[key][0] * value for key, value in factors["opponent"]["gain"].items()) +\
-        sum(values[key][0] * value for key, value in factors["opponent"]["loss"].items())
+        return max(actions, key=attrgetter("total_score"))
 
 
 def chance_of_win(gamestate, action):
-
+    """
+    :param gamestate: A gamestate
+    :param action: An attack
+    :return: The chance that the attack is successful
+    """
     attack = battle.get_attack(action, gamestate)
     defence = battle.get_defence(action, attack, gamestate)
-
-    if attack < 0:
-        attack = 0
-    if attack > 6:
-        attack = 6
-    if defence < 0:
-        defence = 0
-    if defence > 6:
-        defence = 6
+    attack = max(min(0, attack), 6)
+    defence = min(max(0, defence), 6)
 
     chance_of_attack_successful = attack / 6
     chance_of_defence_unsuccessful = (6 - defence) / 6
@@ -310,45 +52,127 @@ def chance_of_win(gamestate, action):
     return chance_of_attack_successful * chance_of_defence_unsuccessful
 
 
-def score_actions_simple(g):
+def update_references(action, gamestate):
+    """
+    :param action: An action
+    :param gamestate: A gamestate
+    :return: An action in which .unit and .target_unit refers to objects in the supplied gamestate.
+    """
+    units = merge(gamestate.player_units, gamestate.enemy_units)
+    action.unit = units[action.start_at]
+    if action.target_at and action.target_at in units:
+        action.target_unit = units[action.target_at]
+    return action
 
-    actions = g.get_actions()
-    go_for = rnd.choice(["attack", "move_forward"])
 
-    if go_for == "attack":
-        for a in actions:
-            if a.is_attack:
-                a.score = chance_of_win(g, a)
-                if a.double_cost:
-                    a.score /= 2
+def one_action_forward(gamestate_document, action, outcome=None):
+    """
+    :param gamestate_document: A dictionary containing the gamestate
+    :param action: An action
+    :param outcome: An outcome of the action if applicable
+    :return: The resulting gamestate after performing action. (Including new bonus tiles.)
+    """
+    gamestate = Gamestate.from_document(gamestate_document)
+    action = update_references(action, gamestate)
+    gamestate.bonus_tiles = action_getter.get_bonus_tiles(gamestate)
+    gamestate.do_action(action, outcome)
+    return gamestate
+
+
+def score_actions(gamestate, scored_actions, scorer):
+    """
+    :param gamestate: A gamestate
+    :param scored_actions: A set of actions whose scores are already evaluated.
+    :return: A list of actions with attributes score and total_score.
+             "score" is the value of the action itself.
+             "total_score" is the value of the action plus the best subsequent action if applicable.
+    """
+
+    def find_score(result):
+        """
+        :param result: The result of an action. If the action has an outcome the result can be either win or loss. If
+                       the action does not have an outcome, the result is noresult.
+
+        Adds the factors for the resulting gamestate to the factors dictionary of the action, and adds the score of the
+        resulting gamestate to the score_if dictionary of the action.
+        """
+        gamestate_factors = ai_factors.get_factors(gamestate_2[action][result])
+        action.factors[result] = ai_factors.get_differences(gamestate_factors, original_factors)
+        action.score_if[result] = scorer.get_score(action.factors[result])
+
+    # Make a copy of the gamestate
+    gamestate_1_document = gamestate.to_document()
+    gamestate_1 = Gamestate.from_document(gamestate_1_document)
+
+    # Find the available actions.
+    gamestate_1.set_available_actions()
+    all_actions = gamestate_1.get_actions()
+
+    # Only calculate scores for actions that are not already scored.
+    actions = {action for action in all_actions if action not in scored_actions}
+    scoredict = {action: action.score for action in scored_actions}
+    for action in all_actions:
+        if action in scoredict:
+            action.score = scoredict[action]
+
+    # If there are no actions whose scores are not already calculated, skip the remaining steps.
+    if not actions:
+        return all_actions
+
+    # Contains the new gamestates after each action and each result.
+    gamestate_2 = {}
+
+    # The factors of gamestate_1. A factor is an element of the gamestate that is important.
+    original_factors = ai_factors.get_factors(gamestate_1)
+
+    # Define a function that returns the resulting gamestate after performing an action on gamestate_1.
+    # (Without changing gamestate_1.)
+    perform_action = partial(one_action_forward, gamestate_1_document)
+
+    # For each action, calculate the score of the action itself.
+    for action in actions:
+        action.factors, action.score_if = {}, {}  # Contains the factors and scores after each possible result.
+        gamestate_2[action] = {}  # Contains the gamestate after each possible results.
+
+        if action.has_outcome:
+            gamestate_2[action][Result.win] = perform_action(action, success)
+            gamestate_2[action][Result.loss] = perform_action(action, failure)
+            action.chance_of_win = chance_of_win(gamestate_1, action)
+            find_score(Result.win)
+            find_score(Result.loss)
+            action.score = (action.score_if[Result.win] * action.chance_of_win +
+                            action.score_if[Result.loss] * (1 - action.chance_of_win))
+
+        else:
+            gamestate_2[action][Result.noresult] = perform_action(action)
+            find_score(Result.noresult)
+            action.score = action.score_if[Result.noresult]
+
+    # For each action (and each result), find the best next action and its score.
+    for action in actions:
+        if next(iter(gamestate_2[action].values())).actions_remaining:
+            action.next_action = {}  # Contains the best next action after each possible result.
+            if action.has_outcome:
+                next_actions_if_win = score_actions(gamestate_2[action][Result.win], actions, scorer)
+                action.next_action[Result.win] = max(next_actions_if_win, key=attrgetter("score"))
+
+                next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], actions, scorer)
+                action.next_action[Result.loss] = max(next_actions_if_loss, key=attrgetter("score"))
+
             else:
-                a.score = 0
+                next_actions = score_actions(gamestate_2[action][Result.noresult], actions, scorer)
+                action.next_action[Result.noresult] = max(next_actions, key=attrgetter("score"))
 
-    elif go_for == "move_forward":
-        for action in actions:
-            action.score = action.end_at.row
-            if action.end_at.row > action.start_at.row:
-                action.score += 1
-            if action.is_attack:
-                action.score += 0.25
-                if action.target_at.row > action.end_at.row and action.move_with_attack:
-                    action.score += 0.5
+    # For each action, calculate the total score. The total score is the value of the action and the expected value
+    # of the best next action if applicable.
+    for action in actions:
+        if hasattr(action, "next_action"):
+            if action.has_outcome:
+                action.total_score = (action.score + action.next_action[Result.win].score * action.chance_of_win +
+                                      action.next_action[Result.loss].score * (1 - action.chance_of_win))
+            else:
+                action.total_score = action.score + action.next_action[Result.noresult].score
+        else:
+            action.total_score = action.score
 
-    return actions
-
-
-def get_select_action_function(score_function):
-
-    def select_action(game):
-        gamestate_copy = game.gamestate.copy()
-        gamestate_copy.set_available_actions()
-        actions_copy = score_function(gamestate_copy)
-        actions_copy.sort(key=attrgetter("score"), reverse=True)
-        if get_setting("Document_ai_decisions") and get_setting("AI_level") > 1:
-            document_actions(actions_copy, game)
-        return next(action for action in game.gamestate.get_actions() if action == actions_copy[0])
-    return select_action
-
-
-def select_upgrade(gamestate):
-    return 0
+    return all_actions
