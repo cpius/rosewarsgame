@@ -98,10 +98,9 @@ class Gamestate:
         player1_units = cls.units_from_document(document["player1_units"])
         player2_units = cls.units_from_document(document["player2_units"])
         actions_remaining = document["actions_remaining"]
-        ai_factors = document["ai_factors"] if "ai_factors" in document else None
         created_at = document["created_at"] if "created_at" in document else None
 
-        return cls(player1_units, player2_units, actions_remaining, created_at, ai_factors=ai_factors)
+        return cls(player1_units, player2_units, actions_remaining, created_at)
 
     @classmethod
     def from_file(cls, path):
@@ -149,8 +148,6 @@ class Gamestate:
             document["created_at"] = self.created_at
         if self.game_id:
             document["game"] = self.game_id
-        if self.ai_factors:
-            document["ai_factors"] = self.ai_factors
 
         return document
 
