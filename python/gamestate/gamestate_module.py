@@ -15,8 +15,7 @@ class Gamestate:
                  player2_units,
                  actions_remaining,
                  created_at=None,
-                 game_id=None,
-                 ai_factors=None):
+                 game_id=None):
         self.board = Board([player1_units, player2_units])
         self.actions_remaining = actions_remaining
         self.action_count = 0
@@ -24,10 +23,6 @@ class Gamestate:
         self.game_id = game_id
         self.available_actions = []
         self.bonus_tiles = {}
-        if ai_factors:
-            self.ai_factors = ai_factors
-        else:
-            self.ai_factors = {}
 
     def all_units(self):
         return self.board.all_units()
