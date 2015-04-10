@@ -4,6 +4,7 @@
 python/replay/*
 python/game/settings.py
 python/non-functional/*
+python/Non-functional/*
 
 
 
