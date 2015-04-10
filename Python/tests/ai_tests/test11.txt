@@ -4,8 +4,8 @@
     {
         "actions_remaining": 2,
         "player1_units": {
-            "C4": "Archer",
-            "C6": "Knight"
+            "A1": "Pikeman",
+            "E1": "Pikeman"
         },
         "player2_units": {
             "D6": "Longswordsman",
