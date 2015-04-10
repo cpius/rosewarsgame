@@ -1,11 +1,12 @@
-from tests import utester, setup_tester, controller_tester, speed_tester2
+from tests import utester, setup_tester, controller_tester, speed_tester, ai_tester
 
 testdict = {
     1:  ("Utester V 1.0", utester.run10),
     2:  ("Utester V 1.1", utester.run11),
     3:  ("Setup tester", setup_tester.run),
     4: ("Controller tester", controller_tester.run),
-    5: ("Speed tester", speed_tester2.run)
+    5: ("Speed tester", speed_tester.test_action_getter),
+    6: ("AI tester", ai_tester.run)
 }
 
 usetests = [5]

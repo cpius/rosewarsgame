@@ -1,10 +1,10 @@
 import json
 from gamestate.gamestate_module import Gamestate
 from time import time
-from gamestate import action_getter
+from gamestate import action_getter as action_getter
 
 
-def run():
+def test_action_getter():
     path = "./../Version_1.0/Tests/General/Action_1.json"
     document = json.loads(open(path).read())
     gamestate = Gamestate.from_document(document["gamestate"])
