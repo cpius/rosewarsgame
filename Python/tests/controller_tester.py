@@ -149,7 +149,7 @@ def is_outcome_correct_extra_action(test_document):
     return actual == expected
 
 
-def utest(test_document):
+def utest(test_document, filename=None):
     return globals()[test_document["type"].lower().replace(" ", "_").replace(",", "")](test_document)
 
 

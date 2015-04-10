@@ -1,7 +1,7 @@
 import json
 from collections import Counter
 from tests.dictdiffer import DictDiffer
-
+import os
 
 
 def difference_between_dictionaries(d1, d2):
@@ -28,7 +28,7 @@ def run_method(testcase_files, test_method):
 
         try:
             exception_flag = True
-            test = test_method(test_document)
+            test = test_method(test_document, os.path.basename(file))
             exception_flag = False
         finally:
             if exception_flag or not test:

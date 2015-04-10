@@ -170,7 +170,7 @@ def server(test_document):
         return False
 
 
-def utest(test_document):
+def utest(test_document, filename=None):
     test_name = test_document["type"].lower().replace(" ", "_").replace(",", "")
 
     return globals()[test_name](test_document)
