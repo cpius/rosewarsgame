@@ -1,0 +1,33 @@
+{
+    "type": "Is outcome correct",
+    "description": "Test if left click selects a Catapult if there is one action left",
+    "click_position": "E4",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": "Catapult"
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "B4": "Pikeman"
+        }
+    },
+    "pre_positions": {
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Knight",
+            "E4": "Catapult"
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "B4": "Pikeman"
+        }
+    },
+    "post_positions": {
+        "start_at": "E4"
+    }
+}

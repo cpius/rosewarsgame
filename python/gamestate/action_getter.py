@@ -58,6 +58,9 @@ class UnitActions:
         if unit.has(Trait.defence_maneuverability):
             attacks, moves = self.get_defence_maneuverability_actions()
 
+        if unit.has(Trait.double_attack_cost) and self.gamestate.actions_remaining < 2:
+            attacks = set()
+
         return moves | attacks | abilities
 
     def set_movesets(self, movement=None, zoc_blocks=None):
@@ -252,8 +255,7 @@ def get_actions(gamestate):
 
 
 def can_use_unit(unit, gamestate):
-    if ((unit.has(Trait.double_attack_cost) and gamestate.actions_remaining < 2) or
-            unit.has(Effect.poisoned) or unit.has(State.recently_bribed)):
+    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
         return False
     elif gamestate.is_extra_action():
         return unit.has(State.extra_action)
