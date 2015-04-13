@@ -19,7 +19,7 @@ class Player(object):
 
     @classmethod
     def from_document(cls, document):
-        return cls(document["color"], Intelligence([document["intelligence"]]), document["profile"])
+        return cls(document["color"], Intelligence(document["intelligence"]), document["profile"])
 
     def to_document(self):
         return {
