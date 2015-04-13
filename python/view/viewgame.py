@@ -18,7 +18,7 @@ class Viewgame:
         if not game.is_player_human():
             gamestate.flip_all_units()
 
-        self.draw_units(game)
+        self.draw_units(gamestate, game.current_player().color, game.opponent_player().color)
 
         if actions and not shade_positions:
             shade_positions = self.get_shade_actions(actions)
@@ -33,12 +33,12 @@ class Viewgame:
             rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
             AAfilledRoundedRect(self.screen, rectangle_style, self.interface.shading, 0.2)
 
-    def draw_units(self, game):
-        for position, unit in game.gamestate.player_units.items():
-            self.draw_unit(unit, position, game.current_player().color)
+    def draw_units(self, gamestate, player_color, opponent_color):
+        for position, unit in gamestate.player_units.items():
+            self.draw_unit(unit, position, player_color)
 
-        for position, unit in game.gamestate.enemy_units.items():
-            self.draw_unit(unit, position, game.opponent_player().color)
+        for position, unit in gamestate.enemy_units.items():
+            self.draw_unit(unit, position, opponent_color)
 
     @staticmethod
     def get_shade_actions(actions):

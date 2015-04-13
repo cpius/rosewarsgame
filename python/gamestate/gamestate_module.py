@@ -220,3 +220,6 @@ class Gamestate:
 
     def pass_extra_action(self):
         self.board.pass_extra_action()
+
+    def copy(self):
+        return Gamestate.from_document(self.to_document())
