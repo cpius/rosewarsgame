@@ -3,7 +3,6 @@ import gamestate.battle as battle
 from gamestate.gamestate_library import *
 from game.game_library import prettify
 from functools import total_ordering
-from view.rounded_rect import AAfilledRoundedRect
 
 
 @total_ordering
