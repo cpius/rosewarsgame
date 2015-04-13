@@ -131,13 +131,6 @@ class Gamestate:
 
         return units
 
-    @classmethod
-    def get_ai_from_name(cls, name):
-        if name == "Human":
-            return name
-        else:
-            return ai_module.AI(name)
-
     def to_document(self):
         document = {
             "actions_remaining": self.actions_remaining,
