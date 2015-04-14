@@ -30,9 +30,12 @@ def select_action(gamestate):
     if win_actions:
         for action in win_actions:
             action.move_distance = distance(action.start_at, action.end_at)
-        return min(win_actions, key=attrgetter("move_distance"))
+        chosen_action = min(win_actions, key=attrgetter("move_distance"))
     else:
-        return max(actions, key=attrgetter("total_score"))
+        chosen_action = max(actions, key=attrgetter("total_score"))
+
+    update_references(chosen_action, gamestate)
+    return chosen_action
 
 
 def chance_of_win(gamestate, action):
