@@ -1,1 +1,6 @@
-scp *.py rosewars:~
+scp *.py firstred:~/python/
+scp game/*.py firstred:~/python/game/
+scp ai/*.py firstred:~/python/ai/
+scp -r gamestate/*.py firstred:~/python/gamestate/
+scp ../Version_1.1/Descriptions.json firstred:~/Version_1.1
+scp ../Version_1.1/Units.json firstred:~/Version_1.1
