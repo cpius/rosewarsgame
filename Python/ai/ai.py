@@ -4,7 +4,7 @@ from gamestate.gamestate_module import Gamestate
 from functools import partial
 from ai import ai_factors
 from operator import attrgetter
-from ai.ai_library import Result, success, failure
+from ai.ai_library import Result, success, failure, Player
 import gamestate.action_getter as action_getter
 import ai.documenter as documenter
 
@@ -26,7 +26,8 @@ def select_upgrade(gamestate):
 def select_action(gamestate):
     scorer = ai_factors.FactorScorer()
     actions = score_actions(gamestate, set(), scorer)
-    win_actions = {action for action in actions if action.score >= 10000}
+    win_actions = {action for action in actions if Result.noresult in action.factors and
+                   "Backline" in action.factors[Result.noresult][Player.player]}
     if win_actions:
         for action in win_actions:
             action.move_distance = distance(action.start_at, action.end_at)
