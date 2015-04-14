@@ -19,7 +19,8 @@ class Player(object):
 
     @classmethod
     def from_document(cls, document):
-        return cls(document["color"], Intelligence(document["intelligence"]), document["profile"])
+        intelligence = getattr(Intelligence, document["intelligence"])
+        return cls(document["color"], intelligence, document["profile"])
 
     def to_document(self):
         return {
