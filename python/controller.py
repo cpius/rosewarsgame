@@ -65,6 +65,7 @@ class Controller(object):
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence, player.profile)
         controller.clear_move()
+        controller.game.gamestate.set_available_actions()
 
         if play_fanfare:
             controller.sound.play_fanfare()
