@@ -2,10 +2,12 @@
     "traits":
     {
         "attack_skill": {
-            "1": "1 Is added to the units base attack"
+            "1": "1 Is added to the units base attack",
+            "2": "2 Is added to the units base attack."
         },
         "defence_skill": {
-            "1": "1 Is added to the units base defence"
+            "1": "1 Is added to the units base defence.",
+            "2": "2 Is added to the units base attack."
         },
         "range_skill": {
             "1": "1 Is added to the units base range"

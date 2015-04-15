@@ -136,10 +136,12 @@ class Viewgame:
             self.draw_bribed(position)
 
         level = unit.unit_level
-        if not unit.should_be_upgraded() and level:
+        #print(unit, level, unit.should_be_upgraded())
+        if level:
             if level > 3:
                 level = 3
             pic = get_image(self.interface.level_icons[level], (14, 14))
+            #print("here", unit)
             self.screen.blit(pic, self.interface.coordinates["top_left"].get(position))
 
     def draw_bribed(self, position):
