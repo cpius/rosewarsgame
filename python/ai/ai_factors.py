@@ -28,7 +28,7 @@ def get_moves_to_backline(unit, position, backline):
     if backline == 8:
         return math.ceil((8 - position.row) / unit.movement)
     else:
-        return math.ceil(position.row / unit.movement)
+        return math.ceil((position.row - 1) / unit.movement)
 
 
 def get_unit_factors(unit, position, gamestate, backline):
