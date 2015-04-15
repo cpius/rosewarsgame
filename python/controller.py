@@ -153,7 +153,7 @@ class Controller(object):
                 clicked_item = self.view.get_item_from_mouse_click(event.pos)
                 if clicked_item == Item.Help:
                     pass
-                elif clicked_item == Item.Pass_action:
+                elif self.game.gamestate.is_extra_action() and clicked_item == Item.Pass_action:
                     self.game.gamestate.pass_extra_action()
                     if self.game.gamestate.is_turn_done():
                         self.game.shift_turn()
