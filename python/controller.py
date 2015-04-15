@@ -363,7 +363,9 @@ class Controller(object):
 
         if move_with_attack:
             self.view.draw_post_movement(action)
+            pygame.time.delay(pause_for_animation)
             self.game.gamestate.move_melee_unit_to_target_tile(action)
+            self.draw_game()
 
         self.game.gamestate.set_available_actions()
 
