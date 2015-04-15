@@ -100,7 +100,7 @@ def get_attack(action, gamestate, is_sub_action=False):
 
 def lancing(action):
     if action.unit.has(Trait.lancing, 1) and action.is_attack and distance_to_target(action) >= 3:
-        return 2
+        return 3
     elif action.unit.has(Trait.lancing, 2) and action.is_attack and distance_to_target(action) >= 2:
         return 3
     else:
