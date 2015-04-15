@@ -320,7 +320,7 @@ class Controller(object):
         return unit.abilities[choice]
 
     def ask_about_move_with_attack(self, action):
-        self.view.draw_ask_about_move_with_attack(action.end_at, action.target_at)
+        self.view.draw_ask_about_move_with_attack(self.game, action.end_at, action.target_at)
         return self.get_choice_position({action.target_at: True, action.end_at: False})
 
     def clear_move(self):

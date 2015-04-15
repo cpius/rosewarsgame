@@ -33,7 +33,8 @@ class View():
     def get_position_from_mouse_click(self, coordinates):
         return get_position_from_mouseclick(self.interface, coordinates)
 
-    def draw_ask_about_move_with_attack(self, end_at, target_at):
+    def draw_ask_about_move_with_attack(self, game, end_at, target_at):
+        self.draw_game(game, None, None, False)
         self.viewgame.draw_ask_about_move_with_attack(end_at, target_at)
         write_message(self.screen, self.interface, "Click the tile you want to stand on.")
         self.refresh()
