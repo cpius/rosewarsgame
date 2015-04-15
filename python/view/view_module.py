@@ -5,6 +5,7 @@ from view.view_control_library import *
 from view.view_display_library import *
 import game.settings as settings
 import view.interfaces as interfaces
+from game.enums import Intelligence
 
 
 class View():
@@ -57,7 +58,7 @@ class View():
         if redraw_log:
             self.clear_right()
             self.viewlog.draw_logbook(game)
-        if game.gamestate.is_extra_action():
+        if game.gamestate.is_extra_action() and game.current_player().intelligence == Intelligence.Human:
             self.viewinfo.draw_pass_action_button()
         self.refresh()
 
