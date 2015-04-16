@@ -7,21 +7,45 @@ from game.game_library import read_json
 from gamestate.action_getter import UnitActions
 
 
-class FactorScorer:
-    def __init__(self):
-        self.values = self.read_values()
+class Factors:
+    def __init__(self, gamestate):
+        self.factors = {Player.player: Counter(), Player.opponent: Counter()}
+        for pos, unit in gamestate.player_units.items():
+            self.factors[Player.player] += get_unit_factors(unit, pos, gamestate, 8)
+        for pos, unit in gamestate.enemy_units.items():
+            self.factors[Player.opponent] += get_unit_factors(unit, pos, gamestate, 1)
 
-    @staticmethod
-    def read_values():
-        return read_json("./ai/values.json")
+        self.values = read_json("./ai/values.json")
 
-    def get_score(self, factors):
+    def subtract(self, other):
+        for player in list(Player):
+            self.factors[player].subtract(other.factors[player])
+
+    def __repr__(self):
+        player_strings = []
+        for player in list(Player):
+            items = []
+            for elem, count in self.factors[player].items():
+                if count != 0:
+                    items.append("'" + elem + "'" + " " + str(count))
+            if items:
+                player_strings.append(str(player) + ": " + ", ".join(items))
+        s = ". ".join(player_strings)
+        if not s:
+            return "%"
+        else:
+            return s + "."
+
+    def get_score(self):
         score = 0
-        for factor, value in factors[Player.player].items():
+        for factor, value in self.factors[Player.player].items():
             score += self.values[factor][0] * value
-        for factor, value in factors[Player.opponent].items():
+        for factor, value in self.factors[Player.opponent].items():
             score -= self.values[factor][1] * value
         return score
+
+    def is_winning(self):
+        return "Backline" in self.factors[Player.player]
 
 
 def get_moves_to_backline(unit, position, backline):
@@ -69,24 +93,3 @@ def get_unit_factors(unit, position, gamestate, backline):
         factors[backline_factor] += 1
 
     return factors
-
-
-def get_factors(gamestate):
-    factors = {Player.player: Counter(), Player.opponent: Counter()}
-    for pos, unit in gamestate.player_units.items():
-        factors[Player.player] += get_unit_factors(unit, pos, gamestate, 8)
-    for pos, unit in gamestate.enemy_units.items():
-        factors[Player.opponent] += get_unit_factors(unit, pos, gamestate, 1)
-
-    return factors
-
-
-def get_differences(factors_1, factors_2):
-    differences = {}
-    for player in list(Player):
-        a = factors_1[player].copy()
-        a.subtract(factors_2[player])
-        differences[player] = a
-
-    return differences
-

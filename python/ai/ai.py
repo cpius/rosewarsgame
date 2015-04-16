@@ -24,10 +24,9 @@ def select_upgrade(gamestate):
 
 
 def select_action(gamestate):
-    scorer = ai_factors.FactorScorer()
-    actions = score_actions(gamestate, set(), scorer)
+    actions = score_actions(gamestate, set())
     win_actions = {action for action in actions if Result.noresult in action.factors and
-                   "Backline" in action.factors[Result.noresult][Player.player]}
+                   action.factors[Result.noresult].is_winning()}
     if win_actions:
         for action in win_actions:
             action.move_distance = distance(action.start_at, action.end_at)
@@ -83,7 +82,7 @@ def one_action_forward(gamestate_document, action, outcome=None):
     return gamestate
 
 
-def score_actions(gamestate, scored_actions, scorer):
+def score_actions(gamestate, scored_actions):
     """
     :param gamestate: A gamestate
     :param scored_actions: A set of actions whose scores are already evaluated.
@@ -100,9 +99,10 @@ def score_actions(gamestate, scored_actions, scorer):
         Adds the factors for the resulting gamestate to the factors dictionary of the action, and adds the score of the
         resulting gamestate to the score_if dictionary of the action.
         """
-        gamestate_factors = ai_factors.get_factors(gamestate_2[action][result])
-        action.factors[result] = ai_factors.get_differences(gamestate_factors, original_factors)
-        action.score_if[result] = scorer.get_score(action.factors[result])
+        gamestate_factors = ai_factors.Factors(gamestate_2[action][result])
+        gamestate_factors.subtract(original_factors)
+        action.factors[result] = gamestate_factors
+        action.score_if[result] = gamestate_factors.get_score()
 
     # Make a copy of the gamestate
     gamestate_1_document = gamestate.to_document()
@@ -112,7 +112,7 @@ def score_actions(gamestate, scored_actions, scorer):
     gamestate_1.set_available_actions()
     all_actions = gamestate_1.get_actions()
 
-    # Only calculate scores for actions that are not already scored.
+    # Only recalculate scores for actions that are new or has a new bonus.
     new_actions = {action for action in all_actions if action not in scored_actions}
     actions_new_bonus = {action for action in all_actions if action.end_at in gamestate.bonus_tiles[Trait.flag_bearing]
                          or action.start_at in gamestate.bonus_tiles[Trait.crusading]}
@@ -130,7 +130,7 @@ def score_actions(gamestate, scored_actions, scorer):
     gamestate_2 = {}
 
     # The factors of gamestate_1. A factor is an element of the gamestate that is important.
-    original_factors = ai_factors.get_factors(gamestate_1)
+    original_factors = ai_factors.Factors(gamestate_1)
 
     # Define a function that returns the resulting gamestate after performing an action on gamestate_1.
     # (Without changing gamestate_1.)
@@ -160,14 +160,14 @@ def score_actions(gamestate, scored_actions, scorer):
         if next(iter(gamestate_2[action].values())).actions_remaining:
             action.next_action = {}  # Contains the best next action after each possible result.
             if action.has_outcome:
-                next_actions_if_win = score_actions(gamestate_2[action][Result.win], actions, scorer)
+                next_actions_if_win = score_actions(gamestate_2[action][Result.win], actions)
                 action.next_action[Result.win] = max(next_actions_if_win, key=attrgetter("score"))
 
-                next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], actions, scorer)
+                next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], actions)
                 action.next_action[Result.loss] = max(next_actions_if_loss, key=attrgetter("score"))
 
             else:
-                next_actions = score_actions(gamestate_2[action][Result.noresult], actions, scorer)
+                next_actions = score_actions(gamestate_2[action][Result.noresult], actions)
                 action.next_action[Result.noresult] = max(next_actions, key=attrgetter("score"))
 
     # For each action, calculate the total score. The total score is the value of the action and the expected value

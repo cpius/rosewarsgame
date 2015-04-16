@@ -3,7 +3,6 @@ from tests.test_library import *
 from gamestate.action import Action
 import ai.ai as ai
 from operator import attrgetter
-import ai.ai_factors as ai_factors
 from glob import glob
 
 
@@ -12,15 +11,14 @@ def test(test_document, filename):
     gamestate = Gamestate.from_document(test_document["gamestate"])
     expected_action = Action.from_document(gamestate.all_units(), test_document["action"])
 
-    scorer = ai_factors.FactorScorer()
-
     gamestate.set_available_actions()
-    actions = list(ai.score_actions(gamestate, set(), scorer))
+    actions = list(ai.score_actions(gamestate, set()))
     actions.sort(key=attrgetter("total_score"), reverse=True)
 
     ai.document_actions(actions, "./replay/" + filename + ".txt")
 
     action = ai.select_action(gamestate)
+    print(action.factors)
 
     if action == expected_action:
         return True
@@ -30,9 +28,11 @@ def test(test_document, filename):
         print("wrong result")
         for action in actions:
             print(action, action.total_score)
-            print(action.factors)
-            if hasattr(action, "next_action_if_win"):
-                print(action.next_action_if_win)
+            if hasattr(action, "chance_of_win"):
+                print("Chance of win:", action.chance_of_win)
+            print("Factors:", action.factors)
+            if hasattr(action, "next_action"):
+                print("Next action:", action.next_action)
             print()
 
         print(gamestate)
@@ -43,7 +43,7 @@ def test(test_document, filename):
 def run():
     testcase_files = glob("./tests/ai_tests/*.json")
 
-    #testcase_files = ["./tests/ai_tests/test6.json"]
+    #testcase_files = ["./tests/ai_tests/test12.json"]
 
     run_method(testcase_files, test)
 
