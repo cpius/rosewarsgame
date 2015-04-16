@@ -139,6 +139,7 @@ class UnitClass():
 
     def gain_experience(self):
         if not self.has(State.used) and not beginner_mode:
+            self.gained_experience_this_turn = True
             self.increase(State.experience)
 
     @property
@@ -217,7 +218,7 @@ class UnitClass():
 
     def should_be_upgraded(self):
         experience = self.get(State.experience)
-        return experience and experience % self.experience_to_upgrade == 0
+        return hasattr(self, "gained_experience_this_turn") and experience % self.experience_to_upgrade == 0
 
     def to_document(self):
         write_attributes = {attribute: attribute_values for attribute, attribute_values in self.attributes.items() if
