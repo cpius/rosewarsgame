@@ -113,7 +113,10 @@ def score_actions(gamestate, scored_actions, scorer):
     all_actions = gamestate_1.get_actions()
 
     # Only calculate scores for actions that are not already scored.
-    actions = {action for action in all_actions if action not in scored_actions}
+    new_actions = {action for action in all_actions if action not in scored_actions}
+    actions_new_bonus = {action for action in all_actions if action.end_at in gamestate.bonus_tiles[Trait.flag_bearing]
+                         or action.start_at in gamestate.bonus_tiles[Trait.crusading]}
+    actions = new_actions | actions_new_bonus
     scoredict = {action: action.score for action in scored_actions}
     for action in all_actions:
         if action in scoredict:
