@@ -6,6 +6,6 @@ if __name__ == '__main__':
 
     view = View()
 
-    controller = Controller.from_replay('./replay/a.json')
+    controller = Controller.from_replay('./replay/a.json', ai_opponent=True)
 
     controller.run_game()

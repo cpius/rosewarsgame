@@ -73,14 +73,14 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_replay(cls, savegame_file=None):
+    def from_replay(cls, savegame_file=None, ai_opponent=False):
 
         if not savegame_file:
             savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
 
         controller = cls(View(), Sound())
         savegame_document = json.loads(open(savegame_file).read())
-        controller.game = Game.from_log_document(savegame_document)
+        controller.game = Game.from_log_document(savegame_document, ai_opponent=ai_opponent)
         controller.clear_move()
 
         if controller.game.is_turn_done():
