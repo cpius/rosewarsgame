@@ -47,7 +47,7 @@ def chance_of_win(gamestate, action):
     """
     attack = battle.get_attack(action, gamestate)
     defence = battle.get_defence(action, attack, gamestate)
-    attack = max(min(0, attack), 6)
+    attack = min(max(0, attack), 6)
     defence = min(max(0, defence), 6)
 
     chance_of_attack_successful = attack / 6
