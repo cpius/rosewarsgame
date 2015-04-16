@@ -18,9 +18,13 @@ def test(test_document, filename):
     ai.document_actions(actions, "./replay/" + filename + ".txt")
 
     action = ai.select_action(gamestate)
-    print(action.factors)
 
-    if action == expected_action:
+    if test_document["type"] == "is action correct":
+        expected_result = True
+    else:
+        expected_result = False
+
+    if (action == expected_action) == expected_result:
         return True
 
     else:

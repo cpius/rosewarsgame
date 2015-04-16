@@ -5,15 +5,22 @@ from ai.ai_library import Player
 from gamestate.gamestate_module import Unit
 from game.game_library import read_json
 from gamestate.action_getter import UnitActions
+from gamestate.enums import Effect
 
 
 class Factors:
     def __init__(self, gamestate):
         self.factors = {Player.player: Counter(), Player.opponent: Counter()}
         for pos, unit in gamestate.player_units.items():
-            self.factors[Player.player] += get_unit_factors(unit, pos, gamestate, 8)
+            if not unit.has(Effect.bribed):
+                self.factors[Player.player] += get_unit_factors(unit, pos, gamestate, 8)
+            else:
+                self.factors[Player.opponent] += get_unit_factors(unit, pos, gamestate, 1)
         for pos, unit in gamestate.enemy_units.items():
-            self.factors[Player.opponent] += get_unit_factors(unit, pos, gamestate, 1)
+            if not unit.has(Effect.bribed):
+                self.factors[Player.opponent] += get_unit_factors(unit, pos, gamestate, 1)
+            else:
+                self.factors[Player.player] += get_unit_factors(unit, pos, gamestate, 8)
 
         self.values = read_json("./ai/values.json")
 
