@@ -22,6 +22,7 @@ class Game:
         self.actions = dict()
         self.outcomes = dict()
         self.options = dict()
+        self.savegame_folder = self.set_savegame_folder()
 
     @classmethod
     def from_log_document(cls, log_document, player_profile=None, shift_turn=False):
@@ -151,12 +152,13 @@ class Game:
         self.players = [self.players[1], self.players[0]]
         self.gamestate.set_available_actions()
 
-    def savegame_folder(self):
-        return "./replay/" + str(self.created_at.strftime("%Y%m%d-%H%M%S"))
+    def set_savegame_folder(self):
+        savegame_folder = "./replay/" + str(self.created_at.strftime("%Y%m%d-%H%M%S"))
+        if not os.path.exists(savegame_folder):
+            os.makedirs(savegame_folder)
+        return savegame_folder
 
     def save(self, view, action, outcome):
-        if not os.path.exists(self.savegame_folder()):
-            os.makedirs(self.savegame_folder())
 
         action_count = self.gamestate.action_count
 
@@ -166,7 +168,7 @@ class Game:
             outcome_document = outcome.to_document()
             self.outcomes[action_count] = outcome_document
 
-        filename = self.savegame_folder() + "/" + str(action_count)
+        filename = self.savegame_folder + "/" + str(action_count)
 
         view.save_screenshot(filename + ".jpeg")
 

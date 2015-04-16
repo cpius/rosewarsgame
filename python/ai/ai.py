@@ -23,8 +23,11 @@ def select_upgrade(gamestate):
     return 1
 
 
-def select_action(gamestate):
+def select_action(gamestate, savegame_folder=None):
+    print(savegame_folder)
     actions = score_actions(gamestate, set())
+    if savegame_folder:
+        document_actions(actions, savegame_folder + "/" + str(gamestate.action_count + 1) + ".txt")
     win_actions = {action for action in actions if Result.noresult in action.factors and
                    action.factors[Result.noresult].is_winning()}
     if win_actions:

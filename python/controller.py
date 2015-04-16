@@ -99,7 +99,7 @@ class Controller(object):
         interval_in_milliseconds = 1000
         pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, interval_in_milliseconds)
 
-        action, outcome, upgrade = self.client.select_action(self.game.gamestate)
+        action, outcome, upgrade = self.client.select_action(self.game.gamestate, self.game.savegame_folder)
 
         if action is None:
             return
@@ -120,7 +120,7 @@ class Controller(object):
 
     def trigger_artificial_intelligence(self):
 
-        action = self.game.current_player().ai.select_action(self.game.gamestate)
+        action = self.game.current_player().ai.select_action(self.game.gamestate, self.game.savegame_folder)
 
         if action:
             self.perform_action(action)
@@ -129,7 +129,7 @@ class Controller(object):
             self.draw_game()
 
         if self.game.gamestate.is_extra_action():
-            extra_action = self.game.current_player().ai.select_action(self.game.gamestate)
+            extra_action = self.game.current_player().ai.select_action(self.game.gamestate, self.game.savegame_folder)
             self.perform_action(extra_action)
 
     def run_game(self):
