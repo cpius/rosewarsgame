@@ -24,7 +24,6 @@ def select_upgrade(gamestate):
 
 
 def select_action(gamestate, savegame_folder=None):
-    print(savegame_folder)
     actions = score_actions(gamestate, set())
     if savegame_folder:
         document_actions(actions, savegame_folder + "/" + str(gamestate.action_count + 1) + ".txt")
