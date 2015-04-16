@@ -1,4 +1,5 @@
 from ai.ai_library import Player, Result
+from operator import attrgetter
 
 
 def show(number):
@@ -34,6 +35,8 @@ def get_string_result(action, result, resultstr):
 
 def document_actions(actions, path):
 
+    actions = list(actions)
+    actions.sort(key=attrgetter("total_score"), reverse=True)
     s = []
     for action in actions:
         s += ["---" + str(action) + "---"]
