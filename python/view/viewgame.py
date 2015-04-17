@@ -135,13 +135,11 @@ class Viewgame:
         if unit.has(Effect.bribed):
             self.draw_bribed(position)
 
-        level = unit.unit_level
-        #print(unit, level, unit.should_be_upgraded())
-        if level:
-            if level > 3:
-                level = 3
-            pic = get_image(self.interface.level_icons[level], (14, 14))
-            #print("here", unit)
+        rank = unit.get(State.rank)
+        if rank:
+            if rank > 3:
+                rank = 3
+            pic = get_image(self.interface.rank_icons[rank], (14, 14))
             self.screen.blit(pic, self.interface.coordinates["top_left"].get(position))
 
     def draw_bribed(self, position):

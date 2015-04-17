@@ -30,7 +30,7 @@
             "A2": "Knight",
             "E3": {
                 "name": "Ballista",
-                "experience": 4,
+                "rank": 1,
                 "used": 1,
                 "attack_skill": 1
             }

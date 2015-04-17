@@ -19,7 +19,7 @@
         "player1_units": {
             "A3": {
                 "name": "Ballista",
-                "experience": 4,
+                "rank": 1,
                 "attack_skill": 3
             }
         },

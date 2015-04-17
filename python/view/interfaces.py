@@ -68,7 +68,7 @@ class Rectangles(Interface):
     crusading_icon = "./graphics/flag.gif"
     high_morale_icon = "./graphics/flag_black.gif"
     move_icon = "./graphics/move.gif"
-    level_icons = ["./graphics/level1.gif", "./graphics/level1.gif", "./graphics/level2.gif", "./graphics/level3.gif"]
+    rank_icons = ["./graphics/level1.gif", "./graphics/level1.gif", "./graphics/level2.gif", "./graphics/level3.gif"]
     base_coordinates = (0, 0)
 
     def __init__(self, zoom):

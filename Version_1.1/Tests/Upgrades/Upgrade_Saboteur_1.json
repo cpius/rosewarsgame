@@ -9,7 +9,8 @@
         "player1_units": {
             "A3": {
                 "name": "Saboteur",
-                "experience": 8,
+                "experience": 4,
+                "rank": 1,
                 "poison": 2
             }
         },
@@ -22,7 +23,7 @@
         "player1_units": {
             "A3": {
                 "name": "Saboteur",
-                "experience": 8,
+                "rank": 2,
                 "poison": 2,
                 "sabotage": 2
             }

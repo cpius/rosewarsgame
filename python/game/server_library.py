@@ -6,7 +6,7 @@ from game.game_library import document_to_string
 
 def validate_upgrade(action_document, gamestate):
     position, unit = gamestate.get_upgradeable_unit()
-    upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
+    upgrade_options = unit.get_upgrade_choices()
     upgrade = get_enum_attributes(action_document["upgrade"])
 
     if upgrade in upgrade_options:

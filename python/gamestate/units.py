@@ -15,8 +15,8 @@ class UnitClass():
     base_defence = 0
     base_range = 0
     base_movement = 0
-    level = 0
     upgrades = {}
+
 
     @property
     def attack(self):
@@ -139,7 +139,6 @@ class UnitClass():
 
     def gain_experience(self):
         if not self.has(State.used) and not beginner_mode:
-            self.gained_experience_this_turn = True
             self.increase(State.experience)
 
     @property
@@ -171,6 +170,8 @@ class UnitClass():
         else:
             upgraded_unit = base_units[self.unit]()
             upgraded_unit.attributes = dict(self.attributes)
+            upgraded_unit.increase(State.rank, 1)
+            upgraded_unit.remove(State.experience)
             for attribute, attribute_values in upgrade.items():
                 upgraded_unit.increase(attribute, attribute_values.level)
 
@@ -181,20 +182,17 @@ class UnitClass():
         :param choice: upgrade choice 0 or 1.
         :return: A new UnitClass object, based on the unit and with the upgrade.
         """
-        upgrade = self.get_upgrade(choice)
+        upgrade = self.get_upgrade_choices()[choice]
         return self.get_upgraded_unit_from_upgrade(upgrade)
 
-    def get_upgrade(self, choice):
+    def get_upgrade_choices(self):
         """
         :param choice: upgrade choice 0 or 1.
         :return: The chosen unit upgrade in enum upgrade format. (Dictionary with enums as keys and AttributeValues as
         values.)
         """
         if version == 1.0:
-            if choice == 1:
-                return {Trait.attack_skill: AttributeValues(level=1)}
-            else:
-                return {Trait.defence_skill: AttributeValues(level=1)}
+            return [{Trait.attack_skill: AttributeValues(level=1)}, {Trait.defence_skill: AttributeValues(level=1)}]
 
         def has_upgrade(check_upgrade):
             if check_upgrade in Unit:
@@ -210,15 +208,10 @@ class UnitClass():
                 if not (upgrade_category in ["once_1", "once_2"] and has_upgrade(upgrade)):
                     possible_upgrade_choices.append(upgrade)
 
-        return possible_upgrade_choices[choice]
-
-    @property
-    def unit_level(self):
-        return self.get(State.experience) // self.experience_to_upgrade
+        return possible_upgrade_choices
 
     def should_be_upgraded(self):
-        experience = self.get(State.experience)
-        return hasattr(self, "gained_experience_this_turn") and experience % self.experience_to_upgrade == 0
+        return self.has(State.experience) and self.get(State.experience) % self.experience_to_upgrade == 0
 
     def to_document(self):
         write_attributes = {attribute: attribute_values for attribute, attribute_values in self.attributes.items() if

@@ -17,6 +17,7 @@ class State(Enum):
     lost_extra_life = 6
     movement_remaining = 7
     recently_bribed = 8
+    rank = 9
     used = 10
 
 

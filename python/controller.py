@@ -308,12 +308,12 @@ class Controller(object):
         self.draw_game(shade_positions=end_ats)
         return self.get_choice_position({position: position for position in end_ats})
 
-    def pick_upgrade(self, unit):
-        self.view.draw_upgrade_options(unit)
+    def pick_upgrade(self, upgrade_choices):
+        self.view.draw_upgrade_options(upgrade_choices)
         buttons = {pygame.K_1: 0, pygame.K_2: 1}
         areas = [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]]
         choice = self.get_choice(buttons, areas)
-        return unit.get_upgrade(choice)
+        return upgrade_choices[choice]
 
     def pick_ability(self, unit):
         self.view.draw_ask_about_ability(unit)
@@ -332,17 +332,24 @@ class Controller(object):
         is_player_network = self.game.is_player_network()
         unit_has_extra_action = action.unit.has(State.extra_action)
         unit_should_be_upgraded = action.unit.should_be_upgraded()
+        unit_still_exists = action.end_at in self.game.gamestate.player_units
 
-        return unit_should_be_upgraded and not unit_has_extra_action and not is_player_network
+        return unit_still_exists and unit_should_be_upgraded and not unit_has_extra_action and not is_player_network
 
     def perform_upgrade(self, action, upgrade):
 
         if upgrade is None:
-            if self.game.is_player_human():
-                upgrade = self.pick_upgrade(action.unit)
+            upgrade_choices = action.unit.get_upgrade_choices()
+            if not upgrade_choices:
+                return
+
+            if len(upgrade_choices) == 1:
+                upgrade = upgrade_choices[0]
+            elif self.game.is_player_human():
+                upgrade = self.pick_upgrade(upgrade_choices)
             else:
                 choice = self.game.current_player().ai.select_upgrade(self.game)
-                upgrade = action.unit.get_upgrade(choice)
+                upgrade = upgrade_choices[choice]
 
         position = action.end_at if action.end_at in self.game.gamestate.player_units else action.target_at
         self.game.gamestate.player_units[position] = action.unit.get_upgraded_unit_from_upgrade(upgrade)

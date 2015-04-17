@@ -9,7 +9,8 @@
         "player1_units": {
             "A3": {
                 "name": "Catapult",
-                "experience": 6,
+                "experience": 3,
+                "rank": 1,
                 "attack_skill": 1
             }
         },
@@ -22,7 +23,7 @@
         "player1_units": {
             "A3": {
                 "name": "Catapult",
-                "experience": 6,
+                "rank": 2,
                 "attack_skill": 2
             }
         },

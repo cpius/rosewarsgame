@@ -88,8 +88,8 @@ def read_positions(positions):
     return positions
 
 
-def pick_upgrade(choice, unit):
-    return unit.get_upgrade(choice)
+def pick_upgrade(choice, upgrade_choices):
+    return upgrade_choices[choice]
 
 
 def is_outcome_correct(test_document):
