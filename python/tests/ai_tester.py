@@ -19,7 +19,7 @@ def test(test_document, filename):
 
     action = ai.select_action(gamestate)
 
-    if test_document["type"] == "is action correct":
+    if test_document["type"] == "Is action correct":
         expected_result = True
     else:
         expected_result = False
