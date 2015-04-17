@@ -62,21 +62,30 @@ def get_moves_to_backline(unit, position, backline):
         return math.ceil((position.row - 1) / unit.movement)
 
 
+
 def get_unit_factors(unit, position, gamestate, backline):
+
+    def get_actions_to_backlines():
+        gamestate_copy = gamestate.copy()
+        if backline == 1:
+            gamestate_copy.board.units = gamestate_copy.board.units[::-1]
+            gamestate_copy.board.units[0] = {position: unit}
+        unit_actions = UnitActions(unit, position, gamestate_copy, gamestate.bonus_tiles)
+        unit_actions.set_zoc_blocks()
+        possible_actions = unit_actions.get_all_actions()
+        if any(action.end_at.row == backline for action in possible_actions):
+            if unit.has_extra_life:
+                return "1 action from backline, extra life"
+            else:
+                return "1 action from backline"
 
     def get_backline_factor():
         moves_to_backline = get_moves_to_backline(unit, position, backline)
 
         if moves_to_backline == 1:
-            gamestate_copy = gamestate.copy()
-            gamestate_copy.board.units = gamestate_copy.board.units[::-1]
-            unit_actions = UnitActions(unit, position, gamestate_copy, gamestate.bonus_tiles)
-            possible_actions = unit_actions.get_all_actions()
-            if any(action.end_at.row == backline for action in possible_actions):
-                if unit.has_extra_life:
-                    return "1 action from backline, extra life"
-                else:
-                    return "1 action from backline"
+            actions_to_backline = get_actions_to_backlines()
+            if actions_to_backline:
+                return actions_to_backline
 
         if moves_to_backline <= 3 and unit.has_extra_life:
             return str(moves_to_backline) + " move(s) from backline, extra life"
