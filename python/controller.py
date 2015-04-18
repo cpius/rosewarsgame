@@ -403,7 +403,7 @@ class Controller(object):
         if action.is_attack:
             animation_delay = pause_for_animation_attack
         pygame.time.delay(animation_delay)
-        self.draw_game()
+        self.draw_game(shade_actions=False)
 
         if self.move_with_attack_should_be_performed(action, outcome):
             self.perform_move_with_attack(action, outcome)
