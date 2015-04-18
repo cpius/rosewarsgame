@@ -120,9 +120,11 @@ def score_actions(gamestate, scored_actions):
                          or action.start_at in gamestate.bonus_tiles[Trait.crusading]}
     actions = new_actions | actions_new_bonus
     scoredict = {action: action.score for action in scored_actions}
+    factordict = {action: action.factors for action in scored_actions}
     for action in all_actions:
         if action in scoredict:
             action.score = scoredict[action]
+            action.factors = factordict[action]
 
     # If there are no actions whose scores are not already calculated, skip the remaining steps.
     if not actions:
@@ -162,14 +164,24 @@ def score_actions(gamestate, scored_actions):
         if next(iter(gamestate_2[action].values())).actions_remaining:
             action.next_action = {}  # Contains the best next action after each possible result.
             if action.has_outcome:
-                next_actions_if_win = score_actions(gamestate_2[action][Result.win], actions)
-                action.next_action[Result.win] = max(next_actions_if_win, key=attrgetter("score"))
+                if action.factors[Result.win].opponent_has_winning_action():
+                    next_actions_if_win = score_actions(gamestate_2[action][Result.win], set())
+                else:
+                    next_actions_if_win = score_actions(gamestate_2[action][Result.win], actions)
 
-                next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], actions)
+                if action.factors[Result.loss].opponent_has_winning_action():
+                    next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], set())
+                else:
+                    next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], actions)
+
+                action.next_action[Result.win] = max(next_actions_if_win, key=attrgetter("score"))
                 action.next_action[Result.loss] = max(next_actions_if_loss, key=attrgetter("score"))
 
             else:
-                next_actions = score_actions(gamestate_2[action][Result.noresult], actions)
+                if action.factors[Result.noresult].opponent_has_winning_action():
+                    next_actions = score_actions(gamestate_2[action][Result.noresult], set())
+                else:
+                    next_actions = score_actions(gamestate_2[action][Result.noresult], actions)
                 action.next_action[Result.noresult] = max(next_actions, key=attrgetter("score"))
 
     # For each action, calculate the total score. The total score is the value of the action and the expected value
@@ -177,10 +189,13 @@ def score_actions(gamestate, scored_actions):
     for action in actions:
         if hasattr(action, "next_action"):
             if action.has_outcome:
-                action.total_score = (action.score + action.next_action[Result.win].score * action.chance_of_win +
-                                      action.next_action[Result.loss].score * (1 - action.chance_of_win))
+                next_action_score = (action.next_action[Result.win].score * action.chance_of_win +
+                                     action.next_action[Result.loss].score * (1 - action.chance_of_win))
             else:
-                action.total_score = action.score + action.next_action[Result.noresult].score
+                next_action_score = action.next_action[Result.noresult].score
+            action.total_score = action.score + next_action_score
+            if next_action_score > action.score:
+                action.total_score -= 0.1
         else:
             action.total_score = action.score
 

@@ -1,11 +1,11 @@
-from gamestate.gamestate_library import Position
 from collections import Counter
 import math
 from ai.ai_library import Player
 from gamestate.gamestate_module import Unit
+from gamestate.gamestate_library import directions, Direction
 from game.game_library import read_json
 from gamestate.action_getter import UnitActions
-from gamestate.enums import Effect
+from gamestate.enums import Effect, State, Trait, Ability
 
 
 class Factors:
@@ -20,6 +20,7 @@ class Factors:
             if not unit.has(Effect.bribed):
                 self.factors[Player.opponent] += get_unit_factors(unit, pos, gamestate, 1)
             else:
+                unit.set(State.recently_bribed)
                 self.factors[Player.player] += get_unit_factors(unit, pos, gamestate, 8)
 
         self.values = read_json("./ai/values.json")
@@ -54,6 +55,9 @@ class Factors:
     def is_winning(self):
         return "Backline" in self.factors[Player.player]
 
+    def opponent_has_winning_action(self):
+        return "1 action from backline" in self.factors[Player.opponent] or "1 action from backline, extra life" in self.factors[Player.opponent]
+
 
 def get_moves_to_backline(unit, position, backline):
     if backline == 8:
@@ -62,10 +66,11 @@ def get_moves_to_backline(unit, position, backline):
         return math.ceil((position.row - 1) / unit.movement)
 
 
-
 def get_unit_factors(unit, position, gamestate, backline):
 
     def get_actions_to_backlines():
+        if not can_use_unit(unit, gamestate):
+            return
         gamestate_copy = gamestate.copy()
         if backline == 1:
             gamestate_copy.board.units = gamestate_copy.board.units[::-1]
@@ -78,6 +83,11 @@ def get_unit_factors(unit, position, gamestate, backline):
                 return "1 action from backline, extra life"
             else:
                 return "1 action from backline"
+        if any(action.target_at and action.target_at.row == backline and action.move_with_attack for action in possible_actions):
+            if unit.has_extra_life:
+                return "1 attack from backline, extra life"
+            else:
+                return "1 attack from backline"
 
     def get_backline_factor():
         moves_to_backline = get_moves_to_backline(unit, position, backline)
@@ -108,4 +118,22 @@ def get_unit_factors(unit, position, gamestate, backline):
     if backline_factor:
         factors[backline_factor] += 1
 
+    if unit.has_javelin:
+        factors["Javelin"] += 1
+
+    if unit.has(Trait.longsword):
+        target_count = max(len(list((position.four_forward_tiles(direction) | {position.move(direction)}) & set(gamestate.enemy_units))) for direction in directions)
+        if target_count == 3:
+            factors["Longswordsman can attack 3"] += 1
+        if target_count >= 4:
+            factors["Longswordsman can attack 4+"] += 1
+
     return factors
+
+
+def can_use_unit(unit, gamestate):
+    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
+        return False
+    elif gamestate.is_extra_action():
+        return unit.has(State.extra_action)
+    return True

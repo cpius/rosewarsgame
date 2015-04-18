@@ -29,6 +29,7 @@ def get_string_result(action, result, resultstr):
     s += ["Score of action: " + show(action.score_if[result])]
     if hasattr(action, "next_action"):
         s += ["Next action: " + str(action.next_action[result])]
+        s += ["Next action factors: " + str(action.next_action[result].factors)]
         s += ["Next action score: " + show(action.next_action[result].score)]
     return s
 
