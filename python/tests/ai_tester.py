@@ -17,6 +17,15 @@ def test(test_document, filename):
 
     ai.document_actions(actions, "./replay/" + filename + ".txt")
 
+    if test_document["type"] == "Is action correct":
+        if actions[0].total_score == actions[1].total_score:
+            print("")
+            print("wrong result: Two highest actions have equal score")
+            print(actions[0])
+            print(actions[1])
+            print(actions[0].total_score)
+            return False
+
     action = ai.select_action(gamestate)
 
     if test_document["type"] == "Is action correct":
