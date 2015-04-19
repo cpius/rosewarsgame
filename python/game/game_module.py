@@ -25,7 +25,7 @@ class Game:
         self.savegame_folder = self.set_savegame_folder()
 
     @classmethod
-    def from_log_document(cls, log_document, player_profile=None, shift_turn=False, ai_opponent=False):
+    def from_log_document(cls, log_document, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Human, player_profile=None):
 
         initial_gamestate_document = log_document["initial_gamestate"]
         gamestate = Gamestate.from_document(initial_gamestate_document)
@@ -33,11 +33,8 @@ class Game:
             player1 = Player.from_document(log_document["player1"])
             player2 = Player.from_document(log_document["player2"])
         else:
-            player1 = Player("Green", Intelligence.Human)
-            if ai_opponent:
-                player2 = Player("Red", Intelligence.AI)
-            else:
-                player2 = Player("Red", Intelligence.Human)
+            player1 = Player("Green", player_intelligence)
+            player2 = Player("Red", opponent_intelligence)
 
         if player_profile:
             if player1.profile == player_profile:

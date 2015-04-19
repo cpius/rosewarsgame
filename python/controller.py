@@ -14,6 +14,7 @@ from gamestate.gamestate_library import *
 from view.view_control_library import *
 import pygame
 from game.settings import *
+from game.enums import Intelligence
 
 
 class Controller(object):
@@ -60,7 +61,7 @@ class Controller(object):
         game_document = client.get_game()
 
         controller = cls(View(), Sound())
-        controller.game = Game.from_log_document(game_document, player, True)
+        controller.game = Game.from_log_document(game_document, player)
         controller.client = client
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence, player.profile)
@@ -73,14 +74,14 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_replay(cls, savegame_file=None, ai_opponent=False):
+    def from_replay(cls, savegame_file=None, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Network):
 
         if not savegame_file:
             savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
 
         controller = cls(View(), Sound())
         savegame_document = json.loads(open(savegame_file).read())
-        controller.game = Game.from_log_document(savegame_document, ai_opponent=ai_opponent)
+        controller.game = Game.from_log_document(savegame_document, player_intelligence, opponent_intelligence)
         controller.clear_move()
 
         if controller.game.is_turn_done():
