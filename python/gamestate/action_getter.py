@@ -136,6 +136,8 @@ class UnitActions:
         :param allow_move_with_attack: Whether a move with attack is allowed if not blocked
         :return All attack actions the unit can perform with move_with_attack as True/False
         """
+        if not self.unit.attack:
+            return set()
         zoc_blocks = zoc_blocks if zoc_blocks else self.zoc_blocks
         moveset = moveset if moveset else self.moveset_with_leftover
         moveset = moveset | {self.start_at}
@@ -255,7 +257,7 @@ def get_actions(gamestate):
 
 
 def can_use_unit(unit, gamestate):
-    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
+    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed) or unit.has(State.attack_frozen):
         return False
     elif gamestate.is_extra_action():
         return unit.has(State.extra_action)
