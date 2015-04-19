@@ -6,7 +6,7 @@ from game.settings import version, required_special_unit_set, beginner_mode
 
 Info = namedtuple("Info", ["allowed_rows", "copies", "protection_required"])
 
-units_info = {Unit.Archer: Info({2, 3}, 3, False),
+units_info = {Unit.Archer: Info({2, 3}, 2, False),
               Unit.Assassin: Info({1}, 1, True),
               Unit.Trebuchet: Info({3}, 1, True),
               Unit.Ballista: Info({2, 3}, 1, True),
