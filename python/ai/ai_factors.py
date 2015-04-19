@@ -2,7 +2,7 @@ from collections import Counter
 import math
 from ai.ai_library import Player
 from gamestate.gamestate_module import Unit
-from gamestate.gamestate_library import directions, Direction
+from gamestate.gamestate_library import directions, distance
 from game.game_library import read_json
 from gamestate.action_getter import UnitActions
 from gamestate.enums import Effect, State, Trait, Ability
@@ -105,6 +105,13 @@ def get_unit_factors(unit, position, gamestate, backline):
 
     factors = Counter()
 
+    if backline == 1:
+        player_units = gamestate.enemy_units
+        enemy_units = gamestate.player_units
+    else:
+        player_units = gamestate.player_units
+        enemy_units = gamestate.enemy_units
+
     if position.row == backline:
         factors["Backline"] += 1
         return factors
@@ -121,8 +128,21 @@ def get_unit_factors(unit, position, gamestate, backline):
     if unit.has_javelin:
         factors["Javelin"] += 1
 
+    if unit.unit == Unit.Cannon:
+        if unit.has(State.attack_frozen, 3):
+            factors["2 counters on Cannon"] += 1
+        if unit.has(State.attack_frozen, 2):
+            factors["1 counter on Cannon"] += 1
+
+    if unit.unit == Unit.Ballista:
+        for enemy_position, enemy_unit in enemy_units.items():
+            if distance(position, enemy_position) <= 3:
+                factors["Enemy within range of Ballista"] += 1
+
+
+
     if unit.has(Trait.longsword):
-        target_count = max(len(list((position.four_forward_tiles(direction) | {position.move(direction)}) & set(gamestate.enemy_units))) for direction in directions)
+        target_count = max(len(list((position.four_forward_tiles(direction) | {position.move(direction)}) & set(enemy_units))) for direction in directions)
         if target_count == 3:
             factors["Longswordsman can attack 3"] += 1
         if target_count >= 4:

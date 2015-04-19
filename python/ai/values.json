@@ -18,5 +18,8 @@
     "Longswordsman can attack 4+": [45, 45],
     "Basic unit": [40, 40],
     "Special unit": [90, 90],
-    "Javelin": [4,4]
+    "Javelin": [4,4],
+    "2 counters on Cannon": [-10, -10],
+    "1 counter on Cannon": [-5, -5],
+    "Enemy within range of Ballista": [5, 5]
 }
