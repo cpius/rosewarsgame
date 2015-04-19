@@ -153,7 +153,8 @@
             "2": "Reduces a units defence to 0 for two turns."
         },
         "assassinate": {
-            "1": "Attempt to assassinate any unit on the board with a 66% probability of success After the attempt there is a 50% risk that Assassin is discovered and killed. Assassinate can only be performed on the second action."
+            "1": "Attempt to assassinate any unit on the board with a 66% probability of success After the attempt there is a 50% risk that Assassin is discovered and killed. Assassinate can only be performed on the second action.",
+            "2": "Attempt to assassinate any unit on the board with a 100% probability of success After the attempt there is a 50% risk that Assassin is discovered and killed. Assassinate can only be performed on the second action."
         }
     }
 }
