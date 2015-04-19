@@ -1,0 +1,21 @@
+{
+    "type": "Does action exist",
+    "description": "test if Scout can attack",
+    "result": false,
+    "action": {
+        "start_at": "E3",
+        "end_at": "E6",
+        "target_at": "E7",
+        "move_with_attack": true
+    },
+    "gamestate": {
+        "actions_remaining": 2,
+        "player1_units": {
+            "E3": "Scout",
+            "A2": "Pikeman"
+        },
+        "player2_units": {
+            "E7": "Pikeman"
+        }
+    }
+}

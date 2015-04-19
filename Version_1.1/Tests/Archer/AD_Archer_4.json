@@ -1,0 +1,22 @@
+{
+    "type": "Is attack and defence correct",
+    "description": "Archer gets bonus against Berserker",
+    "attack": 3,
+    "defence": 1,
+    "action": {
+        "start_at": "C2",
+        "end_at": "C2",
+        "target_at": "C5"
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "C2": "Archer",
+            "D4": "Knight"
+        },
+        "player2_units": {
+            "C5": "Berserker",
+            "B5": "Pikeman"
+        }
+    }
+}
