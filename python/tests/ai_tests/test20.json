@@ -1,6 +1,6 @@
 {
     "type": "Is action incorrect",
-    "description": "Don't move in thw wrong direction in extra-action.",
+    "description": "Don't move in the wrong direction in extra-action.",
     "gamestate": {
         "player1_units": {
             "C2": "Pikeman",

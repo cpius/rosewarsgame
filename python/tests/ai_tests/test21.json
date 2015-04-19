@@ -1,0 +1,25 @@
+{
+    "type": "Is action correct",
+    "description": "Make an attack with Hobelar if another attack can win the game",
+    "gamestate": {
+        "player1_units": {
+            "C5": "Hobelar",
+            "A4": "Knight"
+        },
+        "player2_units": {
+            "C7": "Pikeman",
+            "A5": "Ballista",
+            "E5": "Pikeman",
+            "A7": "Pikeman"
+        },
+        "actions_remaining": 1
+    },
+    "action":
+    {
+        "start_at": "C5",
+        "end_at": "C6",
+        "target_at": "C7",
+        "move_with_attack": true
+    }
+}
+
