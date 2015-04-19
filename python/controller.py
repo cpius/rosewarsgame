@@ -333,7 +333,7 @@ class Controller(object):
         is_player_network = self.game.is_player_network()
         unit_has_extra_action = action.unit.has(State.extra_action)
         unit_should_be_upgraded = action.unit.should_be_upgraded()
-        unit_still_exists = action.end_at in self.game.gamestate.player_units
+        unit_still_exists = action.end_at in self.game.gamestate.player_units or action.target_at in self.game.gamestate.player_units
 
         return unit_still_exists and unit_should_be_upgraded and not unit_has_extra_action and not is_player_network
 
