@@ -162,6 +162,11 @@ class Controller(object):
                     self.clear_move()
                     self.game.gamestate.set_available_actions()
                     self.draw_game(redraw_log=True)
+                    if self.game.is_player_network():
+                        self.trigger_network_player()
+
+                    if self.game.is_player_ai():
+                        self.trigger_artificial_intelligence()
                 else:
                     position = self.view.get_position_from_mouse_click(event.pos)
                     if not self.game.is_player_human():
