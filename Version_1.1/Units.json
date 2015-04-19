@@ -364,7 +364,7 @@
         "attack": 0,
         "defence": 2,
         "movement": 1,
-        "range": 3,
+        "range": 4,
         "attributes": {
             "sabotage": 1,
             "poison": 1
@@ -381,7 +381,7 @@
         "attack": 0,
         "defence": 2,
         "movement": 1,
-        "range": 3,
+        "range": 4,
         "attributes": {
             "bribe": 1
         },
