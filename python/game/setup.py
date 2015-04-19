@@ -216,7 +216,7 @@ def at_least_five_melee_with_weaponsmith(unit_list):
 
 draw_requirements = {at_least_one_war_machine, at_least_five_melee_with_weaponsmith, at_least_one_pikeman}
 
-placement_requirements = {at_least_two_column_blocks, at_most_one_pikeman_per_column, no_pikemen_on_the_edges}
+placement_requirements = {at_least_one_column_block, at_most_one_pikeman_per_column, no_pikemen_on_the_edges}
 
 
 def draw_units():
