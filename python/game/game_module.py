@@ -99,9 +99,8 @@ class Game:
                 upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
                 game.gamestate.player_units[position] = upgraded_unit
 
-        if shift_turn:
-            if game.is_turn_done():
-                game.shift_turn()
+        if game.is_turn_done():
+            game.shift_turn()
 
         return game
 
