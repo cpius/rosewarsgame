@@ -112,7 +112,7 @@ def score_actions(gamestate, scored_actions):
 
     # Find the available actions.
     gamestate_1.set_available_actions()
-    all_actions = gamestate_1.get_actions()
+    all_actions = gamestate_1.get_actions_including_pass_extra()
 
     # Only recalculate scores for actions that are new or has a new bonus.
     new_actions = {action for action in all_actions if action not in scored_actions}

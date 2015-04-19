@@ -7,6 +7,7 @@ import json
 from gamestate.gamestate_library import *
 from gamestate.board import Board
 from game.game_library import document_to_string
+from gamestate.action import Action
 
 
 class Gamestate:
@@ -53,6 +54,13 @@ class Gamestate:
 
     def get_actions(self, positions=None):
         return filter_actions(self.available_actions, positions)
+
+    def get_actions_including_pass_extra(self, positions=None):
+        actions = filter_actions(self.available_actions, positions)
+        if self.is_extra_action():
+            for position, unit in self.player_units.items():
+                actions.add(Action(self.player_units, position, position))
+        return actions
 
     def get_actions_with_move_with_attack_as_none(self):
 
