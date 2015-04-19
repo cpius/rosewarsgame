@@ -124,6 +124,7 @@ def score_actions(gamestate, scored_actions):
     for action in all_actions:
         if action in scoredict:
             action.score = scoredict[action]
+            action.total_score = scoredict[action]
             action.factors = factordict[action]
 
     # If there are no actions whose scores are not already calculated, skip the remaining steps.
@@ -159,6 +160,12 @@ def score_actions(gamestate, scored_actions):
             find_score(Result.noresult)
             action.score = action.score_if[Result.noresult]
 
+    if gamestate_1.is_extra_action() and scored_actions and gamestate_1.actions_remaining:
+        for action in all_actions:
+            action.total_score = action.score + max([action.score for action in scored_actions])
+        return all_actions
+
+
     # For each action (and each result), find the best next action and its score.
     for action in actions:
         if next(iter(gamestate_2[action].values())).actions_remaining:
@@ -189,10 +196,10 @@ def score_actions(gamestate, scored_actions):
     for action in actions:
         if hasattr(action, "next_action"):
             if action.has_outcome:
-                next_action_score = (action.next_action[Result.win].score * action.chance_of_win +
-                                     action.next_action[Result.loss].score * (1 - action.chance_of_win))
+                next_action_score = (action.next_action[Result.win].total_score * action.chance_of_win +
+                                     action.next_action[Result.loss].total_score * (1 - action.chance_of_win))
             else:
-                next_action_score = action.next_action[Result.noresult].score
+                next_action_score = action.next_action[Result.noresult].total_score
             action.total_score = action.score + next_action_score
             if next_action_score > action.score:
                 action.total_score -= 0.1
