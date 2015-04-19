@@ -250,6 +250,7 @@ def make_unit_subclasses_from_document(document):
         del unit_class_content["attributes"]
         unit_class_content["__init__"] = init
         unit_class_content["type"] = Type[unit_class_content["type"]]
+        unit_class_content["name"] = name
         unit_class = type(name, (UnitClass,), unit_class_content)
 
         unit_class_dictionary[Unit[name]] = unit_class

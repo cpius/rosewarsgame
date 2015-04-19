@@ -67,8 +67,8 @@ class View():
     def refresh():
         pygame.display.flip()
 
-    def draw_upgrade_options(self, unit):
-        self.viewinfo.draw_upgrade_options(unit)
+    def draw_upgrade_options(self, upgrade_choices, unit):
+        self.viewinfo.draw_upgrade_options(upgrade_choices, unit)
         self.refresh()
 
     def draw_ask_about_ability(self, unit):

@@ -132,16 +132,17 @@ class Viewinfo:
         line_length = 25
         show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *text_location)
 
-    def draw_upgrade_options(self, upgrade_choices):
+    def draw_upgrade_options(self, upgrade_choices, unit):
         for i in range(2):
             upgrade = upgrade_choices[i]
             if upgrade in Unit:
-                self.show_unit_upgrade_choice(base_units[upgrade], i)
+                self.show_unit_upgrade_choice(base_units[upgrade](), i)
             else:
                 base = self.interface.upgrade_locations[i]
                 (attribute, values), = upgrade.items()
+                level = unit.get(attribute) + values.level
                 lines = ["Upgrade option " + str(i), ""]
-                lines += [prettify(attribute.name) + ":", get_description(attribute, values.level)]
+                lines += [prettify(attribute.name) + ":", get_description(attribute, level)]
                 line_length = 25
                 show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *base)
 

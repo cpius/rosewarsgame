@@ -309,8 +309,8 @@ class Controller(object):
         self.draw_game(shade_positions=end_ats)
         return self.get_choice_position({position: position for position in end_ats})
 
-    def pick_upgrade(self, upgrade_choices):
-        self.view.draw_upgrade_options(upgrade_choices)
+    def pick_upgrade(self, upgrade_choices, unit):
+        self.view.draw_upgrade_options(upgrade_choices, unit)
         buttons = {pygame.K_1: 0, pygame.K_2: 1}
         areas = [[self.view.interface.upgrade_1_area, 0], [self.view.interface.upgrade_2_area, 1]]
         choice = self.get_choice(buttons, areas)
@@ -347,7 +347,7 @@ class Controller(object):
             if len(upgrade_choices) == 1:
                 upgrade = upgrade_choices[0]
             elif self.game.is_player_human():
-                upgrade = self.pick_upgrade(upgrade_choices)
+                upgrade = self.pick_upgrade(upgrade_choices, action.unit)
             else:
                 choice = self.game.current_player().ai.select_upgrade(self.game)
                 upgrade = upgrade_choices[choice]

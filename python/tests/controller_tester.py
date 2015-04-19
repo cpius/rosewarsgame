@@ -88,7 +88,7 @@ def read_positions(positions):
     return positions
 
 
-def pick_upgrade(choice, upgrade_choices):
+def pick_upgrade(choice, upgrade_choices, unit):
     return upgrade_choices[choice]
 
 
