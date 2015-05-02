@@ -185,7 +185,7 @@ class Viewinfo:
                             "Chance of win: " + best_battle.show_chance_of_win()]
 
             if best_battle.chance_of_push > 0:
-                battle_hint += ["Chance of push: " + best_battle.show_chance_of_push]
+                battle_hint += ["Chance of push: " + best_battle.show_chance_of_push()]
 
         else:
             if worst_battle.attack == best_battle.attack:
