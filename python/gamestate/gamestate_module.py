@@ -66,7 +66,7 @@ class Gamestate:
 
         actions_with_none = set()
         for action in action_getter.get_actions(self):
-            if action.is_attack:
+            if action.is_attack and not action.is_javelin_throw:
                 if not action.move_with_attack:
                     action.move_with_attack = None
                     actions_with_none.add(action)
