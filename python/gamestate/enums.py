@@ -12,7 +12,6 @@ class State(Enum):
     attack_frozen = 1
     experience = 2
     extra_action = 3
-    flanked = 4
     javelin_thrown = 5
     lost_extra_life = 6
     movement_remaining = 7

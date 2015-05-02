@@ -33,9 +33,6 @@ def settle_attack(action, gamestate, outcome, attack_direction, is_sub_action=Fa
         else:
             gamestate.move_unit(action.target_at, push_destination)
 
-    if battle.flanking(action):
-        action.target_unit.set(State.flanked)
-
     if action.is_javelin_throw:
         action.unit.set(State.javelin_thrown)
 

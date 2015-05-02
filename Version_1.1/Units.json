@@ -65,7 +65,7 @@
     "Flanking_Cavalry": {
         "type": "Cavalry",
         "attack": 2,
-        "defence": 3,
+        "defence": 2,
         "movement": 4,
         "range": 1,
         "attributes": {
