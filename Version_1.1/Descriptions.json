@@ -52,7 +52,7 @@
             "2": "Friendly melee units receive +2A if attacking from a tile surrounding Flag Bearer."
         },
         "flanking": {
-            "1": "If it attacks from the side or the rear,  2 is added to its attack.",
+            "1": "If it attacks from the side or the rear, 2 is added to its attack.",
             "2": "If it attacks from the side or the rear, 4 is added to its attack."
         },
         "sturdy_helmet": {
