@@ -13,7 +13,7 @@ from datetime import datetime
 class Game:
     def __init__(self, players, gamestate, interaction_number=0, turn=0, created_at=datetime.utcnow()):
         self.gamestate = gamestate.copy()
-        self.initial_gamestate = gamestate
+        self.initial_gamestate = gamestate.copy()
         self.players = players
         self.interaction_number = interaction_number
         self.turn = turn
