@@ -61,6 +61,9 @@ class UnitActions:
         if unit.has(Trait.double_attack_cost) and self.gamestate.actions_remaining < 2:
             attacks = set()
 
+        if unit.has(State.attack_frozen):
+            attacks = set()
+
         return moves | attacks | abilities
 
     def set_movesets(self, movement=None, zoc_blocks=None):
@@ -257,7 +260,7 @@ def get_actions(gamestate):
 
 
 def can_use_unit(unit, gamestate):
-    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed) or unit.has(State.attack_frozen):
+    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
         return False
     elif gamestate.is_extra_action():
         return unit.has(State.extra_action)
