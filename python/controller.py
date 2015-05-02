@@ -55,13 +55,13 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_network(cls, player):
+    def from_network(cls, player_profile):
 
-        client = Client(player)
+        client = Client(player_profile)
         game_document = client.get_game()
 
         controller = cls(View(), Sound())
-        controller.game = Game.from_log_document(game_document, player, player_profile=player.profile)
+        controller.game = Game.from_log_document(game_document, player_profile=player_profile)
         controller.client = client
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence, player.profile)
