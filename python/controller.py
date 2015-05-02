@@ -100,7 +100,7 @@ class Controller(object):
         interval_in_milliseconds = 1000
         pygame.time.set_timer(self.CHECK_FOR_NETWORK_ACTIONS_EVENT_ID, interval_in_milliseconds)
 
-        action, outcome, upgrade = self.client.select_action(self.game.gamestate, self.game.savegame_folder)
+        action, outcome, upgrade = self.client.select_action(self.game.gamestate)
 
         if action is None:
             return

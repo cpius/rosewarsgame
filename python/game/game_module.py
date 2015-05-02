@@ -36,6 +36,12 @@ class Game:
             player1 = Player("Green", player_intelligence)
             player2 = Player("Red", opponent_intelligence)
 
+        if player1.profile == player_profile:
+            player2.intelligence = Intelligence.Network
+        else:
+            player1.intelligence = Intelligence.Network
+
+
         if player_profile:
             if player1.profile == player_profile:
                 player2.intelligence = player2.ai = Intelligence.Network
