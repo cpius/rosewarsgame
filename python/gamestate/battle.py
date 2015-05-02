@@ -112,11 +112,13 @@ def distance_to_target(action):
 
 
 def flanking(action):
+    if not action.unit.has(Trait.flanking):
+        return False
     attack_direction = action.end_at.get_direction_to(action.target_at)
     if attack_direction == Direction.up:
         return False
 
-    return action.unit.has(Trait.flanking)
+    return True
 
 
 def is_win(action, rolls, gamestate, is_sub_action=False):
