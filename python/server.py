@@ -174,7 +174,7 @@ def do_action_post(game_id):
 
     action_document["created_at"] = datetime.utcnow()
     log_document = construct_log_document(game_document)
-    game = Game.from_log_document(log_document)
+    game = Game.from_log_document(log_document, shift_turn=False)
 
     validation_errors = validate_input(log_document, game.gamestate, action_document)
     if validation_errors:
