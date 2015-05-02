@@ -1,0 +1,22 @@
+{
+    "type": "Is action correct",
+    "description": "If winning by moving to the backline, have the action not be an attack",
+    "gamestate":
+    {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B7": "Light Cavalry",
+            "A3": "Archer"
+        },
+        "player2_units": {
+            "C7": "Archer",
+            "E5": "Ballista"
+        }
+    },
+    "action":
+    {
+        "start_at": "B7",
+        "end_at": "B8"
+    }
+}
+

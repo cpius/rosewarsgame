@@ -19,7 +19,7 @@
             "C2": "Saboteur",
             "C4": "Pikeman"
         },
-        "actions_remaining": 1,
+        "actions_remaining": 2,
         "player2_units": {
             "A7": "Ballista",
             "E7": "Pikeman",

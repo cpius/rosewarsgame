@@ -1,0 +1,45 @@
+{
+    "type": "Is outcome correct",
+    "description": "Hobelar can use its extra action if it has it.",
+    "click_position": "E7",
+    "action_count": 0,
+    "initial_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E6": {
+                "name": "Hobelar",
+                "experience": 1,
+                "used": 1,
+                "extra_action": 1,
+                "movement_remaining": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "B7": "Pikeman"
+        }
+    },
+    "pre_positions": {
+        "start_at": "E6"
+    },
+    "post_gamestate": {
+        "turn": 1,
+        "player1_units": {
+            "A2": "Ballista",
+            "E7": {
+                "name": "Hobelar",
+                "experience": 1,
+                "used": 1
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A6": "Archer",
+            "B7": "Pikeman"
+        }
+    },
+    "post_positions": {
+    }
+}

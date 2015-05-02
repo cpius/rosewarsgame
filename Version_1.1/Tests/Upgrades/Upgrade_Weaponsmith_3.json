@@ -9,7 +9,8 @@
         "player1_units": {
             "A3": {
                 "name": "Weaponsmith",
-                "experience": 8,
+                "experience": 4,
+                "rank": 1,
                 "improve_weapons": 2
             }
         },
@@ -22,10 +23,9 @@
         "player1_units": {
             "A3": {
                 "name": "Weaponsmith",
-                "experience": 8,
+                "rank": 2,
                 "improve_weapons": 2,
-                "defence_skill": 1,
-                "recently_upgraded": 1
+                "defence_skill": 1
             }
         },
         "player2_units": {

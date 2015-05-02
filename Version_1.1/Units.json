@@ -10,9 +10,9 @@
         },
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"sharpshooting": 1},
-            "repeat_1": {"range_skill": 1},
-            "repeat_2": {"attack_skill": 1}
+            "once_1": {"fire_arrows": 1},
+            "repeat_1": {"attack_skill": 1},
+            "repeat_2": {"range_skill": 1}
         }
     },
     "Pikeman": {
@@ -66,7 +66,7 @@
         "type": "Cavalry",
         "attack": 2,
         "defence": 3,
-        "movement": 3,
+        "movement": 4,
         "range": 1,
         "attributes": {
             "flanking": 1
@@ -112,12 +112,11 @@
         "movement": 3,
         "range": 1,
         "attributes": {
-            "lancing": 1,
-            "cavalry_specialist": 1
+            "lancing": 1
         },
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"lancing": 1, "movement_skill": 1},
+            "once_1": {"lancing": 1},
             "repeat_1": {"attack_skill": 1},
             "repeat_2": {"defence_skill": 1}
         }
@@ -147,9 +146,9 @@
         "attributes": {},
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"fire_arrows": 1},
-            "repeat_1": {"attack_skill": 1},
-            "repeat_2": {"range_skill": 1}
+            "once_1": {"attack_skill": 2},
+            "repeat_1": {"range_skill": 1},
+            "repeat_2": {"attack_skill": 1}
         }
     },
     "Catapult": {
@@ -180,9 +179,8 @@
         },
         "experience_to_upgrade": 3,
         "upgrades": {
-            "once_1": {"melee_expert": 1},
-            "repeat_1": {"attack_skill": 1},
-            "repeat_2": {"defence_skill": 1}
+            "once_1": {"defence_skill": 1},
+            "repeat_1": {"attack_skill": 1}
         }
     },
     "Scout": {
@@ -196,10 +194,9 @@
         },
         "experience_to_upgrade": 2,
         "upgrades": {
-            "once_1": {"tall_shield": 1},
+            "once_1": {"sturdy_helmet": 1},
             "once_2": {"attack_skill": 2},
-            "repeat_1": {"movement_skill": 1},
-            "repeat_2": {"defence_skill": 1}
+            "repeat_1": {"movement_skill": 1}
         }
     },
     "Viking": {
@@ -215,7 +212,6 @@
         },
         "experience_to_upgrade": 4,
         "upgrades": {
-            "once_1": {"war_machine_specialist": 1},
             "repeat_1": {"attack_skill": 1},
             "repeat_2": {"defence_skill": 1}
         }
@@ -246,7 +242,7 @@
         },
         "experience_to_upgrade": 3,
         "upgrades": {
-            "once_1": {"far_sighted": 1, "attack_cooldown": 1},
+            "once_1": {"attack_cooldown": 1},
             "repeat_1": {"attack_skill": 1},
             "repeat_2": {"range_skill": 1}
         }
@@ -325,10 +321,9 @@
         },
         "experience_to_upgrade": 3,
         "upgrades": {
-            "once_1": {"big_shield": 1},
-            "once_2": {"attack_skill": 2},
-            "repeat_1": {"attack_skill": 1},
-            "repeat_2": {"defence_skill": 1}
+            "once_1": {"attack_skill": 2},
+            "repeat_1": {"defence_skill": 1},
+            "repeat_2": {"attack_skill": 1}
         }
     },
     "War_Elephant": {
@@ -369,7 +364,7 @@
         "attack": 0,
         "defence": 2,
         "movement": 1,
-        "range": 3,
+        "range": 4,
         "attributes": {
             "sabotage": 1,
             "poison": 1
@@ -386,7 +381,7 @@
         "attack": 0,
         "defence": 2,
         "movement": 1,
-        "range": 3,
+        "range": 4,
         "attributes": {
             "bribe": 1
         },

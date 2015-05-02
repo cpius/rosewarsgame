@@ -2,9 +2,9 @@
 # Custom #
 ##########
 python/replay/*
-python/demo/*
-python/saves/*
-python/settings.txt
+python/game/settings.py
+python/non-functional/*
+python/Non-functional/*
 
 
 

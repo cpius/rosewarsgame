@@ -58,6 +58,9 @@ class UnitActions:
         if unit.has(Trait.defence_maneuverability):
             attacks, moves = self.get_defence_maneuverability_actions()
 
+        if unit.has(Trait.double_attack_cost) and self.gamestate.actions_remaining < 2:
+            attacks = set()
+
         return moves | attacks | abilities
 
     def set_movesets(self, movement=None, zoc_blocks=None):
@@ -82,9 +85,9 @@ class UnitActions:
         """
         zoc_blocks = set()
         for position, enemy_unit in self.enemy_units.items():
-            if enemy_unit.has(Trait.zoc_all):
+            if enemy_unit.has(Trait.zoc_all) and not enemy_unit.has(Effect.sabotaged):
                 zoc_blocks.add(position)
-            elif enemy_unit.has(Trait.zoc_cavalry) and self.unit.type == Type.Cavalry:
+            elif enemy_unit.has(Trait.zoc_cavalry) and self.unit.type == Type.Cavalry and not enemy_unit.has(Effect.sabotaged):
                 zoc_blocks.add(position)
         self.zoc_blocks = frozenset(zoc_blocks)
 
@@ -133,6 +136,8 @@ class UnitActions:
         :param allow_move_with_attack: Whether a move with attack is allowed if not blocked
         :return All attack actions the unit can perform with move_with_attack as True/False
         """
+        if not self.unit.attack:
+            return set()
         zoc_blocks = zoc_blocks if zoc_blocks else self.zoc_blocks
         moveset = moveset if moveset else self.moveset_with_leftover
         moveset = moveset | {self.start_at}
@@ -179,10 +184,10 @@ class UnitActions:
         attacks = set()
         for direction in directions:
             one_tile_away = self.start_at.move(direction)
-            if not one_tile_away:
+            if zoc_block(self.start_at, direction, self.zoc_blocks) or not one_tile_away:
                 continue
             two_tiles_away = one_tile_away.move(direction)
-            if not two_tiles_away:
+            if zoc_block(one_tile_away, direction, self.zoc_blocks) or not two_tiles_away:
                 continue
             if one_tile_away in self.enemy_units and two_tiles_away not in self.units:
                 attacks.add(self.make_action(end_at=two_tiles_away, target_at=one_tile_away, move_with_attack=False))
@@ -238,25 +243,23 @@ def get_bonus_tiles(gamestate):
 
 def get_actions(gamestate):
 
-    is_extra_action = gamestate.is_extra_action()
-
-    if not gamestate.actions_remaining and not is_extra_action:
+    if not gamestate.actions_remaining and not gamestate.is_extra_action():
         return []
 
     bonus_tiles = get_bonus_tiles(gamestate)
     actions = set()
     for position, unit in gamestate.player_units.items():
-        if can_use_unit(unit, is_extra_action):
+        if can_use_unit(unit, gamestate):
             unit_actions = UnitActions(unit, position, gamestate, bonus_tiles)
             actions |= unit_actions.get_all_actions()
 
     return actions
 
 
-def can_use_unit(unit, is_extra_action):
-    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed):
+def can_use_unit(unit, gamestate):
+    if unit.has(Effect.poisoned) or unit.has(State.recently_bribed) or unit.has(State.attack_frozen):
         return False
-    elif is_extra_action:
+    elif gamestate.is_extra_action():
         return unit.has(State.extra_action)
     else:
         return not unit.has(State.used)

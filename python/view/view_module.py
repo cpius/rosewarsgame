@@ -5,6 +5,7 @@ from view.view_control_library import *
 from view.view_display_library import *
 import game.settings as settings
 import view.interfaces as interfaces
+from game.enums import Intelligence
 
 
 class View():
@@ -32,7 +33,8 @@ class View():
     def get_position_from_mouse_click(self, coordinates):
         return get_position_from_mouseclick(self.interface, coordinates)
 
-    def draw_ask_about_move_with_attack(self, end_at, target_at):
+    def draw_ask_about_move_with_attack(self, game, end_at, target_at):
+        self.draw_game(game, None, None, False)
         self.viewgame.draw_ask_about_move_with_attack(end_at, target_at)
         write_message(self.screen, self.interface, "Click the tile you want to stand on.")
         self.refresh()
@@ -41,8 +43,7 @@ class View():
         pygame.image.save(self.screen, name)
 
     def draw_game_end(self, color, game):
-        self.clear_right()
-        self.viewlog.draw_logbook(game)
+        self.draw_game(game, actions=None, shade_positions=None, redraw_log=True)
         write_message(self.screen, self.interface, color + " Wins")
         self.refresh()
 
@@ -53,12 +54,12 @@ class View():
     def clear_left(self):
         pygame.draw.rect(self.screen, Color.Light_grey, self.interface.left_side_rectangle)
 
-    def draw_game(self, game, start_at=None, actions=(), redraw_log=False, draw_pass_action=False):
-        self.viewgame.draw_game(game, start_at, actions)
+    def draw_game(self, game, actions, shade_positions, redraw_log):
+        self.viewgame.draw_game(game, actions, shade_positions)
         if redraw_log:
             self.clear_right()
             self.viewlog.draw_logbook(game)
-        if game.gamestate.is_extra_action():
+        if game.gamestate.is_extra_action() and game.current_player().intelligence == Intelligence.Human:
             self.viewinfo.draw_pass_action_button()
         self.refresh()
 
@@ -66,8 +67,8 @@ class View():
     def refresh():
         pygame.display.flip()
 
-    def draw_upgrade_options(self, unit):
-        self.viewinfo.draw_upgrade_options(unit)
+    def draw_upgrade_options(self, upgrade_choices, unit):
+        self.viewinfo.draw_upgrade_options(upgrade_choices, unit)
         self.refresh()
 
     def draw_ask_about_ability(self, unit):

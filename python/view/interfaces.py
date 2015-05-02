@@ -68,7 +68,7 @@ class Rectangles(Interface):
     crusading_icon = "./graphics/flag.gif"
     high_morale_icon = "./graphics/flag_black.gif"
     move_icon = "./graphics/move.gif"
-    level_icons = ["./graphics/level1.gif", "./graphics/level1.gif", "./graphics/level2.gif", "./graphics/level3.gif"]
+    rank_icons = ["./graphics/level1.gif", "./graphics/level1.gif", "./graphics/level2.gif", "./graphics/level3.gif"]
     base_coordinates = (0, 0)
 
     def __init__(self, zoom):
@@ -124,10 +124,7 @@ class Rectangles(Interface):
 
         self.lower_right_rectangle = (391 * zoom, 391 * zoom, 391 * zoom, 391 * zoom)
 
-        self.move_shading = pygame.Color(0, 0, 0, 160)
-        self.attack_shading = pygame.Color(130, 0, 0, 150)
-        self.ability_shading = pygame.Color(0, 0, 150, 130)
-        self.selected_shading = pygame.Color(0, 0, 0, 160)
+        self.shading = pygame.Color(30, 30, 30, 200)
 
         self.counter_size = int(7 * zoom)
 

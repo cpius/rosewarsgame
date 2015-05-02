@@ -1,0 +1,30 @@
+{
+    "type": "Is action correct",
+    "description": "You don't have to block a bribed unit",
+    "gamestate": {
+        "player1_units": {
+            "B2": {
+                "name": "Diplomat",
+                "used": 1
+            },
+            "A6": "Pikeman",
+            "E2": "Pikeman",
+            "B3": {"name": "Knight",
+                   "bribed": {
+                       "level": 1,
+                       "duration": 1
+                   }
+            }
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "A8": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "A6",
+        "end_at": "A7"
+    }
+}
+

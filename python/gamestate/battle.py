@@ -5,28 +5,13 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
 
     defence_adjusters = 0
 
-    if attacking_unit.is_melee and defending_unit.has(Trait.big_shield):
-        defence_adjusters += 2
-
     if defending_unit.has(Effect.improved_weapons):
         defence_adjusters += 1
 
     if attacking_unit.type == Type.War_Machine and defending_unit.has(Trait.sturdy_helmet):
         defence_adjusters += 1
 
-    if attacking_unit.is_melee and defending_unit.has(Trait.melee_expert):
-        defence_adjusters += 1
-
-    if attacking_unit.has(Trait.pikeman_specialist) and defending_unit == Unit.Pikeman:
-        defence_adjusters += 1
-
-    if attacking_unit.is_ranged and defending_unit.has(Trait.tall_shield):
-        defence_adjusters += 1
-
     if defending_unit.has(Trait.cavalry_specialist) and attacking_unit.type == Type.Cavalry:
-        defence_adjusters += 1
-
-    if defending_unit.has(Trait.war_machine_specialist) and attacking_unit.type == Type.War_Machine:
         defence_adjusters += 1
 
     if action.is_javelin_throw:
@@ -38,8 +23,6 @@ def get_defence_adjusters(attacking_unit, defending_unit, action, gamestate):
 def get_defence_setters(attacking_unit, defending_unit):
 
     defence_setters = []
-    if attacking_unit.has(Trait.sharpshooting):
-        defence_setters.append(1)
 
     if defending_unit.has(Effect.sabotaged, 1) or defending_unit.has(Effect.sabotaged, 2):
         defence_setters.append(0)
@@ -73,19 +56,19 @@ def get_attack(action, gamestate, is_sub_action=False):
     attack = attacking_unit.attack
 
     if lancing(action):
-        attack += lancing(action)
+        attack += 3
 
     if flanking(action):
         attack += 2 * attacking_unit.get(Trait.flanking)
 
-    if action.start_at in gamestate.bonus_tiles[Trait.crusading][1]:
+    if not attacking_unit.type == Type.War_Machine and action.start_at in gamestate.bonus_tiles[Trait.crusading][1]:
         attack += 1
 
-    if action.start_at in gamestate.bonus_tiles[Trait.crusading][2]:
+    if not attacking_unit.type == Type.War_Machine and action.start_at in gamestate.bonus_tiles[Trait.crusading][2]:
         attack += 2
 
-    if attacking_unit.is_melee and action.end_at in gamestate.bonus_tiles[Trait.flag_bearing] \
-            and not attacking_unit.unit == Unit.Flag_Bearer:
+    if (action.end_at in gamestate.bonus_tiles[Trait.flag_bearing] and not attacking_unit.unit == Unit.Flag_Bearer
+            and not (action.is_javelin_throw or attacking_unit.is_ranged)):
         attack += 2
 
     if hasattr(action, "high_morale"):
@@ -106,19 +89,7 @@ def get_attack(action, gamestate, is_sub_action=False):
     if attacking_unit.has(Trait.arrows) and defending_unit.type == Type.Infantry:
         attack += 1
 
-    if defending_unit.has(Trait.pikeman_specialist) and attacking_unit == Unit.Pikeman:
-        attack += 1
-
-    if defending_unit.is_melee and attacking_unit.has(Trait.melee_expert):
-        attack += 1
-
-    if attacking_unit.has(Trait.far_sighted) and distance(action.end_at, action.target_at) < 4:
-        attack -= 1
-
     if attacking_unit.has(Trait.cavalry_specialist) and defending_unit.type == Type.Cavalry:
-        attack += 1
-
-    if attacking_unit.has(Trait.war_machine_specialist) and defending_unit.type == Type.War_Machine:
         attack += 1
 
     if attacking_unit.has(Trait.fire_arrows) and defending_unit.type == Type.War_Machine:
@@ -129,8 +100,8 @@ def get_attack(action, gamestate, is_sub_action=False):
 
 def lancing(action):
     if action.unit.has(Trait.lancing, 1) and action.is_attack and distance_to_target(action) >= 3:
-        return 2
-    elif action.unit.has(Trait.lancing, 2) and action.is_attack and distance_to_target(action) >= 4:
+        return 3
+    elif action.unit.has(Trait.lancing, 2) and action.is_attack and distance_to_target(action) >= 2:
         return 3
     else:
         return 0

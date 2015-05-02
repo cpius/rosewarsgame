@@ -1,0 +1,54 @@
+{
+    "type": "Is action correct",
+    "description": "Consider that the opponent can move his own units out of the way",
+    "gamestate": {
+        "player1_units": {
+            "E2": "Archer",
+            "A6": {
+                "experience": 1,
+                "name": "War_Elephant"
+            },
+            "C3": {
+                "experience": 1,
+                "name": "Knight"
+            },
+            "A3": "Royal_Guard",
+            "B2": "Diplomat",
+            "A2": {
+                "experience": 2,
+                "name": "Ballista"
+            }
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "E7": "Light_Cavalry",
+            "C4": {
+                "experience": 1,
+                "name": "Light_Cavalry"
+            },
+            "B6": {
+                "experience": 1,
+                "name": "Pikeman"
+            },
+            "D3": {
+                "experience": 2,
+                "name": "Viking"
+            },
+            "D7": "Pikeman",
+            "B3": {
+                "experience": 2,
+                "name": "Lancer"
+            },
+            "E6": "Knight",
+            "A7": "Catapult"
+        }
+    },
+    "action":
+    {
+        "start_at": "B2",
+        "end_at": "B2",
+        "target_at": "D3",
+        "ability": "bribe"
+    }
+}
+

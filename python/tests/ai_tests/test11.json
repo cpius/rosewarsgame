@@ -1,0 +1,23 @@
+{
+    "type": "Is action correct",
+    "description": "If you can move in the way of opponents unit instead of attacking it, do it.",
+    "gamestate": {
+        "player1_units": {
+            "A1": "Pikeman",
+            "C4": "Knight",
+            "D2": "Archer"
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "E7": "Catapult",
+            "B2": "Pikeman",
+            "C6": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "A1",
+        "end_at": "B1"
+    }
+}
+

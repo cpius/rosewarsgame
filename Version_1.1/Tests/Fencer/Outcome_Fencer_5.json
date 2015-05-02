@@ -21,7 +21,8 @@
             "E4": {
                 "name": "Fencer",
                 "used": 1,
-                "extra_action": 1
+                "extra_action": 1,
+                "movement_remaining": 0
             },
             "A2": "Pikeman"
         },

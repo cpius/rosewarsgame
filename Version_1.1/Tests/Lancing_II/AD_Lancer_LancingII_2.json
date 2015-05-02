@@ -1,11 +1,10 @@
 {
     "type": "Is attack and defence correct",
-    "description": "Lancer uses its level 2 lancing trait to turboboost its attack",
     "attack": 5,
     "defence": 2,
     "action": {
         "start_at": "B2",
-        "end_at": "B5",
+        "end_at": "C3",
         "target_at": "A5",
         "move_with_attack": true
     },
@@ -14,14 +13,13 @@
         "player1_units": {
             "B2": {
                 "name": "Lancer",
-                "lancing": 2,
-                "movement_skill": 1
+                "lancing": 2
             },
             "A3": "Archer"
         },
         "player2_units": {
             "A5": "Archer",
-            "E5": "Ballista"
+            "C3": "Ballista"
 
         }
     }

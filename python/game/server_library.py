@@ -6,7 +6,7 @@ from game.game_library import document_to_string
 
 def validate_upgrade(action_document, gamestate):
     position, unit = gamestate.get_upgradeable_unit()
-    upgrade_options = [unit.get_upgrade(0), unit.get_upgrade(1)]
+    upgrade_options = unit.get_upgrade_choices()
     upgrade = get_enum_attributes(action_document["upgrade"])
 
     if upgrade in upgrade_options:
@@ -58,3 +58,27 @@ def determine_outcome_if_any(action, gamestate):
         outcome = Outcome.determine_outcome(action, gamestate)
 
     return outcome
+
+
+def get_expected_action(log_document, gamestate):
+    action_number = log_document["action_count"]
+    if action_number == 0:
+        return 1, "action"
+
+    last_action_document = log_document[str(action_number)]
+
+    last_action_options = None
+    if str(action_number) + "_options" in log_document:
+        last_action_options = log_document[str(action_number) + "_options"]
+
+    if "move_with_attack" not in last_action_document:
+        if not last_action_options or "move_with_attack" not in last_action_options:
+            return action_number, "move_with_attack"
+
+    unit, position = gamestate.get_unit_from_action_document(last_action_document)
+    if unit and unit.should_be_upgraded():
+        if not last_action_options or "upgrade" not in last_action_options:
+            print(action_number)
+            return action_number, "upgrade",
+
+    return action_number + 1, "action"

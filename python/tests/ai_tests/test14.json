@@ -1,0 +1,24 @@
+{
+    "type": "Is action incorrect",
+    "description": "Bribing a unit that can't do anything is not super good",
+    "gamestate":
+    {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B2": "Diplomat",
+            "A3": "Knight"
+        },
+        "player2_units": {
+            "B5": "Longswordsman",
+            "C7": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "B2",
+        "end_at": "B2",
+        "target_at": "B5",
+        "ability": "bribe"
+    }
+}
+

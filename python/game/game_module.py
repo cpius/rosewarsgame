@@ -22,9 +22,10 @@ class Game:
         self.actions = dict()
         self.outcomes = dict()
         self.options = dict()
+        self.savegame_folder = self.set_savegame_folder()
 
     @classmethod
-    def from_log_document(cls, log_document, player_profile=None, shift_turn=False):
+    def from_log_document(cls, log_document, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Human, player_profile=None):
 
         initial_gamestate_document = log_document["initial_gamestate"]
         gamestate = Gamestate.from_document(initial_gamestate_document)
@@ -32,8 +33,8 @@ class Game:
             player1 = Player.from_document(log_document["player1"])
             player2 = Player.from_document(log_document["player2"])
         else:
-            player1 = Player("Green", Intelligence.Human)
-            player2 = Player("Red", Intelligence.Human)
+            player1 = Player("Green", player_intelligence)
+            player2 = Player("Red", opponent_intelligence)
 
         if player_profile:
             if player1.profile == player_profile:
@@ -66,9 +67,7 @@ class Game:
 
             action_document = log_document[str(action_number)]
 
-            action_from_document = Action.from_document(gamestate.all_units(), action_document)
-
-            action = next(action for action in gamestate.get_actions() if action == action_from_document)
+            action = Action.from_document(gamestate.all_units(), action_document)
 
             game.actions[str(action_number)] = action
 
@@ -100,9 +99,8 @@ class Game:
                 upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
                 game.gamestate.player_units[position] = upgraded_unit
 
-        if shift_turn:
-            if game.is_turn_done():
-                game.shift_turn()
+        if game.is_turn_done():
+            game.shift_turn()
 
         return game
 
@@ -118,8 +116,11 @@ class Game:
                     colors = self.current_player().color, self.current_player().color
                 is_sub_action = action.target_at == position
                 outcome_string = battle.get_outcome_string(action, outcome.outcomes[position], self.gamestate, is_sub_action)
-                self.logbook.append(Log(ActionType.Attack, action.unit, action.target_unit, action_number, colors,
-                                        outcome_string))
+                if position in self.gamestate.enemy_units:
+                    target = self.gamestate.enemy_units[position]
+                else:
+                    target = self.gamestate.player_units[position]
+                self.logbook.append(Log(ActionType.Attack, action.unit, target, action_number, colors, outcome_string))
         elif action.is_ability:
             if action.target_at in self.gamestate.enemy_units:
                 colors = self.current_player().color, self.opponent_player().color
@@ -153,12 +154,13 @@ class Game:
         self.players = [self.players[1], self.players[0]]
         self.gamestate.set_available_actions()
 
-    def savegame_folder(self):
-        return "./replay/" + str(self.created_at.strftime("%Y%m%d-%H%M%S"))
+    def set_savegame_folder(self):
+        savegame_folder = "./replay/" + str(self.created_at.strftime("%Y%m%d-%H%M%S"))
+        if not os.path.exists(savegame_folder):
+            os.makedirs(savegame_folder)
+        return savegame_folder
 
     def save(self, view, action, outcome):
-        if not os.path.exists(self.savegame_folder()):
-            os.makedirs(self.savegame_folder())
 
         action_count = self.gamestate.action_count
 
@@ -168,7 +170,7 @@ class Game:
             outcome_document = outcome.to_document()
             self.outcomes[action_count] = outcome_document
 
-        filename = self.savegame_folder() + "/" + str(action_count)
+        filename = self.savegame_folder + "/" + str(action_count)
 
         view.save_screenshot(filename + ".jpeg")
 

@@ -5,7 +5,7 @@
     "outcome":{
         "E5": [6, 1]
     },
-    "upgrade_choice": 1,
+    "upgrade_choice": 2,
     "initial_gamestate": {
         "turn": 1,
         "player1_units": {
@@ -30,10 +30,9 @@
             "A2": "Knight",
             "E3": {
                 "name": "Ballista",
-                "experience": 4,
+                "rank": 1,
                 "used": 1,
-                "attack_skill": 1,
-                "recently_upgraded": 1
+                "attack_skill": 1
             }
         },
         "actions_remaining": 1,

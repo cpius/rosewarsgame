@@ -1,0 +1,23 @@
+{
+    "type": "Is action correct",
+    "description": "If the only hope is trying to shoot an opponents unit down, do it.",
+    "gamestate":
+    {
+        "actions_remaining": 1,
+        "player1_units": {
+            "A4": "Knight",
+            "D2": "Archer"
+        },
+        "player2_units": {
+            "B2": "Knight",
+            "A5": "Longswordsman"
+        }
+    },
+    "action":
+    {
+        "start_at": "D2",
+        "end_at": "D2",
+        "target_at": "B2"
+    }
+}
+

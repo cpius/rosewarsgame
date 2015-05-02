@@ -22,10 +22,9 @@
         "player1_units": {
             "A3": {
                 "name": "Lancer",
-                "experience": 4,
+                "rank": 1,
                 "movement_skill": 1,
-                "lancing": 2,
-                "recently_upgraded": 1
+                "lancing": 2
             }
         },
         "player2_units": {

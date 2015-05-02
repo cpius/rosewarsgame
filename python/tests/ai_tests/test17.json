@@ -1,0 +1,24 @@
+{
+    "type": "Is action incorrect",
+    "description": "Throwing the Javelin has some value.",
+    "gamestate": {
+        "player1_units": {
+            "D4": "Javeliner",
+            "E2": "Pikeman"
+        },
+        "actions_remaining": 1,
+        "player2_units": {
+            "D5": "Pikeman",
+            "D6": "Pikeman",
+            "B7": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "D4",
+        "end_at": "D4",
+        "target_at": "D6",
+        "move_with_attack": false
+    }
+}
+

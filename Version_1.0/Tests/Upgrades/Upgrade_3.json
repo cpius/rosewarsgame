@@ -21,9 +21,8 @@
         "player1_units": {
             "A3": {
                 "name": "Catapult",
-                "experience": 3,
-                "attack_skill": 1,
-                "recently_upgraded": 1
+                "rank": 1,
+                "attack_skill": 1
             }
         },
         "player2_units": {

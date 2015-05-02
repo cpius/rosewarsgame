@@ -15,8 +15,8 @@ class UnitClass():
     base_defence = 0
     base_range = 0
     base_movement = 0
-    level = 0
     upgrades = {}
+
 
     @property
     def attack(self):
@@ -63,45 +63,55 @@ class UnitClass():
     def abilities(self):
         return [attribute for attribute in self.attributes if attribute in Ability]
 
-    def get_traits(self):
-        return [attribute for attribute in self.attributes if attribute in Trait]
-
-    def get_states(self):
-        return [attribute for attribute in self.attributes if attribute in State]
-
-    def set(self, attribute, value=None, duration=None, level=1):
+    def set(self, attribute, value=1, duration=None, level=1):
+        """
+        :param attribute: A state or effect.
+        :param value: A value for states. Default 1.
+        :param duration: A duration for effects.
+        :param level: A level for effects. Default 1.
+        """
         if attribute in State:
-            if value is None:
-                value = 1
             self.attributes[attribute] = AttributeValues(value=value)
-        else:
-            self.attributes[attribute] = AttributeValues(value=value, duration=duration, level=level)
+        elif attribute in Effect:
+            self.attributes[attribute] = AttributeValues(duration=duration, level=level)
 
-    def decrease_duration(self, attribute):
-        if attribute in self.attributes:
-            duration = self.attributes[attribute].duration - 1
-            if duration == 0:
-                del self.attributes[attribute]
-            else:
-                self.attributes[attribute].duration = duration
+    def decrease(self, attribute):
+        """
+        :param attribute: A state or effect.
+        :return: If the attribute is a state, decrease the value by 1. If the attribute is an effect, decrease the
+        duration by 1. If the value or duration is set to 0, remove the attribute.
+        """
+        if attribute in self.states:
+            self.attributes[attribute].value -= 1
+            if self.get(attribute) == 0:
+                self.remove(attribute)
+
+        if attribute in self.effects:
+            self.attributes[attribute].duration -= 1
+            if self.attributes[attribute].duration == 0:
+                self.remove(attribute)
 
     def has(self, attribute, number=None):
         """
-        :param attribute: A Trait, Effect, Ability or State
+        :param attribute: An attribute
         :param number: A level or value depending on the attribute type
         :return: If a number is not given, returns whether the unit has the attribute.
                  If a number is given, returns whether the unit has the attribute at that specific level / value.
         """
         if attribute not in self.attributes:
             return False
-        if number is None:
+        elif number is None:
             return True
-        if attribute in Trait or attribute in Effect or attribute in Ability:
-            return self.attributes[attribute].level == number
-        elif attribute in State:
+        if attribute in State:
             return self.attributes[attribute].value == number
+        else:
+            return self.attributes[attribute].level == number
 
     def get(self, attribute):
+        """
+        :param attribute: An attribute
+        :return: If the attribute is a state, returns the state value. Otherwise returns the state level.
+        """
         if attribute in State:
             return self.attributes[attribute].value if attribute in self.attributes else 0
         else:
@@ -111,18 +121,25 @@ class UnitClass():
         if attribute in self.attributes:
             del self.attributes[attribute]
 
+    def increase(self, attribute, n=1):
+        """
+        :param attribute: An attribute
+        :return: If the attribute is a state, increase the value by n. Otherwise increase the level by n.
+        """
+        if attribute in State:
+            if self.has(attribute):
+                self.attributes[attribute].value += n
+            else:
+                self.attributes[attribute] = AttributeValues(value=n)
+        else:
+            if self.has(attribute):
+                self.attributes[attribute].level += n
+            else:
+                self.attributes[attribute] = AttributeValues(level=n)
+
     def gain_experience(self):
         if not self.has(State.used) and not beginner_mode:
-            if State.experience in self.attributes:
-                self.attributes[State.experience].value += 1
-            else:
-                self.attributes[State.experience] = AttributeValues(value=1)
-            self.remove(State.recently_upgraded)
-
-    def remove_states_with_value_zero(self):
-        removestates = [state for state in self.states if self.get(state) == 0]
-        for state in removestates:
-            self.remove(state)
+            self.increase(State.experience)
 
     @property
     def has_extra_life(self):
@@ -147,47 +164,35 @@ class UnitClass():
         """
         if upgrade in Unit:
             upgraded_unit = base_units[upgrade]()
-            for attribute in self.attributes:
-                if attribute in State or attribute in Effect:
-                    upgraded_unit.attributes[attribute] = self.attributes[attribute]
-            upgraded_unit.set(State.recently_upgraded)
+            for attribute in self.states + self.effects:
+                upgraded_unit.attributes[attribute] = self.attributes[attribute]
             upgraded_unit.remove(State.experience)
-            return upgraded_unit
         else:
             upgraded_unit = base_units[self.unit]()
             upgraded_unit.attributes = dict(self.attributes)
-            for key, attributes in upgrade.items():
-                if key in upgraded_unit.attributes:
-                    level = attributes.level + upgraded_unit.attributes[key].level
-                    if level == 0:
-                        del upgraded_unit.attributes[key]
-                    else:
-                        upgraded_unit.attributes[key] = AttributeValues(level=attributes.level + upgraded_unit.attributes[key].level)
-                else:
-                    upgraded_unit.attributes[key] = attributes
-            upgraded_unit.set(State.recently_upgraded, value=1)
+            upgraded_unit.increase(State.rank, 1)
+            upgraded_unit.remove(State.experience)
+            for attribute, attribute_values in upgrade.items():
+                upgraded_unit.increase(attribute, attribute_values.level)
 
-            return upgraded_unit
+        return upgraded_unit
 
     def get_upgraded_unit_from_choice(self, choice):
         """
         :param choice: upgrade choice 0 or 1.
         :return: A new UnitClass object, based on the unit and with the upgrade.
         """
-        upgrade = self.get_upgrade(choice)
+        upgrade = self.get_upgrade_choices()[choice]
         return self.get_upgraded_unit_from_upgrade(upgrade)
 
-    def get_upgrade(self, choice):
+    def get_upgrade_choices(self):
         """
         :param choice: upgrade choice 0 or 1.
         :return: The chosen unit upgrade in enum upgrade format. (Dictionary with enums as keys and AttributeValues as
         values.)
         """
         if version == 1.0:
-            if choice == 1:
-                return {Trait.attack_skill: AttributeValues(level=1)}
-            else:
-                return {Trait.defence_skill: AttributeValues(level=1)}
+            return [{Trait.attack_skill: AttributeValues(level=1)}, {Trait.defence_skill: AttributeValues(level=1)}]
 
         def has_upgrade(check_upgrade):
             if check_upgrade in Unit:
@@ -203,15 +208,10 @@ class UnitClass():
                 if not (upgrade_category in ["once_1", "once_2"] and has_upgrade(upgrade)):
                     possible_upgrade_choices.append(upgrade)
 
-        return possible_upgrade_choices[choice]
-
-    @property
-    def unit_level(self):
-        return self.get(State.experience) // self.experience_to_upgrade
+        return possible_upgrade_choices
 
     def should_be_upgraded(self):
-        experience = self.get(State.experience)
-        return experience and experience % self.experience_to_upgrade == 0 and not self.has(State.recently_upgraded)
+        return self.has(State.experience) and self.get(State.experience) % self.experience_to_upgrade == 0
 
     def to_document(self):
         write_attributes = {attribute: attribute_values for attribute, attribute_values in self.attributes.items() if
@@ -228,6 +228,10 @@ attributes_units = {}
 
 
 def make_unit_subclasses_from_document(document):
+    """
+    :param document: A document containing the specifications for units.
+    :return: A dictionary of unit objects.
+    """
     unit_class_dictionary = {}
     for name, unit_class_content in document.items():
 
@@ -241,11 +245,12 @@ def make_unit_subclasses_from_document(document):
         def init(self):
             super(type(self), self).__init__()
             for attribute, level in attributes_units[self.name].items():
-                self.set(attribute, level=level)
+                self.attributes[attribute] = AttributeValues(level=level)
 
         del unit_class_content["attributes"]
         unit_class_content["__init__"] = init
         unit_class_content["type"] = Type[unit_class_content["type"]]
+        unit_class_content["name"] = name
         unit_class = type(name, (UnitClass,), unit_class_content)
 
         unit_class_dictionary[Unit[name]] = unit_class

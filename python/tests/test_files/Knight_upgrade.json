@@ -30,8 +30,7 @@
             "A2": "Knight",
             "E4": {
                 "name": "Hobelar",
-                "used": 1,
-                "recently_upgraded": 1
+                "used": 1
             }
         },
         "actions_remaining": 1,

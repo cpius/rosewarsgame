@@ -1,0 +1,42 @@
+{
+    "type": "Is action incorrect",
+    "description": "Don't move in thw wrong direction in extra-action.",
+    "gamestate": {
+        "player1_units": {
+            "C2": "Pikeman",
+            "E3": "Archer",
+            "B6": {
+                "used": 1,
+                "extra_action": 1,
+                "movement_remaining": 1,
+                "name": "Hobelar",
+                "experience": 2
+            },
+            "C6": {
+                "name": "Light_Cavalry",
+                "experience": 1
+            },
+            "E2": "Archer",
+            "B2": "Pikeman",
+            "B3": "Catapult"
+        },
+        "player2_units": {
+            "D5": "Javeliner",
+            "A6": "Archer",
+            "A5": "War_Elephant",
+            "C7": "Pikeman",
+            "D6": {
+                "name": "Archer",
+                "experience": 1
+            },
+            "E6": "Light_Cavalry"
+        },
+        "actions_remaining": 0
+    },
+    "action":
+    {
+        "start_at": "B6",
+        "end_at": "B5"
+    }
+}
+

@@ -1,0 +1,24 @@
+{
+    "type": "Is action correct",
+    "description": "First attack with Flag Bearer if that gives the bonus.",
+    "gamestate": {
+        "player1_units": {
+            "D2": "Flag Bearer",
+            "C2": "Knight"
+        },
+        "actions_remaining": 2,
+        "player2_units": {
+            "D4": "Pikeman",
+            "C4": "Lancer",
+            "B4": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "D2",
+        "end_at": "D3",
+        "target_at": "D4",
+        "move_with_attack": false
+    }
+}
+

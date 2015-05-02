@@ -7,6 +7,7 @@ import json
 from gamestate.gamestate_library import *
 from gamestate.board import Board
 from game.game_library import document_to_string
+from gamestate.action import Action
 
 
 class Gamestate:
@@ -15,8 +16,7 @@ class Gamestate:
                  player2_units,
                  actions_remaining,
                  created_at=None,
-                 game_id=None,
-                 ai_factors=None):
+                 game_id=None):
         self.board = Board([player1_units, player2_units])
         self.actions_remaining = actions_remaining
         self.action_count = 0
@@ -24,10 +24,6 @@ class Gamestate:
         self.game_id = game_id
         self.available_actions = []
         self.bonus_tiles = {}
-        if ai_factors:
-            self.ai_factors = ai_factors
-        else:
-            self.ai_factors = {}
 
     def all_units(self):
         return self.board.all_units()
@@ -58,6 +54,13 @@ class Gamestate:
 
     def get_actions(self, positions=None):
         return filter_actions(self.available_actions, positions)
+
+    def get_actions_including_pass_extra(self, positions=None):
+        actions = filter_actions(self.available_actions, positions)
+        if self.is_extra_action():
+            for position, unit in self.player_units.items():
+                actions.add(Action(self.player_units, position, position))
+        return actions
 
     def get_actions_with_move_with_attack_as_none(self):
 
@@ -103,10 +106,9 @@ class Gamestate:
         player1_units = cls.units_from_document(document["player1_units"])
         player2_units = cls.units_from_document(document["player2_units"])
         actions_remaining = document["actions_remaining"]
-        ai_factors = document["ai_factors"] if "ai_factors" in document else None
         created_at = document["created_at"] if "created_at" in document else None
 
-        return cls(player1_units, player2_units, actions_remaining, created_at, ai_factors=ai_factors)
+        return cls(player1_units, player2_units, actions_remaining, created_at)
 
     @classmethod
     def from_file(cls, path):
@@ -137,13 +139,6 @@ class Gamestate:
 
         return units
 
-    @classmethod
-    def get_ai_from_name(cls, name):
-        if name == "Human":
-            return name
-        else:
-            return ai_module.AI(name)
-
     def to_document(self):
         document = {
             "actions_remaining": self.actions_remaining,
@@ -154,8 +149,6 @@ class Gamestate:
             document["created_at"] = self.created_at
         if self.game_id:
             document["game"] = self.game_id
-        if self.ai_factors:
-            document["ai_factors"] = self.ai_factors
 
         return document
 
@@ -235,3 +228,6 @@ class Gamestate:
 
     def pass_extra_action(self):
         self.board.pass_extra_action()
+
+    def copy(self):
+        return Gamestate.from_document(self.to_document())

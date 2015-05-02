@@ -1,0 +1,234 @@
+{
+    "1_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d2e9823a486551c0ee23e",
+        "created_at": "2015-04-14T15:13:28Z",
+        "B5": [
+            6,
+            5
+        ]
+    },
+    "6": {
+        "target_at": "B4",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31a723a48657ffb513f9",
+        "start_at": "A2",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:26:31Z",
+        "end_at": "A2"
+    },
+    "3": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d316d23a48657ffb513f4",
+        "start_at": "B4",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:25:33Z",
+        "end_at": "B5"
+    },
+    "4_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d316e23a48657ffb513f6",
+        "created_at": "2015-04-14T15:25:34Z",
+        "B6": [
+            6,
+            4
+        ]
+    },
+    "6_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31a723a48657ffb513fa",
+        "B4": [
+            5,
+            4
+        ],
+        "created_at": "2015-04-14T15:26:31Z"
+    },
+    "initial_gamestate": {
+        "game": "2015-04-14T15:12:04Z",
+        "actions_remaining": 1,
+        "player1_units": {
+            "D2": "Pikeman",
+            "B2": "Pikeman",
+            "A3": "Archer",
+            "E2": "Saboteur",
+            "D3": "Flanking_Cavalry",
+            "E3": "Hussar",
+            "A2": "Ballista",
+            "B3": "Archer",
+            "E4": "Knight"
+        },
+        "player2_units": {
+            "B8": "Assassin",
+            "A7": "Ballista",
+            "D6": "Light_Cavalry",
+            "D7": "Pikeman",
+            "E7": "Royal_Guard",
+            "A6": "Knight",
+            "B7": "Pikeman",
+            "B5": "Fencer",
+            "A5": "Knight"
+        }
+    },
+    "action_count": 11,
+    "2": {
+        "target_at": "A6",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d2f1523a486551c0ee23f",
+        "start_at": "A4",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:15:33Z",
+        "end_at": "A5"
+    },
+    "8_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31ba23a48657ffb513fe",
+        "created_at": "2015-04-14T15:26:50Z",
+        "B6": [
+            1,
+            2
+        ]
+    },
+    "2_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d2f1523a486551c0ee240",
+        "A6": [
+            1,
+            1
+        ],
+        "created_at": "2015-04-14T15:15:33Z"
+    },
+    "4": {
+        "target_at": "B6",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d316e23a48657ffb513f5",
+        "start_at": "B5",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:25:34Z",
+        "end_at": "B5"
+    },
+    "9_options": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31c023a48657ffb51401",
+        "move_with_attack": true,
+        "created_at": "2015-04-14T15:26:56Z"
+    },
+    "player2": {
+        "intelligence": "Human",
+        "profile": "taske",
+        "color": "Red"
+    },
+    "last_modified": "2015-04-14T15:32:00Z",
+    "9_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31bd23a48657ffb51400",
+        "A6": [
+            2,
+            3
+        ],
+        "created_at": "2015-04-14T15:26:53Z"
+    },
+    "1": {
+        "target_at": "B5",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d2e9823a486551c0ee23d",
+        "start_at": "A3",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:13:28Z",
+        "end_at": "A3"
+    },
+    "8": {
+        "target_at": "B6",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31ba23a48657ffb513fd",
+        "start_at": "B5",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:26:50Z",
+        "end_at": "B5"
+    },
+    "10_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31e123a48657ffb51403",
+        "B4": [
+            6,
+            4
+        ],
+        "created_at": "2015-04-14T15:27:29Z"
+    },
+    "5": {
+        "target_at": "B4",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31a423a48657ffb513f7",
+        "start_at": "D3",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:26:28Z",
+        "end_at": "C4"
+    },
+    "10": {
+        "target_at": "B4",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31e123a48657ffb51402",
+        "start_at": "A2",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:27:29Z",
+        "end_at": "A2"
+    },
+    "player1": {
+        "intelligence": "Human",
+        "profile": "jona",
+        "color": "Green"
+    },
+    "_id": "552d2e4423a486551c0ee23c",
+    "9": {
+        "target_at": "A6",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31bd23a48657ffb513ff",
+        "start_at": "A5",
+        "created_at": "2015-04-14T15:26:53Z",
+        "end_at": "A5"
+    },
+    "7": {
+        "target_at": "B6",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31b923a48657ffb513fb",
+        "start_at": "B5",
+        "move_with_attack": false,
+        "created_at": "2015-04-14T15:26:49Z",
+        "end_at": "B5"
+    },
+    "5_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31a423a48657ffb513f8",
+        "B4": [
+            6,
+            1
+        ],
+        "created_at": "2015-04-14T15:26:28Z"
+    },
+    "11_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d32f023a48657ffb51405",
+        "D6": [
+            4,
+            3
+        ],
+        "created_at": "2015-04-14T15:32:00Z"
+    },
+    "created_at": "2015-04-14T12:57:12Z",
+    "11": {
+        "target_at": "D6",
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d32f023a48657ffb51404",
+        "start_at": "C4",
+        "created_at": "2015-04-14T15:32:00Z",
+        "end_at": "C6"
+    },
+    "7_outcome": {
+        "game": "552d2e4423a486551c0ee23c",
+        "_id": "552d31b923a48657ffb513fc",
+        "created_at": "2015-04-14T15:26:49Z",
+        "B6": [
+            3,
+            1
+        ]
+    }
+}

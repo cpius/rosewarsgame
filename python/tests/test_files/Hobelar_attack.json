@@ -1,5 +1,6 @@
 {
     "type": "Is outcome correct",
+    "description": "Hobelar attacks a unit, misses, and then has an extra movement.",
     "click_position": "E5",
     "action_count": 0,
     "outcome":{

@@ -3,7 +3,7 @@ import gamestate.battle as battle
 from gamestate.gamestate_library import *
 from game.game_library import prettify
 from functools import total_ordering
-from view.rounded_rect import AAfilledRoundedRect
+from gamestate.units import base_units
 
 
 @total_ordering
@@ -51,14 +51,15 @@ class Viewinfo:
         if unit.has(Effect.sabotaged):
             defence = 0
         lines = ["Attack: " + str(unit.attack) + "  Defence: " + str(defence)
-                 + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement), ""]
+                 + "  Range: " + str(unit.range) + "  Movement: " + str(unit.movement)]
 
-        if unit.unit_level:
-            lines += ["Level: " + str(unit.unit_level + 1), ""]
+        lines += [unit.type.name, ""]
+        if unit.has(State.rank):
+            lines += ["Rank: " + str(unit.get(State.rank) + 1), ""]
 
-        dont_show = {State.used, State.recently_upgraded, State.experience, State.lost_extra_life, State.javelin_thrown,
+        dont_show = {State.used, State.experience, State.lost_extra_life, State.javelin_thrown,
                      Trait.attack_skill, Trait.defence_skill, Trait.range_skill, Trait.movement_skill, Trait.extra_life,
-                     Trait.javelin}
+                     Trait.javelin, State.rank}
 
         for attribute in set(unit.attributes) - dont_show:
             values = unit.attributes[attribute]
@@ -86,7 +87,7 @@ class Viewinfo:
             if unit.has(State.javelin_thrown):
                 lines += ["Javelin thrown", ""]
             else:
-                lines += ["Has javelin", ""]
+                lines += [prettify(Trait.javelin.name) + ":", get_description(Trait.javelin, 1), ""]
 
         return lines
 
@@ -131,10 +132,19 @@ class Viewinfo:
         line_length = 25
         show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *text_location)
 
-    def draw_upgrade_options(self, unit):
+    def draw_upgrade_options(self, upgrade_choices, unit):
         for i in range(2):
-            upgraded_unit = unit.get_upgraded_unit_from_choice(i)
-            self.show_unit_upgrade_choice(upgraded_unit, i)
+            upgrade = upgrade_choices[i]
+            if upgrade in Unit:
+                self.show_unit_upgrade_choice(base_units[upgrade](), i)
+            else:
+                base = self.interface.upgrade_locations[i]
+                (attribute, values), = upgrade.items()
+                level = unit.get(attribute) + values.level
+                lines = ["Upgrade option " + str(i), ""]
+                lines += [prettify(attribute.name) + ":", get_description(attribute, level)]
+                line_length = 25
+                show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *base)
 
     def draw_ask_about_ability(self, unit):
         self.clear()

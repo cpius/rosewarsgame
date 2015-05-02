@@ -11,53 +11,44 @@ class Viewgame:
         self.interface = interface
         self.screen = screen
 
-    def draw_game(self, game, start_at=None, actions=()):
-
+    def draw_game(self, game, actions, shade_positions):
         self.screen.blit(get_image(self.interface.board_image), (0, 0))
 
         gamestate = game.gamestate.copy()
         if not game.is_player_human():
             gamestate.flip_all_units()
 
-        self.draw_units(gamestate.player_units, game.current_player().color,
-                        gamestate.enemy_units, game.opponent_player().color, start_at, actions)
+        self.draw_units(gamestate, game.current_player().color, game.opponent_player().color)
 
-        if actions:
-            self.shade_actions(actions)
+        if actions and not shade_positions:
+            shade_positions = self.get_shade_actions(actions)
 
-    def draw_units(self, player_units, player_color, enemy_units, opponent_color, start_position, actions):
-        for position, unit in player_units.items():
-            if position == start_position:
-                self.draw_unit(unit, position, player_color, selected=True)
-            else:
-                self.draw_unit(unit, position, player_color)
+        if shade_positions:
+            self.shade_tiles(shade_positions)
 
-        for position, unit in enemy_units.items():
+    def shade_tiles(self, shade_positions):
+        unit_dimensions = (self.interface.unit_box_width, self.interface.unit_box_height)
+        for position in shade_positions:
+            location = self.interface.coordinates["base_box"].get(position)
+            rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
+            AAfilledRoundedRect(self.screen, rectangle_style, self.interface.shading, 0.2)
+
+    def draw_units(self, gamestate, player_color, opponent_color):
+        for position, unit in gamestate.player_units.items():
+            self.draw_unit(unit, position, player_color)
+
+        for position, unit in gamestate.enemy_units.items():
             self.draw_unit(unit, position, opponent_color)
 
-    def shade_actions(self, actions):
-        unit_dimensions = (self.interface.unit_box_width, self.interface.unit_box_height)
-        drawn_tiles = set()
+    @staticmethod
+    def get_shade_actions(actions):
+        shade_positions = set()
         for action in actions:
-            if action.is_attack:
-                location = self.interface.coordinates["base_box"].get(action.target_at)
-                if location not in drawn_tiles:
-                    drawn_tiles.add(location)
-                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
-                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.attack_shading, 0.2)
-
-            elif action.is_ability:
-                location = self.interface.coordinates["base_box"].get(action.target_at)
-                if location not in drawn_tiles:
-                    drawn_tiles.add(location)
-                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
-                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.ability_shading, 0.2)
+            if action.is_attack or action.is_ability:
+                shade_positions.add(action.target_at)
             else:
-                location = self.interface.coordinates["base_box"].get(action.end_at)
-                if location not in drawn_tiles:
-                    drawn_tiles.add(location)
-                    rectangle_style = (location[0], location[1], unit_dimensions[0], unit_dimensions[1])
-                    AAfilledRoundedRect(self.screen, rectangle_style, self.interface.move_shading, 0.2)
+                shade_positions.add(action.end_at)
+        return shade_positions
 
     def draw_post_movement(self, action):
         pygame.draw.circle(self.screen, Color.Black, self.interface.coordinates["center"].get(action.end_at), 10)
@@ -103,7 +94,7 @@ class Viewgame:
             if color:
                 draw_rectangle(self.screen, dimensions, base, color)
             else:
-                draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+                draw_rectangle(self.screen, dimensions, base, self.interface.shading)
 
     def draw_counters(self, counters, color, position, counter_coordinates, font_coordinates):
         self.draw_bordered_circle(counter_coordinates.get(position), self.interface.counter_size, color)
@@ -144,11 +135,11 @@ class Viewgame:
         if unit.has(Effect.bribed):
             self.draw_bribed(position)
 
-        level = unit.unit_level
-        if not unit.should_be_upgraded() and level:
-            if level > 3:
-                level = 3
-            pic = get_image(self.interface.level_icons[level], (14, 14))
+        rank = unit.get(State.rank)
+        if rank:
+            if rank > 3:
+                rank = 3
+            pic = get_image(self.interface.rank_icons[rank], (14, 14))
             self.screen.blit(pic, self.interface.coordinates["top_left"].get(position))
 
     def draw_bribed(self, position):
@@ -168,9 +159,6 @@ class Viewgame:
         self.draw_unit_box(self.screen, self.interface, base, color)
 
         self.screen.blit(pic, base)
-
-        if selected:
-            draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
 
         if self.get_blue_counters(unit):
             counter_coordinates = self.get_counter_coordinates(counters_drawn)
@@ -243,7 +231,7 @@ class Viewgame:
         dimensions = (self.interface.unit_width, self.interface.unit_height)
 
         base = self.interface.coordinates["base"].get(end_at)
-        draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+        draw_rectangle(self.screen, dimensions, base, self.interface.shading)
 
         base = self.interface.coordinates["base"].get(target_at)
-        draw_rectangle(self.screen, dimensions, base, self.interface.selected_shading)
+        draw_rectangle(self.screen, dimensions, base, self.interface.shading)

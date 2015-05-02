@@ -1,0 +1,24 @@
+{
+    "type": "Is action correct",
+    "description": "Moving a Longswordsman can be good",
+    "gamestate": {
+        "player1_units": {
+            "B4": "Longswordsman",
+            "C3": "Pikeman",
+            "E2": "Knight"
+            },
+        "actions_remaining": 1,
+        "player2_units": {
+            "C5": "Pikeman",
+            "A5": "Pikeman",
+            "E5": "Pikeman",
+            "B6": "Pikeman"
+        }
+    },
+    "action":
+    {
+        "start_at": "B4",
+        "end_at": "B5"
+    }
+}
+
