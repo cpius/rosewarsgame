@@ -25,7 +25,7 @@ class Game:
         self.savegame_folder = self.set_savegame_folder()
 
     @classmethod
-    def from_log_document(cls, log_document, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Human, player_profile=None):
+    def from_log_document(cls, log_document, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Network, player_profile=None, shift_turn=True):
 
         initial_gamestate_document = log_document["initial_gamestate"]
         gamestate = Gamestate.from_document(initial_gamestate_document)
@@ -105,8 +105,9 @@ class Game:
                 upgraded_unit = action.unit.get_upgraded_unit_from_upgrade(upgrade)
                 game.gamestate.player_units[position] = upgraded_unit
 
-        if game.is_turn_done():
-            game.shift_turn()
+        if shift_turn:
+            if game.is_turn_done():
+                game.shift_turn()
 
         return game
 

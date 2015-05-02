@@ -59,7 +59,7 @@ def view(game_id):
         return {"Status": "Error", "Message": "Could not find game with id " + game_id}
 
     log_document = construct_log_document(game_document)
-    game = Game.from_log_document(log_document)
+    game = Game.from_log_document(log_document, shift_turn=False)
     number = get_expected_action(log_document, game.gamestate)[0]
     if number == log_document["action_count"]:
         # Action isn't completed yet
