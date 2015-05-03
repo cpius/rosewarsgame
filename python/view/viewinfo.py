@@ -87,6 +87,7 @@ class Viewinfo:
             if unit.has(State.javelin_thrown):
                 lines += ["Javelin thrown", ""]
             else:
+                lines += ["Has Javelin", ""]
                 lines += [prettify(Trait.javelin.name) + ":", get_description(Trait.javelin, 1), ""]
 
         return lines
