@@ -205,9 +205,6 @@ class Controller(object):
         gamestate = self.game.gamestate
         actions = gamestate.get_actions_with_move_with_attack_as_none()
 
-        # Clear greyed out tiles
-        self.draw_game(redraw_log=True)
-
         # If it's during an extra action, only tiles that indicate possible actions are clickable. If one of those are
         # clicked, perform that action.
         if gamestate.is_extra_action():
@@ -408,7 +405,6 @@ class Controller(object):
         if action.is_attack:
             animation_delay = pause_for_animation_attack
         pygame.time.delay(animation_delay)
-        self.draw_game(shade_actions=False)
 
         if self.move_with_attack_should_be_performed(action, outcome):
             self.perform_move_with_attack(action, outcome)
