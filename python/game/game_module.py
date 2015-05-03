@@ -122,7 +122,12 @@ class Game:
                 else:
                     colors = self.current_player().color, self.current_player().color
                 is_sub_action = action.target_at == position
-                outcome_string = battle.get_outcome_string(action, outcome.outcomes[position], self.gamestate, is_sub_action)
+                if is_sub_action:
+                    sub_action = action.copy()
+                    sub_action.target_at = position
+                    outcome_string = battle.get_outcome_string(sub_action, outcome.outcomes[position], self.gamestate, is_sub_action)
+                else:
+                    outcome_string = battle.get_outcome_string(action, outcome.outcomes[position], self.gamestate, is_sub_action)
                 if position in self.gamestate.enemy_units:
                     target = self.gamestate.enemy_units[position]
                 else:
