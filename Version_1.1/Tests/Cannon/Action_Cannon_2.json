@@ -1,0 +1,23 @@
+{
+    "type": "Does action exist",
+    "description": "A Cannon can move if it's attack frozen.",
+    "result": true,
+    "action": {
+        "start_at": "B3",
+        "end_at": "A3"
+    },
+    "gamestate": {
+        "actions_remaining": 1,
+        "player1_units": {
+            "B3": {
+                "name": "Cannon",
+                "attack_frozen": true
+            },
+            "C3": "Pikeman"
+        },
+        "player2_units": {
+            "C4": "Knight",
+            "B4": "Knight"
+        }
+    }
+}
