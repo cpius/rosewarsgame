@@ -1,4 +1,4 @@
-from tests import utester, setup_tester, controller_tester, speed_tester, ai_tester, server_tester
+from tests import utester, setup_tester, controller_tester, speed_tester, ai_tester
 
 testdict = {
     1:  ("Utester V 1.0", utester.run10),
@@ -10,7 +10,7 @@ testdict = {
     7: ("Server tester", server_tester.run)
 }
 
-usetests = [5]
+usetests = [2]
 
 if __name__ == '__main__':
 
