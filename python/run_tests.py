@@ -6,8 +6,7 @@ testdict = {
     3:  ("Setup tester", setup_tester.run),
     4: ("Controller tester", controller_tester.run),
     5: ("Speed tester", speed_tester.test_action_getter),
-    6: ("AI tester", ai_tester.run),
-    7: ("Server tester", server_tester.run)
+    6: ("AI tester", ai_tester.run)
 }
 
 usetests = [2]
