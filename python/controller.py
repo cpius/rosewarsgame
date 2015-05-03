@@ -74,7 +74,7 @@ class Controller(object):
         return controller
 
     @classmethod
-    def from_replay(cls, savegame_file=None, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Network):
+    def from_replay(cls, savegame_file=None, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Human):
 
         if not savegame_file:
             savegame_file = max(glob.iglob('./replay/*/*.json'), key=os.path.getctime)
