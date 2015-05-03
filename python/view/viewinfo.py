@@ -141,7 +141,7 @@ class Viewinfo:
                 base = self.interface.upgrade_locations[i]
                 (attribute, values), = upgrade.items()
                 level = unit.get(attribute) + values.level
-                lines = ["Upgrade option " + str(i), ""]
+                lines = ["Upgrade option " + str(i + 1), ""]
                 lines += [prettify(attribute.name) + ":", get_description(attribute, level)]
                 line_length = 25
                 show_lines(self.screen, lines, line_length, self.small_line_height, self.small_font, *base)
