@@ -61,7 +61,7 @@ class Controller(object):
         game_document = client.get_game()
 
         controller = cls(View(), Sound())
-        controller.game = Game.from_log_document(game_document, player_profile=player_profile)
+        controller.game = Game.from_log_document(game_document, opponent_intelligence=Intelligence.Network, player_profile=player_profile)
         controller.client = client
         player = controller.game.current_player()
         print("current player is", player.color, player.intelligence, player.profile)

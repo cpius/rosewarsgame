@@ -25,7 +25,7 @@ class Game:
         self.savegame_folder = self.set_savegame_folder()
 
     @classmethod
-    def from_log_document(cls, log_document, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Network, player_profile=None, shift_turn=True):
+    def from_log_document(cls, log_document, player_intelligence=Intelligence.Human, opponent_intelligence=Intelligence.Human, player_profile=None, shift_turn=True):
 
         initial_gamestate_document = log_document["initial_gamestate"]
         gamestate = Gamestate.from_document(initial_gamestate_document)
@@ -35,12 +35,6 @@ class Game:
         else:
             player1 = Player("Green", player_intelligence)
             player2 = Player("Red", opponent_intelligence)
-
-        if player1.profile == player_profile:
-            player2.intelligence = Intelligence.Network
-        else:
-            player1.intelligence = Intelligence.Network
-
 
         if player_profile:
             if player1.profile == player_profile:
