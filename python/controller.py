@@ -413,6 +413,7 @@ class Controller(object):
             self.game_end()
 
         if self.upgrade_should_be_performed(action):
+            self.draw_game()
             self.perform_upgrade(action, upgrade)
 
         if self.game.is_turn_done():
