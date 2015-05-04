@@ -7,8 +7,12 @@ class Player(object):
         self.profile = profile
         self.color = color
         self.intelligence = intelligence
-        if intelligence == Intelligence.AI:
-            self.ai = ai.AI()
+        if intelligence == Intelligence.AI_level1:
+            self.ai = ai.AI(level=1)
+        elif intelligence == Intelligence.AI_level2:
+            self.ai = ai.AI(level=2)
+        elif intelligence == Intelligence.AI_level3:
+            self.ai = ai.AI(level=3)
 
         if color == "Red":
             self.backline = 8

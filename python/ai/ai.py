@@ -10,8 +10,8 @@ import ai.documenter as documenter
 
 
 class AI():
-    def __init__(self):
-        self.select_action = select_action
+    def __init__(self, level):
+        self.select_action = partial(select_action, level)
         self.select_upgrade = select_upgrade
 
 
@@ -23,8 +23,14 @@ def select_upgrade(gamestate):
     return 1
 
 
-def select_action(gamestate, savegame_folder=None):
-    actions = score_actions(gamestate, set())
+def select_action(level, gamestate, savegame_folder=None):
+    if level == 1:
+        actions = score_one_action(gamestate)
+    elif level == 2:
+        actions = score_actions(gamestate, set())
+    else:
+        actions = score_actions(gamestate, set(), extra_thinking=True)
+
     if savegame_folder:
         document_actions(actions, savegame_folder + "/" + str(gamestate.action_count + 1) + ".txt")
     win_actions = {action for action in actions if Result.noresult in action.factors and
@@ -84,7 +90,60 @@ def one_action_forward(gamestate_document, action, outcome=None):
     return gamestate
 
 
-def score_actions(gamestate, scored_actions):
+def score_one_action(gamestate):
+    def find_score(result):
+        """
+        :param result: The result of an action. If the action has an outcome the result can be either win or loss. If
+                       the action does not have an outcome, the result is noresult.
+
+        Adds the factors for the resulting gamestate to the factors dictionary of the action, and adds the score of the
+        resulting gamestate to the score_if dictionary of the action.
+        """
+        gamestate_factors = ai_factors.Factors(gamestate_2[action][result])
+        gamestate_factors.subtract(original_factors)
+        action.factors[result] = gamestate_factors
+        action.score_if[result] = gamestate_factors.get_score()
+
+    # Make a copy of the gamestate
+    gamestate_1_document = gamestate.to_document()
+    gamestate_1 = Gamestate.from_document(gamestate_1_document)
+
+    # Find the available actions.
+    gamestate_1.set_available_actions()
+    actions = gamestate_1.get_actions_including_pass_extra()
+
+    # Contains the new gamestates after each action and each result.
+    gamestate_2 = {}
+
+    # The factors of gamestate_1. A factor is an element of the gamestate that is important.
+    original_factors = ai_factors.Factors(gamestate_1)
+
+    # Define a function that returns the resulting gamestate after performing an action on gamestate_1.
+    # (Without changing gamestate_1.)
+    perform_action = partial(one_action_forward, gamestate_1_document)
+
+    for action in actions:
+        action.factors, action.score_if = {}, {}  # Contains the factors and scores after each possible result.
+        gamestate_2[action] = {}  # Contains the gamestate after each possible results.
+
+        if action.has_outcome:
+            gamestate_2[action][Result.win] = perform_action(action, success)
+            gamestate_2[action][Result.loss] = perform_action(action, failure)
+            action.chance_of_win = chance_of_win(gamestate_1, action)
+            find_score(Result.win)
+            find_score(Result.loss)
+            action.total_score = (action.score_if[Result.win] * action.chance_of_win +
+                            action.score_if[Result.loss] * (1 - action.chance_of_win))
+
+        else:
+            gamestate_2[action][Result.noresult] = perform_action(action)
+            find_score(Result.noresult)
+            action.total_score = action.score_if[Result.noresult]
+
+    return actions
+
+
+def score_actions(gamestate, scored_actions, extra_thinking=False):
     """
     :param gamestate: A gamestate
     :param scored_actions: A set of actions whose scores are already evaluated.
@@ -116,9 +175,12 @@ def score_actions(gamestate, scored_actions):
 
     # Only recalculate scores for actions that are new or has a new bonus.
     new_actions = {action for action in all_actions if action not in scored_actions}
-    actions_new_bonus = {action for action in all_actions if action.end_at in gamestate.bonus_tiles[Trait.flag_bearing]
-                         or action.start_at in gamestate.bonus_tiles[Trait.crusading]}
-    actions = new_actions | actions_new_bonus
+    if extra_thinking:
+        actions_new_bonus = {action for action in all_actions if action.end_at in gamestate.bonus_tiles[Trait.flag_bearing]
+                             or action.start_at in gamestate.bonus_tiles[Trait.crusading]}
+        actions = new_actions | actions_new_bonus
+    else:
+        actions = new_actions
     scoredict = {action: action.score for action in scored_actions}
     factordict = {action: action.factors for action in scored_actions}
     for action in all_actions:
@@ -171,12 +233,12 @@ def score_actions(gamestate, scored_actions):
         if next(iter(gamestate_2[action].values())).actions_remaining:
             action.next_action = {}  # Contains the best next action after each possible result.
             if action.has_outcome:
-                if action.factors[Result.win].opponent_has_winning_action():
+                if extra_thinking and action.factors[Result.win].opponent_has_winning_action():
                     next_actions_if_win = score_actions(gamestate_2[action][Result.win], set())
                 else:
                     next_actions_if_win = score_actions(gamestate_2[action][Result.win], actions)
 
-                if action.factors[Result.loss].opponent_has_winning_action():
+                if extra_thinking and action.factors[Result.loss].opponent_has_winning_action():
                     next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], set())
                 else:
                     next_actions_if_loss = score_actions(gamestate_2[action][Result.loss], actions)
@@ -185,7 +247,7 @@ def score_actions(gamestate, scored_actions):
                 action.next_action[Result.loss] = max(next_actions_if_loss, key=attrgetter("score"))
 
             else:
-                if action.factors[Result.noresult].opponent_has_winning_action():
+                if extra_thinking and action.factors[Result.noresult].opponent_has_winning_action():
                     next_actions = score_actions(gamestate_2[action][Result.noresult], set())
                 else:
                     next_actions = score_actions(gamestate_2[action][Result.noresult], actions)

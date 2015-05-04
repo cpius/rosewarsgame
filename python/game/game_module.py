@@ -227,4 +227,5 @@ class Game:
         return self.opponent_player().intelligence == Intelligence.Network
 
     def is_player_ai(self):
-        return self.current_player().intelligence == Intelligence.AI
+        return self.current_player().intelligence in [Intelligence.AI_level1, Intelligence.AI_level2,
+                                                      Intelligence.AI_level3]

@@ -7,7 +7,7 @@ from game.game_library import *
 from game.enums import *
 from view.view_module import View
 import pygame
-from game.settings import profile
+from game.settings import profile, ai_intelligence
 
 
 def pause():
@@ -88,9 +88,9 @@ if __name__ == '__main__':
     elif Opponent(opponent_choice) == Opponent.AI:
         coinflip = random.randint(0, 1)
         if coinflip == 0:
-            controller = Controller.new_game(Intelligence.Human, Intelligence.AI)
+            controller = Controller.new_game(Intelligence.Human, ai_intelligence)
         else:
-            controller = Controller.new_game(Intelligence.AI, Intelligence.Human)
+            controller = Controller.new_game(ai_intelligence, Intelligence.Human)
 
     if controller:
         controller.run_game()
